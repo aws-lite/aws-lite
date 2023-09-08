@@ -1,0 +1,34 @@
+{
+  "name": "@aws-lite/client",
+  "version": "0.0.0",
+  "description": "A simple, fast, extensible AWS client",
+  "homepage": "https://github.com/architect/aws-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/architect/aws-lite"
+  },
+  "bugs": "https://github.com/architect/aws-lite/issues",
+  "scripts": {
+    "lint": "eslint --fix ."
+  },
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=16"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "aws4": "^1.12.0",
+    "ini": "^4.1.1"
+  },
+  "devDependencies": {
+    "@architect/eslint-config": "^2.1.1",
+    "@aws-sdk/client-ssm": "^3.405.0",
+    "eslint": "^8.48.0"
+  },
+  "files": [
+    "src"
+  ],
+  "eslintConfig": {
+    "extends": "@architect/eslint-config"
+  }
+}
