@@ -3,13 +3,13 @@ let getRegion = require('./get-region')
 let clientFactory = require('./client-factory')
 
 /**
- * @param {object} [config] - Client configuration options
- * @param {string} [config.accessKeyId] - Access key
- * @param {string} [config.secretAccessKey] - Secret access key
- * @param {string} [config.sessionToken] - Session token
- * @param {string} [config.region] - AWS service region (e.g. `us-west-1`)
- * @param {string} [config.profile] - Credentials profile name to use
- * @param {boolean} [config.autoloadPlugins=true] - Attempt to automatically load AWS service plugins
+ * @param {object} [config] Client configuration options
+ * @param {string} [config.accessKeyId] AWS access key
+ * @param {string} [config.secretAccessKey] AWS secret access key
+ * @param {string} [config.sessionToken] AWS session token
+ * @param {string} [config.region] AWS service region (e.g. `us-west-1`); can be overridden per request
+ * @param {string} [config.profile] Credential profile name to use
+ * @param {boolean} [config.autoloadPlugins=true] Attempt to automatically load aws-lite plugins
  *
  * @returns {Promise<function>} Client async function
  */
