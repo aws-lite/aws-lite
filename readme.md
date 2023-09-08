@@ -40,7 +40,8 @@ npm i @aws-lite/plugin-dynamodb
  * This is a synchronous operation that will attempt to load your AWS credentials, local configuration, region settings, etc.
  */
 import awsLite from '@aws-lite/client'
-const aws = awsLite({ region: 'us-west-1' })
+const config = { region: 'us-west-1' } // Optional
+const aws = awsLite(config)
 
 /**
  * Reads
@@ -48,7 +49,7 @@ const aws = awsLite({ region: 'us-west-1' })
  */
 await aws({
   service: 'lambda',
-  endpoint: `/2015-03-31/functions/my-lambda-name/configuration`,
+  endpoint: '/2015-03-31/functions/my-lambda-name/configuration',
 })
 // {
 //   FunctionName: 'my-lambda-name',
@@ -62,7 +63,7 @@ await aws({
  */
 await aws({
   service: 'lambda',
-  endpoint: `/2015-03-31/functions/my-lambda-name/invocations`,
+  endpoint: '/2015-03-31/functions/my-lambda-name/invocations',
   payload: { ok: true },
 })
 // ... whatever your Lambda returned
