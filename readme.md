@@ -7,14 +7,14 @@
 
 ## Who made this?
 
-`aws-sdk` is developed and maintained by the folks at [OpenJS Foundation Architect](https://arc.codes). We <3 AWS!
+`aws-lite` is developed and maintained by the folks at [OpenJS Foundation Architect](https://arc.codes). We <3 AWS!
 
 
 ## Why not use `aws-sdk` / `@aws-sdk/*`?
 
-Amazon has historically done a great job of maintaining its SDKs. However, its JavaScript SDKs are huge, with lots of generated code. This results in things like very slow instantiation (example: [>400ms to load a single AWS client in SDK v2, and >500ms in v3](https://aws.amazon.com/blogs/developer/reduce-lambda-cold-start-times-migrate-to-aws-sdk-for-javascript-v3/)), and reporting errors without usable stack traces.
+Amazon has historically done a great job of maintaining its SDKs. However, its JavaScript SDKs are huge, with lots of generated code. This results in things like very slow instantiation (example: [>400ms to load a single AWS client in SDK v3, and >500ms in v2](https://aws.amazon.com/blogs/developer/reduce-lambda-cold-start-times-migrate-to-aws-sdk-for-javascript-v3/)), and reporting errors without usable stack traces.
 
-We built `aws-lite` exists to provide a simpler, faster, more stable position from which to work with AWS services in Node.js.
+We built `aws-lite` to provide a simpler, faster, more stable position from which to work with AWS services in Node.js.
 
 
 ## Install
