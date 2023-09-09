@@ -2,7 +2,6 @@ let { existsSync, readFileSync } = require('fs')
 let { join } = require('path')
 let os = require('os')
 let ini = require('ini')
-let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
 
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
 module.exports = function getCreds (params) {
@@ -12,12 +11,13 @@ module.exports = function getCreds (params) {
   let envCreds = getCredsFromEnv()
   if (envCreds) return envCreds
 
+  let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
   if (!isInLambda) {
     let credsFileCreds = getCredsFromFile(params)
     if (credsFileCreds) return credsFileCreds
   }
 
-  throw ReferenceError('Must supply AWS credentials via params, environment variables, or credentials file')
+  throw ReferenceError('You must supply AWS credentials via params, environment variables, or credentials file')
 }
 
 function getCredsFromEnv () {
@@ -64,8 +64,7 @@ function validate ({ accessKeyId, secretAccessKey, sessionToken }) {
   }
 
   if ((accessKeyId && !secretAccessKey) ||
-      (!accessKeyId && secretAccessKey) ||
-      (sessionToken && !accessKeyId && !secretAccessKey)) {
+      (!accessKeyId && secretAccessKey)) {
     let msg = 'You must supply both an access key ID & secret access key'
     throw ReferenceError(msg)
   }
@@ -73,8 +72,5 @@ function validate ({ accessKeyId, secretAccessKey, sessionToken }) {
   if (!accessKeyId && !secretAccessKey) {
     return false
   }
-  if (accessKeyId && secretAccessKey) {
-    return { accessKeyId, secretAccessKey, sessionToken }
-  }
-  return false
+  return { accessKeyId, secretAccessKey, sessionToken }
 }

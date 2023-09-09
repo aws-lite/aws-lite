@@ -9,7 +9,11 @@
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
   "scripts": {
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "test": "npm run lint && npm run coverage",
+    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
+    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-spec",
+    "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit"
   },
   "main": "src/index.js",
   "engines": {
@@ -23,12 +27,24 @@
   "devDependencies": {
     "@architect/eslint-config": "^2.1.1",
     "@aws-sdk/client-ssm": "^3.405.0",
-    "eslint": "^8.48.0"
+    "cross-env": "^7.0.3",
+    "eslint": "^8.48.0",
+    "mock-fs": "^5.2.0",
+    "nyc": "^15.1.0",
+    "tap-arc": "^0.4.0",
+    "tape": "^5.6.6"
   },
   "files": [
     "src"
   ],
   "eslintConfig": {
     "extends": "@architect/eslint-config"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "branches": 100,
+    "lines": 100,
+    "functions": 100,
+    "statements": 100
   }
 }
