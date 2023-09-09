@@ -11,8 +11,8 @@
   "scripts": {
     "lint": "eslint --fix .",
     "test": "npm run lint && npm run coverage",
-    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
-    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-spec",
+    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-arc",
+    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit"
   },
   "main": "src/index.js",
