@@ -3,27 +3,12 @@ let os = require('os')
 let { join } = require('path')
 let test = require('tape')
 let mockFs = require('mock-fs')
+let { resetAWSEnvVars } = require('../../lib')
 let cwd = process.cwd()
-let mock = join(cwd, 'test', 'mock')
 let sut = join(cwd, 'src', 'get-creds.js')
 let getCreds = require(sut)
 
-function resetAWSEnvVars () {
-  delete process.env.AMAZON_REGION
-  delete process.env.AWS_ACCESS_KEY
-  delete process.env.AWS_ACCESS_KEY_ID
-  delete process.env.AWS_CONFIG_FILE
-  delete process.env.AWS_DEFAULT_REGION
-  delete process.env.AWS_LAMBDA_FUNCTION_NAME
-  delete process.env.AWS_PROFILE
-  delete process.env.AWS_REGION
-  delete process.env.AWS_SDK_LOAD_CONFIG
-  delete process.env.AWS_SECRET_ACCESS_KEY
-  delete process.env.AWS_SECRET_KEY
-  delete process.env.AWS_SESSION_TOKEN
-  delete process.env.AWS_SHARED_CREDENTIALS_FILE
-}
-
+let mock = join(cwd, 'test', 'mock')
 let ok = 'foo'
 let nope = 'bar'
 let num = 1
@@ -89,32 +74,6 @@ test('Get credentials from env vars', t => {
   resetAWSEnvVars()
 })
 
-test('Get credentials from env vars', t => {
-  t.plan(3)
-  resetAWSEnvVars()
-  let passed, result
-
-  process.env.AWS_ACCESS_KEY_ID = ok
-  process.env.AWS_SECRET_ACCESS_KEY = ok
-
-  // Key + secret only
-  passed = { accessKeyId: ok, secretAccessKey: ok }
-  result = getCreds({})
-  t.deepEqual(result, { ...passed, sessionToken: undefined }, 'Returned correct credentials from env vars')
-
-  // Key + secret + sessionToken
-  process.env.AWS_SESSION_TOKEN = ok
-  passed = { accessKeyId: ok, secretAccessKey: ok, sessionToken: ok }
-  result = getCreds({})
-  t.deepEqual(result, passed, 'Returned correct credentials from env vars')
-
-  // Prioritize passed params before creds file
-  process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
-  result = getCreds({})
-  t.deepEqual(result, passed, 'Returned correct credentials from env vars')
-  resetAWSEnvVars()
-})
-
 test('Get credentials from credentials file', t => {
   t.plan(5)
   resetAWSEnvVars()
@@ -135,9 +94,7 @@ test('Get credentials from credentials file', t => {
   // Default credentials file location
   let home = os.homedir()
   let credsFile = join(home, '.aws', 'credentials')
-  mockFs({
-    [credsFile]: readFileSync(credentialsMock)
-  })
+  mockFs({ [credsFile]: readFileSync(credentialsMock) })
   result = getCreds({})
   t.deepEqual(result, defaultProfile, 'Returned correct credentials from credentials file (~/.aws file location)')
   mockFs.restore()
