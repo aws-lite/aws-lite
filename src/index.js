@@ -10,7 +10,8 @@ let clientFactory = require('./client-factory')
  * @param {string} [config.region] AWS service region (e.g. `us-west-1`); can be overridden per request
  * @param {string} [config.profile] Credential profile name to use
  * @param {boolean} [config.autoloadPlugins=true] Attempt to automatically load aws-lite plugins
- * @param {boolean} [config.keepAlive=true] Disable Node.js's connection keepalive, helpful for local-only testing
+ * @param {boolean} [config.keepAlive=true] Disable Node.js's connection keepalive, helpful for local testing
+ * @param {string} [config.protocol='https'] Set connection protocol to 'http', helpful for local testing
  *
  * @returns {Promise<function>} Client async function
  */

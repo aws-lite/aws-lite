@@ -1,9 +1,12 @@
-let https = require('https')
 let aws4 = require('aws4')
 
 module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
     params.path = params.path || params.endpoint
+    config.protocol = config.protocol ?? 'https'
+    if (![ 'https', 'http' ].includes(config.protocol)) {
+      throw ReferenceError('Protocol must be `https` or `http`')
+    }
 
     // JSON-ify payload where convenient
     let body = params.body || params.data || params.payload || params.json
@@ -18,10 +21,15 @@ module.exports = function request (params, creds, region, config, metadata) {
 
     let options = aws4.sign({ ...params, region }, creds)
 
-    // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
-    options.agent = new https.Agent({ keepAlive: config.keepAlive ?? useAWS() })
+    // Importing http(s) is a bit slow (~1ms), so only use what we need
+    let isHTTPS = options.hostname.includes('.amazonaws.com') || config.protocol === 'https'
+    // eslint-disable-next-line
+    let http = isHTTPS ? require('https') : require('http')
 
-    let req = https.request(options, res => {
+    // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
+    options.agent = new http.Agent({ keepAlive: config.keepAlive ?? useAWS() })
+
+    let req = http.request(options, res => {
       let data = []
       let { headers = {}, statusCode } = res
       let ok = statusCode >= 200 && statusCode < 303
