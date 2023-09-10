@@ -1,7 +1,7 @@
 let https = require('https')
 let aws4 = require('aws4')
 
-module.exports = function request (params, creds, region, metadata) {
+module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
     params.path = params.path || params.endpoint
 
@@ -17,6 +17,10 @@ module.exports = function request (params, creds, region, metadata) {
     }
 
     let options = aws4.sign({ ...params, region }, creds)
+
+    // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
+    options.agent = new https.Agent({ keepAlive: config.keepAlive ?? useAWS() })
+
     let req = https.request(options, res => {
       let data = []
       let { headers = {}, statusCode } = res
@@ -36,4 +40,17 @@ module.exports = function request (params, creds, region, metadata) {
     req.on('error', error => reject({ error }))
     req.end(options.body || '')
   })
+}
+
+// Probably this is going to need some refactoring in Arc 11
+// Certainly it is not reliable in !Arc local Lambda emulation
+let nonLocalEnvs = [ 'staging', 'production' ]
+function useAWS () {
+  let { ARC_ENV, ARC_LOCAL, ARC_SANDBOX } = process.env
+  // Testing is always local
+  if (ARC_ENV === 'testing') return false
+  // Local, but using AWS resources
+  if (nonLocalEnvs.includes(ARC_ENV) && ARC_SANDBOX && !ARC_LOCAL) return false
+  // Assumed to be AWS
+  return true
 }

@@ -9,7 +9,7 @@ module.exports = function clientFactory (config, creds, region) {
   async function client (params = {}) {
     let selectedRegion = params.region || region
     try {
-      return await request(params, creds, selectedRegion)
+      return await request(params, creds, selectedRegion, config)
     }
     catch (err) {
       errorHandler(err)
@@ -60,7 +60,7 @@ module.exports = function clientFactory (config, creds, region) {
             let result = await method.request(params)
             let metadata = { service, name }
             try {
-              return await request({ ...params, ...result }, creds, selectedRegion, metadata)
+              return await request({ ...params, ...result }, creds, selectedRegion, config, metadata)
             }
             catch (err) {
               if (method.error) {
