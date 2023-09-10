@@ -1,4 +1,4 @@
-let { existsSync, readFileSync } = require('fs/promises')
+let { existsSync, readFileSync } = require('fs')
 let { join } = require('path')
 let os = require('os')
 let ini = require('ini')
@@ -19,7 +19,7 @@ module.exports = function getRegion (params) {
     if (configRegion) return configRegion
   }
 
-  throw ReferenceError('Must supply AWS region via params, environment variables, or config file')
+  throw ReferenceError('You must supply AWS region via params, environment variables, or config file')
 }
 
 function getRegionFromEnv () {
