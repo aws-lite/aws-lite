@@ -1,4 +1,3 @@
-let { readFileSync } = require('fs')
 let os = require('os')
 let { join } = require('path')
 let test = require('tape')
@@ -57,7 +56,7 @@ test('Get region from config file', t => {
   // Default config file location
   let home = os.homedir()
   let configFile = join(home, '.aws', 'config')
-  mockFs({ [configFile]: readFileSync(configMock) })
+  mockFs({ [configFile]: mockFs.load(configMock) })
   process.env.AWS_SDK_LOAD_CONFIG = true
   result = getRegion({})
   t.equal(result, west1, 'Returned correct region from config file (~/.aws file location)')

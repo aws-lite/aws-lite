@@ -8,6 +8,7 @@ module.exports = function clientFactory (config, creds, region) {
   // The basic API client
   async function client (params = {}) {
     let selectedRegion = params.region || region
+    validateService(params.service)
     try {
       return await request(params, creds, selectedRegion, config)
     }
@@ -18,6 +19,11 @@ module.exports = function clientFactory (config, creds, region) {
 
   // API plugins
   let { autoloadPlugins = true, plugins = [] } = config
+  if (!Array.isArray(plugins)) {
+    throw TypeError('Plugins must be an array')
+  }
+
+  /* istanbul ignore next */ // TODO check once plugin API settles
   if (autoloadPlugins) {
     let nodeModulesDir = join(process.cwd(), 'node_modules')
     let mods = readdirSync(nodeModulesDir)
@@ -31,18 +37,14 @@ module.exports = function clientFactory (config, creds, region) {
     mods.forEach(findPlugins)
   }
 
+  /* istanbul ignore next */ // TODO check once plugin API settles
   if (plugins.length) {
-    if (!Array.isArray(plugins)) {
-      throw TypeError('Plugins must be an array')
-    }
     plugins.forEach(pluginName => {
       try {
         // eslint-disable-next-line
         let plugin = require(pluginName)
         let { service, methods } = plugin
-        if (!service || !services.includes(service)) {
-          throw ReferenceError(`Invalid AWS service specified: ${service}`)
-        }
+        validateService(service)
         Object.values(methods).forEach(method => {
           if (typeof method.request !== 'function') {
             throw ReferenceError(`All plugin request methods must be a function: ${service}`)
@@ -82,4 +84,13 @@ module.exports = function clientFactory (config, creds, region) {
   }
 
   return client
+}
+
+function validateService (service) {
+  if (!service) {
+    throw ReferenceError(`No AWS service specified`)
+  }
+  if (!services.includes(service)) {
+    throw ReferenceError(`Invalid AWS service specified: ${service}`)
+  }
 }

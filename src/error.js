@@ -1,13 +1,34 @@
-module.exports = function errorHandler ({ error, statusCode, metadata }) {
+module.exports = function errorHandler (input) {
+  if (input instanceof Error) {
+    throw input
+  }
+
+  let { error, statusCode, metadata } = input
   let err = Error()
-  err.statusCode = statusCode
+  if (statusCode) {
+    err.statusCode = statusCode
+  }
+
+  // The most common error response from AWS services
   if (typeof error === 'object') {
     Object.entries(error).forEach(([ name, value ]) => err[name] = value)
   }
+  // Less common: sometimes strings (of XML), possibly without a content-type
+  if (typeof error === 'string') {
+    err.message = error
+  }
+
+  if (typeof metadata === 'object') {
+    Object.entries(metadata).forEach(([ name, value ]) => err[name] = value)
+  }
+
+  /* istanbul ignore next */ // TODO check once plugin API settles
   if (metadata) {
     let { service, name } = metadata
-    let msg = err.message ? `: ${err.message}` : ''
-    err.message = `${service}.${name}${msg}`
+    let msg = '@aws-lite/client: ' + service
+    if (name) msg += `.${name}`
+    if (error.message) msg += `: ${error.message}`
+    err.message = msg
   }
 
   throw err

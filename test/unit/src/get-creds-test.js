@@ -1,4 +1,3 @@
-let { readFileSync } = require('fs')
 let os = require('os')
 let { join } = require('path')
 let test = require('tape')
@@ -94,7 +93,7 @@ test('Get credentials from credentials file', t => {
   // Default credentials file location
   let home = os.homedir()
   let credsFile = join(home, '.aws', 'credentials')
-  mockFs({ [credsFile]: readFileSync(credentialsMock) })
+  mockFs({ [credsFile]: mockFs.load(credentialsMock) })
   result = getCreds({})
   t.deepEqual(result, defaultProfile, 'Returned correct credentials from credentials file (~/.aws file location)')
   mockFs.restore()
