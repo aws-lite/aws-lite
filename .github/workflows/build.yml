@@ -58,42 +58,42 @@ jobs:
 
   # ----- Only git tag testing + package publishing beyond this point ----- #
 
-  # # Publish to package registries
-  # publish:
-  #   # Setup
-  #   needs: build
-  #   if: startsWith(github.ref, 'refs/tags/v')
-  #   runs-on: ubuntu-latest
+  # Publish to package registries
+  publish:
+    # Setup
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
 
-  #   # Go
-  #   steps:
-  #     - name: Check out repo
-  #       uses: actions/checkout@v3
+    # Go
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
 
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: lts/*
-  #         registry-url: https://registry.npmjs.org/
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org/
 
-  #     # Publish to npm
-  #     - name: Publish @RC to npm
-  #       if: contains(github.ref, 'RC')
-  #       run: npm publish --tag RC
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Publish to npm
+      - name: Publish @RC to npm
+        if: contains(github.ref, 'RC')
+        run: npm publish --tag RC
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  #     - name: Publish @latest to npm
-  #       if: contains(github.ref, 'RC') == false #'!contains()'' doesn't work lol
-  #       run: npm publish
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish @latest to npm
+        if: contains(github.ref, 'RC') == false #'!contains()'' doesn't work lol
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  #     - name: Notify
-  #       uses: sarisia/actions-status-discord@v1
-  #       if: always()
-  #       with:
-  #         webhook: ${{ secrets.DISCORD_WEBHOOK }}
-  #         title: "npm publish"
-  #         color: 0x222222
-  #         username: GitHub Actions
+      - name: Notify
+        uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "npm publish"
+          color: 0x222222
+          username: GitHub Actions
