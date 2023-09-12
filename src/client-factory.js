@@ -67,7 +67,7 @@ module.exports = function clientFactory (config, creds, region) {
               validateInput(method.validate, params, metadata)
             }
             try {
-              return await request({ ...params, ...result }, creds, selectedRegion, config, metadata)
+              return await request({ ...params, ...result, service }, creds, selectedRegion, config, metadata)
             }
             catch (err) {
               if (input instanceof Error || !method.error) {

@@ -1,6 +1,11 @@
 const required = true
 
+// This is just a very simple plugin mock (that should actually work!)
+// It is not intended to cover all Lambda API functionality
 module.exports = {
+  service: 'lambda',
+
+  // https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html
   GetFunctionConfiguration: {
     validate: {
       name: { type: 'string', required },
@@ -12,6 +17,8 @@ module.exports = {
       }
     },
   },
+
+  // https://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html
   Invoke: {
     validate: {
       name: { type: 'string', required },

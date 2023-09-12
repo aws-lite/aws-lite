@@ -1,6 +1,7 @@
 let request = async () => {}
 let required = true
 
+// This plugin is specifically / only intended for use in validation testing
 module.exports = {
   service: 'lambda',
   methods: {
