@@ -1,2 +1,2 @@
-let { service, GetFunctionConfiguration } = require('../methods')
-module.exports = { service, methods: { GetFunctionConfiguration } }
+// Just a passthrough
+module.exports = require('../get')
