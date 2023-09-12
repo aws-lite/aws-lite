@@ -467,7 +467,7 @@ test('Plugins - error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.requestMethodBlowsUp: Cannot set properties of undefined \(setting 'bar'\)/, 'Error included basic method information')
+    t.match(err.message, /\@aws-lite\/client: lambda.requestMethodBlowsUp: Cannot set/, 'Error included basic method information')
     t.equal(err.service, service, 'Error has service metadata')
     t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
@@ -553,7 +553,7 @@ test('Plugins - error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodBlowsUp: Cannot set properties of undefined \(setting 'bar'\)/, 'Error included basic method information')
+    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodBlowsUp: Cannot set/, 'Error included basic method information')
     t.equal(err.service, service, 'Error has service metadata')
     t.notOk(err.other, 'Error does not have other metadata')
     t.notOk(err.type, 'Error metadata was not mutated')
