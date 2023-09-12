@@ -564,7 +564,7 @@ test('Plugins - error handling', async t => {
 })
 
 test('Plugins - plugin validation', async t => {
-  t.plan(9)
+  t.plan(11)
 
   // CJS
   try {
@@ -630,6 +630,22 @@ test('Plugins - plugin validation', async t => {
   }
   catch (err) {
     t.match(err.message, /lol is not defined/, 'Throw on invalid plugin')
+    reset()
+  }
+
+  try {
+    await client({ ...defaultConfig, plugins: [ join(invalidPlugins, 'invalid-methods-type') ] })
+  }
+  catch (err) {
+    t.match(err.message, /Plugin must export a methods object/, 'Throw on missing methods')
+    reset()
+  }
+
+  try {
+    await client({ ...defaultConfig, plugins: [ join(invalidPlugins, 'invalid-methods-missing') ] })
+  }
+  catch (err) {
+    t.match(err.message, /Plugin must export a methods object/, 'Throw on missing methods')
     reset()
   }
 

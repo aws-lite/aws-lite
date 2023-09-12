@@ -62,6 +62,9 @@ module.exports = async function clientFactory (config, creds, region) {
         }
         let { service, methods } = plugin
         validateService(service)
+        if (!methods || (typeof methods !== 'object' || Array.isArray(methods))) {
+          throw TypeError('Plugin must export a methods object')
+        }
         Object.values(methods).forEach(method => {
           if (typeof method.request !== 'function') {
             throw ReferenceError(`All plugin request methods must be a function: ${service}`)
