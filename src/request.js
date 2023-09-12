@@ -60,9 +60,10 @@ module.exports = function request (params, creds, region, config, metadata) {
       })
     })
     req.on('error', error => reject({
-      error,
+      error: error.message,
       metadata: {
         ...metadata,
+        rawStack: error.stack,
         service: params.service,
         host: params.host,
         protocol: config.protocol,

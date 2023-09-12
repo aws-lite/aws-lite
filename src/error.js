@@ -4,7 +4,9 @@ module.exports = function errorHandler (input) {
   }
 
   let { error, statusCode, metadata } = input
-  let err = Error()
+
+  // If the error passed is an actual Error, it probably came from a plugin method failing, so we should attempt to retain its beautiful, beautiful stack trace
+  let err = error instanceof Error ? error : Error()
   if (statusCode) {
     err.statusCode = statusCode
   }
@@ -18,21 +20,20 @@ module.exports = function errorHandler (input) {
     err.message = error
   }
 
-  if (typeof metadata === 'object') {
-    Object.entries(metadata).forEach(([ name, value ]) => {
-      // Don't overwrite the error name with the plugin method name
-      if (name !== 'name') err[name] = value
-    })
-  }
+  // Tag the error with whatever metadata we have
+  Object.entries(metadata).forEach(([ name, value ]) => {
+    // Don't overwrite the error name with the plugin method name, though
+    if (name !== 'name') err[name] = value
+  })
 
-  /* istanbul ignore next */ // TODO check once plugin API settles
-  if (metadata) {
-    let { service, name } = metadata
-    let msg = '@aws-lite/client: ' + service
-    if (name) msg += `.${name}`
-    if (error.message) msg += `: ${error.message}`
-    err.message = msg
+  // Construct a more useful error message
+  let { service, name } = metadata
+  let msg = '@aws-lite/client: ' + service
+  if (name) msg += `.${name}`
+  if (error.message || err.message) {
+    msg += `: ${error.message || err.message}`
   }
+  err.message = msg
 
   throw err
 }

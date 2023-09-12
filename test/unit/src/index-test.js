@@ -5,18 +5,23 @@ let { resetAWSEnvVars } = require('../../lib')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
-let mock = join(cwd, 'test', 'mock')
 
 let accessKeyId = 'foo'
 let secretAccessKey = 'bar'
 let region = 'us-west-1'
 let protocol = 'http'
+let autoloadPlugins = false
 let keepAlive = false
 let service = 'lambda'
-let basic = { accessKeyId, secretAccessKey, region, protocol, keepAlive }
+let defaultConfig = { accessKeyId, secretAccessKey, region, protocol, autoloadPlugins, keepAlive }
 let host = 'localhost'
 let port = 1111
 let endpoint = '/an/endpoint'
+
+let badPort = 12345
+let mock = join(cwd, 'test', 'mock')
+let pluginDir = join(mock, 'plugins')
+let invalidPlugins = join(pluginDir, 'invalid')
 
 let server, request, responseBody, responseHeaders = {}, responseStatusCode = 200
 function createServer () {
@@ -111,7 +116,7 @@ test('Basic client functionality', async t => {
 
   let headers = { 'content-type': 'application/json' }
 
-  let aws = await client(basic)
+  let aws = await client(defaultConfig)
 
   // Basic get request
   result = await aws({ service, host, port, endpoint })
@@ -158,7 +163,7 @@ test('Basic client functionality', async t => {
 
 test('Aliased params', async t => {
   t.plan(8)
-  let aws = await client(basic)
+  let aws = await client(defaultConfig)
 
   // Endpoint
   await aws({ service, host, port, endpoint })
@@ -195,20 +200,22 @@ test('Aliased params', async t => {
 })
 
 test('Error handling', async t => {
-  t.plan(14)
+  t.plan(17)
 
   // Normal error
   try {
     responseStatusCode = 400
     responseBody = { message: 'lolno', other: 'metadata' }
     responseHeaders = { 'content-type': 'application/json' }
-    let aws = await client(basic)
-    await aws({ service: 'lambda', host, port, endpoint })
+    let aws = await client(defaultConfig)
+    await aws({ service, host, port, endpoint })
   }
   catch (err) {
-    t.equal(err.message, responseBody.message, 'Bubbled error message')
-    t.equal(err.other, responseBody.other, 'Bubbled error metadata')
-    t.equal(err.statusCode, responseStatusCode, 'Bubbled error status code')
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda: lolno/, 'Error included basic information')
+    t.equal(err.other, responseBody.other, 'Error has other metadata')
+    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
+    t.equal(err.service, service, 'Error has service')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
@@ -219,28 +226,31 @@ test('Error handling', async t => {
     responseBody = '<AccessDeniedException>\n' +
     '  <Message>Unable to determine service/operation name to be authorized</Message>\n' +
     '</AccessDeniedException>\n'
-    let aws = await client(basic)
-    await aws({ service: 'lambda', host, port, endpoint })
+    let aws = await client(defaultConfig)
+    await aws({ service, host, port, endpoint })
   }
   catch (err) {
-    t.equal(err.message, responseBody, 'Bubbled error message')
-    t.equal(err.statusCode, responseStatusCode, 'Bubbled error status code')
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda/, 'Error included basic information')
+    t.ok(err.message.includes(responseBody), 'Error has message')
+    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
+    t.equal(err.service, service, 'Error has service')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
 
   // Request-level failure
-  let badPort = 12345
   try {
-    let aws = await client(basic)
+    let aws = await client(defaultConfig)
     await aws({ service, host, port: badPort, endpoint })
   }
   catch (err) {
-    t.match(err.message, /lambda: connect ECONNREFUSED/, 'Bubbled error message')
-    t.equal(err.port, badPort, 'Bubbled port metadata')
-    t.equal(err.service, service, 'Bubbled service metadata')
-    t.equal(err.host, host, 'Bubbled host metadata')
-    t.equal(err.protocol, protocol, 'Bubbled protocol metadata')
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda: connect ECONNREFUSED/, 'Error included basic information')
+    t.equal(err.port, badPort, 'Error has port metadata')
+    t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.host, host, 'Error has host metadata')
+    t.equal(err.protocol, protocol, 'Error has protocol metadata')
     t.equal(err.statusCode, undefined, 'Status code not found on incomplete request')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
@@ -249,14 +259,11 @@ test('Error handling', async t => {
 
 test('Plugins - method construction, requests', async t => {
   t.plan(29)
-
-  let autoloadPlugins = false
   let name = 'my-lambda'
-
   let aws, expectedEndpoint
 
   // Reads
-  aws = await client({ ...basic, plugins: [ join(mock, 'plugins', 'get.js') ], autoloadPlugins })
+  aws = await client({ ...defaultConfig, plugins: [ join(pluginDir, 'get.js') ] })
   expectedEndpoint = `/2015-03-31/functions/${name}/configuration`
 
   await aws.lambda.GetFunctionConfiguration({ name, host, port })
@@ -269,7 +276,7 @@ test('Plugins - method construction, requests', async t => {
   basicRequestChecks(t, 'GET', { url: expectedEndpoint })
 
   // Writes
-  aws = await client({ ...basic, plugins: [ join(mock, 'plugins', 'post.js') ], autoloadPlugins })
+  aws = await client({ ...defaultConfig, plugins: [ join(pluginDir, 'post.js') ] })
   expectedEndpoint = `/2015-03-31/functions/${name}/invocations`
   let payload = { ok: true }
 
@@ -294,12 +301,10 @@ test('Plugins - method construction, requests', async t => {
 
 test('Plugins - input validation', async t => {
   t.plan(23)
-
-  let autoloadPlugins = false
   let str = 'hi'
   let num = 123
 
-  let aws = await client({ ...basic, plugins: [ join(mock, 'plugins', 'validation.js') ], autoloadPlugins })
+  let aws = await client({ ...defaultConfig, plugins: [ join(pluginDir, 'validation.js') ] })
 
   // No validation
   try {
@@ -433,17 +438,120 @@ test('Plugins - input validation', async t => {
   }
 })
 
-// TODO Plugins - error handling
+test('Plugins - error handling', async t => {
+  t.plan(32)
+  let name = 'my-lambda'
+  let payload = { ok: true }
+
+  let errorsPlugin = join(pluginDir, 'errors.js')
+  let aws = await client({ ...defaultConfig, plugins: [ errorsPlugin ] })
+
+  // Control
+  try {
+    await aws({ service, endpoint, payload, host, port })
+    await aws.lambda.noErrorMethod({ name, payload, host, port })
+    t.pass('Control test completed')
+  }
+  catch (err) {
+    console.log(err)
+    t.fail('Did not expect an error in control test')
+  }
+
+  // Error passed through plugin
+  try {
+    responseBody = { other: 'metadata' }
+    responseHeaders = { 'content-type': 'application/json' }
+    responseStatusCode = 500
+    await aws.lambda.errorMethodMutatesError({ name, payload, host, port })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodMutatesError/, 'Error included basic method information')
+    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
+    t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.other, responseBody.other, 'Error has other metadata')
+    t.notOk(err.type, 'Error does not have type (via plugin error)')
+    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+  }
+  reset()
+
+  // Error mutated by plugin error handler
+  try {
+    responseBody = { message: 'Uh oh, a validation error!', other: 'metadata' }
+    responseHeaders = { 'content-type': 'application/json' }
+    responseStatusCode = 400
+    await aws.lambda.errorMethodMutatesError({ name, payload, host, port })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodMutatesError/, 'Error included basic method information')
+    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
+    t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.other, responseBody.other, 'Error has other metadata')
+    t.equal(err.type, 'Lambda validation error', 'Error has type (via plugin error)')
+    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+  }
+  reset()
+
+  // Request-level error mutated by plugin error handler
+  try {
+    await aws.lambda.noErrorMethod({ name, host, port: badPort })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda.noErrorMethod: connect ECONNREFUSED/, 'Error included basic information')
+    t.equal(err.port, badPort, 'Error has port metadata')
+    t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.host, host, 'Error has host metadata')
+    t.equal(err.protocol, protocol, 'Error has protocol metadata')
+    t.equal(err.statusCode, undefined, 'Status code not found on incomplete request')
+    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    reset()
+  }
+
+  // Error method noop, error passes through
+  try {
+    responseBody = { other: 'metadata' }
+    responseHeaders = { 'content-type': 'application/json' }
+    responseStatusCode = 500
+    await aws.lambda.errorMethodNoop({ name, host, port })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodNoop/, 'Error included basic method information')
+    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
+    t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.other, responseBody.other, 'Error has other metadata')
+    t.notOk(err.type, 'Error does not have type (via plugin error)')
+    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    reset()
+  }
+
+  // Error method itself fails
+  try {
+    responseBody = { other: 'metadata' }
+    responseHeaders = { 'content-type': 'application/json' }
+    responseStatusCode = 500
+    await aws.lambda.errorMethodBlowsUp({ name, host, port })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodBlowsUp: Cannot set properties of undefined \(setting 'bar'\)/, 'Error included basic method information')
+    t.equal(err.service, service, 'Error has service metadata')
+    t.notOk(err.other, 'Error does not have other metadata')
+    t.notOk(err.type, 'Did not bubble error metadata mutation')
+    t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
+    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    reset()
+  }
+})
 
 test('Plugins - plugin validation', async t => {
   t.plan(9)
 
-  let pluginDir = join(mock, 'plugins')
-  let invalid = join(pluginDir, 'invalid')
-
   // CJS
   try {
-    await client({ ...basic, plugins: [ join(pluginDir, 'cjs') ] })
+    await client({ ...defaultConfig, plugins: [ join(pluginDir, 'cjs') ] })
     t.pass('CJS plugins work fine (directory import)')
   }
   catch (err) {
@@ -454,10 +562,10 @@ test('Plugins - plugin validation', async t => {
   // ESM
   try {
     // .mjs file
-    await client({ ...basic, plugins: [ join(pluginDir, 'esm-mjs', 'index.mjs') ] })
+    await client({ ...defaultConfig, plugins: [ join(pluginDir, 'esm-mjs', 'index.mjs') ] })
     t.pass('ESM .mjs plugins work fine')
     // .js ext + package.json.type = module
-    await client({ ...basic, plugins: [ join(pluginDir, 'esm-pkg', 'index.js') ] })
+    await client({ ...defaultConfig, plugins: [ join(pluginDir, 'esm-pkg', 'index.js') ] })
     t.pass('ESM .js + package.json plugins work fine')
   }
   catch (err) {
@@ -467,42 +575,42 @@ test('Plugins - plugin validation', async t => {
 
   // Failures
   try {
-    await client({ ...basic, plugins: [ join(invalid, 'invalid-request-method.js') ] })
+    await client({ ...defaultConfig, plugins: [ join(invalidPlugins, 'invalid-request-method.js') ] })
   }
   catch (err) {
     t.match(err.message, /All plugin request methods must be a function/, 'Throw on invalid request method')
   }
 
   try {
-    await client({ ...basic, plugins: [ join(invalid, 'invalid-error-method.js') ] })
+    await client({ ...defaultConfig, plugins: [ join(invalidPlugins, 'invalid-error-method.js') ] })
   }
   catch (err) {
     t.match(err.message, /All plugin error methods must be a function/, 'Throw on invalid error method')
   }
 
   try {
-    await client({ ...basic, plugins: [ join(invalid, 'invalid-service.js') ] })
+    await client({ ...defaultConfig, plugins: [ join(invalidPlugins, 'invalid-service.js') ] })
   }
   catch (err) {
     t.match(err.message, /Invalid AWS service specified: lolidk/, 'Throw on invalid service')
   }
 
   try {
-    await client({ ...basic, plugins: [ join(invalid, 'this-plugin-does-not-exist.js') ] })
+    await client({ ...defaultConfig, plugins: [ join(invalidPlugins, 'this-plugin-does-not-exist.js') ] })
   }
   catch (err) {
     t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
   }
 
   try {
-    await client({ ...basic, plugins: [ join(invalid, 'invalid-plugin.js') ] })
+    await client({ ...defaultConfig, plugins: [ join(invalidPlugins, 'invalid-plugin.js') ] })
   }
   catch (err) {
     t.match(err.message, /lol is not defined/, 'Throw on invalid plugin')
   }
 
   try {
-    await client({ ...basic, plugins: [ join(invalid, 'this-plugin-does-not-exist.js') ] })
+    await client({ ...defaultConfig, plugins: [ join(invalidPlugins, 'this-plugin-does-not-exist.js') ] })
   }
   catch (err) {
     t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
@@ -512,7 +620,7 @@ test('Plugins - plugin validation', async t => {
 test('General validation', async t => {
   t.plan(4)
   try {
-    let aws = await client(basic)
+    let aws = await client(defaultConfig)
     await aws()
   }
   catch (err) {
@@ -521,7 +629,7 @@ test('General validation', async t => {
   }
 
   try {
-    let aws = await client(basic)
+    let aws = await client(defaultConfig)
     await aws({ service: 'lolidk', host, port, endpoint })
   }
   catch (err) {
@@ -530,7 +638,7 @@ test('General validation', async t => {
   }
 
   try {
-    let aws = await client({ ...basic, protocol: 'lolidk' })
+    let aws = await client({ ...defaultConfig, protocol: 'lolidk' })
     await aws({ service, host, port, endpoint })
   }
   catch (err) {
@@ -539,7 +647,7 @@ test('General validation', async t => {
   }
 
   try {
-    let aws = await client({ ...basic, plugins: { ok: true } })
+    let aws = await client({ ...defaultConfig, plugins: { ok: true } })
     await aws({ service, host, port, endpoint })
   }
   catch (err) {

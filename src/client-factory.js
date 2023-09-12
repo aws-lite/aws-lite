@@ -10,8 +10,9 @@ module.exports = async function clientFactory (config, creds, region) {
   async function client (params = {}) {
     let selectedRegion = params.region || region
     validateService(params.service)
+    let metadata = { service: params.service }
     try {
-      return await request(params, creds, selectedRegion, config)
+      return await request(params, creds, selectedRegion, config, metadata)
     }
     catch (err) {
       errorHandler(err)
@@ -75,22 +76,27 @@ module.exports = async function clientFactory (config, creds, region) {
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
           clientMethods[name] = Object.defineProperty(async input => {
             let selectedRegion = input.region || region
+            // TODO request method error handling
             let result = await method.request(input)
             let params = { ...input, ...result }
             let metadata = { service, name }
             if (method.validate) {
               validateInput(method.validate, params, metadata)
             }
-            /* istanbul ignore next */
             try {
               return await request({ ...params, ...result, service }, creds, selectedRegion, config, metadata)
             }
             catch (err) {
-              if (input instanceof Error || !method.error) {
-                errorHandler(err)
+              if (method.error && !(input instanceof Error)) {
+                try {
+                  let updatedError = await method.error(err)
+                  errorHandler(updatedError || err)
+                }
+                catch (methodError) {
+                  errorHandler({ error: methodError, metadata: { service, name } })
+                }
               }
-              let updatedError = await method.error(err)
-              errorHandler(updatedError || err)
+              errorHandler(err)
             }
           }, 'name', { value: name })
         })
