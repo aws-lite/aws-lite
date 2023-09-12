@@ -19,7 +19,10 @@ module.exports = function errorHandler (input) {
   }
 
   if (typeof metadata === 'object') {
-    Object.entries(metadata).forEach(([ name, value ]) => err[name] = value)
+    Object.entries(metadata).forEach(([ name, value ]) => {
+      // Don't overwrite the error name with the plugin method name
+      if (name !== 'name') err[name] = value
+    })
   }
 
   /* istanbul ignore next */ // TODO check once plugin API settles

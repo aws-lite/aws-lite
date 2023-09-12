@@ -5,6 +5,7 @@ let { resetAWSEnvVars } = require('../../lib')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
+let mock = join(cwd, 'test', 'mock')
 
 let accessKeyId = 'foo'
 let secretAccessKey = 'bar'
@@ -58,6 +59,16 @@ function closeServer () {
     })
   })
 }
+
+function basicRequestChecks (t, method, params = {}) {
+  t.equal(request.method, method, `Made a ${method} request`)
+  t.equal(request.url, params.url || endpoint, 'Made request to correct endpoint')
+  t.ok(request.headers['x-amz-date'], 'Made request with x-amz-date header')
+  t.ok(request.headers['authorization'], 'Made request with authorization header')
+  t.match(request.headers['authorization'], /Credential=foo/, 'Authorization header is using the access key')
+  reset()
+}
+
 function reset () {
   responseHeaders = {}
   responseStatusCode = 200
@@ -99,20 +110,11 @@ test('Basic client functionality', async t => {
 
   let aws = client(basic)
 
-  function basicChecks (method) {
-    t.equal(request.method, method, `Made a ${method} request`)
-    t.equal(request.url, endpoint, 'Made request to correct endpoint')
-    t.ok(request.headers['x-amz-date'], 'Made request with x-amz-date header')
-    t.ok(request.headers['authorization'], 'Made request with authorization header')
-    t.match(request.headers['authorization'], /Credential=foo/, 'Authorization header is using the access key')
-    reset()
-  }
-
   // Basic get request
   result = await aws({ service, host, port, endpoint })
   t.notOk(request.body, 'Request included no body')
   t.equal(result, '', 'Client returned empty response body as empty string')
-  basicChecks('GET')
+  basicRequestChecks(t, 'GET')
 
   // Basic post request
   body = { ok: true }
@@ -121,7 +123,7 @@ test('Basic client functionality', async t => {
   result = await aws({ service, host, port, endpoint, body })
   t.deepEqual(request.body, body, 'Request included correct body')
   t.deepEqual(result, responseBody, 'Client returned response body as parsed JSON')
-  basicChecks('POST')
+  basicRequestChecks(t, 'POST')
 
   // Basic post with AWS-flavored JSON
   body = { ok: true }
@@ -130,7 +132,7 @@ test('Basic client functionality', async t => {
   result = await aws({ service, host, port, endpoint, body })
   t.deepEqual(request.body, body, 'Request included correct body')
   t.deepEqual(result, responseBody, 'Client returned response body as parsed JSON')
-  basicChecks('POST')
+  basicRequestChecks(t, 'POST')
 
   // Publish an object while passing headers
   body = { ok: true }
@@ -152,15 +154,12 @@ test('Basic client functionality', async t => {
 })
 
 test('Aliased params', async t => {
-  t.plan(9)
+  t.plan(8)
   let aws = client(basic)
 
-  // Endpoint / path
+  // Endpoint
   await aws({ service, host, port, endpoint })
   t.equal(request.url, endpoint, 'Made request to correct endpoint (options.endpoint)')
-  reset()
-  await aws({ service, host, port, path: endpoint })
-  t.equal(request.url, endpoint, 'Made request to correct endpoint (options.path)')
   reset()
 
   // Host / hostname
@@ -245,10 +244,189 @@ test('Error handling', async t => {
   }
 })
 
+test('Plugins - method construction, requests', async t => {
+  t.plan(29)
+
+  let autoloadPlugins = false
+  let name = 'my-lambda'
+
+  let aws, expectedEndpoint
+
+  // Reads
+  aws = client({ ...basic, plugins: [ join(mock, 'plugins', 'get.js') ], autoloadPlugins })
+  expectedEndpoint = `/2015-03-31/functions/${name}/configuration`
+
+  await aws.lambda.GetFunctionConfiguration({ name, host, port })
+  t.equal(request.url, expectedEndpoint, 'Plugin requested generated endpoint')
+  t.equal(request.body, undefined, 'Plugin made request without body')
+  basicRequestChecks(t, 'GET', { url: expectedEndpoint })
+
+  await aws.lambda.GetFunctionConfiguration({ name, host, port, endpoint: '/foo' })
+  t.equal(request.url, expectedEndpoint, 'Plugin can override normal client param')
+  basicRequestChecks(t, 'GET', { url: expectedEndpoint })
+
+  // Writes
+  aws = client({ ...basic, plugins: [ join(mock, 'plugins', 'post.js') ], autoloadPlugins })
+  expectedEndpoint = `/2015-03-31/functions/${name}/invocations`
+  let payload = { ok: true }
+
+  await aws.lambda.Invoke({ name, payload, host, port, })
+  t.equal(request.url, expectedEndpoint, 'Plugin requested generated endpoint')
+  t.deepEqual(request.body, payload, 'Plugin made request with included payload')
+  basicRequestChecks(t, 'POST', { url: expectedEndpoint })
+
+  await aws.lambda.Invoke({ name, data: payload, host, port, })
+  t.deepEqual(request.body, payload, `Payload can be aliased to 'data'`)
+
+  await aws.lambda.Invoke({ name, body: payload, host, port, })
+  t.deepEqual(request.body, payload, `Payload can be aliased to 'body'`)
+
+  await aws.lambda.Invoke({ name, json: payload, host, port, })
+  t.deepEqual(request.body, payload, `Payload can be aliased to 'json'`)
+
+  await aws.lambda.Invoke({ name, payload, host, port, endpoint: '/foo' })
+  t.equal(request.url, expectedEndpoint, 'Plugin can override normal client param')
+  basicRequestChecks(t, 'POST', { url: expectedEndpoint })
+})
+
+test('Plugins - input validation', async t => {
+  t.plan(22)
+
+  let autoloadPlugins = false
+  let str = 'hi'
+  let num = 123
+
+  let aws = client({ ...basic, plugins: [ join(mock, 'plugins', 'validation.js') ], autoloadPlugins })
+
+  // Missing required parameter type
+  try {
+    await aws.lambda.testTypes({})
+  }
+  catch (err) {
+    t.match(err.message, /Missing required parameter: required/, 'Errored on missing required param')
+  }
+
+  // Wrong required parameter type
+  try {
+    await aws.lambda.testTypes({ required: num })
+  }
+  catch (err) {
+    t.match(err.message, /Parameter 'required' must be: string/, 'Errored on wrong required param type')
+  }
+
+  // Wrong optional parameter type
+  try {
+    await aws.lambda.testTypes({ arr: true })
+  }
+  catch (err) {
+    t.match(err.message, /Parameter 'arr' must be: array/, 'Errored on wrong optional param type')
+  }
+
+  // Disabled parameter
+  try {
+    await aws.lambda.testTypes({ disabled: str })
+  }
+  catch (err) {
+    t.match(err.message, /Parameter 'disabled' must not be used/, 'Errored on disabled param')
+  }
+
+  // Plugin specified an invalid validation type (string)
+  try {
+    await aws.lambda.testTypes({ required: str, invalidType: str })
+  }
+  catch (err) {
+    t.match(err.message, /Invalid type found: invalidType \(lolidk\)/, 'Errored on invalid validation type (string)')
+  }
+
+  // Plugin specified an invalid validation type (list)
+  try {
+    await aws.lambda.testTypes({ required: str, invalidTypeList: str })
+  }
+  catch (err) {
+    t.match(err.message, /Invalid type found: invalidTypeList \(listidk\)/, 'Errored on invalid validation type (list)')
+  }
+
+  // Plugin specified an invalid validation type, uh, type
+  try {
+    await aws.lambda.testTypes({ required: str, invalidTypeType: str })
+  }
+  catch (err) {
+    t.match(err.message, /Validator 'type' property must be a string or array/, 'Errored on invalid validation type')
+  }
+
+  // Plugin specified an invalid validation type, uh, type (list)
+  try {
+    await aws.lambda.testTypes({ required: str, invalidTypeListType: str })
+  }
+  catch (err) {
+    t.match(err.message, /Invalid type found: invalidTypeListType \(12345\)/, 'Errored on invalid validation type (list)')
+  }
+
+  // Plugin validation is missing a type
+  try {
+    await aws.lambda.testTypes({ required: str, missingType: str })
+  }
+  catch (err) {
+    t.match(err.message, /Validator is missing required 'type' property/, 'Errored on missing validation type')
+  }
+
+  // Now just test the other various types work (and fail)
+  let validTests = { arr: [], num, bool: true, obj: {}, str }
+  for (let [ k, v ] of Object.entries(validTests)) {
+    try {
+      await aws.lambda.testTypes({ required: str, host, port, [k]: v })
+      t.pass(`Correct ${k} validation succeeded`)
+    }
+    catch (err) {
+      console.log(err)
+      t.fail(`Correct ${k} validation failed`)
+    }
+  }
+
+  let invalidTests = { arr: num, bool: num, num: str, obj: num, str: num }
+  for (let [ k, v ] of Object.entries(invalidTests)) {
+    try {
+      await aws.lambda.testTypes({ required: str, [k]: v })
+      t.fail(`Incorrect ${k} validation failed`)
+    }
+    catch (err) {
+      let re = new RegExp(`Parameter '${k}' must be`)
+      t.match(err.message, re, `Incorrect ${k} validation succeeded`)
+    }
+  }
+
+  // Type array
+  try {
+    await aws.lambda.testTypes({ required: str, payload: num })
+  }
+  catch (err) {
+    t.match(err.message, /Parameter 'payload' must be one of/, 'Errored on wrong param (from type array)')
+  }
+
+  // Payload alias
+  try {
+    await aws.lambda.testTypes({ required: str, data: num })
+  }
+  catch (err) {
+    t.match(err.message, /Parameter 'data' must be one of/, 'Errored on wrong param (from type array, payload alias)')
+  }
+
+  // Duplicate aliases
+  try {
+    await aws.lambda.testTypes({ required: str, payload: str, data: str })
+  }
+  catch (err) {
+    t.match(err.message, /Found duplicate payload parameters/, 'Errored on duplicate payload params')
+  }
+})
+
+// TODO Plugins - plugin validation
+// TODO Plugins - error handling
+
 test('Validation', async t => {
   t.plan(4)
   try {
-    let aws = client({ accessKeyId, secretAccessKey, region, protocol, keepAlive })
+    let aws = client(basic)
     await aws()
   }
   catch (err) {
@@ -257,7 +435,7 @@ test('Validation', async t => {
   }
 
   try {
-    let aws = client({ accessKeyId, secretAccessKey, region, protocol, keepAlive })
+    let aws = client(basic)
     await aws({ service: 'lolidk', host, port, endpoint })
   }
   catch (err) {
@@ -266,7 +444,7 @@ test('Validation', async t => {
   }
 
   try {
-    let aws = client({ accessKeyId, secretAccessKey, region, protocol: 'lolidk', keepAlive })
+    let aws = client({ ...basic, protocol: 'lolidk' })
     await aws({ service, host, port, endpoint })
   }
   catch (err) {
@@ -275,7 +453,7 @@ test('Validation', async t => {
   }
 
   try {
-    let aws = client({ accessKeyId, secretAccessKey, region, keepAlive, plugins: { ok: true } })
+    let aws = client({ ...basic, plugins: { ok: true } })
     await aws({ service, host, port, endpoint })
   }
   catch (err) {

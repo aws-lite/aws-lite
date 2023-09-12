@@ -2,6 +2,7 @@ let { readdirSync } = require('fs')
 let { join } = require('path')
 let services = require('./services')
 let request = require('./request')
+let validateInput = require('./validate')
 let errorHandler = require('./error')
 
 module.exports = function clientFactory (config, creds, region) {
@@ -57,20 +58,23 @@ module.exports = function clientFactory (config, creds, region) {
         let clientMethods = {}
         Object.entries(methods).forEach(([ name, method ]) => {
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
-          clientMethods[name] = Object.defineProperty(async params => {
-            let selectedRegion = params.region || region
-            let result = await method.request(params)
+          clientMethods[name] = Object.defineProperty(async input => {
+            let selectedRegion = input.region || region
+            let result = await method.request(input)
+            let params = { ...input, ...result }
             let metadata = { service, name }
+            if (method.validate) {
+              validateInput(method.validate, params, metadata)
+            }
             try {
               return await request({ ...params, ...result }, creds, selectedRegion, config, metadata)
             }
             catch (err) {
-              if (method.error) {
-                return await method.error(err)
-              }
-              else {
+              if (input instanceof Error || !method.error) {
                 errorHandler(err)
               }
+              let updatedError = await method.error(err)
+              errorHandler(updatedError || err)
             }
           }, 'name', { value: name })
         })

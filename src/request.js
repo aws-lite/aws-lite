@@ -3,7 +3,7 @@ let { useAWS } = require('./lib')
 
 module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
-    params.path = params.endpoint || params.path
+    params.path = params.endpoint
     params.host = params.host || params.hostname
     if (params.hostname) delete params.hostname
 
@@ -14,7 +14,7 @@ module.exports = function request (params, creds, region, config, metadata) {
     }
 
     // JSON-ify payload where convenient
-    let body = params.body || params.data || params.payload || params.json
+    let body = params.payload || params.body || params.data || params.json
     // Yeah, lots of potentially weird valid json (like just a null), deal with it if/when we need to I guess
     if (typeof body === 'object') {
       params.headers = params.headers || {}
