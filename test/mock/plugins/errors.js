@@ -4,6 +4,12 @@ let message = 'Lambda validation error'
 module.exports = {
   service: 'lambda',
   methods: {
+    requestMethodBlowsUp: {
+      request: async (input) => {
+        input.foo.bar = 'idk'
+        return input
+      }
+    },
     noErrorMethod: {
       request: passthrough,
     },

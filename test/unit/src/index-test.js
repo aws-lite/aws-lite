@@ -78,6 +78,7 @@ function reset () {
   responseHeaders = {}
   responseStatusCode = 200
   request = responseBody = undefined
+  resetAWSEnvVars()
 }
 
 test('Set up env', t => {
@@ -99,7 +100,7 @@ test('Config method', async t => {
   process.env.AWS_REGION = region
   aws = await client()
   t.equal(typeof aws, 'function', 'Client configurator returned client function without passed config')
-  resetAWSEnvVars()
+  reset()
 
   try {
     process.env.AWS_SHARED_CREDENTIALS_FILE = 'meh' // jic dev has actual creds file
@@ -107,6 +108,7 @@ test('Config method', async t => {
   }
   catch (err) {
     t.match(err.message, /You must supply AWS credentials/, 'Client configurator throws without creds and region')
+    reset()
   }
 })
 
@@ -436,10 +438,11 @@ test('Plugins - input validation', async t => {
   catch (err) {
     t.match(err.message, /Found duplicate payload parameters/, 'Errored on duplicate payload params')
   }
+  reset()
 })
 
 test('Plugins - error handling', async t => {
-  t.plan(32)
+  t.plan(36)
   let name = 'my-lambda'
   let payload = { ok: true }
 
@@ -451,10 +454,24 @@ test('Plugins - error handling', async t => {
     await aws({ service, endpoint, payload, host, port })
     await aws.lambda.noErrorMethod({ name, payload, host, port })
     t.pass('Control test completed')
+    reset()
   }
   catch (err) {
     console.log(err)
     t.fail('Did not expect an error in control test')
+  }
+
+  // Request method fails
+  try {
+    await aws.lambda.requestMethodBlowsUp({ name, host, port })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda.requestMethodBlowsUp: Cannot set properties of undefined \(setting 'bar'\)/, 'Error included basic method information')
+    t.equal(err.service, service, 'Error has service metadata')
+    t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
+    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    reset()
   }
 
   // Error passed through plugin
@@ -539,7 +556,7 @@ test('Plugins - error handling', async t => {
     t.match(err.message, /\@aws-lite\/client: lambda.errorMethodBlowsUp: Cannot set properties of undefined \(setting 'bar'\)/, 'Error included basic method information')
     t.equal(err.service, service, 'Error has service metadata')
     t.notOk(err.other, 'Error does not have other metadata')
-    t.notOk(err.type, 'Did not bubble error metadata mutation')
+    t.notOk(err.type, 'Error metadata was not mutated')
     t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
@@ -553,6 +570,7 @@ test('Plugins - plugin validation', async t => {
   try {
     await client({ ...defaultConfig, plugins: [ join(pluginDir, 'cjs') ] })
     t.pass('CJS plugins work fine (directory import)')
+    reset()
   }
   catch (err) {
     console.log(err)
@@ -567,6 +585,7 @@ test('Plugins - plugin validation', async t => {
     // .js ext + package.json.type = module
     await client({ ...defaultConfig, plugins: [ join(pluginDir, 'esm-pkg', 'index.js') ] })
     t.pass('ESM .js + package.json plugins work fine')
+    reset()
   }
   catch (err) {
     console.log(err)
@@ -579,6 +598,7 @@ test('Plugins - plugin validation', async t => {
   }
   catch (err) {
     t.match(err.message, /All plugin request methods must be a function/, 'Throw on invalid request method')
+    reset()
   }
 
   try {
@@ -586,6 +606,7 @@ test('Plugins - plugin validation', async t => {
   }
   catch (err) {
     t.match(err.message, /All plugin error methods must be a function/, 'Throw on invalid error method')
+    reset()
   }
 
   try {
@@ -593,6 +614,7 @@ test('Plugins - plugin validation', async t => {
   }
   catch (err) {
     t.match(err.message, /Invalid AWS service specified: lolidk/, 'Throw on invalid service')
+    reset()
   }
 
   try {
@@ -600,6 +622,7 @@ test('Plugins - plugin validation', async t => {
   }
   catch (err) {
     t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
+    reset()
   }
 
   try {
@@ -607,6 +630,7 @@ test('Plugins - plugin validation', async t => {
   }
   catch (err) {
     t.match(err.message, /lol is not defined/, 'Throw on invalid plugin')
+    reset()
   }
 
   try {
@@ -614,6 +638,7 @@ test('Plugins - plugin validation', async t => {
   }
   catch (err) {
     t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
+    reset()
   }
 })
 

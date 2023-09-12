@@ -76,17 +76,28 @@ module.exports = async function clientFactory (config, creds, region) {
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
           clientMethods[name] = Object.defineProperty(async input => {
             let selectedRegion = input.region || region
-            // TODO request method error handling
-            let result = await method.request(input)
-            let params = { ...input, ...result }
             let metadata = { service, name }
+
+            // Run plugin.request()
+            try {
+              var result = await method.request(input)
+            }
+            catch (methodError) {
+              errorHandler({ error: methodError, metadata })
+            }
+
+            // Hit plugin.validate
+            let params = { ...input, ...result }
             if (method.validate) {
               validateInput(method.validate, params, metadata)
             }
+
+            // Make the request
             try {
               return await request({ ...params, ...result, service }, creds, selectedRegion, config, metadata)
             }
             catch (err) {
+              // Run plugin.error()
               if (method.error && !(input instanceof Error)) {
                 try {
                   let updatedError = await method.error(err)
