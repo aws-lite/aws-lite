@@ -82,24 +82,27 @@ test('Set up env', t => {
   t.ok(server, 'Started server')
 })
 
-test('Config method', t => {
+test('Config method', async t => {
   t.plan(3)
   let aws
 
-  aws = client({ accessKeyId, secretAccessKey, region })
+  aws = await client({ accessKeyId, secretAccessKey, region })
   t.equal(typeof aws, 'function', 'Client configurator returned client function with passed config')
 
   process.env.AWS_ACCESS_KEY_ID = accessKeyId
   process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey
   process.env.AWS_REGION = region
-  aws = client()
+  aws = await client()
   t.equal(typeof aws, 'function', 'Client configurator returned client function without passed config')
   resetAWSEnvVars()
 
-  t.throws(() => {
+  try {
     process.env.AWS_SHARED_CREDENTIALS_FILE = 'meh' // jic dev has actual creds file
-    client()
-  }, /You must supply AWS credentials/, 'Client configurator throws without creds and region')
+    await client()
+  }
+  catch (err) {
+    t.match(err.message, /You must supply AWS credentials/, 'Client configurator throws without creds and region')
+  }
 })
 
 test('Basic client functionality', async t => {
@@ -108,7 +111,7 @@ test('Basic client functionality', async t => {
 
   let headers = { 'content-type': 'application/json' }
 
-  let aws = client(basic)
+  let aws = await client(basic)
 
   // Basic get request
   result = await aws({ service, host, port, endpoint })
@@ -155,7 +158,7 @@ test('Basic client functionality', async t => {
 
 test('Aliased params', async t => {
   t.plan(8)
-  let aws = client(basic)
+  let aws = await client(basic)
 
   // Endpoint
   await aws({ service, host, port, endpoint })
@@ -199,7 +202,7 @@ test('Error handling', async t => {
     responseStatusCode = 400
     responseBody = { message: 'lolno', other: 'metadata' }
     responseHeaders = { 'content-type': 'application/json' }
-    let aws = client(basic)
+    let aws = await client(basic)
     await aws({ service: 'lambda', host, port, endpoint })
   }
   catch (err) {
@@ -216,7 +219,7 @@ test('Error handling', async t => {
     responseBody = '<AccessDeniedException>\n' +
     '  <Message>Unable to determine service/operation name to be authorized</Message>\n' +
     '</AccessDeniedException>\n'
-    let aws = client(basic)
+    let aws = await client(basic)
     await aws({ service: 'lambda', host, port, endpoint })
   }
   catch (err) {
@@ -229,7 +232,7 @@ test('Error handling', async t => {
   // Request-level failure
   let badPort = 12345
   try {
-    let aws = client(basic)
+    let aws = await client(basic)
     await aws({ service, host, port: badPort, endpoint })
   }
   catch (err) {
@@ -253,7 +256,7 @@ test('Plugins - method construction, requests', async t => {
   let aws, expectedEndpoint
 
   // Reads
-  aws = client({ ...basic, plugins: [ join(mock, 'plugins', 'get.js') ], autoloadPlugins })
+  aws = await client({ ...basic, plugins: [ join(mock, 'plugins', 'get.js') ], autoloadPlugins })
   expectedEndpoint = `/2015-03-31/functions/${name}/configuration`
 
   await aws.lambda.GetFunctionConfiguration({ name, host, port })
@@ -266,22 +269,22 @@ test('Plugins - method construction, requests', async t => {
   basicRequestChecks(t, 'GET', { url: expectedEndpoint })
 
   // Writes
-  aws = client({ ...basic, plugins: [ join(mock, 'plugins', 'post.js') ], autoloadPlugins })
+  aws = await client({ ...basic, plugins: [ join(mock, 'plugins', 'post.js') ], autoloadPlugins })
   expectedEndpoint = `/2015-03-31/functions/${name}/invocations`
   let payload = { ok: true }
 
-  await aws.lambda.Invoke({ name, payload, host, port, })
+  await aws.lambda.Invoke({ name, payload, host, port })
   t.equal(request.url, expectedEndpoint, 'Plugin requested generated endpoint')
   t.deepEqual(request.body, payload, 'Plugin made request with included payload')
   basicRequestChecks(t, 'POST', { url: expectedEndpoint })
 
-  await aws.lambda.Invoke({ name, data: payload, host, port, })
+  await aws.lambda.Invoke({ name, data: payload, host, port })
   t.deepEqual(request.body, payload, `Payload can be aliased to 'data'`)
 
-  await aws.lambda.Invoke({ name, body: payload, host, port, })
+  await aws.lambda.Invoke({ name, body: payload, host, port })
   t.deepEqual(request.body, payload, `Payload can be aliased to 'body'`)
 
-  await aws.lambda.Invoke({ name, json: payload, host, port, })
+  await aws.lambda.Invoke({ name, json: payload, host, port })
   t.deepEqual(request.body, payload, `Payload can be aliased to 'json'`)
 
   await aws.lambda.Invoke({ name, payload, host, port, endpoint: '/foo' })
@@ -290,13 +293,23 @@ test('Plugins - method construction, requests', async t => {
 })
 
 test('Plugins - input validation', async t => {
-  t.plan(22)
+  t.plan(23)
 
   let autoloadPlugins = false
   let str = 'hi'
   let num = 123
 
-  let aws = client({ ...basic, plugins: [ join(mock, 'plugins', 'validation.js') ], autoloadPlugins })
+  let aws = await client({ ...basic, plugins: [ join(mock, 'plugins', 'validation.js') ], autoloadPlugins })
+
+  // No validation
+  try {
+    await aws.lambda.noValidation({ host, port })
+    t.pass('No validation')
+  }
+  catch (err) {
+    console.log(err)
+    t.fail('Method without validation should have passed validation without issue')
+  }
 
   // Missing required parameter type
   try {
@@ -420,13 +433,86 @@ test('Plugins - input validation', async t => {
   }
 })
 
-// TODO Plugins - plugin validation
 // TODO Plugins - error handling
 
-test('Validation', async t => {
+test('Plugins - plugin validation', async t => {
+  t.plan(9)
+
+  let pluginDir = join(mock, 'plugins')
+  let invalid = join(pluginDir, 'invalid')
+
+  // CJS
+  try {
+    await client({ ...basic, plugins: [ join(pluginDir, 'cjs') ] })
+    t.pass('CJS plugins work fine (directory import)')
+  }
+  catch (err) {
+    console.log(err)
+    t.fail('CJS plugin failure')
+  }
+
+  // ESM
+  try {
+    // .mjs file
+    await client({ ...basic, plugins: [ join(pluginDir, 'esm-mjs', 'index.mjs') ] })
+    t.pass('ESM .mjs plugins work fine')
+    // .js ext + package.json.type = module
+    await client({ ...basic, plugins: [ join(pluginDir, 'esm-pkg', 'index.js') ] })
+    t.pass('ESM .js + package.json plugins work fine')
+  }
+  catch (err) {
+    console.log(err)
+    t.fail('ESM plugin failure')
+  }
+
+  // Failures
+  try {
+    await client({ ...basic, plugins: [ join(invalid, 'invalid-request-method.js') ] })
+  }
+  catch (err) {
+    t.match(err.message, /All plugin request methods must be a function/, 'Throw on invalid request method')
+  }
+
+  try {
+    await client({ ...basic, plugins: [ join(invalid, 'invalid-error-method.js') ] })
+  }
+  catch (err) {
+    t.match(err.message, /All plugin error methods must be a function/, 'Throw on invalid error method')
+  }
+
+  try {
+    await client({ ...basic, plugins: [ join(invalid, 'invalid-service.js') ] })
+  }
+  catch (err) {
+    t.match(err.message, /Invalid AWS service specified: lolidk/, 'Throw on invalid service')
+  }
+
+  try {
+    await client({ ...basic, plugins: [ join(invalid, 'this-plugin-does-not-exist.js') ] })
+  }
+  catch (err) {
+    t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
+  }
+
+  try {
+    await client({ ...basic, plugins: [ join(invalid, 'invalid-plugin.js') ] })
+  }
+  catch (err) {
+    t.match(err.message, /lol is not defined/, 'Throw on invalid plugin')
+  }
+
+  try {
+    await client({ ...basic, plugins: [ join(invalid, 'this-plugin-does-not-exist.js') ] })
+  }
+  catch (err) {
+    t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
+  }
+})
+
+test('General validation', async t => {
   t.plan(4)
   try {
-    let aws = client(basic)
+    let aws = await client(basic)
     await aws()
   }
   catch (err) {
@@ -435,7 +521,7 @@ test('Validation', async t => {
   }
 
   try {
-    let aws = client(basic)
+    let aws = await client(basic)
     await aws({ service: 'lolidk', host, port, endpoint })
   }
   catch (err) {
@@ -444,7 +530,7 @@ test('Validation', async t => {
   }
 
   try {
-    let aws = client({ ...basic, protocol: 'lolidk' })
+    let aws = await client({ ...basic, protocol: 'lolidk' })
     await aws({ service, host, port, endpoint })
   }
   catch (err) {
@@ -453,7 +539,7 @@ test('Validation', async t => {
   }
 
   try {
-    let aws = client({ ...basic, plugins: { ok: true } })
+    let aws = await client({ ...basic, plugins: { ok: true } })
     await aws({ service, host, port, endpoint })
   }
   catch (err) {

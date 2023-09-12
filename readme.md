@@ -41,7 +41,7 @@ npm i @aws-lite/plugin-dynamodb
  */
 import awsLite from '@aws-lite/client'
 const config = { region: 'us-west-1' } // Optional
-const aws = awsLite(config)
+const aws = await awsLite(config)
 
 /**
  * Reads

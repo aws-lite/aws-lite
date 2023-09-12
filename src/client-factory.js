@@ -5,7 +5,7 @@ let request = require('./request')
 let validateInput = require('./validate')
 let errorHandler = require('./error')
 
-module.exports = function clientFactory (config, creds, region) {
+module.exports = async function clientFactory (config, creds, region) {
   // The basic API client
   async function client (params = {}) {
     let selectedRegion = params.region || region
@@ -24,7 +24,7 @@ module.exports = function clientFactory (config, creds, region) {
     throw TypeError('Plugins must be an array')
   }
 
-  /* istanbul ignore next */ // TODO check once plugin API settles
+  /* istanbul ignore next */ // TODO check once plugins are published
   if (autoloadPlugins) {
     let nodeModulesDir = join(process.cwd(), 'node_modules')
     let mods = readdirSync(nodeModulesDir)
@@ -38,12 +38,27 @@ module.exports = function clientFactory (config, creds, region) {
     mods.forEach(findPlugins)
   }
 
-  /* istanbul ignore next */ // TODO check once plugin API settles
   if (plugins.length) {
-    plugins.forEach(pluginName => {
+    for (let pluginName of plugins) {
       try {
-        // eslint-disable-next-line
-        let plugin = require(pluginName)
+        let plugin
+        /* istanbul ignore next */
+        try {
+          // eslint-disable-next-line
+          plugin = require(pluginName)
+        }
+        catch (err) {
+          if (hasEsmError(err)) {
+            let path =  process.platform.startsWith('win')
+              ? 'file://' + pluginName
+              : pluginName
+            let mod = await import(path)
+            plugin = mod.default ? mod.default : mod
+          }
+          else {
+            throw err
+          }
+        }
         let { service, methods } = plugin
         validateService(service)
         Object.values(methods).forEach(method => {
@@ -66,6 +81,7 @@ module.exports = function clientFactory (config, creds, region) {
             if (method.validate) {
               validateInput(method.validate, params, metadata)
             }
+            /* istanbul ignore next */
             try {
               return await request({ ...params, ...result, service }, creds, selectedRegion, config, metadata)
             }
@@ -81,10 +97,10 @@ module.exports = function clientFactory (config, creds, region) {
         client[service] = clientMethods
       }
       catch (err) {
-        console.error(`[${pluginName}] Plugin error!`)
+        console.error(`Plugin error: ${pluginName}`)
         throw err
       }
-    })
+    }
   }
 
   return client
@@ -98,3 +114,11 @@ function validateService (service) {
     throw ReferenceError(`Invalid AWS service specified: ${service}`)
   }
 }
+
+let esmErrors = [
+  'Cannot use import statement outside a module',
+  `Unexpected token 'export'`,
+  'require() of ES Module',
+  'Must use import to load ES Module',
+]
+let hasEsmError = err => esmErrors.some(msg => err.message.includes(msg))

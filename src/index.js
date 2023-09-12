@@ -15,10 +15,10 @@ let clientFactory = require('./client-factory')
  *
  * @returns {Promise<function>} Client async function
  */
-function awsLite (config = {}) {
+async function awsLite (config = {}) {
   let creds = getCreds(config)
   let region = getRegion(config)
-  return clientFactory(config, creds, region)
+  return await clientFactory(config, creds, region)
 }
 
 module.exports = awsLite

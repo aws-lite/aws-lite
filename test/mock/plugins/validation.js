@@ -1,4 +1,4 @@
-let request = async () => {}
+let request = async p => p
 let required = true
 
 // This plugin is specifically / only intended for use in validation testing
@@ -21,6 +21,9 @@ module.exports = {
         disabled: false,
         payload: { type: [ 'string', 'array', 'object' ] },
       },
+      request,
+    },
+    noValidation: {
       request,
     },
   }
