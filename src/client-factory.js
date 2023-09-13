@@ -1,6 +1,6 @@
 let { readdirSync } = require('fs')
 let { join } = require('path')
-let services = require('./services')
+let { services } = require('./services')
 let request = require('./request')
 let validateInput = require('./validate')
 let errorHandler = require('./error')
