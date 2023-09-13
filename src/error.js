@@ -13,7 +13,10 @@ module.exports = function errorHandler (input) {
 
   // The most common error response from AWS services
   if (typeof error === 'object') {
-    Object.entries(error).forEach(([ name, value ]) => err[name] = value)
+    Object.entries(error).forEach(([ name, value ]) => {
+      if (name.toLowerCase() === 'message') err.message = value
+      err[name] = value
+    })
   }
   // Less common: sometimes strings (of XML), possibly without a content-type
   if (typeof error === 'string') {
