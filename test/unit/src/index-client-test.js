@@ -14,7 +14,7 @@ test('Set up env', async t => {
   t.ok(started, 'Started server')
 })
 
-test('Primary client functionality', async t => {
+test('Primary client - core functionality', async t => {
   t.plan(24)
   let request, result, body, responseBody
 
@@ -118,7 +118,7 @@ test('Primary client - aliased params', async t => {
   reset()
 })
 
-test('Primary client error handling', async t => {
+test('Primary client - error handling', async t => {
   t.plan(17)
   let responseStatusCode, responseBody, responseHeaders
 
@@ -179,8 +179,8 @@ test('Primary client error handling', async t => {
   }
 })
 
-test('Validation', async t => {
-  t.plan(4)
+test('Primary client - validation', async t => {
+  t.plan(2)
   try {
     let aws = await client(config)
     await aws()
@@ -196,24 +196,6 @@ test('Validation', async t => {
   }
   catch (err) {
     t.match(err.message, /Invalid AWS service specified/, 'Throw on invalid AWS service')
-    reset()
-  }
-
-  try {
-    let aws = await client({ ...config, protocol: 'lolidk' })
-    await aws({ service, host, port, endpoint })
-  }
-  catch (err) {
-    t.match(err.message, /Protocol must be/, 'Throw on bad protocol config')
-    reset()
-  }
-
-  try {
-    let aws = await client({ ...config, plugins: { ok: true } })
-    await aws({ service, host, port, endpoint })
-  }
-  catch (err) {
-    t.match(err.message, /Plugins must be an array/, 'Throw on invalid plugins config')
     reset()
   }
 })

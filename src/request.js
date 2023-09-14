@@ -25,12 +25,6 @@ module.exports = function request (params, creds, region, config, metadata) {
       params.path += '?' + qs.stringify(params.query)
     }
 
-    /* istanbul ignore next */
-    config.protocol = config.protocol ?? 'https'
-    if (![ 'https', 'http' ].includes(config.protocol)) {
-      throw ReferenceError('Protocol must be `https` or `http`')
-    }
-
     // JSON-ify payload where convenient
     let body = params.payload || params.body || params.data || params.json
     // Yeah, lots of potentially weird valid json (like just a null), deal with it if/when we need to I guess

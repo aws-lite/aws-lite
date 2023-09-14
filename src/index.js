@@ -15,10 +15,24 @@ let clientFactory = require('./client-factory')
  *
  * @returns {Promise<function>} Client async function
  */
-async function awsLite (config = {}) {
+module.exports = async function awsLite (config = {}) {
+  // Creds + region first
   let creds = getCreds(config)
   let region = getRegion(config)
+
+  // Set defaults
+  config.protocol = config.protocol ?? 'https'
+
+  // Validate, then go
+  validateConfig(config)
   return await clientFactory(config, creds, region)
 }
 
-module.exports = awsLite
+function validateConfig (config) {
+  if (![ 'https', 'http' ].includes(config.protocol)) {
+    throw ReferenceError('Protocol must be `https` or `http`')
+  }
+  if (config.plugins && !Array.isArray(config.plugins)) {
+    throw TypeError('Plugins must be an array')
+  }
+}

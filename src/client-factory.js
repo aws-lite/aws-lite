@@ -19,12 +19,8 @@ module.exports = async function clientFactory (config, creds, region) {
     }
   }
 
-  // API plugins
+  // Service API plugins
   let { autoloadPlugins = true, plugins = [] } = config
-  if (!Array.isArray(plugins)) {
-    throw TypeError('Plugins must be an array')
-  }
-
   /* istanbul ignore next */ // TODO check once plugins are published
   if (autoloadPlugins) {
     let nodeModulesDir = join(process.cwd(), 'node_modules')

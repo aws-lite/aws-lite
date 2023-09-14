@@ -5,7 +5,7 @@ let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
 
-let { accessKeyId, region, secretAccessKey } = defaults
+let { accessKeyId, config, region, secretAccessKey } = defaults
 
 test('Set up env', async t => {
   t.plan(1)
@@ -32,6 +32,25 @@ test('Initial configuration', async t => {
   }
   catch (err) {
     t.match(err.message, /You must supply AWS credentials/, 'Client configurator throws without creds and region')
+    reset()
+  }
+})
+
+test('Initial configuration - validation', async t => {
+  t.plan(2)
+  try {
+    await client({ ...config, protocol: 'lolidk' })
+  }
+  catch (err) {
+    t.match(err.message, /Protocol must be/, 'Throw on bad protocol config')
+    reset()
+  }
+
+  try {
+    await client({ ...config, plugins: { ok: true } })
+  }
+  catch (err) {
+    t.match(err.message, /Plugins must be an array/, 'Throw on invalid plugins config')
     reset()
   }
 })
