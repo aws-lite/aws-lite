@@ -85,3 +85,31 @@ await aws({
 ## Plugins
 
 (Coming soon!)
+
+
+## Contributing
+
+AWS has (as of this writing) nearly 300 service APIs – `aws-lite` would love your help in authoring and maintaining official (and unofficial) plugins!
+
+
+### Setup
+
+- Pull down this repo
+- Install dependencies and run the normal test suite: `npm it`
+- Create a PR that adheres to our [testing methodology](#testing)
+
+> It is advisable you have AWS credentials on your local development machine for manual verification of any client or service plugin changes
+
+
+### Testing
+
+#### Methodology
+
+Due to the mission-critical nature of this project, we strive for 100% test coverage on the core client. (We also acknowledge that 100% coverage does not mean 0 bugs, so meaningful and thorough tests are much appreciated.)
+
+Due to the nature of interacting with AWS services, manual validation is not only often necessary, but in many cases it's required. (For example: running automated test suites on EKS may be onerous and financially expensive.)
+
+
+#### Live AWS tests
+
+One should expect that running the live AWS client test suite (`npm run test:live`) will result in a limited number of free tier resources to be created in the account corresponding to your supplied (or default) AWS credentials. These resources should never exceed the free tier under normal circumstances.
