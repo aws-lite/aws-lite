@@ -1,4 +1,5 @@
 let { join } = require('path')
+let qs = require('querystring')
 let test = require('tape')
 let { basicRequestChecks, defaults, resetServer: reset, server } = require('../../lib')
 let cwd = process.cwd()
@@ -15,8 +16,8 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(24)
-  let request, result, body, responseBody
+  t.plan(34)
+  let request, result, body, query, responseBody, url
 
   let headers = { 'content-type': 'application/json' }
 
@@ -29,6 +30,12 @@ test('Primary client - core functionality', async t => {
   t.equal(result, '', 'Client returned empty response body as empty string')
   basicRequestChecks(t, 'GET')
 
+  // Basic get request with query string params
+  query = { foo: 'bar', json: JSON.stringify({ ok: true }) }
+  url = endpoint + '?' + qs.stringify(query)
+  result = await aws({ service, host, port, endpoint, query })
+  basicRequestChecks(t, 'GET', { url })
+
   // Basic post request
   body = { ok: true }
   responseBody = { aws: 'lol' }
@@ -38,6 +45,15 @@ test('Primary client - core functionality', async t => {
   t.deepEqual(request.body, body, 'Request included correct body')
   t.deepEqual(result, responseBody, 'Client returned response body as parsed JSON')
   basicRequestChecks(t, 'POST')
+
+  // Basic post with query string params
+  body = { ok: true }
+  query = { fiz: 'buz', json: JSON.stringify({ ok: false }) }
+  url = endpoint + '?' + qs.stringify(query)
+  responseBody = { aws: 'lol' }
+  server.use({ responseBody, responseHeaders: { 'content-type': 'application/json' } })
+  result = await aws({ service, host, port, endpoint, body, query })
+  basicRequestChecks(t, 'POST', { url })
 
   // Basic post with AWS-flavored JSON
   body = { ok: true }
@@ -180,7 +196,7 @@ test('Primary client - error handling', async t => {
 })
 
 test('Primary client - validation', async t => {
-  t.plan(2)
+  t.plan(3)
   try {
     let aws = await client(config)
     await aws()
@@ -196,6 +212,15 @@ test('Primary client - validation', async t => {
   }
   catch (err) {
     t.match(err.message, /Invalid AWS service specified/, 'Throw on invalid AWS service')
+    reset()
+  }
+
+  try {
+    let aws = await client(config)
+    await aws({ service, host, port, endpoint, query: [ 'hi', 'there' ] })
+  }
+  catch (err) {
+    t.match(err.message, /Query property must be an object/, 'Throw on invalid AWS service')
     reset()
   }
 })

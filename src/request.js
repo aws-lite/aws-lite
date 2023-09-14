@@ -16,7 +16,6 @@ module.exports = function request (params, creds, region, config, metadata) {
     if (params.hostname) delete params.hostname
 
     // Accept structured query string
-    /* istanbul ignore next */ // TODO remove this ignore
     if (params.query) {
       if (!is.object(params.query)) {
         throw ReferenceError('Query property must be an object')
