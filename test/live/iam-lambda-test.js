@@ -45,6 +45,8 @@ test('Get Lambda role', async t => {
       }),
       path: '/',
     })
+    // Give it a few seconds for the role to be ready for a new Lambda
+    await new Promise((resolve) => setTimeout(resolve, 5000))
   }
 
   roleARN = role.split('\n').map(l => {
