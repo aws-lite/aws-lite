@@ -46,6 +46,13 @@ jobs:
       env:
         CI: true
 
+    - name: Test (live AWS)
+      run: npm run test:live
+      env:
+        CI: true
+        AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+
     - name: Notify
       uses: sarisia/actions-status-discord@v1
       # Only fire alert once
