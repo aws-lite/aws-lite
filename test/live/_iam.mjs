@@ -1,5 +1,5 @@
 let Version = '2010-05-08'
-module.exports = {
+export default {
   service: 'iam',
   methods: {
     GetRole: {

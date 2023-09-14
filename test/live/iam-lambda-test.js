@@ -13,7 +13,7 @@ test('Set up env', async t => {
   t.plan(2)
   t.ok(client, 'aws-lite client is present')
   let plugins = [
-    join(__dirname, '_iam.js'),
+    join(__dirname, '_iam.mjs'),
     join(__dirname, '_lambda.js'),
   ]
   aws = await client({ region, plugins })
