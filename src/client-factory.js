@@ -2,7 +2,7 @@ let { readdirSync } = require('fs')
 let { join } = require('path')
 let { services } = require('./services')
 let request = require('./request')
-let validateInput = require('./validate')
+let { validateInput } = require('./validate')
 let errorHandler = require('./error')
 
 module.exports = async function clientFactory (config, creds, region) {

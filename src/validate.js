@@ -21,7 +21,7 @@ let payloadAliases = [ 'payload', 'body', 'data', 'json' ]
  *   disableMe: false,
  * }
  */
-module.exports = function validateInput (valid, input, metadata) {
+function validateInput (valid, input, metadata) {
   // Aggregate errors
   let errors = []
 
@@ -97,3 +97,5 @@ module.exports = function validateInput (valid, input, metadata) {
     errorHandler({ error: { message }, metadata })
   }
 }
+
+module.exports = { validateInput, is }

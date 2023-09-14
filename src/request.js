@@ -1,12 +1,29 @@
+let qs = require('querystring')
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
+let { is } = require('./validate')
 let { useAWS } = require('./lib')
 
 module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
-    params.path = params.endpoint
+    // Normalize the path + hostname
+    params.path = params.endpoint || '/'
+    /* istanbul ignore next */ // TODO remove this ignore
+    if (!params.path.startsWith('/')) {
+      params.path = '/' + params.path
+    }
     params.host = params.host || params.hostname
     if (params.hostname) delete params.hostname
+
+    // Accept structured query string
+    /* istanbul ignore next */ // TODO remove this ignore
+    if (params.query) {
+      if (!is.object(params.query)) {
+        throw ReferenceError('Query property must be an object')
+      }
+      // Expect aws4 to handle RFC 3986 encoding when appending the query string to the passed path
+      params.path += '?' + qs.stringify(params.query)
+    }
 
     /* istanbul ignore next */
     config.protocol = config.protocol ?? 'https'
@@ -46,7 +63,6 @@ module.exports = function request (params, creds, region, config, metadata) {
     options.host = options.host || options.hostname
     /* istanbul ignore next */
     if (options.hostname) delete options.hostname
-
 
     // Importing http(s) is a bit slow (~1ms), so only instantiate the client we need
     let isHTTPS = options.host.includes('.amazonaws.com') || config.protocol === 'https'
