@@ -16,7 +16,7 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(34)
+  t.plan(35)
   let request, result, body, query, responseBody, url
 
   let headers = { 'content-type': 'application/json' }
@@ -84,6 +84,12 @@ test('Primary client - core functionality', async t => {
   result = await aws({ service, host, port, endpoint, body })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, body, 'Request included correct body (just a string)')
+  reset()
+
+  // Ensure endpoints without leading slashes are handled properly
+  result = await aws({ service, host, port, endpoint: 'an/endpoint' })
+  request = server.getCurrentRequest()
+  t.deepEqual(request.url, endpoint, 'Request included correct body (just a string)')
   reset()
 })
 

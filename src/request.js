@@ -8,7 +8,6 @@ module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
     // Normalize the path + hostname
     params.path = params.endpoint || '/'
-    /* istanbul ignore next */ // TODO remove this ignore
     if (!params.path.startsWith('/')) {
       params.path = '/' + params.path
     }
