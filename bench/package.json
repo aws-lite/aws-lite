@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "create-resources": "node ./create-resources.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.413.0",
+    "aws-sdk": "^2.1458.0"
+  }
+}
