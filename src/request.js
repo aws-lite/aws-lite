@@ -51,7 +51,7 @@ module.exports = function request (params, creds, region, config, metadata) {
     // Sign and construct the request
     let options = aws4.sign(signing, creds)
     // Renormalize (again), aws4 sometimes uses host, sometimes uses hostname
-    /* istanbul ignore next */
+    /* istanbul ignore next */ // This won't get seen by nyc
     options.host = options.host || options.hostname
     /* istanbul ignore next */
     if (options.hostname) delete options.hostname
