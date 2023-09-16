@@ -4,6 +4,7 @@ let { join } = require('path')
 let { execSync }  = require('child_process')
 let { readFileSync } = require('fs')
 let percentile = require('percentile')
+let { formatSize } = require('./_helpers')
 
 let benchmarkRuns = process.env.AWS_LITE_BENCHMARK_RUNS || 50
 let harness = readFileSync(join(__dirname, '_harness.js')).toString()
@@ -90,16 +91,16 @@ for (let running of benchmarksToRun) {
       let result = execSync(`node -e "${run}"`, { env: {} })
       benchmarks[name][running].runs.push(JSON.parse(result))
     }
-    console.log(`Completed ${benchmarkRuns} runs in ${Date.now() - start}ms`)
+    console.log(`Completed ${benchmarkRuns} runs in ${Date.now() - start} ms`)
     let times = benchmarks[name][running].runs.map(run => run.times.result)
     let avgTime = times.reduce((a, b) => a + b, 0) / times.length
-    console.log(`- Avg time to complete: ${avgTime}ms`)
-    console.log(`- p95 time to complete: ${percentile(95, times)}ms`)
+    console.log(`- Avg time to complete: ${avgTime} ms`)
+    console.log(`- p95 time to complete: ${percentile(95, times)} ms`)
 
     let memory = benchmarks[name][running].runs.map(run => run.memory.result)
-    let avgMemory = memory.reduce((a, b) => a + b, 0) / times.length / 1024 / 1024
-    console.log(`- Avg memory footprint: ${avgMemory}MB`)
-    console.log(`- p95 memory footprint: ${percentile(95, memory)  / 1024 / 1024}MB`)
+    let avgMemory = memory.reduce((a, b) => a + b, 0) / times.length
+    console.log(`- Avg memory footprint: ${formatSize(avgMemory)}`)
+    console.log(`- p95 memory footprint: ${formatSize(percentile(95, memory))}`)
     console.log(``)
   }
 }

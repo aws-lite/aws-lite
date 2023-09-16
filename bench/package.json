@@ -1,12 +1,13 @@
 {
   "scripts": {
-    "create-resources": "node ./create-resources.js"
+    "create-resources": "node ./create-resources.js",
+    "bench": "npm run benchmark",
+    "benchmark": "./benchmark-speed.js && ./benchmark-size.js"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.413.0",
-    "aws-sdk": "^2.1458.0"
-  },
-  "devDependencies": {
+    "aws-sdk": "^2.1458.0",
+    "esbuild": "^0.19.0",
     "percentile": "^1.6.0"
   }
 }
