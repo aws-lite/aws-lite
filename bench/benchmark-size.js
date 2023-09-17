@@ -66,7 +66,7 @@ async function main () {
       console.log(`- Installation time: ${v2installTime} ms`)
     }
     let larger = ''
-    if (!isAWSLite) larger = ` (${roundHalf(unbundledSize / awsLiteUnbundledSize)}x larger)`
+    if (!isAWSLite) larger = ` (~${roundHalf(unbundledSize / awsLiteUnbundledSize)}x larger install size)`
     console.log(`- Unbundled size: ${formatSize(unbundledSize)}${larger}`)
 
     /**
@@ -89,7 +89,7 @@ async function main () {
       larger = ''
     }
     else {
-      larger = ` (${roundHalf(bundledSize / awsLiteBundledSize)}x larger)`
+      larger = ` (~${roundHalf(bundledSize / awsLiteBundledSize)}x larger bundle size)`
     }
     console.log(`- Bundled size: ${formatSize(bundledSize)}${larger}`)
     console.log('')

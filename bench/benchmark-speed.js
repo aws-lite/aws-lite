@@ -4,7 +4,7 @@ let { join } = require('path')
 let { execSync }  = require('child_process')
 let { readFileSync } = require('fs')
 let percentile = require('percentile')
-let { formatSize } = require('./_helpers')
+let { formatSize, roundHalf } = require('./_helpers')
 
 let benchmarkRuns = process.env.AWS_LITE_BENCHMARK_RUNS || 50
 let harness = readFileSync(join(__dirname, '_harness.js')).toString()
@@ -76,10 +76,19 @@ let benchmarksToRun = [
   // TODO: round trip request to DynamoDB
 ]
 
+let awsLiteAvgSpeed
+let awsLiteP95Speed
+let awsLiteAvgMemory
+let awsLiteP95Memory
+let slowerAvg = '', slowerP95 = '', largerAvg = '', largerP95 = ''
+
 for (let running of benchmarksToRun) {
   console.log(`---------- Running ${running} benchmarks ---------- `)
+
   for (let name of Object.keys(benchmarks)) {
+    let isAWSLite = name === 'aws-lite'
     console.log(`[${name}]`)
+
     console.log(`Starting ${running} benchmark`)
     let { script1 = '', script2 } = benchmarks[name][running]
     let start = Date.now()
@@ -94,13 +103,31 @@ for (let running of benchmarksToRun) {
     console.log(`Completed ${benchmarkRuns} runs in ${Date.now() - start} ms`)
     let times = benchmarks[name][running].runs.map(run => run.times.result)
     let avgTime = times.reduce((a, b) => a + b, 0) / times.length
-    console.log(`- Avg time to complete: ${avgTime} ms`)
-    console.log(`- p95 time to complete: ${percentile(95, times)} ms`)
+    let P95Time = percentile(95, times)
+    if (!isAWSLite) {
+      slowerAvg = ` (~${roundHalf(avgTime / awsLiteAvgSpeed)}x slower ${running})`
+      slowerP95 = ` (~${roundHalf(P95Time / awsLiteP95Speed)}x slower ${running})`
+    }
+    else {
+      awsLiteAvgSpeed = avgTime
+      awsLiteP95Speed = P95Time
+    }
+    console.log(`- Avg time to complete: ${avgTime} ms${slowerAvg}`)
+    console.log(`- p95 time to complete: ${P95Time} ms${slowerP95}`)
 
     let memory = benchmarks[name][running].runs.map(run => run.memory.result)
     let avgMemory = memory.reduce((a, b) => a + b, 0) / times.length
-    console.log(`- Avg memory footprint: ${formatSize(avgMemory)}`)
-    console.log(`- p95 memory footprint: ${formatSize(percentile(95, memory))}`)
+    let P95Memory = percentile(95, memory)
+    if (!isAWSLite) {
+      largerAvg = ` (~${roundHalf(avgMemory / awsLiteAvgMemory)}x more memory)`
+      largerP95 = ` (~${roundHalf(P95Memory / awsLiteP95Memory)}x more memory)`
+    }
+    else {
+      awsLiteAvgMemory = avgMemory
+      awsLiteP95Memory = P95Memory
+    }
+    console.log(`- Avg memory footprint: ${formatSize(avgMemory)}${largerAvg}`)
+    console.log(`- p95 memory footprint: ${formatSize(P95Memory)}${largerP95}`)
     console.log(``)
   }
 }
