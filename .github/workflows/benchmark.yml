@@ -1,0 +1,53 @@
+name: Node CI
+
+# Push tests pushes; PR tests merges
+on: [ push ]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./bench
+
+jobs:
+
+  # Benchmark the build
+  benchmark:
+    # Setup
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+        os: [ ubuntu-latest ]
+
+    # Go
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Env
+      run: |
+        echo "Event name: ${{ github.event_name }}"
+        echo "Git ref:    ${{ github.ref }}"
+        echo "GH actor:   ${{ github.actor }}"
+        echo "SHA:        ${{ github.sha }}"
+        VER=`node --version`; echo "Node ver:   $VER"
+        VER=`npm --version`; echo "npm ver:    $VER"
+        echo "OS ver:     ${{ runner.os }}"
+
+    - name: Install root deps
+      run: cd .. && npm install --omit=dev
+
+    - name: Install
+      run: npm install
+
+    - name: Test
+      run: npm run bench
+      # Dummy creds are sufficient until we add live testing
+      env:
+        AWS_ACCESS_KEY_ID: 'foo'
+        AWS_SECRET_ACCESS_KEY: 'bar'
