@@ -45,7 +45,7 @@ jobs:
     - name: Install
       run: npm install
 
-    - name: Test
+    - name: Benchmark
       run: npm run bench
       # Dummy creds are sufficient until we add live testing
       env:
