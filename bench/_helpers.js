@@ -6,6 +6,8 @@ function truncate (num) {
   return `${bits[0]}.${bits[1].substring(0, 2)}`
 }
 
+let roundHalf = num =>  Math.round(num * 2) / 2
+
 function formatSize (num) {
   // Measure in KB
   if (num < MB) return `${truncate(num / KB)} KB`
@@ -20,4 +22,4 @@ let names = {
   'aws-sdk-v3': 'AWS SDK v3',
 }
 
-module.exports = { formatSize, names }
+module.exports = { formatSize, names, roundHalf }
