@@ -21,7 +21,7 @@ let v2installTime
 let v2size
 
 async function main () {
-  console.log(`---------- Running bundle size benchmarks ---------- `)
+  console.log(`---------- Running size benchmarks ---------- `)
   let entryFileFolder = join(__dirname, 'entry-files')
   for (let [ name, friendly ] of Object.entries(names)) {
     let isAWSLite = name === 'aws-lite'
