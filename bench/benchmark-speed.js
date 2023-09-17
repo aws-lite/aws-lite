@@ -97,7 +97,8 @@ for (let running of benchmarksToRun) {
         .replace('/* $script1 */', script1)
         .replace('/* $script2 */', script2)
         .split('\n').join(' ')
-      let result = execSync(`node -e "${run}"`, { env: {} })
+      let { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } = process.env
+      let result = execSync(`node -e "${run}"`, { env: { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } })
       benchmarks[name][running].runs.push(JSON.parse(result))
     }
     console.log(`Completed ${benchmarkRuns} runs in ${Date.now() - start} ms`)
