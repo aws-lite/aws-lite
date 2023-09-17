@@ -2,6 +2,7 @@
 let { mkdirSync, statSync } = require('fs')
 let { join } = require('path')
 let { build } = require('esbuild')
+// eslint-disable-next-line
 let { formatSize, names } = require('./_helpers')
 
 async function main () {
