@@ -10,7 +10,7 @@ const cwd = process.cwd()
 const plugins = [
   { name: 'dynamodb', service: 'DynamoDB', maintainers: [ '@architect' ] },
 ].sort()
-const pluginTmpl = readFileSync(join(__dirname, '_plugin-tmpl.js')).toString()
+const pluginTmpl = readFileSync(join(__dirname, '_plugin-tmpl.mjs')).toString()
 const readmeTmpl = readFileSync(join(__dirname, '_readme-tmpl.md')).toString()
 const packageTmpl = readFileSync(join(__dirname, '_package-tmpl.json'))
 
@@ -34,7 +34,7 @@ plugins.forEach(plugin => {
     let src = pluginTmpl
       .replace(/\$NAME/g, plugin.name)
       .replace(/\$MAINTAINERS/g, maintainers)
-    writeFileSync(join(pluginSrc, 'index.js'), src)
+    writeFileSync(join(pluginSrc, 'index.mjs'), src)
 
     // Plugin: package.json
     let pkg = JSON.parse(packageTmpl)

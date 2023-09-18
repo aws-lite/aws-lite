@@ -8,7 +8,7 @@
     "url": "https://github.com/architect/aws-lite"
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
-  "main": "src/index.js",
+  "main": "src/index.mjs",
   "engines": {
     "node": ">=16"
   },

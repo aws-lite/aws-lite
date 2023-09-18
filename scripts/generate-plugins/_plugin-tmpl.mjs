@@ -4,7 +4,7 @@ const required = true
 /**
  * Plugin maintained by: $MAINTAINERS
  */
-module.exports = {
+export default {
   service,
   methods: {
     // TODO: include a reference link with each method, example:
