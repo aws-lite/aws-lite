@@ -12,7 +12,7 @@
   "engines": {
     "node": ">=16"
   },
-  "author": "@YOUR_GITHUB",
+  "author": "<filled in by the plugin generator>",
   "license": "Apache-2.0",
   "files": [
     "src"

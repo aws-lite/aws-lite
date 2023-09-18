@@ -2,6 +2,8 @@
 
 > $DESC
 
+> Maintained by: $MAINTAINERS
+
 
 ## Install
 

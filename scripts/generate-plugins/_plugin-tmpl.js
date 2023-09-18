@@ -2,7 +2,7 @@ const service = '$NAME'
 const required = true
 
 /**
- * Plugin maintained by: @YOUR_GITHUB
+ * Plugin maintained by: $MAINTAINERS
  */
 module.exports = {
   service,

@@ -87,6 +87,12 @@ await aws({
 (Coming soon!)
 
 
+### Official `@aws-lite/*` plugins
+
+<!-- plugins_start -->
+<!-- plugins_end -->
+
+
 ## Contributing
 
 AWS has (as of this writing) nearly 300 service APIs – `aws-lite` would love your help in authoring and maintaining official (and unofficial) plugins!
