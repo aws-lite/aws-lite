@@ -9,6 +9,7 @@
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
   "scripts": {
+    "generate-plugins": "node scripts/generate-plugins",
     "lint": "eslint --fix .",
     "test": "npm run lint && npm run coverage",
     "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
@@ -39,6 +40,7 @@
   "files": [
     "src"
   ],
+  "workspaces": [],
   "eslintConfig": {
     "extends": "@architect/eslint-config"
   },
@@ -47,6 +49,10 @@
     "branches": 100,
     "lines": 100,
     "functions": 100,
-    "statements": 100
+    "statements": 100,
+    "exclude": [
+      "plugins/",
+      "test/"
+    ]
   }
 }
