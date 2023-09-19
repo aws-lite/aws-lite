@@ -1,11 +1,11 @@
 let { join } = require('path')
 let test = require('tape')
-let { defaults, resetAWSEnvVars: reset } = require('../../lib')
+let { basicRequestChecks, defaults, resetAWSEnvVars: reset, server } = require('../../lib')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
 
-let { accessKeyId, config, region, secretAccessKey } = defaults
+let { accessKeyId, badPort, config, endpoint, host, port, protocol, region, secretAccessKey, service } = defaults
 
 test('Set up env', async t => {
   t.plan(1)
@@ -34,6 +34,37 @@ test('Initial configuration', async t => {
     t.match(err.message, /You must supply AWS credentials/, 'Client configurator throws without creds and region')
     reset()
   }
+})
+
+test('Initial configuration - per-request overrides', async t => {
+  t.plan(7)
+  let started = await server.start()
+  t.ok(started, 'Started server')
+
+  // Just add a bad host[name]!
+  let badHost = 'some-host'
+  let badConfig = { ...config, port: badPort, protocol: 'https' }
+  let aws
+
+  // Basic host config passthrough, not necessarily per-request overrides
+  aws = await client({ ...badConfig, host })
+  await aws({ service, endpoint, port, protocol })
+  aws = await client({ ...badConfig, hostname: host, host: undefined })
+  await aws({ service, endpoint, port, protocol })
+
+  // None of these should work if per-request overrides aren't overriding
+  aws = await client({ ...badConfig, host: badHost })
+  await aws({ service, endpoint, host, port, protocol })
+  await aws({ service, endpoint, hostname: host, port, protocol })
+
+  aws = await client({ ...badConfig, hostname: badHost, host: undefined })
+  await aws({ service, endpoint, host, port, protocol })
+  await aws({ service, endpoint, hostname: host, port, protocol })
+
+  basicRequestChecks(t, 'GET')
+
+  await server.end()
+  t.pass('Server ended')
 })
 
 test('Initial configuration - validation', async t => {

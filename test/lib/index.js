@@ -12,10 +12,8 @@ const secretAccessKey = 'bar'
 const service = 'lambda'
 const endpoint = '/an/endpoint'
 const port = 1111
-const config = { accessKeyId, secretAccessKey, region, protocol, autoloadPlugins, keepAlive }
+const config = { accessKeyId, secretAccessKey, region, protocol, autoloadPlugins, keepAlive, host, port }
 const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, protocol, region, secretAccessKey, service, endpoint, port }
-
-const copy = i => JSON.parse(JSON.stringify(i))
 
 let serverData = {}
 
@@ -107,7 +105,6 @@ function resetAWSEnvVars () {
 
 module.exports = {
   basicRequestChecks,
-  copy,
   defaults,
   resetAWSEnvVars,
   resetServer,
