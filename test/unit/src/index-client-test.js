@@ -1,7 +1,7 @@
 let { join } = require('path')
 let qs = require('querystring')
 let test = require('tape')
-let { basicRequestChecks, defaults, resetServer: reset, server } = require('../../lib')
+let { basicRequestChecks, copy, defaults, resetServer: reset, server } = require('../../lib')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
@@ -16,10 +16,11 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(35)
+  t.plan(42)
   let request, result, body, query, responseBody, url
 
   let headers = { 'content-type': 'application/json' }
+  let headersAwsJSON = { 'content-type': 'application/x-amz-json-1.0' }
 
   let aws = await client(config)
 
@@ -39,7 +40,7 @@ test('Primary client - core functionality', async t => {
   // Basic post request
   body = { ok: true }
   responseBody = { aws: 'lol' }
-  server.use({ responseBody, responseHeaders: { 'content-type': 'application/json' } })
+  server.use({ responseBody, responseHeaders: copy(headers) })
   result = await aws({ service, host, port, endpoint, body })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, body, 'Request included correct body')
@@ -51,18 +52,28 @@ test('Primary client - core functionality', async t => {
   query = { fiz: 'buz', json: JSON.stringify({ ok: false }) }
   url = endpoint + '?' + qs.stringify(query)
   responseBody = { aws: 'lol' }
-  server.use({ responseBody, responseHeaders: { 'content-type': 'application/json' } })
+  server.use({ responseBody, responseHeaders: copy(headers) })
   result = await aws({ service, host, port, endpoint, body, query })
   basicRequestChecks(t, 'POST', { url })
 
   // Basic post with AWS-flavored JSON
   body = { ok: true }
-  responseBody = { aws: 'lol' }
-  server.use({ responseBody, responseHeaders: { 'content-type': 'application/x-amz-json' } })
-  result = await aws({ service, host, port, endpoint, body })
+  responseBody = { aws: { S: 'lol' } } // Raw response object should be AWS JSON
+  server.use({ responseBody, responseHeaders: copy(headersAwsJSON) })
+  result = await aws({ service, host, port, endpoint, body, headers: copy(headersAwsJSON) })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, body, 'Request included correct body')
-  t.deepEqual(result, responseBody, 'Client returned response body as parsed JSON')
+  t.deepEqual(request.body, { ok: { BOOL: true } }, 'Request included correct body (raw AWS JSON)')
+  t.deepEqual(result, { aws: 'lol' }, 'Client returned response body as parsed JSON')
+  basicRequestChecks(t, 'POST')
+
+  // Basic post with AWS-flavored JSON via `useAwsJSON` param
+  body = { ok: false }
+  responseBody = { aws: { S: 'idk' } } // Raw response object should be AWS JSON
+  server.use({ responseBody, responseHeaders: copy(headersAwsJSON) })
+  result = await aws({ service, host, port, endpoint, body, useAwsJSON: true })
+  request = server.getCurrentRequest()
+  t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
+  t.deepEqual(result, { aws: 'idk' }, 'Client returned response body as parsed JSON')
   basicRequestChecks(t, 'POST')
 
   // Publish an object while passing headers

@@ -15,6 +15,8 @@ const port = 1111
 const config = { accessKeyId, secretAccessKey, region, protocol, autoloadPlugins, keepAlive }
 const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, protocol, region, secretAccessKey, service, endpoint, port }
 
+const copy = i => JSON.parse(JSON.stringify(i))
+
 let serverData = {}
 
 let testServer
@@ -105,6 +107,7 @@ function resetAWSEnvVars () {
 
 module.exports = {
   basicRequestChecks,
+  copy,
   defaults,
   resetAWSEnvVars,
   resetServer,

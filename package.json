@@ -15,7 +15,8 @@
     "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
     "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-spec",
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-spec",
-    "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit"
+    "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
+    "vendor": "esbuild scripts/vendor-entry.mjs --bundle --platform=node --format=cjs --outfile=src/_vendor.js"
   },
   "main": "src/index.js",
   "engines": {
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@architect/eslint-config": "^2.1.1",
     "@aws-sdk/client-ssm": "^3.405.0",
+    "@aws-sdk/util-dynamodb": "^3.415.0",
     "adm-zip": "^0.5.10",
     "cross-env": "^7.0.3",
     "eslint": "^8.48.0",
@@ -52,7 +54,8 @@
     "statements": 100,
     "exclude": [
       "plugins/",
-      "test/"
+      "test/",
+      "src/_vendor.js"
     ]
   }
 }

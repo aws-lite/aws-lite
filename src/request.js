@@ -3,6 +3,7 @@ let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
 let { is } = require('./validate')
 let { useAWS } = require('./lib')
+let { marshall: marshallAwsJSON, unmarshall: unmarshallAwsJSON } = require('./_vendor')
 
 module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
@@ -30,6 +31,16 @@ module.exports = function request (params, creds, region, config, metadata) {
       params.headers = params.headers || {}
       if (!params.headers['content-type'] && !params.headers['Content-Type']) {
         params.headers['content-type'] = 'application/json'
+      }
+      // Normalize AWS JSON headers
+      if (params.headers['content-type'].includes('application/x-amz-json')) {
+        params.useAwsJSON = true
+      }
+      if (params.useAwsJSON) {
+        if (!params.headers['content-type'].includes('application/x-amz-json')) {
+          params.headers['content-type'] = 'application/x-amz-json-1.1'
+        }
+        body = marshallAwsJSON(body)
       }
       params.body = JSON.stringify(body)
     }
@@ -73,10 +84,12 @@ module.exports = function request (params, creds, region, config, metadata) {
       res.on('end', () => {
         let result = data.join()
         let contentType = headers?.['content-type'] || headers?.['Content-Type'] || ''
-        let isJSON = contentType.includes('application/json') ||
-                     contentType.includes('application/x-amz-json')
-        if (isJSON && result) result = JSON.parse(result)
-
+        if (contentType.includes('application/json')) {
+          result = JSON.parse(result)
+        }
+        if (contentType.includes('application/x-amz-json')) {
+          result = unmarshallAwsJSON(JSON.parse(result))
+        }
         if (ok) resolve(result)
         else reject({ error: result, metadata, statusCode })
       })
