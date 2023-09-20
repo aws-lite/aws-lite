@@ -9,7 +9,9 @@
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
   "scripts": {
+    "generate": "npm run generate-plugins",
     "generate-plugins": "node scripts/generate-plugins",
+    "publish-plugins": "node scripts/publish-plugins",
     "lint": "eslint --fix .",
     "test": "npm run lint && npm run coverage",
     "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
