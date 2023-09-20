@@ -18,13 +18,17 @@ export default {
           endpoint: `/$API_VER/${name}/etc`
         }
       },
-      error: async (error) => {
-        if (error.statusCode === 400 &&
-          error?.error?.message?.match(/validation error/)) {
-          error.metadata.type = 'Validation error'
+      response: async (raw) => {
+        let response = raw.Item || null
+        return { response }
+      },
+      error: async (err) => {
+        if (err.statusCode === 400 &&
+            err?.error?.message?.match(/validation error/)) {
+          err.metadata.type = 'Validation error'
         }
-        return error
-      }
+        return err
+      },
     },
 
     // TODO: add API link
@@ -37,7 +41,8 @@ export default {
           endpoint: `/$API_VER/${name}/etc`
         }
       },
-      // error: async (error) => error
+      // response: async (response) => ({ response }),
+      // error: async (err) => err,
     },
   }
 }
