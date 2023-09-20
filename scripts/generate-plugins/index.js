@@ -41,6 +41,7 @@ plugins.forEach(plugin => {
     pkg.name = name
     pkg.description = desc
     pkg.author = maintainers
+    pkg.repository.directory = `plugins/${plugin.name}`
     writeFileSync(join(pluginDir, 'package.json'), JSON.stringify(pkg, null, 2))
 
     // Plugin: readme.md
