@@ -51,9 +51,11 @@ module.exports = async function clientFactory (config, creds, region) {
         }
         catch (err) {
           if (hasEsmError(err)) {
-            let path =  process.platform.startsWith('win')
-              ? 'file://' + pluginName
-              : pluginName
+            let path = pluginName
+            if (process.platform.startsWith('win')) {
+              try { path = 'file://' + require.resolve(path) }
+              catch { path = 'file://' + pluginName }
+            }
             let mod = await import(path)
             plugin = mod.default ? mod.default : mod
           }
