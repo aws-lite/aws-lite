@@ -99,6 +99,17 @@ module.exports = function request (params, creds, region, config, metadata) {
     /* istanbul ignore next */
     options.agent = new http.Agent({ keepAlive: config.keepAlive ?? useAWS() })
 
+    /* istanbul ignore next */
+    if (config.debug) {
+      let { method, service, host, path, port = '', headers, protocol, body } = options
+      console.error('[aws-lite] Requesting:', {
+        service,
+        method,
+        url: `${protocol}//${host}${port}${path}`,
+        headers: { ...headers, Authorization: headers.Authorization.substring(0, 35) + '...' }, body,
+      })
+    }
+
     let req = http.request(options, res => {
       let data = []
       /* istanbul ignore next */ // We can always expect headers, but jic

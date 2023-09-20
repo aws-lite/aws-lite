@@ -6,19 +6,23 @@ const awsjsonReq = [ 'Expected', 'ExpressionAttributeValues', 'Item', 'Key', ]
 // ... and decoded
 const awsjsonRes = [ 'Item' ]
 
-// Common validation  params
-const TableName = { type: 'string', required }
-const Key = { type: 'object', required }
-const Item = { type: 'object', required }
-
 // Validation types
 const arr = { type: 'array' }
 const bool = { type: 'boolean' }
 const obj = { type: 'object' }
 const str = { type: 'string' }
 
+// Common validation  params
+const TableName = { ...str, required }
+const Key = { ...obj, required }
+const Item = { ...obj, required }
+const ReturnConsumedCapacity = str
+const ReturnItemCollectionMetrics = str
+
+
 const unmarshall = keys => async response => ({ awsjson: keys, response })
-const headers = method => ({ 'X-Amz-Target': `DynamoDB_20120810.${method}` })
+const headers = (method, additional) => ({ 'X-Amz-Target': `DynamoDB_20120810.${method}`, ...additional })
+const awsjsonContentType = { 'content-type': 'application/x-amz-json-1.0' }
 
 /**
  * Plugin maintained by: @architect
@@ -28,20 +32,18 @@ const headers = method => ({ 'X-Amz-Target': `DynamoDB_20120810.${method}` })
 const BatchExecuteStatement = {
   validate: {
     Statements: { ...arr, required },
-    ReturnConsumedCapacity: str,
+    ReturnConsumedCapacity,
   },
   request: async (params, { awsjsonMarshall }) => {
     // Huzzah, nested arrays with different kinds of serialization
-    let Statements = params.Statements.map(s => {
-      let Parameters = s.Parameters.map(awsjsonMarshall)
+    let Statements = params.Statements?.map(s => {
+      let Parameters = s?.Parameters?.map(awsjsonMarshall)
       return {  ...s, Parameters }
     })
     return {
       awsjson: false, // Don't re-serialize to AWS-flavored JSON
-      headers: {
-        ...headers('BatchExecuteStatement'), // Undocumented as of author time
-        'content-type': 'application/x-amz-json-1.0',
-      },
+      // Undocumented as of author time
+      headers: headers('BatchExecuteStatement', awsjsonContentType),
       payload: { ...params, Statements }
     }
   },
@@ -57,6 +59,89 @@ const BatchExecuteStatement = {
   },
 }
 
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html
+const BatchGetItem = {
+  validate: {
+    RequestItems: { ...obj, required },
+    ReturnConsumedCapacity,
+  },
+  request: async (params, { awsjsonMarshall }) => {
+    let RequestItems = {}
+    Object.entries(params.RequestItems).forEach(([ table, item ]) => {
+      RequestItems[table] = item
+      RequestItems[table].Keys = item?.Keys?.map(awsjsonMarshall)
+    })
+    return {
+      awsjson: false, // Don't re-serialize to AWS-flavored JSON
+      headers: headers('BatchGetItem', awsjsonContentType),
+      payload: { ...params, RequestItems }
+    }
+  },
+  response: async (response, { awsjsonUnmarshall }) => {
+    let Responses = Object.keys(response.Responses)
+    if (Responses.length) {
+      Responses.forEach(i => response.Responses[i] = response.Responses[i]?.map(awsjsonUnmarshall))
+    }
+    let UnprocessedKeys = Object.keys(response.UnprocessedKeys)
+    if (UnprocessedKeys.length) {
+      UnprocessedKeys.forEach(i => response.UnprocessedKeys[i] = {
+        ...response.UnprocessedKeys[i],
+        Keys: response.UnprocessedKeys[i]?.Keys?.map(awsjsonUnmarshall)
+      })
+    }
+    return { response }
+  },
+}
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
+const BatchWriteItem = {
+  validate: {
+    RequestItems: { ...obj, required },
+    ReturnConsumedCapacity,
+    ReturnItemCollectionMetrics,
+  },
+  request: async (params, { awsjsonMarshall }) => {
+    let RequestItems = {}
+    Object.entries(params.RequestItems).forEach(([ table, items ]) => {
+      RequestItems[table] = items.map(i => {
+        let request = {}
+        Object.entries(i).forEach(([ op, data ]) => {
+          if (op === 'DeleteRequest') {
+            request[op] = { Key: awsjsonMarshall(data.Key) }
+          }
+          if (op === 'PutRequest') {
+            request[op] = { Item: awsjsonMarshall(data.Item) }
+          }
+        })
+        return request
+      })
+    })
+    return {
+      awsjson: false, // Don't re-serialize to AWS-flavored JSON
+      headers: headers('BatchWriteItem', awsjsonContentType),
+      payload: { ...params, RequestItems }
+    }
+  },
+  response: async (response, { awsjsonUnmarshall }) => {
+    let UnprocessedItems = {}
+    Object.entries(response.UnprocessedItems).forEach(([ table, items ]) => {
+      UnprocessedItems[table] = items.map(i => {
+        let request = {}
+        Object.entries(i).forEach(([ op, data ]) => {
+          if (op === 'DeleteRequest') {
+            request[op] = { Key: awsjsonUnmarshall(data.Key) }
+          }
+          if (op === 'PutRequest') {
+            request[op] = { Item: awsjsonUnmarshall(data.Item) }
+          }
+        })
+        return request
+      })
+    })
+    return { response: { ...response, UnprocessedItems } }
+  }
+}
+
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
 const GetItem = {
   validate: {
@@ -66,7 +151,7 @@ const GetItem = {
     ConsistentRead: bool,
     ExpressionAttributeNames: obj,
     ProjectionExpression: str,
-    ReturnConsumedCapacity: str,
+    ReturnConsumedCapacity,
   },
   request: async (params) => ({
     awsjson: awsjsonReq,
@@ -86,8 +171,8 @@ const PutItem = {
     Expected: str, // Legacy
     ExpressionAttributeNames: obj,
     ExpressionAttributeValues: obj,
-    ReturnConsumedCapacity: str,
-    ReturnItemCollectionMetrics: str,
+    ReturnConsumedCapacity,
+    ReturnItemCollectionMetrics,
     ReturnValues: str,
     ReturnValuesOnConditionCheckFailure: str,
   },
@@ -100,12 +185,6 @@ const PutItem = {
 }
 
 // TODO:
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html
-// BatchGetItem
-
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
-// BatchWriteItem
-
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateBackup.html
 // CreateBackup
 
@@ -250,5 +329,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, GetItem, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, GetItem, PutItem }
 export default { service, methods }

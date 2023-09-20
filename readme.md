@@ -97,6 +97,8 @@ The following options may be passed when instantiating the `aws-lite` client:
   - AWS config + credentials profile; if not provided, defaults to `AWS_PROFILE` env var, and then to the `default` profile, if present
 - **`autoloadPlugins` (boolean) [default = true]**
   - Automatically load installed `@aws-lite/*` + `aws-lite-plugin-*` plugins
+- **`debug` (boolean) [default = false]**
+  - Enable debug logging to console
 - **`keepAlive` (boolean) [default = true]**
   - Disable Node.js's connection keep-alive, helpful for local testing
 - **`protocol` (string) [default = `https`]**
