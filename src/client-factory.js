@@ -6,6 +6,9 @@ let { validateInput } = require('./validate')
 let { awsjson } = require('./lib')
 let errorHandler = require('./error')
 
+// Never autoload these `@aws-lite/*` packages:
+let ignored = [ 'client', 'arc' ]
+
 module.exports = async function clientFactory (config, creds, region) {
   // The basic API client
   async function client (params = {}) {
@@ -29,7 +32,8 @@ module.exports = async function clientFactory (config, creds, region) {
     // Find first-party plugins
     if (mods.includes('@aws-lite')) {
       let knownPlugins = readdirSync(join(nodeModulesDir, '@aws-lite'))
-      plugins.push(...knownPlugins.map(i => `@aws-lite/${i}`))
+      let filtered = knownPlugins.filter(p => !ignored.includes(p)).map(p => `@aws-lite/${p}`)
+      plugins.push(...filtered)
     }
     // Find correctly namespaced 3rd-party plugins
     let findPlugins = mod => mod.startsWith('aws-lite-plugin-') && plugins.push(mod)
