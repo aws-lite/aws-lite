@@ -176,7 +176,7 @@ await awsLite({
 await awsLite({
   service: 'dynamodb',
   headers: { 'X-Amz-Target': `DynamoDB_20120810.GetItem` },
-  awsjson: [ 'Key' ], // Ensures only payload.key will become AWS-flavored JSON
+  awsjson: [ 'Key' ], // Ensures only payload.Key will become AWS-flavored JSON
   payload: {
     TableName: '$table-name',
     Key: { myHashKey: 'Gaal', mySortKey: 'Dornick' }

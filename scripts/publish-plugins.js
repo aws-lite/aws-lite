@@ -63,11 +63,12 @@ async function main () {
 
     let child = spawn('npm', args, { stdio: 'inherit' })
     child.on('close', code => {
-      if (foundErrors || code !== 0) {
-        process.exit(1)
-      }
+      if (foundErrors || code !== 0) process.exit(1)
     })
   }
-  else console.log('No aws-lite plugins found to publish')
+  else {
+    console.log('No aws-lite plugins found to publish')
+    if (foundErrors) process.exit(1)
+  }
 }
 main()
