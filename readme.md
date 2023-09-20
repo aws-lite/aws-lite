@@ -70,9 +70,11 @@ await aws({
 ```
 
 
-## Options
+## Usage
 
-### Configuration options
+### Configuration
+
+The following options may be passed when instantiating the `aws-lite` client:
 
 - **`accessKeyId` (string)**
   - AWS access key; if not provided, defaults to `AWS_ACCESS_KEY_ID` or `AWS_ACCESS_KEY` env vars, and then to a `~/.aws/credentials` file, if present
@@ -108,7 +110,7 @@ await aws({
   - By default, all installed official plugins (prefixed with `@aws-lite/`) and unofficial plugins (prefixed with `aws-lite-plugin-`) will be loaded
   - Specifying plugins will disable auto-loading plugins
 
-**Examples**
+#### **Example**
 
 ```js
 import awsLite from '@aws-lite/client'
@@ -132,9 +134,56 @@ aws = await awsLite({
 })
 ```
 
-### Client options
 
-(Coming soon!)
+### Client requests
+
+The following parameters may be passed with individual client requests; only `service` is required:
+
+- **`awsjson` (boolean or array)**
+  - Enables AWS-flavored JSON encoding; if boolean, your entire body will be encoded; if an array, the key names specified in the array will be encoded, leaving other keys in normal JSON
+  - Do not use this option if you intend to pass your own pre-serialized AWS-flavored JSON in the `payload`
+- **`endpoint` (string) [default = `/`]**
+  - API endpoint your request will be made to
+- **`headers` (object)**
+  - Header names + values to be added to your request
+  - By default, all headers are included in [authentication via AWS signature v4](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html)
+- **`payload` (object or string)**
+  - Aliases: `body`, `data`, `json`
+  - As a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); strings pass through
+  -
+- **`query` (object)**
+  - Serialize the passed object and append it to your `endpoint` as a query string in your request
+- **`service` (string) [required]**
+  - AWS service code, usually just the lowercase form of the service name (e.g. `DynamoDB` = `dynamodb`); [full list can be found here](src/services.js)
+
+> Additionally, the following [configuration options](#configuration-options) can be specified in each request, overriding those specified by the instantiated client: [`region`](#configuration-options), [`protocol`](#configuration-options), [`host`](#configuration-options), and [`port`](#configuration-options)
+
+
+#### **Example**
+
+```js
+import awsLite from '@aws-lite/client'
+const aws = await awsLite()
+
+// Make a plain JSON request
+await awsLite({
+  service: 'lambda',
+  endpoint: '/2015-03-31/functions/$function-name/invocations',
+  query: { Qualifier: '1' }, // Invoke's version / alias '1'
+  payload: { ok: true }, // Object will be automatically JSON-encoded
+})
+
+// Make an AWS-flavored JSON request
+await awsLite({
+  service: 'dynamodb',
+  headers: { 'X-Amz-Target': `DynamoDB_20120810.GetItem` },
+  awsjson: [ 'Key' ], // Ensures only payload.key will become AWS-flavored JSON
+  payload: {
+    TableName: '$table-name',
+    Key: { myHashKey: 'Gaal', mySortKey: 'Dornick' }
+  },
+})
+```
 
 
 ## Plugins
@@ -144,6 +193,7 @@ aws = await awsLite({
 
 ### Official `@aws-lite/*` plugins
 
+<!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
 <!-- plugins_end -->
 
