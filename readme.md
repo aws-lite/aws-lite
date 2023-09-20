@@ -74,8 +74,63 @@ await aws({
 
 ### Configuration options
 
-(Coming soon!)
+- **`accessKeyId` (string)**
+  - AWS access key; if not provided, defaults to `AWS_ACCESS_KEY_ID` or `AWS_ACCESS_KEY` env vars, and then to a `~/.aws/credentials` file, if present
+  - Manually specify a credentials file location with the `AWS_SHARED_CREDENTIALS_FILE` env var
+  - If no access key is found, `aws-lite` will throw
+- **`secretAccessKey` (string)**
+  - AWS secret key; if not provided, defaults to `AWS_SECRET_ACCESS_KEY` or `AWS_SECRET_KEY` env vars, and then to a `~/.aws/credentials` file, if present
+  - Manually specify a credentials file location with the `AWS_SHARED_CREDENTIALS_FILE` env var
+  - If no secret key is found, `aws-lite` will throw
+- **`sessionToken` (string)**
+  - AWS session token; if not provided, defaults to `AWS_SESSION_TOKEN` env var, and then to a `~/.aws/credentials` file, if present
+  - Manually specify a credentials file location with the `AWS_SHARED_CREDENTIALS_FILE` env var
+- **`region` (string)**
+  - AWS service region (e.g. `us-west-1`); if not provided, defaults to `AWS_REGION`, `AWS_DEFAULT_REGION`, or `AMAZON_REGION` env vars
+  - By default, a `~/.aws/config` (or custom) file will only be loaded by making the `AWS_SDK_LOAD_CONFIG` env var true
+  - Manually specify a config file location with the `AWS_CONFIG_FILE` (and `AWS_SDK_LOAD_CONFIG`) env var
+  - If no region is found, `aws-lite` will throw
+  - Region setting can be overridden per-request
+- **`profile` (string)**
+  - AWS config + credentials profile; if not provided, defaults to `AWS_PROFILE` env var, and then to the `default` profile, if present
+- **`autoloadPlugins` (boolean) [default = true]**
+  - Automatically load installed `@aws-lite/*` + `aws-lite-plugin-*` plugins
+- **`keepAlive` (boolean) [default = true]**
+  - Disable Node.js's connection keep-alive, helpful for local testing
+- **`protocol` (string) [default = `https`]**
+  - Set the connection protocol to `http`, helpful for local testing
+- **`host` (string)**
+  - Set a custom host name to use, helpful for local testing
+- **`port` (number)**
+  - Set a custom port number to use, helpful for local testing
+- **`plugins` (array)**
+  - Define `aws-lite` plugins to load; can be module names (e.g. `@aws-lite/dynamodb`) or file paths on the local machine
+  - By default, all installed official plugins (prefixed with `@aws-lite/`) and unofficial plugins (prefixed with `aws-lite-plugin-`) will be loaded
+  - Specifying plugins will disable auto-loading plugins
 
+**Examples**
+
+```js
+import awsLite from '@aws-lite/client'
+
+// Minimal: load everything from env vars
+aws = await awsLite()
+
+// Maximal: specify everything yourself
+aws = await awsLite({
+  accessKeyId: '$accessKey',
+  secretAccessKey: '$secretKey',
+  sessionToken: '$sessionToken',
+  region: 'us-west-1',
+  profile: 'work',
+  autoloadPlugins: false, // Not necessary if manually specifying plugins
+  keepAlive: false,
+  protocol: 'http',
+  host: 'localhost',
+  port: 12345,
+  plugins: [ '@aws-lite/dynamodb', '/a/custom/local/plugin/path' ],
+})
+```
 
 ### Client options
 
