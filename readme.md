@@ -150,7 +150,6 @@ The following parameters may be passed with individual client requests; only `se
 - **`payload` (object or string)**
   - Aliases: `body`, `data`, `json`
   - As a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); strings pass through
-  -
 - **`query` (object)**
   - Serialize the passed object and append it to your `endpoint` as a query string in your request
 - **`service` (string) [required]**

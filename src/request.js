@@ -2,8 +2,7 @@ let qs = require('querystring')
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
 let { is } = require('./validate')
-let { useAWS } = require('./lib')
-let { marshall: marshallAwsJSON, unmarshall: unmarshallAwsJSON } = require('./_vendor')
+let { awsjson, useAWS } = require('./lib')
 
 let JSONregex = /application\/json/
 let JSONContentType = ct => ct.match(JSONregex)
@@ -40,27 +39,18 @@ module.exports = function request (params, creds, region, config, metadata) {
 
     // Body - JSON-ify payload where convenient!
     let body = params.payload || params.body || params.data || params.json
-    let aws_json = params.awsjson || params.AWSJSON
+    let awsjsonSetting = params.awsjson || params.AWSJSON
     // Lots of potentially weird valid json (like just a null), deal with it if / when we need to I guess
     if (typeof body === 'object') {
       // Backfill content-type if it's just an object
       if (!contentType) contentType = 'application/json'
       // A variety of services use AWS JSON; we'll make it easier via a header or passed param
-      if (AwsJSONContentType(contentType) || aws_json) {
+      if (AwsJSONContentType(contentType) || awsjsonSetting) {
         // Backfill content-type header yet again
         if (!AwsJSONContentType(contentType)) {
           contentType = 'application/x-amz-json-1.0'
         }
-        // We may not be able to AWS JSON-encode the whole payload, check for specified keys
-        if (Array.isArray(aws_json)) {
-          body = Object.entries(body).reduce((acc, [ k, v ]) => {
-            if (aws_json.includes(k)) acc[k] = marshallAwsJSON(v)
-            else acc[k] = v
-            return acc
-          }, {})
-        }
-        // Otherwise, just AWS JSON-encode the whole thing
-        else body = marshallAwsJSON(body)
+        body = awsjson.marshall(body, awsjsonSetting)
       }
       // Final JSON encoding
       params.body = JSON.stringify(body)
@@ -115,17 +105,15 @@ module.exports = function request (params, creds, region, config, metadata) {
       res.on('end', () => {
         let result = data.join()
         let contentType = headers['content-type'] || headers['Content-Type'] || ''
-        if (JSONContentType(contentType)) {
+        if (JSONContentType(contentType) || AwsJSONContentType(contentType)) {
           result = JSON.parse(result)
         }
         // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
         if (AwsJSONContentType(contentType)) {
           try {
-            result = unmarshallAwsJSON(JSON.parse(result))
+            result = awsjson.unmarshall(result)
           }
-          catch {
-            result = JSON.parse(result)
-          }
+          catch { /* noop, it's already parsed */ }
         }
         if (ok) resolve(result)
         else reject({ error: result, metadata, statusCode })

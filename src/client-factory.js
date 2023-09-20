@@ -3,6 +3,7 @@ let { join } = require('path')
 let { services } = require('./services')
 let request = require('./request')
 let { validateInput } = require('./validate')
+let { awsjson } = require('./lib')
 let errorHandler = require('./error')
 
 module.exports = async function clientFactory (config, creds, region) {
@@ -65,7 +66,11 @@ module.exports = async function clientFactory (config, creds, region) {
           if (typeof method.request !== 'function') {
             throw ReferenceError(`All plugin request methods must be a function: ${service}`)
           }
-          // Error handlers are optional
+          // Error + Response handlers are optional
+          /* istanbul ignore next */ // TODO remove as soon as plugin.response() API settles
+          if (method.response && typeof method.response !== 'function') {
+            throw ReferenceError(`All plugin response methods must be a function: ${service}`)
+          }
           if (method.error && typeof method.error !== 'function') {
             throw ReferenceError(`All plugin error methods must be a function: ${service}`)
           }
@@ -93,7 +98,26 @@ module.exports = async function clientFactory (config, creds, region) {
 
             // Make the request
             try {
-              return await request({ ...params, ...result, service }, creds, selectedRegion, config, metadata)
+              let response = await request({ ...params, ...result, service }, creds, selectedRegion, config, metadata)
+
+              // Run plugin.response()
+              /* istanbul ignore next */ // TODO remove as soon as plugin.response() API settles
+              if (method.response) {
+                try {
+                  var result = await method.response(response)
+                  if (result.response === undefined) {
+                    throw TypeError('Response plugins must return a response property')
+                  }
+                }
+                catch (methodError) {
+                  errorHandler({ error: methodError, metadata })
+                }
+                let awsjsonSetting = result.awsjson || result.AWSJSON
+                response = awsjsonSetting
+                  ? awsjson.unmarshall(result.response, awsjsonSetting)
+                  : result.response
+              }
+              return response
             }
             catch (err) {
               // Run plugin.error()
