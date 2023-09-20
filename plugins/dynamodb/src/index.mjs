@@ -24,6 +24,39 @@ const headers = method => ({ 'X-Amz-Target': `DynamoDB_20120810.${method}` })
  * Plugin maintained by: @architect
  */
 
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchExecuteStatement.html
+const BatchExecuteStatement = {
+  validate: {
+    Statements: { ...arr, required },
+    ReturnConsumedCapacity: str,
+  },
+  request: async (params, { awsjsonMarshall }) => {
+    // Huzzah, nested arrays with different kinds of serialization
+    let Statements = params.Statements.map(s => {
+      let Parameters = s.Parameters.map(awsjsonMarshall)
+      return {  ...s, Parameters }
+    })
+    return {
+      awsjson: false, // Don't re-serialize to AWS-flavored JSON
+      headers: {
+        ...headers('BatchExecuteStatement'), // Undocumented as of author time
+        'content-type': 'application/x-amz-json-1.0',
+      },
+      payload: { ...params, Statements }
+    }
+  },
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (response?.Responses?.length) {
+      response.Responses = response.Responses.map(r => {
+        if (r?.Error?.Item) r.Error.Item = awsjsonUnmarshall(r.Error.Item)
+        if (r?.Item) r.Item = awsjsonUnmarshall(r?.Item)
+        return r
+      })
+    }
+    return { response }
+  },
+}
+
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
 const GetItem = {
   validate: {
@@ -67,9 +100,6 @@ const PutItem = {
 }
 
 // TODO:
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchExecuteStatement.html
-// BatchExecuteStatement
-
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html
 // BatchGetItem
 
@@ -220,5 +250,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { GetItem, PutItem }
+const methods = { BatchExecuteStatement, GetItem, PutItem }
 export default { service, methods }

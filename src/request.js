@@ -39,18 +39,21 @@ module.exports = function request (params, creds, region, config, metadata) {
 
     // Body - JSON-ify payload where convenient!
     let body = params.payload || params.body || params.data || params.json
-    let awsjsonSetting = params.awsjson || params.AWSJSON
     // Lots of potentially weird valid json (like just a null), deal with it if / when we need to I guess
     if (typeof body === 'object') {
       // Backfill content-type if it's just an object
       if (!contentType) contentType = 'application/json'
+
       // A variety of services use AWS JSON; we'll make it easier via a header or passed param
-      if (AwsJSONContentType(contentType) || awsjsonSetting) {
+      // Allow for manual encoding by passing a header while setting awsjson to false
+      let awsjsonEncode = params.awsjson ||
+                          (AwsJSONContentType(contentType) && params.awsjson !== false)
+      if (awsjsonEncode) {
         // Backfill content-type header yet again
         if (!AwsJSONContentType(contentType)) {
           contentType = 'application/x-amz-json-1.0'
         }
-        body = awsjson.marshall(body, awsjsonSetting)
+        body = awsjson.marshall(body, params.awsjson)
       }
       // Final JSON encoding
       params.body = JSON.stringify(body)

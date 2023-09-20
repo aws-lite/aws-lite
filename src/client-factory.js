@@ -4,6 +4,7 @@ let { services } = require('./services')
 let request = require('./request')
 let { validateInput } = require('./validate')
 let { awsjson } = require('./lib')
+let { marshall, unmarshall } = require('./_vendor')
 let errorHandler = require('./error')
 
 // Never autoload these `@aws-lite/*` packages:
@@ -81,6 +82,7 @@ module.exports = async function clientFactory (config, creds, region) {
             throw ReferenceError(`All plugin error methods must be a function: ${service}`)
           }
         })
+        let pluginUtils = { awsjsonMarshall: marshall, awsjsonUnmarshall: unmarshall }
         let clientMethods = {}
         Object.entries(methods).forEach(([ name, method ]) => {
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
@@ -90,7 +92,7 @@ module.exports = async function clientFactory (config, creds, region) {
 
             // Run plugin.request()
             try {
-              var result = await method.request(input)
+              var result = await method.request(input, pluginUtils)
             }
             catch (methodError) {
               errorHandler({ error: methodError, metadata })
@@ -110,7 +112,7 @@ module.exports = async function clientFactory (config, creds, region) {
               /* istanbul ignore next */ // TODO remove as soon as plugin.response() API settles
               if (method.response) {
                 try {
-                  var result = await method.response(response)
+                  var result = await method.response(response, pluginUtils)
                   if (result.response === undefined) {
                     throw TypeError('Response plugins must return a response property')
                   }
@@ -118,9 +120,8 @@ module.exports = async function clientFactory (config, creds, region) {
                 catch (methodError) {
                   errorHandler({ error: methodError, metadata })
                 }
-                let awsjsonSetting = result.awsjson || result.AWSJSON
-                response = awsjsonSetting
-                  ? awsjson.unmarshall(result.response, awsjsonSetting)
+                response = result.awsjson
+                  ? awsjson.unmarshall(result.response, result.awsjson)
                   : result.response
               }
               return response
@@ -129,7 +130,7 @@ module.exports = async function clientFactory (config, creds, region) {
               // Run plugin.error()
               if (method.error && !(input instanceof Error)) {
                 try {
-                  let updatedError = await method.error(err)
+                  let updatedError = await method.error(err, pluginUtils)
                   errorHandler(updatedError || err)
                 }
                 catch (methodError) {
