@@ -66,5 +66,159 @@ const PutItem = {
   response: unmarshall([ 'Attributes', ]),
 }
 
+// TODO:
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchExecuteStatement.html
+// BatchExecuteStatement
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html
+// BatchGetItem
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
+// BatchWriteItem
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateBackup.html
+// CreateBackup
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateGlobalTable.html
+// CreateGlobalTable
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html
+// CreateTable
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteBackup.html
+// DeleteBackup
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html
+// DeleteItem
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html
+// DeleteTable
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeBackup.html
+// DescribeBackup
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeContinuousBackups.html
+// DescribeContinuousBackups
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeContributorInsights.html
+// DescribeContributorInsights
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeEndpoints.html
+// DescribeEndpoints
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeExport.html
+// DescribeExport
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeGlobalTable.html
+// DescribeGlobalTable
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeGlobalTableSettings.html
+// DescribeGlobalTableSettings
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeImport.html
+// DescribeImport
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeKinesisStreamingDestination.html
+// DescribeKinesisStreamingDestination
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeLimits.html
+// DescribeLimits
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html
+// DescribeTable
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTableReplicaAutoScaling.html
+// DescribeTableReplicaAutoScaling
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTimeToLive.html
+// DescribeTimeToLive
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DisableKinesisStreamingDestination.html
+// DisableKinesisStreamingDestination
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_EnableKinesisStreamingDestination.html
+// EnableKinesisStreamingDestination
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteStatement.html
+// ExecuteStatement
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteTransaction.html
+// ExecuteTransaction
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExportTableToPointInTime.html
+// ExportTableToPointInTime
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ImportTable.html
+// ImportTable
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListBackups.html
+// ListBackups
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListContributorInsights.html
+// ListContributorInsights
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListExports.html
+// ListExports
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListGlobalTables.html
+// ListGlobalTables
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListImports.html
+// ListImports
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTables.html
+// ListTables
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTagsOfResource.html
+// ListTagsOfResource
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html
+// Query
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableFromBackup.html
+// RestoreTableFromBackup
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableToPointInTime.html
+// RestoreTableToPointInTime
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html
+// Scan
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TagResource.html
+// TagResource
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html
+// TransactGetItems
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html
+// TransactWriteItems
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UntagResource.html
+// UntagResource
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContinuousBackups.html
+// UpdateContinuousBackups
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContributorInsights.html
+// UpdateContributorInsights
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateGlobalTable.html
+// UpdateGlobalTable
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateGlobalTableSettings.html
+// UpdateGlobalTableSettings
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html
+// UpdateItem
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTable.html
+// UpdateTable
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTableReplicaAutoScaling.html
+// UpdateTableReplicaAutoScaling
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
+// UpdateTimeToLive
+
 const methods = { GetItem, PutItem }
 export default { service, methods }
