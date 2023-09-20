@@ -42,7 +42,9 @@
   "files": [
     "src"
   ],
-  "workspaces": [],
+  "workspaces": [
+    "plugins/dynamodb"
+  ],
   "eslintConfig": {
     "extends": "@architect/eslint-config"
   },

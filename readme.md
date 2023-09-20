@@ -28,7 +28,7 @@ npm i @aws-lite/client
 You can use the client as-is to quickly interact with AWS service APIs, or extend it with specific service plugins like so:
 
 ```sh
-npm i @aws-lite/plugin-dynamodb
+npm i @aws-lite/dynamodb
 ```
 
 
@@ -194,6 +194,7 @@ await awsLite({
 
 <!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
+- [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
 <!-- plugins_end -->
 
 
