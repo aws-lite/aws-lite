@@ -338,22 +338,66 @@ const DescribeLimits = {
   }),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html
-// DescribeTable
+const DescribeTable = {
+  validate: {
+    TableName,
+  },
+  request: async (params) => ({
+    headers: headers('DescribeTable'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTableReplicaAutoScaling.html
-// DescribeTableReplicaAutoScaling
+const DescribeTableReplicaAutoScaling = {
+  validate: {
+    TableName,
+  },
+  request: async (params) => ({
+    headers: headers('DescribeTableReplicaAutoScaling'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTimeToLive.html
-// DescribeTimeToLive
+const DescribeTimeToLive = {
+  validate: {
+    TableName,
+  },
+  request: async (params) => ({
+    headers: headers('DescribeTimeToLive'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DisableKinesisStreamingDestination.html
 // DisableKinesisStreamingDestination
+const DisableKinesisStreamingDestination = {
+  validate: {
+    TableName,
+    StreamArn: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('DisableKinesisStreamingDestination'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_EnableKinesisStreamingDestination.html
 // EnableKinesisStreamingDestination
+const EnableKinesisStreamingDestination = {
+  validate: {
+    TableName,
+    StreamArn: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('EnableKinesisStreamingDestination'),
+    payload: params,
+  }),
+}
 
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteStatement.html
 // ExecuteStatement
 
@@ -479,5 +523,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, GetItem, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, GetItem, PutItem }
 export default { service, methods }
