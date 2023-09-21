@@ -11,6 +11,7 @@ const arr = { type: 'array' }
 const bool = { type: 'boolean' }
 const obj = { type: 'object' }
 const str = { type: 'string' }
+const num = { type: 'number' }
 
 // Common validation  params
 const TableName = { ...str, required }
@@ -372,7 +373,6 @@ const DescribeTimeToLive = {
 }
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DisableKinesisStreamingDestination.html
-// DisableKinesisStreamingDestination
 const DisableKinesisStreamingDestination = {
   validate: {
     TableName,
@@ -385,7 +385,6 @@ const DisableKinesisStreamingDestination = {
 }
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_EnableKinesisStreamingDestination.html
-// EnableKinesisStreamingDestination
 const EnableKinesisStreamingDestination = {
   validate: {
     TableName,
@@ -397,15 +396,82 @@ const EnableKinesisStreamingDestination = {
   }),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteStatement.html
-// ExecuteStatement
+const ExecuteStatement = {
+  validate: {
+    TableName,
+    Statement: { ...str, required },
+    ConsistentRead: bool,
+    Limit: num,
+    NextToken: str,
+    Parameters: obj,
+    ReturnConsumedCapacity,
+    ReturnValuesOnConditionCheckFailure: str,
+  },
+  request: async (params, { awsjsonMarshall }) => {
+    if (params.Parameters) params.Parameters = params.Parameters.map(awsjsonMarshall)
+    return {
+      headers: headers('ExecuteStatement'),
+      payload: params,
+    }
+  },
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (response?.Items?.length) {
+      response.Items = response.Items.map(awsjsonUnmarshall)
+    }
+    return { awsjson: [ 'LastEvaluatedKey' ], response }
+  },
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteTransaction.html
-// ExecuteTransaction
+const ExecuteTransaction = {
+  validate: {
+    TableName,
+    TransactStatements: { ...arr, required },
+    ClientRequestToken: str,
+    ReturnConsumedCapacity,
+  },
+  request: async (params, { awsjsonMarshall }) => {
+    if (params.TransactStatements){
+      params.TransactStatements = params.TransactStatements.map(i => {
+        if (i.Parameters) i.Parameters = i.Parameters.map(awsjsonMarshall)
+        return i
+      })
+    }
+    return {
+      headers: headers('ExecuteTransaction'),
+      payload: params,
+    }
+  },
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (response?.Responses?.length) {
+      response.Responses = response.Responses.map(i => {
+        i.Item = awsjsonUnmarshall(i.Item)
+        return i
+      })
+    }
+    return { response }
+  },
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExportTableToPointInTime.html
-// ExportTableToPointInTime
+const ExportTableToPointInTime = {
+  validate: {
+    S3Bucket: { ...str, required },
+    TableArn: { ...str, required },
+    ClientToken: str,
+    ExportFormat: str,
+    ExportTime: num,
+    S3BucketOwner: str,
+    S3Prefix: str,
+    S3SseAlgorithm: str,
+    S3SseKmsKeyId: str,
+  },
+  request: async (params) => ({
+    headers: headers('ExportTableToPointInTime'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
 const GetItem = {
@@ -523,5 +589,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, GetItem, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, PutItem }
 export default { service, methods }
