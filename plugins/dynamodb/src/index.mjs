@@ -2,7 +2,7 @@ const service = 'dynamodb'
 const required = true
 
 // Common params to be AWS-flavored JSON-encoded
-const awsjsonReq = [ 'Expected', 'ExpressionAttributeValues', 'Item', 'Key', ]
+const awsjsonReq = [ 'ExpressionAttributeValues', 'Item', 'Key', ]
 // ... and decoded
 const awsjsonRes = [ 'Item' ]
 
@@ -187,16 +187,55 @@ const CreateTable = {
   }),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteBackup.html
-// DeleteBackup
+const DeleteBackup = {
+  validate: {
+    BackupArn: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('DeleteBackup'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html
-// DeleteItem
+const DeleteItem = {
+  validate: {
+    TableName,
+    Key,
+    ConditionalOperator: str,
+    ConditionExpression: str,
+    Expected: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
+    ExpressionAttributeNames: obj,
+    ExpressionAttributeValues: obj,
+    ReturnConsumedCapacity,
+    ReturnItemCollectionMetrics,
+    ReturnValues: str,
+    ReturnValuesOnConditionCheckFailure: str,
+  },
+  request: async (params) => ({
+    awsjson: awsjsonReq,
+    headers: headers('DeleteItem'),
+    payload: params,
+  }),
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (response?.Attributes) response.Attributes = awsjsonUnmarshall(response.Attributes)
+    return { response }
+  },
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html
-// DeleteTable
+const DeleteTable = {
+  validate: {
+    TableName,
+  },
+  request: async (params) => ({
+    headers: headers('DeleteTable'),
+    payload: params,
+  }),
+}
 
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeBackup.html
 // DescribeBackup
 
@@ -302,7 +341,7 @@ const PutItem = {
     Item,
     ConditionalOperator: str, // Legacy
     ConditionExpression: str,
-    Expected: str, // Legacy
+    Expected: str, // Legacy, we're not automatically serializing to AWS-flavored JSON
     ExpressionAttributeNames: obj,
     ExpressionAttributeValues: obj,
     ReturnConsumedCapacity,
@@ -367,5 +406,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, GetItem, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, GetItem, PutItem }
 export default { service, methods }
