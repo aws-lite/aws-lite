@@ -235,15 +235,41 @@ const DeleteTable = {
   }),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeBackup.html
-// DescribeBackup
+const DescribeBackup = {
+  validate: {
+    BackupArn: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('DescribeBackup'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeContinuousBackups.html
-// DescribeContinuousBackups
+const DescribeContinuousBackups = {
+  validate: {
+    TableName,
+  },
+  request: async (params) => ({
+    headers: headers('DescribeContinuousBackups'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeContributorInsights.html
-// DescribeContributorInsights
+const DescribeContributorInsights = {
+  validate: {
+    TableName,
+    IndexName: str,
+  },
+  request: async (params) => ({
+    headers: headers('DescribeContributorInsights'),
+    payload: params,
+  }),
+}
+
+// TODO:
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeEndpoints.html
 // DescribeEndpoints
@@ -406,5 +432,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, GetItem, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, GetItem, PutItem }
 export default { service, methods }
