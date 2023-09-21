@@ -42,8 +42,7 @@ const BatchExecuteStatement = {
     })
     return {
       awsjson: false, // Don't re-serialize to AWS-flavored JSON
-      // Undocumented as of author time
-      headers: headers('BatchExecuteStatement', awsjsonContentType),
+      headers: headers('BatchExecuteStatement', awsjsonContentType), // Undocumented as of author time
       payload: { ...params, Statements }
     }
   },
@@ -51,7 +50,7 @@ const BatchExecuteStatement = {
     if (response?.Responses?.length) {
       response.Responses = response.Responses.map(r => {
         if (r?.Error?.Item) r.Error.Item = awsjsonUnmarshall(r.Error.Item)
-        if (r?.Item) r.Item = awsjsonUnmarshall(r?.Item)
+        if (r?.Item) r.Item = awsjsonUnmarshall(r.Item)
         return r
       })
     }
@@ -142,6 +141,59 @@ const BatchWriteItem = {
   }
 }
 
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateBackup.html
+const CreateBackup = {
+  validate: {
+    TableName,
+    BackupName: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('CreateBackup'), // Undocumented as of author time
+    payload: params,
+  }),
+}
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateGlobalTable.html
+const CreateGlobalTable = {
+  validate: {
+    GlobalTableName: TableName,
+    ReplicationGroup: { ...arr, required },
+  },
+  request: async (params) => ({
+    headers: headers('CreateGlobalTable'), // Undocumented as of author time
+    payload: params,
+  }),
+}
+
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html
+const CreateTable = {
+  validate: {
+    TableName,
+    AttributeDefinitions: { ...arr, required },
+    KeySchema: { ...arr, required },
+    BillingMode: str,
+    DeletionProtectionEnabled: bool,
+    GlobalSecondaryIndexes: arr,
+    LocalSecondaryIndexes: arr,
+    ProvisionedThroughput: obj,
+    SSESpecification: obj,
+    StreamSpecification: obj,
+    TableClass: str,
+    Tags: arr,
+  },
+  request: async (params) => ({
+    headers: headers('CreateTable'),
+    payload: params,
+  }),
+}
+
+
+
+
+
+
+
+
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
 const GetItem = {
   validate: {
@@ -185,15 +237,6 @@ const PutItem = {
 }
 
 // TODO:
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateBackup.html
-// CreateBackup
-
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateGlobalTable.html
-// CreateGlobalTable
-
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html
-// CreateTable
-
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteBackup.html
 // DeleteBackup
 
@@ -329,5 +372,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, GetItem, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, GetItem, PutItem }
 export default { service, methods }
