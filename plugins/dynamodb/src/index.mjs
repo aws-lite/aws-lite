@@ -187,55 +187,6 @@ const CreateTable = {
   }),
 }
 
-
-
-
-
-
-
-
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
-const GetItem = {
-  validate: {
-    TableName,
-    Key,
-    AttributesToGet: arr, // Legacy
-    ConsistentRead: bool,
-    ExpressionAttributeNames: obj,
-    ProjectionExpression: str,
-    ReturnConsumedCapacity,
-  },
-  request: async (params) => ({
-    awsjson: awsjsonReq,
-    headers: headers('GetItem'),
-    payload: params,
-  }),
-  response: unmarshall(awsjsonRes),
-}
-
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html
-const PutItem = {
-  validate: {
-    TableName,
-    Item,
-    ConditionalOperator: str, // Legacy
-    ConditionExpression: str,
-    Expected: str, // Legacy
-    ExpressionAttributeNames: obj,
-    ExpressionAttributeValues: obj,
-    ReturnConsumedCapacity,
-    ReturnItemCollectionMetrics,
-    ReturnValues: str,
-    ReturnValuesOnConditionCheckFailure: str,
-  },
-  request: async (params) => ({
-    awsjson: awsjsonReq,
-    headers: headers('PutItem'),
-    payload: params,
-  }),
-  response: unmarshall([ 'Attributes', ]),
-}
-
 // TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteBackup.html
 // DeleteBackup
@@ -300,6 +251,26 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExportTableToPointInTime.html
 // ExportTableToPointInTime
 
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
+const GetItem = {
+  validate: {
+    TableName,
+    Key,
+    AttributesToGet: arr, // Legacy
+    ConsistentRead: bool,
+    ExpressionAttributeNames: obj,
+    ProjectionExpression: str,
+    ReturnConsumedCapacity,
+  },
+  request: async (params) => ({
+    awsjson: awsjsonReq,
+    headers: headers('GetItem'),
+    payload: params,
+  }),
+  response: unmarshall(awsjsonRes),
+}
+
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ImportTable.html
 // ImportTable
 
@@ -324,6 +295,30 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTagsOfResource.html
 // ListTagsOfResource
 
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html
+const PutItem = {
+  validate: {
+    TableName,
+    Item,
+    ConditionalOperator: str, // Legacy
+    ConditionExpression: str,
+    Expected: str, // Legacy
+    ExpressionAttributeNames: obj,
+    ExpressionAttributeValues: obj,
+    ReturnConsumedCapacity,
+    ReturnItemCollectionMetrics,
+    ReturnValues: str,
+    ReturnValuesOnConditionCheckFailure: str,
+  },
+  request: async (params) => ({
+    awsjson: awsjsonReq,
+    headers: headers('PutItem'),
+    payload: params,
+  }),
+  response: unmarshall([ 'Attributes', ]),
+}
+
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html
 // Query
 
