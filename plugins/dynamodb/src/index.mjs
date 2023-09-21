@@ -269,29 +269,76 @@ const DescribeContributorInsights = {
   }),
 }
 
-// TODO:
-
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeEndpoints.html
-// DescribeEndpoints
+const DescribeEndpoints = {
+  request: async () => ({
+    headers: headers('DescribeEndpoints'),
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeExport.html
-// DescribeExport
+const DescribeExport = {
+  validate: {
+    ExportArn: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('DescribeExport'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeGlobalTable.html
-// DescribeGlobalTable
+const DescribeGlobalTable = {
+  validate: {
+    GlobalTableName: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('DescribeGlobalTable'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeGlobalTableSettings.html
-// DescribeGlobalTableSettings
+const DescribeGlobalTableSettings = {
+  validate: {
+    GlobalTableName: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('DescribeGlobalTableSettings'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeImport.html
-// DescribeImport
+const DescribeImport = {
+  validate: {
+    ImportArn: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('DescribeImport'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeKinesisStreamingDestination.html
-// DescribeKinesisStreamingDestination
+const DescribeKinesisStreamingDestination = {
+  validate: {
+    TableName,
+  },
+  request: async (params) => ({
+    headers: headers('DescribeKinesisStreamingDestination'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeLimits.html
-// DescribeLimits
+const DescribeLimits = {
+  request: async () => ({
+    headers: headers('DescribeLimits'),
+  }),
+}
 
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html
 // DescribeTable
 
@@ -432,5 +479,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, GetItem, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, GetItem, PutItem }
 export default { service, methods }

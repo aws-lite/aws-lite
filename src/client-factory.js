@@ -87,7 +87,7 @@ module.exports = async function clientFactory (config, creds, region) {
         Object.entries(methods).forEach(([ name, method ]) => {
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
           clientMethods[name] = Object.defineProperty(async input => {
-            let selectedRegion = input.region || region
+            let selectedRegion = input?.region || region
             let metadata = { service, name }
 
             // Run plugin.request()

@@ -102,13 +102,13 @@ module.exports = function request (params, creds, region, config, metadata) {
     /* istanbul ignore next */
     if (config.debug) {
       let { method, service, host, path, port = '', headers, protocol, body } = options
-      let truncatedBody = body.length > 1000 ? body?.substring(0, 1000) + '...' : body
+      let truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
       console.error('[aws-lite] Requesting:', {
         service,
         method,
         url: `${protocol}//${host}${port}${path}`,
         headers: { ...headers, Authorization: headers.Authorization.substring(0, 35) + '...' },
-        body: truncatedBody,
+        body: truncatedBody || '<no body>',
       })
     }
 
