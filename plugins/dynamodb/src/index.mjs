@@ -696,16 +696,75 @@ const RestoreTableToPointInTime = {
   }),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html
-// Scan
+const Scan = {
+  validate: {
+    TableName,
+    AttributesToGet: arr,
+    ConditionalOperator: str,
+    ConsistentRead: bool,
+    ExclusiveStartKey: obj,
+    ExpressionAttributeNames: obj,
+    ExpressionAttributeValues: obj,
+    FilterExpression: str,
+    IndexName: str,
+    Limit: num,
+    ProjectionExpression: str,
+    ReturnConsumedCapacity: str,
+    ScanFilter: obj,  // Legacy, we're not automatically serializing to AWS-flavored JSON
+    Segment: num,
+    Select: str,
+    TotalSegments: num,
+  },
+  request: async (params) => ({
+    headers: headers('Scan'),
+    payload: params,
+  }),
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (response?.Items?.length) response.Items = response.Items.map(awsjsonUnmarshall)
+    return { response }
+  },
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TagResource.html
-// TagResource
+const TagResource = {
+  validate: {
+    ResourceArn: { ...str, required },
+    Tags: { ...arr, required },
+  },
+  request: async (params) => ({
+    headers: headers('TagResource'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html
-// TransactGetItems
+const TransactGetItems = {
+  validate: {
+    TransactItems: arr,
+    ReturnConsumedCapacity: str,
+  },
+  request: async (params, { awsjsonMarshall }) => {
+    params.TransactItems = params.TransactItems.map(i => {
+      // Key is required, but let Dynamo's validator blow up if not present
+      if (i.Get.Key) i.Get.Key = awsjsonMarshall(i.Get.Key)
+      return i
+    })
+    return {
+      headers: headers('TransactGetItems'),
+      payload: params,
+    }
+  },
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (response?.Responses?.length) response.Responses = response.Responses.map(i => {
+      i.Item = awsjsonUnmarshall(i.Item)
+      return i
+    })
+    return { response }
+  },
+}
 
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html
 // TransactWriteItems
 
@@ -736,5 +795,5 @@ const RestoreTableToPointInTime = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, }
 export default { service, methods }
