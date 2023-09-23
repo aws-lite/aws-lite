@@ -101,7 +101,7 @@ module.exports = function request (params, creds, region, config, metadata) {
 
     /* istanbul ignore next */
     if (config.debug) {
-      let { method, service, host, path, port = '', headers, protocol, body } = options
+      let { method = 'GET', service, host, path, port = '', headers, protocol, body } = options
       let truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
       console.error('[aws-lite] Requesting:', {
         service,

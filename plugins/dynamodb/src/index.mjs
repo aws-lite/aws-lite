@@ -492,30 +492,113 @@ const GetItem = {
   response: unmarshall(awsjsonRes),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ImportTable.html
-// ImportTable
+const ImportTable = {
+  validate: {
+    InputFormat: { ...str, required },
+    S3BucketSource: { ...obj, required },
+    TableCreationParameters: { ...obj, required },
+    ClientToken: str,
+    InputCompressionType: str,
+    InputFormatOptions: obj,
+  },
+  request: async (params) => ({
+    headers: headers('ImportTable'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListBackups.html
-// ListBackups
+const ListBackups = {
+  validate: {
+    BackupType: str,
+    ExclusiveStartBackupArn: str,
+    Limit: num,
+    TableName: str,
+    TimeRangeLowerBound: num,
+    TimeRangeUpperBound: num,
+  },
+  request: async (params) => ({
+    headers: headers('ListBackups'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListContributorInsights.html
-// ListContributorInsights
+const ListContributorInsights = {
+  validate: {
+    MaxResults: num,
+    NextToken: str,
+    TableName: str,
+  },
+  request: async (params) => ({
+    headers: headers('ListContributorInsights'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListExports.html
-// ListExports
+const ListExports = {
+  validate: {
+    MaxResults: num,
+    NextToken: str,
+    TableArn: str,
+  },
+  request: async (params) => ({
+    headers: headers('ListExports'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListGlobalTables.html
-// ListGlobalTables
+const ListGlobalTables = {
+  validate: {
+    ExclusiveStartGlobalTableName: str,
+    Limit: num,
+    RegionName: str,
+  },
+  request: async (params) => ({
+    headers: headers('ListGlobalTables'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListImports.html
-// ListImports
+const ListImports = {
+  validate: {
+    NextToken: str,
+    PageSize: num,
+    TableArn: str,
+  },
+  request: async (params) => ({
+    headers: headers('ListImports'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTables.html
-// ListTables
+const ListTables = {
+  validate: {
+    ExclusiveStartTableName: str,
+    Limit: num,
+  },
+  request: async (params) => ({
+    headers: headers('ListTables'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTagsOfResource.html
-// ListTagsOfResource
+const ListTagsOfResource = {
+  validate: {
+    NextToken: str,
+    ResourceArn: { ...str, required },
+  },
+  request: async (params) => ({
+    headers: headers('ListTagsOfResource'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html
 const PutItem = {
@@ -589,5 +672,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem }
 export default { service, methods }
