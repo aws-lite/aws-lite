@@ -2,7 +2,7 @@ const service = 'dynamodb'
 const required = true
 
 // Common params to be AWS-flavored JSON-encoded
-const awsjsonReq = [ 'ExpressionAttributeValues', 'Item', 'Key', ]
+const awsjsonReq = [ 'ExclusiveStartKey', 'ExpressionAttributeValues', 'Item', 'Key', ]
 // ... and decoded
 const awsjsonRes = [ 'Item' ]
 
@@ -623,16 +623,80 @@ const PutItem = {
   response: unmarshall([ 'Attributes', ]),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html
-// Query
+const Query = {
+  validate: {
+    TableName,
+    AttributesToGet: arr,
+    ConditionalOperator: str,
+    ConsistentRead: bool,
+    ExclusiveStartKey: obj,
+    ExpressionAttributeNames: obj,
+    ExpressionAttributeValues: obj,
+    FilterExpression: str,
+    IndexName: str,
+    KeyConditionExpression: str,
+    KeyConditions: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
+    Limit: num,
+    ProjectionExpression: str,
+    QueryFilter: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
+    ReturnConsumedCapacity: str,
+    ScanIndexForward: bool,
+    Select: str,
+  },
+  request: async (params) => ({
+    awsjson: awsjsonReq,
+    headers: headers('Query'),
+    payload: params,
+  }),
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (response?.Items?.length) response.Items = response.Items.map(awsjsonUnmarshall)
+    if (response?.LastEvaluatedKey) {
+      let key = response.LastEvaluatedKey[Object.keys(response.LastEvaluatedKey)[0]]
+      response.LastEvaluatedKey = awsjsonUnmarshall(key)
+    }
+    return { response }
+  },
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableFromBackup.html
-// RestoreTableFromBackup
+const RestoreTableFromBackup = {
+  validate: {
+    BackupArn: { ...str, required },
+    TargetTableName: { ...str, required },
+    BillingModeOverride: str,
+    GlobalSecondaryIndexOverride: arr,
+    LocalSecondaryIndexOverride: arr,
+    ProvisionedThroughputOverride: obj,
+    SSESpecificationOverride: obj,
+  },
+  request: async (params) => ({
+    headers: headers('RestoreTableFromBackup'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableToPointInTime.html
-// RestoreTableToPointInTime
+const RestoreTableToPointInTime = {
+  validate: {
+    TargetTableName: { ...str, required },
+    BillingModeOverride: str,
+    GlobalSecondaryIndexOverride: arr,
+    LocalSecondaryIndexOverride: arr,
+    ProvisionedThroughputOverride: obj,
+    RestoreDateTime: num,
+    SourceTableArn: str,
+    SourceTableName: str,
+    SSESpecificationOverride: obj,
+    UseLatestRestorableTime: bool,
+  },
+  request: async (params) => ({
+    headers: headers('RestoreTableToPointInTime'),
+    payload: params,
+  }),
+}
 
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html
 // Scan
 
@@ -672,5 +736,5 @@ const PutItem = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, DeleteItem, DeleteTable, CreateGlobalTable, CreateTable, DeleteBackup, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, }
 export default { service, methods }
