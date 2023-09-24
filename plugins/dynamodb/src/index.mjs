@@ -746,7 +746,7 @@ const TransactGetItems = {
   },
   request: async (params, { awsjsonMarshall }) => {
     params.TransactItems = params.TransactItems.map(i => {
-      // Key is required, but let Dynamo's validator blow up if not present
+      // Required, but let Dynamo's validator blow up if not present
       if (i.Get.Key) i.Get.Key = awsjsonMarshall(i.Get.Key)
       return i
     })
@@ -764,16 +764,94 @@ const TransactGetItems = {
   },
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html
-// TransactWriteItems
+const TransactWriteItems = {
+  validate: {
+    TransactItems: arr,
+    ClientRequestToken: str,
+    ReturnConsumedCapacity: str,
+    ReturnItemCollectionMetrics: str,
+  },
+  request: async (params, { awsjsonMarshall }) => {
+    params.TransactItems = params.TransactItems.map(i => {
+
+      // One of the below four is required, but let Dynamo's validator blow up if not present
+      /**/ if (i.ConditionCheck) {
+        if (i.ConditionCheck.ExpressionAttributeValues) {
+          i.ConditionCheck.ExpressionAttributeValues = awsjsonMarshall(i.ConditionCheck.ExpressionAttributeValues)
+        }
+        if (i.ConditionCheck.Key) {
+          i.ConditionCheck.Key = awsjsonMarshall(i.ConditionCheck.Key)
+        }
+      }
+      else if (i.Delete) {
+        if (i.Delete.ExpressionAttributeValues) {
+          i.Delete.ExpressionAttributeValues = awsjsonMarshall(i.Delete.ExpressionAttributeValues)
+        }
+        if (i.Delete.Key) {
+          i.Delete.Key = awsjsonMarshall(i.Delete.Key)
+        }
+      }
+      else if (i.Put) {
+        if (i.Put.ExpressionAttributeValues) {
+          i.Put.ExpressionAttributeValues = awsjsonMarshall(i.Put.ExpressionAttributeValues)
+        }
+        if (i.Put.Item) {
+          i.Put.Item = awsjsonMarshall(i.Put.Item)
+        }
+      }
+      else if (i.Update) {
+        if (i.Update.ExpressionAttributeValues) {
+          i.Update.ExpressionAttributeValues = awsjsonMarshall(i.Update.ExpressionAttributeValues)
+        }
+        if (i.Update.Key) {
+          i.Update.Key = awsjsonMarshall(i.Update.Key)
+        }
+      }
+      return i
+    })
+    return {
+      headers: headers('TransactWriteItems'),
+      payload: params,
+    }
+  },
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (Object.keys(response?.ItemCollectionMetrics || {})?.length) {
+      Object.entries(response?.ItemCollectionMetrics).forEach(([ table, items ]) => {
+        response.ItemCollectionMetrics[table] = items.map(i => {
+          i.ItemCollectionKey = awsjsonUnmarshall(i.ItemCollectionKey)
+        })
+      })
+    }
+    return { response }
+  },
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UntagResource.html
-// UntagResource
+const UntagResource = {
+  validate: {
+    ResourceArn: { ...str, required },
+    TagKeys: { ...arr, required },
+  },
+  request: async (params) => ({
+    headers: headers('UntagResource'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContinuousBackups.html
-// UpdateContinuousBackups
+const UpdateContinuousBackups = {
+  validate: {
+    TableName,
+    PointInTimeRecoverySpecification: obj,
+  },
+  request: async (params) => ({
+    headers: headers('UpdateContinuousBackups'),
+    payload: params,
+  }),
+}
 
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContributorInsights.html
 // UpdateContributorInsights
 
@@ -795,5 +873,5 @@ const TransactGetItems = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, TransactWriteItems, UntagResource, UpdateContinuousBackups, }
 export default { service, methods }
