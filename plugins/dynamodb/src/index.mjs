@@ -4,7 +4,7 @@ const required = true
 // Common params to be AWS-flavored JSON-encoded
 const awsjsonReq = [ 'ExclusiveStartKey', 'ExpressionAttributeValues', 'Item', 'Key', ]
 // ... and decoded
-const awsjsonRes = [ 'Item' ]
+const awsjsonRes = [ 'Attributes', 'Item' ]
 
 // Validation types
 const arr = { type: 'array' }
@@ -817,7 +817,7 @@ const TransactWriteItems = {
   },
   response: async (response, { awsjsonUnmarshall }) => {
     if (Object.keys(response?.ItemCollectionMetrics || {})?.length) {
-      Object.entries(response?.ItemCollectionMetrics).forEach(([ table, items ]) => {
+      Object.entries(response.ItemCollectionMetrics).forEach(([ table, items ]) => {
         response.ItemCollectionMetrics[table] = items.map(i => {
           i.ItemCollectionKey = awsjsonUnmarshall(i.ItemCollectionKey)
         })
@@ -892,18 +892,83 @@ const UpdateGlobalTableSettings = {
   }),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html
-// UpdateItem
+const UpdateItem = {
+  validate: {
+    Key: { ...obj, required },
+    TableName,
+    AttributeUpdates: obj,
+    ConditionalOperator: str,
+    ConditionExpression: str,
+    Expected: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
+    ExpressionAttributeNames: obj,
+    ExpressionAttributeValues: obj,
+    ReturnConsumedCapacity: str,
+    ReturnItemCollectionMetrics: str,
+    ReturnValues: str,
+    ReturnValuesOnConditionCheckFailure: str,
+    UpdateExpression: str,
+  },
+  request: async (params) => ({
+    awsjson: awsjsonReq,
+    headers: headers('UpdateItem'),
+    payload: params,
+  }),
+  response: async (response, { awsjsonUnmarshall }) => {
+    if (Object.keys(response?.ItemCollectionMetrics || {})?.length) {
+      Object.entries(response.ItemCollectionMetrics.ItemCollectionKey).forEach(([ key, props ]) => {
+        response.ItemCollectionMetrics.ItemCollectionKey[key] = awsjsonUnmarshall(props)
+      })
+    }
+    return { awsjson: awsjsonRes, response }
+  },
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTable.html
-// UpdateTable
+const UpdateTable = {
+  validate: {
+    TableName,
+    AttributeDefinitions: arr,
+    BillingMode: str,
+    DeletionProtectionEnabled: bool,
+    GlobalSecondaryIndexUpdates: arr,
+    ProvisionedThroughput: obj,
+    ReplicaUpdates: arr,
+    SSESpecification: obj,
+    StreamSpecification: obj,
+    TableClass: str,
+  },
+  request: async (params) => ({
+    headers: headers('UpdateTable'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTableReplicaAutoScaling.html
-// UpdateTableReplicaAutoScaling
+const UpdateTableReplicaAutoScaling = {
+  validate: {
+    TableName,
+    GlobalSecondaryIndexUpdates: arr,
+    ProvisionedWriteCapacityAutoScalingUpdate: obj,
+    ReplicaUpdates: arr,
+  },
+  request: async (params) => ({
+    headers: headers('UpdateTableReplicaAutoScaling'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
-// UpdateTimeToLive
+const UpdateTimeToLive = {
+  validate: {
+    TableName,
+    TimeToLiveSpecification: obj,
+  },
+  request: async (params) => ({
+    headers: headers('UpdateTimeToLive'),
+    payload: params,
+  }),
+}
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, TransactWriteItems, UntagResource, UpdateContinuousBackups, UpdateContributorInsights, UpdateGlobalTable, UpdateGlobalTableSettings }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, TransactWriteItems, UntagResource, UpdateContinuousBackups, UpdateContributorInsights, UpdateGlobalTable, UpdateGlobalTableSettings, UpdateItem, UpdateTable, UpdateTableReplicaAutoScaling, UpdateTimeToLive }
 export default { service, methods }
