@@ -851,16 +851,48 @@ const UpdateContinuousBackups = {
   }),
 }
 
-// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContributorInsights.html
-// UpdateContributorInsights
+const UpdateContributorInsights = {
+  validate: {
+    TableName,
+    ContributorInsightsAction: str,
+    IndexName: str,
+  },
+  request: async (params) => ({
+    headers: headers('UpdateContributorInsights'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateGlobalTable.html
-// UpdateGlobalTable
+const UpdateGlobalTable = {
+  validate: {
+    GlobalTableName: { ...str, required },
+    ReplicaUpdates: arr,
+  },
+  request: async (params) => ({
+    headers: headers('UpdateGlobalTable'),
+    payload: params,
+  }),
+}
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateGlobalTableSettings.html
-// UpdateGlobalTableSettings
+const UpdateGlobalTableSettings = {
+  validate: {
+    GlobalTableName: { ...str, required },
+    GlobalTableBillingMode: str,
+    GlobalTableGlobalSecondaryIndexSettingsUpdate: arr,
+    GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate: obj,
+    GlobalTableProvisionedWriteCapacityUnits: num,
+    ReplicaSettingsUpdate: arr,
+  },
+  request: async (params) => ({
+    headers: headers('UpdateGlobalTableSettings'),
+    payload: params,
+  }),
+}
 
+// TODO:
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html
 // UpdateItem
 
@@ -873,5 +905,5 @@ const UpdateContinuousBackups = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html
 // UpdateTimeToLive
 
-const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, TransactWriteItems, UntagResource, UpdateContinuousBackups, }
+const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, TransactWriteItems, UntagResource, UpdateContinuousBackups, UpdateContributorInsights, UpdateGlobalTable, UpdateGlobalTableSettings }
 export default { service, methods }
