@@ -1,13 +1,34 @@
-# `aws-lite`
+<h1>`aws-lite`</h1>
 
-> `aws-lite` is a simple, extremely fast, extensible AWS client for Node.js.
+> [`aws-lite`](https://www.npmjs.com/package/@aws-lite/client) is a simple, extremely fast, extensible AWS client for Node.js.
 >
 > (It's got good error reporting, too.)
 
+- [Who made this?](#who-made-this)
+- [Why not use `aws-sdk` / `@aws-sdk/*`?](#why-not-use-aws-sdk--aws-sdk)
+- [Install](#install)
+- [Quickstart](#quickstart)
+- [Usage](#usage)
+  - [Configuration](#configuration)
+  - [Client requests](#client-requests)
+- [Plugins](#plugins)
+  - [Plugin API](#plugin-api)
+    - [`validate`](#validate)
+    - [`request()`](#request)
+    - [`response()`](#response)
+    - [`error()`](#error)
+  - [List of official `@aws-lite/*` plugins](#list-of-official-aws-lite-plugins)
+- [Contributing](#contributing)
+  - [Setup](#setup)
+  - [Testing](#testing)
+    - [Methodology](#methodology)
+    - [Live AWS tests](#live-aws-tests)
+
+---
 
 ## Who made this?
 
-`aws-lite` is developed and maintained by the folks at [OpenJS Foundation Architect](https://arc.codes). We <3 AWS!
+[`aws-lite`](https://www.npmjs.com/package/@aws-lite/client) is developed and maintained by the folks at [OpenJS Foundation Architect](https://arc.codes). We <3 AWS!
 
 
 ## Why not use `aws-sdk` / `@aws-sdk/*`?
@@ -112,7 +133,7 @@ The following options may be passed when instantiating the `aws-lite` client:
   - By default, all installed official plugins (prefixed with `@aws-lite/`) and unofficial plugins (prefixed with `aws-lite-plugin-`) will be loaded
   - Specifying plugins will disable auto-loading plugins
 
-#### **Example**
+An example:
 
 ```js
 import awsLite from '@aws-lite/client'
@@ -160,7 +181,7 @@ The following parameters may be passed with individual client requests; only `se
 > Additionally, the following [configuration options](#configuration-options) can be specified in each request, overriding those specified by the instantiated client: [`region`](#configuration-options), [`protocol`](#configuration-options), [`host`](#configuration-options), and [`port`](#configuration-options)
 
 
-#### **Example**
+An example:
 
 ```js
 import awsLite from '@aws-lite/client'
@@ -189,10 +210,190 @@ await awsLite({
 
 ## Plugins
 
-(Coming soon!)
+Out of the box, [`@aws-lite/client`](https://www.npmjs.com/package/@aws-lite/client) is a full-featured AWS API client that you can use to interact with any AWS service that makes use of [authentication via AWS signature v4](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html) (which should be just about all of them).
+
+`@aws-lite/client` can be extended with plugins to more easily interact with AWS services. A bit more about how plugins work:
+
+- Plugins can be authored in ESM or CJS
+- Plugins can be dependencies downloaded from npm, or also live locally in your codebase
+- In conjunction with the open source community, `aws-lite` publishes service plugins under the `@aws-lite/$service` namespace that conform to `aws-lite` standards
+- `@aws-lite/*` plugins, and packages published to npm with the `aws-lite-plugin-*` prefix, are automatically loaded by the `@aws-lite/client` upon instantiation
+  - This behavior can be overridden with the [`autoloadPlugins` parameter](#Configuration)
+
+Thus, to make use of the `@aws-lite/dynamodb` plugin, this is what your code would look like:
+
+```sh
+npm i @aws-lite/client @aws-lite/dynamodb
+```
+
+```js
+import awsLite from '@aws-lite/client'
+const aws = await awsLite() // @aws-lite/dynamodb is now loaded
+aws.dynamodb.PutItem({ TableName: 'my-table', Key: { id: 'hello' } })
+```
 
 
-### Official `@aws-lite/*` plugins
+### Plugin API
+
+The `aws-lite` plugin API is lightweight and simple to learn. It makes use of four optional lifecycle hooks:
+
+- [`validate`](#validate) [optional] - an object of property names and types to validate inputs with pre-request
+- [`request()`](#request()) [optional] - an async function that enables mutation of inputs to the final service API request
+- [`response()`](#response()) [optional] - an async function that enables mutation of service API responses before they are returned
+- [`error()`](#error()) [optional] - an async function that enables mutation of service API errors before they are returned
+
+The above four lifecycle hooks must be exported as an object named `methods`, along with a valid AWS service code property named `service`, like so:
+
+```js
+// A simple plugin for validating input
+export default {
+  service: 'dynamodb',
+  methods: {
+    PutItem: {
+      validate: {
+        TableName: { type: 'string', required: true }
+      }
+    }
+  }
+}
+// Using the above plugin
+aws.dynamodb.PutItem({ TableName: 12345 }) // Throws validation error
+```
+
+Example plugins can be found below, in [`plugins/` dir (containing `@aws-lite/*` plugins)](https://github.com/architect/aws-lite/tree/main/plugins), and in [tests](https://github.com/architect/aws-lite/tree/main/test/mock/plugins).
+
+
+#### `validate`
+
+The `validate` lifecycle hook is an optional object containing (case-sensitive) input property names, with a corresponding object that denotes their `type` and whether `required`.
+
+Types are as follows: `array` `boolean` `number` `object` `string`. An example `validate` plugin:
+
+```js
+// Validate inputs for a single DynamoDB method (`CreateTable`)
+export default {
+  service: 'dynamodb',
+  methods: {
+    CreateTable: {
+      validate: {
+        TableName:                  { type: 'string', required: true }
+        AttributeDefinitions:       { type: 'array', required: true },
+        KeySchema:                  { type: 'array', required: true },
+        BillingMode:                { type: 'string' },
+        DeletionProtectionEnabled:  { type: 'boolean', },
+        GlobalSecondaryIndexes:     { type: 'array' },
+        LocalSecondaryIndexes:      { type: 'array' },
+        ProvisionedThroughput:      { type: 'object' },
+        SSESpecification:           { type: 'object' },
+        StreamSpecification:        { type: 'object' },
+        TableClass:                 { type: 'string' },
+        Tags:                       { type: 'array' },
+      }
+    }
+  }
+}
+```
+
+
+#### `request()`
+
+The `request()` lifecycle hook is an optional async function that enables that enables mutation of inputs to the final service API request.
+
+`request()` is executed with two positional arguments:
+
+- **`params` (object)**
+  - The method's input parameters
+- **`utils` (object)**
+  - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
+
+The `request()` method must return a valid client request object, and can make use of any of the existing [client request properties](#Client-requests). An example:
+
+```js
+// Automatically serialize input to AWS-flavored JSON
+export default {
+  service: 'dynamodb',
+  methods: {
+    PutItem: {
+      validate: { Item: { type: 'object', required: true } },
+      request: async (params, utils) => {
+        params.Item = utils.awsjsonMarshall(params.Item)
+        return {
+          headers: { 'X-Amz-Target': `DynamoDB_20120810.PutItem` }
+          payload: params
+        }
+      }
+    }
+  }
+}
+```
+
+
+#### `response()`
+
+The `response()` lifecycle hook is an async function that enables mutation of service API responses before they are returned.
+
+`response()` is executed with two positional arguments:
+
+- **`response` (any)**
+  - Raw non-error response from AWS service API request; if the entire payload is JSON or AWS-flavored JSON, `aws-lite` will attempt to parse it prior to executing `response()`. Responses that are primarily JSON, but with nested AWS-flavored JSON, will be parsed only as JSON and may require additional deserialization with the `awsjsonUnmarshall` utility
+- **`utils` (object)**
+  - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
+
+The `response()` method must return an object containing a `response` property, and an optional `awsjson` property (that behaves the same as in [client requests](#Client-requests)). An example:
+
+```js
+// Automatically deserialize AWS-flavored JSON
+export default {
+  service: 'dynamodb',
+  methods: {
+    GetItem: {
+      // Successful responses always have an AWS-flavored JSON `Item` property
+      response: async (response, utils) => {
+        return { awsjson: [ 'Item' ], response }
+      }
+    }
+  }
+}
+```
+
+
+#### `error()`
+
+The `error()` lifecycle hook is an async function that enables mutation of service API errors before they are returned.
+
+`error()` is executed with two positional arguments:
+
+- **`error` (object)**
+  - The object containing the following properties:
+    - **`error` (object or string)**: the raw error from the service API; if the entire error payload is JSON, `aws-lite` will attempt to parse it into the `error` property
+    - **`metadata` (object)** - `aws-lite` error metadata; to improve the quality of the errors presented by `aws-lite`, please only append to this object
+    - **`statusCode` (number or undefined)** - resulting status code of the API response; if an HTTP connection error occurred, no `statusCode` will be present
+- **`utils` (object)**
+  - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
+
+The `error()` method may return nothing, a new or mutated version of the error payload it was passed, a string, an object, or a JS error. An example
+
+```js
+// Improve clarity of error output
+export default {
+  service: 'lambda',
+  methods: {
+    GetFunctionConfiguration: {
+      error: async (err, utils) => {
+        if (err.statusCode === 400 &&
+            err?.error?.message?.match(/validation/)) {
+          // Append a property to be clearly displayed along with the other error data
+          err.metadata.type = 'Validation error'
+        }
+        return err
+      }
+    }
+  }
+}
+```
+
+
+### List of official `@aws-lite/*` plugins
 
 <!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
@@ -209,6 +410,9 @@ AWS has (as of this writing) nearly 300 service APIs – `aws-lite` would love y
 
 - Pull down this repo
 - Install dependencies and run the normal test suite: `npm it`
+- To create a plugin:
+  - Add your plugin to the [`plugins` array in the plugin generator](https://github.com/architect/aws-lite/blob/main/scripts/generate-plugins/index.js)
+  - Run `npm run generate-plugins`
 - Create a PR that adheres to our [testing methodology](#testing)
 
 > It is advisable you have AWS credentials on your local development machine for manual verification of any client or service plugin changes

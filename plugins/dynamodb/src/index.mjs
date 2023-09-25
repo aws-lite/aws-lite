@@ -895,7 +895,7 @@ const UpdateGlobalTableSettings = {
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html
 const UpdateItem = {
   validate: {
-    Key: { ...obj, required },
+    Key,
     TableName,
     AttributeUpdates: obj,
     ConditionalOperator: str,

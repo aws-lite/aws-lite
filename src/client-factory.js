@@ -70,7 +70,7 @@ module.exports = async function clientFactory (config, creds, region) {
           throw TypeError('Plugin must export a methods object')
         }
         Object.values(methods).forEach(method => {
-          if (typeof method.request !== 'function') {
+          if (method.request && typeof method.request !== 'function') {
             throw ReferenceError(`All plugin request methods must be a function: ${service}`)
           }
           // Error + Response handlers are optional

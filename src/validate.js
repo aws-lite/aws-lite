@@ -5,7 +5,7 @@ let is = {
   array: item => Array.isArray(item),
   boolean: item => typeof item === 'boolean',
   number: item => Number.isInteger(item),
-  object: item => typeof item === 'object' && !Array.isArray(item),
+  object: item => item && typeof item === 'object' && !Array.isArray(item),
   string: item => typeof item === 'string',
   // TODO: ARN, partial arn
 }
