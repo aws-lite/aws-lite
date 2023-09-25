@@ -1,4 +1,4 @@
-<h1>`aws-lite`</h1>
+<h1><code>aws-lite</code></h1>
 
 > [`aws-lite`](https://www.npmjs.com/package/@aws-lite/client) is a simple, extremely fast, extensible AWS client for Node.js.
 >
@@ -129,8 +129,8 @@ The following options may be passed when instantiating the `aws-lite` client:
 - **`port` (number)**
   - Set a custom port number to use, helpful for local testing
 - **`plugins` (array)**
-  - Define `aws-lite` plugins to load; can be module names (e.g. `@aws-lite/dynamodb`) or file paths on the local machine
-  - By default, all installed official plugins (prefixed with `@aws-lite/`) and unofficial plugins (prefixed with `aws-lite-plugin-`) will be loaded
+  - Define `aws-lite` plugins to load; can be module names (e.g. `@aws-lite/dynamodb`) or file paths on the local machine (e.g. `/path/to/my/plugin.mjs`)
+  - By default, all installed [official plugins (prefixed with `@aws-lite/`)](#list-of-official-aws-lite-plugins) and unofficial plugins (prefixed with `aws-lite-plugin-`) will be loaded
   - Specifying plugins will disable auto-loading plugins
 
 An example:
@@ -238,9 +238,9 @@ aws.dynamodb.PutItem({ TableName: 'my-table', Key: { id: 'hello' } })
 The `aws-lite` plugin API is lightweight and simple to learn. It makes use of four optional lifecycle hooks:
 
 - [`validate`](#validate) [optional] - an object of property names and types to validate inputs with pre-request
-- [`request()`](#request()) [optional] - an async function that enables mutation of inputs to the final service API request
-- [`response()`](#response()) [optional] - an async function that enables mutation of service API responses before they are returned
-- [`error()`](#error()) [optional] - an async function that enables mutation of service API errors before they are returned
+- [`request()`](#request) [optional] - an async function that enables mutation of inputs to the final service API request
+- [`response()`](#response) [optional] - an async function that enables mutation of service API responses before they are returned
+- [`error()`](#error) [optional] - an async function that enables mutation of service API errors before they are returned
 
 The above four lifecycle hooks must be exported as an object named `methods`, along with a valid AWS service code property named `service`, like so:
 
