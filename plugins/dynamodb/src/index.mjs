@@ -20,7 +20,6 @@ const Item = { ...obj, required }
 const ReturnConsumedCapacity = str
 const ReturnItemCollectionMetrics = str
 
-
 const unmarshall = keys => async response => ({ awsjson: keys, response })
 const headers = (method, additional) => ({ 'X-Amz-Target': `DynamoDB_20120810.${method}`, ...additional })
 const awsjsonContentType = { 'content-type': 'application/x-amz-json-1.0' }

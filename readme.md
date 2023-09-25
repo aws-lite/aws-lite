@@ -20,6 +20,7 @@
   - [List of official `@aws-lite/*` plugins](#list-of-official-aws-lite-plugins)
 - [Contributing](#contributing)
   - [Setup](#setup)
+  - [Authoring `@aws-lite/*` plugins](#authoring-aws-lite-plugins)
   - [Testing](#testing)
     - [Methodology](#methodology)
     - [Live AWS tests](#live-aws-tests)
@@ -418,13 +419,36 @@ AWS has (as of this writing) nearly 300 service APIs – `aws-lite` would love y
 > It is advisable you have AWS credentials on your local development machine for manual verification of any client or service plugin changes
 
 
+### Authoring `@aws-lite/*` plugins
+
+Similar to the [Definitely Typed (`@types`)](https://github.com/DefinitelyTyped/DefinitelyTyped) model, `aws-lite` releases packages maintained by third parties under the `@aws-lite/*` namespace.
+
+Plugins released within the `@aws-lite/*` namespace are expected to conform to the following standards:
+
+- `@aws-lite/*` plugins should read more or less like the others, and broadly adhere to the following style:
+  - Plugins should be authored in ESM, be functional (read: no classes), and avoid globals / closures, etc. wherever possible
+  - Plugins should be authored in JavaScript; those that require transpilation (e.g. TypeScript) will not be accepted
+- Plugins should cover all documented methods for a given service, and include links for each method within the plugin
+- Each plugin is singular for a given service
+  - Example: we will not ship `@aws-lite/lambda`, `@aws-lite/lambda-1`, `@aws-lite/lambda-new`, etc.
+  - With permission of the current maintainer(s), you may become a maintainer of an existing plugin
+- To maintain the speed, security, and lightweight size of the `aws-lite` project, plugins should ideally have zero external dependencies
+  - If external dependencies are absolutely necessary, they should be justifiable; expect their inclusion to be heavily audited
+- Ideally (but not necessarily), each plugin should include its own tests
+  - Tests should follow the project's testing methodology, utilizing `tape` as the runner and `tap-arc` as the output parser
+  - Tests should not rely on interfacing with live AWS services
+- Wherever possible, plugin maintainers should attempt to employ manual verification of their plugins during development
+- By opting to author a plugin, you are opting to provide reasonably prompt bug fixes, updates, etc. for the community
+  - If you are not willing to make that kind of commitment but still want to publish your plugins publicly, please feel free to do so outside this repo with an `aws-lite-plugin-` package prefix
+
+
 ### Testing
 
 #### Methodology
 
 Due to the mission-critical nature of this project, we strive for 100% test coverage on the core client. (We also acknowledge that 100% coverage does not mean 0 bugs, so meaningful and thorough tests are much appreciated.)
 
-Due to the nature of interacting with AWS services, manual validation is not only often necessary, but in many cases it's required. (For example: running automated test suites on EKS may be onerous and financially expensive.)
+Due to the nature of interacting with AWS services, manual validation is not only often necessary, but in many cases it's required. (For example: running automated test suites on EKS may be slow, onerous, and financially expensive.)
 
 
 #### Live AWS tests
