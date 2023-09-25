@@ -217,7 +217,7 @@ Out of the box, [`@aws-lite/client`](https://www.npmjs.com/package/@aws-lite/cli
 
 - Plugins can be authored in ESM or CJS
 - Plugins can be dependencies downloaded from npm, or also live locally in your codebase
-- In conjunction with the open source community, `aws-lite` publishes service plugins under the `@aws-lite/$service` namespace that conform to `aws-lite` standards
+- In conjunction with the open source community, `aws-lite` publishes service plugins under the `@aws-lite/$service` namespace that [conform to `aws-lite` standards](#authoring-aws-lite-plugins)
 - `@aws-lite/*` plugins, and packages published to npm with the `aws-lite-plugin-*` prefix, are automatically loaded by the `@aws-lite/client` upon instantiation
   - This behavior can be overridden with the [`autoloadPlugins` parameter](#Configuration)
 
@@ -277,11 +277,11 @@ export default {
   methods: {
     CreateTable: {
       validate: {
-        TableName:                  { type: 'string', required: true }
+        TableName:                  { type: 'string', required: true },
         AttributeDefinitions:       { type: 'array', required: true },
         KeySchema:                  { type: 'array', required: true },
         BillingMode:                { type: 'string' },
-        DeletionProtectionEnabled:  { type: 'boolean', },
+        DeletionProtectionEnabled:  { type: 'boolean' },
         GlobalSecondaryIndexes:     { type: 'array' },
         LocalSecondaryIndexes:      { type: 'array' },
         ProvisionedThroughput:      { type: 'object' },
@@ -340,7 +340,7 @@ The `response()` lifecycle hook is an async function that enables mutation of se
 - **`utils` (object)**
   - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
 
-The `response()` method may return nothing, but if it does return a mutated response, it must come in the form of an object containing a `response` property, and an optional `awsjson` property (that behaves the same as in [client requests](#Client-requests)). An example:
+The `response()` method may return nothing, but if it does return a mutated response, it must come in the form of an object containing a `response` property, and an optional `awsjson` property (that behaves the same as in [client requests](#client-requests)). An example:
 
 ```js
 // Automatically deserialize AWS-flavored JSON
