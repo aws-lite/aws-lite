@@ -113,16 +113,16 @@ module.exports = async function clientFactory (config, creds, region) {
               if (method.response) {
                 try {
                   var result = await method.response(response, pluginUtils)
-                  if (result?.response === undefined) {
+                  if (result && result?.response === undefined) {
                     throw TypeError('Response plugins must return a response property')
                   }
                 }
                 catch (methodError) {
                   errorHandler({ error: methodError, metadata })
                 }
-                response = result.awsjson
+                response = result?.awsjson
                   ? awsjson.unmarshall(result.response, result.awsjson)
-                  : result.response
+                  : result?.response || response
               }
               return response
             }

@@ -340,7 +340,7 @@ The `response()` lifecycle hook is an async function that enables mutation of se
 - **`utils` (object)**
   - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
 
-The `response()` method must return an object containing a `response` property, and an optional `awsjson` property (that behaves the same as in [client requests](#Client-requests)). An example:
+The `response()` method may return nothing, but if it does return a mutated response, it must come in the form of an object containing a `response` property, and an optional `awsjson` property (that behaves the same as in [client requests](#Client-requests)). An example:
 
 ```js
 // Automatically deserialize AWS-flavored JSON
