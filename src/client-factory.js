@@ -93,6 +93,7 @@ module.exports = async function clientFactory (config, creds, region) {
             // Run plugin.request()
             try {
               var result = await method.request(input, pluginUtils)
+              result = result || {}
             }
             catch (methodError) {
               errorHandler({ error: methodError, metadata })
@@ -113,7 +114,7 @@ module.exports = async function clientFactory (config, creds, region) {
               if (method.response) {
                 try {
                   var result = await method.response(response, pluginUtils)
-                  if (result && result?.response === undefined) {
+                  if (result && result.response === undefined) {
                     throw TypeError('Response plugins must return a response property')
                   }
                 }

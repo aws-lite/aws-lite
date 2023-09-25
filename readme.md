@@ -307,7 +307,7 @@ The `request()` lifecycle hook is an optional async function that enables that e
 - **`utils` (object)**
   - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
 
-The `request()` method must return a valid client request object, and can make use of any of the existing [client request properties](#Client-requests). An example:
+The `request()` method may return nothing, or a [valid client request](#client-requests). An example:
 
 ```js
 // Automatically serialize input to AWS-flavored JSON
