@@ -119,7 +119,8 @@ module.exports = function request (params, creds, region, config, metadata) {
       let ok = statusCode >= 200 && statusCode < 303
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
-        let result = data.join()
+        // TODO The following string coersion will definitely need be changed when we get into binary response payloads
+        let result = Buffer.concat(data).toString()
         let contentType = headers['content-type'] || headers['Content-Type'] || ''
         if (JSONContentType(contentType) || AwsJSONContentType(contentType)) {
           result = JSON.parse(result)
