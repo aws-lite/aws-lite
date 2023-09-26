@@ -2,19 +2,27 @@ let qs = require('querystring')
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
 let { is } = require('./validate')
-let { useAWS } = require('./lib')
+let { awsjson, useAWS } = require('./lib')
+
+let JSONregex = /application\/json/
+let JSONContentType = ct => ct.match(JSONregex)
+let AwsJSONregex = /application\/x-amz-json/
+let AwsJSONContentType = ct => ct.match(AwsJSONregex)
 
 module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
-    // Normalize the path + hostname
+
+    // Path
     params.path = params.endpoint || '/'
     if (!params.path.startsWith('/')) {
       params.path = '/' + params.path
     }
-    params.host = params.host || params.hostname
+
+    // Host
+    params.host = params.host || params.hostname || config.host || config.hostname
     if (params.hostname) delete params.hostname
 
-    // Accept structured query string
+    // Structured query string
     if (params.query) {
       if (!is.object(params.query)) {
         throw ReferenceError('Query property must be an object')
@@ -23,19 +31,41 @@ module.exports = function request (params, creds, region, config, metadata) {
       params.path += '?' + qs.stringify(params.query)
     }
 
-    // JSON-ify payload where convenient
+    // Headers, content-type
+    let headers = params.headers || {}
+    let contentType = headers['content-type'] || headers['Content-Type'] || ''
+    /* istanbul ignore next */
+    if (headers['Content-Type']) delete headers['Content-Type']
+
+    // Body - JSON-ify payload where convenient!
     let body = params.payload || params.body || params.data || params.json
-    // Yeah, lots of potentially weird valid json (like just a null), deal with it if/when we need to I guess
+    // Lots of potentially weird valid json (like just a null), deal with it if / when we need to I guess
     if (typeof body === 'object') {
-      params.headers = params.headers || {}
-      if (!params.headers['content-type'] && !params.headers['Content-Type']) {
-        params.headers['content-type'] = 'application/json'
+      // Backfill content-type if it's just an object
+      if (!contentType) contentType = 'application/json'
+
+      // A variety of services use AWS JSON; we'll make it easier via a header or passed param
+      // Allow for manual encoding by passing a header while setting awsjson to false
+      let awsjsonEncode = params.awsjson ||
+                          (AwsJSONContentType(contentType) && params.awsjson !== false)
+      if (awsjsonEncode) {
+        // Backfill content-type header yet again
+        if (!AwsJSONContentType(contentType)) {
+          contentType = 'application/x-amz-json-1.0'
+        }
+        body = awsjson.marshall(body, params.awsjson)
       }
+      // Final JSON encoding
       params.body = JSON.stringify(body)
     }
+    // Everything else just passes through
     else params.body = body
 
-    // Let aws4 handle (most) logic related to region instantiation
+    // Finalize headers, content-type
+    if (contentType) headers['content-type'] = contentType
+    params.headers = headers
+
+    // Sign the payload; let aws4 handle (most) logic related to region + service instantiation
     let signing = { region, ...params }
     /* istanbul ignore next */
     if (globalServices.includes(params.service)) {
@@ -50,33 +80,58 @@ module.exports = function request (params, creds, region, config, metadata) {
 
     // Sign and construct the request
     let options = aws4.sign(signing, creds)
-    // Renormalize (again), aws4 sometimes uses host, sometimes uses hostname
+    // Normalize host (again): aws4 sometimes uses host, sometimes hostname
     /* istanbul ignore next */ // This won't get seen by nyc
     options.host = options.host || options.hostname
     /* istanbul ignore next */
     if (options.hostname) delete options.hostname
 
     // Importing http(s) is a bit slow (~1ms), so only instantiate the client we need
-    let isHTTPS = options.host.includes('.amazonaws.com') || config.protocol === 'https'
+    options.protocol = (params.protocol || config.protocol) + ':'
+    let isHTTPS = options.host.includes('.amazonaws.com') || options.protocol === 'https:'
     /* istanbul ignore next */ // eslint-disable-next-line
     let http = isHTTPS ? require('https') : require('http')
+
+    // Port configuration
+    options.port = params.port || config.port
 
     // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
     /* istanbul ignore next */
     options.agent = new http.Agent({ keepAlive: config.keepAlive ?? useAWS() })
 
+    /* istanbul ignore next */
+    if (config.debug) {
+      let { method = 'GET', service, host, path, port = '', headers, protocol, body } = options
+      let truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
+      console.error('[aws-lite] Requesting:', {
+        service,
+        method,
+        url: `${protocol}//${host}${port}${path}`,
+        headers: { ...headers, Authorization: headers.Authorization.substring(0, 35) + '...' },
+        body: truncatedBody || '<no body>',
+      })
+    }
+
     let req = http.request(options, res => {
       let data = []
-      let { headers, statusCode } = res
+      /* istanbul ignore next */ // We can always expect headers, but jic
+      let { headers = {}, statusCode } = res
       let ok = statusCode >= 200 && statusCode < 303
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
-        let result = data.join()
-        let contentType = headers?.['content-type'] || headers?.['Content-Type'] || ''
-        let isJSON = contentType.includes('application/json') ||
-                     contentType.includes('application/x-amz-json')
-        if (isJSON && result) result = JSON.parse(result)
-
+        // TODO The following string coersion will definitely need be changed when we get into binary response payloads
+        let result = Buffer.concat(data).toString()
+        let contentType = headers['content-type'] || headers['Content-Type'] || ''
+        if (JSONContentType(contentType) || AwsJSONContentType(contentType)) {
+          result = JSON.parse(result)
+        }
+        // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
+        if (AwsJSONContentType(contentType)) {
+          try {
+            result = awsjson.unmarshall(result)
+          }
+          catch { /* noop, it's already parsed */ }
+        }
         if (ok) resolve(result)
         else reject({ error: result, metadata, statusCode })
       })
@@ -87,9 +142,9 @@ module.exports = function request (params, creds, region, config, metadata) {
         ...metadata,
         rawStack: error.stack,
         service: params.service,
-        host: params.host,
-        protocol: config.protocol,
-        port: params.port,
+        host: options.host,
+        protocol: options.protocol.replace(':', ''),
+        port: options.port,
       }
     }))
     req.end(options.body || '')

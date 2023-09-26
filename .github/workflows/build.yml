@@ -65,8 +65,8 @@ jobs:
 
   # ----- Only git tag testing + package publishing beyond this point ----- #
 
-  # Publish to package registries
-  publish:
+  # Publish client to package registries
+  publish-client:
     # Setup
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
@@ -84,13 +84,13 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       # Publish to npm
-      - name: Publish @RC to npm
+      - name: Publish client@RC to npm
         if: contains(github.ref, 'RC')
         run: npm publish --tag RC
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish @latest to npm
+      - name: Publish client@latest to npm
         if: contains(github.ref, 'RC') == false #'!contains()'' doesn't work lol
         run: npm publish
         env:
@@ -102,5 +102,38 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: "npm publish"
+          color: 0x222222
+          username: GitHub Actions
+
+  # Publish modules to package registries
+  publish-modules:
+    # Setup
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    # Go
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org/
+
+      # Publish to npm
+      - name: Publish plugins@latest to npm
+        run: npm run publish-plugins
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Notify
+        uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "npm run publish-plugins"
           color: 0x222222
           username: GitHub Actions

@@ -1,2 +1,4 @@
 scratch
 test/mock/
+bench/tmp/
+**/_vendor.*js
