@@ -399,6 +399,7 @@ export default {
 <!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
+- [S3](https://www.npmjs.com/package/@aws-lite/s3)
 <!-- plugins_end -->
 
 

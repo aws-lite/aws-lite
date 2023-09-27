@@ -7,6 +7,8 @@ let { awsjson } = require('./lib')
 let { marshall, unmarshall } = require('./_vendor')
 let errorHandler = require('./error')
 
+let copy = obj => JSON.parse(JSON.stringify(obj))
+
 // Never autoload these `@aws-lite/*` packages:
 let ignored = [ 'client', 'arc' ]
 
@@ -82,7 +84,19 @@ module.exports = async function clientFactory (config, creds, region) {
             throw ReferenceError(`All plugin error methods must be a function: ${service}`)
           }
         })
-        let pluginUtils = { awsjsonMarshall: marshall, awsjsonUnmarshall: unmarshall }
+
+        let credentials = copy(creds)
+        Object.defineProperty(config, 'secretAccessKey', { enumerable: false })
+        Object.defineProperty(config, 'secretAccessKey', { enumerable: false })
+        Object.defineProperty(credentials, 'sessionToken', { enumerable: false })
+        Object.defineProperty(credentials, 'sessionToken', { enumerable: false })
+        let pluginUtils = {
+          awsjsonMarshall: marshall,
+          awsjsonUnmarshall: unmarshall,
+          config: copy(config),
+          credentials,
+          region,
+        }
         let clientMethods = {}
         Object.entries(methods).forEach(([ name, method ]) => {
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
@@ -92,38 +106,38 @@ module.exports = async function clientFactory (config, creds, region) {
 
             // Run plugin.request()
             try {
-              var result = await method.request(input, pluginUtils)
-              result = result || {}
+              var req = await method.request(input, pluginUtils)
+              req = req || {}
             }
             catch (methodError) {
               errorHandler({ error: methodError, metadata })
             }
 
             // Hit plugin.validate
-            let params = { ...input, ...result }
+            let params = { ...input, ...req }
             if (method.validate) {
               validateInput(method.validate, params, metadata)
             }
 
             // Make the request
             try {
-              let response = await request({ ...params, ...result, service }, creds, selectedRegion, config, metadata)
+              let response = await request({ ...params, service }, creds, selectedRegion, config, metadata)
 
               // Run plugin.response()
               /* istanbul ignore next */ // TODO remove as soon as plugin.response() API settles
               if (method.response) {
                 try {
-                  var result = await method.response(response, pluginUtils)
-                  if (result && result.response === undefined) {
+                  var pluginRes = await method.response(response, pluginUtils)
+                  if (pluginRes && pluginRes.response === undefined) {
                     throw TypeError('Response plugins must return a response property')
                   }
                 }
                 catch (methodError) {
                   errorHandler({ error: methodError, metadata })
                 }
-                response = result?.awsjson
-                  ? awsjson.unmarshall(result.response, result.awsjson)
-                  : result?.response || response
+                response = pluginRes?.awsjson
+                  ? awsjson.unmarshall(pluginRes.response, pluginRes.awsjson)
+                  : pluginRes?.response || response
               }
               return response
             }

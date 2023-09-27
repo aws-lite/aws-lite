@@ -13,7 +13,8 @@ module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
 
     // Path
-    params.path = params.endpoint || '/'
+    // Note: params.path may be passed if the request is coming from a plugin that pre-signed with aws4
+    params.path = params.endpoint || params.path || '/'
     if (!params.path.startsWith('/')) {
       params.path = '/' + params.path
     }
@@ -147,6 +148,8 @@ module.exports = function request (params, creds, region, config, metadata) {
         port: options.port,
       }
     }))
-    req.end(options.body || '')
+    /* istanbul ignore next */ // TODO remove and test
+    if (options.stream) options.stream.pipe(req)
+    else req.end(options.body || '')
   })
 }

@@ -9,6 +9,7 @@ const cwd = process.cwd()
 // - maintainers: array of GitHub handles of the individual(s) or org(s) responsible for maintaining the plugin
 const plugins = [
   { name: 'dynamodb', service: 'DynamoDB', maintainers: [ '@architect' ] },
+  { name: 's3', service: 'S3', maintainers: [ '@architect' ] },
 ].sort()
 const pluginTmpl = readFileSync(join(__dirname, '_plugin-tmpl.mjs')).toString()
 const readmeTmpl = readFileSync(join(__dirname, '_readme-tmpl.md')).toString()
