@@ -14,9 +14,9 @@
     "publish-plugins": "node scripts/publish-plugins",
     "lint": "eslint --fix .",
     "test": "npm run lint && npm run coverage",
-    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
-    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-spec",
-    "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-spec",
+    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-arc",
+    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
+    "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "vendor": "esbuild scripts/vendor-entry.mjs --bundle --platform=node --format=cjs --outfile=src/_vendor.js"
   },
@@ -38,7 +38,7 @@
     "eslint": "^8.48.0",
     "mock-fs": "^5.2.0",
     "nyc": "^15.1.0",
-    "tap-spec": "^5.0.0",
+    "tap-arc": "^1.0.0",
     "tape": "^5.6.6"
   },
   "files": [
