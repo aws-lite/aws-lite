@@ -1,3 +1,4 @@
+import incomplete from './incomplete.mjs'
 import PutObject from './put-object.mjs'
 
 const service = 's3'
@@ -8,7 +9,7 @@ const service = 's3'
 export default {
   service,
   methods: {
-    // https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html
-    PutObject
+    PutObject,
+    ...incomplete
   }
 }

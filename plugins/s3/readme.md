@@ -11,6 +11,12 @@
 npm i @aws-lite/s3
 ```
 
+## Docs
+
+<!-- ! Do not remove docs_start / docs_end ! -->
+<!-- docs_start -->
+<!-- docs_end -->
+
 
 ## Learn more
 

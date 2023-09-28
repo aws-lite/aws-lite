@@ -12,6 +12,13 @@ npm i @aws-lite/dynamodb
 ```
 
 
+## Docs
+
+<!-- ! Do not remove docs_start / docs_end ! -->
+<!-- docs_start -->
+<!-- docs_end -->
+
+
 ## Usage
 
 This plugin covers all DynamoDB methods (listed & linked below), utilizing DynamoDB's semantics.

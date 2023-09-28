@@ -99,6 +99,10 @@ module.exports = async function clientFactory (config, creds, region) {
         }
         let clientMethods = {}
         Object.entries(methods).forEach(([ name, method ]) => {
+          // Allow for falsy methods to be denoted as incomplete in generated docs
+          /* istanbul ignore next */ // TODO remove and test
+          if (!method || method.disabled) return
+
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
           clientMethods[name] = Object.defineProperty(async input => {
             let selectedRegion = input?.region || region
