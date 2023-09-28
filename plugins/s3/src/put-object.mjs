@@ -17,33 +17,69 @@ function payloadMetadata (chunkSize, signature) {
   return intToHexString(chunkSize) + `;chunk-signature=${signature}` + chunkBreak
 }
 
-// https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html
-// https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html
 const PutObject = {
+  awsDoc: 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html',
+  // See also: https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html
   validate: {
-    Bucket: { type: 'string', required },
-    Key: { type: 'string', required },
-    file: { type: 'string', required },
-    headers: { type: 'object' },
-    minChunkSize: { type: 'number' },
+    Bucket:                    { type: 'string', required, comment: 'S3 bucket name' },
+    Key:                       { type: 'string', required, comment: 'S3 key / file name' },
+    File:                      { type: 'string', required, comment: 'File path to be read and uploaded from the local filesystem' },
+    MinChunkSize:              { type: 'number', default: minSize, comment: 'Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3' },
+    // Here come the headers
+    ACL:                       { type: 'string', comment: 'Sets header: x-amz-acl' },
+    BucketKeyEnabled:          { type: 'string', comment: 'Sets header: x-amz-server-side-encryption-bucket-key-enabled' },
+    CacheControl:              { type: 'string', comment: 'Sets header: Cache-Control' },
+    ChecksumAlgorithm:         { type: 'string', comment: 'Sets header: x-amz-sdk-checksum-algorithm' },
+    ChecksumCRC32:             { type: 'string', comment: 'Sets header: x-amz-checksum-crc32' },
+    ChecksumCRC32C:            { type: 'string', comment: 'Sets header: x-amz-checksum-crc32c' },
+    ChecksumSHA1:              { type: 'string', comment: 'Sets header: x-amz-checksum-sha1' },
+    ChecksumSHA256:            { type: 'string', comment: 'Sets header: x-amz-checksum-sha256' },
+    ContentDisposition:        { type: 'string', comment: 'Sets header: Content-Disposition' },
+    ContentEncoding:           { type: 'string', comment: 'Sets header: Content-Encoding' },
+    ContentLanguage:           { type: 'string', comment: 'Sets header: Content-Language' },
+    ContentLength:             { type: 'string', comment: 'Sets header: Content-Length' },
+    ContentMD5:                { type: 'string', comment: 'Sets header: Content-MD5' },
+    ContentType:               { type: 'string', comment: 'Sets header: Content-Type' },
+    ExpectedBucketOwner:       { type: 'string', comment: 'Sets header: x-amz-expected-bucket-owner' },
+    Expires:                   { type: 'string', comment: 'Sets header: Expires' },
+    GrantFullControl:          { type: 'string', comment: 'Sets header: x-amz-grant-full-control' },
+    GrantRead:                 { type: 'string', comment: 'Sets header: x-amz-grant-read' },
+    GrantReadACP:              { type: 'string', comment: 'Sets header: x-amz-grant-read-acp' },
+    GrantWriteACP:             { type: 'string', comment: 'Sets header: x-amz-grant-write-acp' },
+    ObjectLockLegalHoldStatus: { type: 'string', comment: 'Sets header: x-amz-object-lock-legal-hold' },
+    ObjectLockMode:            { type: 'string', comment: 'Sets header: x-amz-object-lock-mode' },
+    ObjectLockRetainUntilDate: { type: 'string', comment: 'Sets header: x-amz-object-lock-retain-until-date' },
+    RequestPayer:              { type: 'string', comment: 'Sets header: x-amz-request-payer' },
+    ServerSideEncryption:      { type: 'string', comment: 'Sets header: x-amz-server-side-encryption' },
+    SSECustomerAlgorithm:      { type: 'string', comment: 'Sets header: x-amz-server-side-encryption-customer-algorithm' },
+    SSECustomerKey:            { type: 'string', comment: 'Sets header: x-amz-server-side-encryption-customer-key' },
+    SSECustomerKeyMD5:         { type: 'string', comment: 'Sets header: x-amz-server-side-encryption-customer-key-MD5' },
+    SSEKMSEncryptionContext:   { type: 'string', comment: 'Sets header: x-amz-server-side-encryption-context' },
+    SSEKMSKeyId:               { type: 'string', comment: 'Sets header: x-amz-server-side-encryption-aws-kms-key-id' },
+    StorageClass:              { type: 'string', comment: 'Sets header: x-amz-storage-class' },
+    Tagging:                   { type: 'string', comment: 'Sets header: x-amz-tagging' },
+    WebsiteRedirectLocation:   { type: 'string', comment: 'Sets header: x-amz-website-redirect-location' },
   },
   request: async (params, utils) => {
-    let { Bucket, Key, file, headers = {}, minChunkSize } = params
+    let { Bucket, Key, File, MinChunkSize } = params
     let { credentials, region } = utils
-    minChunkSize = minChunkSize || minSize
+    MinChunkSize = MinChunkSize || minSize
+
+    let { ACL, BucketKeyEnabled, CacheControl, ChecksumAlgorithm, ChecksumCRC32, ChecksumCRC32C, ChecksumSHA1, ChecksumSHA256, ContentDisposition, ContentEncoding, ContentLanguage, ContentLength, ContentMD5, ContentType, ExpectedBucketOwner, Expires, GrantFullControl, GrantRead, GrantReadACP, GrantWriteACP, ObjectLockLegalHoldStatus, ObjectLockMode, ObjectLockRetainUntilDate, RequestPayer, ServerSideEncryption, SSECustomerAlgorithm, SSECustomerKey, SSECustomerKeyMD5, SSEKMSEncryptionContext, SSEKMSKeyId, StorageClass, Tagging, WebsiteRedirectLocation } = params
+    let headers = { ACL, BucketKeyEnabled, CacheControl, ChecksumAlgorithm, ChecksumCRC32, ChecksumCRC32C, ChecksumSHA1, ChecksumSHA256, ContentDisposition, ContentEncoding, ContentLanguage, ContentLength, ContentMD5, ContentType, ExpectedBucketOwner, Expires, GrantFullControl, GrantRead, GrantReadACP, GrantWriteACP, ObjectLockLegalHoldStatus, ObjectLockMode, ObjectLockRetainUntilDate, RequestPayer, ServerSideEncryption, SSECustomerAlgorithm, SSECustomerKey, SSECustomerKeyMD5, SSEKMSEncryptionContext, SSEKMSKeyId, StorageClass, Tagging, WebsiteRedirectLocation }
 
     let dataSize
     try {
-      let stats = await stat(file)
+      let stats = await stat(File)
       dataSize = stats.size
     }
     catch (err) {
-      console.log(`Error reading file: ${file}`)
+      console.log(`Error reading file: ${File}`)
       throw err
     }
 
-    if (dataSize <= minChunkSize) {
-      let payload = await readFile(file)
+    if (dataSize <= MinChunkSize) {
+      let payload = await readFile(File)
       return {
         path: `/${Bucket}/${Key}`,
         method: 'PUT',
@@ -64,12 +100,12 @@ const PutObject = {
       let emptyHash = hash('')
 
       // Multipart uploading requires an extra zero-data chunk to denote completion
-      let chunkAmount = Math.ceil(dataSize / minChunkSize) + 1
+      let chunkAmount = Math.ceil(dataSize / MinChunkSize) + 1
 
       for (let i = 0; i < chunkAmount; i++) {
         // Get start end byte position for streaming
-        let start = i === 0 ? 0 : i * minChunkSize
-        let end = (i * minChunkSize) + minChunkSize
+        let start = i === 0 ? 0 : i * MinChunkSize
+        let end = (i * MinChunkSize) + MinChunkSize
 
         let chunk = {}, chunkSize
         // The last real chunk
@@ -117,7 +153,7 @@ const PutObject = {
                               `${yyyymmdd}/${canonicalReq.region}/s3/aws4_request\n`
 
       // TODO make this streamable
-      let data = await readFile(file)
+      let data = await readFile(File)
       let stream = new Readable()
       chunks.forEach((chunk, i) => {
         if (chunk.canonicalRequest) return
