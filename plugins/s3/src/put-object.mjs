@@ -42,8 +42,16 @@ const PutObject = {
       throw err
     }
 
-    // TODO non-streaming upload
-    if (dataSize > minChunkSize) {
+    if (dataSize <= minChunkSize) {
+      let payload = await readFile(file)
+      return {
+        path: `/${Bucket}/${Key}`,
+        method: 'PUT',
+        headers,
+        payload,
+      }
+    }
+    else {
       // We'll assemble file indices of chunks here
       let chunks = [
         // Reminder: no payload is sent with the canonical request
@@ -80,8 +88,7 @@ const PutObject = {
           chunk.end = end
         }
 
-        totalRequestSize += payloadMetadata(chunkSize, dummySig).length +
-                            chunkBreak.length
+        totalRequestSize += payloadMetadata(chunkSize, dummySig).length + chunkBreak.length
         chunks.push({ ...chunk, chunkSize })
       }
 

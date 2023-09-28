@@ -41,7 +41,7 @@ module.exports = function request (params, creds, region, config, metadata) {
     // Body - JSON-ify payload where convenient!
     let body = params.payload || params.body || params.data || params.json
     // Lots of potentially weird valid json (like just a null), deal with it if / when we need to I guess
-    if (typeof body === 'object') {
+    if (typeof body === 'object' && !(body instanceof Buffer)) {
       // Backfill content-type if it's just an object
       if (!contentType) contentType = 'application/json'
 
@@ -103,7 +103,9 @@ module.exports = function request (params, creds, region, config, metadata) {
     /* istanbul ignore next */
     if (config.debug) {
       let { method = 'GET', service, host, path, port = '', headers, protocol, body } = options
-      let truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
+      let truncatedBody
+      if (body instanceof Buffer) truncatedBody = `<body buffer of ${body.length}b>`
+      else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
       console.error('[aws-lite] Requesting:', {
         service,
         method,
