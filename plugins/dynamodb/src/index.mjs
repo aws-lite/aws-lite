@@ -1,5 +1,6 @@
 const service = 'dynamodb'
 const required = true
+const docRoot = 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/'
 
 // Common params to be AWS-flavored JSON-encoded
 const awsjsonReq = [ 'ExclusiveStartKey', 'ExpressionAttributeValues', 'Item', 'Key', ]
@@ -29,7 +30,7 @@ const awsjsonContentType = { 'content-type': 'application/x-amz-json-1.0' }
  */
 
 const BatchExecuteStatement = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchExecuteStatement.html',
+  awsDoc: docRoot + 'API_BatchExecuteStatement.html',
   validate: {
     Statements: { ...arr, required },
     ReturnConsumedCapacity,
@@ -59,7 +60,7 @@ const BatchExecuteStatement = {
 }
 
 const BatchGetItem = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html',
+  awsDoc: docRoot + 'API_BatchGetItem.html',
   validate: {
     RequestItems: { ...obj, required },
     ReturnConsumedCapacity,
@@ -93,7 +94,7 @@ const BatchGetItem = {
 }
 
 const BatchWriteItem = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html',
+  awsDoc: docRoot + 'API_BatchWriteItem.html',
   validate: {
     RequestItems: { ...obj, required },
     ReturnConsumedCapacity,
@@ -142,7 +143,7 @@ const BatchWriteItem = {
 }
 
 const CreateBackup = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateBackup.html',
+  awsDoc: docRoot + 'API_CreateBackup.html',
   validate: {
     TableName,
     BackupName: { ...str, required },
@@ -154,7 +155,7 @@ const CreateBackup = {
 }
 
 const CreateGlobalTable = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateGlobalTable.html',
+  awsDoc: docRoot + 'API_CreateGlobalTable.html',
   validate: {
     GlobalTableName: TableName,
     ReplicationGroup: { ...arr, required },
@@ -166,7 +167,7 @@ const CreateGlobalTable = {
 }
 
 const CreateTable = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html',
+  awsDoc: docRoot + 'API_CreateTable.html',
   validate: {
     TableName,
     AttributeDefinitions: { ...arr, required },
@@ -188,7 +189,7 @@ const CreateTable = {
 }
 
 const DeleteBackup = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteBackup.html',
+  awsDoc: docRoot + 'API_DeleteBackup.html',
   validate: {
     BackupArn: { ...str, required },
   },
@@ -199,7 +200,7 @@ const DeleteBackup = {
 }
 
 const DeleteItem = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html',
+  awsDoc: docRoot + 'API_DeleteItem.html',
   validate: {
     TableName,
     Key,
@@ -225,7 +226,7 @@ const DeleteItem = {
 }
 
 const DeleteTable = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html',
+  awsDoc: docRoot + 'API_DeleteTable.html',
   validate: {
     TableName,
   },
@@ -236,7 +237,7 @@ const DeleteTable = {
 }
 
 const DescribeBackup = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeBackup.html',
+  awsDoc: docRoot + 'API_DescribeBackup.html',
   validate: {
     BackupArn: { ...str, required },
   },
@@ -247,7 +248,7 @@ const DescribeBackup = {
 }
 
 const DescribeContinuousBackups = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeContinuousBackups.html',
+  awsDoc: docRoot + 'API_DescribeContinuousBackups.html',
   validate: {
     TableName,
   },
@@ -258,7 +259,7 @@ const DescribeContinuousBackups = {
 }
 
 const DescribeContributorInsights = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeContributorInsights.html',
+  awsDoc: docRoot + 'API_DescribeContributorInsights.html',
   validate: {
     TableName,
     IndexName: str,
@@ -270,14 +271,14 @@ const DescribeContributorInsights = {
 }
 
 const DescribeEndpoints = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeEndpoints.html',
+  awsDoc: docRoot + 'API_DescribeEndpoints.html',
   request: async () => ({
     headers: headers('DescribeEndpoints'),
   }),
 }
 
 const DescribeExport = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeExport.html',
+  awsDoc: docRoot + 'API_DescribeExport.html',
   validate: {
     ExportArn: { ...str, required },
   },
@@ -288,7 +289,7 @@ const DescribeExport = {
 }
 
 const DescribeGlobalTable = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeGlobalTable.html',
+  awsDoc: docRoot + 'API_DescribeGlobalTable.html',
   validate: {
     GlobalTableName: { ...str, required },
   },
@@ -299,7 +300,7 @@ const DescribeGlobalTable = {
 }
 
 const DescribeGlobalTableSettings = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeGlobalTableSettings.html',
+  awsDoc: docRoot + 'API_DescribeGlobalTableSettings.html',
   validate: {
     GlobalTableName: { ...str, required },
   },
@@ -310,7 +311,7 @@ const DescribeGlobalTableSettings = {
 }
 
 const DescribeImport = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeImport.html',
+  awsDoc: docRoot + 'API_DescribeImport.html',
   validate: {
     ImportArn: { ...str, required },
   },
@@ -321,7 +322,7 @@ const DescribeImport = {
 }
 
 const DescribeKinesisStreamingDestination = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeKinesisStreamingDestination.html',
+  awsDoc: docRoot + 'API_DescribeKinesisStreamingDestination.html',
   validate: {
     TableName,
   },
@@ -332,14 +333,14 @@ const DescribeKinesisStreamingDestination = {
 }
 
 const DescribeLimits = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeLimits.html',
+  awsDoc: docRoot + 'API_DescribeLimits.html',
   request: async () => ({
     headers: headers('DescribeLimits'),
   }),
 }
 
 const DescribeTable = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html',
+  awsDoc: docRoot + 'API_DescribeTable.html',
   validate: {
     TableName,
   },
@@ -350,7 +351,7 @@ const DescribeTable = {
 }
 
 const DescribeTableReplicaAutoScaling = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTableReplicaAutoScaling.html',
+  awsDoc: docRoot + 'API_DescribeTableReplicaAutoScaling.html',
   validate: {
     TableName,
   },
@@ -361,7 +362,7 @@ const DescribeTableReplicaAutoScaling = {
 }
 
 const DescribeTimeToLive = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTimeToLive.html',
+  awsDoc: docRoot + 'API_DescribeTimeToLive.html',
   validate: {
     TableName,
   },
@@ -372,7 +373,7 @@ const DescribeTimeToLive = {
 }
 
 const DisableKinesisStreamingDestination = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DisableKinesisStreamingDestination.html',
+  awsDoc: docRoot + 'API_DisableKinesisStreamingDestination.html',
   validate: {
     TableName,
     StreamArn: { ...str, required },
@@ -384,7 +385,7 @@ const DisableKinesisStreamingDestination = {
 }
 
 const EnableKinesisStreamingDestination = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_EnableKinesisStreamingDestination.html',
+  awsDoc: docRoot + 'API_EnableKinesisStreamingDestination.html',
   validate: {
     TableName,
     StreamArn: { ...str, required },
@@ -396,7 +397,7 @@ const EnableKinesisStreamingDestination = {
 }
 
 const ExecuteStatement = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteStatement.html',
+  awsDoc: docRoot + 'API_ExecuteStatement.html',
   validate: {
     TableName,
     Statement: { ...str, required },
@@ -423,7 +424,7 @@ const ExecuteStatement = {
 }
 
 const ExecuteTransaction = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteTransaction.html',
+  awsDoc: docRoot + 'API_ExecuteTransaction.html',
   validate: {
     TableName,
     TransactStatements: { ...arr, required },
@@ -454,7 +455,7 @@ const ExecuteTransaction = {
 }
 
 const ExportTableToPointInTime = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExportTableToPointInTime.html',
+  awsDoc: docRoot + 'API_ExportTableToPointInTime.html',
   validate: {
     S3Bucket: { ...str, required },
     TableArn: { ...str, required },
@@ -473,7 +474,7 @@ const ExportTableToPointInTime = {
 }
 
 const GetItem = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html',
+  awsDoc: docRoot + 'API_GetItem.html',
   validate: {
     TableName,
     Key,
@@ -492,7 +493,7 @@ const GetItem = {
 }
 
 const ImportTable = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ImportTable.html',
+  awsDoc: docRoot + 'API_ImportTable.html',
   validate: {
     InputFormat: { ...str, required },
     S3BucketSource: { ...obj, required },
@@ -508,7 +509,7 @@ const ImportTable = {
 }
 
 const ListBackups = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListBackups.html',
+  awsDoc: docRoot + 'API_ListBackups.html',
   validate: {
     BackupType: str,
     ExclusiveStartBackupArn: str,
@@ -524,7 +525,7 @@ const ListBackups = {
 }
 
 const ListContributorInsights = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListContributorInsights.html',
+  awsDoc: docRoot + 'API_ListContributorInsights.html',
   validate: {
     MaxResults: num,
     NextToken: str,
@@ -537,7 +538,7 @@ const ListContributorInsights = {
 }
 
 const ListExports = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListExports.html',
+  awsDoc: docRoot + 'API_ListExports.html',
   validate: {
     MaxResults: num,
     NextToken: str,
@@ -550,7 +551,7 @@ const ListExports = {
 }
 
 const ListGlobalTables = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListGlobalTables.html',
+  awsDoc: docRoot + 'API_ListGlobalTables.html',
   validate: {
     ExclusiveStartGlobalTableName: str,
     Limit: num,
@@ -563,7 +564,7 @@ const ListGlobalTables = {
 }
 
 const ListImports = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListImports.html',
+  awsDoc: docRoot + 'API_ListImports.html',
   validate: {
     NextToken: str,
     PageSize: num,
@@ -576,7 +577,7 @@ const ListImports = {
 }
 
 const ListTables = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTables.html',
+  awsDoc: docRoot + 'API_ListTables.html',
   validate: {
     ExclusiveStartTableName: str,
     Limit: num,
@@ -588,7 +589,7 @@ const ListTables = {
 }
 
 const ListTagsOfResource = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTagsOfResource.html',
+  awsDoc: docRoot + 'API_ListTagsOfResource.html',
   validate: {
     NextToken: str,
     ResourceArn: { ...str, required },
@@ -600,7 +601,7 @@ const ListTagsOfResource = {
 }
 
 const PutItem = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html',
+  awsDoc: docRoot + 'API_PutItem.html',
   validate: {
     TableName,
     Item,
@@ -623,7 +624,7 @@ const PutItem = {
 }
 
 const Query = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html',
+  awsDoc: docRoot + 'API_Query.html',
   validate: {
     TableName,
     AttributesToGet: arr,
@@ -659,7 +660,7 @@ const Query = {
 }
 
 const RestoreTableFromBackup = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableFromBackup.html',
+  awsDoc: docRoot + 'API_RestoreTableFromBackup.html',
   validate: {
     BackupArn: { ...str, required },
     TargetTableName: { ...str, required },
@@ -676,7 +677,7 @@ const RestoreTableFromBackup = {
 }
 
 const RestoreTableToPointInTime = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableToPointInTime.html',
+  awsDoc: docRoot + 'API_RestoreTableToPointInTime.html',
   validate: {
     TargetTableName: { ...str, required },
     BillingModeOverride: str,
@@ -696,7 +697,7 @@ const RestoreTableToPointInTime = {
 }
 
 const Scan = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html',
+  awsDoc: docRoot + 'API_Scan.html',
   validate: {
     TableName,
     AttributesToGet: arr,
@@ -726,7 +727,7 @@ const Scan = {
 }
 
 const TagResource = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TagResource.html',
+  awsDoc: docRoot + 'API_TagResource.html',
   validate: {
     ResourceArn: { ...str, required },
     Tags: { ...arr, required },
@@ -738,7 +739,7 @@ const TagResource = {
 }
 
 const TransactGetItems = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html',
+  awsDoc: docRoot + 'API_TransactGetItems.html',
   validate: {
     TransactItems: arr,
     ReturnConsumedCapacity: str,
@@ -764,7 +765,7 @@ const TransactGetItems = {
 }
 
 const TransactWriteItems = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html',
+  awsDoc: docRoot + 'API_TransactWriteItems.html',
   validate: {
     TransactItems: arr,
     ClientRequestToken: str,
@@ -827,7 +828,7 @@ const TransactWriteItems = {
 }
 
 const UntagResource = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UntagResource.html',
+  awsDoc: docRoot + 'API_UntagResource.html',
   validate: {
     ResourceArn: { ...str, required },
     TagKeys: { ...arr, required },
@@ -839,7 +840,7 @@ const UntagResource = {
 }
 
 const UpdateContinuousBackups = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContinuousBackups.html',
+  awsDoc: docRoot + 'API_UpdateContinuousBackups.html',
   validate: {
     TableName,
     PointInTimeRecoverySpecification: obj,
@@ -851,7 +852,7 @@ const UpdateContinuousBackups = {
 }
 
 const UpdateContributorInsights = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContributorInsights.html',
+  awsDoc: docRoot + 'API_UpdateContributorInsights.html',
   validate: {
     TableName,
     ContributorInsightsAction: str,
@@ -864,7 +865,7 @@ const UpdateContributorInsights = {
 }
 
 const UpdateGlobalTable = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateGlobalTable.html',
+  awsDoc: docRoot + 'API_UpdateGlobalTable.html',
   validate: {
     GlobalTableName: { ...str, required },
     ReplicaUpdates: arr,
@@ -876,7 +877,7 @@ const UpdateGlobalTable = {
 }
 
 const UpdateGlobalTableSettings = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateGlobalTableSettings.html',
+  awsDoc: docRoot + 'API_UpdateGlobalTableSettings.html',
   validate: {
     GlobalTableName: { ...str, required },
     GlobalTableBillingMode: str,
@@ -892,7 +893,7 @@ const UpdateGlobalTableSettings = {
 }
 
 const UpdateItem = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html',
+  awsDoc: docRoot + 'API_UpdateItem.html',
   validate: {
     Key,
     TableName,
@@ -924,7 +925,7 @@ const UpdateItem = {
 }
 
 const UpdateTable = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTable.html',
+  awsDoc: docRoot + 'API_UpdateTable.html',
   validate: {
     TableName,
     AttributeDefinitions: arr,
@@ -944,7 +945,7 @@ const UpdateTable = {
 }
 
 const UpdateTableReplicaAutoScaling = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTableReplicaAutoScaling.html',
+  awsDoc: docRoot + 'API_UpdateTableReplicaAutoScaling.html',
   validate: {
     TableName,
     GlobalSecondaryIndexUpdates: arr,
@@ -958,7 +959,7 @@ const UpdateTableReplicaAutoScaling = {
 }
 
 const UpdateTimeToLive = {
-  awsDoc: 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html',
+  awsDoc: docRoot + 'API_UpdateTimeToLive.html',
   validate: {
     TableName,
     TimeToLiveSpecification: obj,

@@ -7,9 +7,9 @@ const required = true
 export default {
   service,
   methods: {
-    // TODO: include a reference link with each method, example:
-    // https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html
     $ReplaceMe: {
+      // Include a reference link with each method, for example:
+      awsDoc: 'https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html',
       validate: {
         name: { type: 'string', required },
       },
@@ -33,6 +33,7 @@ export default {
 
     // TODO: add API link
     $ReplaceMeToo: {
+      awsDoc: 'https://docs.aws.amazon.com/...',
       validate: {
         name: { type: 'string', required },
       },
