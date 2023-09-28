@@ -1,6 +1,6 @@
 #! /usr/bin/env node
-let { join } = require('path')
-let { existsSync, mkdirSync, readFileSync, writeFileSync } = require('fs')
+import { join } from 'node:path'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 const cwd = process.cwd()
 
 // Break this into a separate file if it becomes too big / unwieldy!
@@ -11,9 +11,9 @@ const plugins = [
   { name: 'dynamodb', service: 'DynamoDB', maintainers: [ '@architect' ] },
   { name: 's3', service: 'S3', maintainers: [ '@architect' ] },
 ].sort()
-const pluginTmpl = readFileSync(join(__dirname, '_plugin-tmpl.mjs')).toString()
-const readmeTmpl = readFileSync(join(__dirname, '_readme-tmpl.md')).toString()
-const packageTmpl = readFileSync(join(__dirname, '_package-tmpl.json'))
+const pluginTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_plugin-tmpl.mjs')).toString()
+const readmeTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_readme-tmpl.md')).toString()
+const packageTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_package-tmpl.json'))
 
 plugins.forEach(plugin => {
   if (!plugin.name || typeof plugin.name !== 'string' ||
