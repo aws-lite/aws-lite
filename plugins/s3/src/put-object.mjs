@@ -4,7 +4,6 @@ import { readFile, stat } from 'node:fs/promises'
 import { Readable } from 'node:stream'
 
 const required = true
-const setsReqHeader = 'Set request header: '
 
 const minSize = 1024 * 1024 * 5
 const intToHexString = int => String(Number(int).toString(16))
@@ -18,6 +17,50 @@ function payloadMetadata (chunkSize, signature) {
   return intToHexString(chunkSize) + `;chunk-signature=${signature}` + chunkBreak
 }
 
+// Commonly used headers
+const comment = header => `Sets request header: \`${header}\``
+const getValidateHeaders = (...headers) => headers.reduce((acc, h) => {
+  if (!headerMappings?.[h]?.header) throw ReferenceError(`Header not found: ${h}`)
+  acc[h] = { type: 'string', comment: comment(headerMappings[h].header) }
+  return acc
+}, {})
+// The !x-amz headers are documented as old school pascal-case headers; lowcasing them to be HTTP 2.0 compliant
+let headerMappings = {
+  ACL:                       { header: 'x-amz-acl' },
+  BucketKeyEnabled:          { header: 'x-amz-server-side-encryption-bucket-key-enabled' },
+  CacheControl:              { header: 'cache-control' },
+  ChecksumAlgorithm:         { header: 'x-amz-sdk-checksum-algorithm' },
+  ChecksumCRC32:             { header: 'x-amz-checksum-crc32' },
+  ChecksumCRC32C:            { header: 'x-amz-checksum-crc32c' },
+  ChecksumSHA1:              { header: 'x-amz-checksum-sha1' },
+  ChecksumSHA256:            { header: 'x-amz-checksum-sha256' },
+  ContentDisposition:        { header: 'content-disposition' },
+  ContentEncoding:           { header: 'content-encoding' },
+  ContentLanguage:           { header: 'content-language' },
+  ContentLength:             { header: 'content-length' },
+  ContentMD5:                { header: 'content-md5' },
+  ContentType:               { header: 'content-type' },
+  ExpectedBucketOwner:       { header: 'x-amz-expected-bucket-owner' },
+  Expires:                   { header: 'expires' },
+  GrantFullControl:          { header: 'x-amz-grant-full-control' },
+  GrantRead:                 { header: 'x-amz-grant-read' },
+  GrantReadACP:              { header: 'x-amz-grant-read-acp' },
+  GrantWriteACP:             { header: 'x-amz-grant-write-acp' },
+  ObjectLockLegalHoldStatus: { header: 'x-amz-object-lock-legal-hold' },
+  ObjectLockMode:            { header: 'x-amz-object-lock-mode' },
+  ObjectLockRetainUntilDate: { header: 'x-amz-object-lock-retain-until-date' },
+  RequestPayer:              { header: 'x-amz-request-payer' },
+  ServerSideEncryption:      { header: 'x-amz-server-side-encryption' },
+  SSECustomerAlgorithm:      { header: 'x-amz-server-side-encryption-customer-algorithm' },
+  SSECustomerKey:            { header: 'x-amz-server-side-encryption-customer-key' },
+  SSECustomerKeyMD5:         { header: 'x-amz-server-side-encryption-customer-key-md5' },
+  SSEKMSEncryptionContext:   { header: 'x-amz-server-side-encryption-context' },
+  SSEKMSKeyId:               { header: 'x-amz-server-side-encryption-aws-kms-key-id' },
+  StorageClass:              { header: 'x-amz-storage-class' },
+  Tagging:                   { header: 'x-amz-tagging' },
+  WebsiteRedirectLocation:   { header: 'x-amz-website-redirect-location' },
+}
+
 const PutObject = {
   awsDoc: 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html',
   // See also: https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html
@@ -27,47 +70,25 @@ const PutObject = {
     File:                      { type: 'string', required, comment: 'File path to be read and uploaded from the local filesystem' },
     MinChunkSize:              { type: 'number', default: minSize, comment: 'Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3' },
     // Here come the headers
-    ACL:                       { type: 'string', comment: setsReqHeader + '`x-amz-acl`' },
-    BucketKeyEnabled:          { type: 'string', comment: setsReqHeader + '`x-amz-server-side-encryption-bucket-key-enabled`' },
-    CacheControl:              { type: 'string', comment: setsReqHeader + '`Cache-Control`' },
-    ChecksumAlgorithm:         { type: 'string', comment: setsReqHeader + '`x-amz-sdk-checksum-algorithm`' },
-    ChecksumCRC32:             { type: 'string', comment: setsReqHeader + '`x-amz-checksum-crc32`' },
-    ChecksumCRC32C:            { type: 'string', comment: setsReqHeader + '`x-amz-checksum-crc32c`' },
-    ChecksumSHA1:              { type: 'string', comment: setsReqHeader + '`x-amz-checksum-sha1`' },
-    ChecksumSHA256:            { type: 'string', comment: setsReqHeader + '`x-amz-checksum-sha256`' },
-    ContentDisposition:        { type: 'string', comment: setsReqHeader + '`Content-Disposition`' },
-    ContentEncoding:           { type: 'string', comment: setsReqHeader + '`Content-Encoding`' },
-    ContentLanguage:           { type: 'string', comment: setsReqHeader + '`Content-Language`' },
-    ContentLength:             { type: 'string', comment: setsReqHeader + '`Content-Length`' },
-    ContentMD5:                { type: 'string', comment: setsReqHeader + '`Content-MD5`' },
-    ContentType:               { type: 'string', comment: setsReqHeader + '`Content-Type`' },
-    ExpectedBucketOwner:       { type: 'string', comment: setsReqHeader + '`x-amz-expected-bucket-owner`' },
-    Expires:                   { type: 'string', comment: setsReqHeader + '`Expires`' },
-    GrantFullControl:          { type: 'string', comment: setsReqHeader + '`x-amz-grant-full-control`' },
-    GrantRead:                 { type: 'string', comment: setsReqHeader + '`x-amz-grant-read`' },
-    GrantReadACP:              { type: 'string', comment: setsReqHeader + '`x-amz-grant-read-acp`' },
-    GrantWriteACP:             { type: 'string', comment: setsReqHeader + '`x-amz-grant-write-acp`' },
-    ObjectLockLegalHoldStatus: { type: 'string', comment: setsReqHeader + '`x-amz-object-lock-legal-hold`' },
-    ObjectLockMode:            { type: 'string', comment: setsReqHeader + '`x-amz-object-lock-mode`' },
-    ObjectLockRetainUntilDate: { type: 'string', comment: setsReqHeader + '`x-amz-object-lock-retain-until-date`' },
-    RequestPayer:              { type: 'string', comment: setsReqHeader + '`x-amz-request-payer`' },
-    ServerSideEncryption:      { type: 'string', comment: setsReqHeader + '`x-amz-server-side-encryption`' },
-    SSECustomerAlgorithm:      { type: 'string', comment: setsReqHeader + '`x-amz-server-side-encryption-customer-algorithm`' },
-    SSECustomerKey:            { type: 'string', comment: setsReqHeader + '`x-amz-server-side-encryption-customer-key`' },
-    SSECustomerKeyMD5:         { type: 'string', comment: setsReqHeader + '`x-amz-server-side-encryption-customer-key-MD5`' },
-    SSEKMSEncryptionContext:   { type: 'string', comment: setsReqHeader + '`x-amz-server-side-encryption-context`' },
-    SSEKMSKeyId:               { type: 'string', comment: setsReqHeader + '`x-amz-server-side-encryption-aws-kms-key-id`' },
-    StorageClass:              { type: 'string', comment: setsReqHeader + '`x-amz-storage-class`' },
-    Tagging:                   { type: 'string', comment: setsReqHeader + '`x-amz-tagging`' },
-    WebsiteRedirectLocation:   { type: 'string', comment: setsReqHeader + '`x-amz-website-redirect-location`' },
+    ...getValidateHeaders('ACL', 'BucketKeyEnabled', 'CacheControl', 'ChecksumAlgorithm', 'ChecksumCRC32',
+      'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256', 'ContentDisposition', 'ContentEncoding',
+      'ContentLanguage', 'ContentLength', 'ContentMD5', 'ContentType', 'ExpectedBucketOwner', 'Expires',
+      'GrantFullControl', 'GrantRead', 'GrantReadACP', 'GrantWriteACP', 'ObjectLockLegalHoldStatus',
+      'ObjectLockMode', 'ObjectLockRetainUntilDate', 'RequestPayer', 'ServerSideEncryption',
+      'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'SSEKMSEncryptionContext',
+      'SSEKMSKeyId', 'StorageClass', 'Tagging', 'WebsiteRedirectLocation')
   },
   request: async (params, utils) => {
     let { Bucket, Key, File, MinChunkSize } = params
     let { credentials, region } = utils
     MinChunkSize = MinChunkSize || minSize
 
-    let { ACL, BucketKeyEnabled, CacheControl, ChecksumAlgorithm, ChecksumCRC32, ChecksumCRC32C, ChecksumSHA1, ChecksumSHA256, ContentDisposition, ContentEncoding, ContentLanguage, ContentLength, ContentMD5, ContentType, ExpectedBucketOwner, Expires, GrantFullControl, GrantRead, GrantReadACP, GrantWriteACP, ObjectLockLegalHoldStatus, ObjectLockMode, ObjectLockRetainUntilDate, RequestPayer, ServerSideEncryption, SSECustomerAlgorithm, SSECustomerKey, SSECustomerKeyMD5, SSEKMSEncryptionContext, SSEKMSKeyId, StorageClass, Tagging, WebsiteRedirectLocation } = params
-    let headers = { ACL, BucketKeyEnabled, CacheControl, ChecksumAlgorithm, ChecksumCRC32, ChecksumCRC32C, ChecksumSHA1, ChecksumSHA256, ContentDisposition, ContentEncoding, ContentLanguage, ContentLength, ContentMD5, ContentType, ExpectedBucketOwner, Expires, GrantFullControl, GrantRead, GrantReadACP, GrantWriteACP, ObjectLockLegalHoldStatus, ObjectLockMode, ObjectLockRetainUntilDate, RequestPayer, ServerSideEncryption, SSECustomerAlgorithm, SSECustomerKey, SSECustomerKeyMD5, SSEKMSEncryptionContext, SSEKMSKeyId, StorageClass, Tagging, WebsiteRedirectLocation }
+    let headers = Object.keys(params).reduce((acc, param) => {
+      if (headerMappings[param]?.header) {
+        acc[headerMappings[param].header] = params[param]
+      }
+      return acc
+    }, {})
 
     let dataSize
     try {

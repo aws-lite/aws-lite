@@ -30,71 +30,71 @@ Properties:
 - **`MinChunkSize` (number)**
   - Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3
 - **`ACL` (string)**
-  - Sets header: x-amz-acl
+  - Sets request header: `x-amz-acl`
 - **`BucketKeyEnabled` (string)**
-  - Sets header: x-amz-server-side-encryption-bucket-key-enabled
+  - Sets request header: `x-amz-server-side-encryption-bucket-key-enabled`
 - **`CacheControl` (string)**
-  - Sets header: Cache-Control
+  - Sets request header: `cache-control`
 - **`ChecksumAlgorithm` (string)**
-  - Sets header: x-amz-sdk-checksum-algorithm
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
 - **`ChecksumCRC32` (string)**
-  - Sets header: x-amz-checksum-crc32
+  - Sets request header: `x-amz-checksum-crc32`
 - **`ChecksumCRC32C` (string)**
-  - Sets header: x-amz-checksum-crc32c
+  - Sets request header: `x-amz-checksum-crc32c`
 - **`ChecksumSHA1` (string)**
-  - Sets header: x-amz-checksum-sha1
+  - Sets request header: `x-amz-checksum-sha1`
 - **`ChecksumSHA256` (string)**
-  - Sets header: x-amz-checksum-sha256
+  - Sets request header: `x-amz-checksum-sha256`
 - **`ContentDisposition` (string)**
-  - Sets header: Content-Disposition
+  - Sets request header: `content-disposition`
 - **`ContentEncoding` (string)**
-  - Sets header: Content-Encoding
+  - Sets request header: `content-encoding`
 - **`ContentLanguage` (string)**
-  - Sets header: Content-Language
+  - Sets request header: `content-language`
 - **`ContentLength` (string)**
-  - Sets header: Content-Length
+  - Sets request header: `content-length`
 - **`ContentMD5` (string)**
-  - Sets header: Content-MD5
+  - Sets request header: `content-md5`
 - **`ContentType` (string)**
-  - Sets header: Content-Type
+  - Sets request header: `content-type`
 - **`ExpectedBucketOwner` (string)**
-  - Sets header: x-amz-expected-bucket-owner
+  - Sets request header: `x-amz-expected-bucket-owner`
 - **`Expires` (string)**
-  - Sets header: Expires
+  - Sets request header: `expires`
 - **`GrantFullControl` (string)**
-  - Sets header: x-amz-grant-full-control
+  - Sets request header: `x-amz-grant-full-control`
 - **`GrantRead` (string)**
-  - Sets header: x-amz-grant-read
+  - Sets request header: `x-amz-grant-read`
 - **`GrantReadACP` (string)**
-  - Sets header: x-amz-grant-read-acp
+  - Sets request header: `x-amz-grant-read-acp`
 - **`GrantWriteACP` (string)**
-  - Sets header: x-amz-grant-write-acp
+  - Sets request header: `x-amz-grant-write-acp`
 - **`ObjectLockLegalHoldStatus` (string)**
-  - Sets header: x-amz-object-lock-legal-hold
+  - Sets request header: `x-amz-object-lock-legal-hold`
 - **`ObjectLockMode` (string)**
-  - Sets header: x-amz-object-lock-mode
+  - Sets request header: `x-amz-object-lock-mode`
 - **`ObjectLockRetainUntilDate` (string)**
-  - Sets header: x-amz-object-lock-retain-until-date
+  - Sets request header: `x-amz-object-lock-retain-until-date`
 - **`RequestPayer` (string)**
-  - Sets header: x-amz-request-payer
+  - Sets request header: `x-amz-request-payer`
 - **`ServerSideEncryption` (string)**
-  - Sets header: x-amz-server-side-encryption
+  - Sets request header: `x-amz-server-side-encryption`
 - **`SSECustomerAlgorithm` (string)**
-  - Sets header: x-amz-server-side-encryption-customer-algorithm
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
 - **`SSECustomerKey` (string)**
-  - Sets header: x-amz-server-side-encryption-customer-key
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
 - **`SSECustomerKeyMD5` (string)**
-  - Sets header: x-amz-server-side-encryption-customer-key-MD5
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
 - **`SSEKMSEncryptionContext` (string)**
-  - Sets header: x-amz-server-side-encryption-context
+  - Sets request header: `x-amz-server-side-encryption-context`
 - **`SSEKMSKeyId` (string)**
-  - Sets header: x-amz-server-side-encryption-aws-kms-key-id
+  - Sets request header: `x-amz-server-side-encryption-aws-kms-key-id`
 - **`StorageClass` (string)**
-  - Sets header: x-amz-storage-class
+  - Sets request header: `x-amz-storage-class`
 - **`Tagging` (string)**
-  - Sets header: x-amz-tagging
+  - Sets request header: `x-amz-tagging`
 - **`WebsiteRedirectLocation` (string)**
-  - Sets header: x-amz-website-redirect-location
+  - Sets request header: `x-amz-website-redirect-location`
 
 
 ### Methods yet to be implemented
