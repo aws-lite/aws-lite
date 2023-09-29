@@ -1,5 +1,7 @@
+let { stat } = require('fs/promises')
 let { marshall, unmarshall } = require('./_vendor')
 
+// AWS-flavored JSON stuff
 function marshaller (method, obj, awsjsonSetting) {
   // We may not be able to AWS JSON-[en|de]code the whole payload, check for specified keys
   if (Array.isArray(awsjsonSetting)) {
@@ -17,6 +19,11 @@ let awsjson = {
   unmarshall: marshaller.bind({}, unmarshall),
 }
 
+async function exists (file) {
+  try { await stat(file); return true }
+  catch { return false }
+}
+
 // Probably this is going to need some refactoring in Arc 11
 // Certainly it is not reliable in !Arc local Lambda emulation
 let nonLocalEnvs = [ 'staging', 'production' ]
@@ -30,4 +37,4 @@ function useAWS () {
   return true
 }
 
-module.exports = { awsjson, useAWS }
+module.exports = { awsjson, exists, useAWS }

@@ -1,4 +1,4 @@
-let { readdirSync } = require('fs')
+let { readdir } = require('fs/promises')
 let { join } = require('path')
 let { services } = require('./services')
 let request = require('./request')
@@ -31,10 +31,10 @@ module.exports = async function clientFactory (config, creds, region) {
   /* istanbul ignore next */ // TODO check once plugins are published
   if (autoloadPlugins) {
     let nodeModulesDir = join(process.cwd(), 'node_modules')
-    let mods = readdirSync(nodeModulesDir)
+    let mods = await readdir(nodeModulesDir)
     // Find first-party plugins
     if (mods.includes('@aws-lite')) {
-      let knownPlugins = readdirSync(join(nodeModulesDir, '@aws-lite'))
+      let knownPlugins = await readdir(join(nodeModulesDir, '@aws-lite'))
       let filtered = knownPlugins.filter(p => !ignored.includes(p)).map(p => `@aws-lite/${p}`)
       plugins.push(...filtered)
     }

@@ -1,10 +1,11 @@
-let { existsSync, readFileSync } = require('fs')
+let { readFile } = require('fs/promises')
+let { exists } = require('./lib')
 let { join } = require('path')
 let os = require('os')
 let ini = require('ini')
 let regions = require('./regions.json')
 
-module.exports = function getRegion (params) {
+module.exports = async function getRegion (params) {
   let { region } = params
 
   let paramsRegion = validateRegion(region)
@@ -15,7 +16,7 @@ module.exports = function getRegion (params) {
 
   let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
   if (!isInLambda) {
-    let configRegion = getRegionFromConfig(params)
+    let configRegion = await getRegionFromConfig(params)
     if (configRegion) return configRegion
   }
 
@@ -29,7 +30,7 @@ function getRegionFromEnv () {
   return validateRegion(region)
 }
 
-function getRegionFromConfig (params) {
+async function getRegionFromConfig (params) {
   let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE, AWS_PROFILE } = process.env
   if (!AWS_SDK_LOAD_CONFIG) return false
 
@@ -38,8 +39,8 @@ function getRegionFromConfig (params) {
   let home = os.homedir()
 
   let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
-  if (existsSync(configFile)) {
-    let file = readFileSync(configFile)
+  if (await exists(configFile)) {
+    let file = await readFile(configFile)
     let config = ini.parse(file.toString())
 
     if (!config[profileName]) {

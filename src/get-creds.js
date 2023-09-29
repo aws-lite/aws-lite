@@ -1,10 +1,11 @@
-let { existsSync, readFileSync } = require('fs')
+let { readFile } = require('fs/promises')
+let { exists } = require('./lib')
 let { join } = require('path')
 let os = require('os')
 let ini = require('ini')
 
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
-module.exports = function getCreds (params) {
+module.exports = async function getCreds (params) {
   let paramsCreds = validate(params)
   if (paramsCreds) return paramsCreds
 
@@ -13,7 +14,7 @@ module.exports = function getCreds (params) {
 
   let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
   if (!isInLambda) {
-    let credsFileCreds = getCredsFromFile(params)
+    let credsFileCreds = await getCredsFromFile(params)
     if (credsFileCreds) return credsFileCreds
   }
 
@@ -29,14 +30,14 @@ function getCredsFromEnv () {
   return validate({ accessKeyId, secretAccessKey, sessionToken })
 }
 
-function getCredsFromFile (params) {
+async function getCredsFromFile (params) {
   let { AWS_SHARED_CREDENTIALS_FILE, AWS_PROFILE } = process.env
   let profile = params.profile || AWS_PROFILE || 'default'
   let home = os.homedir()
 
   let credsFile = AWS_SHARED_CREDENTIALS_FILE || join(home, '.aws', 'credentials')
-  if (existsSync(credsFile)) {
-    let file = readFileSync(credsFile)
+  if (await exists(credsFile)) {
+    let file = await readFile(credsFile)
     let creds = ini.parse(file.toString())
 
     if (!creds[profile]) {

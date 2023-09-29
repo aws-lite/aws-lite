@@ -21,8 +21,8 @@ let clientFactory = require('./client-factory')
  */
 module.exports = async function awsLite (config = {}) {
   // Creds + region first
-  let creds = getCreds(config)
-  let region = getRegion(config)
+  let creds = await getCreds(config)
+  let region = await getRegion(config)
 
   // Set defaults
   config.protocol = config.protocol ?? 'https'
