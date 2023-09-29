@@ -210,7 +210,7 @@ const PutObject = {
           stream.push(null)
         }
       })
-      canonicalReq.stream = stream
+      canonicalReq.payload = stream
       return canonicalReq
     }
   },

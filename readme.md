@@ -171,9 +171,10 @@ The following parameters may be passed with individual client requests; only `se
 - **`headers` (object)**
   - Header names + values to be added to your request
   - By default, all headers are included in [authentication via AWS signature v4](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html)
-- **`payload` (object or string)**
+- **`payload` (object, buffer, readable stream, string)**
   - Aliases: `body`, `data`, `json`
-  - As a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); strings pass through
+  - As a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); buffers and strings simply pass through as is
+  - Passing a Node.js readable stream is currently experimental; this initiates an HTTP data stream to the API endpoint instead of writing a normal HTTP body payload
 - **`query` (object)**
   - Serialize the passed object and append it to your `endpoint` as a query string in your request
 - **`service` (string) [required]**

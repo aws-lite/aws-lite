@@ -1,4 +1,5 @@
 let qs = require('querystring')
+let { Readable } = require('stream')
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
 let { is } = require('./validate')
@@ -40,8 +41,11 @@ module.exports = function request (params, creds, region, config, metadata) {
 
     // Body - JSON-ify payload where convenient!
     let body = params.payload || params.body || params.data || params.json
+    let isBuffer = body instanceof Buffer
+    let isStream = body instanceof Readable
+
     // Lots of potentially weird valid json (like just a null), deal with it if / when we need to I guess
-    if (typeof body === 'object' && !(body instanceof Buffer)) {
+    if (typeof body === 'object' && !isBuffer && !isStream) {
       // Backfill content-type if it's just an object
       if (!contentType) contentType = 'application/json'
 
@@ -59,8 +63,11 @@ module.exports = function request (params, creds, region, config, metadata) {
       // Final JSON encoding
       params.body = JSON.stringify(body)
     }
-    // Everything else just passes through
-    else params.body = body
+    // Everything besides streams pass through for signing
+    else {
+      /* istanbul ignore next */
+      params.body = isStream ? undefined : body
+    }
 
     // Finalize headers, content-type
     if (contentType) headers['content-type'] = contentType
@@ -104,7 +111,8 @@ module.exports = function request (params, creds, region, config, metadata) {
     if (config.debug) {
       let { method = 'GET', service, host, path, port = '', headers, protocol, body } = options
       let truncatedBody
-      if (body instanceof Buffer) truncatedBody = `<body buffer of ${body.length}b>`
+      /**/ if (isBuffer) truncatedBody = `<body buffer of ${body.length}b>`
+      else if (isStream) truncatedBody = `<readable stream>`
       else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
       console.error('[aws-lite] Requesting:', {
         service,
@@ -150,8 +158,18 @@ module.exports = function request (params, creds, region, config, metadata) {
         port: options.port,
       }
     }))
+
     /* istanbul ignore next */ // TODO remove and test
-    if (options.stream) options.stream.pipe(req)
+    if (isStream) {
+      body.pipe(req)
+      if (config.debug) {
+        let bytes = 0
+        body.on('data', chunk => {
+          bytes += chunk.length
+          console.error(`Bytes streamed: ${bytes}`)
+        })
+      }
+    }
     else req.end(options.body || '')
   })
 }
