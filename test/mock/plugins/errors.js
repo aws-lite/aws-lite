@@ -5,6 +5,7 @@ module.exports = {
   service: 'lambda',
   methods: {
     requestMethodBlowsUp: {
+      awsDoc: 'https://requestMethodBlowsUp.lol',
       request: async (input) => {
         input.foo.bar = 'idk'
         return input
@@ -14,6 +15,8 @@ module.exports = {
       request: passthrough,
     },
     errorMethodMutatesError: {
+      awsDoc: 'https://errorMethodMutatesError.lol',
+      readme: 'lolidk',
       request: noop,
       error: async (error) => {
         if (error.statusCode === 400 &&
@@ -24,10 +27,12 @@ module.exports = {
       }
     },
     errorMethodNoop: {
+      awsDoc: 'https://errorMethodNoop.lol',
       request: noop,
       error: noop,
     },
     errorMethodBlowsUp: {
+      awsDoc: 'https://errorMethodBlowsUp.lol',
       request: noop,
       error: async (err) => {
         err.metadata.type = message

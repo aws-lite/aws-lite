@@ -88,6 +88,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({})
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Missing required parameter: required/, 'Errored on missing required param')
   }
 
@@ -96,6 +97,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: num })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Parameter 'required' must be: string/, 'Errored on wrong required param type')
   }
 
@@ -104,6 +106,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ arr: true })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Parameter 'arr' must be: array/, 'Errored on wrong optional param type')
   }
 
@@ -112,6 +115,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ disabled: str })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Parameter 'disabled' must not be used/, 'Errored on disabled param')
   }
 
@@ -120,6 +124,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: str, invalidType: str })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Invalid type found: invalidType \(lolidk\)/, 'Errored on invalid validation type (string)')
   }
 
@@ -128,6 +133,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: str, invalidTypeList: str })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Invalid type found: invalidTypeList \(listidk\)/, 'Errored on invalid validation type (list)')
   }
 
@@ -136,6 +142,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: str, invalidTypeType: str })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Validator 'type' property must be a string or array/, 'Errored on invalid validation type')
   }
 
@@ -144,6 +151,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: str, invalidTypeListType: str })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Invalid type found: invalidTypeListType \(12345\)/, 'Errored on invalid validation type (list)')
   }
 
@@ -152,6 +160,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: str, missingType: str })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Validator is missing required 'type' property/, 'Errored on missing validation type')
   }
 
@@ -175,6 +184,7 @@ test('Plugins - input validation', async t => {
       t.fail(`Incorrect ${k} validation failed`)
     }
     catch (err) {
+      console.log(err)
       let re = new RegExp(`Parameter '${k}' must be`)
       t.match(err.message, re, `Incorrect ${k} validation succeeded`)
     }
@@ -185,6 +195,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: str, payload: num })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Parameter 'payload' must be one of/, 'Errored on wrong param (from type array)')
   }
 
@@ -193,6 +204,7 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: str, data: num })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Parameter 'data' must be one of/, 'Errored on wrong param (from type array, payload alias)')
   }
 
@@ -201,13 +213,14 @@ test('Plugins - input validation', async t => {
     await aws.lambda.testTypes({ required: str, payload: str, data: str })
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /Found duplicate payload parameters/, 'Errored on duplicate payload params')
   }
   reset()
 })
 
 test('Plugins - error handling', async t => {
-  t.plan(36)
+  t.plan(43)
   let name = 'my-lambda'
   let payload = { ok: true }
   let responseBody, responseHeaders, responseStatusCode
@@ -235,6 +248,7 @@ test('Plugins - error handling', async t => {
     console.log(err)
     t.match(err.message, /\@aws-lite\/client: lambda.requestMethodBlowsUp: Cannot set/, 'Error included basic method information')
     t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.awsDoc, 'https://requestMethodBlowsUp.lol', 'Error has AWS API doc')
     t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
@@ -253,6 +267,8 @@ test('Plugins - error handling', async t => {
     t.match(err.message, /\@aws-lite\/client: lambda.errorMethodMutatesError/, 'Error included basic method information')
     t.equal(err.statusCode, responseStatusCode, 'Error has status code')
     t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.awsDoc, 'https://errorMethodMutatesError.lol', 'Error has AWS API doc')
+    t.equal(err.readme, 'lolidk', 'Error has custom readme doc')
     t.equal(err.other, responseBody.other, 'Error has other metadata')
     t.notOk(err.type, 'Error does not have type (via plugin error)')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
@@ -272,6 +288,8 @@ test('Plugins - error handling', async t => {
     t.match(err.message, /\@aws-lite\/client: lambda.errorMethodMutatesError/, 'Error included basic method information')
     t.equal(err.statusCode, responseStatusCode, 'Error has status code')
     t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.awsDoc, 'https://errorMethodMutatesError.lol', 'Error has AWS API doc')
+    t.equal(err.readme, 'lolidk', 'Error has custom readme doc')
     t.equal(err.other, responseBody.other, 'Error has other metadata')
     t.equal(err.type, 'Lambda validation error', 'Error has type (via plugin error)')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
@@ -307,6 +325,7 @@ test('Plugins - error handling', async t => {
     t.match(err.message, /\@aws-lite\/client: lambda.errorMethodNoop/, 'Error included basic method information')
     t.equal(err.statusCode, responseStatusCode, 'Error has status code')
     t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.awsDoc, 'https://errorMethodNoop.lol', 'Error has AWS API doc')
     t.equal(err.other, responseBody.other, 'Error has other metadata')
     t.notOk(err.type, 'Error does not have type (via plugin error)')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
@@ -325,11 +344,27 @@ test('Plugins - error handling', async t => {
     console.log(err)
     t.match(err.message, /\@aws-lite\/client: lambda.errorMethodBlowsUp: Cannot set/, 'Error included basic method information')
     t.equal(err.service, service, 'Error has service metadata')
+    t.notOk(err.awsDoc, 'Error does not have a doc')
     t.notOk(err.other, 'Error does not have other metadata')
     t.notOk(err.type, 'Error metadata was not mutated')
     t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
+  }
+})
+
+test('Plugins - error docs (@aws-lite)', async t => {
+  t.plan(2)
+  let aws = await client({ ...config, plugins: [ '@aws-lite/s3' ] })
+
+  try {
+    await aws.s3.PutObject()
+    reset()
+  }
+  catch (err) {
+    console.log(err)
+    t.equal(err.awsDoc, 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html', 'Error has a doc')
+    t.equal(err.readme, 'https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObject', 'Error has link to method in readme')
   }
 })
 

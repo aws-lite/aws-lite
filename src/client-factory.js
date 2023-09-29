@@ -105,8 +105,24 @@ module.exports = async function clientFactory (config, creds, region) {
 
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
           clientMethods[name] = Object.defineProperty(async input => {
+            input = input || {}
             let selectedRegion = input?.region || region
             let metadata = { service, name }
+            if (method.awsDoc) {
+              metadata.awsDoc = method.awsDoc
+            }
+            // Printed after the AWS doc
+            if (pluginName.startsWith('@aws-lite/')) {
+              metadata.readme = `https://github.com/architect/aws-lite/blob/main/plugins/${service}/readme.md#${name}`
+            }
+            else if (method.readme) {
+              metadata.readme = method.readme
+            }
+
+            // Initial validation
+            if (method.validate) {
+              validateInput(method.validate, input, metadata)
+            }
 
             // Run plugin.request()
             try {
@@ -117,7 +133,7 @@ module.exports = async function clientFactory (config, creds, region) {
               errorHandler({ error: methodError, metadata })
             }
 
-            // Hit plugin.validate
+            // Validate combined inputs of user + plugin
             let params = { ...input, ...req }
             if (method.validate) {
               validateInput(method.validate, params, metadata)

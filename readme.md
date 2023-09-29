@@ -261,6 +261,10 @@ export default {
 aws.dynamodb.PutItem({ TableName: 12345 }) // Throws validation error
 ```
 
+Additionally, two optional metadata properties may be added that will be included in any method errors:
+- `awsDoc` (string) [optional] - intended to be a link to the AWS API doc pertaining to this method; should usually start with `https://docs.aws.amazon.com/...`
+- `readme` (string) [optional] - a link to a relevant section in your plugin's readme or docs
+
 Example plugins can be found below, in [`plugins/` dir (containing `@aws-lite/*` plugins)](https://github.com/architect/aws-lite/tree/main/plugins), and in [tests](https://github.com/architect/aws-lite/tree/main/test/mock/plugins).
 
 
