@@ -16,7 +16,7 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(28)
+  t.plan(30)
   let request, result, body, query, responseBody, url
 
   let headers = { 'content-type': 'application/json' }
@@ -27,7 +27,9 @@ test('Primary client - core functionality', async t => {
   result = await aws({ service, endpoint })
   request = server.getCurrentRequest()
   t.notOk(request.body, 'Request included no body')
-  t.equal(result, '', 'Client returned empty response body as empty string')
+  t.equal(result.statusCode, 200, 'Client returned status code of response')
+  t.ok(result.headers, 'Client returned response headers')
+  t.equal(result.payload, '', 'Client returned empty response body as empty string')
   basicRequestChecks(t, 'GET')
 
   // Basic get request with query string params
@@ -43,7 +45,7 @@ test('Primary client - core functionality', async t => {
   result = await aws({ service, endpoint, body })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, body, 'Request included correct body')
-  t.deepEqual(result, responseBody, 'Client returned response body as parsed JSON')
+  t.deepEqual(result.payload, responseBody, 'Client returned response body as parsed JSON')
   basicRequestChecks(t, 'POST')
 
   // Basic post with query string params
@@ -147,7 +149,7 @@ test('Primary client - AWS JSON payloads', async t => {
   result = await aws({ service, endpoint, body, headers: headersAwsJSON() })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: true } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -157,7 +159,7 @@ test('Primary client - AWS JSON payloads', async t => {
   result = await aws({ service, endpoint, body, headers: headersAwsJSON() })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -167,7 +169,7 @@ test('Primary client - AWS JSON payloads', async t => {
   result = await aws({ service, endpoint, body, awsjson: true })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -177,7 +179,7 @@ test('Primary client - AWS JSON payloads', async t => {
   result = await aws({ service, endpoint, body, awsjson: [ 'fine' ] })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: true, fine: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -186,12 +188,12 @@ test('Primary client - AWS JSON payloads', async t => {
   server.use({ responseBody: regularJSON, responseHeaders: headersAwsJSON() })
   result = await aws({ service, endpoint })
   request = server.getCurrentRequest()
-  t.deepEqual(result, regularJSON, 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, regularJSON, 'Client returned response body as parsed, unmarshalled JSON')
   reset()
 })
 
 test('Primary client - error handling', async t => {
-  t.plan(17)
+  t.plan(19)
   let responseStatusCode, responseBody, responseHeaders
 
   // Normal error
@@ -207,7 +209,8 @@ test('Primary client - error handling', async t => {
     console.log(err)
     t.match(err.message, /\@aws-lite\/client: lambda: lolno/, 'Error included basic information')
     t.equal(err.other, responseBody.other, 'Error has other metadata')
-    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
+    t.equal(err.statusCode, responseStatusCode, 'Error has response status code')
+    t.ok(err.headers, 'Error has response headers')
     t.equal(err.service, service, 'Error has service')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
@@ -227,7 +230,8 @@ test('Primary client - error handling', async t => {
     console.log(err)
     t.match(err.message, /\@aws-lite\/client: lambda/, 'Error included basic information')
     t.ok(err.message.includes(responseBody), 'Error has message')
-    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
+    t.equal(err.statusCode, responseStatusCode, 'Error has response status code')
+    t.ok(err.headers, 'Error has response headers')
     t.equal(err.service, service, 'Error has service')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()

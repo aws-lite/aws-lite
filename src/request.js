@@ -131,20 +131,20 @@ module.exports = function request (params, creds, region, config, metadata) {
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
         // TODO The following string coersion will definitely need be changed when we get into binary response payloads
-        let result = Buffer.concat(data).toString()
+        let payload = Buffer.concat(data).toString()
         let contentType = headers['content-type'] || headers['Content-Type'] || ''
         if (JSONContentType(contentType) || AwsJSONContentType(contentType)) {
-          result = JSON.parse(result)
+          payload = JSON.parse(payload)
         }
         // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
         if (AwsJSONContentType(contentType)) {
           try {
-            result = awsjson.unmarshall(result)
+            payload = awsjson.unmarshall(payload)
           }
           catch { /* noop, it's already parsed */ }
         }
-        if (ok) resolve(result)
-        else reject({ error: result, metadata, statusCode })
+        if (ok) resolve({ statusCode, headers, payload })
+        else reject({ statusCode, headers, error: payload, metadata })
       })
     })
     req.on('error', error => reject({

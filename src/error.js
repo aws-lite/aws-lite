@@ -4,12 +4,15 @@ module.exports = function errorHandler (input) {
     throw input
   }
 
-  let { error, statusCode, metadata } = input
+  let { statusCode, headers, error, metadata } = input
 
   // If the error passed is an actual Error, it probably came from a plugin method failing, so we should attempt to retain its beautiful, beautiful stack trace
   let err = error instanceof Error ? error : Error()
   if (statusCode) {
     err.statusCode = statusCode
+  }
+  if (headers) {
+    err.headers = headers
   }
 
   // The most common error response from AWS services

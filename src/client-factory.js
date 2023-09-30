@@ -7,6 +7,7 @@ let { awsjson } = require('./lib')
 let { marshall, unmarshall } = require('./_vendor')
 let errorHandler = require('./error')
 
+let credentialProps = [ 'accessKeyId', 'secretAccessKey', 'sessionToken' ]
 let copy = obj => JSON.parse(JSON.stringify(obj))
 
 // Never autoload these `@aws-lite/*` packages:
@@ -85,17 +86,16 @@ module.exports = async function clientFactory (config, creds, region) {
           }
         })
 
+        let configuration = copy(config)
+        credentialProps.forEach(p => delete configuration[p])
         let credentials = copy(creds)
-        Object.defineProperty(config, 'secretAccessKey', { enumerable: false })
-        Object.defineProperty(config, 'secretAccessKey', { enumerable: false })
-        Object.defineProperty(credentials, 'sessionToken', { enumerable: false })
+        Object.defineProperty(credentials, 'secretAccessKey', { enumerable: false })
         Object.defineProperty(credentials, 'sessionToken', { enumerable: false })
         let pluginUtils = {
           awsjsonMarshall: marshall,
           awsjsonUnmarshall: unmarshall,
-          config: copy(config),
+          config: configuration,
           credentials,
-          region,
         }
         let clientMethods = {}
         Object.entries(methods).forEach(([ name, method ]) => {
@@ -126,7 +126,7 @@ module.exports = async function clientFactory (config, creds, region) {
 
             // Run plugin.request()
             try {
-              var req = await method.request(input, pluginUtils)
+              var req = await method.request(input, { ...pluginUtils, region: selectedRegion })
               req = req || {}
             }
             catch (methodError) {
@@ -147,17 +147,22 @@ module.exports = async function clientFactory (config, creds, region) {
               /* istanbul ignore next */ // TODO remove as soon as plugin.response() API settles
               if (method.response) {
                 try {
-                  var pluginRes = await method.response(response, pluginUtils)
-                  if (pluginRes && pluginRes.response === undefined) {
-                    throw TypeError('Response plugins must return a response property')
-                  }
+                  var pluginRes = await method.response(response, { ...pluginUtils, region: selectedRegion })
                 }
                 catch (methodError) {
                   errorHandler({ error: methodError, metadata })
                 }
-                response = pluginRes?.awsjson
-                  ? awsjson.unmarshall(pluginRes.response, pluginRes.awsjson)
-                  : pluginRes?.response || response
+                if (pluginRes) {
+                  let { statusCode, headers, payload } = pluginRes
+                  if (pluginRes.awsjson) {
+                    payload = awsjson.unmarshall(payload, pluginRes.awsjson)
+                  }
+                  response = {
+                    statusCode: statusCode || response.statusCode,
+                    headers: headers || response.headers,
+                    payload: payload || response.payload,
+                  }
+                }
               }
               return response
             }
@@ -165,7 +170,7 @@ module.exports = async function clientFactory (config, creds, region) {
               // Run plugin.error()
               if (method.error && !(input instanceof Error)) {
                 try {
-                  let updatedError = await method.error(err, pluginUtils)
+                  let updatedError = await method.error(err, { ...pluginUtils, region: selectedRegion })
                   errorHandler(updatedError || err)
                 }
                 catch (methodError) {

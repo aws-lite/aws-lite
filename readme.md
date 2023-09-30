@@ -17,6 +17,7 @@
     - [`request()`](#request)
     - [`response()`](#response)
     - [`error()`](#error)
+    - [Plugin utils](#plugin-utils)
   - [List of official `@aws-lite/*` plugins](#list-of-official-aws-lite-plugins)
 - [Contributing](#contributing)
   - [Setup](#setup)
@@ -250,6 +251,8 @@ The above four lifecycle hooks must be exported as an object named `methods`, al
 // A simple plugin for validating input
 export default {
   service: 'dynamodb',
+  awsDoc: 'https://docs.aws.../API_PutItem.html',
+  readme: 'https://github...#PutItem',
   methods: {
     PutItem: {
       validate: {
@@ -262,7 +265,7 @@ export default {
 aws.dynamodb.PutItem({ TableName: 12345 }) // Throws validation error
 ```
 
-Additionally, two optional metadata properties may be added that will be included in any method errors:
+Additionally, two optional (but highly recommended) metadata properties may be added that will be included in any method errors:
 - `awsDoc` (string) [optional] - intended to be a link to the AWS API doc pertaining to this method; should usually start with `https://docs.aws.amazon.com/...`
 - `readme` (string) [optional] - a link to a relevant section in your plugin's readme or docs
 
@@ -310,7 +313,7 @@ The `request()` lifecycle hook is an optional async function that enables that e
 - **`params` (object)**
   - The method's input parameters
 - **`utils` (object)**
-  - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
+  - [Plugin helper utilities](#plugin-utils)
 
 The `request()` method may return nothing, or a [valid client request](#client-requests). An example:
 
@@ -340,12 +343,18 @@ The `response()` lifecycle hook is an async function that enables mutation of se
 
 `response()` is executed with two positional arguments:
 
-- **`response` (any)**
-  - Raw non-error response from AWS service API request; if the entire payload is JSON or AWS-flavored JSON, `aws-lite` will attempt to parse it prior to executing `response()`. Responses that are primarily JSON, but with nested AWS-flavored JSON, will be parsed only as JSON and may require additional deserialization with the `awsjsonUnmarshall` utility
+- **`params` (object)**
+  - An object containing three properties from the API response:
+    - **`statusCode` (number)**
+      - HTTP response status code
+    - **`headers` (object)**
+      - HTTP response headers
+    - **`payload` (object or string)**
+      - Raw non-error response from AWS service API request; if the entire payload is JSON or AWS-flavored JSON, `aws-lite` will attempt to parse it prior to executing `response()`. Responses that are primarily JSON, but with nested AWS-flavored JSON, will be parsed only as JSON and may require additional deserialization with the `awsjsonUnmarshall` utility
 - **`utils` (object)**
-  - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
+  - [Plugin helper utilities](#plugin-utils)
 
-The `response()` method may return nothing, but if it does return a mutated response, it must come in the form of an object containing a `response` property, and an optional `awsjson` property (that behaves the same as in [client requests](#client-requests)). An example:
+The `response()` method may return nothing, or it may return an object containing the following optional properties: `statusCode` (number), `headers` (object), `payload` (object or string), and `awsjson` (that behaves the same as in [client requests](#client-requests)). An example:
 
 ```js
 // Automatically deserialize AWS-flavored JSON
@@ -353,9 +362,9 @@ export default {
   service: 'dynamodb',
   methods: {
     GetItem: {
-      // Successful responses always have an AWS-flavored JSON `Item` property
-      response: async (response, utils) => {
-        return { awsjson: [ 'Item' ], response }
+      // Assume successful responses always have an AWS-flavored JSON `Item` property
+      response: async (params, utils) => {
+        return { awsjson: [ 'Item' ], ...params }
       }
     }
   }
@@ -375,9 +384,9 @@ The `error()` lifecycle hook is an async function that enables mutation of servi
     - **`metadata` (object)** - `aws-lite` error metadata; to improve the quality of the errors presented by `aws-lite`, please only append to this object
     - **`statusCode` (number or undefined)** - resulting status code of the API response; if an HTTP connection error occurred, no `statusCode` will be present
 - **`utils` (object)**
-  - Helper utilities for (de)serializing AWS-flavored JSON: `awsjsonMarshall`, `awsjsonUnmarshall`
+  - [Plugin helper utilities](#plugin-utils)
 
-The `error()` method may return nothing, a new or mutated version of the error payload it was passed, a string, an object, or a JS error. An example
+The `error()` method may return nothing, a new or mutated version of the error payload it was passed, a string, an object, or a JS error. An example:
 
 ```js
 // Improve clarity of error output
@@ -395,6 +404,41 @@ export default {
       }
     }
   }
+}
+```
+
+
+#### Plugin utils
+
+[`request()`](#request), [`response()`](#response), and [`error()`](#error) are all passed a second argument of helper utilities and data pertaining to the client:
+
+- **`awsjsonMarshall` (function)**
+  - Utility for marshalling data to the format underlying AWS-flavored JSON serialization; accepts a plain object, returns a marshalled object
+- **`awsjsonUnmarshall` (function)**
+  - Utility for unmarshalling data from the format underlying AWS-flavored JSON serialization; accepts a marshalled object, returns a plain object
+- **`config` (object)**
+  - The current [client configuration](#configuration); any configured credentials are found in the `credentials` object
+- **`credentials` (object)**
+  - `accessKeyId`, `secretAccessKey`, and `sessionToken` being used in this request
+  - Note: `secretAccessKey` and `sessionToken` are present in this object, but non-enumerable
+- **`region` (string)**
+  - Canonical service region being used in this request; this value may differ from the region set in the `config` object if overridden per-request
+
+An example of plugin utils:
+
+```js
+async function request (params, utils) {
+  let awsStyle = utils.awsjsonMarshall({ ok: true, hi: 'there' })
+  console.log(marshalled) // { ok: { BOOL: true }, hi: { S: 'there' } }
+
+  let plain = utils.awsjsonUnmarshall({ ok: { BOOL: true }, hi: { S: 'there' } })
+  console.log(unmarshalled) // { ok: true, hi: 'there' }
+
+  console.log(config) // { profile: 'my-profile', autoloadPlugins: true, ... }
+
+  console.log(credentials) // { accessKeyId: 'abc123...' } secrets are non-enumerable
+
+  console.log(region) // 'us-west-1'
 }
 ```
 
