@@ -152,16 +152,16 @@ module.exports = async function clientFactory (config, creds, region) {
                 catch (methodError) {
                   errorHandler({ error: methodError, metadata })
                 }
-                if (pluginRes) {
-                  let { statusCode, headers, payload } = pluginRes
-                  if (pluginRes.awsjson) {
-                    payload = awsjson.unmarshall(payload, pluginRes.awsjson)
+                if (pluginRes !== undefined) {
+                  let unmarshalling = pluginRes.awsjson
+                  if (unmarshalling) {
+                    delete pluginRes.awsjson
+                    // If a payload property isn't included, it _is_ the payload
+                    let payload = pluginRes.payload || pluginRes
+                    let unmarshalled = awsjson.unmarshall(payload, unmarshalling)
+                    response = { ...pluginRes, ...unmarshalled }
                   }
-                  response = {
-                    statusCode: statusCode || response.statusCode,
-                    headers: headers || response.headers,
-                    payload: payload || response.payload,
-                  }
+                  else response = pluginRes
                 }
               }
               return response

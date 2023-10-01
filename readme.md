@@ -174,7 +174,7 @@ The following parameters may be passed with individual client requests; only `se
   - By default, all headers are included in [authentication via AWS signature v4](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html)
 - **`payload` (object, buffer, readable stream, string)**
   - Aliases: `body`, `data`, `json`
-  - As a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); buffers and strings simply pass through as is
+  - As a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); buffers and strings simply pass through as-is
   - Passing a Node.js readable stream is currently experimental; this initiates an HTTP data stream to the API endpoint instead of writing a normal HTTP body payload
 - **`query` (object)**
   - Serialize the passed object and append it to your `endpoint` as a query string in your request
@@ -343,7 +343,7 @@ The `response()` lifecycle hook is an async function that enables mutation of se
 
 `response()` is executed with two positional arguments:
 
-- **`params` (object)**
+- **`response` (object)**
   - An object containing three properties from the API response:
     - **`statusCode` (number)**
       - HTTP response status code
@@ -354,7 +354,11 @@ The `response()` lifecycle hook is an async function that enables mutation of se
 - **`utils` (object)**
   - [Plugin helper utilities](#plugin-utils)
 
-The `response()` method may return nothing, or it may return an object containing the following optional properties: `statusCode` (number), `headers` (object), `payload` (object or string), and `awsjson` (that behaves the same as in [client requests](#client-requests)). An example:
+The `response()` method may return: nothing (which will pass through the `response` object as-is), a mutated version of the `response` object, or any other data type (most commonly an object or string).
+
+Should you return an object, you may also include an `awsjson` property (that behaves the same as in [client requests](#client-requests)). The `awsjson` property will be stripped from any returned response.
+
+An example:
 
 ```js
 // Automatically deserialize AWS-flavored JSON

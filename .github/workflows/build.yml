@@ -41,6 +41,14 @@ jobs:
     - name: Install
       run: npm install
 
+    - name: Link (npm < 7)
+      if: matrix.node-version == '14.x'
+      run: |
+        cd plugins/s3
+        npm link
+        cd ../../
+        npm link @aws-lite/s3
+
     - name: Test
       run: npm test
       env:

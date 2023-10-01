@@ -12,6 +12,7 @@ export default {
           }
         }
       },
+      response: async ({ payload }) => payload,
     },
     CreateRole: {
       request: async function ({ name, policyDoc, desc, path }) {
@@ -26,6 +27,7 @@ export default {
           }
         }
       },
+      response: async ({ payload }) => payload,
     }
   }
 }

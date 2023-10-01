@@ -22,6 +22,7 @@ module.exports = {
           endpoint: `/2015-03-31/functions/${name}/configuration`
         }
       },
+      response: async ({ payload }) => payload,
     },
 
     // https://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html
@@ -35,6 +36,7 @@ module.exports = {
           endpoint: `/2015-03-31/functions/${name}/invocations`
         }
       },
+      response: async ({ payload }) => payload,
     },
   }
 }
