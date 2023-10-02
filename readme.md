@@ -350,13 +350,13 @@ The `response()` lifecycle hook is an async function that enables mutation of se
     - **`headers` (object)**
       - HTTP response headers
     - **`payload` (object or string)**
-      - Raw non-error response from AWS service API request; if the entire payload is JSON or AWS-flavored JSON, `aws-lite` will attempt to parse it prior to executing `response()`. Responses that are primarily JSON, but with nested AWS-flavored JSON, will be parsed only as JSON and may require additional deserialization with the `awsjsonUnmarshall` utility
+      - Raw non-error response from AWS service API request; if the entire payload is JSON or AWS-flavored JSON, `aws-lite` will attempt to parse it prior to executing `response()`. Responses that are primarily JSON, but with nested AWS-flavored JSON, will be parsed only as JSON and may require additional deserialization with the `awsjsonUnmarshall` utility or `awsjson` property
 - **`utils` (object)**
   - [Plugin helper utilities](#plugin-utils)
 
-The `response()` method may return: nothing (which will pass through the `response` object as-is), a mutated version of the `response` object, or any other data type (most commonly an object or string).
+The `response()` method may return: nothing (which will pass through the `response` object as-is) or any data (most commonly an object or string, or mutated version of the `response` object).
 
-Should you return an object, you may also include an `awsjson` property (that behaves the same as in [client requests](#client-requests)). The `awsjson` property will be stripped from any returned response.
+Should you return an object, you may also include an `awsjson` property (that behaves the same as in [client requests](#client-requests)). The `awsjson` property is considered reserved, and will be stripped from any returned data.
 
 An example:
 
@@ -367,8 +367,9 @@ export default {
   methods: {
     GetItem: {
       // Assume successful responses always have an AWS-flavored JSON `Item` property
-      response: async (params, utils) => {
-        return { awsjson: [ 'Item' ], ...params }
+      response: async (response, utils) => {
+        response.awsjson = [ 'Item' ]
+        return response // Returns the response (`statusCode`, `headers`, `payload`), with `payload.Item` unformatted from AWS-flavored JSON
       }
     }
   }

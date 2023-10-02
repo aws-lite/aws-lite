@@ -21,7 +21,8 @@ const Item = { ...obj, required }
 const ReturnConsumedCapacity = str
 const ReturnItemCollectionMetrics = str
 
-const unmarshall = keys => async response => ({ awsjson: keys, response })
+const defaultResponse = ({ payload }) => payload
+const unmarshall = keys => ({ payload }) => ({ awsjson: keys, ...payload })
 const headers = (method, additional) => ({ 'X-Amz-Target': `DynamoDB_20120810.${method}`, ...additional })
 const awsjsonContentType = { 'content-type': 'application/x-amz-json-1.0' }
 
@@ -47,15 +48,15 @@ const BatchExecuteStatement = {
       payload: { ...params, Statements }
     }
   },
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (response?.Responses?.length) {
-      response.Responses = response.Responses.map(r => {
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (payload?.Responses?.length) {
+      payload.Responses = payload.Responses.map(r => {
         if (r?.Error?.Item) r.Error.Item = awsjsonUnmarshall(r.Error.Item)
         if (r?.Item) r.Item = awsjsonUnmarshall(r.Item)
         return r
       })
     }
-    return { response }
+    return payload
   },
 }
 
@@ -77,19 +78,19 @@ const BatchGetItem = {
       payload: { ...params, RequestItems }
     }
   },
-  response: async (response, { awsjsonUnmarshall }) => {
-    let Responses = Object.keys(response.Responses)
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    let Responses = Object.keys(payload.Responses)
     if (Responses.length) {
-      Responses.forEach(i => response.Responses[i] = response.Responses[i]?.map(awsjsonUnmarshall))
+      Responses.forEach(i => payload.Responses[i] = payload.Responses[i]?.map(awsjsonUnmarshall))
     }
-    let UnprocessedKeys = Object.keys(response.UnprocessedKeys)
+    let UnprocessedKeys = Object.keys(payload.UnprocessedKeys)
     if (UnprocessedKeys.length) {
-      UnprocessedKeys.forEach(i => response.UnprocessedKeys[i] = {
-        ...response.UnprocessedKeys[i],
-        Keys: response.UnprocessedKeys[i]?.Keys?.map(awsjsonUnmarshall)
+      UnprocessedKeys.forEach(i => payload.UnprocessedKeys[i] = {
+        ...payload.UnprocessedKeys[i],
+        Keys: payload.UnprocessedKeys[i]?.Keys?.map(awsjsonUnmarshall)
       })
     }
-    return { response }
+    return payload
   },
 }
 
@@ -122,9 +123,9 @@ const BatchWriteItem = {
       payload: { ...params, RequestItems }
     }
   },
-  response: async (response, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
     let UnprocessedItems = {}
-    Object.entries(response.UnprocessedItems).forEach(([ table, items ]) => {
+    Object.entries(payload.UnprocessedItems).forEach(([ table, items ]) => {
       UnprocessedItems[table] = items.map(i => {
         let request = {}
         Object.entries(i).forEach(([ op, data ]) => {
@@ -138,7 +139,7 @@ const BatchWriteItem = {
         return request
       })
     })
-    return { response: { ...response, UnprocessedItems } }
+    return { ...payload, UnprocessedItems }
   }
 }
 
@@ -152,6 +153,7 @@ const CreateBackup = {
     headers: headers('CreateBackup'), // Undocumented as of author time
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const CreateGlobalTable = {
@@ -164,6 +166,7 @@ const CreateGlobalTable = {
     headers: headers('CreateGlobalTable'), // Undocumented as of author time
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const CreateTable = {
@@ -186,6 +189,7 @@ const CreateTable = {
     headers: headers('CreateTable'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DeleteBackup = {
@@ -197,6 +201,7 @@ const DeleteBackup = {
     headers: headers('DeleteBackup'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DeleteItem = {
@@ -219,9 +224,9 @@ const DeleteItem = {
     headers: headers('DeleteItem'),
     payload: params,
   }),
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (response?.Attributes) response.Attributes = awsjsonUnmarshall(response.Attributes)
-    return { response }
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (payload?.Attributes) payload.Attributes = awsjsonUnmarshall(payload.Attributes)
+    return payload
   },
 }
 
@@ -234,6 +239,7 @@ const DeleteTable = {
     headers: headers('DeleteTable'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeBackup = {
@@ -245,6 +251,7 @@ const DescribeBackup = {
     headers: headers('DescribeBackup'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeContinuousBackups = {
@@ -256,6 +263,7 @@ const DescribeContinuousBackups = {
     headers: headers('DescribeContinuousBackups'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeContributorInsights = {
@@ -268,6 +276,7 @@ const DescribeContributorInsights = {
     headers: headers('DescribeContributorInsights'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeEndpoints = {
@@ -275,6 +284,7 @@ const DescribeEndpoints = {
   request: async () => ({
     headers: headers('DescribeEndpoints'),
   }),
+  response: defaultResponse,
 }
 
 const DescribeExport = {
@@ -286,6 +296,7 @@ const DescribeExport = {
     headers: headers('DescribeExport'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeGlobalTable = {
@@ -297,6 +308,7 @@ const DescribeGlobalTable = {
     headers: headers('DescribeGlobalTable'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeGlobalTableSettings = {
@@ -308,6 +320,7 @@ const DescribeGlobalTableSettings = {
     headers: headers('DescribeGlobalTableSettings'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeImport = {
@@ -319,6 +332,7 @@ const DescribeImport = {
     headers: headers('DescribeImport'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeKinesisStreamingDestination = {
@@ -330,6 +344,7 @@ const DescribeKinesisStreamingDestination = {
     headers: headers('DescribeKinesisStreamingDestination'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeLimits = {
@@ -337,6 +352,7 @@ const DescribeLimits = {
   request: async () => ({
     headers: headers('DescribeLimits'),
   }),
+  response: defaultResponse,
 }
 
 const DescribeTable = {
@@ -348,6 +364,7 @@ const DescribeTable = {
     headers: headers('DescribeTable'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeTableReplicaAutoScaling = {
@@ -359,6 +376,7 @@ const DescribeTableReplicaAutoScaling = {
     headers: headers('DescribeTableReplicaAutoScaling'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DescribeTimeToLive = {
@@ -370,6 +388,7 @@ const DescribeTimeToLive = {
     headers: headers('DescribeTimeToLive'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const DisableKinesisStreamingDestination = {
@@ -382,6 +401,7 @@ const DisableKinesisStreamingDestination = {
     headers: headers('DisableKinesisStreamingDestination'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const EnableKinesisStreamingDestination = {
@@ -394,6 +414,7 @@ const EnableKinesisStreamingDestination = {
     headers: headers('EnableKinesisStreamingDestination'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const ExecuteStatement = {
@@ -415,11 +436,12 @@ const ExecuteStatement = {
       payload: params,
     }
   },
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (response?.Items?.length) {
-      response.Items = response.Items.map(awsjsonUnmarshall)
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (payload?.Items?.length) {
+      payload.Items = payload.Items.map(awsjsonUnmarshall)
     }
-    return { awsjson: [ 'LastEvaluatedKey' ], response }
+    payload.awsjson = [ 'LastEvaluatedKey' ]
+    return payload
   },
 }
 
@@ -443,14 +465,14 @@ const ExecuteTransaction = {
       payload: params,
     }
   },
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (response?.Responses?.length) {
-      response.Responses = response.Responses.map(i => {
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (payload?.Responses?.length) {
+      payload.Responses = payload.Responses.map(i => {
         i.Item = awsjsonUnmarshall(i.Item)
         return i
       })
     }
-    return { response }
+    return payload
   },
 }
 
@@ -471,6 +493,7 @@ const ExportTableToPointInTime = {
     headers: headers('ExportTableToPointInTime'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const GetItem = {
@@ -506,6 +529,7 @@ const ImportTable = {
     headers: headers('ImportTable'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const ListBackups = {
@@ -522,6 +546,7 @@ const ListBackups = {
     headers: headers('ListBackups'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const ListContributorInsights = {
@@ -535,6 +560,7 @@ const ListContributorInsights = {
     headers: headers('ListContributorInsights'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const ListExports = {
@@ -548,6 +574,7 @@ const ListExports = {
     headers: headers('ListExports'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const ListGlobalTables = {
@@ -561,6 +588,7 @@ const ListGlobalTables = {
     headers: headers('ListGlobalTables'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const ListImports = {
@@ -574,6 +602,7 @@ const ListImports = {
     headers: headers('ListImports'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const ListTables = {
@@ -586,6 +615,7 @@ const ListTables = {
     headers: headers('ListTables'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const ListTagsOfResource = {
@@ -598,6 +628,7 @@ const ListTagsOfResource = {
     headers: headers('ListTagsOfResource'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const PutItem = {
@@ -649,13 +680,13 @@ const Query = {
     headers: headers('Query'),
     payload: params,
   }),
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (response?.Items?.length) response.Items = response.Items.map(awsjsonUnmarshall)
-    if (response?.LastEvaluatedKey) {
-      let key = response.LastEvaluatedKey[Object.keys(response.LastEvaluatedKey)[0]]
-      response.LastEvaluatedKey = awsjsonUnmarshall(key)
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (payload?.Items?.length) payload.Items = payload.Items.map(awsjsonUnmarshall)
+    if (payload?.LastEvaluatedKey) {
+      let key = payload.LastEvaluatedKey[Object.keys(payload.LastEvaluatedKey)[0]]
+      payload.LastEvaluatedKey = awsjsonUnmarshall(key)
     }
-    return { response }
+    return payload
   },
 }
 
@@ -674,6 +705,7 @@ const RestoreTableFromBackup = {
     headers: headers('RestoreTableFromBackup'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const RestoreTableToPointInTime = {
@@ -694,6 +726,7 @@ const RestoreTableToPointInTime = {
     headers: headers('RestoreTableToPointInTime'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const Scan = {
@@ -720,9 +753,9 @@ const Scan = {
     headers: headers('Scan'),
     payload: params,
   }),
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (response?.Items?.length) response.Items = response.Items.map(awsjsonUnmarshall)
-    return { response }
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (payload?.Items?.length) payload.Items = payload.Items.map(awsjsonUnmarshall)
+    return payload
   },
 }
 
@@ -736,6 +769,7 @@ const TagResource = {
     headers: headers('TagResource'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const TransactGetItems = {
@@ -755,12 +789,12 @@ const TransactGetItems = {
       payload: params,
     }
   },
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (response?.Responses?.length) response.Responses = response.Responses.map(i => {
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (payload?.Responses?.length) payload.Responses = payload.Responses.map(i => {
       i.Item = awsjsonUnmarshall(i.Item)
       return i
     })
-    return { response }
+    return payload
   },
 }
 
@@ -815,15 +849,15 @@ const TransactWriteItems = {
       payload: params,
     }
   },
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (Object.keys(response?.ItemCollectionMetrics || {})?.length) {
-      Object.entries(response.ItemCollectionMetrics).forEach(([ table, items ]) => {
-        response.ItemCollectionMetrics[table] = items.map(i => {
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (Object.keys(payload?.ItemCollectionMetrics || {})?.length) {
+      Object.entries(payload.ItemCollectionMetrics).forEach(([ table, items ]) => {
+        payload.ItemCollectionMetrics[table] = items.map(i => {
           i.ItemCollectionKey = awsjsonUnmarshall(i.ItemCollectionKey)
         })
       })
     }
-    return { response }
+    return payload
   },
 }
 
@@ -837,6 +871,7 @@ const UntagResource = {
     headers: headers('UntagResource'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const UpdateContinuousBackups = {
@@ -862,6 +897,7 @@ const UpdateContributorInsights = {
     headers: headers('UpdateContributorInsights'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const UpdateGlobalTable = {
@@ -874,6 +910,7 @@ const UpdateGlobalTable = {
     headers: headers('UpdateGlobalTable'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const UpdateGlobalTableSettings = {
@@ -890,6 +927,7 @@ const UpdateGlobalTableSettings = {
     headers: headers('UpdateGlobalTableSettings'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const UpdateItem = {
@@ -914,13 +952,14 @@ const UpdateItem = {
     headers: headers('UpdateItem'),
     payload: params,
   }),
-  response: async (response, { awsjsonUnmarshall }) => {
-    if (Object.keys(response?.ItemCollectionMetrics || {})?.length) {
-      Object.entries(response.ItemCollectionMetrics.ItemCollectionKey).forEach(([ key, props ]) => {
-        response.ItemCollectionMetrics.ItemCollectionKey[key] = awsjsonUnmarshall(props)
+  response: async ({ payload }, { awsjsonUnmarshall }) => {
+    if (Object.keys(payload?.ItemCollectionMetrics || {})?.length) {
+      Object.entries(payload.ItemCollectionMetrics.ItemCollectionKey).forEach(([ key, props ]) => {
+        payload.ItemCollectionMetrics.ItemCollectionKey[key] = awsjsonUnmarshall(props)
       })
     }
-    return { awsjson: awsjsonRes, response }
+    payload.awsjson = awsjsonRes
+    return payload
   },
 }
 
@@ -942,6 +981,7 @@ const UpdateTable = {
     headers: headers('UpdateTable'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const UpdateTableReplicaAutoScaling = {
@@ -956,6 +996,7 @@ const UpdateTableReplicaAutoScaling = {
     headers: headers('UpdateTableReplicaAutoScaling'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const UpdateTimeToLive = {
@@ -968,6 +1009,7 @@ const UpdateTimeToLive = {
     headers: headers('UpdateTimeToLive'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, TransactWriteItems, UntagResource, UpdateContinuousBackups, UpdateContributorInsights, UpdateGlobalTable, UpdateGlobalTableSettings, UpdateItem, UpdateTable, UpdateTableReplicaAutoScaling, UpdateTimeToLive }
