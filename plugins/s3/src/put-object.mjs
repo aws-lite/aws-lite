@@ -2,6 +2,8 @@ import aws4 from 'aws4'
 import crypto from 'node:crypto'
 import { readFile, stat } from 'node:fs/promises'
 import { Readable } from 'node:stream'
+import lib from './lib.mjs'
+const { getValidateHeaders, headerMappings, parseHeadersToResults } = lib
 
 const required = true
 const chunkBreak = `\r\n`
@@ -16,79 +18,14 @@ function payloadMetadata (chunkSize, signature) {
   return intToHexString(chunkSize) + `;chunk-signature=${signature}` + chunkBreak
 }
 
-// Commonly used headers
-const comment = header => `Sets request header: \`${header}\``
-const getValidateHeaders = (...headers) => headers.reduce((acc, h) => {
-  if (!headerMappings[h]) throw ReferenceError(`Header not found: ${h}`)
-  acc[h] = { type: 'string', comment: comment(headerMappings[h]) }
-  return acc
-}, {})
-// The !x-amz headers are documented by AWS as old school pascal-case headers; lowcasing them to be HTTP 2.0 compliant
-const headerMappings = {
-  ACL:                        'x-amz-acl',
-  BucketKeyEnabled:           'x-amz-server-side-encryption-bucket-key-enabled',
-  CacheControl:               'cache-control',
-  ChecksumAlgorithm:          'x-amz-sdk-checksum-algorithm',
-  ChecksumCRC32:              'x-amz-checksum-crc32',
-  ChecksumCRC32C:             'x-amz-checksum-crc32c',
-  ChecksumSHA1:               'x-amz-checksum-sha1',
-  ChecksumSHA256:             'x-amz-checksum-sha256',
-  ContentDisposition:         'content-disposition',
-  ContentEncoding:            'content-encoding',
-  ContentLanguage:            'content-language',
-  ContentLength:              'content-length',
-  ContentMD5:                 'content-md5',
-  ContentType:                'content-type',
-  ETag:                       'etag',
-  ExpectedBucketOwner:        'x-amz-expected-bucket-owner',
-  Expiration:                 'x-amz-expiration',
-  Expires:                    'expires',
-  GrantFullControl:           'x-amz-grant-full-control',
-  GrantRead:                  'x-amz-grant-read',
-  GrantReadACP:               'x-amz-grant-read-acp',
-  GrantWriteACP:              'x-amz-grant-write-acp',
-  ObjectLockLegalHoldStatus:  'x-amz-object-lock-legal-hold',
-  ObjectLockMode:             'x-amz-object-lock-mode',
-  ObjectLockRetainUntilDate:  'x-amz-object-lock-retain-until-date',
-  RequestCharged:             'x-amz-request-charged',
-  RequestPayer:               'x-amz-request-payer',
-  ServerSideEncryption:       'x-amz-server-side-encryption',
-  SSECustomerAlgorithm:       'x-amz-server-side-encryption-customer-algorithm',
-  SSECustomerKey:             'x-amz-server-side-encryption-customer-key',
-  SSECustomerKeyMD5:          'x-amz-server-side-encryption-customer-key-md5',
-  SSEKMSEncryptionContext:    'x-amz-server-side-encryption-context',
-  SSEKMSKeyId:                'x-amz-server-side-encryption-aws-kms-key-id',
-  StorageClass:               'x-amz-storage-class',
-  Tagging:                    'x-amz-tagging',
-  VersionId:                  'x-amz-version-id',
-  WebsiteRedirectLocation:    'x-amz-website-redirect-location',
-}
-// Invert above for header lookups
-const paramMappings = Object.fromEntries(Object.entries(headerMappings).map(([ k, v ]) => [ v, k ]))
-const quoted = /^".*"$/
-const ignoreHeaders = [ 'content-length' ]
-const parseHeadersToResults = ({ headers }) => {
-  let results = Object.entries(headers).reduce((acc, [ header, value ]) => {
-    const normalized = header.toLowerCase()
-    if (value.match(quoted)) {
-      value = value.substring(1, value.length - 1)
-    }
-    if (paramMappings[normalized] && !ignoreHeaders.includes(normalized)) {
-      acc[paramMappings[normalized]] = value
-    }
-    return acc
-  }, {})
-  return results
-}
-
 const PutObject = {
   awsDoc: 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html',
   // See also: https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html
   validate: {
-    Bucket:                    { type: 'string', required, comment: 'S3 bucket name' },
-    Key:                       { type: 'string', required, comment: 'S3 key / file name' },
-    File:                      { type: 'string', required, comment: 'File path to be read and uploaded from the local filesystem' },
-    MinChunkSize:              { type: 'number', default: minSize, comment: 'Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3' },
+    Bucket:       { type: 'string', required, comment: 'S3 bucket name' },
+    Key:          { type: 'string', required, comment: 'S3 key / file name' },
+    File:         { type: 'string', required, comment: 'File path to be read and uploaded from the local filesystem' },
+    MinChunkSize: { type: 'number', default: minSize, comment: 'Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3' },
     // Here come the headers
     ...getValidateHeaders('ACL', 'BucketKeyEnabled', 'CacheControl', 'ChecksumAlgorithm', 'ChecksumCRC32',
       'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256', 'ContentDisposition', 'ContentEncoding',
@@ -236,4 +173,5 @@ const PutObject = {
   },
   response: parseHeadersToResults,
 }
+
 export default PutObject
