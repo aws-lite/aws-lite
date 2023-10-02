@@ -4,14 +4,13 @@ import { readFile, stat } from 'node:fs/promises'
 import { Readable } from 'node:stream'
 
 const required = true
-
+const chunkBreak = `\r\n`
 const minSize = 1024 * 1024 * 5
 const intToHexString = int => String(Number(int).toString(16))
 const algo = 'sha256', utf8 = 'utf8', hex = 'hex'
 const hash = str => crypto.createHash(algo).update(str, utf8).digest(hex)
 const hmac = (key, str, enc) => crypto.createHmac(algo, key).update(str, utf8).digest(enc)
 
-let chunkBreak = `\r\n`
 function payloadMetadata (chunkSize, signature) {
   // Don't forget: after the signature + break would normally follow the body + one more break
   return intToHexString(chunkSize) + `;chunk-signature=${signature}` + chunkBreak
@@ -20,45 +19,66 @@ function payloadMetadata (chunkSize, signature) {
 // Commonly used headers
 const comment = header => `Sets request header: \`${header}\``
 const getValidateHeaders = (...headers) => headers.reduce((acc, h) => {
-  if (!headerMappings?.[h]?.header) throw ReferenceError(`Header not found: ${h}`)
-  acc[h] = { type: 'string', comment: comment(headerMappings[h].header) }
+  if (!headerMappings[h]) throw ReferenceError(`Header not found: ${h}`)
+  acc[h] = { type: 'string', comment: comment(headerMappings[h]) }
   return acc
 }, {})
-// The !x-amz headers are documented as old school pascal-case headers; lowcasing them to be HTTP 2.0 compliant
-let headerMappings = {
-  ACL:                       { header: 'x-amz-acl' },
-  BucketKeyEnabled:          { header: 'x-amz-server-side-encryption-bucket-key-enabled' },
-  CacheControl:              { header: 'cache-control' },
-  ChecksumAlgorithm:         { header: 'x-amz-sdk-checksum-algorithm' },
-  ChecksumCRC32:             { header: 'x-amz-checksum-crc32' },
-  ChecksumCRC32C:            { header: 'x-amz-checksum-crc32c' },
-  ChecksumSHA1:              { header: 'x-amz-checksum-sha1' },
-  ChecksumSHA256:            { header: 'x-amz-checksum-sha256' },
-  ContentDisposition:        { header: 'content-disposition' },
-  ContentEncoding:           { header: 'content-encoding' },
-  ContentLanguage:           { header: 'content-language' },
-  ContentLength:             { header: 'content-length' },
-  ContentMD5:                { header: 'content-md5' },
-  ContentType:               { header: 'content-type' },
-  ExpectedBucketOwner:       { header: 'x-amz-expected-bucket-owner' },
-  Expires:                   { header: 'expires' },
-  GrantFullControl:          { header: 'x-amz-grant-full-control' },
-  GrantRead:                 { header: 'x-amz-grant-read' },
-  GrantReadACP:              { header: 'x-amz-grant-read-acp' },
-  GrantWriteACP:             { header: 'x-amz-grant-write-acp' },
-  ObjectLockLegalHoldStatus: { header: 'x-amz-object-lock-legal-hold' },
-  ObjectLockMode:            { header: 'x-amz-object-lock-mode' },
-  ObjectLockRetainUntilDate: { header: 'x-amz-object-lock-retain-until-date' },
-  RequestPayer:              { header: 'x-amz-request-payer' },
-  ServerSideEncryption:      { header: 'x-amz-server-side-encryption' },
-  SSECustomerAlgorithm:      { header: 'x-amz-server-side-encryption-customer-algorithm' },
-  SSECustomerKey:            { header: 'x-amz-server-side-encryption-customer-key' },
-  SSECustomerKeyMD5:         { header: 'x-amz-server-side-encryption-customer-key-md5' },
-  SSEKMSEncryptionContext:   { header: 'x-amz-server-side-encryption-context' },
-  SSEKMSKeyId:               { header: 'x-amz-server-side-encryption-aws-kms-key-id' },
-  StorageClass:              { header: 'x-amz-storage-class' },
-  Tagging:                   { header: 'x-amz-tagging' },
-  WebsiteRedirectLocation:   { header: 'x-amz-website-redirect-location' },
+// The !x-amz headers are documented by AWS as old school pascal-case headers; lowcasing them to be HTTP 2.0 compliant
+const headerMappings = {
+  ACL:                        'x-amz-acl',
+  BucketKeyEnabled:           'x-amz-server-side-encryption-bucket-key-enabled',
+  CacheControl:               'cache-control',
+  ChecksumAlgorithm:          'x-amz-sdk-checksum-algorithm',
+  ChecksumCRC32:              'x-amz-checksum-crc32',
+  ChecksumCRC32C:             'x-amz-checksum-crc32c',
+  ChecksumSHA1:               'x-amz-checksum-sha1',
+  ChecksumSHA256:             'x-amz-checksum-sha256',
+  ContentDisposition:         'content-disposition',
+  ContentEncoding:            'content-encoding',
+  ContentLanguage:            'content-language',
+  ContentLength:              'content-length',
+  ContentMD5:                 'content-md5',
+  ContentType:                'content-type',
+  ETag:                       'etag',
+  ExpectedBucketOwner:        'x-amz-expected-bucket-owner',
+  Expiration:                 'x-amz-expiration',
+  Expires:                    'expires',
+  GrantFullControl:           'x-amz-grant-full-control',
+  GrantRead:                  'x-amz-grant-read',
+  GrantReadACP:               'x-amz-grant-read-acp',
+  GrantWriteACP:              'x-amz-grant-write-acp',
+  ObjectLockLegalHoldStatus:  'x-amz-object-lock-legal-hold',
+  ObjectLockMode:             'x-amz-object-lock-mode',
+  ObjectLockRetainUntilDate:  'x-amz-object-lock-retain-until-date',
+  RequestCharged:             'x-amz-request-charged',
+  RequestPayer:               'x-amz-request-payer',
+  ServerSideEncryption:       'x-amz-server-side-encryption',
+  SSECustomerAlgorithm:       'x-amz-server-side-encryption-customer-algorithm',
+  SSECustomerKey:             'x-amz-server-side-encryption-customer-key',
+  SSECustomerKeyMD5:          'x-amz-server-side-encryption-customer-key-md5',
+  SSEKMSEncryptionContext:    'x-amz-server-side-encryption-context',
+  SSEKMSKeyId:                'x-amz-server-side-encryption-aws-kms-key-id',
+  StorageClass:               'x-amz-storage-class',
+  Tagging:                    'x-amz-tagging',
+  VersionId:                  'x-amz-version-id',
+  WebsiteRedirectLocation:    'x-amz-website-redirect-location',
+}
+// Invert above for header lookups
+const paramMappings = Object.fromEntries(Object.entries(headerMappings).map(([ k, v ]) => [ v, k ]))
+const quoted = /^".*"$/
+const ignoreHeaders = [ 'content-length' ]
+const parseHeadersToResults = ({ headers }) => {
+  let results = Object.entries(headers).reduce((acc, [ header, value ]) => {
+    const normalized = header.toLowerCase()
+    if (value.match(quoted)) {
+      value = value.substring(1, value.length - 1)
+    }
+    if (paramMappings[normalized] && !ignoreHeaders.includes(normalized)) {
+      acc[paramMappings[normalized]] = value
+    }
+    return acc
+  }, {})
+  return results
 }
 
 const PutObject = {
@@ -84,8 +104,8 @@ const PutObject = {
     MinChunkSize = MinChunkSize || minSize
 
     let headers = Object.keys(params).reduce((acc, param) => {
-      if (headerMappings[param]?.header) {
-        acc[headerMappings[param].header] = params[param]
+      if (headerMappings[param]) {
+        acc[headerMappings[param]] = params[param]
       }
       return acc
     }, {})
@@ -214,5 +234,6 @@ const PutObject = {
       return canonicalReq
     }
   },
+  response: parseHeadersToResults,
 }
 export default PutObject
