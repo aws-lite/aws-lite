@@ -29,7 +29,7 @@ test('Primary client - core functionality', async t => {
   t.notOk(request.body, 'Request included no body')
   t.equal(result.statusCode, 200, 'Client returned status code of response')
   t.ok(result.headers, 'Client returned response headers')
-  t.equal(result.payload, '', 'Client returned empty response body as empty string')
+  t.equal(result.payload, null, 'Client returned empty response body as null')
   basicRequestChecks(t, 'GET')
 
   // Basic get request with query string params

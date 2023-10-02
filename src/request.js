@@ -9,6 +9,8 @@ let JSONregex = /application\/json/
 let JSONContentType = ct => ct.match(JSONregex)
 let AwsJSONregex = /application\/x-amz-json/
 let AwsJSONContentType = ct => ct.match(AwsJSONregex)
+let XMLregex = /(application|text)\/xml/
+let XMLContentType = ct => ct.match(XMLregex)
 
 module.exports = function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
@@ -70,7 +72,14 @@ module.exports = function request (params, creds, region, config, metadata) {
     }
 
     // Finalize headers, content-type
-    if (contentType) headers['content-type'] = contentType
+    if (contentType) {
+      headers['content-type'] = contentType
+    }
+    // aws4's default content-type is form-urlencoded: backfill if there's a (non-streaming) body, yet no content-type was specified
+    // We don't want aws4 to attempt to sign stream objects, so if we backfill this content-type on a stream, the signature breaks and auth will fail
+    else if (params.body) {
+      headers['content-type'] = 'application/octet-stream'
+    }
     params.headers = headers
 
     // Sign the payload; let aws4 handle (most) logic related to region + service instantiation
@@ -114,7 +123,7 @@ module.exports = function request (params, creds, region, config, metadata) {
       /**/ if (isBuffer) truncatedBody = `<body buffer of ${body.length}b>`
       else if (isStream) truncatedBody = `<readable stream>`
       else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
-      console.error('[aws-lite] Requesting:', {
+      console.error('[aws-lite] Request:', {
         service,
         method,
         url: `${protocol}//${host}${port}${path}`,
@@ -130,18 +139,41 @@ module.exports = function request (params, creds, region, config, metadata) {
       let ok = statusCode >= 200 && statusCode < 303
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
-        // TODO The following string coersion will definitely need be changed when we get into binary response payloads
-        let payload = Buffer.concat(data).toString()
+        let body = Buffer.concat(data), payload, rawString
         let contentType = headers['content-type'] || headers['Content-Type'] || ''
         if (JSONContentType(contentType) || AwsJSONContentType(contentType)) {
-          payload = JSON.parse(payload)
-        }
-        // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
-        if (AwsJSONContentType(contentType)) {
-          try {
-            payload = awsjson.unmarshall(payload)
+          payload = JSON.parse(body)
+
+          /* istanbul ignore next */
+          if (config.debug) rawString = body.toString()
+
+          // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
+          if (AwsJSONContentType(contentType)) {
+            try {
+              payload = awsjson.unmarshall(payload)
+            }
+            catch { /* noop, it's already parsed */ }
           }
-          catch { /* noop, it's already parsed */ }
+        }
+        /* istanbul ignore next */
+        if (XMLContentType(contentType)) {
+          payload = body.toString()
+          /* istanbul ignore next */
+          if (config.debug) rawString = payload
+        }
+        /* istanbul ignore next */ // TODO remove and test
+        payload = payload || (body.length ? body : null)
+
+        /* istanbul ignore next */ // TODO remove and test
+        if (config.debug) {
+          let truncatedBody
+          /**/ if (payload instanceof Buffer) truncatedBody = body.length ? `<body buffer of ${body.length}b>` : ''
+          else if (rawString) truncatedBody = rawString?.length > 1000 ? rawString?.substring(0, 1000) + '...' : rawString
+          console.error('[aws-lite] Response:', {
+            statusCode,
+            headers,
+            body: truncatedBody || '<no body>',
+          })
         }
         if (ok) resolve({ statusCode, headers, payload })
         else reject({ statusCode, headers, error: payload, metadata })
