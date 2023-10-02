@@ -884,6 +884,7 @@ const UpdateContinuousBackups = {
     headers: headers('UpdateContinuousBackups'),
     payload: params,
   }),
+  response: defaultResponse,
 }
 
 const UpdateContributorInsights = {
