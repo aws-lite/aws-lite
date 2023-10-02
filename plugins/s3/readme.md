@@ -16,6 +16,55 @@ npm i @aws-lite/s3
 
 <!-- ! Do not remove method_docs_start / method_docs_end ! -->
 <!-- method_docs_start -->
+### `GetObject`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`PartNumber` (number)**
+  - Part number (between 1 - 10,000) of the object
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`IfMatch` (string)**
+  - Sets request header: `if-match`
+- **`IfModifiedSince` (string)**
+  - Sets request header: `if-modified-since`
+- **`IfNoneMatch` (string)**
+  - Sets request header: `if-none-match`
+- **`IfUnmodifiedSince` (string)**
+  - Sets request header: `if-unmodified-since`
+- **`Range` (string)**
+  - Sets request header: `range`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKey` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`ChecksumMode` (string)**
+  - Sets request header: `x-amz-checksum-mode`
+- **`ResponseCacheControl` (string)**
+  - Sets response header: `cache-control`
+- **`ResponseContentDisposition` (string)**
+  - Sets response header: `content-disposition`
+- **`ResponseContentEncoding` (string)**
+  - Sets response header: `content-encoding`
+- **`ResponseContentLanguage` (string)**
+  - Sets response header: `content-language`
+- **`ResponseContentType` (string)**
+  - Sets response header: `content-type`
+- **`ResponseExpires` (string)**
+  - Sets response header: `expires`
+
+
 ### `PutObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html)
@@ -145,7 +194,6 @@ Properties:
 - `GetBucketTagging`
 - `GetBucketVersioning`
 - `GetBucketWebsite`
-- `GetObject`
 - `GetObjectAcl`
 - `GetObjectAttributes`
 - `GetObjectLegalHold`

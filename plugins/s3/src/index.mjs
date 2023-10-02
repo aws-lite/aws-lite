@@ -16,17 +16,17 @@ const GetObject = {
     Bucket:                     { type: 'string', required, comment: 'S3 bucket name' },
     Key:                        { type: 'string', required, comment: 'S3 key / file name' },
     PartNumber:                 { type: 'number', comment: 'Part number (between 1 - 10,000) of the object' },
-    ResponseCacheControl:       { type: 'string', comment: 'Sets the cache-control header of the response' },
-    ResponseContentDisposition: { type: 'string', comment: 'Sets the content-disposition header of the response' },
-    ResponseContentEncoding:    { type: 'string', comment: 'Sets the content-encoding header of the response' },
-    ResponseContentLanguage:    { type: 'string', comment: 'Sets the content-language header of the response' },
-    ResponseContentType:        { type: 'string', comment: 'Sets the content-type header of the response' },
-    ResponseExpires:            { type: 'string', comment: 'Sets the expires header of the response' },
     VersionId:                  { type: 'string', comment: 'Reference a specific version of the object' },
     // Here come the headers
     ...getValidateHeaders('IfMatch', 'IfModifiedSince', 'IfNoneMatch', 'IfUnmodifiedSince',
       'Range', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer',
-      'ExpectedBucketOwner', 'ChecksumMode')
+      'ExpectedBucketOwner', 'ChecksumMode'),
+    ResponseCacheControl:       { type: 'string', comment: 'Sets response header: `cache-control`' },
+    ResponseContentDisposition: { type: 'string', comment: 'Sets response header: `content-disposition`' },
+    ResponseContentEncoding:    { type: 'string', comment: 'Sets response header: `content-encoding`' },
+    ResponseContentLanguage:    { type: 'string', comment: 'Sets response header: `content-language`' },
+    ResponseContentType:        { type: 'string', comment: 'Sets response header: `content-type`' },
+    ResponseExpires:            { type: 'string', comment: 'Sets response header: `expires`' },
   },
   request: async (params) => {
     let { Bucket, Key } = params
