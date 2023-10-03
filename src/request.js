@@ -155,13 +155,11 @@ module.exports = function request (params, creds, region, config, metadata) {
             catch { /* noop, it's already parsed */ }
           }
         }
-        /* istanbul ignore next */
         if (XMLContentType(contentType)) {
           payload = body.toString()
           /* istanbul ignore next */
           if (config.debug) rawString = payload
         }
-        /* istanbul ignore next */ // TODO remove and test
         payload = payload || (body.length ? body : null)
 
         /* istanbul ignore next */ // TODO remove and test

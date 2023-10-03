@@ -16,7 +16,7 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(30)
+  t.plan(42)
   let request, result, body, query, responseBody, url
 
   let headers = { 'content-type': 'application/json' }
@@ -83,6 +83,20 @@ test('Primary client - core functionality', async t => {
   request = server.getCurrentRequest()
   t.deepEqual(request.url, endpoint, 'Request included correct body (just a string)')
   reset()
+
+  // Endpoint returns XML
+  responseBody = '<hello>yo</hello>'
+  server.use({ responseBody, responseHeaders: { 'content-type': 'application/xml' } })
+  result = await aws({ service, endpoint })
+  t.deepEqual(result.payload, responseBody, 'Client returned response body as XML string')
+  basicRequestChecks(t, 'GET')
+
+  // Endpoint returns a buffer
+  responseBody = Buffer.from('ohi')
+  server.use({ responseBody, responseHeaders: { 'content-type': 'application/octet-stream' } })
+  result = await aws({ service, endpoint })
+  t.deepEqual(result.payload, responseBody, 'Client returned response body as buffer')
+  basicRequestChecks(t, 'GET')
 })
 
 test('Primary client - aliased params', async t => {
