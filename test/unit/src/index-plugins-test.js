@@ -17,57 +17,8 @@ test('Set up env', async t => {
   t.ok(started, 'Started server')
 })
 
-test('Plugins - method construction, requests', async t => {
-  t.plan(29)
-  let name = 'my-lambda'
-  let aws, expectedEndpoint, request
-
-  // Reads
-  aws = await client({ ...config, plugins: [ join(pluginDir, 'get.js') ] })
-  expectedEndpoint = `/2015-03-31/functions/${name}/configuration`
-
-  await aws.lambda.GetFunctionConfiguration({ name, host, port })
-  request = server.getCurrentRequest()
-  t.equal(request.url, expectedEndpoint, 'Plugin requested generated endpoint')
-  t.equal(request.body, undefined, 'Plugin made request without body')
-  basicRequestChecks(t, 'GET', { url: expectedEndpoint })
-
-  await aws.lambda.GetFunctionConfiguration({ name, host, port, endpoint: '/foo' })
-  request = server.getCurrentRequest()
-  t.equal(request.url, expectedEndpoint, 'Plugin can override normal client param')
-  basicRequestChecks(t, 'GET', { url: expectedEndpoint })
-
-  // Writes
-  aws = await client({ ...config, plugins: [ join(pluginDir, 'post.js') ] })
-  expectedEndpoint = `/2015-03-31/functions/${name}/invocations`
-  let payload = { ok: true }
-
-  await aws.lambda.Invoke({ name, payload, host, port })
-  request = server.getCurrentRequest()
-  t.equal(request.url, expectedEndpoint, 'Plugin requested generated endpoint')
-  t.deepEqual(request.body, payload, 'Plugin made request with included payload')
-  basicRequestChecks(t, 'POST', { url: expectedEndpoint })
-
-  await aws.lambda.Invoke({ name, data: payload, host, port })
-  request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, `Payload can be aliased to 'data'`)
-
-  await aws.lambda.Invoke({ name, body: payload, host, port })
-  request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, `Payload can be aliased to 'body'`)
-
-  await aws.lambda.Invoke({ name, json: payload, host, port })
-  request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, `Payload can be aliased to 'json'`)
-
-  await aws.lambda.Invoke({ name, payload, host, port, endpoint: '/foo' })
-  request = server.getCurrentRequest()
-  t.equal(request.url, expectedEndpoint, 'Plugin can override normal client param')
-  basicRequestChecks(t, 'POST', { url: expectedEndpoint })
-})
-
-test('Plugins - input validation', async t => {
-  t.plan(23)
+test('Plugins - validate input', async t => {
+  t.plan(24)
   let str = 'hi'
   let num = 123
 
@@ -190,6 +141,15 @@ test('Plugins - input validation', async t => {
     }
   }
 
+  // Initial validation passes, but request() output does not pass validation
+  try {
+    await aws.lambda.pluginBreaksValidation({ required: str, arr: [] })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /Parameter 'arr' must be: array/, 'Errored on wrong param (from type array)')
+  }
+
   // Type array
   try {
     await aws.lambda.testTypes({ required: str, payload: num })
@@ -219,7 +179,56 @@ test('Plugins - input validation', async t => {
   reset()
 })
 
-test('Plugins - error handling', async t => {
+test('Plugins - method construction, request()', async t => {
+  t.plan(29)
+  let name = 'my-lambda'
+  let aws, expectedEndpoint, request
+
+  // Reads
+  aws = await client({ ...config, plugins: [ join(pluginDir, 'get.js') ] })
+  expectedEndpoint = `/2015-03-31/functions/${name}/configuration`
+
+  await aws.lambda.GetFunctionConfiguration({ name, host, port })
+  request = server.getCurrentRequest()
+  t.equal(request.url, expectedEndpoint, 'Plugin requested generated endpoint')
+  t.equal(request.body, undefined, 'Plugin made request without body')
+  basicRequestChecks(t, 'GET', { url: expectedEndpoint })
+
+  await aws.lambda.GetFunctionConfiguration({ name, host, port, endpoint: '/foo' })
+  request = server.getCurrentRequest()
+  t.equal(request.url, expectedEndpoint, 'Plugin can override normal client param')
+  basicRequestChecks(t, 'GET', { url: expectedEndpoint })
+
+  // Writes
+  aws = await client({ ...config, plugins: [ join(pluginDir, 'post.js') ] })
+  expectedEndpoint = `/2015-03-31/functions/${name}/invocations`
+  let payload = { ok: true }
+
+  await aws.lambda.Invoke({ name, payload, host, port })
+  request = server.getCurrentRequest()
+  t.equal(request.url, expectedEndpoint, 'Plugin requested generated endpoint')
+  t.deepEqual(request.body, payload, 'Plugin made request with included payload')
+  basicRequestChecks(t, 'POST', { url: expectedEndpoint })
+
+  await aws.lambda.Invoke({ name, data: payload, host, port })
+  request = server.getCurrentRequest()
+  t.deepEqual(request.body, payload, `Payload can be aliased to 'data'`)
+
+  await aws.lambda.Invoke({ name, body: payload, host, port })
+  request = server.getCurrentRequest()
+  t.deepEqual(request.body, payload, `Payload can be aliased to 'body'`)
+
+  await aws.lambda.Invoke({ name, json: payload, host, port })
+  request = server.getCurrentRequest()
+  t.deepEqual(request.body, payload, `Payload can be aliased to 'json'`)
+
+  await aws.lambda.Invoke({ name, payload, host, port, endpoint: '/foo' })
+  request = server.getCurrentRequest()
+  t.equal(request.url, expectedEndpoint, 'Plugin can override normal client param')
+  basicRequestChecks(t, 'POST', { url: expectedEndpoint })
+})
+
+test('Plugins - error(), error handling', async t => {
   t.plan(43)
   let name = 'my-lambda'
   let payload = { ok: true }

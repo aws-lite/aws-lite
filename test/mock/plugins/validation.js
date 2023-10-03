@@ -26,5 +26,9 @@ module.exports = {
     noValidation: {
       request,
     },
+    pluginBreaksValidation: {
+      validate: { arr: { type: 'array' } },
+      request: async () => ({ arr: 12345 })
+    }
   }
 }
