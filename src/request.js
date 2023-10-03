@@ -46,7 +46,7 @@ module.exports = function request (params, creds, region, config, metadata) {
     let isBuffer = body instanceof Buffer
     let isStream = body instanceof Readable
 
-    // Lots of potentially weird valid json (like just a null), deal with it if / when we need to I guess
+    // Detecting objects leaves open the possibility of some weird valid JSON (like just a null), deal with it if / when we need to I guess
     if (typeof body === 'object' && !isBuffer && !isStream) {
       // Backfill content-type if it's just an object
       if (!contentType) contentType = 'application/json'

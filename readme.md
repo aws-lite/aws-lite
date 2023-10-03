@@ -11,6 +11,7 @@
 - [Usage](#usage)
   - [Configuration](#configuration)
   - [Client requests](#client-requests)
+  - [Client responses](#client-responses)
 - [Plugins](#plugins)
   - [Plugin API](#plugin-api)
     - [`validate`](#validate)
@@ -172,10 +173,13 @@ The following parameters may be passed with individual client requests; only `se
 - **`headers` (object)**
   - Header names + values to be added to your request
   - By default, all headers are included in [authentication via AWS signature v4](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html)
+  - If your request includes a `payload` that cannot be automatically JSON-encoded and you do not specify a `content-type` header, the default `application/octet-stream` will be used
 - **`payload` (object, buffer, readable stream, string)**
   - Aliases: `body`, `data`, `json`
-  - As a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); buffers and strings simply pass through as-is
-  - Passing a Node.js readable stream is currently experimental; this initiates an HTTP data stream to the API endpoint instead of writing a normal HTTP body payload
+  - Payload to be used as the HTTP request body; as a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); buffers, streams, and strings simply pass through as-is
+  - Readable streams are currently experimental
+    - Passing a Node.js readable stream initiates an HTTP data stream to the API endpoint instead of writing a normal HTTP body
+    - Streams are not automatically signed like normal HTTP bodies, and may [require their own signing procedures, as in S3](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html)
 - **`query` (object)**
   - Serialize the passed object and append it to your `endpoint` as a query string in your request
 - **`service` (string) [required]**
@@ -208,6 +212,46 @@ await awsLite({
     Key: { myHashKey: 'Gaal', mySortKey: 'Dornick' }
   },
 })
+```
+
+
+### Client responses
+
+The following properties are returned with each non-error client response:
+
+- **`statusCode` (number)**
+  - HTTP status code of the response
+- **`headers` (object)**
+  - Response header names + values
+- **`payload` (object, string, null)**
+  - Response payload; as a convenience, JSON-encoded responses are automatically parsed; XML-encoded responses are returned as plain strings
+  - Responses without an HTTP body return a `null` payload
+
+An example:
+
+```js
+import awsLite from '@aws-lite/client'
+const aws = await awsLite()
+
+await awsLite({
+  service: 'lambda',
+  endpoint: '/2015-03-31/functions/$function-name/configuration',
+})
+// {
+//   statusCode: 200,
+//   headers: {
+//     'content-type': 'application/json',
+//     'x-amzn-requestid': 'ba3a55d2-16c2-4c2b-afe1-cf0c5523040b',
+//     ...
+//   },
+//   payload: {
+//     FunctionName: '$function-name',
+//     FunctionArn: 'arn:aws:lambda:us-west-1:1234567890:function:$function-name',
+//     Role: 'arn:aws:iam::1234567890:role/$function-name-role',
+//     Runtime: 'nodejs18.x',
+//     ...
+//   }
+// }
 ```
 
 
@@ -369,7 +413,7 @@ export default {
       // Assume successful responses always have an AWS-flavored JSON `Item` property
       response: async (response, utils) => {
         response.awsjson = [ 'Item' ]
-        return response // Returns the response (`statusCode`, `headers`, `payload`), with `payload.Item` unformatted from AWS-flavored JSON
+        return response // Returns the response (`statusCode`, `headers`, `payload`), with `payload.Item` unformatted from AWS-flavored JSON, and the `awsjson` property removed
       }
     }
   }
