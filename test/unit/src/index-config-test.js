@@ -1,4 +1,5 @@
 let { join } = require('path')
+let mockFs = require('mock-fs')
 let test = require('tape')
 let { basicRequestChecks, defaults, resetAWSEnvVars: reset, server } = require('../../lib')
 let cwd = process.cwd()
@@ -12,7 +13,7 @@ test('Set up env', async t => {
   t.ok(client, 'aws-lite client is present')
 })
 
-test('Initial configuration', async t => {
+test('Configuration - basic config', async t => {
   t.plan(3)
   let aws
 
@@ -36,7 +37,34 @@ test('Initial configuration', async t => {
   }
 })
 
-test('Initial configuration - per-request overrides', async t => {
+test('Configuration - plugin loading', async t => {
+  t.plan(4)
+  let aws
+
+  aws = await client({ accessKeyId, secretAccessKey, region })
+  t.ok(aws.dynamodb, 'Client auto-loaded @aws-lite/dynamodb')
+
+  aws = await client({ accessKeyId, secretAccessKey, region, autoloadPlugins: false })
+  t.notOk(aws.dynamodb, 'Client did not auto-load @aws-lite/dynamodb')
+
+  let nodeModules = join(cwd, 'node_modules')
+  mockFs({ [nodeModules]: {} })
+  aws = await client({ accessKeyId, secretAccessKey, region })
+  t.notOk(aws.dynamodb, `Client did not auto-load @aws-lite/* plugins it can't find`)
+  mockFs.restore()
+
+  // A bit of a funky test, but we don't need to exercise actually loading an aws-lite-plugin-* plugin, we just need to ensure it attempts to
+  try {
+    mockFs({ [join(nodeModules, 'aws-lite-plugin-hi')]: {} })
+    aws = await client({ accessKeyId, secretAccessKey, region })
+  }
+  catch (err) {
+    t.match(err.message, /Cannot find module 'aws-lite-plugin-hi'/, 'Found and loaded aws-lite-plugin-*')
+  }
+  mockFs.restore()
+})
+
+test('Configuration - per-request overrides', async t => {
   t.plan(7)
   let started = await server.start()
   t.ok(started, 'Started server')
@@ -67,7 +95,7 @@ test('Initial configuration - per-request overrides', async t => {
   t.pass('Server ended')
 })
 
-test('Initial configuration - validation', async t => {
+test('Configuration - validation', async t => {
   t.plan(2)
   try {
     await client({ ...config, protocol: 'lolidk' })

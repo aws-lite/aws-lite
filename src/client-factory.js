@@ -29,7 +29,6 @@ module.exports = async function clientFactory (config, creds, region) {
 
   // Service API plugins
   let { autoloadPlugins = true, plugins = [] } = config
-  /* istanbul ignore next */ // TODO check once plugins are published
   if (autoloadPlugins) {
     let nodeModulesDir = join(process.cwd(), 'node_modules')
     let mods = await readdir(nodeModulesDir)
