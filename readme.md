@@ -259,7 +259,9 @@ await awsLite({
 
 Out of the box, [`@aws-lite/client`](https://www.npmjs.com/package/@aws-lite/client) is a full-featured AWS API client that you can use to interact with any AWS service that makes use of [authentication via AWS signature v4](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html) (which should be just about all of them).
 
-`@aws-lite/client` can be extended with plugins to more easily interact with AWS services. A bit more about how plugins work:
+`@aws-lite/client` can be extended with plugins to more easily interact with AWS services, or provide custom behavior or semantics. As such, plugins enable you to have significantly more control over the entire API request/response lifecycle.
+
+A bit more about how plugins work:
 
 - Plugins can be authored in ESM or CJS
 - Plugins can be dependencies downloaded from npm, or also live locally in your codebase
@@ -284,7 +286,7 @@ aws.dynamodb.PutItem({ TableName: 'my-table', Key: { id: 'hello' } })
 
 The `aws-lite` plugin API is lightweight and simple to learn. It makes use of four optional lifecycle hooks:
 
-- [`validate`](#validate) [optional] - an object of property names and types to validate inputs with pre-request
+- [`validate`](#validate) [optional] - an object of property names and types used to validate inputs pre-request
 - [`request()`](#request) [optional] - an async function that enables mutation of inputs to the final service API request
 - [`response()`](#response) [optional] - an async function that enables mutation of service API responses before they are returned
 - [`error()`](#error) [optional] - an async function that enables mutation of service API errors before they are returned
@@ -292,7 +294,7 @@ The `aws-lite` plugin API is lightweight and simple to learn. It makes use of fo
 The above four lifecycle hooks must be exported as an object named `methods`, along with a valid AWS service code property named `service`, like so:
 
 ```js
-// A simple plugin for validating input
+// A simple plugin for validating `TableName` input on dynamodb.PutItem() calls
 export default {
   service: 'dynamodb',
   awsDoc: 'https://docs.aws.../API_PutItem.html',
@@ -309,7 +311,7 @@ export default {
 aws.dynamodb.PutItem({ TableName: 12345 }) // Throws validation error
 ```
 
-Additionally, two optional (but highly recommended) metadata properties may be added that will be included in any method errors:
+Additionally, two optional (but highly recommended) metadata properties that will be included in any method errors:
 - `awsDoc` (string) [optional] - intended to be a link to the AWS API doc pertaining to this method; should usually start with `https://docs.aws.amazon.com/...`
 - `readme` (string) [optional] - a link to a relevant section in your plugin's readme or docs
 
