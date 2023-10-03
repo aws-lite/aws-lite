@@ -1,4 +1,5 @@
 let { join } = require('path')
+let { Readable } = require('stream')
 let qs = require('querystring')
 let test = require('tape')
 let { basicRequestChecks, defaults, resetServer: reset, server } = require('../../lib')
@@ -16,8 +17,8 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(42)
-  let request, result, body, query, responseBody, url
+  t.plan(48)
+  let request, result, payload, query, responseBody, url
 
   let headers = { 'content-type': 'application/json' }
 
@@ -39,44 +40,54 @@ test('Primary client - core functionality', async t => {
   basicRequestChecks(t, 'GET', { url })
 
   // Basic post request
-  body = { ok: true }
+  payload = { ok: true }
   responseBody = { aws: 'lol' }
   server.use({ responseBody, responseHeaders: headers })
-  result = await aws({ service, endpoint, body })
+  result = await aws({ service, endpoint, payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, body, 'Request included correct body')
+  t.deepEqual(request.body, payload, 'Request included correct body')
   t.deepEqual(result.payload, responseBody, 'Client returned response body as parsed JSON')
   basicRequestChecks(t, 'POST')
 
   // Basic post with query string params
-  body = { ok: true }
+  payload = { ok: true }
   query = { fiz: 'buz', json: JSON.stringify({ ok: false }) }
   url = endpoint + '?' + qs.stringify(query)
   responseBody = { aws: 'lol' }
   server.use({ responseBody, responseHeaders: headers })
-  result = await aws({ service, endpoint, body, query })
+  result = await aws({ service, endpoint, payload, query })
   basicRequestChecks(t, 'POST', { url })
 
   // Publish an object while passing headers
-  body = { ok: true }
-  result = await aws({ service, endpoint, body, headers })
+  payload = { ok: true }
+  result = await aws({ service, endpoint, payload, headers })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, body, 'Request included correct body (pre-encoded JSON)')
+  t.deepEqual(request.body, payload, 'Request included correct body (pre-encoded JSON)')
   reset()
 
   // Publish JSON while passing headers
-  body = JSON.stringify({ ok: true })
-  result = await aws({ service, endpoint, body, headers })
+  payload = JSON.stringify({ ok: true })
+  result = await aws({ service, endpoint, payload, headers })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, JSON.parse(body), 'Request included correct body (pre-encoded JSON)')
+  t.deepEqual(request.body, JSON.parse(payload), 'Request included correct body (pre-encoded JSON)')
   reset()
 
   // Publish some other kind of non-JSON request
-  body = 'hi'
-  result = await aws({ service, endpoint, body })
+  payload = 'hi'
+  result = await aws({ service, endpoint, payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, body, 'Request included correct body (just a string)')
+  t.deepEqual(request.body.toString(), payload, 'Request included correct body (just a string)')
   reset()
+
+  // Publish a stream
+  payload = new Readable()
+  let text = 'hi\nhello\nyo'
+  text.split('').forEach(c => payload.push(c))
+  payload.push(null)
+  await aws({ service, endpoint, payload, method: 'POST', headers: { 'content-length': text.length } })
+  request = server.getCurrentRequest()
+  t.equal(request.body.toString(), text, 'Request included correct body')
+  basicRequestChecks(t, 'POST')
 
   // Ensure endpoints without leading slashes are handled properly
   result = await aws({ service, endpoint: 'an/endpoint' })
@@ -142,7 +153,7 @@ test('Primary client - aliased params', async t => {
   let string = 'hi'
   await aws({ service, endpoint, payload: string })
   request = server.getCurrentRequest()
-  t.equal(request.body, string, 'Made request with correct body (plain string)')
+  t.equal(request.body.toString(), string, 'Made request with correct body (plain string)')
   reset()
 })
 

@@ -189,9 +189,9 @@ module.exports = function request (params, creds, region, config, metadata) {
       }
     }))
 
-    /* istanbul ignore next */ // TODO remove and test
     if (isStream) {
       body.pipe(req)
+      /* istanbul ignore next */
       if (config.debug) {
         let bytes = 0
         body.on('data', chunk => {

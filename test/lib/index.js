@@ -4,6 +4,7 @@ const http = require('http')
 const accessKeyId = 'foo'
 const autoloadPlugins = false
 const badPort = 12345
+const debug = false
 const host = 'localhost'
 const keepAlive = false
 const protocol = 'http'
@@ -12,7 +13,7 @@ const secretAccessKey = 'bar'
 const service = 'lambda'
 const endpoint = '/an/endpoint'
 const port = 1111
-const config = { accessKeyId, secretAccessKey, region, protocol, autoloadPlugins, keepAlive, host, port }
+const config = { accessKeyId, secretAccessKey, region, debug, protocol, autoloadPlugins, keepAlive, host, port }
 const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, protocol, region, secretAccessKey, service, endpoint, port }
 
 let serverData = {}
@@ -29,7 +30,7 @@ let server = {
         if (data.length) {
           body = req.headers?.['content-type']?.includes('json')
             ? JSON.parse(data)
-            : data.join()
+            : Buffer.concat(data)
         }
         serverData.request = {
           url: req.url,
