@@ -1,2 +1,2 @@
 // Just a passthrough
-module.exports = require('../get')
+module.exports = require('../request-get')

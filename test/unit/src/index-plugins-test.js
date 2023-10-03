@@ -22,7 +22,7 @@ test('Plugins - validate input', async t => {
   let str = 'hi'
   let num = 123
 
-  let aws = await client({ ...config, plugins: [ join(pluginDir, 'validation.js') ] })
+  let aws = await client({ ...config, plugins: [ join(pluginDir, 'validate.js') ] })
 
   // No validation
   try {
@@ -185,7 +185,7 @@ test('Plugins - method construction, request()', async t => {
   let aws, expectedEndpoint, request
 
   // Reads
-  aws = await client({ ...config, plugins: [ join(pluginDir, 'get.js') ] })
+  aws = await client({ ...config, plugins: [ join(pluginDir, 'request-get.js') ] })
   expectedEndpoint = `/2015-03-31/functions/${name}/configuration`
 
   await aws.lambda.GetFunctionConfiguration({ name, host, port })
@@ -200,7 +200,7 @@ test('Plugins - method construction, request()', async t => {
   basicRequestChecks(t, 'GET', { url: expectedEndpoint })
 
   // Writes
-  aws = await client({ ...config, plugins: [ join(pluginDir, 'post.js') ] })
+  aws = await client({ ...config, plugins: [ join(pluginDir, 'request-post.js') ] })
   expectedEndpoint = `/2015-03-31/functions/${name}/invocations`
   let payload = { ok: true }
 
@@ -234,7 +234,7 @@ test('Plugins - error(), error handling', async t => {
   let payload = { ok: true }
   let responseBody, responseHeaders, responseStatusCode
 
-  let errorsPlugin = join(pluginDir, 'errors.js')
+  let errorsPlugin = join(pluginDir, 'error.js')
   let aws = await client({ ...config, plugins: [ errorsPlugin ] })
 
   // Control
