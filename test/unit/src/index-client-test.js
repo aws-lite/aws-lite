@@ -30,7 +30,7 @@ test('Primary client - core functionality', async t => {
   t.notOk(request.body, 'Request included no body')
   t.equal(result.statusCode, 200, 'Client returned status code of response')
   t.ok(result.headers, 'Client returned response headers')
-  t.equal(result.payload, null, 'Client returned empty response body as null')
+  t.equal(result.payload, null, 'Client returned empty response payload as null')
   basicRequestChecks(t, 'GET')
 
   // Basic get request with query string params
@@ -46,7 +46,7 @@ test('Primary client - core functionality', async t => {
   result = await aws({ service, endpoint, payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, 'Request included correct body')
-  t.deepEqual(result.payload, responseBody, 'Client returned response body as parsed JSON')
+  t.deepEqual(result.payload, responseBody, 'Client returned response payload as parsed JSON')
   basicRequestChecks(t, 'POST')
 
   // Basic post with query string params
@@ -99,14 +99,14 @@ test('Primary client - core functionality', async t => {
   responseBody = '<hello>yo</hello>'
   server.use({ responseBody, responseHeaders: { 'content-type': 'application/xml' } })
   result = await aws({ service, endpoint })
-  t.deepEqual(result.payload, responseBody, 'Client returned response body as XML string')
+  t.deepEqual(result.payload, responseBody, 'Client returned response payload as XML string')
   basicRequestChecks(t, 'GET')
 
   // Endpoint returns a buffer
   responseBody = Buffer.from('ohi')
   server.use({ responseBody, responseHeaders: { 'content-type': 'application/octet-stream' } })
   result = await aws({ service, endpoint })
-  t.deepEqual(result.payload, responseBody, 'Client returned response body as buffer')
+  t.deepEqual(result.payload, responseBody, 'Client returned response payload as buffer')
   basicRequestChecks(t, 'GET')
 })
 
@@ -174,7 +174,7 @@ test('Primary client - AWS JSON payloads', async t => {
   result = await aws({ service, endpoint, body, headers: headersAwsJSON() })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: true } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -184,7 +184,7 @@ test('Primary client - AWS JSON payloads', async t => {
   result = await aws({ service, endpoint, body, headers: headersAwsJSON() })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -194,7 +194,7 @@ test('Primary client - AWS JSON payloads', async t => {
   result = await aws({ service, endpoint, body, awsjson: true })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -204,7 +204,7 @@ test('Primary client - AWS JSON payloads', async t => {
   result = await aws({ service, endpoint, body, awsjson: [ 'fine' ] })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: true, fine: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -213,7 +213,7 @@ test('Primary client - AWS JSON payloads', async t => {
   server.use({ responseBody: regularJSON, responseHeaders: headersAwsJSON() })
   result = await aws({ service, endpoint })
   request = server.getCurrentRequest()
-  t.deepEqual(result.payload, regularJSON, 'Client returned response body as parsed, unmarshalled JSON')
+  t.deepEqual(result.payload, regularJSON, 'Client returned response payload as parsed, unmarshalled JSON')
   reset()
 })
 

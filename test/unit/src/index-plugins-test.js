@@ -228,6 +228,72 @@ test('Plugins - method construction, request()', async t => {
   basicRequestChecks(t, 'POST', { url: expectedEndpoint })
 })
 
+test('Plugins - response()', async t => {
+  t.plan(61)
+  let aws, payload, response, responseBody, responseHeaders
+
+  aws = await client({ ...config, host, port, plugins: [ join(pluginDir, 'response.js') ] })
+
+  // Pass through by having no response() method
+  response = await aws.lambda.NoResponseMethod()
+  t.equal(response.statusCode, 200, 'Response status code passed through')
+  t.ok(response.headers, 'Response headers passed through')
+  t.notOk(response.headers.foo, 'Response headers not mutated')
+  t.equal(response.payload, null, 'Response payload passed through')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  // Actively pass through
+  response = await aws.lambda.Passthrough()
+  t.equal(response.statusCode, 200, 'Response status code passed through')
+  t.ok(response.headers, 'Response headers passed through')
+  t.notOk(response.headers.foo, 'Response headers not mutated')
+  t.equal(response.payload, null, 'Response payload passed through')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  // Mutate a single property, but pass the rest through
+  response = await aws.lambda.MutateProperty()
+  t.equal(response.statusCode, 234, 'Response status code mutated by plugin')
+  t.ok(response.headers, 'Response headers passed through')
+  t.notOk(response.headers.foo, 'Response headers not mutated')
+  t.equal(response.payload, null, 'Response payload passed through')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  // Mutate all properties
+  response = await aws.lambda.MutateAllProperties()
+  t.equal(response.statusCode, 234, 'Response status code mutated by plugin')
+  t.equal(response.headers.foo, 'bar', 'Response headers mutated')
+  t.equal(response.payload.hi, 'there', 'Response payload mutated')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  responseHeaders = { 'content-type': 'application/json' }
+  payload = { hi: 'there' }
+  server.use({ responseHeaders, responseBody: payload })
+  response = await aws.lambda.OnlyPassThroughPayload()
+  t.deepEqual(response, payload, 'Response passed through just the payload')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  response = await aws.lambda.ReturnWhatever()
+  t.deepEqual(response, 'yooo', 'Response passed through whatever it wants')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  // A bit contrived since AWS JSON would normally be returned with an appropriate header, but we are just making sure we can force the entire payload to be unmarhsalled
+  responseHeaders = { 'content-type': 'application/json' }
+  responseBody = { aws: { S: 'idk' } }
+  server.use({ responseHeaders, responseBody })
+  response = await aws.lambda.ReturnAwsJsonAll()
+  t.deepEqual(response.payload, { aws: 'idk' }, 'Returned response payload as parsed, unmarshalled JSON')
+  t.notOk(response.awsjson, 'awsjson property stripped')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  responseHeaders = { 'content-type': 'application/x-amz-json-1.0' }
+  responseBody = { Item: { aws: { S: 'idk' } }, ok: true }
+  server.use({ responseHeaders, responseBody })
+  response = await aws.lambda.ReturnAwsJsonKey()
+  t.deepEqual(response.payload, { Item: { aws: 'idk' }, ok: true }, 'Returned response payload as parsed, unmarshalled JSON')
+  t.notOk(response.awsjson, 'awsjson property stripped')
+  basicRequestChecks(t, 'GET', { url: '/' })
+})
+
 test('Plugins - error(), error handling', async t => {
   t.plan(43)
   let name = 'my-lambda'

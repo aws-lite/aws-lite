@@ -125,12 +125,14 @@ module.exports = async function clientFactory (config, creds, region) {
             }
 
             // Run plugin.request()
-            try {
-              var req = await method.request(input, { ...pluginUtils, region: selectedRegion })
-              req = req || {}
-            }
-            catch (methodError) {
-              errorHandler({ error: methodError, metadata })
+            if (method.request) {
+              try {
+                var req = await method.request(input, { ...pluginUtils, region: selectedRegion })
+                req = req || {}
+              }
+              catch (methodError) {
+                errorHandler({ error: methodError, metadata })
+              }
             }
 
             // Validate combined inputs of user + plugin
@@ -157,9 +159,10 @@ module.exports = async function clientFactory (config, creds, region) {
                   if (unmarshalling) {
                     delete pluginRes.awsjson
                     // If a payload property isn't included, it _is_ the payload
-                    let payload = pluginRes.payload || pluginRes
-                    let unmarshalled = awsjson.unmarshall(payload, unmarshalling)
-                    response = { ...pluginRes, ...unmarshalled }
+                    let unmarshalled = awsjson.unmarshall(pluginRes.payload || pluginRes, unmarshalling)
+                    response = pluginRes.payload
+                      ? { ...pluginRes, payload: unmarshalled }
+                      : unmarshalled
                   }
                   else response = pluginRes
                 }
