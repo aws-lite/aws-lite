@@ -14,6 +14,7 @@ const plugins = [
   { name: 'dynamodb', service: 'DynamoDB', maintainers: [ '@architect' ] },
   { name: 's3', service: 'S3', maintainers: [ '@architect' ] },
 ].sort()
+
 const pluginTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_plugin-tmpl.mjs')).toString()
 const readmeTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_readme-tmpl.md')).toString()
 const packageTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_package-tmpl.json'))

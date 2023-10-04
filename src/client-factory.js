@@ -35,7 +35,7 @@ module.exports = async function clientFactory (config, creds, region) {
     // Find first-party plugins
     if (mods.includes('@aws-lite')) {
       let knownPlugins = await readdir(join(nodeModulesDir, '@aws-lite'))
-      let filtered = knownPlugins.filter(p => !ignored.includes(p)).map(p => `@aws-lite/${p}`)
+      let filtered = knownPlugins.filter(p => !ignored.includes(p) && !p.endsWith('-types')).map(p => `@aws-lite/${p}`)
       plugins.push(...filtered)
     }
     // Find correctly namespaced 3rd-party plugins
