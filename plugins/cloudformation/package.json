@@ -1,0 +1,21 @@
+{
+  "name": "@aws-lite/cloudformation",
+  "version": "0.0.0",
+  "description": "Official `aws-lite` plugin for cloudformation",
+  "homepage": "https://github.com/architect/aws-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/architect/aws-lite",
+    "directory": "plugins/cloudformation"
+  },
+  "bugs": "https://github.com/architect/aws-lite/issues",
+  "main": "src/index.mjs",
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "@architect",
+  "license": "Apache-2.0",
+  "files": [
+    "src"
+  ]
+}

@@ -45,6 +45,7 @@
     "src"
   ],
   "workspaces": [
+    "plugins/cloudformation",
     "plugins/dynamodb",
     "plugins/s3"
   ],

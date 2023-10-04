@@ -13,6 +13,7 @@ const pluginMethodsRegex = /(?<=(<!-- method_docs_start -->\n))[\s\S]*?(?=(<!-- 
 const plugins = [
   { name: 'dynamodb', service: 'DynamoDB', maintainers: [ '@architect' ] },
   { name: 's3', service: 'S3', maintainers: [ '@architect' ] },
+  { name: 'cloudformation', service: 'cloudformation', maintainers: [ '@architect' ] },
 ].sort()
 
 const pluginTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_plugin-tmpl.mjs')).toString()
