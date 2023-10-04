@@ -14,9 +14,9 @@ npm i @aws-lite/dynamodb
 
 ## Docs
 
-<!-- ! Do not remove docs_start / docs_end ! -->
-<!-- docs_start -->
-<!-- docs_end -->
+<!-- ! Do not remove method_docs_start / method_docs_end ! -->
+<!-- method_docs_start -->
+<!-- method_docs_end -->
 
 
 ## Usage

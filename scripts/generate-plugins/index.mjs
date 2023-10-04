@@ -2,14 +2,16 @@
 import { join } from 'node:path'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import generateTypes from './_types.mjs'
+const types = true
 
 // Break this into a separate file if it becomes too big / unwieldy!
 // - name: the official service name; example: `cloudformation`
 // - service: the commonly recognized, more formal version (including casing); example: `CloudFormation`
 // - maintainers: array of GitHub handles of the individual(s) or org(s) responsible for maintaining the plugin
 const plugins = [
-  { name: 'dynamodb', service: 'DynamoDB', types: true, maintainers: [ '@architect' ] },
-  { name: 's3', service: 'S3', types: true, maintainers: [ '@architect' ] },
+  { name: 'dynamodb', service: 'DynamoDB', types, maintainers: [ '@architect' ] },
+  { name: 's3', service: 'S3', types, maintainers: [ '@architect' ] },
+  { name: 'ssm', service: 'SSM', types, maintainers: [ '@architect' ] },
 ].sort()
 
 const cwd = process.cwd()
@@ -71,41 +73,43 @@ async function main () {
     }
     // Maybe update docs
     else {
-      // TODO ↓ remove once things are nice and dialed in! ↓
-      if (plugin.name === 's3') {
-        const pluginReadmeFile = join(pluginDir, 'readme.md')
-        let pluginReadme = readFileSync(pluginReadmeFile).toString()
-        // Generate docs markdown
-        const { default: _plugin } = await import(name)
-        let incompleteMethods = []
-        let methodDocs = Object.keys(_plugin.methods).map(methodName => {
-          let header = `### \`${methodName}\`\n\n`
-          if (!_plugin.methods[methodName] || _plugin.methods[methodName].disabled) {
-            incompleteMethods.push(methodName)
-            return
-          }
-          const { awsDoc, validate } = _plugin.methods[methodName]
-          if (!awsDoc) throw ReferenceError(`All methods must refer to an AWS service API doc: ${name} ${methodName}`)
-          header += `[Canonical AWS API doc](${awsDoc})\n`
-          if (validate) {
-            header += `\nProperties:\n` + Object.entries(validate).map(([ param, values ]) => {
-              const { type, required, comment } = values
-              const _req = required ? ' [required]' : ''
-              const _com = comment ? `\n  - ${comment}` : ''
-              return `- **\`${param}\` (${type})${_req}**${_com}`
-            }).join('\n')
-          }
-          return header
-        }).filter(Boolean).join('\n\n\n') + '\n'
-
-        if (incompleteMethods.length) {
-          methodDocs += `\n\n### Methods yet to be implemented\n\n` +
-                        `> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!\n\n` +
-                        incompleteMethods.map(methodName => `- \`${methodName}\``).join('\n') + '\n'
+      const pluginReadmeFile = join(pluginDir, 'readme.md')
+      let pluginReadme = readFileSync(pluginReadmeFile).toString()
+      // Generate docs markdown
+      const { default: _plugin } = await import(name)
+      let incompleteMethods = []
+      let methodDocs = Object.keys(_plugin.methods).map(methodName => {
+        let header = `### \`${methodName}\`\n\n`
+        if (!_plugin.methods[methodName] || _plugin.methods[methodName].disabled) {
+          let item = { name: methodName }
+          if (_plugin.methods[methodName]?.awsDoc) item.awsDoc = _plugin.methods[methodName].awsDoc
+          incompleteMethods.push(item)
+          return
         }
-        pluginReadme = pluginReadme.replace(pluginMethodsRegex, methodDocs)
-        writeFileSync(pluginReadmeFile, pluginReadme)
+        const { awsDoc, validate } = _plugin.methods[methodName]
+        if (!awsDoc) throw ReferenceError(`All methods must refer to an AWS service API doc: ${name} ${methodName}`)
+        header += `[Canonical AWS API doc](${awsDoc})\n`
+        if (validate) {
+          header += `\nProperties:\n` + Object.entries(validate).map(([ param, values ]) => {
+            const { type, required, comment } = values
+            const _req = required ? ' [required]' : ''
+            const _com = comment ? `\n  - ${comment}` : ''
+            return `- **\`${param}\` (${type})${_req}**${_com}`
+          }).join('\n')
+        }
+        return header
+      }).filter(Boolean).join('\n\n\n') + '\n'
+
+      if (incompleteMethods.length) {
+        methodDocs += `\n\n### Methods yet to be implemented\n\n` +
+                      `> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!\n\n` +
+                      incompleteMethods.map(({ name, awsDoc }) => awsDoc
+                        ? `- [\`${name}\`](${awsDoc})`
+                        : `- \`${name}\``
+                      ).join('\n') + '\n'
       }
+      pluginReadme = pluginReadme.replace(pluginMethodsRegex, methodDocs)
+      writeFileSync(pluginReadmeFile, pluginReadme)
     }
 
     if (plugin.types)

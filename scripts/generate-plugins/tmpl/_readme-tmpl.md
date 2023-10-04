@@ -15,8 +15,8 @@ npm i $NAME
 ## Docs
 
 <!-- ! Do not remove docs_start / docs_end ! -->
-<!-- docs_start -->
-<!-- docs_end -->
+<!-- method_docs_start -->
+<!-- method_docs_end -->
 
 
 ## Learn more
