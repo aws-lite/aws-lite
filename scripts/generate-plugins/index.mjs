@@ -13,6 +13,7 @@ const pluginMethodsRegex = /(?<=(<!-- method_docs_start -->\n))[\s\S]*?(?=(<!-- 
 const plugins = [
   { name: 'dynamodb', service: 'DynamoDB', maintainers: [ '@architect' ] },
   { name: 's3', service: 'S3', maintainers: [ '@architect' ] },
+  { name: 'ssm', service: 'SSM', maintainers: [ '@architect' ] },
 ].sort()
 
 const pluginTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_plugin-tmpl.mjs')).toString()
@@ -70,9 +71,6 @@ async function main () {
     }
     // Maybe update docs
     else {
-      // TODO ↓ remove once things are nice and dialed in! ↓
-      if (plugin.name !== 's3') continue
-
       const pluginReadmeFile = join(pluginDir, 'readme.md')
       let pluginReadme = readFileSync(pluginReadmeFile).toString()
       // Generate docs markdown
@@ -81,7 +79,9 @@ async function main () {
       let methodDocs = Object.keys(_plugin.methods).map(methodName => {
         let header = `### \`${methodName}\`\n\n`
         if (!_plugin.methods[methodName] || _plugin.methods[methodName].disabled) {
-          incompleteMethods.push(methodName)
+          let item = { name: methodName }
+          if (_plugin.methods[methodName]?.awsDoc) item.awsDoc = _plugin.methods[methodName].awsDoc
+          incompleteMethods.push(item)
           return
         }
         const { awsDoc, validate } = _plugin.methods[methodName]
@@ -101,7 +101,10 @@ async function main () {
       if (incompleteMethods.length) {
         methodDocs += `\n\n### Methods yet to be implemented\n\n` +
                       `> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!\n\n` +
-                      incompleteMethods.map(methodName => `- \`${methodName}\``).join('\n') + '\n'
+                      incompleteMethods.map(({ name, awsDoc }) => awsDoc
+                        ? `- [\`${name}\`](${awsDoc})`
+                        : `- \`${name}\``
+                      ).join('\n') + '\n'
       }
       pluginReadme = pluginReadme.replace(pluginMethodsRegex, methodDocs)
       writeFileSync(pluginReadmeFile, pluginReadme)
