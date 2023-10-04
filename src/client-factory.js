@@ -75,8 +75,6 @@ module.exports = async function clientFactory (config, creds, region) {
           if (method.request && typeof method.request !== 'function') {
             throw ReferenceError(`All plugin request methods must be a function: ${service}`)
           }
-          // Error + Response handlers are optional
-          /* istanbul ignore next */ // TODO remove as soon as plugin.response() API settles
           if (method.response && typeof method.response !== 'function') {
             throw ReferenceError(`All plugin response methods must be a function: ${service}`)
           }
@@ -99,7 +97,6 @@ module.exports = async function clientFactory (config, creds, region) {
         let clientMethods = {}
         Object.entries(methods).forEach(([ name, method ]) => {
           // Allow for falsy methods to be denoted as incomplete in generated docs
-          /* istanbul ignore next */ // TODO remove and test
           if (!method || method.disabled) return
 
           // For convenient error reporting (and jic anyone wants to enumerate everything) try to ensure the AWS API method names pass through
@@ -145,7 +142,6 @@ module.exports = async function clientFactory (config, creds, region) {
               let response = await request({ ...params, service }, creds, selectedRegion, config, metadata)
 
               // Run plugin.response()
-              /* istanbul ignore next */ // TODO remove as soon as plugin.response() API settles
               if (method.response) {
                 try {
                   var pluginRes = await method.response(response, { ...pluginUtils, region: selectedRegion })

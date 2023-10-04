@@ -11,6 +11,13 @@ module.exports = {
         return input
       }
     },
+    responseMethodBlowsUp: {
+      awsDoc: 'https://responseMethodBlowsUp.lol',
+      response: async (input) => {
+        input.foo.bar = 'idk'
+        return input
+      }
+    },
     noErrorMethod: {
       request: passthrough,
     },

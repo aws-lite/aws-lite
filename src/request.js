@@ -67,7 +67,6 @@ module.exports = function request (params, creds, region, config, metadata) {
     }
     // Everything besides streams pass through for signing
     else {
-      /* istanbul ignore next */
       params.body = isStream ? undefined : body
     }
 
@@ -162,7 +161,7 @@ module.exports = function request (params, creds, region, config, metadata) {
         }
         payload = payload || (body.length ? body : null)
 
-        /* istanbul ignore next */ // TODO remove and test
+        /* istanbul ignore next */
         if (config.debug) {
           let truncatedBody
           /**/ if (payload instanceof Buffer) truncatedBody = body.length ? `<body buffer of ${body.length}b>` : ''

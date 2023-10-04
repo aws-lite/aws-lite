@@ -33,8 +33,14 @@ module.exports = {
     ReturnAwsJsonAll: {
       response: params => ({ ...params, awsjson: true })
     },
+    ReturnAwsJsonPayload: {
+      response: params => ({ ...params.payload, awsjson: true })
+    },
     ReturnAwsJsonKey: {
       response: params => ({ ...params, awsjson: [ 'Item' ] })
+    },
+    ReturnNothing: {
+      response: () => {}
     },
   }
 }

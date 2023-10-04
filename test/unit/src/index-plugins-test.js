@@ -229,7 +229,7 @@ test('Plugins - method construction, request()', async t => {
 })
 
 test('Plugins - response()', async t => {
-  t.plan(61)
+  t.plan(77)
   let aws, payload, response, responseBody, responseHeaders
 
   aws = await client({ ...config, host, port, plugins: [ join(pluginDir, 'response.js') ] })
@@ -285,6 +285,16 @@ test('Plugins - response()', async t => {
   t.notOk(response.awsjson, 'awsjson property stripped')
   basicRequestChecks(t, 'GET', { url: '/' })
 
+  // Unmarshall just the payload contents, leaving out headers and status code
+  responseHeaders = { 'content-type': 'application/json' }
+  responseBody = { aws: { S: 'idk' } }
+  server.use({ responseHeaders, responseBody })
+  response = await aws.lambda.ReturnAwsJsonPayload()
+  t.deepEqual(response, { aws: 'idk' }, 'Returned response payload as parsed, unmarshalled JSON')
+  t.notOk(response.awsjson, 'awsjson property stripped')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  // Unmarshall an individual payload key
   responseHeaders = { 'content-type': 'application/x-amz-json-1.0' }
   responseBody = { Item: { aws: { S: 'idk' } }, ok: true }
   server.use({ responseHeaders, responseBody })
@@ -292,10 +302,18 @@ test('Plugins - response()', async t => {
   t.deepEqual(response.payload, { Item: { aws: 'idk' }, ok: true }, 'Returned response payload as parsed, unmarshalled JSON')
   t.notOk(response.awsjson, 'awsjson property stripped')
   basicRequestChecks(t, 'GET', { url: '/' })
+
+  // Response returns nothing
+  response = await aws.lambda.ReturnNothing()
+  t.equal(response.statusCode, 200, 'Response status code passed through')
+  t.ok(response.headers, 'Response headers passed through')
+  t.notOk(response.headers.foo, 'Response headers not mutated')
+  t.equal(response.payload, null, 'Response payload passed through')
+  basicRequestChecks(t, 'GET', { url: '/' })
 })
 
 test('Plugins - error(), error handling', async t => {
-  t.plan(43)
+  t.plan(48)
   let name = 'my-lambda'
   let payload = { ok: true }
   let responseBody, responseHeaders, responseStatusCode
@@ -324,6 +342,20 @@ test('Plugins - error(), error handling', async t => {
     t.match(err.message, /\@aws-lite\/client: lambda.requestMethodBlowsUp: Cannot set/, 'Error included basic method information')
     t.equal(err.service, service, 'Error has service metadata')
     t.equal(err.awsDoc, 'https://requestMethodBlowsUp.lol', 'Error has AWS API doc')
+    t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
+    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    reset()
+  }
+
+  // Response method fails
+  try {
+    await aws.lambda.responseMethodBlowsUp({ name, host, port })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda.responseMethodBlowsUp: Cannot set/, 'Error included basic method information')
+    t.equal(err.service, service, 'Error has service metadata')
+    t.equal(err.awsDoc, 'https://responseMethodBlowsUp.lol', 'Error has AWS API doc')
     t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
@@ -443,8 +475,16 @@ test('Plugins - error docs (@aws-lite)', async t => {
   }
 })
 
+test('Plugins - disabled methods', async t => {
+  t.plan(3)
+  let aws = await client({ ...config, plugins: [ join(pluginDir, 'misc', 'disabled-methods') ] })
+  t.ok(aws.lambda.ok, 'Client loaded plugin containing disabled methods')
+  t.notOk(aws.lambda.disabledByFalsy, 'Client did not load method disabled by boolean false')
+  t.notOk(aws.lambda.disabledByParam, `Client did not load method disabled by 'disabled' param`)
+})
+
 test('Plugins - plugin validation', async t => {
-  t.plan(11)
+  t.plan(12)
 
   // CJS
   try {
@@ -478,6 +518,14 @@ test('Plugins - plugin validation', async t => {
   }
   catch (err) {
     t.match(err.message, /All plugin request methods must be a function/, 'Throw on invalid request method')
+    reset()
+  }
+
+  try {
+    await client({ ...config, plugins: [ join(invalidPlugins, 'invalid-response-method.js') ] })
+  }
+  catch (err) {
+    t.match(err.message, /All plugin response methods must be a function/, 'Throw on invalid response method')
     reset()
   }
 
