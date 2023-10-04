@@ -6,10 +6,12 @@ const getValidateHeaders = (...headers) => headers.reduce((acc, h) => {
 }, {})
 const comment = header => `Sets request header: \`${header}\``
 
-// Map common AWS-named params to their respective headers
+// Map AWS-named S3 params to their respective headers
 // The !x-amz headers are documented by AWS as old school pascal-case headers; lowcasing them to be HTTP 2.0 compliant
 const headerMappings = {
+  AcceptRanges:               'accept-ranges',
   ACL:                        'x-amz-acl',
+  ArchiveStatus:              'x-amz-archive-status',
   BucketKeyEnabled:           'x-amz-server-side-encryption-bucket-key-enabled',
   CacheControl:               'cache-control',
   ChecksumAlgorithm:          'x-amz-sdk-checksum-algorithm',
@@ -24,6 +26,7 @@ const headerMappings = {
   ContentLength:              'content-length',
   ContentMD5:                 'content-md5',
   ContentType:                'content-type',
+  DeleteMarker:               'x-amz-delete-marker',
   ETag:                       'etag',
   ExpectedBucketOwner:        'x-amz-expected-bucket-owner',
   Expiration:                 'x-amz-expiration',
@@ -36,12 +39,17 @@ const headerMappings = {
   IfModifiedSince:            'if-modified-since',
   IfNoneMatch:                'if-none-match',
   IfUnmodifiedSince:          'if-unmodified-since',
+  LastModified:               'Last-Modified',
+  MissingMeta:                'x-amz-missing-meta',
   ObjectLockLegalHoldStatus:  'x-amz-object-lock-legal-hold',
   ObjectLockMode:             'x-amz-object-lock-mode',
   ObjectLockRetainUntilDate:  'x-amz-object-lock-retain-until-date',
+  PartsCount:                 'x-amz-mp-parts-count',
   Range:                      'range',
+  ReplicationStatus:          'x-amz-replication-status',
   RequestCharged:             'x-amz-request-charged',
   RequestPayer:               'x-amz-request-payer',
+  Restore:                    'x-amz-restore',
   ServerSideEncryption:       'x-amz-server-side-encryption',
   SSECustomerAlgorithm:       'x-amz-server-side-encryption-customer-algorithm',
   SSECustomerKey:             'x-amz-server-side-encryption-customer-key',
@@ -75,8 +83,31 @@ const parseHeadersToResults = ({ headers }) => {
   return results
 }
 
+function getHeadersFromParams (params, ignore = []) {
+  let headers = Object.keys(params).reduce((acc, param) => {
+    if (headerMappings[param] && !ignore.includes(param)) {
+      acc[headerMappings[param]] = params[param]
+    }
+    return acc
+  }, {})
+  return headers
+}
+
+function getQueryFromParams (params, queryParams) {
+  let query
+  queryParams.forEach(p => {
+    if (params[p]) {
+      if (!query) query = {}
+      query[p] = params[p]
+    }
+  })
+  return query
+}
+
 export default {
   getValidateHeaders,
+  getHeadersFromParams,
+  getQueryFromParams,
   headerMappings,
   parseHeadersToResults,
 }

@@ -3,7 +3,7 @@ import crypto from 'node:crypto'
 import { readFile, stat } from 'node:fs/promises'
 import { Readable } from 'node:stream'
 import lib from './lib.mjs'
-const { getValidateHeaders, headerMappings, parseHeadersToResults } = lib
+const { getHeadersFromParams, getValidateHeaders, parseHeadersToResults } = lib
 
 const required = true
 const chunkBreak = `\r\n`
@@ -40,12 +40,7 @@ const PutObject = {
     let { credentials, region } = utils
     MinChunkSize = MinChunkSize || minSize
 
-    let headers = Object.keys(params).reduce((acc, param) => {
-      if (headerMappings[param]) {
-        acc[headerMappings[param]] = params[param]
-      }
-      return acc
-    }, {})
+    let headers = getHeadersFromParams(params)
 
     let dataSize
     try {

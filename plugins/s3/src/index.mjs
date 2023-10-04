@@ -1,6 +1,6 @@
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { getValidateHeaders, headerMappings } = lib
+const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, parseHeadersToResults } = lib
 import PutObject from './put-object.mjs'
 
 const service = 's3'
@@ -30,26 +30,13 @@ const GetObject = {
   },
   request: async (params) => {
     let { Bucket, Key } = params
-    let ignoreHeaders = [ 'VersionId' ]
-    let headers = Object.keys(params).reduce((acc, param) => {
-      if (headerMappings[param] && !ignoreHeaders.includes(param)) {
-        acc[headerMappings[param]] = params[param]
-      }
-      return acc
-    }, {})
-
-    let query
     let queryParams = [ 'PartNumber', 'ResponseCacheControl', 'ResponseContentDisposition',
       'ResponseContentEncoding', 'ResponseContentLanguage', 'ResponseContentType',
       'ResponseExpires', 'VersionId' ]
-    queryParams.forEach(p => {
-      if (params[p]) {
-        if (!query) query = {}
-        query[p] = params[p]
-      }
-    })
+    let headers = getHeadersFromParams(params, queryParams)
+    let query = getQueryFromParams(params, queryParams)
     return {
-      path: `/${Bucket}/${Key}`,
+      endpoint: `/${Bucket}/${Key}`,
       headers,
       query,
     }
@@ -57,5 +44,32 @@ const GetObject = {
   response: ({ payload }) => payload,
 }
 
-const methods = { GetObject, PutObject, ...incomplete }
+const HeadObject = {
+  awsDoc: 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html',
+  validate: {
+    Bucket:                     { type: 'string', required, comment: 'S3 bucket name' },
+    Key:                        { type: 'string', required, comment: 'S3 key / file name' },
+    PartNumber:                 { type: 'number', comment: 'Part number (between 1 - 10,000) of the object' },
+    VersionId:                  { type: 'string', comment: 'Reference a specific version of the object' },
+    // Here come the headers
+    ...getValidateHeaders('IfMatch', 'IfModifiedSince', 'IfNoneMatch', 'IfUnmodifiedSince',
+      'Range', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer',
+      'ExpectedBucketOwner', 'ChecksumMode'),
+  },
+  request: async (params) => {
+    let { Bucket, Key } = params
+    let queryParams = [ 'PartNumber', 'VersionId' ]
+    let headers = getHeadersFromParams(params, queryParams)
+    let query = getQueryFromParams(params, queryParams)
+    return {
+      endpoint: `/${Bucket}/${Key}`,
+      method: 'HEAD',
+      headers,
+      query,
+    }
+  },
+  response: parseHeadersToResults,
+}
+
+const methods = { GetObject, HeadObject, PutObject, ...incomplete }
 export default { service, methods }
