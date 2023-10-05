@@ -16,193 +16,193 @@ declare interface AwsLiteS3 {
   /** @description AWS Documentation: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html} */
   PutObject: (input: { Bucket: string, Key: string, File: string, MinChunkSize?: number, ACL?: string, BucketKeyEnabled?: string, CacheControl?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, ContentDisposition?: string, ContentEncoding?: string, ContentLanguage?: string, ContentLength?: string, ContentMD5?: string, ContentType?: string, ExpectedBucketOwner?: string, Expires?: string, GrantFullControl?: string, GrantRead?: string, GrantReadACP?: string, GrantWriteACP?: string, ObjectLockLegalHoldStatus?: string, ObjectLockMode?: string, ObjectLockRetainUntilDate?: string, RequestPayer?: string, ServerSideEncryption?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, SSEKMSEncryptionContext?: string, SSEKMSKeyId?: string, StorageClass?: string, Tagging?: string, WebsiteRedirectLocation?: string }) => Promise<PutObjectCommandOutput>
   /** @description Not yet implemented */
-  AbortMultipartUpload: never
+  // AbortMultipartUpload: never
   /** @description Not yet implemented */
-  CompleteMultipartUpload: never
+  // CompleteMultipartUpload: never
   /** @description Not yet implemented */
-  CopyObject: never
+  // CopyObject: never
   /** @description Not yet implemented */
-  CreateBucket: never
+  // CreateBucket: never
   /** @description Not yet implemented */
-  CreateMultipartUpload: never
+  // CreateMultipartUpload: never
   /** @description Not yet implemented */
-  DeleteBucket: never
+  // DeleteBucket: never
   /** @description Not yet implemented */
-  DeleteBucketAnalyticsConfiguration: never
+  // DeleteBucketAnalyticsConfiguration: never
   /** @description Not yet implemented */
-  DeleteBucketCors: never
+  // DeleteBucketCors: never
   /** @description Not yet implemented */
-  DeleteBucketEncryption: never
+  // DeleteBucketEncryption: never
   /** @description Not yet implemented */
-  DeleteBucketIntelligentTieringConfiguration: never
+  // DeleteBucketIntelligentTieringConfiguration: never
   /** @description Not yet implemented */
-  DeleteBucketInventoryConfiguration: never
+  // DeleteBucketInventoryConfiguration: never
   /** @description Not yet implemented */
-  DeleteBucketLifecycle: never
+  // DeleteBucketLifecycle: never
   /** @description Not yet implemented */
-  DeleteBucketMetricsConfiguration: never
+  // DeleteBucketMetricsConfiguration: never
   /** @description Not yet implemented */
-  DeleteBucketOwnershipControls: never
+  // DeleteBucketOwnershipControls: never
   /** @description Not yet implemented */
-  DeleteBucketPolicy: never
+  // DeleteBucketPolicy: never
   /** @description Not yet implemented */
-  DeleteBucketReplication: never
+  // DeleteBucketReplication: never
   /** @description Not yet implemented */
-  DeleteBucketTagging: never
+  // DeleteBucketTagging: never
   /** @description Not yet implemented */
-  DeleteBucketWebsite: never
+  // DeleteBucketWebsite: never
   /** @description Not yet implemented */
-  DeleteObject: never
+  // DeleteObject: never
   /** @description Not yet implemented */
-  DeleteObjects: never
+  // DeleteObjects: never
   /** @description Not yet implemented */
-  DeleteObjectTagging: never
+  // DeleteObjectTagging: never
   /** @description Not yet implemented */
-  DeletePublicAccessBlock: never
+  // DeletePublicAccessBlock: never
   /** @description Not yet implemented */
-  GetBucketAccelerateConfiguration: never
+  // GetBucketAccelerateConfiguration: never
   /** @description Not yet implemented */
-  GetBucketAcl: never
+  // GetBucketAcl: never
   /** @description Not yet implemented */
-  GetBucketAnalyticsConfiguration: never
+  // GetBucketAnalyticsConfiguration: never
   /** @description Not yet implemented */
-  GetBucketCors: never
+  // GetBucketCors: never
   /** @description Not yet implemented */
-  GetBucketEncryption: never
+  // GetBucketEncryption: never
   /** @description Not yet implemented */
-  GetBucketIntelligentTieringConfiguration: never
+  // GetBucketIntelligentTieringConfiguration: never
   /** @description Not yet implemented */
-  GetBucketInventoryConfiguration: never
+  // GetBucketInventoryConfiguration: never
   /** @description Not yet implemented */
-  GetBucketLifecycle: never
+  // GetBucketLifecycle: never
   /** @description Not yet implemented */
-  GetBucketLifecycleConfiguration: never
+  // GetBucketLifecycleConfiguration: never
   /** @description Not yet implemented */
-  GetBucketLocation: never
+  // GetBucketLocation: never
   /** @description Not yet implemented */
-  GetBucketLogging: never
+  // GetBucketLogging: never
   /** @description Not yet implemented */
-  GetBucketMetricsConfiguration: never
+  // GetBucketMetricsConfiguration: never
   /** @description Not yet implemented */
-  GetBucketNotification: never
+  // GetBucketNotification: never
   /** @description Not yet implemented */
-  GetBucketNotificationConfiguration: never
+  // GetBucketNotificationConfiguration: never
   /** @description Not yet implemented */
-  GetBucketOwnershipControls: never
+  // GetBucketOwnershipControls: never
   /** @description Not yet implemented */
-  GetBucketPolicy: never
+  // GetBucketPolicy: never
   /** @description Not yet implemented */
-  GetBucketPolicyStatus: never
+  // GetBucketPolicyStatus: never
   /** @description Not yet implemented */
-  GetBucketReplication: never
+  // GetBucketReplication: never
   /** @description Not yet implemented */
-  GetBucketRequestPayment: never
+  // GetBucketRequestPayment: never
   /** @description Not yet implemented */
-  GetBucketTagging: never
+  // GetBucketTagging: never
   /** @description Not yet implemented */
-  GetBucketVersioning: never
+  // GetBucketVersioning: never
   /** @description Not yet implemented */
-  GetBucketWebsite: never
+  // GetBucketWebsite: never
   /** @description Not yet implemented */
-  GetObjectAcl: never
+  // GetObjectAcl: never
   /** @description Not yet implemented */
-  GetObjectAttributes: never
+  // GetObjectAttributes: never
   /** @description Not yet implemented */
-  GetObjectLegalHold: never
+  // GetObjectLegalHold: never
   /** @description Not yet implemented */
-  GetObjectLockConfiguration: never
+  // GetObjectLockConfiguration: never
   /** @description Not yet implemented */
-  GetObjectRetention: never
+  // GetObjectRetention: never
   /** @description Not yet implemented */
-  GetObjectTagging: never
+  // GetObjectTagging: never
   /** @description Not yet implemented */
-  GetObjectTorrent: never
+  // GetObjectTorrent: never
   /** @description Not yet implemented */
-  GetPublicAccessBlock: never
+  // GetPublicAccessBlock: never
   /** @description Not yet implemented */
-  HeadBucket: never
+  // HeadBucket: never
   /** @description Not yet implemented */
-  ListBucketAnalyticsConfigurations: never
+  // ListBucketAnalyticsConfigurations: never
   /** @description Not yet implemented */
-  ListBucketIntelligentTieringConfigurations: never
+  // ListBucketIntelligentTieringConfigurations: never
   /** @description Not yet implemented */
-  ListBucketInventoryConfigurations: never
+  // ListBucketInventoryConfigurations: never
   /** @description Not yet implemented */
-  ListBucketMetricsConfigurations: never
+  // ListBucketMetricsConfigurations: never
   /** @description Not yet implemented */
-  ListBuckets: never
+  // ListBuckets: never
   /** @description Not yet implemented */
-  ListMultipartUploads: never
+  // ListMultipartUploads: never
   /** @description Not yet implemented */
-  ListObjects: never
+  // ListObjects: never
   /** @description Not yet implemented */
-  ListObjectsV2: never
+  // ListObjectsV2: never
   /** @description Not yet implemented */
-  ListObjectVersions: never
+  // ListObjectVersions: never
   /** @description Not yet implemented */
-  ListParts: never
+  // ListParts: never
   /** @description Not yet implemented */
-  PutBucketAccelerateConfiguration: never
+  // PutBucketAccelerateConfiguration: never
   /** @description Not yet implemented */
-  PutBucketAcl: never
+  // PutBucketAcl: never
   /** @description Not yet implemented */
-  PutBucketAnalyticsConfiguration: never
+  // PutBucketAnalyticsConfiguration: never
   /** @description Not yet implemented */
-  PutBucketCors: never
+  // PutBucketCors: never
   /** @description Not yet implemented */
-  PutBucketEncryption: never
+  // PutBucketEncryption: never
   /** @description Not yet implemented */
-  PutBucketIntelligentTieringConfiguration: never
+  // PutBucketIntelligentTieringConfiguration: never
   /** @description Not yet implemented */
-  PutBucketInventoryConfiguration: never
+  // PutBucketInventoryConfiguration: never
   /** @description Not yet implemented */
-  PutBucketLifecycle: never
+  // PutBucketLifecycle: never
   /** @description Not yet implemented */
-  PutBucketLifecycleConfiguration: never
+  // PutBucketLifecycleConfiguration: never
   /** @description Not yet implemented */
-  PutBucketLogging: never
+  // PutBucketLogging: never
   /** @description Not yet implemented */
-  PutBucketMetricsConfiguration: never
+  // PutBucketMetricsConfiguration: never
   /** @description Not yet implemented */
-  PutBucketNotification: never
+  // PutBucketNotification: never
   /** @description Not yet implemented */
-  PutBucketNotificationConfiguration: never
+  // PutBucketNotificationConfiguration: never
   /** @description Not yet implemented */
-  PutBucketOwnershipControls: never
+  // PutBucketOwnershipControls: never
   /** @description Not yet implemented */
-  PutBucketPolicy: never
+  // PutBucketPolicy: never
   /** @description Not yet implemented */
-  PutBucketReplication: never
+  // PutBucketReplication: never
   /** @description Not yet implemented */
-  PutBucketRequestPayment: never
+  // PutBucketRequestPayment: never
   /** @description Not yet implemented */
-  PutBucketTagging: never
+  // PutBucketTagging: never
   /** @description Not yet implemented */
-  PutBucketVersioning: never
+  // PutBucketVersioning: never
   /** @description Not yet implemented */
-  PutBucketWebsite: never
+  // PutBucketWebsite: never
   /** @description Not yet implemented */
-  PutObjectAcl: never
+  // PutObjectAcl: never
   /** @description Not yet implemented */
-  PutObjectLegalHold: never
+  // PutObjectLegalHold: never
   /** @description Not yet implemented */
-  PutObjectLockConfiguration: never
+  // PutObjectLockConfiguration: never
   /** @description Not yet implemented */
-  PutObjectRetention: never
+  // PutObjectRetention: never
   /** @description Not yet implemented */
-  PutObjectTagging: never
+  // PutObjectTagging: never
   /** @description Not yet implemented */
-  PutPublicAccessBlock: never
+  // PutPublicAccessBlock: never
   /** @description Not yet implemented */
-  RestoreObject: never
+  // RestoreObject: never
   /** @description Not yet implemented */
-  SelectObjectContent: never
+  // SelectObjectContent: never
   /** @description Not yet implemented */
-  UploadPart: never
+  // UploadPart: never
   /** @description Not yet implemented */
-  UploadPartCopy: never
+  // UploadPartCopy: never
   /** @description Not yet implemented */
-  WriteGetObjectResponse: never
+  // WriteGetObjectResponse: never
   // $METHODS_END
 }
 

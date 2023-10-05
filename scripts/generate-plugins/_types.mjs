@@ -84,7 +84,7 @@ function createTypesStr ({ methods, name, service }) {
     else if (typeof methodDef === 'boolean' && methodDef === false) {
       // incomplete method
       lines.push('  /** @description Not yet implemented */')
-      lines.push(`  ${method}: never`)
+      lines.push(`  // ${method}: never`)
     }
   }
 
