@@ -41,6 +41,8 @@ function createTypesStr ({ methods, name, service }) {
   const outputs = []
   const lines = []
   for (const method in methods) {
+    // TODO: exclude methods that already exist outside of $METHODS block
+    // * this would allow authors to customize the types for those methods
     const methodDef = methods[method]
 
     if (typeof methodDef === 'object') {
@@ -72,15 +74,16 @@ function createTypesStr ({ methods, name, service }) {
           inputTypeString.push(`${key}: ${type}`)
         }
 
-        if (awsDoc)
-          lines.push(`  /** @description AWS Documentation: {@link ${awsDoc}} */`)
+        if (awsDoc) lines.push(`  /** @description AWS Documentation: {@link ${awsDoc}} */`)
         lines.push(`  ${method}: (input: { ${inputTypeString.join(', ')} }) => Promise<${output}>`)
       }
       else {
         lines.push(`  ${method}: () => Promise<${output}>`)
       }
     }
-    else if (methodDef === false) {
+    else if (typeof methodDef === 'boolean' && methodDef === false) {
+      // incomplete method
+      lines.push('  /** @description Not yet implemented */')
       lines.push(`  ${method}: never`)
     }
   }
@@ -131,4 +134,6 @@ export default async function main ({ name, service }) {
   const typesStr = createTypesStr({ methods, name, service })
   writeFileSync(join(pluginTypesDir, 'index.d.ts'), typesStr)
   if (isCLI) console.log(`Created ${pluginTypesDir}/index.d.ts`)
+
+  // TODO: plugin-types readme
 }
