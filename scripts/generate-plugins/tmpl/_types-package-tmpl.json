@@ -1,0 +1,9 @@
+{
+  "name": "@aws-lite/$NAME-types",
+  "version": "0.0.0",
+  "main": "",
+  "types": "index.d.ts",
+  "devDependencies": {
+    "@aws-lite/client": "latest"
+  }
+}

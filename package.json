@@ -21,6 +21,7 @@
     "vendor": "esbuild scripts/vendor-entry.mjs --bundle --platform=node --format=cjs --outfile=src/_vendor.js"
   },
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "engines": {
     "node": ">=16"
   },

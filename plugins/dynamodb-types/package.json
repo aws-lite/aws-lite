@@ -1,0 +1,12 @@
+{
+  "name": "@aws-lite/dynamodb-types",
+  "description": "Type definitions for the @aws-lite/dynamodb plugin",
+  "version": "0.0.0",
+  "main": "",
+  "types": "index.d.ts",
+  "devDependencies": {
+    "@aws-lite/client": "^0.7.0",
+    "@aws-lite/dynamodb": "^0.1.1",
+    "@aws-sdk/client-dynamodb": "^3.425.0"
+  }
+}

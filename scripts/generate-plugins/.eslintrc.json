@@ -1,0 +1,8 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2023
+  },
+  "rules": {
+    "import/no-unresolved": "off"
+  }
+}
