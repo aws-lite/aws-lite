@@ -35,7 +35,7 @@ export default {
         },
       },
 
-      async request ({ StackName, TemplateBody,  Capabilities=['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']}, {region}) {
+      async request ({ StackName, TemplateBody,  Capabilities=['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']}) {
         return {
           query: {
             StackName, TemplateBody, Capabilities
