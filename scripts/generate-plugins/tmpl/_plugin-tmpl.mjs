@@ -18,10 +18,7 @@ export default {
           endpoint: `/$API_VER/${name}/etc`
         }
       },
-      response: async (raw) => {
-        let response = raw.Item || null
-        return { response }
-      },
+      response: async ({ payload }) => payload,
       error: async (err) => {
         if (err.statusCode === 400 &&
             err?.error?.message?.match(/validation error/)) {
@@ -42,7 +39,7 @@ export default {
           endpoint: `/$API_VER/${name}/etc`
         }
       },
-      // response: async (response) => ({ response }),
+      // response: async ({ payload }) => payload,
       // error: async (err) => err,
     },
   }
