@@ -37,7 +37,6 @@ export default {
 
       async request ({ StackName, TemplateBody,  Capabilities=['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']}, {region}) {
         return {
-          endpoint: `https://${ service }.${ region }.amazonaws.com/`
           query: {
             StackName, TemplateBody, Capabilities
           }
@@ -45,9 +44,7 @@ export default {
       },
 
       async response (raw) {
-        console.log('got response', raw)
-        let response = raw.Item || null
-        return { response }
+        return { raw }
       },
 
       async error (err) {
