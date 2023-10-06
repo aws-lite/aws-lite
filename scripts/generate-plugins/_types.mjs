@@ -66,8 +66,8 @@ function createTypesStr ({ methods, name, service, existingTypes }) {
     const methodDef = methods[method]
 
     if (methodDef) {
-      const output = `${method}CommandOutput`
-      outputTypes.push(`  ${output}`)
+      const methodResponse = `${method}Response`
+      outputTypes.push(`  ${method}CommandOutput as ${methodResponse}`)
 
       const { awsDoc, validate } = methodDef
       if (validate) {
@@ -94,11 +94,16 @@ function createTypesStr ({ methods, name, service, existingTypes }) {
           inputTypeString.push(`${key}: ${type}`)
         }
 
-        if (awsDoc) methodTypes.push(`  /** @description AWS Documentation: {@link ${awsDoc}} */`)
-        methodTypes.push(`  ${method}: (input: { ${inputTypeString.join(', ')} }) => Promise<${output}>`)
+        const descString = [ '  /**', '   * @description' ]
+        if (awsDoc) descString.push(`   * - AWS Docs: {@link ${awsDoc} ${service}: ${method}}`)
+        descString.push(`   * - aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/${name}/readme.md#${method} ${name}}`)
+        descString.push('   */')
+        methodTypes.push(descString.join('\n'))
+        methodTypes.push(`  ${method}: (input: { ${inputTypeString.join(', ')} }) => Promise<${methodResponse}>`)
       }
       else {
-        methodTypes.push(`  ${method}: () => Promise<${output}>`)
+        methodTypes.push(`  /** @description aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/${name}/readme.md#${method} ${name}} */`)
+        methodTypes.push(`  ${method}: () => Promise<${methodResponse}>`)
       }
     }
   }

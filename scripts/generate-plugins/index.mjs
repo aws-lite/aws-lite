@@ -8,8 +8,8 @@ import generateTypes from './_types.mjs'
 // - service: the commonly recognized, more formal version (including casing); example: `CloudFormation`
 // - maintainers: array of GitHub handles of the individual(s) or org(s) responsible for maintaining the plugin
 const plugins = [
-  { name: 'dynamodb', service: 'DynamoDB', generateTypes: true, maintainers: [ '@architect' ] },
-  { name: 's3', service: 'S3', generateTypes: true, maintainers: [ '@architect' ] },
+  { name: 'dynamodb', service: 'DynamoDB', types: true, maintainers: [ '@architect' ] },
+  { name: 's3', service: 'S3', types: true, maintainers: [ '@architect' ] },
 ].sort()
 
 const cwd = process.cwd()
@@ -108,7 +108,7 @@ async function main () {
       }
     }
 
-    if (plugin.generateTypes)
+    if (plugin.types)
       try { await generateTypes(plugin) }
       catch (error) {
         console.error(`Failed to generate types for ${name}: ${error.message}`)
