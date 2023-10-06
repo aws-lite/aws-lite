@@ -48,14 +48,7 @@ test('Get Lambda role', async t => {
     // Give it a few seconds for the role to be ready for a new Lambda
     await new Promise((resolve) => setTimeout(resolve, 5000))
   }
-
-  roleARN = role.split('\n').map(l => {
-    let line = l.trim()
-    if (line.startsWith('<Arn>')) {
-      return line.replace(/(\<Arn\>|\<\/Arn\>)/g, '')
-    }
-  }).filter(Boolean).toString()
-
+  roleARN = role?.GetRoleResult?.Role?.Arn
   t.ok(role, 'Got Lambda execution role')
   t.equal(roleARN.split(':').length, 6, `Got role ARN: ${roleARN}`)
 })
