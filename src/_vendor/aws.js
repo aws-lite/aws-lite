@@ -1,3 +1,4 @@
+/* Vendored with gratitude from https://github.com/aws/aws-sdk-js-v3 and used under the Apache 2.0 license */
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -851,15 +852,15 @@ var require_dist_cjs = __commonJS({
   }
 });
 
-// scripts/vendor-entry.mjs
-var vendor_entry_exports = {};
-__export(vendor_entry_exports, {
+// scripts/vendor/vendor-aws-json-entry.mjs
+var vendor_aws_json_entry_exports = {};
+__export(vendor_aws_json_entry_exports, {
   convertToAttr: () => import_util_dynamodb.convertToAttr,
   convertToNative: () => import_util_dynamodb.convertToNative,
   marshall: () => import_util_dynamodb.marshall,
   unmarshall: () => import_util_dynamodb.unmarshall
 });
-module.exports = __toCommonJS(vendor_entry_exports);
+module.exports = __toCommonJS(vendor_aws_json_entry_exports);
 var import_util_dynamodb = __toESM(require_dist_cjs(), 1);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

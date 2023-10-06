@@ -1,5 +1,5 @@
 let { stat } = require('fs/promises')
-let { marshall, unmarshall } = require('./_vendor')
+let { marshall, unmarshall } = require('./_vendor/aws')
 
 // AWS-flavored JSON stuff
 function marshaller (method, obj, awsjsonSetting) {

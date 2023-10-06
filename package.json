@@ -18,7 +18,7 @@
     "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-spec",
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-spec",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
-    "vendor": "esbuild scripts/vendor-entry.mjs --bundle --platform=node --format=cjs --outfile=src/_vendor.js"
+    "vendor": "scripts/vendor/vendor.sh"
   },
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -37,6 +37,7 @@
     "adm-zip": "^0.5.10",
     "cross-env": "^7.0.3",
     "eslint": "^8.50.0",
+    "fast-xml-parser": "^4.3.2",
     "mock-fs": "^5.2.0",
     "nyc": "^15.1.0",
     "tap-spec": "^5.0.0",
@@ -62,7 +63,7 @@
     "exclude": [
       "plugins/",
       "test/",
-      "src/_vendor.js"
+      "src/_vendor/"
     ]
   }
 }

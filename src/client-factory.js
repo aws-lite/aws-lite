@@ -4,7 +4,6 @@ let { services } = require('./services')
 let request = require('./request')
 let { validateInput } = require('./validate')
 let { awsjson } = require('./lib')
-let { marshall, unmarshall } = require('./_vendor')
 let errorHandler = require('./error')
 
 let credentialProps = [ 'accessKeyId', 'secretAccessKey', 'sessionToken' ]
@@ -44,6 +43,10 @@ module.exports = async function clientFactory (config, creds, region) {
   }
 
   if (plugins.length) {
+    // Only require the vendor if it's actually needed
+    // eslint-disable-next-line
+    let { marshall, unmarshall } = require('./_vendor/aws')
+
     for (let pluginName of plugins) {
       try {
         let plugin
