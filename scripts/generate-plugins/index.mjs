@@ -2,17 +2,7 @@
 import { join } from 'node:path'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import generateTypes from './_types.mjs'
-const types = true
-
-// Break this into a separate file if it becomes too big / unwieldy!
-// - name: the official service name; example: `cloudformation`
-// - service: the commonly recognized, more formal version (including casing); example: `CloudFormation`
-// - maintainers: array of GitHub handles of the individual(s) or org(s) responsible for maintaining the plugin
-const plugins = [
-  { name: 'dynamodb', service: 'DynamoDB', types, maintainers: [ '@architect' ] },
-  { name: 's3', service: 'S3', types, maintainers: [ '@architect' ] },
-  { name: 'ssm', service: 'SSM', types, maintainers: [ '@architect' ] },
-].sort()
+import plugins from '../../plugins.mjs'
 
 const cwd = process.cwd()
 const tmplDir = join(cwd, 'scripts', 'generate-plugins', 'tmpl')
@@ -112,7 +102,7 @@ async function main () {
       writeFileSync(pluginReadmeFile, pluginReadme)
     }
 
-    if (plugin.types)
+    if (plugin.types !== false)
       try { await generateTypes(plugin) }
       catch (error) {
         console.error(`Failed to generate types for ${name}: ${error.message}`)

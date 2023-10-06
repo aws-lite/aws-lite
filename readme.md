@@ -537,9 +537,9 @@ AWS has (as of this writing) nearly 300 service APIs – `aws-lite` would love y
 
 - Pull down this repo
 - Install dependencies and run the normal test suite: `npm it`
-- To create a plugin:
-  - Add your plugin to the [`plugins` array in the plugin generator](https://github.com/architect/aws-lite/blob/main/scripts/generate-plugins/index.js)
-  - Run `npm run generate-plugins`
+- To create an `@aws-lite/*` plugin:
+  - Add your plugin to the [`plugins` file](https://github.com/architect/aws-lite/blob/main/plugins.mjs)
+  - Run `npm run gen`
 - Create a PR that adheres to our [testing methodology](#testing)
 
 > It is advisable you have AWS credentials on your local development machine for manual verification of any client or service plugin changes
