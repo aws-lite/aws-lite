@@ -20,6 +20,7 @@ const Key = { ...obj, required }
 const Item = { ...obj, required }
 const ReturnConsumedCapacity = str
 const ReturnItemCollectionMetrics = str
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => payload
 const unmarshall = keys => ({ payload }) => ({ awsjson: keys, ...payload })
@@ -679,6 +680,7 @@ const Query = {
     ReturnConsumedCapacity: str,
     ScanIndexForward: bool,
     Select: str,
+    paginate: valPaginate,
   },
   request: async (params) => {
     let paginate
@@ -759,6 +761,7 @@ const Scan = {
     Segment: num,
     Select: str,
     TotalSegments: num,
+    paginate: valPaginate,
   },
   request: async (params) => {
     let paginate
