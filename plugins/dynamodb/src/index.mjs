@@ -25,6 +25,11 @@ const defaultResponse = ({ payload }) => payload
 const unmarshall = keys => ({ payload }) => ({ awsjson: keys, ...payload })
 const headers = (method, additional) => ({ 'X-Amz-Target': `DynamoDB_20120810.${method}`, ...additional })
 const awsjsonContentType = { 'content-type': 'application/x-amz-json-1.0' }
+const paginator = {
+  cursor: 'ExclusiveStartKey',
+  token: 'LastEvaluatedKey',
+  accumulator: 'Items',
+}
 
 /**
  * Plugin maintained by: @architect
@@ -675,17 +680,23 @@ const Query = {
     ScanIndexForward: bool,
     Select: str,
   },
-  request: async (params) => ({
-    awsjson: awsjsonReq,
-    headers: headers('Query'),
-    payload: params,
-  }),
+  request: async (params) => {
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+    return {
+      awsjson: [ 'ExpressionAttributeValues' ],
+      headers: headers('Query'),
+      paginate,
+      paginator,
+      payload: params,
+    }
+  },
   response: async ({ payload }, { awsjsonUnmarshall }) => {
     if (payload?.Items?.length) payload.Items = payload.Items.map(awsjsonUnmarshall)
-    if (payload?.LastEvaluatedKey) {
-      let key = payload.LastEvaluatedKey[Object.keys(payload.LastEvaluatedKey)[0]]
-      payload.LastEvaluatedKey = awsjsonUnmarshall(key)
-    }
+    if (payload?.LastEvaluatedKey) payload.awsjson = [ 'LastEvaluatedKey' ]
     return payload
   },
 }
@@ -749,10 +760,19 @@ const Scan = {
     Select: str,
     TotalSegments: num,
   },
-  request: async (params) => ({
-    headers: headers('Scan'),
-    payload: params,
-  }),
+  request: async (params) => {
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+    return {
+      headers: headers('Scan'),
+      payload: params,
+      paginate,
+      paginator,
+    }
+  },
   response: async ({ payload }, { awsjsonUnmarshall }) => {
     if (payload?.Items?.length) payload.Items = payload.Items.map(awsjsonUnmarshall)
     return payload
