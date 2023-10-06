@@ -53,7 +53,7 @@ import {
   UpdateItemCommandOutput,
   UpdateTableCommandOutput,
   UpdateTableReplicaAutoScalingCommandOutput,
-  UpdateTimeToLiveCommandOutput
+  UpdateTimeToLiveCommandOutput,
   // $IMPORTS_END
 } from "@aws-sdk/client-dynamodb";
 

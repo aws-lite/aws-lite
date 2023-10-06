@@ -1,8 +1,8 @@
 #! /usr/bin/env node
-import { createInterface } from 'node:readline/promises'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { argv, cwd, exit, stdin, stdout } from 'node:process'
+import { createInterface } from 'node:readline/promises'
 import { fileURLToPath } from 'node:url'
 
 const CWD = cwd()
@@ -37,17 +37,36 @@ if (isCLI) {
   }
 }
 
-function createTypesStr ({ methods, name, service }) {
-  const outputs = []
-  const lines = []
+function createTypesStr ({ methods, name, service, existingTypes }) {
+  let existingMethods = []
+  if (existingTypes) {
+    const match = /declare interface AwsLiteS3 {([^]*?)\n}\n/g.exec(existingTypes)
+
+    if (match) {
+      existingMethods = match[1]
+        .trim()
+        .replace(/\/\/ \$METHODS_START.*?\/\/ \$METHODS_END\n?/gs, '') // remove generated methods
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => !line.startsWith('//'))  // remove comments
+        .filter(line => !line.startsWith('/**')) // remove JSDoc
+        .map(line => line.split(': ')[0]) // grab method name
+    }
+    else {
+      console.log('Interface declaration not found in the input string.')
+    }
+  }
+
+  const outputTypes = []
+  const methodTypes = []
   for (const method in methods) {
-    // TODO: exclude methods that already exist outside of $METHODS block
-    // * this would allow authors to customize the types for those methods
+    if (existingMethods.includes(method)) continue
+
     const methodDef = methods[method]
 
-    if (typeof methodDef === 'object') {
+    if (methodDef) {
       const output = `${method}CommandOutput`
-      outputs.push(`  ${output}`)
+      outputTypes.push(`  ${output}`)
 
       const { awsDoc, validate } = methodDef
       if (validate) {
@@ -74,29 +93,26 @@ function createTypesStr ({ methods, name, service }) {
           inputTypeString.push(`${key}: ${type}`)
         }
 
-        if (awsDoc) lines.push(`  /** @description AWS Documentation: {@link ${awsDoc}} */`)
-        lines.push(`  ${method}: (input: { ${inputTypeString.join(', ')} }) => Promise<${output}>`)
+        if (awsDoc) methodTypes.push(`  /** @description AWS Documentation: {@link ${awsDoc}} */`)
+        methodTypes.push(`  ${method}: (input: { ${inputTypeString.join(', ')} }) => Promise<${output}>`)
       }
       else {
-        lines.push(`  ${method}: () => Promise<${output}>`)
+        methodTypes.push(`  ${method}: () => Promise<${output}>`)
       }
-    }
-    else if (typeof methodDef === 'boolean' && methodDef === false) {
-      // incomplete method
-      lines.push('  /** @description Not yet implemented */')
-      lines.push(`  // ${method}: never`)
     }
   }
 
-  const typesTmpl = readFileSync(join(HERE, 'tmpl', '_types-tmpl.d.ts')).toString()
 
   const importsRegex = /(?<=(\/\/ \$IMPORTS_START\n))[\s\S]*?(?=(\/\/ \$IMPORTS_END))/g
   const methodsRegex = /(?<=(\/\/ \$METHODS_START\n))[\s\S]*?(?=(\/\/ \$METHODS_END))/g
+  const typesTmpl = existingTypes
+    ? existingTypes
+    : readFileSync(join(HERE, 'tmpl', '_types-tmpl.d.ts')).toString()
   return typesTmpl
     .replace(/\$SERVICE/g, service)
     .replace(/\$NAME/g, name)
-    .replace(importsRegex, outputs.join(',\n') + '\n  ')
-    .replace(methodsRegex, lines.join('\n') + '\n  ')
+    .replace(importsRegex, outputTypes.join(',\n') + ',\n  ')
+    .replace(methodsRegex, methodTypes.join('\n') + '\n  ')
 }
 
 /**
@@ -131,7 +147,10 @@ export default async function main ({ name, service }) {
     if (isCLI) console.log(`Created ${pluginTypesDir}/package.json`)
   }
 
-  const typesStr = createTypesStr({ methods, name, service })
+  const existingTypes = existsSync(join(pluginTypesDir, 'index.d.ts'))
+    ? readFileSync(join(pluginTypesDir, 'index.d.ts')).toString()
+    : null
+  const typesStr = createTypesStr({ methods, name, service, existingTypes })
   writeFileSync(join(pluginTypesDir, 'index.d.ts'), typesStr)
   if (isCLI) console.log(`Created ${pluginTypesDir}/index.d.ts`)
 
