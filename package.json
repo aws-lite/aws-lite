@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@architect/eslint-config": "^2.1.2",
-    "@aws-sdk/client-ssm": "^3.405.0",
     "@aws-sdk/util-dynamodb": "^3.423.0",
     "@smithy/smithy-client": "^2.1.9",
     "adm-zip": "^0.5.10",

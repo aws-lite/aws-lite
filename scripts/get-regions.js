@@ -1,21 +1,12 @@
 let { join } = require('path')
 let { writeFileSync } = require('fs')
-let { SSMClient, GetParametersByPathCommand } = require('@aws-sdk/client-ssm')
+let awsLite = require('../')
 
 // Get the list of Lambda regions
-async function getRegions () {
-  let Path = '/aws/service/global-infrastructure/services'
-  let ssm = new SSMClient({ region: 'us-east-1' })
-  let results = []
-  async function getRegionPage (NextToken) {
-    let cmd = new GetParametersByPathCommand({ Path, NextToken })
-    let result = await ssm.send(cmd)
-    results.push(...result.Parameters)
-    if (result.NextToken) await getRegionPage(result.NextToken)
-  }
-  await getRegionPage()
-
-  let regions = results
+async function getRegions (aws) {
+  let Path = '/aws/service/global-infrastructure/regions'
+  let results = await aws.ssm.GetParametersByPath({ Path, paginate: true })
+  let regions = results.Parameters
     .map(({ Value }) => Value)
     .sort()
     .reverse()
@@ -25,7 +16,8 @@ async function getRegions () {
 }
 
 async function main () {
-  let regions = await getRegions()
+  let aws = await awsLite({ region: 'us-east-1' })
+  let regions = await getRegions(aws)
   let file = join(__dirname, '..', 'src', 'regions.json')
   writeFileSync(file, JSON.stringify(regions))
 }
