@@ -102,6 +102,37 @@ Properties:
   - Sets request header: `x-amz-checksum-mode`
 
 
+### `ListObjectsV2`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`Delimiter` (string)**
+  - Delimiter character used to group keys
+- **`EncodingType` (string)**
+  - Object key encoding type (must be `url`)
+- **`FetchOwner` (string)**
+  - Return owner field with results
+- **`MaxKeys` (number)**
+  - Set the maximum number of keys returned per response
+- **`Prefix` (string)**
+  - Limit response to keys that begin with the specified prefix
+- **`StartAfter` (string)**
+  - Starts listing after any specified key in the bucket
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`OptionalObjectAttributes` (string)**
+  - Sets request header: `x-amz-optional-object-attributes`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `PutObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html)
@@ -247,7 +278,6 @@ Properties:
 - `ListBuckets`
 - `ListMultipartUploads`
 - `ListObjects`
-- `ListObjectsV2`
 - `ListObjectVersions`
 - `ListParts`
 - `PutBucketAccelerateConfiguration`

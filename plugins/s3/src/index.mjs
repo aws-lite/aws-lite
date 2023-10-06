@@ -71,5 +71,37 @@ const HeadObject = {
   response: parseHeadersToResults,
 }
 
-const methods = { GetObject, HeadObject, PutObject, ...incomplete }
+const ListObjectsV2 = {
+  awsDoc: 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html',
+  validate: {
+    Bucket:             { type: 'string', required, comment: 'S3 bucket name' },
+    ContinuationToken:  { type: 'string', comment: 'Pagination cursor token (returned as `NextContinuationToken`' },
+    Delimiter:          { type: 'string', comment: 'Delimiter character used to group keys' },
+    EncodingType:       { type: 'string', comment: 'Object key encoding type (must be `url`)' },
+    FetchOwner:         { type: 'string', comment: 'Return owner field with results' },
+    MaxKeys:            { type: 'number', comment: 'Set the maximum number of keys returned per response' },
+    Prefix:             { type: 'string', comment: 'Limit response to keys that begin with the specified prefix' },
+    StartAfter:         { type: 'string', comment: 'Starts listing after any specified key in the bucket' },
+    // Here come the headers
+    ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'OptionalObjectAttributes'),
+    paginate:           { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+  },
+  request: async (params) => {
+    let { Bucket, paginate } = params
+    let queryParams = [ 'ContinuationToken', 'Delimiter', 'EncodingType', 'FetchOwner', 'MaxKeys', 'Prefix', 'StartAfter' ]
+    let headers = getHeadersFromParams(params, queryParams)
+    let query = getQueryFromParams(params, queryParams) || {}
+    query['list-type'] = 2
+    return {
+      endpoint: `/${Bucket}`,
+      headers,
+      query,
+      paginate,
+      paginator: { type: 'query', cursor: 'continuation-token', token: 'NextContinuationToken', accumulator: 'Contents' }
+    }
+  },
+  response: ({ payload }) => payload,
+}
+
+const methods = { GetObject, HeadObject, ListObjectsV2, PutObject, ...incomplete }
 export default { service, methods }
