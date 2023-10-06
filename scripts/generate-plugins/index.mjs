@@ -1,24 +1,26 @@
 #! /usr/bin/env node
 import { join } from 'node:path'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-
-const cwd = process.cwd()
-const pluginListRegex = /(?<=(<!-- plugins_start -->\n))[\s\S]*?(?=(<!-- plugins_end -->))/g
-const pluginMethodsRegex = /(?<=(<!-- method_docs_start -->\n))[\s\S]*?(?=(<!-- method_docs_end -->))/g
+import generateTypes from './_types.mjs'
+const types = true
 
 // Break this into a separate file if it becomes too big / unwieldy!
 // - name: the official service name; example: `cloudformation`
 // - service: the commonly recognized, more formal version (including casing); example: `CloudFormation`
 // - maintainers: array of GitHub handles of the individual(s) or org(s) responsible for maintaining the plugin
 const plugins = [
-  { name: 'dynamodb', service: 'DynamoDB', maintainers: [ '@architect' ] },
-  { name: 's3', service: 'S3', maintainers: [ '@architect' ] },
-  { name: 'ssm', service: 'SSM', maintainers: [ '@architect' ] },
+  { name: 'dynamodb', service: 'DynamoDB', types, maintainers: [ '@architect' ] },
+  { name: 's3', service: 'S3', types, maintainers: [ '@architect' ] },
+  { name: 'ssm', service: 'SSM', types, maintainers: [ '@architect' ] },
 ].sort()
 
-const pluginTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_plugin-tmpl.mjs')).toString()
-const readmeTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_readme-tmpl.md')).toString()
-const packageTmpl = readFileSync(join(cwd, 'scripts', 'generate-plugins', '_package-tmpl.json'))
+const cwd = process.cwd()
+const tmplDir = join(cwd, 'scripts', 'generate-plugins', 'tmpl')
+const pluginTmpl = readFileSync(join(tmplDir, '_plugin-tmpl.mjs')).toString()
+const readmeTmpl = readFileSync(join(tmplDir, '_readme-tmpl.md')).toString()
+const packageTmpl = readFileSync(join(tmplDir, '_package-tmpl.json')).toString()
+const pluginListRegex = /(?<=(<!-- plugins_start -->\n))[\s\S]*?(?=(<!-- plugins_end -->))/g
+const pluginMethodsRegex = /(?<=(<!-- method_docs_start -->\n))[\s\S]*?(?=(<!-- method_docs_end -->))/g
 
 async function main () {
   for (let plugin of plugins) {
@@ -59,14 +61,14 @@ async function main () {
         .replace(/\$MAINTAINERS/g, maintainerLinks)
       writeFileSync(join(pluginDir, 'readme.md'), readme)
 
-      // Project: package.json
-      let projectPkgFile = join(cwd, 'package.json')
-      let projectPkg = JSON.parse(readFileSync(projectPkgFile))
+      // aws-lite project: package.json
+      let awsLitePkgFile = join(cwd, 'package.json')
+      let awsLitePkg = JSON.parse(readFileSync(awsLitePkgFile).toString())
       let workspace = `plugins/${plugin.name}`
-      if (!projectPkg.workspaces.includes(workspace)) {
-        projectPkg.workspaces.push(workspace)
-        projectPkg.workspaces = projectPkg.workspaces.sort()
-        writeFileSync(projectPkgFile, JSON.stringify(projectPkg, null, 2))
+      if (!awsLitePkg.workspaces.includes(workspace)) {
+        awsLitePkg.workspaces.push(workspace)
+        awsLitePkg.workspaces = awsLitePkg.workspaces.sort()
+        writeFileSync(awsLitePkgFile, JSON.stringify(awsLitePkg, null, 2))
       }
     }
     // Maybe update docs
@@ -109,6 +111,12 @@ async function main () {
       pluginReadme = pluginReadme.replace(pluginMethodsRegex, methodDocs)
       writeFileSync(pluginReadmeFile, pluginReadme)
     }
+
+    if (plugin.types)
+      try { await generateTypes(plugin) }
+      catch (error) {
+        console.error(`Failed to generate types for ${name}: ${error.message}`)
+      }
   }
 
   // Project readme.md

@@ -21,6 +21,7 @@
     "vendor": "scripts/vendor/vendor.sh"
   },
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "engines": {
     "node": ">=16"
   },
