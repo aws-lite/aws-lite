@@ -2,6 +2,7 @@ import {
   // $IMPORTS_START
   GetObjectCommandOutput as GetObjectResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
+  ListObjectsV2CommandOutput as ListObjectsV2Response,
   PutObjectCommandOutput as PutObjectResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-s3";
@@ -20,6 +21,12 @@ declare interface AwsLiteS3 {
    * - aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#HeadObject s3}
    */
   HeadObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string }) => Promise<HeadObjectResponse>
+  /**
+   * @description
+   * - AWS Docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html S3: ListObjectsV2}
+   * - aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListObjectsV2 s3}
+   */
+  ListObjectsV2: (input: { Bucket: string, ContinuationToken?: string, Delimiter?: string, EncodingType?: string, FetchOwner?: string, MaxKeys?: number, Prefix?: string, StartAfter?: string, RequestPayer?: string, ExpectedBucketOwner?: string, OptionalObjectAttributes?: string, paginate?: boolean }) => Promise<ListObjectsV2Response>
   /**
    * @description
    * - AWS Docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html S3: PutObject}
