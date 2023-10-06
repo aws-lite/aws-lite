@@ -40,7 +40,8 @@ if (isCLI) {
 function createTypesStr ({ methods, name, service, existingTypes }) {
   let existingMethods = []
   if (existingTypes) {
-    const match = /declare interface AwsLiteS3 {([^]*?)\n}\n/g.exec(existingTypes)
+    const interfaceRegex = new RegExp(`declare interface AwsLite${service} {([^]*?)\n}\n`, 'g')
+    const match = interfaceRegex.exec(existingTypes)
 
     if (match) {
       existingMethods = match[1]
