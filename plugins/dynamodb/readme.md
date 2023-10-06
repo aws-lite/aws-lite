@@ -16,6 +16,598 @@ npm i @aws-lite/dynamodb
 
 <!-- ! Do not remove method_docs_start / method_docs_end ! -->
 <!-- method_docs_start -->
+### `BatchExecuteStatement`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchExecuteStatement.html)
+
+Properties:
+- **`Statements` (array) [required]**
+- **`ReturnConsumedCapacity` (string)**
+
+
+### `BatchGetItem`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html)
+
+Properties:
+- **`RequestItems` (object) [required]**
+- **`ReturnConsumedCapacity` (string)**
+
+
+### `BatchWriteItem`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html)
+
+Properties:
+- **`RequestItems` (object) [required]**
+- **`ReturnConsumedCapacity` (string)**
+- **`ReturnItemCollectionMetrics` (string)**
+
+
+### `CreateBackup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateBackup.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`BackupName` (string) [required]**
+
+
+### `CreateGlobalTable`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateGlobalTable.html)
+
+Properties:
+- **`GlobalTableName` (string) [required]**
+- **`ReplicationGroup` (array) [required]**
+
+
+### `CreateTable`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`AttributeDefinitions` (array) [required]**
+- **`KeySchema` (array) [required]**
+- **`BillingMode` (string)**
+- **`DeletionProtectionEnabled` (boolean)**
+- **`GlobalSecondaryIndexes` (array)**
+- **`LocalSecondaryIndexes` (array)**
+- **`ProvisionedThroughput` (object)**
+- **`SSESpecification` (object)**
+- **`StreamSpecification` (object)**
+- **`TableClass` (string)**
+- **`Tags` (array)**
+
+
+### `DeleteBackup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteBackup.html)
+
+Properties:
+- **`BackupArn` (string) [required]**
+
+
+### `DeleteItem`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`Key` (object) [required]**
+- **`ConditionalOperator` (string)**
+- **`ConditionExpression` (string)**
+- **`Expected` (object)**
+- **`ExpressionAttributeNames` (object)**
+- **`ExpressionAttributeValues` (object)**
+- **`ReturnConsumedCapacity` (string)**
+- **`ReturnItemCollectionMetrics` (string)**
+- **`ReturnValues` (string)**
+- **`ReturnValuesOnConditionCheckFailure` (string)**
+
+
+### `DeleteTable`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html)
+
+Properties:
+- **`TableName` (string) [required]**
+
+
+### `DescribeBackup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeBackup.html)
+
+Properties:
+- **`BackupArn` (string) [required]**
+
+
+### `DescribeContinuousBackups`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeContinuousBackups.html)
+
+Properties:
+- **`TableName` (string) [required]**
+
+
+### `DescribeContributorInsights`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeContributorInsights.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`IndexName` (string)**
+
+
+### `DescribeEndpoints`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeEndpoints.html)
+
+
+
+### `DescribeExport`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeExport.html)
+
+Properties:
+- **`ExportArn` (string) [required]**
+
+
+### `DescribeGlobalTable`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeGlobalTable.html)
+
+Properties:
+- **`GlobalTableName` (string) [required]**
+
+
+### `DescribeGlobalTableSettings`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeGlobalTableSettings.html)
+
+Properties:
+- **`GlobalTableName` (string) [required]**
+
+
+### `DescribeImport`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeImport.html)
+
+Properties:
+- **`ImportArn` (string) [required]**
+
+
+### `DescribeKinesisStreamingDestination`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeKinesisStreamingDestination.html)
+
+Properties:
+- **`TableName` (string) [required]**
+
+
+### `DescribeLimits`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeLimits.html)
+
+
+
+### `DescribeTable`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html)
+
+Properties:
+- **`TableName` (string) [required]**
+
+
+### `DescribeTableReplicaAutoScaling`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTableReplicaAutoScaling.html)
+
+Properties:
+- **`TableName` (string) [required]**
+
+
+### `DescribeTimeToLive`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTimeToLive.html)
+
+Properties:
+- **`TableName` (string) [required]**
+
+
+### `DisableKinesisStreamingDestination`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DisableKinesisStreamingDestination.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`StreamArn` (string) [required]**
+
+
+### `EnableKinesisStreamingDestination`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_EnableKinesisStreamingDestination.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`StreamArn` (string) [required]**
+
+
+### `ExecuteStatement`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteStatement.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`Statement` (string) [required]**
+- **`ConsistentRead` (boolean)**
+- **`Limit` (number)**
+- **`NextToken` (string)**
+- **`Parameters` (object)**
+- **`ReturnConsumedCapacity` (string)**
+- **`ReturnValuesOnConditionCheckFailure` (string)**
+
+
+### `ExecuteTransaction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteTransaction.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`TransactStatements` (array) [required]**
+- **`ClientRequestToken` (string)**
+- **`ReturnConsumedCapacity` (string)**
+
+
+### `ExportTableToPointInTime`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExportTableToPointInTime.html)
+
+Properties:
+- **`S3Bucket` (string) [required]**
+- **`TableArn` (string) [required]**
+- **`ClientToken` (string)**
+- **`ExportFormat` (string)**
+- **`ExportTime` (number)**
+- **`S3BucketOwner` (string)**
+- **`S3Prefix` (string)**
+- **`S3SseAlgorithm` (string)**
+- **`S3SseKmsKeyId` (string)**
+
+
+### `GetItem`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`Key` (object) [required]**
+- **`AttributesToGet` (array)**
+- **`ConsistentRead` (boolean)**
+- **`ExpressionAttributeNames` (object)**
+- **`ProjectionExpression` (string)**
+- **`ReturnConsumedCapacity` (string)**
+
+
+### `ImportTable`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ImportTable.html)
+
+Properties:
+- **`InputFormat` (string) [required]**
+- **`S3BucketSource` (object) [required]**
+- **`TableCreationParameters` (object) [required]**
+- **`ClientToken` (string)**
+- **`InputCompressionType` (string)**
+- **`InputFormatOptions` (object)**
+
+
+### `ListBackups`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListBackups.html)
+
+Properties:
+- **`BackupType` (string)**
+- **`ExclusiveStartBackupArn` (string)**
+- **`Limit` (number)**
+- **`TableName` (string)**
+- **`TimeRangeLowerBound` (number)**
+- **`TimeRangeUpperBound` (number)**
+
+
+### `ListContributorInsights`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListContributorInsights.html)
+
+Properties:
+- **`MaxResults` (number)**
+- **`NextToken` (string)**
+- **`TableName` (string)**
+
+
+### `ListExports`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListExports.html)
+
+Properties:
+- **`MaxResults` (number)**
+- **`NextToken` (string)**
+- **`TableArn` (string)**
+
+
+### `ListGlobalTables`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListGlobalTables.html)
+
+Properties:
+- **`ExclusiveStartGlobalTableName` (string)**
+- **`Limit` (number)**
+- **`RegionName` (string)**
+
+
+### `ListImports`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListImports.html)
+
+Properties:
+- **`NextToken` (string)**
+- **`PageSize` (number)**
+- **`TableArn` (string)**
+
+
+### `ListTables`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTables.html)
+
+Properties:
+- **`ExclusiveStartTableName` (string)**
+- **`Limit` (number)**
+
+
+### `ListTagsOfResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTagsOfResource.html)
+
+Properties:
+- **`NextToken` (string)**
+- **`ResourceArn` (string) [required]**
+
+
+### `PutItem`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`Item` (object) [required]**
+- **`ConditionalOperator` (string)**
+- **`ConditionExpression` (string)**
+- **`Expected` (string)**
+- **`ExpressionAttributeNames` (object)**
+- **`ExpressionAttributeValues` (object)**
+- **`ReturnConsumedCapacity` (string)**
+- **`ReturnItemCollectionMetrics` (string)**
+- **`ReturnValues` (string)**
+- **`ReturnValuesOnConditionCheckFailure` (string)**
+
+
+### `Query`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`AttributesToGet` (array)**
+- **`ConditionalOperator` (string)**
+- **`ConsistentRead` (boolean)**
+- **`ExclusiveStartKey` (object)**
+- **`ExpressionAttributeNames` (object)**
+- **`ExpressionAttributeValues` (object)**
+- **`FilterExpression` (string)**
+- **`IndexName` (string)**
+- **`KeyConditionExpression` (string)**
+- **`KeyConditions` (object)**
+- **`Limit` (number)**
+- **`ProjectionExpression` (string)**
+- **`QueryFilter` (object)**
+- **`ReturnConsumedCapacity` (string)**
+- **`ScanIndexForward` (boolean)**
+- **`Select` (string)**
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `RestoreTableFromBackup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableFromBackup.html)
+
+Properties:
+- **`BackupArn` (string) [required]**
+- **`TargetTableName` (string) [required]**
+- **`BillingModeOverride` (string)**
+- **`GlobalSecondaryIndexOverride` (array)**
+- **`LocalSecondaryIndexOverride` (array)**
+- **`ProvisionedThroughputOverride` (object)**
+- **`SSESpecificationOverride` (object)**
+
+
+### `RestoreTableToPointInTime`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableToPointInTime.html)
+
+Properties:
+- **`TargetTableName` (string) [required]**
+- **`BillingModeOverride` (string)**
+- **`GlobalSecondaryIndexOverride` (array)**
+- **`LocalSecondaryIndexOverride` (array)**
+- **`ProvisionedThroughputOverride` (object)**
+- **`RestoreDateTime` (number)**
+- **`SourceTableArn` (string)**
+- **`SourceTableName` (string)**
+- **`SSESpecificationOverride` (object)**
+- **`UseLatestRestorableTime` (boolean)**
+
+
+### `Scan`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`AttributesToGet` (array)**
+- **`ConditionalOperator` (string)**
+- **`ConsistentRead` (boolean)**
+- **`ExclusiveStartKey` (object)**
+- **`ExpressionAttributeNames` (object)**
+- **`ExpressionAttributeValues` (object)**
+- **`FilterExpression` (string)**
+- **`IndexName` (string)**
+- **`Limit` (number)**
+- **`ProjectionExpression` (string)**
+- **`ReturnConsumedCapacity` (string)**
+- **`ScanFilter` (object)**
+- **`Segment` (number)**
+- **`Select` (string)**
+- **`TotalSegments` (number)**
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `TagResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TagResource.html)
+
+Properties:
+- **`ResourceArn` (string) [required]**
+- **`Tags` (array) [required]**
+
+
+### `TransactGetItems`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html)
+
+Properties:
+- **`TransactItems` (array)**
+- **`ReturnConsumedCapacity` (string)**
+
+
+### `TransactWriteItems`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html)
+
+Properties:
+- **`TransactItems` (array)**
+- **`ClientRequestToken` (string)**
+- **`ReturnConsumedCapacity` (string)**
+- **`ReturnItemCollectionMetrics` (string)**
+
+
+### `UntagResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UntagResource.html)
+
+Properties:
+- **`ResourceArn` (string) [required]**
+- **`TagKeys` (array) [required]**
+
+
+### `UpdateContinuousBackups`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContinuousBackups.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`PointInTimeRecoverySpecification` (object)**
+
+
+### `UpdateContributorInsights`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContributorInsights.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`ContributorInsightsAction` (string)**
+- **`IndexName` (string)**
+
+
+### `UpdateGlobalTable`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateGlobalTable.html)
+
+Properties:
+- **`GlobalTableName` (string) [required]**
+- **`ReplicaUpdates` (array)**
+
+
+### `UpdateGlobalTableSettings`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateGlobalTableSettings.html)
+
+Properties:
+- **`GlobalTableName` (string) [required]**
+- **`GlobalTableBillingMode` (string)**
+- **`GlobalTableGlobalSecondaryIndexSettingsUpdate` (array)**
+- **`GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate` (object)**
+- **`GlobalTableProvisionedWriteCapacityUnits` (number)**
+- **`ReplicaSettingsUpdate` (array)**
+
+
+### `UpdateItem`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html)
+
+Properties:
+- **`Key` (object) [required]**
+- **`TableName` (string) [required]**
+- **`AttributeUpdates` (object)**
+- **`ConditionalOperator` (string)**
+- **`ConditionExpression` (string)**
+- **`Expected` (object)**
+- **`ExpressionAttributeNames` (object)**
+- **`ExpressionAttributeValues` (object)**
+- **`ReturnConsumedCapacity` (string)**
+- **`ReturnItemCollectionMetrics` (string)**
+- **`ReturnValues` (string)**
+- **`ReturnValuesOnConditionCheckFailure` (string)**
+- **`UpdateExpression` (string)**
+
+
+### `UpdateTable`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTable.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`AttributeDefinitions` (array)**
+- **`BillingMode` (string)**
+- **`DeletionProtectionEnabled` (boolean)**
+- **`GlobalSecondaryIndexUpdates` (array)**
+- **`ProvisionedThroughput` (object)**
+- **`ReplicaUpdates` (array)**
+- **`SSESpecification` (object)**
+- **`StreamSpecification` (object)**
+- **`TableClass` (string)**
+
+
+### `UpdateTableReplicaAutoScaling`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTableReplicaAutoScaling.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`GlobalSecondaryIndexUpdates` (array)**
+- **`ProvisionedWriteCapacityAutoScalingUpdate` (object)**
+- **`ReplicaUpdates` (array)**
+
+
+### `UpdateTimeToLive`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTimeToLive.html)
+
+Properties:
+- **`TableName` (string) [required]**
+- **`TimeToLiveSpecification` (object)**
 <!-- method_docs_end -->
 
 
