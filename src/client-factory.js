@@ -5,6 +5,7 @@ let request = require('./request')
 let { validateInput } = require('./validate')
 let { awsjson } = require('./lib')
 let errorHandler = require('./error')
+let aws
 
 let credentialProps = [ 'accessKeyId', 'secretAccessKey', 'sessionToken' ]
 let copy = obj => JSON.parse(JSON.stringify(obj))
@@ -43,10 +44,6 @@ module.exports = async function clientFactory (config, creds, region) {
   }
 
   if (plugins.length) {
-    // Only require the vendor if it's actually needed
-    // eslint-disable-next-line
-    let { marshall, unmarshall } = require('./_vendor/aws')
-
     for (let pluginName of plugins) {
       try {
         let plugin
@@ -91,9 +88,15 @@ module.exports = async function clientFactory (config, creds, region) {
         let credentials = copy(creds)
         Object.defineProperty(credentials, 'secretAccessKey', { enumerable: false })
         Object.defineProperty(credentials, 'sessionToken', { enumerable: false })
+
+        // Only require the vendor if it's actually needed
+        if (!aws) {
+          // eslint-disable-next-line
+          aws = require('./_vendor/aws')
+        }
         let pluginUtils = {
-          awsjsonMarshall: marshall,
-          awsjsonUnmarshall: unmarshall,
+          awsjsonMarshall: aws.marshall,
+          awsjsonUnmarshall: aws.unmarshall,
           config: configuration,
           credentials,
         }
