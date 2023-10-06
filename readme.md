@@ -180,6 +180,15 @@ The following parameters may be passed with individual client requests; only `se
   - Readable streams are currently experimental
     - Passing a Node.js readable stream initiates an HTTP data stream to the API endpoint instead of writing a normal HTTP body
     - Streams are not automatically signed like normal HTTP bodies, and may [require their own signing procedures, as in S3](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html)
+- **`paginate` (boolean) [experimental]**
+  - Enables (or disables) automatic result pagination; if pagination is enabled by default (see `paginator.default`), pass `false` to disable automatic pagination
+- **`paginator` (object) [experimental]**
+  - Enable automatic pagination for service API via the following properties:
+    - **`type` (string) [default = `payload`]** - `payload` (default) passes the cursor via body payload, `query` passes the cursor via query string parameter
+    - **`cursor` (string) [required]** - pagination token from the prior response payload to be passed with the current request; example: in S3 this is the query string parameter `continuation token`
+    - **`token` (string) [required]** - pagination token returned in each response payload to be passed with the next request as `cursor`; example: in S3, this would be `NextContinuationToken`
+    - **`accumulator` (string) [required]** - Response payload array property name to aggregate into final result set; example: in S3, this would be `Contents`
+    - **`default` (string)** - set value to `enabled` to enable pagination for all applicable requests by default; individual requests can opt out of pagination by setting `paginate` to `false`
 - **`query` (object)**
   - Serialize the passed object and append it to your `endpoint` as a query string in your request
 - **`service` (string) [required]**
@@ -210,6 +219,21 @@ await awsLite({
   payload: {
     TableName: '$table-name',
     Key: { myHashKey: 'Gaal', mySortKey: 'Dornick' }
+  },
+})
+
+// Paginate results
+await awsLite({
+  service: 'dynamodb',
+  headers: { 'X-Amz-Target': `DynamoDB_20120810.Scan` },
+  paginator: {
+    cursor: 'ExclusiveStartKey',
+    token: 'LastEvaluatedKey',
+    accumulator: 'Items',
+    enabled: 'default',
+  },
+  payload: {
+    TableName: '$table-name',
   },
 })
 ```
