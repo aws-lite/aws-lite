@@ -2,9 +2,20 @@ import incomplete from './incomplete.mjs'
 
 const service = 'ssm'
 const required = true
-const defaultRequest = method => (payload) => ({ awsjson: false, headers: headers(method), payload })
+const defaultRequest = (method, more = {}) => (payload) => {
+  let params = { awsjson: false, headers: headers(method), payload, ...more }
+  if (payload.paginate) {
+    delete params.payload.paginate
+    params.paginate = true
+  }
+  return params
+}
+const headers = (method, additional) => ({
+  'X-Amz-Target': `AmazonSSM.${method}`,
+  'content-type': 'application/x-amz-json-1.1',
+  ...additional
+})
 const defaultResponse = ({ payload }) => payload
-const headers = (method, additional) => ({ 'X-Amz-Target': `AmazonSSM.${method}`, 'content-type': 'application/x-amz-json-1.1', ...additional })
 
 /**
  * Plugin maintained by: @architect
@@ -21,8 +32,11 @@ export default {
         ParameterFilters: { type: 'array', comment: 'Array of filters to limit results' },
         Recursive:        { type: 'boolean', comment: 'Retrieve all parameters within a heirarchy' },
         WithDecryption:   { type: 'boolean', comment: 'Decrypt encrypted parameter values' },
+        paginate:         { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
       },
-      request: defaultRequest('GetParametersByPath'),
+      request: defaultRequest('GetParametersByPath', {
+        paginator: { cursor: 'NextToken', token: 'NextToken', accumulator: 'Parameters' }
+      }),
       response: defaultResponse,
     },
     ...incomplete,

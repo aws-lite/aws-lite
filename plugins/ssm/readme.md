@@ -33,6 +33,8 @@ Properties:
   - Retrieve all parameters within a heirarchy
 - **`WithDecryption` (boolean)**
   - Decrypt encrypted parameter values
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### Methods yet to be implemented
