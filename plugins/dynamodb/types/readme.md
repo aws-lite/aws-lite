@@ -1,4 +1,3 @@
-
 ## Install
 
 Add to `devDependencies` in `package.json`:

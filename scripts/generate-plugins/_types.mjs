@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 
 const CWD = cwd()
 const FILE = fileURLToPath(import.meta.url)
-const HERE = dirname(FILE)
+const __dirname = dirname(FILE)
 
 const isCLI = FILE === argv[1]
 if (isCLI) {
@@ -113,7 +113,7 @@ function createTypesStr ({ methods, name, service, existingTypes }) {
   const methodsRegex = /(?<=(\/\/ \$METHODS_START\n))[\s\S]*?(?=(\/\/ \$METHODS_END))/g
   const typesTmpl = existingTypes
     ? existingTypes
-    : readFileSync(join(HERE, 'tmpl', '_types-tmpl.d.ts')).toString()
+    : readFileSync(join(__dirname, 'tmpl', '_types-tmpl.d.ts')).toString()
   return typesTmpl
     .replace(/\$SERVICE/g, service)
     .replace(/\$NAME/g, name)
@@ -131,7 +131,7 @@ export default async function main ({ name, service }) {
   const typesName = `${name}-types`
   const fullTypesName = `@aws-lite/${typesName}`
   const fullPluginName = `@aws-lite/${name}`
-  const pluginTypesDir = join(CWD, 'plugins', typesName)
+  const pluginTypesDir = join(CWD, 'plugins', name, 'types')
 
   const { methods } = (await import(join(CWD, 'plugins', name, 'src', 'index.mjs'))).default
 
@@ -140,17 +140,17 @@ export default async function main ({ name, service }) {
     if (isCLI) console.log(`NEW package: ${fullTypesName}`)
     mkdirSync(pluginTypesDir, { recursive: true })
 
-    const typesPackageTmpl = readFileSync(join(HERE, 'tmpl', '_types-package-tmpl.json')).toString()
+    const typesPackageTmpl = readFileSync(join(__dirname, 'tmpl', '_types-package-tmpl.json')).toString()
     const typesPkg = JSON.parse(typesPackageTmpl)
 
     typesPkg.name = fullTypesName
     typesPkg.description = `Type definitions for the ${fullPluginName} plugin`
     typesPkg.dependencies[`@aws-sdk/client-${name}`] = '3'
 
-    writeFileSync(join(pluginTypesDir, 'package.json'), JSON.stringify(typesPkg, null, 2))
+    writeFileSync(join(pluginTypesDir, 'package.json'), JSON.stringify(typesPkg, null, 2) + '\n')
     if (isCLI) console.log(`Created ${pluginTypesDir}/package.json`)
 
-    const typesReadmeTmpl = readFileSync(join(HERE, 'tmpl', '_types-readme-tmpl.md'))
+    const typesReadmeTmpl = readFileSync(join(__dirname, 'tmpl', '_types-readme-tmpl.md'))
       .toString()
       .replace(/\$NAME/g, name)
 

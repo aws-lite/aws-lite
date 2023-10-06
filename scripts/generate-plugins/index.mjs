@@ -41,7 +41,7 @@ async function main () {
       pkg.description = desc
       pkg.author = maintainers
       pkg.repository.directory = `plugins/${plugin.name}`
-      writeFileSync(join(pluginDir, 'package.json'), JSON.stringify(pkg, null, 2))
+      writeFileSync(join(pluginDir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
 
       // Plugin: readme.md
       let maintainerLinks = plugin.maintainers.map(p => `[${p}](https://github.com/${p.replace('@', '')})`).join(', ')

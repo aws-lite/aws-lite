@@ -1,10 +1,12 @@
 import {
+  /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
   GetParametersByPathCommandOutput as GetParametersByPathResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-ssm";
 
 declare interface AwsLiteSSM {
+  /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
   /**
    * @description

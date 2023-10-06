@@ -1,4 +1,5 @@
 import {
+  /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
   GetObjectCommandOutput as GetObjectResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
@@ -8,6 +9,7 @@ import {
 } from "@aws-sdk/client-s3";
 
 declare interface AwsLiteS3 {
+  /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
   /**
    * @description

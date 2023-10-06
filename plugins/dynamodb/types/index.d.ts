@@ -1,4 +1,5 @@
 import {
+  /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
   BatchExecuteStatementCommandOutput as BatchExecuteStatementResponse,
   BatchGetItemCommandOutput as BatchGetItemResponse,
@@ -57,6 +58,7 @@ import {
 } from "@aws-sdk/client-dynamodb";
 
 declare interface AwsLiteDynamoDB {
+  /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
   /**
    * @description
