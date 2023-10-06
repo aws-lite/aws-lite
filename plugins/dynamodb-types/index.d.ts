@@ -1,4 +1,3 @@
-import "@aws-lite/client";
 import {
   // $IMPORTS_START
   BatchExecuteStatementCommandOutput,
@@ -166,7 +165,7 @@ declare interface AwsLiteDynamoDB {
   // $METHODS_END
 }
 
-declare global {
+declare module "@aws-lite/client" {
   interface AwsLiteClient {
     dynamodb: AwsLiteDynamoDB;
   }

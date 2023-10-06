@@ -1,4 +1,3 @@
-import "@aws-lite/client";
 import {
   // $IMPORTS_START
   // $IMPORTS_END
@@ -9,7 +8,7 @@ declare interface AwsLite$SERVICE {
   // $METHODS_END
 }
 
-declare global {
+declare module "@aws-lite/client" {
   interface AwsLiteClient {
     $NAME: AwsLite$SERVICE;
   }

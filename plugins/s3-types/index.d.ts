@@ -1,4 +1,3 @@
-import "@aws-lite/client";
 import {
   // $IMPORTS_START
   GetObjectCommandOutput,
@@ -18,7 +17,7 @@ declare interface AwsLiteS3 {
   // $METHODS_END
 }
 
-declare global {
+declare module "@aws-lite/client" {
   interface AwsLiteClient {
     s3: AwsLiteS3;
   }

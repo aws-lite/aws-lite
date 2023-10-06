@@ -140,16 +140,14 @@ export default async function main ({ name, service }) {
 
     typesPkg.name = fullTypesName
     typesPkg.description = `Type definitions for the ${fullPluginName} plugin`
-    // TODO: not "latest"
-    typesPkg.devDependencies['@aws-lite/client'] = 'latest'
-    typesPkg.devDependencies[fullPluginName] = 'latest'
-    typesPkg.devDependencies[`@aws-sdk/client-${name}`] = 'latest'
+    typesPkg.dependencies[`@aws-sdk/client-${name}`] = '3'
 
     writeFileSync(join(pluginTypesDir, 'package.json'), JSON.stringify(typesPkg, null, 2))
     if (isCLI) console.log(`Created ${pluginTypesDir}/package.json`)
 
-    let typesReadmeTmpl = readFileSync(join(HERE, 'tmpl', '_types-readme-tmpl.md')).toString()
-    typesReadmeTmpl = typesReadmeTmpl.replace(/\$NAME/g, name)
+    const typesReadmeTmpl = readFileSync(join(HERE, 'tmpl', '_types-readme-tmpl.md'))
+      .toString()
+      .replace(/\$NAME/g, name)
 
     writeFileSync(join(pluginTypesDir, 'readme.md'), typesReadmeTmpl)
     if (isCLI) console.log(`Created ${pluginTypesDir}/readme.md`)

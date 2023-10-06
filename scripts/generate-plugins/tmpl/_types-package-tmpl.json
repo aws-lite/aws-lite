@@ -1,9 +1,11 @@
 {
   "name": "@aws-lite/$NAME-types",
+  "description": "Type definitions for an @aws-lite plugin",
   "version": "0.0.0",
   "main": "",
   "types": "index.d.ts",
-  "devDependencies": {
-    "@aws-lite/client": "latest"
-  }
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {}
 }
