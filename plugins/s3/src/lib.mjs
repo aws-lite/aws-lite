@@ -44,6 +44,7 @@ const headerMappings = {
   ObjectLockLegalHoldStatus:  'x-amz-object-lock-legal-hold',
   ObjectLockMode:             'x-amz-object-lock-mode',
   ObjectLockRetainUntilDate:  'x-amz-object-lock-retain-until-date',
+  OptionalObjectAttributes:   'x-amz-optional-object-attributes',
   PartsCount:                 'x-amz-mp-parts-count',
   Range:                      'range',
   ReplicationStatus:          'x-amz-replication-status',
@@ -93,12 +94,30 @@ function getHeadersFromParams (params, ignore = []) {
   return headers
 }
 
+const QueryParamMappings = {
+  ContinuationToken: 'continuation-token',
+  Delimiter: 'delimiter',
+  EncodingType: 'encoding-type',
+  FetchOwner: 'fetch-owner',
+  MaxKeys: 'max-keys',
+  PartNumber: 'partNumber',
+  Prefix: 'prefix',
+  ResponseCacheControl: 'response-cache-control',
+  ResponseContentDisposition: 'response-content-disposition',
+  ResponseContentEncoding: 'response-content-encoding',
+  ResponseContentLanguage: 'response-content-language',
+  ResponseContentType: 'response-content-type',
+  ResponseExpires: 'response-expires',
+  StartAfter: 'start-after',
+  VersionId: 'versionId',
+}
+
 function getQueryFromParams (params, queryParams) {
   let query
   queryParams.forEach(p => {
-    if (params[p]) {
+    if (params[p] && QueryParamMappings[p]) {
       if (!query) query = {}
-      query[p] = params[p]
+      query[QueryParamMappings[p]] = params[p]
     }
   })
   return query
