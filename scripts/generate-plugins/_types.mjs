@@ -125,11 +125,12 @@ export default async function main ({ name, service }) {
   const typesName = `${name}-types`
   const fullTypesName = `@aws-lite/${typesName}`
   const fullPluginName = `@aws-lite/${name}`
-  const { methods } = (await import(join(CWD, 'plugins', name, 'src', 'index.mjs'))).default
   const pluginTypesDir = join(CWD, 'plugins', typesName)
 
+  const { methods } = (await import(join(CWD, 'plugins', name, 'src', 'index.mjs'))).default
+
   if (!existsSync(pluginTypesDir)) {
-    // new plugin types package
+    // new plugin types package - this only happens once
     if (isCLI) console.log(`NEW package: ${fullTypesName}`)
     mkdirSync(pluginTypesDir, { recursive: true })
 
@@ -145,6 +146,12 @@ export default async function main ({ name, service }) {
 
     writeFileSync(join(pluginTypesDir, 'package.json'), JSON.stringify(typesPkg, null, 2))
     if (isCLI) console.log(`Created ${pluginTypesDir}/package.json`)
+
+    let typesReadmeTmpl = readFileSync(join(HERE, 'tmpl', '_types-readme-tmpl.md')).toString()
+    typesReadmeTmpl = typesReadmeTmpl.replace(/\$NAME/g, name)
+
+    writeFileSync(join(pluginTypesDir, 'readme.md'), typesReadmeTmpl)
+    if (isCLI) console.log(`Created ${pluginTypesDir}/readme.md`)
   }
 
   const existingTypes = existsSync(join(pluginTypesDir, 'index.d.ts'))
@@ -153,6 +160,4 @@ export default async function main ({ name, service }) {
   const typesStr = createTypesStr({ methods, name, service, existingTypes })
   writeFileSync(join(pluginTypesDir, 'index.d.ts'), typesStr)
   if (isCLI) console.log(`Created ${pluginTypesDir}/index.d.ts`)
-
-  // TODO: plugin-types readme
 }

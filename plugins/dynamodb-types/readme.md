@@ -4,7 +4,7 @@
 Add to `devDependencies` in `package.json`:
 
 ```
-npm i -D aws-lite-dynamodb-types
+npm i -D @aws-lite/dynamodb-types
 ```
 
 <small>Be sure you also have `@aws-lite/dynamodb` installed.</small>
@@ -38,7 +38,7 @@ Example:
   "extends": "@tsconfig/node-lts/tsconfig.json",
   "compilerOptions": {
     "types": [
-      "aws-lite-dynamodb-types"
+      "@aws-lite/dynamodb-types"
     ]
   }
 }
@@ -49,11 +49,11 @@ Example:
 Either in individual files or in an `index.d.ts` file.
 
 ```ts
-/// <reference types="aws-lite-dynamodb-types" />
+/// <reference types="@aws-lite/dynamodb-types" />
 ```
 
 ymmv
 
 ```ts
-/// <reference path="./node_modules/aws-lite-dynamodb-types/index.d.ts" />
+/// <reference path="./node_modules/@aws-lite/dynamodb-types/index.d.ts" />
 ```
