@@ -4,16 +4,30 @@ let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
 let { is } = require('./validate')
 let { awsjson, useAWS } = require('./lib')
+let xml
 
+/* istanbul ignore next */
+let copy = obj => JSON.parse(JSON.stringify(obj))
 let JSONregex = /application\/json/
 let JSONContentType = ct => ct.match(JSONregex)
 let AwsJSONregex = /application\/x-amz-json/
 let AwsJSONContentType = ct => ct.match(AwsJSONregex)
 let XMLregex = /(application|text)\/xml/
 let XMLContentType = ct => ct.match(XMLregex)
+let textNodeName = '#text'
 
-module.exports = function request (params, creds, region, config, metadata) {
+module.exports = async function _request (params, creds, region, config, metadata) {
+  /* istanbul ignore next */ // TODO remove + test
+  if ((params.paginator?.default === 'enabled' && params.paginate !== false) ||
+      (params.paginator && params.paginate)) {
+    return await paginator(params, creds, region, config, metadata)
+  }
+  return request(params, creds, region, config, metadata)
+}
+
+function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
+    let { debug } = config
 
     // Path
     // Note: params.path may be passed if the request is coming from a plugin that pre-signed with aws4
@@ -83,6 +97,7 @@ module.exports = function request (params, creds, region, config, metadata) {
 
     // Sign the payload; let aws4 handle (most) logic related to region + service instantiation
     let signing = { region, ...params }
+
     /* istanbul ignore next */
     if (globalServices.includes(params.service)) {
       // If it's semi-global and the region is not us-east-1, leave the region in
@@ -116,7 +131,7 @@ module.exports = function request (params, creds, region, config, metadata) {
     options.agent = new http.Agent({ keepAlive: config.keepAlive ?? useAWS() })
 
     /* istanbul ignore next */
-    if (config.debug) {
+    if (debug) {
       let { method = 'GET', service, host, path, port = '', headers, protocol, body } = options
       let truncatedBody
       /**/ if (isBuffer) truncatedBody = `<body buffer of ${body.length}b>`
@@ -144,7 +159,7 @@ module.exports = function request (params, creds, region, config, metadata) {
           payload = JSON.parse(body)
 
           /* istanbul ignore next */
-          if (config.debug) rawString = body.toString()
+          if (debug) rawString = body.toString()
 
           // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
           if (AwsJSONContentType(contentType)) {
@@ -155,17 +170,46 @@ module.exports = function request (params, creds, region, config, metadata) {
           }
         }
         if (XMLContentType(contentType)) {
-          payload = body.toString()
+          // Only require the vendor if it's actually needed
           /* istanbul ignore next */
-          if (config.debug) rawString = payload
+          if (!xml) {
+            // eslint-disable-next-line
+            let vendor = require('./_vendor/xml')
+            // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
+            xml = new vendor.XMLParser({
+              attributeNamePrefix: '',
+              htmlEntities: true,
+              ignoreAttributes: false,
+              ignoreDeclaration: true,
+              parseTagValue: false,
+              trimValues: false,
+              tagValueProcessor: (_, val) => (val.trim() === '' && val.includes('\n') ? '' : undefined),
+            })
+            xml.addEntity('#xD', '\r')
+            xml.addEntity('#10', '\n')
+            xml.getValueFromTextNode = vendor.getValueFromTextNode
+          }
+
+          let parsed = xml.parse(body)
+          let key = Object.keys(parsed)[0]
+          let payloadToReturn = parsed[key]
+          /* istanbul ignore next */ // TODO remove + test
+          if (payloadToReturn[textNodeName]) {
+            payloadToReturn[key] = payloadToReturn[textNodeName]
+            delete payloadToReturn[textNodeName]
+          }
+          payload = xml.getValueFromTextNode(payloadToReturn)
+
+          /* istanbul ignore next */
+          if (debug) rawString = body.toString()
         }
         payload = payload || (body.length ? body : null)
 
         /* istanbul ignore next */
-        if (config.debug) {
+        if (debug) {
           let truncatedBody
           /**/ if (payload instanceof Buffer) truncatedBody = body.length ? `<body buffer of ${body.length}b>` : ''
-          else if (rawString) truncatedBody = rawString?.length > 1000 ? rawString?.substring(0, 1000) + '...' : rawString
+          else if (rawString) truncatedBody = rawString?.length > 250 ? rawString?.substring(0, 250) + '...' : rawString
           console.error('[aws-lite] Response:', {
             statusCode,
             headers,
@@ -191,7 +235,7 @@ module.exports = function request (params, creds, region, config, metadata) {
     if (isStream) {
       body.pipe(req)
       /* istanbul ignore next */
-      if (config.debug) {
+      if (debug) {
         let bytes = 0
         body.on('data', chunk => {
           bytes += chunk.length
@@ -201,4 +245,63 @@ module.exports = function request (params, creds, region, config, metadata) {
     }
     else req.end(options.body || '')
   })
+}
+
+let validPaginationTypes = [ 'payload', 'query' ]
+/* istanbul ignore next */
+async function paginator (params, creds, region, config, metadata) {
+  let { debug } = config
+  let { type, cursor, token, accumulator } = params.paginator
+  if (!cursor || typeof cursor !== 'string') {
+    throw ReferenceError(`aws-lite paginator requires a cursor property name (string)`)
+  }
+  if (!token || typeof token !== 'string') {
+    throw ReferenceError(`aws-lite paginator requires a token property name (string)`)
+  }
+  if (!accumulator || typeof accumulator !== 'string') {
+    throw ReferenceError(`aws-lite paginator requires an accumulator property name (string)`)
+  }
+  if (type && !validPaginationTypes.includes(type)) {
+    throw ReferenceError(`aws-lite paginator type must be one of: ${validPaginationTypes.join(', ')}`)
+  }
+
+  // aws4 has a lot of options, so our request() method mutates the passed params and just signs the whole thing
+  // That's normally fine! But we need to start from a fresh copy of the original headers each time, or content-length, auth, etc. will be passed by reference, and may get borked across multiple sequential requests
+  let originalHeaders = copy(params.headers || {})
+  let page = 1
+  let items = []
+  async function get () {
+    let result = await request(
+      { ...params, headers: copy(originalHeaders) },
+      creds, region, config, metadata
+    )
+    if (!result.payload) {
+      throw ReferenceError('Pagination error: missing API response')
+    }
+    if (typeof result.payload !== 'object') {
+      throw ReferenceError('Pagination error: response must be valid JSON or XML')
+    }
+    if (!result.payload[accumulator]) {
+      throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' not found`)
+    }
+    if (!Array.isArray(result.payload[accumulator])) {
+      throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' must be an array`)
+
+    }
+    items.push(...result.payload[accumulator])
+    if (result.payload[token]) {
+      if (type === 'payload' || !type) {
+        params.payload[cursor] = result.payload[token]
+      }
+      if (type === 'query') {
+        params.query = params.query || {}
+        params.query[cursor] = result.payload[token]
+      }
+      page++
+      if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
+      await get()
+    }
+  }
+  await get()
+  return { payload: { [accumulator]: items } }
 }

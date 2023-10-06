@@ -96,10 +96,10 @@ test('Primary client - core functionality', async t => {
   reset()
 
   // Endpoint returns XML
-  responseBody = '<hello>yo</hello>'
+  responseBody = '<result><hello>yo</hello></result>'
   server.use({ responseBody, responseHeaders: { 'content-type': 'application/xml' } })
   result = await aws({ service, endpoint })
-  t.deepEqual(result.payload, responseBody, 'Client returned response payload as XML string')
+  t.deepEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
   basicRequestChecks(t, 'GET')
 
   // Endpoint returns a buffer
