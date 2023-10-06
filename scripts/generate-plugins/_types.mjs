@@ -65,7 +65,7 @@ function createTypesStr ({ methods, name, service, existingTypes }) {
 
     const methodDef = methods[method]
 
-    if (methodDef) {
+    if (methodDef && !methodDef.disabled) {
       const methodResponse = `${method}Response`
       outputTypes.push(`  ${method}CommandOutput as ${methodResponse}`)
 
