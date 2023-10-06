@@ -14,8 +14,8 @@ npm i @aws-lite/ssm
 
 ## Docs
 
-<!-- ! Do not remove method_docs_start / method_docs_end ! -->
-<!-- method_docs_start -->
+<!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
+<!-- METHOD_DOCS_START -->
 ### `GetParametersByPath`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath)
@@ -178,7 +178,7 @@ Properties:
 - [`UpdatePatchBaseline`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_UpdatePatchBaseline)
 - [`UpdateResourceDataSync`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_UpdateResourceDataSync)
 - [`UpdateServiceSetting`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_UpdateServiceSetting)
-<!-- method_docs_end -->
+<!-- METHOD_DOCS_END -->
 
 
 ## Learn more

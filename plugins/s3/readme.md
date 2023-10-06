@@ -14,8 +14,8 @@ npm i @aws-lite/s3
 
 ## Methods
 
-<!-- ! Do not remove method_docs_start / method_docs_end ! -->
-<!-- method_docs_start -->
+<!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
+<!-- METHOD_DOCS_START -->
 ### `GetObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html)
@@ -311,7 +311,7 @@ Properties:
 - `UploadPart`
 - `UploadPartCopy`
 - `WriteGetObjectResponse`
-<!-- method_docs_end -->
+<!-- METHOD_DOCS_END -->
 
 
 ## Learn more

@@ -14,8 +14,8 @@ npm i @aws-lite/dynamodb
 
 ## Docs
 
-<!-- ! Do not remove method_docs_start / method_docs_end ! -->
-<!-- method_docs_start -->
+<!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
+<!-- METHOD_DOCS_START -->
 ### `BatchExecuteStatement`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchExecuteStatement.html)
@@ -608,7 +608,7 @@ Properties:
 Properties:
 - **`TableName` (string) [required]**
 - **`TimeToLiveSpecification` (object)**
-<!-- method_docs_end -->
+<!-- METHOD_DOCS_END -->
 
 
 ## Usage

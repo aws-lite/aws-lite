@@ -10,7 +10,7 @@ const pluginTmpl = readFileSync(join(tmplDir, '_plugin-tmpl.mjs')).toString()
 const readmeTmpl = readFileSync(join(tmplDir, '_readme-tmpl.md')).toString()
 const packageTmpl = readFileSync(join(tmplDir, '_package-tmpl.json')).toString()
 const pluginListRegex = /(?<=(<!-- plugins_start -->\n))[\s\S]*?(?=(<!-- plugins_end -->))/g
-const pluginMethodsRegex = /(?<=(<!-- method_docs_start -->\n))[\s\S]*?(?=(<!-- method_docs_end -->))/g
+const pluginMethodsRegex = /(?<=(<!-- METHOD_DOCS_START -->\n))[\s\S]*?(?=(<!-- METHOD_DOCS_END -->))/g
 
 async function main () {
   for (let plugin of plugins) {
