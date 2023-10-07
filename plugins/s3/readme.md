@@ -11,6 +11,11 @@
 npm i @aws-lite/s3
 ```
 
+Optionally install types:
+
+```sh
+npm i -D @aws-lite/s3-types
+```
 
 ## Methods
 

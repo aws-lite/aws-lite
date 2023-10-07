@@ -11,6 +11,12 @@
 npm i $NAME
 ```
 
+Optionally install types:
+
+```sh
+npm i -D $NAME-types
+```
+
 
 ## Docs
 

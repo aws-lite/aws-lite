@@ -11,6 +11,12 @@
 npm i @aws-lite/dynamodb
 ```
 
+Optionally install types:
+
+```sh
+npm i -D @aws-lite/dynamodb-types
+```
+
 
 ## Docs
 

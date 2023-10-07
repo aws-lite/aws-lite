@@ -11,6 +11,11 @@
 npm i @aws-lite/ssm
 ```
 
+Optionally install types:
+
+```sh
+npm i -D @aws-lite/ssm-types
+```
 
 ## Docs
 
