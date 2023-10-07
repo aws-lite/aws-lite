@@ -12,6 +12,7 @@
     "gen": "npm run generate-plugins",
     "generate-plugins": "node scripts/generate-plugins/index.mjs",
     "publish-plugins": "node scripts/publish-plugins",
+    "plugin": "node scripts/version-plugins.mjs",
     "lint": "eslint --fix .",
     "test": "npm run lint && npm run coverage",
     "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
@@ -40,6 +41,7 @@
     "fast-xml-parser": "^4.3.2",
     "mock-fs": "^5.2.0",
     "nyc": "^15.1.0",
+    "semver": "^7.5.4",
     "tap-spec": "^5.0.0",
     "tape": "^5.7.0"
   },

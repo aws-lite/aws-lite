@@ -580,3 +580,16 @@ Due to the nature of interacting with AWS services, manual validation is not onl
 #### Live AWS tests
 
 One should expect that running the live AWS client test suite (`npm run test:live`) will result in a limited number of free tier resources to be created in the account corresponding to your supplied (or default) AWS credentials. These resources should never exceed the free tier under normal circumstances.
+
+
+### Releasing `@aws-lite/*` plugins
+
+To release an update to a `@aws-lite/*` plugin, use the `npm run plugin` script with similar syntax to the `npm version` command, like so:
+
+- Commit all your changes and start in a clean state
+- Release a plugin (and its types): `npm run plugin [major|minor|patch] $plugin`
+  - Example: `npm run plugin minor dynamodb`
+- Patch a plugin's types only: `npm run plugin patch $plugin-types`
+  - Example: `npm run plugin patch dynamodb-types`
+  - Note: type changes can only be issued as patches
+- Push the commit
