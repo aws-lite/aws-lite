@@ -14,12 +14,18 @@ const obj = { type: 'object' }
 const str = { type: 'string' }
 const num = { type: 'number' }
 
-// Common validation  params
-const TableName = { ...str, required }
-const Key = { ...obj, required }
-const Item = { ...obj, required }
-const ReturnConsumedCapacity = str
-const ReturnItemCollectionMetrics = str
+// Reused validation params
+const AttributeDefinitions = { ...arr, required, comment: 'Array of attributes that describe the primary (and sort) schema for the table' }
+const BillingMode = { ...str, comment: 'Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`' }
+const DeletionProtectionEnabled = { ...bool, comment: 'Enable or disable deletion protection' }
+const Key = { ...obj, required, comment: 'Primary (and sort) key of the item in question' }
+const ProvisionedThroughput = { ...obj, comment: 'Provisioned throughput setting for table or index' }
+const ReturnConsumedCapacity = { ...str, comment: 'Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`' }
+const ReturnItemCollectionMetrics = { ...str, comment: 'Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)' }
+const SSESpecification = { ...obj, comment: 'Server-side encryption settings' }
+const StreamSpecification = { ...obj, comment: 'Settings for Streams, including: `StreamEnabled` (boolean), and `StreamViewType` (`KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, or `NEW_AND_OLD_IMAGES`)' }
+const TableClass = { ...str, comment: 'Class of the table, can be set to: `STANDARD`, or `STANDARD_INFREQUENT_ACCESS`' }
+const TableName = { ...str, required, comment: 'DynamoDB table name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => payload
@@ -39,7 +45,7 @@ const paginator = {
 const BatchExecuteStatement = {
   awsDoc: docRoot + 'API_BatchExecuteStatement.html',
   validate: {
-    Statements: { ...arr, required },
+    Statements: { ...arr, required, comment: 'Array of PartiQL statements representing the batch being run' },
     ReturnConsumedCapacity,
   },
   request: async (params, { awsjsonMarshall }) => {
@@ -69,7 +75,7 @@ const BatchExecuteStatement = {
 const BatchGetItem = {
   awsDoc: docRoot + 'API_BatchGetItem.html',
   validate: {
-    RequestItems: { ...obj, required },
+    RequestItems: { ...obj, required, comment: 'An object containing >=1 table names and, for each table, an object describing >=1 items to get' },
     ReturnConsumedCapacity,
   },
   request: async (params, { awsjsonMarshall }) => {
@@ -103,7 +109,7 @@ const BatchGetItem = {
 const BatchWriteItem = {
   awsDoc: docRoot + 'API_BatchWriteItem.html',
   validate: {
-    RequestItems: { ...obj, required },
+    RequestItems: { ...obj, required, comment: 'An object containing >=1 table names and, for each table, an object describing >=1 items to write' },
     ReturnConsumedCapacity,
     ReturnItemCollectionMetrics,
   },
@@ -153,7 +159,7 @@ const CreateBackup = {
   awsDoc: docRoot + 'API_CreateBackup.html',
   validate: {
     TableName,
-    BackupName: { ...str, required },
+    BackupName: { ...str, required, comment: 'Specified name of the backup' },
   },
   request: async (params) => ({
     headers: headers('CreateBackup'), // Undocumented as of author time
@@ -166,7 +172,7 @@ const CreateGlobalTable = {
   awsDoc: docRoot + 'API_CreateGlobalTable.html',
   validate: {
     GlobalTableName: TableName,
-    ReplicationGroup: { ...arr, required },
+    ReplicationGroup: { ...arr, required, comment: 'AWS regions where the global table needs to be created' },
   },
   request: async (params) => ({
     headers: headers('CreateGlobalTable'), // Undocumented as of author time
@@ -179,17 +185,17 @@ const CreateTable = {
   awsDoc: docRoot + 'API_CreateTable.html',
   validate: {
     TableName,
-    AttributeDefinitions: { ...arr, required },
-    KeySchema: { ...arr, required },
-    BillingMode: str,
-    DeletionProtectionEnabled: bool,
-    GlobalSecondaryIndexes: arr,
-    LocalSecondaryIndexes: arr,
-    ProvisionedThroughput: obj,
-    SSESpecification: obj,
-    StreamSpecification: obj,
-    TableClass: str,
-    Tags: arr,
+    AttributeDefinitions,
+    KeySchema: { ...arr, required, comment: 'Attributes that make up the primary key for a table or index. The attributes in `KeySchema` must also be defined in the `AttributeDefinitions` array' },
+    BillingMode,
+    DeletionProtectionEnabled,
+    GlobalSecondaryIndexes: { ...arr, comment: `1-20 global secondary indexes to be created on the table; please refer to ${docRoot}API_CreateTable.html#DDB-CreateTable-request-GlobalSecondaryIndexes` },
+    LocalSecondaryIndexes: { ...arr, comment: `1-5 local secondary indexes to be created on the table; please refer to ${docRoot}API_CreateTable.html#DDB-CreateTable-request-LocalSecondaryIndexes` },
+    ProvisionedThroughput,
+    SSESpecification,
+    StreamSpecification,
+    TableClass,
+    Tags: { ...arr, comment: 'Array of pairs to label the table' },
   },
   request: async (params) => ({
     headers: headers('CreateTable'),
@@ -641,7 +647,7 @@ const PutItem = {
   awsDoc: docRoot + 'API_PutItem.html',
   validate: {
     TableName,
-    Item,
+    Item: { ...obj, required, comment: 'Item to be written to DynamoDB' },
     ConditionalOperator: str, // Legacy
     ConditionExpression: str,
     Expected: str, // Legacy, we're not automatically serializing to AWS-flavored JSON
@@ -992,14 +998,14 @@ const UpdateTable = {
   validate: {
     TableName,
     AttributeDefinitions: arr,
-    BillingMode: str,
-    DeletionProtectionEnabled: bool,
+    BillingMode,
+    DeletionProtectionEnabled,
     GlobalSecondaryIndexUpdates: arr,
-    ProvisionedThroughput: obj,
+    ProvisionedThroughput,
     ReplicaUpdates: arr,
-    SSESpecification: obj,
-    StreamSpecification: obj,
-    TableClass: str,
+    SSESpecification,
+    StreamSpecification,
+    TableClass,
   },
   request: async (params) => ({
     headers: headers('UpdateTable'),
