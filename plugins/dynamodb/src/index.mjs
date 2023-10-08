@@ -17,10 +17,13 @@ const num = { type: 'number' }
 
 // Reused validation params
 const AttributeDefinitions = { ...arr, required, comment: 'Array of attributes that describe the primary (and sort) schema for the table' }
+const AttributesToGet = { ...arr, comment: 'Legacy parameter, use `ProjectionExpression` instead' }
 const BackupArn = { ...str, required, comment: 'ARN of the specified backup' }
 const BillingMode = { ...str, comment: 'Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`' }
+const ClientToken = { ...str, comment: 'Ensures operation request is idempotent' }
 const ConditionalOperator = { ...str, comment: 'Legacy parameter, use `FilterExpression` instead' }
 const ConditionExpression = { ...str, comment: `Condition that must be satisfied in order to complete the operation, see: ${devGuide}Expressions.ConditionExpressions.html` }
+const ConsistentRead = { ...bool, comment: 'Enable strongly consistent reads; by default eventually consistent reads are used' }
 const DeletionProtectionEnabled = { ...bool, comment: 'Enable or disable deletion protection' }
 const Expected = { ...obj, comment: 'Legacy parameter, use `ConditionExpression` instead' }
 const ExpressionAttributeNames = { ...obj, comment: `Substitution tokens for attribute names in an expression, see: ${devGuide}Expressions.Attributes.html` }
@@ -28,6 +31,9 @@ const ExpressionAttributeValues = { ...str, comment: `Values that can be substit
 const GlobalTableName = { ...str, required, comment: 'DynamoDB global table name' }
 const IndexName = { ...str, comment: 'DynamoDB global secondary index name (if applicable)' }
 const Key = { ...obj, required, comment: 'Primary (and sort) key of the item in question' }
+const Limit = { ...num, comment: 'Maximum number of items to evaluate and return' }
+const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
+const ProjectionExpression = { ...str, comment: 'Comma separated string that identifies one or more attributes to retrieve from the table' }
 const ProvisionedThroughput = { ...obj, comment: 'Provisioned throughput setting for table or index' }
 const ReturnConsumedCapacity = { ...str, comment: 'Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`' }
 const ReturnItemCollectionMetrics = { ...str, comment: 'Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)' }
@@ -445,11 +451,11 @@ const ExecuteStatement = {
   awsDoc: docRoot + 'API_ExecuteStatement.html',
   validate: {
     TableName,
-    Statement: { ...str, required },
-    ConsistentRead: bool,
-    Limit: num,
-    NextToken: str,
-    Parameters: obj,
+    Statement: { ...str, required, comment: 'PartiQL statement representing the operation to run' },
+    ConsistentRead,
+    Limit,
+    NextToken,
+    Parameters: { ...obj, comment: 'PartiQL statement parameters, if any' },
     ReturnConsumedCapacity,
     ReturnValuesOnConditionCheckFailure,
   },
@@ -473,8 +479,8 @@ const ExecuteTransaction = {
   awsDoc: docRoot + 'API_ExecuteTransaction.html',
   validate: {
     TableName,
-    TransactStatements: { ...arr, required },
-    ClientRequestToken: str,
+    TransactStatements: { ...arr, required, comment: 'PartiQL statement parameters representing the transaction to run' },
+    ClientRequestToken: NextToken,
     ReturnConsumedCapacity,
   },
   request: async (params, { awsjsonMarshall }) => {
@@ -503,15 +509,15 @@ const ExecuteTransaction = {
 const ExportTableToPointInTime = {
   awsDoc: docRoot + 'API_ExportTableToPointInTime.html',
   validate: {
-    S3Bucket: { ...str, required },
-    TableArn: { ...str, required },
-    ClientToken: str,
-    ExportFormat: str,
-    ExportTime: num,
-    S3BucketOwner: str,
-    S3Prefix: str,
-    S3SseAlgorithm: str,
-    S3SseKmsKeyId: str,
+    S3Bucket: { ...str, required, comment: 'Destination S3 bucket of the snapshot export' },
+    TableArn: { ...str, required, comment: 'ARN of the table being exported' },
+    ClientToken,
+    ExportFormat: { str, comment: 'Format for the exported data, can be set to: `DYNAMODB_JSON`, or `IO`' },
+    ExportTime: { ...num, comment: 'Point in time (in epoch seconds) from which to export table data' },
+    S3BucketOwner: { ...str, comment: 'AWS account ID that owns the destination S3 bucket' },
+    S3Prefix: { ...str, comment: 'S3 bucket prefix to use as the file name and path of the exported snapshot' },
+    S3SseAlgorithm: { ...str, comment: 'Type of encryption used on the bucket where export data will be stored, can be set to `AES256`, or `KMS`' },
+    S3SseKmsKeyId: { ...str, comment: 'AWS KMS managed key ID used to encrypt the destination S3 bucket (if applicable)' },
   },
   request: async (params) => ({
     headers: headers('ExportTableToPointInTime'),
@@ -525,10 +531,10 @@ const GetItem = {
   validate: {
     TableName,
     Key,
-    AttributesToGet: arr, // Legacy
-    ConsistentRead: bool,
+    AttributesToGet,
+    ConsistentRead,
     ExpressionAttributeNames,
-    ProjectionExpression: str,
+    ProjectionExpression,
     ReturnConsumedCapacity,
   },
   request: async (params) => ({
@@ -543,9 +549,9 @@ const ImportTable = {
   awsDoc: docRoot + 'API_ImportTable.html',
   validate: {
     InputFormat: { ...str, required },
-    S3BucketSource: { ...obj, required },
+    S3BucketSource: { ...obj, required, comment: 'Destination S3 bucket of the snapshot import' },
     TableCreationParameters: { ...obj, required },
-    ClientToken: str,
+    ClientToken,
     InputCompressionType: str,
     InputFormatOptions: obj,
   },
@@ -561,7 +567,7 @@ const ListBackups = {
   validate: {
     BackupType: str,
     ExclusiveStartBackupArn: str,
-    Limit: num,
+    Limit,
     TableName: str,
     TimeRangeLowerBound: num,
     TimeRangeUpperBound: num,
@@ -577,7 +583,7 @@ const ListContributorInsights = {
   awsDoc: docRoot + 'API_ListContributorInsights.html',
   validate: {
     MaxResults: num,
-    NextToken: str,
+    NextToken,
     TableName: str,
   },
   request: async (params) => ({
@@ -591,7 +597,7 @@ const ListExports = {
   awsDoc: docRoot + 'API_ListExports.html',
   validate: {
     MaxResults: num,
-    NextToken: str,
+    NextToken,
     TableArn: str,
   },
   request: async (params) => ({
@@ -605,7 +611,7 @@ const ListGlobalTables = {
   awsDoc: docRoot + 'API_ListGlobalTables.html',
   validate: {
     ExclusiveStartGlobalTableName: str,
-    Limit: num,
+    Limit,
     RegionName: str,
   },
   request: async (params) => ({
@@ -618,7 +624,7 @@ const ListGlobalTables = {
 const ListImports = {
   awsDoc: docRoot + 'API_ListImports.html',
   validate: {
-    NextToken: str,
+    NextToken,
     PageSize: num,
     TableArn: str,
   },
@@ -633,7 +639,7 @@ const ListTables = {
   awsDoc: docRoot + 'API_ListTables.html',
   validate: {
     ExclusiveStartTableName: str,
-    Limit: num,
+    Limit,
   },
   request: async (params) => ({
     headers: headers('ListTables'),
@@ -645,7 +651,7 @@ const ListTables = {
 const ListTagsOfResource = {
   awsDoc: docRoot + 'API_ListTagsOfResource.html',
   validate: {
-    NextToken: str,
+    NextToken,
     ResourceArn: { ...str, required },
   },
   request: async (params) => ({
@@ -682,9 +688,8 @@ const Query = {
   awsDoc: docRoot + 'API_Query.html',
   validate: {
     TableName,
-    AttributesToGet: arr,
-    ConditionalOperator,
-    ConsistentRead: bool,
+    AttributesToGet,    ConditionalOperator,
+    ConsistentRead,
     ExclusiveStartKey: obj,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
@@ -692,8 +697,8 @@ const Query = {
     IndexName,
     KeyConditionExpression: str,
     KeyConditions: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
-    Limit: num,
-    ProjectionExpression: str,
+    Limit,
+    ProjectionExpression,
     QueryFilter: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
     ReturnConsumedCapacity: str,
     ScanIndexForward: bool,
@@ -764,16 +769,15 @@ const Scan = {
   awsDoc: docRoot + 'API_Scan.html',
   validate: {
     TableName,
-    AttributesToGet: arr,
-    ConditionalOperator,
-    ConsistentRead: bool,
+    AttributesToGet,    ConditionalOperator,
+    ConsistentRead,
     ExclusiveStartKey: obj,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
     FilterExpression: str,
     IndexName,
-    Limit: num,
-    ProjectionExpression: str,
+    Limit,
+    ProjectionExpression,
     ReturnConsumedCapacity: str,
     ScanFilter: obj,  // Legacy, we're not automatically serializing to AWS-flavored JSON
     Segment: num,
