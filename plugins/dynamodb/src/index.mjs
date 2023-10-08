@@ -1,6 +1,7 @@
 const service = 'dynamodb'
 const required = true
 const docRoot = 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/'
+const devGuide = 'https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/'
 
 // Common params to be AWS-flavored JSON-encoded
 const awsjsonReq = [ 'ExclusiveStartKey', 'ExpressionAttributeValues', 'Item', 'Key', ]
@@ -16,13 +17,24 @@ const num = { type: 'number' }
 
 // Reused validation params
 const AttributeDefinitions = { ...arr, required, comment: 'Array of attributes that describe the primary (and sort) schema for the table' }
+const BackupArn = { ...str, required, comment: 'ARN of the specified backup' }
 const BillingMode = { ...str, comment: 'Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`' }
+const ConditionalOperator = { ...str, comment: 'Legacy parameter, use `FilterExpression` instead' }
+const ConditionExpression = { ...str, comment: `Condition that must be satisfied in order to complete the operation, see: ${devGuide}Expressions.ConditionExpressions.html` }
 const DeletionProtectionEnabled = { ...bool, comment: 'Enable or disable deletion protection' }
+const Expected = { ...obj, comment: 'Legacy parameter, use `ConditionExpression` instead' }
+const ExpressionAttributeNames = { ...obj, comment: `Substitution tokens for attribute names in an expression, see: ${devGuide}Expressions.Attributes.html` }
+const ExpressionAttributeValues = { ...str, comment: `Values that can be substituted in an expression, see: ${devGuide}Expressions.ConditionExpressions.html` }
+const GlobalTableName = { ...str, required, comment: 'DynamoDB global table name' }
+const IndexName = { ...str, comment: 'DynamoDB global secondary index name (if applicable)' }
 const Key = { ...obj, required, comment: 'Primary (and sort) key of the item in question' }
 const ProvisionedThroughput = { ...obj, comment: 'Provisioned throughput setting for table or index' }
 const ReturnConsumedCapacity = { ...str, comment: 'Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`' }
 const ReturnItemCollectionMetrics = { ...str, comment: 'Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)' }
+const ReturnValues = { ...str, comment: 'Return the item as it was prior to the operation taking place, can be set to `NONE` (default), or `ALL_OLD`' }
+const ReturnValuesOnConditionCheckFailure = { ...str, comment: 'Return the item attributes that failed  a condition check, can be set to `NONE`, or `ALL_OLD`' }
 const SSESpecification = { ...obj, comment: 'Server-side encryption settings' }
+const StreamArn = { ...str, required, comment: 'ARN of the specified Kinesis data stream' }
 const StreamSpecification = { ...obj, comment: 'Settings for Streams, including: `StreamEnabled` (boolean), and `StreamViewType` (`KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, or `NEW_AND_OLD_IMAGES`)' }
 const TableClass = { ...str, comment: 'Class of the table, can be set to: `STANDARD`, or `STANDARD_INFREQUENT_ACCESS`' }
 const TableName = { ...str, required, comment: 'DynamoDB table name' }
@@ -207,7 +219,7 @@ const CreateTable = {
 const DeleteBackup = {
   awsDoc: docRoot + 'API_DeleteBackup.html',
   validate: {
-    BackupArn: { ...str, required },
+    BackupArn,
   },
   request: async (params) => ({
     headers: headers('DeleteBackup'),
@@ -221,15 +233,15 @@ const DeleteItem = {
   validate: {
     TableName,
     Key,
-    ConditionalOperator: str,
-    ConditionExpression: str,
-    Expected: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
-    ExpressionAttributeNames: obj,
-    ExpressionAttributeValues: obj,
+    ConditionalOperator,
+    ConditionExpression,
+    Expected,
+    ExpressionAttributeNames,
+    ExpressionAttributeValues,
     ReturnConsumedCapacity,
     ReturnItemCollectionMetrics,
-    ReturnValues: str,
-    ReturnValuesOnConditionCheckFailure: str,
+    ReturnValues,
+    ReturnValuesOnConditionCheckFailure,
   },
   request: async (params) => ({
     awsjson: awsjsonReq,
@@ -257,7 +269,7 @@ const DeleteTable = {
 const DescribeBackup = {
   awsDoc: docRoot + 'API_DescribeBackup.html',
   validate: {
-    BackupArn: { ...str, required },
+    BackupArn,
   },
   request: async (params) => ({
     headers: headers('DescribeBackup'),
@@ -282,7 +294,7 @@ const DescribeContributorInsights = {
   awsDoc: docRoot + 'API_DescribeContributorInsights.html',
   validate: {
     TableName,
-    IndexName: str,
+    IndexName,
   },
   request: async (params) => ({
     headers: headers('DescribeContributorInsights'),
@@ -302,7 +314,7 @@ const DescribeEndpoints = {
 const DescribeExport = {
   awsDoc: docRoot + 'API_DescribeExport.html',
   validate: {
-    ExportArn: { ...str, required },
+    ExportArn: { ...str, required, comment: 'ARN of the specified export' },
   },
   request: async (params) => ({
     headers: headers('DescribeExport'),
@@ -314,7 +326,7 @@ const DescribeExport = {
 const DescribeGlobalTable = {
   awsDoc: docRoot + 'API_DescribeGlobalTable.html',
   validate: {
-    GlobalTableName: { ...str, required },
+    GlobalTableName,
   },
   request: async (params) => ({
     headers: headers('DescribeGlobalTable'),
@@ -326,7 +338,7 @@ const DescribeGlobalTable = {
 const DescribeGlobalTableSettings = {
   awsDoc: docRoot + 'API_DescribeGlobalTableSettings.html',
   validate: {
-    GlobalTableName: { ...str, required },
+    GlobalTableName,
   },
   request: async (params) => ({
     headers: headers('DescribeGlobalTableSettings'),
@@ -338,7 +350,7 @@ const DescribeGlobalTableSettings = {
 const DescribeImport = {
   awsDoc: docRoot + 'API_DescribeImport.html',
   validate: {
-    ImportArn: { ...str, required },
+    ImportArn: { ...str, required, comment: 'ARN of the specified import' },
   },
   request: async (params) => ({
     headers: headers('DescribeImport'),
@@ -407,7 +419,7 @@ const DisableKinesisStreamingDestination = {
   awsDoc: docRoot + 'API_DisableKinesisStreamingDestination.html',
   validate: {
     TableName,
-    StreamArn: { ...str, required },
+    StreamArn,
   },
   request: async (params) => ({
     headers: headers('DisableKinesisStreamingDestination'),
@@ -420,7 +432,7 @@ const EnableKinesisStreamingDestination = {
   awsDoc: docRoot + 'API_EnableKinesisStreamingDestination.html',
   validate: {
     TableName,
-    StreamArn: { ...str, required },
+    StreamArn,
   },
   request: async (params) => ({
     headers: headers('EnableKinesisStreamingDestination'),
@@ -439,7 +451,7 @@ const ExecuteStatement = {
     NextToken: str,
     Parameters: obj,
     ReturnConsumedCapacity,
-    ReturnValuesOnConditionCheckFailure: str,
+    ReturnValuesOnConditionCheckFailure,
   },
   request: async (params, { awsjsonMarshall }) => {
     if (params.Parameters) params.Parameters = params.Parameters.map(awsjsonMarshall)
@@ -515,7 +527,7 @@ const GetItem = {
     Key,
     AttributesToGet: arr, // Legacy
     ConsistentRead: bool,
-    ExpressionAttributeNames: obj,
+    ExpressionAttributeNames,
     ProjectionExpression: str,
     ReturnConsumedCapacity,
   },
@@ -648,15 +660,15 @@ const PutItem = {
   validate: {
     TableName,
     Item: { ...obj, required, comment: 'Item to be written to DynamoDB' },
-    ConditionalOperator: str, // Legacy
-    ConditionExpression: str,
-    Expected: str, // Legacy, we're not automatically serializing to AWS-flavored JSON
-    ExpressionAttributeNames: obj,
-    ExpressionAttributeValues: obj,
+    ConditionalOperator,
+    ConditionExpression,
+    Expected,
+    ExpressionAttributeNames,
+    ExpressionAttributeValues,
     ReturnConsumedCapacity,
     ReturnItemCollectionMetrics,
-    ReturnValues: str,
-    ReturnValuesOnConditionCheckFailure: str,
+    ReturnValues,
+    ReturnValuesOnConditionCheckFailure,
   },
   request: async (params) => ({
     awsjson: awsjsonReq,
@@ -671,13 +683,13 @@ const Query = {
   validate: {
     TableName,
     AttributesToGet: arr,
-    ConditionalOperator: str,
+    ConditionalOperator,
     ConsistentRead: bool,
     ExclusiveStartKey: obj,
-    ExpressionAttributeNames: obj,
-    ExpressionAttributeValues: obj,
+    ExpressionAttributeNames,
+    ExpressionAttributeValues,
     FilterExpression: str,
-    IndexName: str,
+    IndexName,
     KeyConditionExpression: str,
     KeyConditions: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
     Limit: num,
@@ -753,13 +765,13 @@ const Scan = {
   validate: {
     TableName,
     AttributesToGet: arr,
-    ConditionalOperator: str,
+    ConditionalOperator,
     ConsistentRead: bool,
     ExclusiveStartKey: obj,
-    ExpressionAttributeNames: obj,
-    ExpressionAttributeValues: obj,
+    ExpressionAttributeNames,
+    ExpressionAttributeValues,
     FilterExpression: str,
-    IndexName: str,
+    IndexName,
     Limit: num,
     ProjectionExpression: str,
     ReturnConsumedCapacity: str,
@@ -921,7 +933,7 @@ const UpdateContributorInsights = {
   validate: {
     TableName,
     ContributorInsightsAction: str,
-    IndexName: str,
+    IndexName,
   },
   request: async (params) => ({
     headers: headers('UpdateContributorInsights'),
@@ -933,7 +945,7 @@ const UpdateContributorInsights = {
 const UpdateGlobalTable = {
   awsDoc: docRoot + 'API_UpdateGlobalTable.html',
   validate: {
-    GlobalTableName: { ...str, required },
+    GlobalTableName,
     ReplicaUpdates: arr,
   },
   request: async (params) => ({
@@ -946,7 +958,7 @@ const UpdateGlobalTable = {
 const UpdateGlobalTableSettings = {
   awsDoc: docRoot + 'API_UpdateGlobalTableSettings.html',
   validate: {
-    GlobalTableName: { ...str, required },
+    GlobalTableName,
     GlobalTableBillingMode: str,
     GlobalTableGlobalSecondaryIndexSettingsUpdate: arr,
     GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate: obj,
@@ -966,15 +978,15 @@ const UpdateItem = {
     Key,
     TableName,
     AttributeUpdates: obj,
-    ConditionalOperator: str,
-    ConditionExpression: str,
-    Expected: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
-    ExpressionAttributeNames: obj,
-    ExpressionAttributeValues: obj,
+    ConditionalOperator,
+    ConditionExpression,
+    Expected,
+    ExpressionAttributeNames,
+    ExpressionAttributeValues,
     ReturnConsumedCapacity: str,
     ReturnItemCollectionMetrics: str,
-    ReturnValues: str,
-    ReturnValuesOnConditionCheckFailure: str,
+    ReturnValues: { ...str, comment: 'Return the item as it was prior to the operation taking place, can be set to `NONE` (default), `ALL_OLD`, `UPDATED_OLD`, `ALL_NEW`, `UPDATED_NEW`' },
+    ReturnValuesOnConditionCheckFailure,
     UpdateExpression: str,
   },
   request: async (params) => ({
