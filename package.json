@@ -14,7 +14,7 @@
     "publish-plugins": "node scripts/publish-plugins",
     "plugin": "node scripts/version-plugins.mjs",
     "lint": "eslint --fix .",
-    "test": "npm run lint && npm run coverage",
+    "test": "npm run lint && npm run gen && npm run coverage",
     "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
     "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-spec",
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-spec",
