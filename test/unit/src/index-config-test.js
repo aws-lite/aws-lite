@@ -95,6 +95,38 @@ test('Configuration - per-request overrides', async t => {
   await aws({ service, endpoint, hostname: host, port, protocol })
 
   basicRequestChecks(t, 'GET')
+  reset()
+
+  await server.end()
+  t.pass('Server ended')
+})
+
+test('Configuration - endpoint prefix', async t => {
+  t.plan(22)
+  let aws
+  let started = await server.start()
+  t.ok(started, 'Started server')
+
+  let endpointPrefix
+  endpointPrefix = 'foo'
+  aws = await client({ ...config, endpointPrefix })
+  await aws({ service, endpoint, host, port, protocol })
+  basicRequestChecks(t, 'GET', { url: `/${endpointPrefix}${endpoint}` })
+
+  endpointPrefix = '/foo/bar'
+  aws = await client({ ...config, endpointPrefix })
+  await aws({ service, endpoint, host, port, protocol })
+  basicRequestChecks(t, 'GET', { url: `${endpointPrefix}${endpoint}` })
+
+  endpointPrefix = '/foo//bar'
+  aws = await client({ ...config, endpointPrefix })
+  await aws({ service, endpoint, host, port, protocol })
+  basicRequestChecks(t, 'GET', { url: `/foo/bar${endpoint}` })
+
+  endpointPrefix = 'foo/bar/'
+  aws = await client({ ...config, endpointPrefix })
+  await aws({ service, endpoint, host, port, protocol })
+  basicRequestChecks(t, 'GET', { url: `/foo/bar${endpoint}` })
 
   await server.end()
   t.pass('Server ended')

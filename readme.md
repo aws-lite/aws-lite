@@ -10,6 +10,8 @@
 - [Quickstart](#quickstart)
 - [Usage](#usage)
   - [Configuration](#configuration)
+    - [Credentials + region](#credentials--region)
+    - [General config](#general-config)
   - [Client requests](#client-requests)
   - [Client responses](#client-responses)
 - [Plugins](#plugins)
@@ -26,6 +28,7 @@
   - [Testing](#testing)
     - [Methodology](#methodology)
     - [Live AWS tests](#live-aws-tests)
+  - [Releasing `@aws-lite/*` plugins](#releasing-aws-lite-plugins)
 
 ---
 
@@ -100,6 +103,8 @@ await aws({
 
 The following options may be passed when instantiating the `aws-lite` client:
 
+#### Credentials + region
+
 - **`accessKeyId` (string)**
   - AWS access key; if not provided, defaults to `AWS_ACCESS_KEY_ID` or `AWS_ACCESS_KEY` env vars, and then to a `~/.aws/credentials` file, if present
   - Manually specify a credentials file location with the `AWS_SHARED_CREDENTIALS_FILE` env var
@@ -119,22 +124,28 @@ The following options may be passed when instantiating the `aws-lite` client:
   - Region setting can be overridden per-request
 - **`profile` (string)**
   - AWS config + credentials profile; if not provided, defaults to `AWS_PROFILE` env var, and then to the `default` profile, if present
+
+
+#### General config
+
 - **`autoloadPlugins` (boolean) [default = true]**
   - Automatically load installed `@aws-lite/*` + `aws-lite-plugin-*` plugins
 - **`debug` (boolean) [default = false]**
   - Enable debug logging to console
-- **`keepAlive` (boolean) [default = true]**
-  - Disable Node.js's connection keep-alive, helpful for local testing
-- **`protocol` (string) [default = `https`]**
-  - Set the connection protocol to `http`, helpful for local testing
+- **`endpointPrefix` (string)**
+  - Add prefix to endpoint requests, helpful for local testing
 - **`host` (string)**
   - Set a custom host name to use, helpful for local testing
-- **`port` (number)**
-  - Set a custom port number to use, helpful for local testing
+- **`keepAlive` (boolean) [default = true]**
+  - Disable Node.js's connection keep-alive, helpful for local testing
 - **`plugins` (array)**
   - Define `aws-lite` plugins to load; can be module names (e.g. `@aws-lite/dynamodb`) or file paths on the local machine (e.g. `/path/to/my/plugin.mjs`)
   - By default, all installed [official plugins (prefixed with `@aws-lite/`)](#list-of-official-aws-lite-plugins) and unofficial plugins (prefixed with `aws-lite-plugin-`) will be loaded
   - Specifying plugins will disable auto-loading plugins
+- **`port` (number)**
+  - Set a custom port number to use, helpful for local testing
+- **`protocol` (string) [default = `https`]**
+  - Set the connection protocol to `http`, helpful for local testing
 
 An example:
 
@@ -152,11 +163,13 @@ aws = await awsLite({
   region: 'us-west-1',
   profile: 'work',
   autoloadPlugins: false, // Not necessary if manually specifying plugins
-  keepAlive: false,
-  protocol: 'http',
+  debug: true,
+  endpointPrefix: '/test/path/',
   host: 'localhost',
-  port: 12345,
+  keepAlive: false,
   plugins: [ '@aws-lite/dynamodb', '/a/custom/local/plugin/path' ],
+  port: 12345,
+  protocol: 'http',
 })
 ```
 

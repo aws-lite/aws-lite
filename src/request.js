@@ -31,10 +31,21 @@ function request (params, creds, region, config, metadata) {
 
     // Path
     // Note: params.path may be passed if the request is coming from a plugin that pre-signed with aws4
-    params.path = params.endpoint || params.path || '/'
-    if (!params.path.startsWith('/')) {
+    params.path = params.endpoint || params.path || ''
+    if (params.path && !params.path.startsWith('/')) {
       params.path = '/' + params.path
     }
+    if (config.endpointPrefix) {
+      if (!config.endpointPrefix.startsWith('/')) {
+        config.endpointPrefix = '/' + config.endpointPrefix
+      }
+      if (config.endpointPrefix.endsWith('/')) {
+        config.endpointPrefix = config.endpointPrefix.substring(0, config.endpointPrefix.length - 1)
+      }
+      params.path = config.endpointPrefix + params.path
+    }
+    params.path = params.path || '/'
+    params.path = params.path.replace(/\/\//g, '/')
 
     // Host
     params.host = params.host || params.hostname || config.host || config.hostname

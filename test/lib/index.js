@@ -71,7 +71,7 @@ let server = {
 function basicRequestChecks (t, method, params = {}) {
   let request = server.getCurrentRequest()
   t.equal(request.method, method, `Made a ${method} request`)
-  t.equal(request.url, params.url || endpoint, 'Made request to correct endpoint')
+  t.equal(request.url, params.url || endpoint, `Made request to correct endpoint: ${params.url || endpoint}`)
   t.ok(request.headers['x-amz-date'], 'Made request with x-amz-date header')
   t.ok(request.headers['authorization'], 'Made request with authorization header')
   t.match(request.headers['authorization'], /Credential=foo/, 'Authorization header is using the access key')

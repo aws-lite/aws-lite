@@ -10,11 +10,12 @@ declare module "@aws-lite/client" {
     profile?: string;
     autoloadPlugins?: boolean;
     debug?: string;
-    keepAlive?: boolean;
-    protocol?: string;
+    endpointPrefix?: string;
     host?: string;
-    port?: number;
+    keepAlive?: boolean;
     plugins?: any[];
+    port?: number;
+    protocol?: string;
   }
 
   interface AwsLiteRequest {

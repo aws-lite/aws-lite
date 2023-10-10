@@ -35,7 +35,7 @@ Properties:
 - **`ParameterFilters` (array)**
   - Array of filters to limit results
 - **`Recursive` (boolean)**
-  - Retrieve all parameters within a heirarchy
+  - Retrieve all parameters within a hierarchy
 - **`WithDecryption` (boolean)**
   - Decrypt encrypted parameter values
 - **`paginate` (boolean)**

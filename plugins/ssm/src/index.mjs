@@ -30,7 +30,7 @@ export default {
         MaxResults:       { type: 'number', comment: 'Limit the maximum number of items returned' },
         NextToken:        { type: 'string', comment: 'Pagination token to start the next set of results' },
         ParameterFilters: { type: 'array', comment: 'Array of filters to limit results' },
-        Recursive:        { type: 'boolean', comment: 'Retrieve all parameters within a heirarchy' },
+        Recursive:        { type: 'boolean', comment: 'Retrieve all parameters within a hierarchy' },
         WithDecryption:   { type: 'boolean', comment: 'Decrypt encrypted parameter values' },
         paginate:         { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
       },
