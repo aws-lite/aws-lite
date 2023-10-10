@@ -817,8 +817,8 @@ const Scan = {
 const TagResource = {
   awsDoc: docRoot + 'API_TagResource.html',
   validate: {
-    ResourceArn: { ...str, required },
-    Tags: { ...arr, required },
+    ResourceArn: { ...str, required, comment: 'Resource to add tags to' },
+    Tags: { ...arr, required, comment: 'Tags to be assigned' },
   },
   request: async (params) => ({
     headers: headers('TagResource'),
@@ -830,7 +830,7 @@ const TagResource = {
 const TransactGetItems = {
   awsDoc: docRoot + 'API_TransactGetItems.html',
   validate: {
-    TransactItems: arr,
+    TransactItems: { ...arr, required, comment: `Ordered array of up to 100 \`TransactGetItem\` objects, each of which containing a \`Get\` object; see: ${docRoot}API_TransactGetItems.html#DDB-TransactGetItems-request-TransactItems` },
     ReturnConsumedCapacity,
   },
   request: async (params, { awsjsonMarshall }) => {
@@ -856,10 +856,10 @@ const TransactGetItems = {
 const TransactWriteItems = {
   awsDoc: docRoot + 'API_TransactWriteItems.html',
   validate: {
-    TransactItems: arr,
-    ClientRequestToken: str,
+    TransactItems: { ...arr, required, comment: `Ordered array of up to 100 \`TransactWriteItem\` objects, each of which containing a \`ConditionCheck\`, \`Put\`, \`Update\`, or \`Delete\` object; see ${docRoot}API_TransactWriteItems.html#DDB-TransactWriteItems-request-TransactItems` },
+    ClientRequestToken: ClientToken,
     ReturnConsumedCapacity,
-    ReturnItemCollectionMetrics: str,
+    ReturnItemCollectionMetrics,
   },
   request: async (params, { awsjsonMarshall }) => {
     params.TransactItems = params.TransactItems.map(i => {
@@ -919,8 +919,8 @@ const TransactWriteItems = {
 const UntagResource = {
   awsDoc: docRoot + 'API_UntagResource.html',
   validate: {
-    ResourceArn: { ...str, required },
-    TagKeys: { ...arr, required },
+    ResourceArn: { ...str, required, comment: 'Resource to remove tags from' },
+    TagKeys: { ...arr, required, comment: 'Tags to be removed' },
   },
   request: async (params) => ({
     headers: headers('UntagResource'),
@@ -933,7 +933,7 @@ const UpdateContinuousBackups = {
   awsDoc: docRoot + 'API_UpdateContinuousBackups.html',
   validate: {
     TableName,
-    PointInTimeRecoverySpecification: obj,
+    PointInTimeRecoverySpecification: { ...obj, comment: `Point in time recovery settings; see: ${docRoot}API_PointInTimeRecoverySpecification.html` },
   },
   request: async (params) => ({
     headers: headers('UpdateContinuousBackups'),
@@ -946,7 +946,7 @@ const UpdateContributorInsights = {
   awsDoc: docRoot + 'API_UpdateContributorInsights.html',
   validate: {
     TableName,
-    ContributorInsightsAction: str,
+    ContributorInsightsAction: { ...str, comment: 'Contributor insights action, can be set to: `ENABLE` or `DISABLE`' },
     IndexName,
   },
   request: async (params) => ({
@@ -960,7 +960,7 @@ const UpdateGlobalTable = {
   awsDoc: docRoot + 'API_UpdateGlobalTable.html',
   validate: {
     GlobalTableName,
-    ReplicaUpdates: arr,
+    ReplicaUpdates: { ...arr, comment: 'List of regions to be added or removed from the global table' },
   },
   request: async (params) => ({
     headers: headers('UpdateGlobalTable'),
@@ -973,11 +973,11 @@ const UpdateGlobalTableSettings = {
   awsDoc: docRoot + 'API_UpdateGlobalTableSettings.html',
   validate: {
     GlobalTableName,
-    GlobalTableBillingMode: str,
-    GlobalTableGlobalSecondaryIndexSettingsUpdate: arr,
-    GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate: obj,
-    GlobalTableProvisionedWriteCapacityUnits: num,
-    ReplicaSettingsUpdate: arr,
+    GlobalTableBillingMode: BillingMode,
+    GlobalTableGlobalSecondaryIndexSettingsUpdate: { ...arr, comment: `1-20 global secondary indexes to be modified; see: ${docRoot}API_GlobalTableGlobalSecondaryIndexSettingsUpdate.html` },
+    GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate: { ...obj, comment: `Auto-scaling settings for managing provisioned write capacity; see: ${docRoot}API_AutoScalingSettingsUpdate.html` },
+    GlobalTableProvisionedWriteCapacityUnits: { ...num, comment: 'Maximum number of writes per second before returning a `ThrottlingException`' },
+    ReplicaSettingsUpdate: { ...arr, comment: `Global table settings to be modified;see: ${docRoot}API_ReplicaSettingsUpdate.html` },
   },
   request: async (params) => ({
     headers: headers('UpdateGlobalTableSettings'),
@@ -991,17 +991,17 @@ const UpdateItem = {
   validate: {
     Key,
     TableName,
-    AttributeUpdates: obj,
-    ConditionalOperator,
+    AttributeUpdates: { ...obj, comment: 'Legacy parameter, use `UpdateExpression` instead' },
+    ConditionalOperator: { ...str, comment: 'Legacy parameter, use `ConditionExpression` instead' },
     ConditionExpression,
     Expected,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
     ReturnConsumedCapacity,
-    ReturnItemCollectionMetrics: str,
+    ReturnItemCollectionMetrics,
     ReturnValues: { ...str, comment: 'Return the item as it was prior to the operation taking place, can be set to `NONE` (default), `ALL_OLD`, `UPDATED_OLD`, `ALL_NEW`, `UPDATED_NEW`' },
     ReturnValuesOnConditionCheckFailure,
-    UpdateExpression: str,
+    UpdateExpression: { ...str, comment: `Expression that defines attributes to be updated, the action to be performed on each, and their new values; see: ${docRoot}API_UpdateItem.html#DDB-UpdateItem-request-UpdateExpression` },
   },
   request: async (params) => ({
     awsjson: awsjsonReq,
@@ -1023,12 +1023,12 @@ const UpdateTable = {
   awsDoc: docRoot + 'API_UpdateTable.html',
   validate: {
     TableName,
-    AttributeDefinitions: arr,
+    AttributeDefinitions: { ...AttributeDefinitions, required: false },
     BillingMode,
     DeletionProtectionEnabled,
-    GlobalSecondaryIndexUpdates: arr,
+    GlobalSecondaryIndexUpdates: { ...arr, comment: `Global secondary index updates, each of which may be: \`Create\`, \`Update\`, or \`Delete\`; see: ${docRoot}API_GlobalSecondaryIndexUpdate.html` },
     ProvisionedThroughput,
-    ReplicaUpdates: arr,
+    ReplicaUpdates: { ...arr, comment: `Table replica updates, each of which may be: \`Create\`, \`Update\`, or \`Delete\`; see: ${docRoot}API_ReplicationGroupUpdate.html` },
     SSESpecification,
     StreamSpecification,
     TableClass,
@@ -1044,9 +1044,9 @@ const UpdateTableReplicaAutoScaling = {
   awsDoc: docRoot + 'API_UpdateTableReplicaAutoScaling.html',
   validate: {
     TableName,
-    GlobalSecondaryIndexUpdates: arr,
-    ProvisionedWriteCapacityAutoScalingUpdate: obj,
-    ReplicaUpdates: arr,
+    GlobalSecondaryIndexUpdates: { ...arr, comment: `Auto-scaling settings of the global secondary indexes of the replica; see: ${docRoot}API_GlobalSecondaryIndexAutoScalingUpdate.html` },
+    ProvisionedWriteCapacityAutoScalingUpdate: { ...obj, comment: `Auto-scaling settings for a global table or global secondary index; see ${docRoot}API_AutoScalingSettingsUpdate.html` },
+    ReplicaUpdates: { ...arr, comment: `Auto=scaling settings of table replicas; see: ${docRoot}API_ReplicaAutoScalingUpdate.html` },
   },
   request: async (params) => ({
     headers: headers('UpdateTableReplicaAutoScaling'),
@@ -1059,7 +1059,7 @@ const UpdateTimeToLive = {
   awsDoc: docRoot + 'API_UpdateTimeToLive.html',
   validate: {
     TableName,
-    TimeToLiveSpecification: obj,
+    TimeToLiveSpecification: { ...obj, comment: 'TTL settings for the specified table' },
   },
   request: async (params) => ({
     headers: headers('UpdateTimeToLive'),

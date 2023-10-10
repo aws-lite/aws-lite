@@ -70,7 +70,7 @@ function createTypesStr ({ methods, name, service, existingTypes }) {
       outputTypes.push(`  ${method}CommandOutput as ${methodResponse}`)
 
       const { awsDoc, validate } = methodDef
-      if (validate) {
+      if (validate && Object.keys(validate).length) {
         const inputType = {}
         for (const key in validate) {
           const { type, required } = validate[key]
