@@ -2,7 +2,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { argv, cwd, exit, stdin, stdout } from 'node:process'
-import { createInterface } from 'node:readline/promises'
 import { fileURLToPath } from 'node:url'
 
 const CWD = cwd()
@@ -15,6 +14,8 @@ if (isCLI) {
   let name = argv[2]
   let service = argv[3]
   if (!name || !service) {
+    // Keep `readline/promises` import out of the Node.js 14.x tests
+    let { createInterface } = await import('node:readline/promises')
     const rl = createInterface({ input: stdin, output: stdout })
     name = await rl.question('plugin name: ')
     if (!name) {

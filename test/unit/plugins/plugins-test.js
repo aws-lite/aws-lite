@@ -13,7 +13,8 @@ test('Set up env', async t => {
 test('Check plugins for docs + validation', async t => {
   let plan = 0
   for (let { name } of plugins) {
-    let path = name => join(cwd, 'plugins', name, 'src', 'index.mjs')
+    let prefix = process.platform.startsWith('win') ? 'file://' : ''
+    let path = name => prefix + join(cwd, 'plugins', name, 'src', 'index.mjs')
     let plugin = (await import(path(name))).default
     t.comment(`@aws-lite/${name}`)
 
