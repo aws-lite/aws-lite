@@ -25,16 +25,20 @@ const ConditionalOperator = { ...str, comment: 'Legacy parameter, use `FilterExp
 const ConditionExpression = { ...str, comment: `Condition that must be satisfied in order to complete the operation, see: ${devGuide}Expressions.ConditionExpressions.html` }
 const ConsistentRead = { ...bool, comment: 'Enable strongly consistent reads; by default eventually consistent reads are used' }
 const DeletionProtectionEnabled = { ...bool, comment: 'Enable or disable deletion protection' }
+const ExclusiveStartKey = { ...obj, comment: 'Pagination cursor token ARN to be used if `LastEvaluatedKey` was returned in a previous response' }
 const Expected = { ...obj, comment: 'Legacy parameter, use `ConditionExpression` instead' }
 const ExpressionAttributeNames = { ...obj, comment: `Substitution tokens for attribute names in an expression, see: ${devGuide}Expressions.Attributes.html` }
-const ExpressionAttributeValues = { ...str, comment: `Values that can be substituted in an expression, see: ${devGuide}Expressions.ConditionExpressions.html` }
+const ExpressionAttributeValues = { ...obj, comment: `Values that can be substituted in an expression, see: ${devGuide}Expressions.ConditionExpressions.html` }
+const FilterExpression = { ...str, comment: `String of filter conditions applied before data is returned; see: ${devGuide}QueryAndScan.html#Query.FilterExpression` }
+const GlobalSecondaryIndexOverride = { ...arr, comment: 'List of global secondary indexes for the restored table; included indexes should match existing secondary indexes, although indexes can be excluded' }
 const GlobalTableName = { ...str, required, comment: 'DynamoDB global table name' }
 const IndexName = { ...str, comment: 'DynamoDB global secondary index name (if applicable)' }
 const Key = { ...obj, required, comment: 'Primary (and sort) key of the item in question' }
 const Limit = { ...num, comment: 'Maximum number of items to evaluate and return' }
+const LocalSecondaryIndexOverride = { ...arr, comment: 'List of local secondary indexes for the restored table; included indexes should match existing secondary indexes, although indexes can be excluded' }
 const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const ProjectionExpression = { ...str, comment: 'Comma separated string that identifies one or more attributes to retrieve from the table' }
-const ProvisionedThroughput = { ...obj, comment: 'Provisioned throughput setting for table or index' }
+const ProvisionedThroughput = { ...obj, comment: 'Provisioned throughput setting' }
 const ReturnConsumedCapacity = { ...str, comment: 'Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`' }
 const ReturnItemCollectionMetrics = { ...str, comment: 'Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)' }
 const ReturnValues = { ...str, comment: 'Return the item as it was prior to the operation taking place, can be set to `NONE` (default), or `ALL_OLD`' }
@@ -44,6 +48,7 @@ const StreamArn = { ...str, required, comment: 'ARN of the specified Kinesis dat
 const StreamSpecification = { ...obj, comment: 'Settings for Streams, including: `StreamEnabled` (boolean), and `StreamViewType` (`KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, or `NEW_AND_OLD_IMAGES`)' }
 const TableClass = { ...str, comment: 'Class of the table, can be set to: `STANDARD`, or `STANDARD_INFREQUENT_ACCESS`' }
 const TableName = { ...str, required, comment: 'DynamoDB table name' }
+const TargetTableName = { ...str, required, comment: 'Name of the new table into which the backup will be restored' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => payload
@@ -311,6 +316,7 @@ const DescribeContributorInsights = {
 
 const DescribeEndpoints = {
   awsDoc: docRoot + 'API_DescribeEndpoints.html',
+  validate: { /* No validations, just satisfying tests! */ },
   request: async () => ({
     headers: headers('DescribeEndpoints'),
   }),
@@ -379,6 +385,7 @@ const DescribeKinesisStreamingDestination = {
 
 const DescribeLimits = {
   awsDoc: docRoot + 'API_DescribeLimits.html',
+  validate: { /* No validations, just satisfying tests! */ },
   request: async () => ({
     headers: headers('DescribeLimits'),
   }),
@@ -512,7 +519,7 @@ const ExportTableToPointInTime = {
     S3Bucket: { ...str, required, comment: 'Destination S3 bucket of the snapshot export' },
     TableArn: { ...str, required, comment: 'ARN of the table being exported' },
     ClientToken,
-    ExportFormat: { str, comment: 'Format for the exported data, can be set to: `DYNAMODB_JSON`, or `IO`' },
+    ExportFormat: { ...str, comment: 'Format for the exported data, can be set to: `DYNAMODB_JSON`, or `IO`' },
     ExportTime: { ...num, comment: 'Point in time (in epoch seconds) from which to export table data' },
     S3BucketOwner: { ...str, comment: 'AWS account ID that owns the destination S3 bucket' },
     S3Prefix: { ...str, comment: 'S3 bucket prefix to use as the file name and path of the exported snapshot' },
@@ -548,12 +555,12 @@ const GetItem = {
 const ImportTable = {
   awsDoc: docRoot + 'API_ImportTable.html',
   validate: {
-    InputFormat: { ...str, required },
+    InputFormat: { ...str, required, comment: 'Source data format, can be set to: `CSV`, `DYNAMODB_JSON`, or `ION`' },
     S3BucketSource: { ...obj, required, comment: 'Destination S3 bucket of the snapshot import' },
-    TableCreationParameters: { ...obj, required },
+    TableCreationParameters: { ...obj, required, comment: `Parameters for the table to import the data, see: ${docRoot}API_TableCreationParameters.html` },
     ClientToken,
-    InputCompressionType: str,
-    InputFormatOptions: obj,
+    InputCompressionType: { ...str, comment: 'Input compression type, can be set to: `GZIP`, `ZSTD`, or `NONE`' },
+    InputFormatOptions: { ...obj, comment: 'Additional input formatting options' },
   },
   request: async (params) => ({
     headers: headers('ImportTable'),
@@ -565,12 +572,12 @@ const ImportTable = {
 const ListBackups = {
   awsDoc: docRoot + 'API_ListBackups.html',
   validate: {
-    BackupType: str,
-    ExclusiveStartBackupArn: str,
+    BackupType: { ...str, comment: 'Limit backups by type, can be set to: `USER` `SYSTEM`, `AWS_BACKUP`, or `ALL`' },
+    ExclusiveStartBackupArn: { ...str, comment: 'Pagination cursor token ARN to be used if `LastEvaluatedBackupArn` was returned in a previous response' },
     Limit,
-    TableName: str,
-    TimeRangeLowerBound: num,
-    TimeRangeUpperBound: num,
+    TableName: { ...str, comment: 'List backups by DynamoDB table name' },
+    TimeRangeLowerBound: { ...num, comment: 'Inclusively return backups created after this time' },
+    TimeRangeUpperBound: { ...num, comment: 'Exclusively return backups created before this time' },
   },
   request: async (params) => ({
     headers: headers('ListBackups'),
@@ -582,9 +589,9 @@ const ListBackups = {
 const ListContributorInsights = {
   awsDoc: docRoot + 'API_ListContributorInsights.html',
   validate: {
-    MaxResults: num,
+    MaxResults: Limit,
     NextToken,
-    TableName: str,
+    TableName: { ...TableName, required: false },
   },
   request: async (params) => ({
     headers: headers('ListContributorInsights'),
@@ -596,9 +603,9 @@ const ListContributorInsights = {
 const ListExports = {
   awsDoc: docRoot + 'API_ListExports.html',
   validate: {
-    MaxResults: num,
+    MaxResults: Limit,
     NextToken,
-    TableArn: str,
+    TableArn: { ...str, comment: 'ARN of the exported table' },
   },
   request: async (params) => ({
     headers: headers('ListExports'),
@@ -610,9 +617,9 @@ const ListExports = {
 const ListGlobalTables = {
   awsDoc: docRoot + 'API_ListGlobalTables.html',
   validate: {
-    ExclusiveStartGlobalTableName: str,
+    ExclusiveStartGlobalTableName: { ...str, comment: 'Pagination cursor token to be used if `LastEvaluatedGlobalTableName` was returned in a previous response' },
     Limit,
-    RegionName: str,
+    RegionName: { ...str, comment: 'List the global tables in a specific region' },
   },
   request: async (params) => ({
     headers: headers('ListGlobalTables'),
@@ -625,8 +632,8 @@ const ListImports = {
   awsDoc: docRoot + 'API_ListImports.html',
   validate: {
     NextToken,
-    PageSize: num,
-    TableArn: str,
+    PageSize: Limit,
+    TableArn: { ...str, comment: 'ARN of the table imported to' },
   },
   request: async (params) => ({
     headers: headers('ListImports'),
@@ -638,7 +645,7 @@ const ListImports = {
 const ListTables = {
   awsDoc: docRoot + 'API_ListTables.html',
   validate: {
-    ExclusiveStartTableName: str,
+    ExclusiveStartTableName: { ...str, comment: 'Pagination cursor token to be used if `LastEvaluatedTableName` was returned in a previous response' },
     Limit,
   },
   request: async (params) => ({
@@ -652,7 +659,7 @@ const ListTagsOfResource = {
   awsDoc: docRoot + 'API_ListTagsOfResource.html',
   validate: {
     NextToken,
-    ResourceArn: { ...str, required },
+    ResourceArn: { ...str, required, comment: 'Resource tags to be returned' },
   },
   request: async (params) => ({
     headers: headers('ListTagsOfResource'),
@@ -688,21 +695,23 @@ const Query = {
   awsDoc: docRoot + 'API_Query.html',
   validate: {
     TableName,
-    AttributesToGet,    ConditionalOperator,
+    AttributesToGet,
+    ConditionalOperator,
     ConsistentRead,
-    ExclusiveStartKey: obj,
+    ExclusiveStartKey,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
-    FilterExpression: str,
+    FilterExpression,
     IndexName,
-    KeyConditionExpression: str,
-    KeyConditions: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
+    KeyConditionExpression: { ...str, comment: `Condition specifying the key values for items to be retrieved; the condition must perform an equality test on a single partition key value; see: ${docRoot}API_Query.html#DDB-Query-request-KeyConditionExpression` },
+    KeyConditions: { ...obj, comment: 'Legacy parameter, use `KeyConditionExpression` instead' },
     Limit,
     ProjectionExpression,
-    QueryFilter: obj, // Legacy, we're not automatically serializing to AWS-flavored JSON
-    ReturnConsumedCapacity: str,
-    ScanIndexForward: bool,
-    Select: str,
+    QueryFilter: { ...obj, comment: 'Legacy parameter, use `FilterExpression` instead' },
+    ReturnConsumedCapacity,
+    ScanIndexForward: { ...bool, comment: 'Index traversal order: `true` (default) for ascending, `false` for descending order' },
+    Select: { ...str, comment: `Attributes to be returned in the result, can be set to: \`ALL_ATTRIBUTES\`, \`ALL_PROJECTED_ATTRIBUTES\`,
+    \`COUNT\`, or \`SPECIFIC_ATTRIBUTES\`; see: ${docRoot}API_Query.html#DDB-Query-request-Select` },
     paginate: valPaginate,
   },
   request: async (params) => {
@@ -729,13 +738,13 @@ const Query = {
 const RestoreTableFromBackup = {
   awsDoc: docRoot + 'API_RestoreTableFromBackup.html',
   validate: {
-    BackupArn: { ...str, required },
-    TargetTableName: { ...str, required },
-    BillingModeOverride: str,
-    GlobalSecondaryIndexOverride: arr,
-    LocalSecondaryIndexOverride: arr,
-    ProvisionedThroughputOverride: obj,
-    SSESpecificationOverride: obj,
+    BackupArn,
+    TargetTableName,
+    BillingModeOverride: BillingMode,
+    GlobalSecondaryIndexOverride,
+    LocalSecondaryIndexOverride,
+    ProvisionedThroughputOverride: ProvisionedThroughput,
+    SSESpecificationOverride: SSESpecification,
   },
   request: async (params) => ({
     headers: headers('RestoreTableFromBackup'),
@@ -747,16 +756,16 @@ const RestoreTableFromBackup = {
 const RestoreTableToPointInTime = {
   awsDoc: docRoot + 'API_RestoreTableToPointInTime.html',
   validate: {
-    TargetTableName: { ...str, required },
-    BillingModeOverride: str,
-    GlobalSecondaryIndexOverride: arr,
-    LocalSecondaryIndexOverride: arr,
-    ProvisionedThroughputOverride: obj,
-    RestoreDateTime: num,
-    SourceTableArn: str,
-    SourceTableName: str,
-    SSESpecificationOverride: obj,
-    UseLatestRestorableTime: bool,
+    TargetTableName,
+    BillingModeOverride: BillingMode,
+    GlobalSecondaryIndexOverride,
+    LocalSecondaryIndexOverride,
+    ProvisionedThroughputOverride: ProvisionedThroughput,
+    RestoreDateTime: { ...num, comment: 'Past time to restore the table to' },
+    SourceTableArn: { ...BackupArn, required: false },
+    SourceTableName: { ...str, comment: 'Name of the source table being restored' },
+    SSESpecificationOverride: SSESpecification,
+    UseLatestRestorableTime: { ...bool, comment: 'Restore to the latest possible time; typically 5 minutes before the current time' },
   },
   request: async (params) => ({
     headers: headers('RestoreTableToPointInTime'),
@@ -771,18 +780,19 @@ const Scan = {
     TableName,
     AttributesToGet,    ConditionalOperator,
     ConsistentRead,
-    ExclusiveStartKey: obj,
+    ExclusiveStartKey,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
-    FilterExpression: str,
+    FilterExpression,
     IndexName,
     Limit,
     ProjectionExpression,
-    ReturnConsumedCapacity: str,
-    ScanFilter: obj,  // Legacy, we're not automatically serializing to AWS-flavored JSON
-    Segment: num,
-    Select: str,
-    TotalSegments: num,
+    ReturnConsumedCapacity,
+    ScanFilter: { ...obj, comment: 'Legacy parameter, use `FilterExpression` instead' },
+    Segment: { ...num, comment: `Individual segment to be scanned in a parallel \`Scan\` request; see ${docRoot}API_Scan.html#DDB-Scan-request-ScanFilter` },
+    Select: { ...str, comment: `Attributes to be returned in the result, can be set to: \`ALL_ATTRIBUTES\`, \`ALL_PROJECTED_ATTRIBUTES\`,
+    \`COUNT\`, or \`SPECIFIC_ATTRIBUTES\`; see: ${docRoot}API_Scan.html#DDB-Scan-request-Select` },
+    TotalSegments: { ...num, comment: `Total number of segments to be scanned in a parallel \`Scan\` request; see ${docRoot}API_Scan.html#DDB-Scan-request-ScanFilter` },
     paginate: valPaginate,
   },
   request: async (params) => {
@@ -821,7 +831,7 @@ const TransactGetItems = {
   awsDoc: docRoot + 'API_TransactGetItems.html',
   validate: {
     TransactItems: arr,
-    ReturnConsumedCapacity: str,
+    ReturnConsumedCapacity,
   },
   request: async (params, { awsjsonMarshall }) => {
     params.TransactItems = params.TransactItems.map(i => {
@@ -848,7 +858,7 @@ const TransactWriteItems = {
   validate: {
     TransactItems: arr,
     ClientRequestToken: str,
-    ReturnConsumedCapacity: str,
+    ReturnConsumedCapacity,
     ReturnItemCollectionMetrics: str,
   },
   request: async (params, { awsjsonMarshall }) => {
@@ -987,7 +997,7 @@ const UpdateItem = {
     Expected,
     ExpressionAttributeNames,
     ExpressionAttributeValues,
-    ReturnConsumedCapacity: str,
+    ReturnConsumedCapacity,
     ReturnItemCollectionMetrics: str,
     ReturnValues: { ...str, comment: 'Return the item as it was prior to the operation taking place, can be set to `NONE` (default), `ALL_OLD`, `UPDATED_OLD`, `ALL_NEW`, `UPDATED_NEW`' },
     ReturnValuesOnConditionCheckFailure,
