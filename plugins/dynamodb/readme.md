@@ -131,13 +131,13 @@ Properties:
 - **`ConditionalOperator` (string)**
   - Legacy parameter, use `FilterExpression` instead
 - **`ConditionExpression` (string)**
-  - Condition that must be satisfied in order to complete the operation, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Condition that must be satisfied in order to complete the operation; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`Expected` (object)**
   - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
   - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
@@ -373,7 +373,7 @@ Properties:
 - **`ConsistentRead` (boolean)**
   - Enable strongly consistent reads; by default eventually consistent reads are used
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ProjectionExpression` (string)**
   - Comma separated string that identifies one or more attributes to retrieve from the table
 - **`ReturnConsumedCapacity` (string)**
@@ -390,7 +390,7 @@ Properties:
 - **`S3BucketSource` (object) [required]**
   - Destination S3 bucket of the snapshot import
 - **`TableCreationParameters` (object) [required]**
-  - Parameters for the table to import the data, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableCreationParameters.html)
+  - Parameters for the table to import the data; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableCreationParameters.html)
 - **`ClientToken` (string)**
   - Ensures operation request is idempotent
 - **`InputCompressionType` (string)**
@@ -504,13 +504,13 @@ Properties:
 - **`ConditionalOperator` (string)**
   - Legacy parameter, use `FilterExpression` instead
 - **`ConditionExpression` (string)**
-  - Condition that must be satisfied in order to complete the operation, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Condition that must be satisfied in order to complete the operation; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`Expected` (object)**
   - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
   - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
@@ -537,9 +537,9 @@ Properties:
 - **`ExclusiveStartKey` (object)**
   - Pagination cursor token ARN to be used if `LastEvaluatedKey` was returned in a previous response
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`FilterExpression` (string)**
   - String of filter conditions applied before data is returned; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
 - **`IndexName` (string)**
@@ -629,9 +629,9 @@ Properties:
 - **`ExclusiveStartKey` (object)**
   - Pagination cursor token ARN to be used if `LastEvaluatedKey` was returned in a previous response
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`FilterExpression` (string)**
   - String of filter conditions applied before data is returned; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
 - **`IndexName` (string)**
@@ -645,12 +645,12 @@ Properties:
 - **`ScanFilter` (object)**
   - Legacy parameter, use `FilterExpression` instead
 - **`Segment` (number)**
-  - Individual segment to be scanned in a parallel `Scan` request; see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter
+  - Individual segment to be scanned in a parallel `Scan` request; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter)
 - **`Select` (string)**
   - Attributes to be returned in the result, can be set to: `ALL_ATTRIBUTES`, `ALL_PROJECTED_ATTRIBUTES`,
     `COUNT`, or `SPECIFIC_ATTRIBUTES`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Select)
 - **`TotalSegments` (number)**
-  - Total number of segments to be scanned in a parallel `Scan` request; see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter
+  - Total number of segments to be scanned in a parallel `Scan` request; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter)
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -683,7 +683,7 @@ Properties:
 
 Properties:
 - **`TransactItems` (array) [required]**
-  - Ordered array of up to 100 `TransactWriteItem` objects, each of which containing a `ConditionCheck`, `Put`, `Update`, or `Delete` object; see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html#DDB-TransactWriteItems-request-TransactItems
+  - Ordered array of up to 100 `TransactWriteItem` objects, each of which containing a `ConditionCheck`, `Put`, `Update`, or `Delete` object; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html#DDB-TransactWriteItems-request-TransactItems)
 - **`ClientRequestToken` (string)**
   - Ensures operation request is idempotent
 - **`ReturnConsumedCapacity` (string)**
@@ -754,7 +754,7 @@ Properties:
 - **`GlobalTableProvisionedWriteCapacityUnits` (number)**
   - Maximum number of writes per second before returning a `ThrottlingException`
 - **`ReplicaSettingsUpdate` (array)**
-  - Global table settings to be modified;[see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaSettingsUpdate.html)
+  - Global table settings to be modified; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaSettingsUpdate.html)
 
 
 ### `UpdateItem`
@@ -771,13 +771,13 @@ Properties:
 - **`ConditionalOperator` (string)**
   - Legacy parameter, use `ConditionExpression` instead
 - **`ConditionExpression` (string)**
-  - Condition that must be satisfied in order to complete the operation, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Condition that must be satisfied in order to complete the operation; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`Expected` (object)**
   - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
   - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
@@ -827,7 +827,7 @@ Properties:
 - **`GlobalSecondaryIndexUpdates` (array)**
   - Auto-scaling settings of the global secondary indexes of the replica; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalSecondaryIndexAutoScalingUpdate.html)
 - **`ProvisionedWriteCapacityAutoScalingUpdate` (object)**
-  - Auto-scaling settings for a global table or global secondary index; see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AutoScalingSettingsUpdate.html
+  - Auto-scaling settings for a global table or global secondary index; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AutoScalingSettingsUpdate.html)
 - **`ReplicaUpdates` (array)**
   - Auto=scaling settings of table replicas; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaAutoScalingUpdate.html)
 
