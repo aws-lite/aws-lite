@@ -22,14 +22,14 @@ const BackupArn = { ...str, required, comment: 'ARN of the specified backup' }
 const BillingMode = { ...str, comment: 'Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`' }
 const ClientToken = { ...str, comment: 'Ensures operation request is idempotent' }
 const ConditionalOperator = { ...str, comment: 'Legacy parameter, use `FilterExpression` instead' }
-const ConditionExpression = { ...str, comment: `Condition that must be satisfied in order to complete the operation, see: ${devGuide}Expressions.ConditionExpressions.html` }
+const ConditionExpression = { ...str, comment: `Condition that must be satisfied in order to complete the operation, [see AWS docs](${devGuide}Expressions.ConditionExpressions.html)` }
 const ConsistentRead = { ...bool, comment: 'Enable strongly consistent reads; by default eventually consistent reads are used' }
 const DeletionProtectionEnabled = { ...bool, comment: 'Enable or disable deletion protection' }
 const ExclusiveStartKey = { ...obj, comment: 'Pagination cursor token ARN to be used if `LastEvaluatedKey` was returned in a previous response' }
 const Expected = { ...obj, comment: 'Legacy parameter, use `ConditionExpression` instead' }
-const ExpressionAttributeNames = { ...obj, comment: `Substitution tokens for attribute names in an expression, see: ${devGuide}Expressions.Attributes.html` }
-const ExpressionAttributeValues = { ...obj, comment: `Values that can be substituted in an expression, see: ${devGuide}Expressions.ConditionExpressions.html` }
-const FilterExpression = { ...str, comment: `String of filter conditions applied before data is returned; see: ${devGuide}QueryAndScan.html#Query.FilterExpression` }
+const ExpressionAttributeNames = { ...obj, comment: `Substitution tokens for attribute names in an expression, [see AWS docs](${devGuide}Expressions.Attributes.html)` }
+const ExpressionAttributeValues = { ...obj, comment: `Values that can be substituted in an expression, [see AWS docs](${devGuide}Expressions.ConditionExpressions.html)` }
+const FilterExpression = { ...str, comment: `String of filter conditions applied before data is returned; [see AWS docs](${devGuide}QueryAndScan.html#Query.FilterExpression)` }
 const GlobalSecondaryIndexOverride = { ...arr, comment: 'List of global secondary indexes for the restored table; included indexes should match existing secondary indexes, although indexes can be excluded' }
 const GlobalTableName = { ...str, required, comment: 'DynamoDB global table name' }
 const IndexName = { ...str, comment: 'DynamoDB global secondary index name (if applicable)' }
@@ -212,8 +212,8 @@ const CreateTable = {
     KeySchema: { ...arr, required, comment: 'Attributes that make up the primary key for a table or index. The attributes in `KeySchema` must also be defined in the `AttributeDefinitions` array' },
     BillingMode,
     DeletionProtectionEnabled,
-    GlobalSecondaryIndexes: { ...arr, comment: `1-20 global secondary indexes to be created on the table; please refer to ${docRoot}API_CreateTable.html#DDB-CreateTable-request-GlobalSecondaryIndexes` },
-    LocalSecondaryIndexes: { ...arr, comment: `1-5 local secondary indexes to be created on the table; please refer to ${docRoot}API_CreateTable.html#DDB-CreateTable-request-LocalSecondaryIndexes` },
+    GlobalSecondaryIndexes: { ...arr, comment: `1-20 global secondary indexes to be created on the table; [see AWS docs](${docRoot}API_CreateTable.html#DDB-CreateTable-request-GlobalSecondaryIndexes)` },
+    LocalSecondaryIndexes: { ...arr, comment: `1-5 local secondary indexes to be created on the table; [see AWS docs](${docRoot}API_CreateTable.html#DDB-CreateTable-request-LocalSecondaryIndexes)` },
     ProvisionedThroughput,
     SSESpecification,
     StreamSpecification,
@@ -557,7 +557,7 @@ const ImportTable = {
   validate: {
     InputFormat: { ...str, required, comment: 'Source data format, can be set to: `CSV`, `DYNAMODB_JSON`, or `ION`' },
     S3BucketSource: { ...obj, required, comment: 'Destination S3 bucket of the snapshot import' },
-    TableCreationParameters: { ...obj, required, comment: `Parameters for the table to import the data, see: ${docRoot}API_TableCreationParameters.html` },
+    TableCreationParameters: { ...obj, required, comment: `Parameters for the table to import the data, [see AWS docs](${docRoot}API_TableCreationParameters.html)` },
     ClientToken,
     InputCompressionType: { ...str, comment: 'Input compression type, can be set to: `GZIP`, `ZSTD`, or `NONE`' },
     InputFormatOptions: { ...obj, comment: 'Additional input formatting options' },
@@ -703,7 +703,7 @@ const Query = {
     ExpressionAttributeValues,
     FilterExpression,
     IndexName,
-    KeyConditionExpression: { ...str, comment: `Condition specifying the key values for items to be retrieved; the condition must perform an equality test on a single partition key value; see: ${docRoot}API_Query.html#DDB-Query-request-KeyConditionExpression` },
+    KeyConditionExpression: { ...str, comment: `Condition specifying the key values for items to be retrieved; the condition must perform an equality test on a single partition key value; [see AWS docs](${docRoot}API_Query.html#DDB-Query-request-KeyConditionExpression)` },
     KeyConditions: { ...obj, comment: 'Legacy parameter, use `KeyConditionExpression` instead' },
     Limit,
     ProjectionExpression,
@@ -711,7 +711,7 @@ const Query = {
     ReturnConsumedCapacity,
     ScanIndexForward: { ...bool, comment: 'Index traversal order: `true` (default) for ascending, `false` for descending order' },
     Select: { ...str, comment: `Attributes to be returned in the result, can be set to: \`ALL_ATTRIBUTES\`, \`ALL_PROJECTED_ATTRIBUTES\`,
-    \`COUNT\`, or \`SPECIFIC_ATTRIBUTES\`; see: ${docRoot}API_Query.html#DDB-Query-request-Select` },
+    \`COUNT\`, or \`SPECIFIC_ATTRIBUTES\`; [see AWS docs](${docRoot}API_Query.html#DDB-Query-request-Select)` },
     paginate: valPaginate,
   },
   request: async (params) => {
@@ -791,7 +791,7 @@ const Scan = {
     ScanFilter: { ...obj, comment: 'Legacy parameter, use `FilterExpression` instead' },
     Segment: { ...num, comment: `Individual segment to be scanned in a parallel \`Scan\` request; see ${docRoot}API_Scan.html#DDB-Scan-request-ScanFilter` },
     Select: { ...str, comment: `Attributes to be returned in the result, can be set to: \`ALL_ATTRIBUTES\`, \`ALL_PROJECTED_ATTRIBUTES\`,
-    \`COUNT\`, or \`SPECIFIC_ATTRIBUTES\`; see: ${docRoot}API_Scan.html#DDB-Scan-request-Select` },
+    \`COUNT\`, or \`SPECIFIC_ATTRIBUTES\`; [see AWS docs](${docRoot}API_Scan.html#DDB-Scan-request-Select)` },
     TotalSegments: { ...num, comment: `Total number of segments to be scanned in a parallel \`Scan\` request; see ${docRoot}API_Scan.html#DDB-Scan-request-ScanFilter` },
     paginate: valPaginate,
   },
@@ -830,7 +830,7 @@ const TagResource = {
 const TransactGetItems = {
   awsDoc: docRoot + 'API_TransactGetItems.html',
   validate: {
-    TransactItems: { ...arr, required, comment: `Ordered array of up to 100 \`TransactGetItem\` objects, each of which containing a \`Get\` object; see: ${docRoot}API_TransactGetItems.html#DDB-TransactGetItems-request-TransactItems` },
+    TransactItems: { ...arr, required, comment: `Ordered array of up to 100 \`TransactGetItem\` objects, each of which containing a \`Get\` object; [see AWS docs](${docRoot}API_TransactGetItems.html#DDB-TransactGetItems-request-TransactItems)` },
     ReturnConsumedCapacity,
   },
   request: async (params, { awsjsonMarshall }) => {
@@ -933,7 +933,7 @@ const UpdateContinuousBackups = {
   awsDoc: docRoot + 'API_UpdateContinuousBackups.html',
   validate: {
     TableName,
-    PointInTimeRecoverySpecification: { ...obj, comment: `Point in time recovery settings; see: ${docRoot}API_PointInTimeRecoverySpecification.html` },
+    PointInTimeRecoverySpecification: { ...obj, comment: `Point in time recovery settings; [see AWS docs](${docRoot}API_PointInTimeRecoverySpecification.html)` },
   },
   request: async (params) => ({
     headers: headers('UpdateContinuousBackups'),
@@ -974,10 +974,10 @@ const UpdateGlobalTableSettings = {
   validate: {
     GlobalTableName,
     GlobalTableBillingMode: BillingMode,
-    GlobalTableGlobalSecondaryIndexSettingsUpdate: { ...arr, comment: `1-20 global secondary indexes to be modified; see: ${docRoot}API_GlobalTableGlobalSecondaryIndexSettingsUpdate.html` },
-    GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate: { ...obj, comment: `Auto-scaling settings for managing provisioned write capacity; see: ${docRoot}API_AutoScalingSettingsUpdate.html` },
+    GlobalTableGlobalSecondaryIndexSettingsUpdate: { ...arr, comment: `1-20 global secondary indexes to be modified; [see AWS docs](${docRoot}API_GlobalTableGlobalSecondaryIndexSettingsUpdate.html)` },
+    GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate: { ...obj, comment: `Auto-scaling settings for managing provisioned write capacity; [see AWS docs](${docRoot}API_AutoScalingSettingsUpdate.html)` },
     GlobalTableProvisionedWriteCapacityUnits: { ...num, comment: 'Maximum number of writes per second before returning a `ThrottlingException`' },
-    ReplicaSettingsUpdate: { ...arr, comment: `Global table settings to be modified;see: ${docRoot}API_ReplicaSettingsUpdate.html` },
+    ReplicaSettingsUpdate: { ...arr, comment: `Global table settings to be modified;[see AWS docs](${docRoot}API_ReplicaSettingsUpdate.html)` },
   },
   request: async (params) => ({
     headers: headers('UpdateGlobalTableSettings'),
@@ -1001,7 +1001,7 @@ const UpdateItem = {
     ReturnItemCollectionMetrics,
     ReturnValues: { ...str, comment: 'Return the item as it was prior to the operation taking place, can be set to `NONE` (default), `ALL_OLD`, `UPDATED_OLD`, `ALL_NEW`, `UPDATED_NEW`' },
     ReturnValuesOnConditionCheckFailure,
-    UpdateExpression: { ...str, comment: `Expression that defines attributes to be updated, the action to be performed on each, and their new values; see: ${docRoot}API_UpdateItem.html#DDB-UpdateItem-request-UpdateExpression` },
+    UpdateExpression: { ...str, comment: `Expression that defines attributes to be updated, the action to be performed on each, and their new values; [see AWS docs](${docRoot}API_UpdateItem.html#DDB-UpdateItem-request-UpdateExpression)` },
   },
   request: async (params) => ({
     awsjson: awsjsonReq,
@@ -1026,9 +1026,9 @@ const UpdateTable = {
     AttributeDefinitions: { ...AttributeDefinitions, required: false },
     BillingMode,
     DeletionProtectionEnabled,
-    GlobalSecondaryIndexUpdates: { ...arr, comment: `Global secondary index updates, each of which may be: \`Create\`, \`Update\`, or \`Delete\`; see: ${docRoot}API_GlobalSecondaryIndexUpdate.html` },
+    GlobalSecondaryIndexUpdates: { ...arr, comment: `Global secondary index updates, each of which may be: \`Create\`, \`Update\`, or \`Delete\`; [see AWS docs](${docRoot}API_GlobalSecondaryIndexUpdate.html)` },
     ProvisionedThroughput,
-    ReplicaUpdates: { ...arr, comment: `Table replica updates, each of which may be: \`Create\`, \`Update\`, or \`Delete\`; see: ${docRoot}API_ReplicationGroupUpdate.html` },
+    ReplicaUpdates: { ...arr, comment: `Table replica updates, each of which may be: \`Create\`, \`Update\`, or \`Delete\`; [see AWS docs](${docRoot}API_ReplicationGroupUpdate.html)` },
     SSESpecification,
     StreamSpecification,
     TableClass,
@@ -1044,9 +1044,9 @@ const UpdateTableReplicaAutoScaling = {
   awsDoc: docRoot + 'API_UpdateTableReplicaAutoScaling.html',
   validate: {
     TableName,
-    GlobalSecondaryIndexUpdates: { ...arr, comment: `Auto-scaling settings of the global secondary indexes of the replica; see: ${docRoot}API_GlobalSecondaryIndexAutoScalingUpdate.html` },
+    GlobalSecondaryIndexUpdates: { ...arr, comment: `Auto-scaling settings of the global secondary indexes of the replica; [see AWS docs](${docRoot}API_GlobalSecondaryIndexAutoScalingUpdate.html)` },
     ProvisionedWriteCapacityAutoScalingUpdate: { ...obj, comment: `Auto-scaling settings for a global table or global secondary index; see ${docRoot}API_AutoScalingSettingsUpdate.html` },
-    ReplicaUpdates: { ...arr, comment: `Auto=scaling settings of table replicas; see: ${docRoot}API_ReplicaAutoScalingUpdate.html` },
+    ReplicaUpdates: { ...arr, comment: `Auto=scaling settings of table replicas; [see AWS docs](${docRoot}API_ReplicaAutoScalingUpdate.html)` },
   },
   request: async (params) => ({
     headers: headers('UpdateTableReplicaAutoScaling'),

@@ -28,7 +28,9 @@ npm i -D @aws-lite/dynamodb-types
 
 Properties:
 - **`Statements` (array) [required]**
+  - Array of PartiQL statements representing the batch being run
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 
 
 ### `BatchGetItem`
@@ -37,7 +39,9 @@ Properties:
 
 Properties:
 - **`RequestItems` (object) [required]**
+  - An object containing >=1 table names and, for each table, an object describing >=1 items to get
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 
 
 ### `BatchWriteItem`
@@ -46,8 +50,11 @@ Properties:
 
 Properties:
 - **`RequestItems` (object) [required]**
+  - An object containing >=1 table names and, for each table, an object describing >=1 items to write
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
+  - Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)
 
 
 ### `CreateBackup`
@@ -56,7 +63,9 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`BackupName` (string) [required]**
+  - Specified name of the backup
 
 
 ### `CreateGlobalTable`
@@ -65,7 +74,9 @@ Properties:
 
 Properties:
 - **`GlobalTableName` (string) [required]**
+  - DynamoDB table name
 - **`ReplicationGroup` (array) [required]**
+  - AWS regions where the global table needs to be created
 
 
 ### `CreateTable`
@@ -74,17 +85,29 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`AttributeDefinitions` (array) [required]**
+  - Array of attributes that describe the primary (and sort) schema for the table
 - **`KeySchema` (array) [required]**
+  - Attributes that make up the primary key for a table or index. The attributes in `KeySchema` must also be defined in the `AttributeDefinitions` array
 - **`BillingMode` (string)**
+  - Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`
 - **`DeletionProtectionEnabled` (boolean)**
+  - Enable or disable deletion protection
 - **`GlobalSecondaryIndexes` (array)**
+  - 1-20 global secondary indexes to be created on the table; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#DDB-CreateTable-request-GlobalSecondaryIndexes)
 - **`LocalSecondaryIndexes` (array)**
+  - 1-5 local secondary indexes to be created on the table; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#DDB-CreateTable-request-LocalSecondaryIndexes)
 - **`ProvisionedThroughput` (object)**
+  - Provisioned throughput setting
 - **`SSESpecification` (object)**
+  - Server-side encryption settings
 - **`StreamSpecification` (object)**
+  - Settings for Streams, including: `StreamEnabled` (boolean), and `StreamViewType` (`KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, or `NEW_AND_OLD_IMAGES`)
 - **`TableClass` (string)**
+  - Class of the table, can be set to: `STANDARD`, or `STANDARD_INFREQUENT_ACCESS`
 - **`Tags` (array)**
+  - Array of pairs to label the table
 
 
 ### `DeleteBackup`
@@ -93,6 +116,7 @@ Properties:
 
 Properties:
 - **`BackupArn` (string) [required]**
+  - ARN of the specified backup
 
 
 ### `DeleteItem`
@@ -101,16 +125,27 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`Key` (object) [required]**
+  - Primary (and sort) key of the item in question
 - **`ConditionalOperator` (string)**
+  - Legacy parameter, use `FilterExpression` instead
 - **`ConditionExpression` (string)**
+  - Condition that must be satisfied in order to complete the operation, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`Expected` (object)**
+  - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
+  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
+  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
+  - Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)
 - **`ReturnValues` (string)**
+  - Return the item as it was prior to the operation taking place, can be set to `NONE` (default), or `ALL_OLD`
 - **`ReturnValuesOnConditionCheckFailure` (string)**
+  - Return the item attributes that failed  a condition check, can be set to `NONE`, or `ALL_OLD`
 
 
 ### `DeleteTable`
@@ -119,6 +154,7 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 
 
 ### `DescribeBackup`
@@ -127,6 +163,7 @@ Properties:
 
 Properties:
 - **`BackupArn` (string) [required]**
+  - ARN of the specified backup
 
 
 ### `DescribeContinuousBackups`
@@ -135,6 +172,7 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 
 
 ### `DescribeContributorInsights`
@@ -143,12 +181,16 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`IndexName` (string)**
+  - DynamoDB global secondary index name (if applicable)
 
 
 ### `DescribeEndpoints`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeEndpoints.html)
+
+Properties:
 
 
 
@@ -158,6 +200,7 @@ Properties:
 
 Properties:
 - **`ExportArn` (string) [required]**
+  - ARN of the specified export
 
 
 ### `DescribeGlobalTable`
@@ -166,6 +209,7 @@ Properties:
 
 Properties:
 - **`GlobalTableName` (string) [required]**
+  - DynamoDB global table name
 
 
 ### `DescribeGlobalTableSettings`
@@ -174,6 +218,7 @@ Properties:
 
 Properties:
 - **`GlobalTableName` (string) [required]**
+  - DynamoDB global table name
 
 
 ### `DescribeImport`
@@ -182,6 +227,7 @@ Properties:
 
 Properties:
 - **`ImportArn` (string) [required]**
+  - ARN of the specified import
 
 
 ### `DescribeKinesisStreamingDestination`
@@ -190,11 +236,14 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 
 
 ### `DescribeLimits`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeLimits.html)
+
+Properties:
 
 
 
@@ -204,6 +253,7 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 
 
 ### `DescribeTableReplicaAutoScaling`
@@ -212,6 +262,7 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 
 
 ### `DescribeTimeToLive`
@@ -220,6 +271,7 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 
 
 ### `DisableKinesisStreamingDestination`
@@ -228,7 +280,9 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`StreamArn` (string) [required]**
+  - ARN of the specified Kinesis data stream
 
 
 ### `EnableKinesisStreamingDestination`
@@ -237,7 +291,9 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`StreamArn` (string) [required]**
+  - ARN of the specified Kinesis data stream
 
 
 ### `ExecuteStatement`
@@ -246,13 +302,21 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`Statement` (string) [required]**
+  - PartiQL statement representing the operation to run
 - **`ConsistentRead` (boolean)**
+  - Enable strongly consistent reads; by default eventually consistent reads are used
 - **`Limit` (number)**
+  - Maximum number of items to evaluate and return
 - **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`Parameters` (object)**
+  - PartiQL statement parameters, if any
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnValuesOnConditionCheckFailure` (string)**
+  - Return the item attributes that failed  a condition check, can be set to `NONE`, or `ALL_OLD`
 
 
 ### `ExecuteTransaction`
@@ -261,9 +325,13 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`TransactStatements` (array) [required]**
+  - PartiQL statement parameters representing the transaction to run
 - **`ClientRequestToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 
 
 ### `ExportTableToPointInTime`
@@ -272,14 +340,23 @@ Properties:
 
 Properties:
 - **`S3Bucket` (string) [required]**
+  - Destination S3 bucket of the snapshot export
 - **`TableArn` (string) [required]**
+  - ARN of the table being exported
 - **`ClientToken` (string)**
+  - Ensures operation request is idempotent
 - **`ExportFormat` (string)**
+  - Format for the exported data, can be set to: `DYNAMODB_JSON`, or `IO`
 - **`ExportTime` (number)**
+  - Point in time (in epoch seconds) from which to export table data
 - **`S3BucketOwner` (string)**
+  - AWS account ID that owns the destination S3 bucket
 - **`S3Prefix` (string)**
+  - S3 bucket prefix to use as the file name and path of the exported snapshot
 - **`S3SseAlgorithm` (string)**
+  - Type of encryption used on the bucket where export data will be stored, can be set to `AES256`, or `KMS`
 - **`S3SseKmsKeyId` (string)**
+  - AWS KMS managed key ID used to encrypt the destination S3 bucket (if applicable)
 
 
 ### `GetItem`
@@ -288,12 +365,19 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`Key` (object) [required]**
+  - Primary (and sort) key of the item in question
 - **`AttributesToGet` (array)**
+  - Legacy parameter, use `ProjectionExpression` instead
 - **`ConsistentRead` (boolean)**
+  - Enable strongly consistent reads; by default eventually consistent reads are used
 - **`ExpressionAttributeNames` (object)**
+  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ProjectionExpression` (string)**
+  - Comma separated string that identifies one or more attributes to retrieve from the table
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 
 
 ### `ImportTable`
@@ -302,11 +386,17 @@ Properties:
 
 Properties:
 - **`InputFormat` (string) [required]**
+  - Source data format, can be set to: `CSV`, `DYNAMODB_JSON`, or `ION`
 - **`S3BucketSource` (object) [required]**
+  - Destination S3 bucket of the snapshot import
 - **`TableCreationParameters` (object) [required]**
+  - Parameters for the table to import the data, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableCreationParameters.html)
 - **`ClientToken` (string)**
+  - Ensures operation request is idempotent
 - **`InputCompressionType` (string)**
+  - Input compression type, can be set to: `GZIP`, `ZSTD`, or `NONE`
 - **`InputFormatOptions` (object)**
+  - Additional input formatting options
 
 
 ### `ListBackups`
@@ -315,11 +405,17 @@ Properties:
 
 Properties:
 - **`BackupType` (string)**
+  - Limit backups by type, can be set to: `USER` `SYSTEM`, `AWS_BACKUP`, or `ALL`
 - **`ExclusiveStartBackupArn` (string)**
+  - Pagination cursor token ARN to be used if `LastEvaluatedBackupArn` was returned in a previous response
 - **`Limit` (number)**
+  - Maximum number of items to evaluate and return
 - **`TableName` (string)**
+  - List backups by DynamoDB table name
 - **`TimeRangeLowerBound` (number)**
+  - Inclusively return backups created after this time
 - **`TimeRangeUpperBound` (number)**
+  - Exclusively return backups created before this time
 
 
 ### `ListContributorInsights`
@@ -328,8 +424,11 @@ Properties:
 
 Properties:
 - **`MaxResults` (number)**
+  - Maximum number of items to evaluate and return
 - **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`TableName` (string)**
+  - DynamoDB table name
 
 
 ### `ListExports`
@@ -338,8 +437,11 @@ Properties:
 
 Properties:
 - **`MaxResults` (number)**
+  - Maximum number of items to evaluate and return
 - **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`TableArn` (string)**
+  - ARN of the exported table
 
 
 ### `ListGlobalTables`
@@ -348,8 +450,11 @@ Properties:
 
 Properties:
 - **`ExclusiveStartGlobalTableName` (string)**
+  - Pagination cursor token to be used if `LastEvaluatedGlobalTableName` was returned in a previous response
 - **`Limit` (number)**
+  - Maximum number of items to evaluate and return
 - **`RegionName` (string)**
+  - List the global tables in a specific region
 
 
 ### `ListImports`
@@ -358,8 +463,11 @@ Properties:
 
 Properties:
 - **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`PageSize` (number)**
+  - Maximum number of items to evaluate and return
 - **`TableArn` (string)**
+  - ARN of the table imported to
 
 
 ### `ListTables`
@@ -368,7 +476,9 @@ Properties:
 
 Properties:
 - **`ExclusiveStartTableName` (string)**
+  - Pagination cursor token to be used if `LastEvaluatedTableName` was returned in a previous response
 - **`Limit` (number)**
+  - Maximum number of items to evaluate and return
 
 
 ### `ListTagsOfResource`
@@ -377,7 +487,9 @@ Properties:
 
 Properties:
 - **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`ResourceArn` (string) [required]**
+  - Resource tags to be returned
 
 
 ### `PutItem`
@@ -386,16 +498,27 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`Item` (object) [required]**
+  - Item to be written to DynamoDB
 - **`ConditionalOperator` (string)**
+  - Legacy parameter, use `FilterExpression` instead
 - **`ConditionExpression` (string)**
-- **`Expected` (string)**
+  - Condition that must be satisfied in order to complete the operation, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+- **`Expected` (object)**
+  - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
+  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
+  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
+  - Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)
 - **`ReturnValues` (string)**
+  - Return the item as it was prior to the operation taking place, can be set to `NONE` (default), or `ALL_OLD`
 - **`ReturnValuesOnConditionCheckFailure` (string)**
+  - Return the item attributes that failed  a condition check, can be set to `NONE`, or `ALL_OLD`
 
 
 ### `Query`
@@ -404,22 +527,40 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`AttributesToGet` (array)**
+  - Legacy parameter, use `ProjectionExpression` instead
 - **`ConditionalOperator` (string)**
+  - Legacy parameter, use `FilterExpression` instead
 - **`ConsistentRead` (boolean)**
+  - Enable strongly consistent reads; by default eventually consistent reads are used
 - **`ExclusiveStartKey` (object)**
+  - Pagination cursor token ARN to be used if `LastEvaluatedKey` was returned in a previous response
 - **`ExpressionAttributeNames` (object)**
+  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
+  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`FilterExpression` (string)**
+  - String of filter conditions applied before data is returned; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
 - **`IndexName` (string)**
+  - DynamoDB global secondary index name (if applicable)
 - **`KeyConditionExpression` (string)**
+  - Condition specifying the key values for items to be retrieved; the condition must perform an equality test on a single partition key value; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression)
 - **`KeyConditions` (object)**
+  - Legacy parameter, use `KeyConditionExpression` instead
 - **`Limit` (number)**
+  - Maximum number of items to evaluate and return
 - **`ProjectionExpression` (string)**
+  - Comma separated string that identifies one or more attributes to retrieve from the table
 - **`QueryFilter` (object)**
+  - Legacy parameter, use `FilterExpression` instead
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ScanIndexForward` (boolean)**
+  - Index traversal order: `true` (default) for ascending, `false` for descending order
 - **`Select` (string)**
+  - Attributes to be returned in the result, can be set to: `ALL_ATTRIBUTES`, `ALL_PROJECTED_ATTRIBUTES`,
+    `COUNT`, or `SPECIFIC_ATTRIBUTES`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select)
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -430,12 +571,19 @@ Properties:
 
 Properties:
 - **`BackupArn` (string) [required]**
+  - ARN of the specified backup
 - **`TargetTableName` (string) [required]**
+  - Name of the new table into which the backup will be restored
 - **`BillingModeOverride` (string)**
+  - Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`
 - **`GlobalSecondaryIndexOverride` (array)**
+  - List of global secondary indexes for the restored table; included indexes should match existing secondary indexes, although indexes can be excluded
 - **`LocalSecondaryIndexOverride` (array)**
+  - List of local secondary indexes for the restored table; included indexes should match existing secondary indexes, although indexes can be excluded
 - **`ProvisionedThroughputOverride` (object)**
+  - Provisioned throughput setting
 - **`SSESpecificationOverride` (object)**
+  - Server-side encryption settings
 
 
 ### `RestoreTableToPointInTime`
@@ -444,15 +592,25 @@ Properties:
 
 Properties:
 - **`TargetTableName` (string) [required]**
+  - Name of the new table into which the backup will be restored
 - **`BillingModeOverride` (string)**
+  - Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`
 - **`GlobalSecondaryIndexOverride` (array)**
+  - List of global secondary indexes for the restored table; included indexes should match existing secondary indexes, although indexes can be excluded
 - **`LocalSecondaryIndexOverride` (array)**
+  - List of local secondary indexes for the restored table; included indexes should match existing secondary indexes, although indexes can be excluded
 - **`ProvisionedThroughputOverride` (object)**
+  - Provisioned throughput setting
 - **`RestoreDateTime` (number)**
+  - Past time to restore the table to
 - **`SourceTableArn` (string)**
+  - ARN of the specified backup
 - **`SourceTableName` (string)**
+  - Name of the source table being restored
 - **`SSESpecificationOverride` (object)**
+  - Server-side encryption settings
 - **`UseLatestRestorableTime` (boolean)**
+  - Restore to the latest possible time; typically 5 minutes before the current time
 
 
 ### `Scan`
@@ -461,21 +619,38 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`AttributesToGet` (array)**
+  - Legacy parameter, use `ProjectionExpression` instead
 - **`ConditionalOperator` (string)**
+  - Legacy parameter, use `FilterExpression` instead
 - **`ConsistentRead` (boolean)**
+  - Enable strongly consistent reads; by default eventually consistent reads are used
 - **`ExclusiveStartKey` (object)**
+  - Pagination cursor token ARN to be used if `LastEvaluatedKey` was returned in a previous response
 - **`ExpressionAttributeNames` (object)**
+  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
+  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`FilterExpression` (string)**
+  - String of filter conditions applied before data is returned; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
 - **`IndexName` (string)**
+  - DynamoDB global secondary index name (if applicable)
 - **`Limit` (number)**
+  - Maximum number of items to evaluate and return
 - **`ProjectionExpression` (string)**
+  - Comma separated string that identifies one or more attributes to retrieve from the table
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ScanFilter` (object)**
+  - Legacy parameter, use `FilterExpression` instead
 - **`Segment` (number)**
+  - Individual segment to be scanned in a parallel `Scan` request; see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter
 - **`Select` (string)**
+  - Attributes to be returned in the result, can be set to: `ALL_ATTRIBUTES`, `ALL_PROJECTED_ATTRIBUTES`,
+    `COUNT`, or `SPECIFIC_ATTRIBUTES`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Select)
 - **`TotalSegments` (number)**
+  - Total number of segments to be scanned in a parallel `Scan` request; see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -486,7 +661,9 @@ Properties:
 
 Properties:
 - **`ResourceArn` (string) [required]**
+  - Resource to add tags to
 - **`Tags` (array) [required]**
+  - Tags to be assigned
 
 
 ### `TransactGetItems`
@@ -494,8 +671,10 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html)
 
 Properties:
-- **`TransactItems` (array)**
+- **`TransactItems` (array) [required]**
+  - Ordered array of up to 100 `TransactGetItem` objects, each of which containing a `Get` object; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html#DDB-TransactGetItems-request-TransactItems)
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 
 
 ### `TransactWriteItems`
@@ -503,10 +682,14 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html)
 
 Properties:
-- **`TransactItems` (array)**
+- **`TransactItems` (array) [required]**
+  - Ordered array of up to 100 `TransactWriteItem` objects, each of which containing a `ConditionCheck`, `Put`, `Update`, or `Delete` object; see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html#DDB-TransactWriteItems-request-TransactItems
 - **`ClientRequestToken` (string)**
+  - Ensures operation request is idempotent
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
+  - Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)
 
 
 ### `UntagResource`
@@ -515,7 +698,9 @@ Properties:
 
 Properties:
 - **`ResourceArn` (string) [required]**
+  - Resource to remove tags from
 - **`TagKeys` (array) [required]**
+  - Tags to be removed
 
 
 ### `UpdateContinuousBackups`
@@ -524,7 +709,9 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`PointInTimeRecoverySpecification` (object)**
+  - Point in time recovery settings; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PointInTimeRecoverySpecification.html)
 
 
 ### `UpdateContributorInsights`
@@ -533,8 +720,11 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`ContributorInsightsAction` (string)**
+  - Contributor insights action, can be set to: `ENABLE` or `DISABLE`
 - **`IndexName` (string)**
+  - DynamoDB global secondary index name (if applicable)
 
 
 ### `UpdateGlobalTable`
@@ -543,7 +733,9 @@ Properties:
 
 Properties:
 - **`GlobalTableName` (string) [required]**
+  - DynamoDB global table name
 - **`ReplicaUpdates` (array)**
+  - List of regions to be added or removed from the global table
 
 
 ### `UpdateGlobalTableSettings`
@@ -552,11 +744,17 @@ Properties:
 
 Properties:
 - **`GlobalTableName` (string) [required]**
+  - DynamoDB global table name
 - **`GlobalTableBillingMode` (string)**
+  - Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`
 - **`GlobalTableGlobalSecondaryIndexSettingsUpdate` (array)**
+  - 1-20 global secondary indexes to be modified; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalTableGlobalSecondaryIndexSettingsUpdate.html)
 - **`GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate` (object)**
+  - Auto-scaling settings for managing provisioned write capacity; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AutoScalingSettingsUpdate.html)
 - **`GlobalTableProvisionedWriteCapacityUnits` (number)**
+  - Maximum number of writes per second before returning a `ThrottlingException`
 - **`ReplicaSettingsUpdate` (array)**
+  - Global table settings to be modified;[see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaSettingsUpdate.html)
 
 
 ### `UpdateItem`
@@ -565,18 +763,31 @@ Properties:
 
 Properties:
 - **`Key` (object) [required]**
+  - Primary (and sort) key of the item in question
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`AttributeUpdates` (object)**
+  - Legacy parameter, use `UpdateExpression` instead
 - **`ConditionalOperator` (string)**
+  - Legacy parameter, use `ConditionExpression` instead
 - **`ConditionExpression` (string)**
+  - Condition that must be satisfied in order to complete the operation, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`Expected` (object)**
+  - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
+  - Substitution tokens for attribute names in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
+  - Values that can be substituted in an expression, [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
+  - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
+  - Return collection metrics in response, can be set to: `SIZE`, or `NONE` (default)
 - **`ReturnValues` (string)**
+  - Return the item as it was prior to the operation taking place, can be set to `NONE` (default), `ALL_OLD`, `UPDATED_OLD`, `ALL_NEW`, `UPDATED_NEW`
 - **`ReturnValuesOnConditionCheckFailure` (string)**
+  - Return the item attributes that failed  a condition check, can be set to `NONE`, or `ALL_OLD`
 - **`UpdateExpression` (string)**
+  - Expression that defines attributes to be updated, the action to be performed on each, and their new values; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html#DDB-UpdateItem-request-UpdateExpression)
 
 
 ### `UpdateTable`
@@ -585,15 +796,25 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`AttributeDefinitions` (array)**
+  - Array of attributes that describe the primary (and sort) schema for the table
 - **`BillingMode` (string)**
+  - Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`
 - **`DeletionProtectionEnabled` (boolean)**
+  - Enable or disable deletion protection
 - **`GlobalSecondaryIndexUpdates` (array)**
+  - Global secondary index updates, each of which may be: `Create`, `Update`, or `Delete`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalSecondaryIndexUpdate.html)
 - **`ProvisionedThroughput` (object)**
+  - Provisioned throughput setting
 - **`ReplicaUpdates` (array)**
+  - Table replica updates, each of which may be: `Create`, `Update`, or `Delete`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicationGroupUpdate.html)
 - **`SSESpecification` (object)**
+  - Server-side encryption settings
 - **`StreamSpecification` (object)**
+  - Settings for Streams, including: `StreamEnabled` (boolean), and `StreamViewType` (`KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, or `NEW_AND_OLD_IMAGES`)
 - **`TableClass` (string)**
+  - Class of the table, can be set to: `STANDARD`, or `STANDARD_INFREQUENT_ACCESS`
 
 
 ### `UpdateTableReplicaAutoScaling`
@@ -602,9 +823,13 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`GlobalSecondaryIndexUpdates` (array)**
+  - Auto-scaling settings of the global secondary indexes of the replica; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalSecondaryIndexAutoScalingUpdate.html)
 - **`ProvisionedWriteCapacityAutoScalingUpdate` (object)**
+  - Auto-scaling settings for a global table or global secondary index; see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AutoScalingSettingsUpdate.html
 - **`ReplicaUpdates` (array)**
+  - Auto=scaling settings of table replicas; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaAutoScalingUpdate.html)
 
 
 ### `UpdateTimeToLive`
@@ -613,7 +838,9 @@ Properties:
 
 Properties:
 - **`TableName` (string) [required]**
+  - DynamoDB table name
 - **`TimeToLiveSpecification` (object)**
+  - TTL settings for the specified table
 <!-- METHOD_DOCS_END -->
 
 

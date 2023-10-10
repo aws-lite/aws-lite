@@ -273,7 +273,7 @@ declare interface AwsLiteDynamoDB {
    * - AWS Docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html DynamoDB: PutItem}
    * - aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/dynamodb/readme.md#PutItem dynamodb}
    */
-  PutItem: (input: { TableName: string, Item: Record<string, any>, ConditionalOperator?: string, ConditionExpression?: string, Expected?: string, ExpressionAttributeNames?: Record<string, any>, ExpressionAttributeValues?: Record<string, any>, ReturnConsumedCapacity?: string, ReturnItemCollectionMetrics?: string, ReturnValues?: string, ReturnValuesOnConditionCheckFailure?: string }) => Promise<PutItemResponse>
+  PutItem: (input: { TableName: string, Item: Record<string, any>, ConditionalOperator?: string, ConditionExpression?: string, Expected?: Record<string, any>, ExpressionAttributeNames?: Record<string, any>, ExpressionAttributeValues?: Record<string, any>, ReturnConsumedCapacity?: string, ReturnItemCollectionMetrics?: string, ReturnValues?: string, ReturnValuesOnConditionCheckFailure?: string }) => Promise<PutItemResponse>
   /**
    * @description
    * - AWS Docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html DynamoDB: Query}
@@ -309,13 +309,13 @@ declare interface AwsLiteDynamoDB {
    * - AWS Docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html DynamoDB: TransactGetItems}
    * - aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/dynamodb/readme.md#TransactGetItems dynamodb}
    */
-  TransactGetItems: (input: { TransactItems?: any[], ReturnConsumedCapacity?: string }) => Promise<TransactGetItemsResponse>
+  TransactGetItems: (input: { TransactItems: any[], ReturnConsumedCapacity?: string }) => Promise<TransactGetItemsResponse>
   /**
    * @description
    * - AWS Docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html DynamoDB: TransactWriteItems}
    * - aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/dynamodb/readme.md#TransactWriteItems dynamodb}
    */
-  TransactWriteItems: (input: { TransactItems?: any[], ClientRequestToken?: string, ReturnConsumedCapacity?: string, ReturnItemCollectionMetrics?: string }) => Promise<TransactWriteItemsResponse>
+  TransactWriteItems: (input: { TransactItems: any[], ClientRequestToken?: string, ReturnConsumedCapacity?: string, ReturnItemCollectionMetrics?: string }) => Promise<TransactWriteItemsResponse>
   /**
    * @description
    * - AWS Docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UntagResource.html DynamoDB: UntagResource}
