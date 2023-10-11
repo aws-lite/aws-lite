@@ -60,7 +60,7 @@ async function getCredsFromFile (params) {
       ({
         aws_access_key_id: accessKeyId,
         aws_secret_access_key: secretAccessKey,
-        aws_session_toke: sessionToken,
+        aws_session_token: sessionToken,
       } = creds[profile])
     }
 
