@@ -55,6 +55,7 @@ jobs:
         CI: true
 
     - name: Test (live AWS)
+      if: github.repository == 'architect/aws-lite'
       run: npm run test:live
       env:
         CI: true
