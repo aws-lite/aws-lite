@@ -87,7 +87,7 @@ test('Get credentials from credentials file', async t => {
   let nonDefaultProfile = {
     accessKeyId: 'profile_1_aws_access_key_id',
     secretAccessKey: 'profile_1_aws_secret_access_key',
-    sessionToken: undefined
+    sessionToken: 'profile_1_aws_session_token'
   }
 
   // Default credentials file location
