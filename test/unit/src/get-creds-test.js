@@ -74,10 +74,11 @@ test('Get credentials from env vars', async t => {
 })
 
 test('Get credentials from credentials file', async t => {
-  t.plan(5)
+  t.plan(6)
   resetAWSEnvVars()
   let result
   let profile = 'profile_1'
+  let processProfile = 'profile_2'
 
   let defaultProfile = {
     accessKeyId: 'default_aws_access_key_id',
@@ -87,6 +88,11 @@ test('Get credentials from credentials file', async t => {
   let nonDefaultProfile = {
     accessKeyId: 'profile_1_aws_access_key_id',
     secretAccessKey: 'profile_1_aws_secret_access_key',
+    sessionToken: undefined
+  }
+  let processProfileCreds = {
+    accessKeyId: 'profile_2_aws_access_key_id',
+    secretAccessKey: 'profile_2_aws_secret_access_key',
     sessionToken: undefined
   }
 
@@ -116,6 +122,12 @@ test('Get credentials from credentials file', async t => {
   process.env.AWS_PROFILE = profile
   result = await getCreds({})
   t.deepEqual(result, nonDefaultProfile, 'Returned correct credentials from credentials file (AWS_PROFILE env var)')
+  resetAWSEnvVars()
+
+  // credentials from a process
+  process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
+  result = await getCreds({ profile: processProfile })
+  t.deepEqual(result, processProfileCreds, 'Returned correct credentials from credentials file (params.profile)')
   resetAWSEnvVars()
 
   // Credential file checks are skipped in Lambda
