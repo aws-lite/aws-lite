@@ -78,6 +78,7 @@ test('Get credentials from credentials file', async t => {
   resetAWSEnvVars()
   let result
   let profile = 'profile_1'
+  let processProfile = 'profile_2'
 
   let defaultProfile = {
     accessKeyId: 'default_aws_access_key_id',
@@ -88,6 +89,11 @@ test('Get credentials from credentials file', async t => {
     accessKeyId: 'profile_1_aws_access_key_id',
     secretAccessKey: 'profile_1_aws_secret_access_key',
     sessionToken: 'profile_1_aws_session_token'
+  }
+  let processProfileCreds = {
+    accessKeyId: 'profile_2_aws_access_key_id',
+    secretAccessKey: 'profile_2_aws_secret_access_key',
+    sessionToken: undefined
   }
 
   // Default credentials file location
@@ -117,6 +123,16 @@ test('Get credentials from credentials file', async t => {
   result = await getCreds({})
   t.deepEqual(result, nonDefaultProfile, 'Returned correct credentials from credentials file (AWS_PROFILE env var)')
   resetAWSEnvVars()
+
+  // Windows blows up on this test likely because of how it parses quotes within quotes
+  if (!process.platform.startsWith('win')) {
+    t.plan(6)
+    // Credentials from a process
+    process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
+    result = await getCreds({ profile: processProfile })
+    t.deepEqual(result, processProfileCreds, 'Returned correct credentials from credentials file (params.profile)')
+    resetAWSEnvVars()
+  }
 
   // Credential file checks are skipped in Lambda
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock

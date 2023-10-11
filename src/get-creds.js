@@ -1,6 +1,7 @@
 let { readFile } = require('fs/promises')
 let { exists } = require('./lib')
 let { join } = require('path')
+let { execSync } = require('child_process')
 let os = require('os')
 let ini = require('ini')
 
@@ -43,11 +44,24 @@ async function getCredsFromFile (params) {
     if (!creds[profile]) {
       throw TypeError(`Profile not found: ${profile}`)
     }
-    let {
-      aws_access_key_id: accessKeyId,
-      aws_secret_access_key: secretAccessKey,
-      aws_session_token: sessionToken,
-    } = creds[profile]
+
+    let accessKeyId
+    let secretAccessKey
+    let sessionToken
+    if (creds[profile].credential_process) {
+      ({
+        AccessKeyId: accessKeyId,
+        SecretAccessKey: secretAccessKey,
+        SessionToken: sessionToken,
+      } = JSON.parse(execSync(creds[profile].credential_process, { encoding: 'utf8' })))
+    }
+    else {
+      ({
+        aws_access_key_id: accessKeyId,
+        aws_secret_access_key: secretAccessKey,
+        aws_session_toke: sessionToken,
+      } = creds[profile])
+    }
 
     return validate({ accessKeyId, secretAccessKey, sessionToken })
   }
