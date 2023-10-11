@@ -55,7 +55,7 @@ jobs:
         CI: true
 
     - name: Test (live AWS)
-      if: github.repository == 'architect/aws-lite'
+      if: ${{ env.AWS_ACCESS_KEY_ID != '' && env.AWS_SECRET_ACCESS_KEY != '' }}
       run: npm run test:live
       env:
         CI: true
