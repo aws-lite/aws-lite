@@ -48,7 +48,6 @@ async function getCredsFromFile (params) {
     let accessKeyId
     let secretAccessKey
     let sessionToken
-    /* istanbul ignore if */ // TODO remove + test (Windows, specifically)
     if (creds[profile].credential_process) {
       ({
         AccessKeyId: accessKeyId,
