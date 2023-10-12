@@ -779,7 +779,8 @@ const Scan = {
   awsDoc: docRoot + 'API_Scan.html',
   validate: {
     TableName,
-    AttributesToGet,    ConditionalOperator,
+    AttributesToGet,
+    ConditionalOperator,
     ConsistentRead,
     ExclusiveStartKey,
     ExpressionAttributeNames,
@@ -803,6 +804,7 @@ const Scan = {
       paginate = true
     }
     return {
+      awsjson: [ 'ExpressionAttributeValues' ],
       headers: headers('Scan'),
       payload: params,
       paginate,
