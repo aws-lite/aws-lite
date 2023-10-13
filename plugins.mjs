@@ -6,8 +6,9 @@
  * - types: set to `false` to disable generating type definitions
  */
 const plugins = [
-  { name: 'dynamodb',   service: 'DynamoDB',  maintainers: [ '@architect' ] },
-  { name: 's3',         service: 'S3',        maintainers: [ '@architect' ] },
-  { name: 'ssm',        service: 'SSM',       maintainers: [ '@architect' ] },
+  { name: 'dynamodb',   service: 'DynamoDB',          maintainers: [ '@architect' ] },
+  { name: 's3',         service: 'S3',                maintainers: [ '@architect' ] },
+  { name: 'ssm',        service: 'SSM',               maintainers: [ '@architect' ] },
+  { name: 'rds-data',   service: 'RDS Data Service',  maintainers: [ '@architect' ] },
 ]
 export default plugins.sort((a, b) => a.name > b.name ? 1 : -1)
