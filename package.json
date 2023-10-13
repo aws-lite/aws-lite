@@ -50,6 +50,7 @@
   ],
   "workspaces": [
     "plugins/dynamodb",
+    "plugins/rds-data",
     "plugins/s3",
     "plugins/ssm"
   ],
