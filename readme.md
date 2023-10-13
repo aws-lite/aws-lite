@@ -146,6 +146,8 @@ The following options may be passed when instantiating the `aws-lite` client:
   - Set a custom port number to use, helpful for local testing
 - **`protocol` (string) [default = `https`]**
   - Set the connection protocol to `http`, helpful for local testing
+- **`responseContentType` (string)**
+  - Set an overriding Content-Type header for all responses, helpful for local testing 
 
 An example:
 

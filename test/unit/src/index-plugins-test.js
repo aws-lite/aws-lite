@@ -229,7 +229,7 @@ test('Plugins - method construction, request()', async t => {
 })
 
 test('Plugins - response()', async t => {
-  t.plan(77)
+  t.plan(83)
   let aws, payload, response, responseBody, responseHeaders
 
   aws = await client({ ...config, host, port, plugins: [ join(pluginDir, 'response.js') ] })
@@ -309,6 +309,18 @@ test('Plugins - response()', async t => {
   t.ok(response.headers, 'Response headers passed through')
   t.notOk(response.headers.foo, 'Response headers not mutated')
   t.equal(response.payload, null, 'Response payload passed through')
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  // Force content type on response
+  aws = await client({ ...config, responseContentType: 'application/json', plugins: [ join(pluginDir, 'response.js') ] })
+  console.log(aws)
+
+  // Response is forced to another content-type and parsed appropriately
+  responseHeaders = { 'content-type': '*/*' }
+  payload = { hi: 'there' }
+  server.use({ responseHeaders, responseBody: JSON.stringify(payload) })
+  response = await aws.lambda.Passthrough()
+  t.deepEqual(response.payload, payload, 'Returned response payload parsed despite wrong content-type')
   basicRequestChecks(t, 'GET', { url: '/' })
 })
 
