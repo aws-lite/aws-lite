@@ -2,7 +2,7 @@
 
 > Official `aws-lite` plugin for RDS Data Service
 
-> Maintained by: [@architect](https://github.com/architect)
+> Maintained by: [@andybee](https://github.com/andybee)
 
 
 ## Install
