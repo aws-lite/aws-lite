@@ -51,6 +51,7 @@
   "workspaces": [
     "plugins/dynamodb",
     "plugins/s3",
+    "plugins/sns",
     "plugins/ssm"
   ],
   "eslintConfig": {

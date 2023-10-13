@@ -537,6 +537,7 @@ async function request (params, utils) {
 <!-- plugins_start -->
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
 - [S3](https://www.npmjs.com/package/@aws-lite/s3)
+- [SNS](https://www.npmjs.com/package/@aws-lite/sns)
 - [SSM](https://www.npmjs.com/package/@aws-lite/ssm)
 <!-- plugins_end -->
 
