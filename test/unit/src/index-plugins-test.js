@@ -313,8 +313,6 @@ test('Plugins - response()', async t => {
 
   // Force content type on response
   aws = await client({ ...config, responseContentType: 'application/json', plugins: [ join(pluginDir, 'response.js') ] })
-  console.log(aws)
-
   // Response is forced to another content-type and parsed appropriately
   responseHeaders = { 'content-type': '*/*' }
   payload = { hi: 'there' }
