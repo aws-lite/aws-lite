@@ -165,7 +165,7 @@ function request (params, creds, region, config, metadata) {
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
         let body = Buffer.concat(data), payload, rawString
-        let contentType = headers['content-type'] || headers['Content-Type'] || ''
+        let contentType = config.responseContentType || headers['content-type'] || headers['Content-Type'] || ''
         if (JSONContentType(contentType) || AwsJSONContentType(contentType)) {
           payload = JSON.parse(body)
 
