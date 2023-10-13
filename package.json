@@ -52,6 +52,7 @@
     "plugins/dynamodb",
     "plugins/s3",
     "plugins/sns",
+    "plugins/sqs",
     "plugins/ssm"
   ],
   "eslintConfig": {

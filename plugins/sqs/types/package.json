@@ -1,0 +1,13 @@
+{
+  "name": "@aws-lite/sqs-types",
+  "description": "Type definitions for the @aws-lite/sqs plugin",
+  "version": "0.0.0",
+  "main": "",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-sqs": "3"
+  }
+}

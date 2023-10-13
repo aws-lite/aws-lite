@@ -9,6 +9,7 @@ const plugins = [
   { name: 'dynamodb',   service: 'DynamoDB',  maintainers: [ '@architect' ] },
   { name: 's3',         service: 'S3',        maintainers: [ '@architect' ] },
   { name: 'sns',        service: 'SNS',       maintainers: [ '@architect' ] },
+  { name: 'sqs',        service: 'SQS',       maintainers: [ '@architect' ] },
   { name: 'ssm',        service: 'SSM',       maintainers: [ '@architect' ] },
 ]
 export default plugins.sort((a, b) => a.name > b.name ? 1 : -1)

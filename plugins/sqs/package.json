@@ -1,0 +1,21 @@
+{
+  "name": "@aws-lite/sqs",
+  "version": "0.0.0",
+  "description": "Official `aws-lite` plugin for SQS",
+  "homepage": "https://github.com/architect/aws-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/architect/aws-lite.git",
+    "directory": "plugins/sqs"
+  },
+  "bugs": "https://github.com/architect/aws-lite/issues",
+  "main": "src/index.mjs",
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "@architect",
+  "license": "Apache-2.0",
+  "files": [
+    "src"
+  ]
+}
