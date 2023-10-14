@@ -539,6 +539,7 @@ async function request (params, utils) {
 <!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
+- [RDS Data Service](https://www.npmjs.com/package/@aws-lite/rds-data)
 - [S3](https://www.npmjs.com/package/@aws-lite/s3)
 - [SSM](https://www.npmjs.com/package/@aws-lite/ssm)
 <!-- plugins_end -->
