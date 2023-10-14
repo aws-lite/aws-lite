@@ -29,7 +29,6 @@ export default {
   ListTagsForResource:                { disabled, awsDoc: docRoot + 'API_ListTagsForResource.html' },
   ListTopics:                         { disabled, awsDoc: docRoot + 'API_ListTopics.html' },
   OptInPhoneNumber:                   { disabled, awsDoc: docRoot + 'API_OptInPhoneNumber.html' },
-  Publish:                            { disabled, awsDoc: docRoot + 'API_Publish.html' },
   PublishBatch:                       { disabled, awsDoc: docRoot + 'API_PublishBatch.html' },
   PutDataProtectionPolicy:            { disabled, awsDoc: docRoot + 'API_PutDataProtectionPolicy.html' },
   RemovePermission:                   { disabled, awsDoc: docRoot + 'API_RemovePermission.html' },
