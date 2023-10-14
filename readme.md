@@ -172,6 +172,7 @@ aws = await awsLite({
   plugins: [ '@aws-lite/dynamodb', '/a/custom/local/plugin/path' ],
   port: 12345,
   protocol: 'http',
+  responseContentType: 'application/json',
 })
 ```
 
