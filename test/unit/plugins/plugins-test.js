@@ -26,6 +26,10 @@ test('Check plugins for docs + validation', async t => {
         t.pass(`${name}: method disabled by boolean`)
         plan++
       }
+      else if (method.deprecated === true) {
+        t.pass(`${name}: method deprecated by property`)
+        plan++
+      }
       else if (method.disabled === true) {
         t.pass(`${name}: method disabled by property`)
         plan++
