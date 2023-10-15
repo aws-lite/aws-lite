@@ -15,6 +15,7 @@ let clientFactory = require('./client-factory')
  * @param {string} [config.protocol='https'] Set the connection protocol to 'http', helpful for local testing
  * @param {string} [config.host] Set a custom host name to use, helpful for local testing
  * @param {number} [config.port] Set a custom port number to use, helpful for local testing
+ * @param {string} [config.responseContentType] Set an overriding Content-Type headers for responses, helpful for local testing
  * @param {array} [config.plugins] Define AWS service plugins; by default, `@aws-lite/*` + `aws-lite-plugin-*` plugins are auto-loaded; specifying this option disables plugin auto-loading
  *
  * @returns {Promise<function>} Client async function

@@ -16,6 +16,7 @@ declare module "@aws-lite/client" {
     plugins?: any[];
     port?: number;
     protocol?: string;
+    responseContentType?: string;
   }
 
   interface AwsLiteRequest {

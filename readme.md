@@ -146,6 +146,8 @@ The following options may be passed when instantiating the `aws-lite` client:
   - Set a custom port number to use, helpful for local testing
 - **`protocol` (string) [default = `https`]**
   - Set the connection protocol to `http`, helpful for local testing
+- **`responseContentType` (string)**
+  - Set an overriding Content-Type header for all responses, helpful for local testing 
 
 An example:
 
@@ -170,6 +172,7 @@ aws = await awsLite({
   plugins: [ '@aws-lite/dynamodb', '/a/custom/local/plugin/path' ],
   port: 12345,
   protocol: 'http',
+  responseContentType: 'application/json',
 })
 ```
 
@@ -536,6 +539,7 @@ async function request (params, utils) {
 <!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
+- [RDS Data Service](https://www.npmjs.com/package/@aws-lite/rds-data)
 - [S3](https://www.npmjs.com/package/@aws-lite/s3)
 - [SNS](https://www.npmjs.com/package/@aws-lite/sns)
 - [SQS](https://www.npmjs.com/package/@aws-lite/sqs)
