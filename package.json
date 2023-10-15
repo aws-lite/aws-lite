@@ -15,11 +15,16 @@
     "plugin": "node scripts/version-plugins.mjs",
     "lint": "eslint --fix .",
     "test": "npm run lint && npm run gen && npm run coverage",
+    "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
     "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
     "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-spec",
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-spec",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "vendor": "scripts/vendor/vendor.sh"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npm run test:precommit",
+    "pre-push": "npm run test && npm run test:live"
   },
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -42,6 +47,7 @@
     "mock-fs": "^5.2.0",
     "nyc": "^15.1.0",
     "semver": "^7.5.4",
+    "simple-git-hooks": "^2.9.0",
     "tap-spec": "^5.0.0",
     "tape": "^5.7.0"
   },

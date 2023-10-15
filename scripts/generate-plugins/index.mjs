@@ -13,6 +13,7 @@ const pluginListRegex = /(?<=(<!-- plugins_start -->\n))[\s\S]*?(?=(<!-- plugins
 const pluginMethodsRegex = /(?<=(<!-- METHOD_DOCS_START -->\n))[\s\S]*?(?=(<!-- METHOD_DOCS_END -->))/g
 
 async function main () {
+  let mutated = false
   for (let plugin of plugins) {
     if (!plugin.name || typeof plugin.name !== 'string' ||
         !plugin.service || typeof plugin.service !== 'string' ||
@@ -24,6 +25,7 @@ async function main () {
     let pluginDir = join(cwd, 'plugins', plugin.name)
     let maintainers = plugin.maintainers.join(', ')
     if (!existsSync(pluginDir)) {
+      mutated = true
       let pluginSrc = join(pluginDir, 'src')
       mkdirSync(pluginSrc, { recursive: true })
 
@@ -64,7 +66,7 @@ async function main () {
     // Maybe update docs
     else {
       const pluginReadmeFile = join(pluginDir, 'readme.md')
-      let pluginReadme = readFileSync(pluginReadmeFile).toString()
+      const pluginReadme = readFileSync(pluginReadmeFile).toString()
       // Generate docs markdown
       const { default: _plugin } = await import(name)
       let deprecatedMethods = []
@@ -112,22 +114,34 @@ async function main () {
                         : `- \`${name}\``
                       ).join('\n') + '\n'
       }
-      pluginReadme = pluginReadme.replace(pluginMethodsRegex, methodDocs)
-      writeFileSync(pluginReadmeFile, pluginReadme)
+      const updatedPluginReadme = pluginReadme.replace(pluginMethodsRegex, methodDocs)
+      writeFileSync(pluginReadmeFile, updatedPluginReadme)
+      if (updatedPluginReadme !== pluginReadme) {
+        mutated = true
+      }
     }
 
-    if (plugin.types !== false)
+    if (plugin.types !== false) {
       try { await generateTypes(plugin) }
       catch (error) {
         console.error(`Failed to generate types for ${name}: ${error.message}`)
       }
+    }
   }
 
   // Project readme.md
   const projectReadmeFile = join(cwd, 'readme.md')
-  let projectReadme = readFileSync(projectReadmeFile).toString()
+  const projectReadme = readFileSync(projectReadmeFile).toString()
   const pluginList = plugins.map(({ name, service }) => `- [${service}](https://www.npmjs.com/package/@aws-lite/${name})`)
-  projectReadme = projectReadme.replace(pluginListRegex, pluginList.join('\n') + '\n')
-  writeFileSync(projectReadmeFile, projectReadme)
+  const updatedProjectReadme = projectReadme.replace(pluginListRegex, pluginList.join('\n') + '\n')
+  writeFileSync(projectReadmeFile, updatedProjectReadme)
+  if (projectReadme !== updatedProjectReadme) {
+    mutated = true
+  }
+
+  // If run in the git pre-commit hook, ensure any changes are accounted for
+  if (process.env.PRECOMMIT && mutated) {
+    throw Error('Found uncommitted changes to plugin docs and/or types, please commit changes and try again')
+  }
 }
 main()
