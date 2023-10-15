@@ -55,7 +55,7 @@ function createTypesStr ({ methods, name, service, existingTypes }) {
         .map(line => line.split(': ')[0]) // grab method name
     }
     else {
-      console.log('Interface declaration not found in the input string.')
+      throw ReferenceError(`Interface declaration not found in the input string: ${service}`)
     }
   }
 
@@ -109,14 +109,16 @@ function createTypesStr ({ methods, name, service, existingTypes }) {
     }
   }
 
-
+  const nameProp = name.match(/[-\.]/g) ? `'${name}'` : name
+  const serviceProp = service.replace(/ /g, '')
   const importsRegex = /(?<=(\/\/ \$IMPORTS_START\n))[\s\S]*?(?=(\/\/ \$IMPORTS_END))/g
   const methodsRegex = /(?<=(\/\/ \$METHODS_START\n))[\s\S]*?(?=(\/\/ \$METHODS_END))/g
   const typesTmpl = existingTypes
     ? existingTypes
     : readFileSync(join(__dirname, 'tmpl', '_types-tmpl.d.ts')).toString()
   return typesTmpl
-    .replace(/\$SERVICE/g, service)
+    .replace(/\$SERVICE/g, serviceProp)
+    .replace(/\$NAME_PROP/g, nameProp)
     .replace(/\$NAME/g, name)
     .replace(importsRegex, outputTypes.join(',\n') + ',\n  ')
     .replace(methodsRegex, methodTypes.join('\n') + '\n  ')
