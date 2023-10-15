@@ -30,14 +30,14 @@ Properties:
   - Name of the database
 - **`parameterSets` (array)**
   - Parameter set for the batch operation
-- **`resourceArn` [required]**
+- **`resourceArn` (string) [required]**
   - Amazon Resource Name (ARN) of the Aurora Serverless DB cluster
 - **`schema` (string)**
   - Name of the database schema
 - **`secretArn` (string) [required]**
   - ARN of the secret that enables access to the DB cluster
 - **`sql` (string) [required]**
-  - FooSQL statement to run. Don't include a semicolon (;) at the end of the SQL statement.
+  - SQL statement to run
 - **`transactionId` (string)**
   - Transaction ID of the transaction that you want to include the SQL statement in
 
@@ -110,6 +110,11 @@ Properties:
   - ARN of the secret that enables access to the DB cluster
 - **`transactionId` (string) [required]**
   - Identifier of the transaction to roll back
+
+
+### Deprecated methods
+
+- [`ExecuteSql`](https://docs.aws.amazon.com/rdsdataservice/latest/APIReference/API_ExecuteSql.html)
 <!-- METHOD_DOCS_END -->
 
 

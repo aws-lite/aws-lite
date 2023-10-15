@@ -1,4 +1,4 @@
-const disabled = true
+const deprecated = true
 export default {
-  ExecuteSql: { disabled, awsDoc: 'https://docs.aws.amazon.com/rdsdataservice/latest/APIReference/API_ExecuteSql.html' }
+  ExecuteSql: { deprecated, awsDoc: 'https://docs.aws.amazon.com/rdsdataservice/latest/APIReference/API_ExecuteSql.html' }
 }
