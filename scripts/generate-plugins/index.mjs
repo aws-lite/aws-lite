@@ -67,9 +67,16 @@ async function main () {
       let pluginReadme = readFileSync(pluginReadmeFile).toString()
       // Generate docs markdown
       const { default: _plugin } = await import(name)
+      let deprecatedMethods = []
       let incompleteMethods = []
       let methodDocs = Object.keys(_plugin.methods).map(methodName => {
         let header = `### \`${methodName}\`\n\n`
+        if (_plugin.methods[methodName].deprecated) {
+          let item = { name: methodName }
+          if (_plugin.methods[methodName]?.awsDoc) item.awsDoc = _plugin.methods[methodName].awsDoc
+          deprecatedMethods.push(item)
+          return
+        }
         if (!_plugin.methods[methodName] || _plugin.methods[methodName].disabled) {
           let item = { name: methodName }
           if (_plugin.methods[methodName]?.awsDoc) item.awsDoc = _plugin.methods[methodName].awsDoc
@@ -90,6 +97,13 @@ async function main () {
         return header
       }).filter(Boolean).join('\n\n\n') + '\n'
 
+      if (deprecatedMethods.length) {
+        methodDocs += `\n\n### Deprecated methods\n\n` +
+                      deprecatedMethods.map(({ name, awsDoc }) => awsDoc
+                        ? `- [\`${name}\`](${awsDoc})`
+                        : `- \`${name}\``
+                      ).join('\n') + '\n'
+      }
       if (incompleteMethods.length) {
         methodDocs += `\n\n### Methods yet to be implemented\n\n` +
                       `> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!\n\n` +

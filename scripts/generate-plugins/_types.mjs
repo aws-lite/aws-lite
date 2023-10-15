@@ -39,9 +39,10 @@ if (isCLI) {
 }
 
 function createTypesStr ({ methods, name, service, existingTypes }) {
+  const serviceProp = service.replace(/ /g, '')
   let existingMethods = []
   if (existingTypes) {
-    const interfaceRegex = new RegExp(`declare interface AwsLite${service} {([^]*?)\n}\n`, 'g')
+    const interfaceRegex = new RegExp(`declare interface AwsLite${serviceProp} {([^]*?)\n}\n`, 'g')
     const match = interfaceRegex.exec(existingTypes)
 
     if (match) {
@@ -110,7 +111,6 @@ function createTypesStr ({ methods, name, service, existingTypes }) {
   }
 
   const nameProp = name.match(/[-\.]/g) ? `'${name}'` : name
-  const serviceProp = service.replace(/ /g, '')
   const importsRegex = /(?<=(\/\/ \$IMPORTS_START\n))[\s\S]*?(?=(\/\/ \$IMPORTS_END))/g
   const methodsRegex = /(?<=(\/\/ \$METHODS_START\n))[\s\S]*?(?=(\/\/ \$METHODS_END))/g
   const typesTmpl = existingTypes
