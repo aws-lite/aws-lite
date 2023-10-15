@@ -18,7 +18,6 @@ export default {
   PurgeQueue:                   { disabled, awsDoc: docRoot + 'API_PurgeQueue.html' },
   ReceiveMessage:               { disabled, awsDoc: docRoot + 'API_ReceiveMessage.html' },
   RemovePermission:             { disabled, awsDoc: docRoot + 'API_RemovePermission.html' },
-  SendMessage:                  { disabled, awsDoc: docRoot + 'API_SendMessage.html' },
   SendMessageBatch:             { disabled, awsDoc: docRoot + 'API_SendMessageBatch.html' },
   SetQueueAttributes:           { disabled, awsDoc: docRoot + 'API_SetQueueAttributes.html' },
   StartMessageMoveTask:         { disabled, awsDoc: docRoot + 'API_StartMessageMoveTask.html' },
