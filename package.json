@@ -24,7 +24,7 @@
   },
   "simple-git-hooks": {
     "pre-commit": "npm run test:precommit",
-    "pre-push": "npm run test && npm run test:live"
+    "pre-push": "npm run test"
   },
   "main": "src/index.js",
   "types": "src/index.d.ts",
