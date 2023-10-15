@@ -22,7 +22,29 @@ npm i -D @aws-lite/sns-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `Publish`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/sns/latest/api/API_Publish.html)
+
+Properties:
+- **`Message` (string) [required]**
+  - Message payload to send
+- **`MessageAttributes` (string)**
+  - String to MessageAttributeValue object map
+- **`MessageDeduplicationId` (string)**
+  - Ensures request is idempotent; may only be used for FIFO topics
+- **`MessageGroupId` (string)**
+  - Tag specifying a specific message group; may only be used for FIFO topics
+- **`MessageStructure` (string)**
+  - May be set to `json` publish JSON payloads
+- **`PhoneNumber` (string)**
+  - SMS recipient phone number in E.164 format; if not specified, you must specify `TargetArn` or `TargetArn`
+- **`Subject` (string)**
+  - Email subject line
+- **`TargetArn` (string)**
+  - If not specified, you must specify `PhoneNumber` or `TopicArn`
+- **`TopicArn` (string)**
+  - ARN of the the topic to publish to; if not specified, you must specify `PhoneNumber` or `TargetArn`
 
 
 ### Methods yet to be implemented
@@ -57,7 +79,6 @@ npm i -D @aws-lite/sns-types
 - [`ListTagsForResource`](https://docs.aws.amazon.com/sns/latest/api/API_ListTagsForResource.html)
 - [`ListTopics`](https://docs.aws.amazon.com/sns/latest/api/API_ListTopics.html)
 - [`OptInPhoneNumber`](https://docs.aws.amazon.com/sns/latest/api/API_OptInPhoneNumber.html)
-- [`Publish`](https://docs.aws.amazon.com/sns/latest/api/API_Publish.html)
 - [`PublishBatch`](https://docs.aws.amazon.com/sns/latest/api/API_PublishBatch.html)
 - [`PutDataProtectionPolicy`](https://docs.aws.amazon.com/sns/latest/api/API_PutDataProtectionPolicy.html)
 - [`RemovePermission`](https://docs.aws.amazon.com/sns/latest/api/API_RemovePermission.html)

@@ -22,7 +22,25 @@ npm i -D @aws-lite/sqs-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `SendMessage`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html)
+
+Properties:
+- **`MessageBody` (string) [required]**
+  - Message to send, from 1b - 256KiB
+- **`QueueUrl` (string) [required]**
+  - SQS queue URL to send the message to
+- **`DelaySeconds` (number)**
+  - Seconds, from 0 - 900, to delay a message
+- **`MessageAttributes` (object)**
+  - Message attribute map; [see AWS docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_MessageAttributeValue.html)
+- **`MessageDeduplicationId` (string)**
+  - Ensures request is idempotent; may only be used for FIFO queues
+- **`MessageGroupId` (string)**
+  - Tag specifying a specific message group; may only be used for FIFO queues
+- **`MessageSystemAttributes` (object)**
+  - Message system attribute map; [see AWS docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_MessageSystemAttributeValue.html)
 
 
 ### Methods yet to be implemented
@@ -46,7 +64,6 @@ npm i -D @aws-lite/sqs-types
 - [`PurgeQueue`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_PurgeQueue.html)
 - [`ReceiveMessage`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html)
 - [`RemovePermission`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_RemovePermission.html)
-- [`SendMessage`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html)
 - [`SendMessageBatch`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessageBatch.html)
 - [`SetQueueAttributes`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SetQueueAttributes.html)
 - [`StartMessageMoveTask`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_StartMessageMoveTask.html)
