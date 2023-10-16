@@ -1,4 +1,4 @@
-# `$NAME`
+# `$SERVICE`
 
 > $DESC
 
@@ -8,13 +8,13 @@
 ## Install
 
 ```sh
-npm i $NAME
+npm i $SERVICE
 ```
 
 Optionally install types:
 
 ```sh
-npm i -D $NAME-types
+npm i -D $SERVICE-types
 ```
 
 

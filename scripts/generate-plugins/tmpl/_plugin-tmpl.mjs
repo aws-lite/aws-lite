@@ -1,4 +1,4 @@
-const service = '$NAME'
+const service = '$SERVICE'
 const required = true
 
 /**
