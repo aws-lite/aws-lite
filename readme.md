@@ -547,6 +547,33 @@ async function request (params, utils) {
 <!-- plugins_end -->
 
 
+### Plugin types and [code completion](https://en.wikipedia.org/wiki/Intelligent_code_completion)
+
+`aws-lite/*` plugins can have auto-generated and hand-written types. These type definitions are authored as `.d.ts` files and distributed as separate, optional dependencies. The "ambient" types are automatically loaded by editors (using the official TS Lang Server like VSCode) or declared specifically in a TypeScript project's `tsconfig`.
+
+#### Installation and usage
+
+Generally, types are available as `@aws-lite/<plugin>-types` packages. For example, once you have installed `@aws-lite/client` and `@aws-lite/dynamodb` as dependencies, add the DynamoDB types as a dev dependency:
+
+```sh
+npm i -D @aws-lite/dynamodb-types
+```
+
+**In a JavaScript project**, code completion (aka Intellisense) for input and output types will be loaded automatically for `awsLite.dynamodb.<method>` calls.
+
+**In a TypeScript project**, include the types in your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "types": [
+      "@aws-lite/dynamodb-types"
+    ]
+  }
+}
+```
+
+
 ## Contributing
 
 AWS has (as of this writing) nearly 300 service APIs – `aws-lite` would love your help in authoring and maintaining official (and unofficial) plugins!
@@ -600,6 +627,34 @@ Due to the nature of interacting with AWS services, manual validation is not onl
 
 One should expect that running the live AWS client test suite (`npm run test:live`) will result in a limited number of free tier resources to be created in the account corresponding to your supplied (or default) AWS credentials. These resources should never exceed the free tier under normal circumstances.
 
+
+### Creating `@aws-lite/*-types` packages
+
+`@aws-lite/*` plugins can have auto-generated and hand-written types. These type definitions are authored as `index.d.ts` files and distributed as separate, optional dependencies.
+
+After adding a plugin and running `npm run gen`, a `types/` directory will be added to the newly created plugin directory. Each time `npm run gen` is run, the plugin implementation is analyzed and the types are regenerated automatically.
+
+It is possible to opt out of automatic type generation by setting `types: false` in the [`plugins` file](https://github.com/architect/aws-lite/blob/main/plugins.mjs).
+
+It also possible to maintain hand-written types alongside generated types by specifying imports and method types outside of their respective "fences" in the generated `index.d.ts` file. For example, to provide a custom type for the `s3` plugin's `PutObject` method, you could do the following:
+
+```ts
+// plugins/s3/types/index.d.ts
+declare interface AwsLiteS3 {
+  // $METHODS_START
+  
+  /** edited for brevity */
+  
+  GetObject: (input: ) => Promise<GetObjectResponse>
+  HeadObject: (input: ) => Promise<HeadObjectResponse>
+  ListObjectsV2: (input: ) => Promise<ListObjectsV2Response>
+  // $METHODS_END
+
+  PutObject: (input: ACustomInputType) => Promise<ACustomResponseType>
+}
+```
+
+Because the `PutObject` method is defined outside of the `$METHODS_START` and `$METHODS_END` fences, it will not be overwritten by the next run of `npm run gen`. Further, the generator won't create a duplicate `PutObject` method inside the fences.
 
 ### Releasing `@aws-lite/*` plugins
 
