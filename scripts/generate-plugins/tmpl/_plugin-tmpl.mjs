@@ -11,7 +11,7 @@ export default {
       // Include a reference link with each method, for example:
       awsDoc: 'https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html',
       validate: {
-        name: { type: 'string', required },
+        name: { type: 'string', required, comment: 'Basic method description' },
       },
       request: async ({ name }) => {
         return {
@@ -32,7 +32,7 @@ export default {
     $ReplaceMeToo: {
       awsDoc: 'https://docs.aws.amazon.com/...',
       validate: {
-        name: { type: 'string', required },
+        name: { type: 'string', required, comment: 'Basic method description' },
       },
       request: async ({ name }) => {
         return {
