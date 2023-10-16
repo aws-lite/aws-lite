@@ -1,5 +1,5 @@
 {
-  "name": "@aws-lite/$NAME-types",
+  "name": "@aws-lite/$SERVICE-types",
   "description": "Type definitions for an @aws-lite plugin",
   "version": "0.0.0",
   "main": "",

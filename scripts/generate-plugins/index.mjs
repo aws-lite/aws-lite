@@ -15,40 +15,43 @@ const pluginMethodsRegex = /(?<=(<!-- METHOD_DOCS_START -->\n))[\s\S]*?(?=(<!-- 
 async function main () {
   let mutated = false
   for (let plugin of plugins) {
-    if (!plugin.name || typeof plugin.name !== 'string' ||
-        !plugin.service || typeof plugin.service !== 'string' ||
-        !plugin.maintainers || !Array.isArray(plugin.maintainers)) {
-      throw ReferenceError(`Specified plugin must have 'name' (string), 'service' (string), and 'maintainers' (array)`)
+    let { service, property, display, maintainers } = plugin
+    if (!service || typeof service !== 'string' ||
+        !property || typeof property !== 'string' ||
+        !display || typeof display !== 'string' ||
+        !maintainers || !Array.isArray(maintainers)) {
+      throw ReferenceError(`Specified plugin must have 'service' (string), 'property' (string), 'display' (string), and 'maintainers' (array)`)
     }
 
-    let name = `@aws-lite/${plugin.name}`
-    let pluginDir = join(cwd, 'plugins', plugin.name)
-    let maintainers = plugin.maintainers.join(', ')
+    let packageName = `@aws-lite/${service}`
+    let repoDir = `plugins/${service}`
+    let pluginDir = join(cwd, 'plugins', service)
+    let maintainersList = maintainers.join(', ')
     if (!existsSync(pluginDir)) {
       mutated = true
       let pluginSrc = join(pluginDir, 'src')
       mkdirSync(pluginSrc, { recursive: true })
 
-      let desc = `Official \`aws-lite\` plugin for ${plugin.service}`
+      let desc = `Official \`aws-lite\` plugin for ${display}`
 
       // Plugin: src/index.js
       let src = pluginTmpl
-        .replace(/\$NAME/g, plugin.name)
-        .replace(/\$MAINTAINERS/g, maintainers)
+        .replace(/\$SERVICE/g, service)
+        .replace(/\$MAINTAINERS/g, maintainersList)
       writeFileSync(join(pluginSrc, 'index.mjs'), src)
 
       // Plugin: package.json
       let pkg = JSON.parse(packageTmpl)
-      pkg.name = name
+      pkg.name = packageName
       pkg.description = desc
-      pkg.author = maintainers
-      pkg.repository.directory = `plugins/${plugin.name}`
+      pkg.author = maintainersList
+      pkg.repository.directory = repoDir
       writeFileSync(join(pluginDir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
 
       // Plugin: readme.md
-      let maintainerLinks = plugin.maintainers.map(p => `[${p}](https://github.com/${p.replace('@', '')})`).join(', ')
+      let maintainerLinks = maintainers.map(p => `[${p}](https://github.com/${p.replace('@', '')})`).join(', ')
       let readme = readmeTmpl
-        .replace(/\$NAME/g, name)
+        .replace(/\$SERVICE/g, packageName)
         .replace(/\$DESC/g, desc)
         .replace(/\$MAINTAINERS/g, maintainerLinks)
       writeFileSync(join(pluginDir, 'readme.md'), readme)
@@ -56,7 +59,7 @@ async function main () {
       // aws-lite project: package.json
       let awsLitePkgFile = join(cwd, 'package.json')
       let awsLitePkg = JSON.parse(readFileSync(awsLitePkgFile).toString())
-      let workspace = `plugins/${plugin.name}`
+      let workspace = repoDir
       if (!awsLitePkg.workspaces.includes(workspace)) {
         awsLitePkg.workspaces.push(workspace)
         awsLitePkg.workspaces = awsLitePkg.workspaces.sort()
@@ -68,25 +71,25 @@ async function main () {
       const pluginReadmeFile = join(pluginDir, 'readme.md')
       const pluginReadme = readFileSync(pluginReadmeFile).toString()
       // Generate docs markdown
-      const { default: _plugin } = await import(name)
+      const { default: _plugin } = await import(packageName)
       let deprecatedMethods = []
       let incompleteMethods = []
-      let methodDocs = Object.keys(_plugin.methods).map(methodName => {
-        let header = `### \`${methodName}\`\n\n`
-        if (_plugin.methods[methodName].deprecated) {
-          let item = { name: methodName }
-          if (_plugin.methods[methodName]?.awsDoc) item.awsDoc = _plugin.methods[methodName].awsDoc
+      let methodDocs = Object.keys(_plugin.methods).map(method => {
+        let header = `### \`${method}\`\n\n`
+        if (_plugin.methods[method].deprecated) {
+          let item = { method }
+          if (_plugin.methods[method]?.awsDoc) item.awsDoc = _plugin.methods[method].awsDoc
           deprecatedMethods.push(item)
           return
         }
-        if (!_plugin.methods[methodName] || _plugin.methods[methodName].disabled) {
-          let item = { name: methodName }
-          if (_plugin.methods[methodName]?.awsDoc) item.awsDoc = _plugin.methods[methodName].awsDoc
+        if (!_plugin.methods[method] || _plugin.methods[method].disabled) {
+          let item = { method }
+          if (_plugin.methods[method]?.awsDoc) item.awsDoc = _plugin.methods[method].awsDoc
           incompleteMethods.push(item)
           return
         }
-        const { awsDoc, validate } = _plugin.methods[methodName]
-        if (!awsDoc) throw ReferenceError(`All methods must refer to an AWS service API doc: ${name} ${methodName}`)
+        const { awsDoc, validate } = _plugin.methods[method]
+        if (!awsDoc) throw ReferenceError(`All methods must refer to an AWS service API doc: ${display} ${method}`)
         header += `[Canonical AWS API doc](${awsDoc})\n`
         if (validate) {
           header += `\nProperties:\n` + Object.entries(validate).map(([ param, values ]) => {
@@ -101,17 +104,17 @@ async function main () {
 
       if (deprecatedMethods.length) {
         methodDocs += `\n\n### Deprecated methods\n\n` +
-                      deprecatedMethods.map(({ name, awsDoc }) => awsDoc
-                        ? `- [\`${name}\`](${awsDoc})`
-                        : `- \`${name}\``
+                      deprecatedMethods.map(({ method, awsDoc }) => awsDoc
+                        ? `- [\`${method}\`](${awsDoc})`
+                        : `- \`${method}\``
                       ).join('\n') + '\n'
       }
       if (incompleteMethods.length) {
         methodDocs += `\n\n### Methods yet to be implemented\n\n` +
                       `> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!\n\n` +
-                      incompleteMethods.map(({ name, awsDoc }) => awsDoc
-                        ? `- [\`${name}\`](${awsDoc})`
-                        : `- \`${name}\``
+                      incompleteMethods.map(({ method, awsDoc }) => awsDoc
+                        ? `- [\`${method}\`](${awsDoc})`
+                        : `- \`${method}\``
                       ).join('\n') + '\n'
       }
       const updatedPluginReadme = pluginReadme.replace(pluginMethodsRegex, methodDocs)
@@ -124,7 +127,7 @@ async function main () {
     if (plugin.types !== false) {
       try { await generateTypes(plugin) }
       catch (error) {
-        console.error(`Failed to generate types for ${name}: ${error.message}`)
+        console.error(`Failed to generate types for ${service}: ${error.message}`)
       }
     }
   }
@@ -132,7 +135,7 @@ async function main () {
   // Project readme.md
   const projectReadmeFile = join(cwd, 'readme.md')
   const projectReadme = readFileSync(projectReadmeFile).toString()
-  const pluginList = plugins.map(({ name, service }) => `- [${service}](https://www.npmjs.com/package/@aws-lite/${name})`)
+  const pluginList = plugins.map(({ service, display }) => `- [${display}](https://www.npmjs.com/package/@aws-lite/${service})`)
   const updatedProjectReadme = projectReadme.replace(pluginListRegex, pluginList.join('\n') + '\n')
   writeFileSync(projectReadmeFile, updatedProjectReadme)
   if (projectReadme !== updatedProjectReadme) {

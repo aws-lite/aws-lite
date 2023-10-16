@@ -3,10 +3,10 @@
 Add to `devDependencies` in `package.json`:
 
 ```
-npm i -D @aws-lite/$NAME-types
+npm i -D @aws-lite/$SERVICE-types
 ```
 
-<small>Be sure you also have `@aws-lite/$NAME` installed.</small>
+<small>Be sure you also have `@aws-lite/$SERVICE` installed.</small>
 
 ## Usage and Config
 
@@ -25,7 +25,7 @@ Example:
   "extends": "@tsconfig/node-lts/tsconfig.json",
   "compilerOptions": {
     "types": [
-      "@aws-lite/$NAME-types"
+      "@aws-lite/$SERVICE-types"
     ]
   }
 }
@@ -36,11 +36,11 @@ Example:
 Either in individual files or in an `index.d.ts` file.
 
 ```ts
-/// <reference types="@aws-lite/$NAME-types" />
+/// <reference types="@aws-lite/$SERVICE-types" />
 ```
 
 ymmv
 
 ```ts
-/// <reference path="./node_modules/@aws-lite/$NAME-types/index.d.ts" />
+/// <reference path="./node_modules/@aws-lite/$SERVICE-types/index.d.ts" />
 ```

@@ -1,16 +1,23 @@
 /**
  * `@aws-lite/*` plugins:
- * - name: the official service name; example: `cloudformation`, see also: `src/services.js`
- * - service: the commonly recognized, more formal version (including casing); example: `CloudFormation`
+ * - service: the official service name, usually corresponding to the API subdomain; also maps to the package name and plugin folder; for types, this should generally match the AWS SDK v3 package names; example: `cloudformation`, see also: `src/services.js`
+ * - property: service property name to be used in code; an unenumerable lowcase alias will be available in the client
+ * - display: the commonly recognized, more formal version (including casing); example: `CloudFormation`
  * - maintainers: array of GitHub handles of the individual(s) or org(s) responsible for maintaining the plugin
- * - types: set to `false` to disable generating type definitions
+ * - types: set to `false` to temporarily disable generating type definitions
  */
 const plugins = [
-  { name: 'dynamodb',   service: 'DynamoDB',          maintainers: [ '@architect' ] },
-  { name: 'rds-data',   service: 'RDS Data Service',  maintainers: [ '@andybee' ] },
-  { name: 's3',         service: 'S3',                maintainers: [ '@architect' ] },
-  { name: 'sns',        service: 'SNS',               maintainers: [ '@architect' ] },
-  { name: 'sqs',        service: 'SQS',               maintainers: [ '@architect' ] },
-  { name: 'ssm',        service: 'SSM',               maintainers: [ '@architect' ] },
+  {
+    service: 'dynamodb', property: 'DynamoDB',
+    display: 'DynamoDB', maintainers: [ '@architect' ]
+  },
+  {
+    service: 'rds-data', property: 'RDSData',
+    display: 'RDS Data Service', maintainers: [ '@andybee' ]
+  },
+  { service: 's3', property: 'S3', display: 'S3', maintainers: [ '@architect' ] },
+  { service: 'sns', property: 'SNS', display: 'SNS', maintainers: [ '@architect' ] },
+  { service: 'sqs', property: 'SQS', display: 'SQS', maintainers: [ '@architect' ] },
+  { service: 'ssm', property: 'SSM', display: 'SSM', maintainers: [ '@architect' ] },
 ]
-export default plugins.sort((a, b) => a.name > b.name ? 1 : -1)
+export default plugins.sort((a, b) => a.display > b.display ? 1 : -1)
