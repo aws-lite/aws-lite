@@ -12,11 +12,11 @@ test('Set up env', async t => {
 
 test('Check plugins for docs + validation', async t => {
   let plan = 0
-  for (let { name } of plugins) {
+  for (let { service } of plugins) {
     let prefix = process.platform.startsWith('win') ? 'file://' : ''
-    let path = name => prefix + join(cwd, 'plugins', name, 'src', 'index.mjs')
-    let plugin = (await import(path(name))).default
-    t.comment(`@aws-lite/${name}`)
+    let path = service => prefix + join(cwd, 'plugins', service, 'src', 'index.mjs')
+    let plugin = (await import(path(service))).default
+    t.comment(`@aws-lite/${service}`)
 
     // Traverse methods
     let methods = Object.entries(plugin.methods)
