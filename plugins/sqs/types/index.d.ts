@@ -10,8 +10,8 @@ declare interface AwsLiteSQS {
   // $METHODS_START
   /**
    * @description
-   * - AWS Docs: {@link https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html SQS: SendMessage}
-   * - aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/sqs/readme.md#SendMessage sqs}
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html SQS: SendMessage}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/sqs/readme.md#SendMessage SQS: SendMessage}
    */
   SendMessage: (input: { MessageBody: string, QueueUrl: string, DelaySeconds?: number, MessageAttributes?: Record<string, any>, MessageDeduplicationId?: string, MessageGroupId?: string, MessageSystemAttributes?: Record<string, any> }) => Promise<SendMessageResponse>
   // $METHODS_END
@@ -19,6 +19,6 @@ declare interface AwsLiteSQS {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    sqs: AwsLiteSQS;
+    SQS: AwsLiteSQS;
   }
 }

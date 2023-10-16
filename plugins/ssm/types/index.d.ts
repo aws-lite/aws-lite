@@ -10,8 +10,8 @@ declare interface AwsLiteSSM {
   // $METHODS_START
   /**
    * @description
-   * - AWS Docs: {@link https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath SSM: GetParametersByPath}
-   * - aws-lite Docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/ssm/readme.md#GetParametersByPath ssm}
+   * - AWS docs: {@link https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath SSM: GetParametersByPath}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/ssm/readme.md#GetParametersByPath SSM: GetParametersByPath}
    */
   GetParametersByPath: (input: { Path: string, MaxResults?: number, NextToken?: string, ParameterFilters?: any[], Recursive?: boolean, WithDecryption?: boolean, paginate?: boolean }) => Promise<GetParametersByPathResponse>
   // $METHODS_END
@@ -19,6 +19,6 @@ declare interface AwsLiteSSM {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    ssm: AwsLiteSSM;
+    SSM: AwsLiteSSM;
   }
 }
