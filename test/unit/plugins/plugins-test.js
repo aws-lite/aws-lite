@@ -39,7 +39,12 @@ test('Check plugins for docs + validation', async t => {
         t.ok(method.validate, `${name}: method has validate object`)
         let validations = Object.entries(method.validate)
         for (let [ param, { type, comment } ] of validations) {
-          t.ok(validTypes.includes(type), `${name}: ${param} valid type (${type})`)
+          if (Array.isArray(type)) {
+            t.ok(type.every(t => validTypes.includes(t)), `${name}: ${param} valid types (${type.join(', ')})`)
+          }
+          else {
+            t.ok(validTypes.includes(type), `${name}: ${param} valid type (${type})`)
+          }
           t.ok(comment, `${name}: ${param} has comment`)
         }
         plan += 2 + (validations.length * 2)

@@ -22,16 +22,51 @@ npm i -D @aws-lite/apigatewaymanagementapi-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `PostToConnection`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
+
+Properties:
+- **`ApiUrl` (string)**
+  - Full API Gateway WebSocket URL, including stage; if using this, do not use `ApiId` and `Stage`; example: `wss://abc123.execute-api.us-west-1.amazonaws.com/$default`
+- **`ApiId` (string)**
+  - API Gateway ID
+- **`Stage` (string)**
+  - API Gateway stage; example: `$default`)
+- **`ConnectionId` (string) [required]**
+  - WebSocket connection ID
+- **`Data` (string, object)**
+  - Data to send to WebSocket client
 
 
+### `DeleteConnection`
 
-### Methods yet to be implemented
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+Properties:
+- **`ApiUrl` (string)**
+  - Full API Gateway WebSocket URL, including stage; if using this, do not use `ApiId` and `Stage`; example: `wss://abc123.execute-api.us-west-1.amazonaws.com/$default`
+- **`ApiId` (string)**
+  - API Gateway ID
+- **`Stage` (string)**
+  - API Gateway stage; example: `$default`)
+- **`ConnectionId` (string) [required]**
+  - WebSocket connection ID
 
-- [`PostToConnection`](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
-- [`DeleteConnection`](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
-- [`GetConnection`](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
+
+### `GetConnection`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
+
+Properties:
+- **`ApiUrl` (string)**
+  - Full API Gateway WebSocket URL, including stage; if using this, do not use `ApiId` and `Stage`; example: `wss://abc123.execute-api.us-west-1.amazonaws.com/$default`
+- **`ApiId` (string)**
+  - API Gateway ID
+- **`Stage` (string)**
+  - API Gateway stage; example: `$default`)
+- **`ConnectionId` (string) [required]**
+  - WebSocket connection ID
 <!-- METHOD_DOCS_END -->
 
 
