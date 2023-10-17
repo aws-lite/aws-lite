@@ -8,6 +8,11 @@
  */
 const plugins = [
   {
+    // Technically the service here is `execute-api`, but that's not really recognized
+    service: 'apigatewaymanagementapi', property: 'ApiGatewayManagementApi',
+    display: 'API Gateway WebSocket Management API', maintainers: [ '@architect' ]
+  },
+  {
     service: 'dynamodb', property: 'DynamoDB',
     display: 'DynamoDB', maintainers: [ '@architect' ]
   },

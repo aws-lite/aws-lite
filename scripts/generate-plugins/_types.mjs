@@ -84,10 +84,11 @@ function createTypesStr ({ methods, service, property, display, existingTypes })
   const typesTmpl = existingTypes
     ? existingTypes
     : readFileSync(join(__dirname, 'tmpl', '_types-tmpl.d.ts')).toString()
+  const trailingComma = outputTypes.length ? ',' : ''
   return typesTmpl
     .replace(/\$SERVICE/g, service)
     .replace(/\$PROPERTY/g, property)
-    .replace(importsRegex, outputTypes.join(',\n') + ',\n  ')
+    .replace(importsRegex, outputTypes.join(',\n') + `${trailingComma}\n  `)
     .replace(methodsRegex, methodTypes.join('\n') + '\n  ')
 }
 

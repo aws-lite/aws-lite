@@ -166,7 +166,7 @@ function request (params, creds, region, config, metadata) {
       res.on('end', () => {
         let body = Buffer.concat(data), payload, rawString
         let contentType = config.responseContentType || headers['content-type'] || headers['Content-Type'] || ''
-        if (JSONContentType(contentType) || AwsJSONContentType(contentType)) {
+        if (body.length && (JSONContentType(contentType) || AwsJSONContentType(contentType))) {
           payload = JSON.parse(body)
 
           /* istanbul ignore next */
@@ -180,7 +180,7 @@ function request (params, creds, region, config, metadata) {
             catch { /* noop, it's already parsed */ }
           }
         }
-        if (XMLContentType(contentType)) {
+        if (body.length && XMLContentType(contentType)) {
           // Only require the vendor if it's actually needed
           /* istanbul ignore next */
           if (!xml) {
