@@ -1,7 +1,7 @@
 {
   "name": "@aws-lite/ssm-types",
   "description": "Type definitions for the @aws-lite/ssm plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "",
   "types": "index.d.ts",
   "files": [
