@@ -1,6 +1,7 @@
 import deprecated from './deprecated.mjs'
 
 const service = 'rds-data'
+const property = 'RDSData'
 const required = true
 const docRoot = 'https://docs.aws.amazon.com/rdsdataservice/latest/APIReference/'
 
@@ -115,4 +116,4 @@ const methods = {
   ...deprecated,
 }
 
-export default { service, methods }
+export default { service, property, methods }

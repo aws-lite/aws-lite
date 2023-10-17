@@ -4,6 +4,7 @@ const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, parseHeade
 import PutObject from './put-object.mjs'
 
 const service = 's3'
+const property = 'S3'
 const required = true
 
 /**
@@ -104,4 +105,4 @@ const ListObjectsV2 = {
 }
 
 const methods = { GetObject, HeadObject, ListObjectsV2, PutObject, ...incomplete }
-export default { service, methods }
+export default { service, property, methods }

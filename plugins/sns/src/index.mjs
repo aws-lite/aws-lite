@@ -1,6 +1,7 @@
 import incomplete from './incomplete.mjs'
 
 const service = 'sns'
+const property = 'SNS'
 const required = true
 const docRoot = 'https://docs.aws.amazon.com/sns/latest/api/'
 
@@ -32,6 +33,7 @@ const Publish = {
 
 export default {
   service,
+  property,
   methods: {
     Publish,
     ...incomplete,

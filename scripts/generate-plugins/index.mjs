@@ -37,6 +37,7 @@ async function main () {
       // Plugin: src/index.js
       let src = pluginTmpl
         .replace(/\$SERVICE/g, service)
+        .replace(/\$PROPERTY/g, property)
         .replace(/\$MAINTAINERS/g, maintainersList)
       writeFileSync(join(pluginSrc, 'index.mjs'), src)
 

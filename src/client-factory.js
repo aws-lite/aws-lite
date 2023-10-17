@@ -6,6 +6,7 @@ let { validateInput } = require('./validate')
 let { awsjson } = require('./lib')
 let errorHandler = require('./error')
 let aws
+let enumerable = false
 
 let credentialProps = [ 'accessKeyId', 'secretAccessKey', 'sessionToken' ]
 let copy = obj => JSON.parse(JSON.stringify(obj))
@@ -69,7 +70,7 @@ module.exports = async function clientFactory (config, creds, region) {
             throw err
           }
         }
-        let { service, methods } = plugin
+        let { service, methods, property } = plugin
         validateService(service)
         if (!methods || (typeof methods !== 'object' || Array.isArray(methods))) {
           throw TypeError('Plugin must export a methods object')
@@ -89,8 +90,8 @@ module.exports = async function clientFactory (config, creds, region) {
         let configuration = copy(config)
         credentialProps.forEach(p => delete configuration[p])
         let credentials = copy(creds)
-        Object.defineProperty(credentials, 'secretAccessKey', { enumerable: false })
-        Object.defineProperty(credentials, 'sessionToken', { enumerable: false })
+        Object.defineProperty(credentials, 'secretAccessKey', { enumerable })
+        Object.defineProperty(credentials, 'sessionToken', { enumerable })
 
         // Only require the vendor if it's actually needed
         if (!aws) {
@@ -188,7 +189,15 @@ module.exports = async function clientFactory (config, creds, region) {
             }
           }, 'name', { value: name })
         })
-        client[service] = clientMethods
+
+        let serviceName = property || service
+        client[serviceName] = clientMethods
+        // Lowcase alias
+        let propLow = serviceName.toLowerCase()
+        if (serviceName !== propLow) {
+          client[propLow] = clientMethods
+          Object.defineProperty(client, propLow, { enumerable })
+        }
       }
       catch (err) {
         console.error(`Plugin error: ${pluginName}`)
