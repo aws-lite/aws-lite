@@ -15,6 +15,16 @@ if (!semverArgs.includes(action)) {
 const pluginName = args[1]
 const plugins = pluginName === 'all' ? pluginList.map(({ service }) => service) : [ pluginName ]
 
+const status = execSync('git status --porcelain')
+if (status.length) {
+  console.error('Found uncommitted changes:')
+  console.error(status.toString())
+  console.error('Please stash or commit changes and run again')
+  process.exit(1)
+}
+
+const files = []
+const msg = []
 for (let p of plugins) {
   const plugin = p.replace('-types', '')
   const typesOnly = p.endsWith('-types')
@@ -41,14 +51,6 @@ for (let p of plugins) {
     throw ReferenceError(`Plugin or types package.json file not found: ${plugin}`)
   }
 
-  const status = execSync('git status --porcelain')
-  if (status.length) {
-    console.error('Found uncommitted changes:')
-    console.error(status.toString())
-    console.error('Please stash or commit changes and run again')
-    process.exit(1)
-  }
-
   const changes = {}
   if (!typesOnly) changes[pluginPkgFile] = { msg: `\`@aws-lite/${plugin}\` ` }
   changes[pluginTypePkgFile] = { msg: `\`@aws-lite/${plugin}-types\` ` }
@@ -70,7 +72,7 @@ for (let p of plugins) {
     writeFileSync(file, JSON.stringify(pkg, null, 2) + '\n')
   })
 
-  const files = Object.keys(changes).join(' ')
-  const msg = Object.values(changes).map(({ msg }) => msg).join('\n')
-  execSync(`git commit ${files} -m '${msg}'`)
+  files.push(...Object.keys(changes))
+  msg.push(...Object.values(changes).map(({ msg }) => msg))
 }
+execSync(`git commit ${files.join(' ')} -m '${msg.join('\n')}'`)
