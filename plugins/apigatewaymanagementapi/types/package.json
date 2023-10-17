@@ -1,0 +1,13 @@
+{
+  "name": "@aws-lite/apigatewaymanagementapi-types",
+  "description": "Type definitions for the @aws-lite/apigatewaymanagementapi plugin",
+  "version": "0.0.0",
+  "main": "",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "3"
+  }
+}

@@ -16,7 +16,7 @@ module.exports = function errorHandler (input) {
   }
 
   // The most common error response from AWS services
-  if (typeof error === 'object') {
+  if (error && typeof error === 'object') {
     Object.entries(error).forEach(([ name, value ]) => {
       if (name.toLowerCase() === 'message') err.message = value
       err[name] = value
@@ -37,7 +37,7 @@ module.exports = function errorHandler (input) {
   let { service, name } = metadata
   let msg = '@aws-lite/client: ' + service
   if (name) msg += `.${name}`
-  if (error.message || err.message) {
+  if (error?.message || err.message) {
     msg += `: ${error.message || err.message}`
   }
   err.message = msg
