@@ -95,9 +95,10 @@ async function main () {
         if (validate) {
           header += `\nProperties:\n` + Object.entries(validate).map(([ param, values ]) => {
             const { type, required, comment } = values
+            const _typ = Array.isArray(type) ? type.join(', ') : type
             const _req = required ? ' [required]' : ''
             const _com = comment ? `\n  - ${comment}` : ''
-            return `- **\`${param}\` (${type})${_req}**${_com}`
+            return `- **\`${param}\` (${_typ})${_req}**${_com}`
           }).join('\n')
         }
         return header

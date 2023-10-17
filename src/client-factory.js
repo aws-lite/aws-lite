@@ -160,7 +160,7 @@ module.exports = async function clientFactory (config, creds, region) {
                   errorHandler({ error: methodError, metadata })
                 }
                 if (pluginRes !== undefined) {
-                  let unmarshalling = pluginRes.awsjson
+                  let unmarshalling = pluginRes?.awsjson
                   if (unmarshalling) {
                     delete pluginRes.awsjson
                     // If a payload property isn't included, it _is_ the payload
