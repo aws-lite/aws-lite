@@ -1,6 +1,7 @@
 import incomplete from './incomplete.mjs'
 
 const service = 'ssm'
+const property = 'SSM'
 const required = true
 const defaultRequest = (method, more = {}) => (payload) => {
   let params = { awsjson: false, headers: headers(method), payload, ...more }
@@ -22,6 +23,7 @@ const defaultResponse = ({ payload }) => payload
  */
 export default {
   service,
+  property,
   methods: {
     GetParametersByPath: {
       awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath',

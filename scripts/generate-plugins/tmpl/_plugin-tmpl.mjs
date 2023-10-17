@@ -1,4 +1,5 @@
 const service = '$SERVICE'
+const property = '$PROPERTY'
 const required = true
 
 /**
@@ -6,6 +7,7 @@ const required = true
  */
 export default {
   service,
+  property,
   methods: {
     $ReplaceMe: {
       // Include a reference link with each method, for example:

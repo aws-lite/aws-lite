@@ -2,6 +2,7 @@ import incomplete from './incomplete.mjs'
 import { default as qs } from 'node:querystring'
 
 const service = 'sqs'
+const property = 'SQS'
 const required = true
 const docRoot = 'https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/'
 
@@ -33,6 +34,7 @@ const SendMessage = {
 
 export default {
   service,
+  property,
   methods: {
     SendMessage,
     ...incomplete,
