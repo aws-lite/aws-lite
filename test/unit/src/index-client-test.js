@@ -17,12 +17,20 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(48)
+  t.plan(54)
   let request, result, payload, query, responseBody, url
 
   let headers = { 'content-type': 'application/json' }
 
   let aws = await client(config)
+
+  // Client has configuration and credentials
+  t.ok(Object.keys(aws.config).length, `Client has config object with configuration properties: ${Object.keys(aws.config).join(', ')}`)
+  t.equal(aws.credentials.accessKeyId, config.accessKeyId, `Client has credentials object with accessKeyId property`)
+  t.equal(aws.credentials.secretAccessKey, config.secretAccessKey, `Client has credentials object wih secretAccessKey property`)
+  t.equal(aws.credentials.sessionToken, config.sessionToken, `Client has credentials object wih sessionToken property`)
+  t.notOk({}.propertyIsEnumerable.call(aws.credentials, 'secretAccessKey'), `secretAccessKey is a non-enumerable property`)
+  t.notOk({}.propertyIsEnumerable.call(aws.credentials, 'sessionToken'), `sessionToken is a non-enumerable property`)
 
   // Basic get request
   result = await aws({ service, endpoint })

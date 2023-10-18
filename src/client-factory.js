@@ -15,6 +15,14 @@ let copy = obj => JSON.parse(JSON.stringify(obj))
 let ignored = [ 'client', 'arc' ]
 
 module.exports = async function clientFactory (config, creds, region) {
+
+  // Attach config + creds to client (and make available for plugins)
+  let configuration = copy(config)
+  credentialProps.forEach(p => delete configuration[p])
+  let credentials = copy(creds)
+  Object.defineProperty(credentials, 'secretAccessKey', { enumerable })
+  Object.defineProperty(credentials, 'sessionToken', { enumerable })
+
   // The basic API client
   async function client (params = {}) {
     let selectedRegion = params.region || region
@@ -26,6 +34,18 @@ module.exports = async function clientFactory (config, creds, region) {
     catch (err) {
       errorHandler(err)
     }
+  }
+  client.config = configuration
+  client.credentials = credentials
+
+  /* istanbul ignore next */
+  if (config.debug) {
+    console.error('[aws-lite] Client instantiated with this config:', configuration)
+    console.error('[aws-lite] Client instantiated with these creds:', {
+      ...credentials,
+      secretAccessKey: credentials.secretAccessKey ? '[found / redacted]' : undefined,
+      sessionToken: credentials.sessionToken ? '[found / redacted]' : undefined,
+    })
   }
 
   // Service API plugins
@@ -86,12 +106,6 @@ module.exports = async function clientFactory (config, creds, region) {
             throw ReferenceError(`All plugin error methods must be a function: ${service}`)
           }
         })
-
-        let configuration = copy(config)
-        credentialProps.forEach(p => delete configuration[p])
-        let credentials = copy(creds)
-        Object.defineProperty(credentials, 'secretAccessKey', { enumerable })
-        Object.defineProperty(credentials, 'sessionToken', { enumerable })
 
         // Only require the vendor if it's actually needed
         if (!aws) {

@@ -10,10 +10,11 @@ const keepAlive = false
 const protocol = 'http'
 const region = 'us-west-1'
 const secretAccessKey = 'bar'
+const sessionToken = 'baz'
 const service = 'lambda'
 const endpoint = '/an/endpoint'
 const port = 1111
-const config = { accessKeyId, secretAccessKey, region, debug, protocol, autoloadPlugins, keepAlive, host, port }
+const config = { accessKeyId, secretAccessKey, sessionToken, region, debug, protocol, autoloadPlugins, keepAlive, host, port }
 const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, protocol, region, secretAccessKey, service, endpoint, port }
 
 let serverData = {}
