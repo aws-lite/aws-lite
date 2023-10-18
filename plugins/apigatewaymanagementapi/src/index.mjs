@@ -14,26 +14,42 @@ const commonValidations = {
 
 function getHostAndEndpoint (params, region) {
   let { ApiUrl, ApiId, ConnectionId, Stage } = params
-  let host, stage
+  let host, port, protocol, path
   if (ApiUrl) {
-    let url = ApiUrl.replace('wss://', '')
+    protocol = ApiUrl.startsWith('http:') || ApiUrl.startsWith('ws:') ? 'http' : 'https'
+    let url = ApiUrl.replace(/^(wss|http|https):\/\//, '')
     let bits = url.split('/')
-    if (bits.length !== 2) throw ReferenceError('Invalid ApiUrl param, expected WebSocket API URL + stage only')
+    if (bits.length < 2) throw ReferenceError('Invalid ApiUrl param, expected WebSocket API host and endpoint path')
     host = bits[0]
-    stage = bits[1]
+    if (host.includes(':')) {
+      port = host.split(':')[1]
+      host = host.split(':')[0]
+    }
+    path = `/${bits.slice(1).join('/')}/@connections/${ConnectionId}`
   }
   else if (ApiId && Stage) {
     host = `${ApiId}.execute-api.${region}.amazonaws.com`
-    stage = Stage
+    path = `/${Stage}/@connections/${ConnectionId}`
   }
   else throw ReferenceError('Cannot derive WebSocket API URL + stage, please pass ApiUrl param, or ApiId + Stage params')
-  if (!stage) throw ReferenceError('Stage not specified')
 
-  let endpoint = `${escape(stage)}/${escape('@connections')}/${escape(ConnectionId)}`
-  return { host, endpoint }
+  let endpoint = path.split('/').map(escape).join('/')
+  return { host, endpoint, port, protocol }
 }
 
-const response = ({ payload }) => payload
+const response = ({ payload }) => {
+  if (!payload) return payload
+  let res = payload
+  // CamelCaseify per https://github.com/aws/aws-sdk-js/blob/master/apis/apigatewaymanagementapi-2018-11-29.normal.json
+  let mutations = [ 'connectedAt', 'identity', 'lastActiveAt' ]
+  mutations.forEach(m => {
+    if (res[m]) {
+      res[m[0].toUpperCase() + m.substring(1)] = res[m]
+      delete res[m]
+    }
+  })
+  return res
+}
 
 /**
  * Plugin maintained by: @architect
