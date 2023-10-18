@@ -113,7 +113,7 @@ module.exports = async function clientFactory (config, creds, region) {
           clientMethods[name] = Object.defineProperty(async input => {
             input = input || {}
             let selectedRegion = input?.region || region
-            let metadata = { service, name }
+            let metadata = { service, name, property }
             if (method.awsDoc) {
               metadata.awsDoc = method.awsDoc
             }

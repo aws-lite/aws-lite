@@ -34,8 +34,8 @@ module.exports = function errorHandler (input) {
   })
 
   // Construct a more useful error message
-  let { service, name } = metadata
-  let msg = '@aws-lite/client: ' + service
+  let { service, name, property } = metadata
+  let msg = '@aws-lite/client: ' + (property || service)
   if (name) msg += `.${name}`
   if (error?.message || err.message) {
     msg += `: ${error.message || err.message}`
