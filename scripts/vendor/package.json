@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@aws-sdk/util-dynamodb": "^3.430.0",
+    "@smithy/smithy-client": "^2.1.11",
+    "fast-xml-parser": "^4.3.2"
+  }
+}

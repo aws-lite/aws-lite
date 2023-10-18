@@ -800,7 +800,7 @@ var require_marshall = __commonJS({
       switch (key) {
         case "M":
         case "L":
-          return value;
+          return (options === null || options === void 0 ? void 0 : options.convertTopLevelContainer) ? attributeValue : value;
         case "SS":
         case "NS":
         case "BS":
@@ -833,7 +833,12 @@ var require_unmarshall = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.unmarshall = void 0;
     var convertToNative_1 = require_convertToNative();
-    var unmarshall2 = (data, options) => (0, convertToNative_1.convertToNative)({ M: data }, options);
+    var unmarshall2 = (data, options) => {
+      if (options === null || options === void 0 ? void 0 : options.convertWithoutMapWrapper) {
+        return (0, convertToNative_1.convertToNative)(data, options);
+      }
+      return (0, convertToNative_1.convertToNative)({ M: data }, options);
+    };
     exports.unmarshall = unmarshall2;
   }
 });
@@ -852,7 +857,7 @@ var require_dist_cjs = __commonJS({
   }
 });
 
-// scripts/vendor/vendor-aws-json-entry.mjs
+// vendor-aws-json-entry.mjs
 var vendor_aws_json_entry_exports = {};
 __export(vendor_aws_json_entry_exports, {
   convertToAttr: () => import_util_dynamodb.convertToAttr,
