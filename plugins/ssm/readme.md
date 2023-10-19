@@ -21,6 +21,28 @@ npm i -D @aws-lite/ssm-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `GetParameter`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameter.html)
+
+Properties:
+- **`Name` (string) [required]**
+  - The name of the parameter to query
+- **`WithDecryption` (boolean)**
+  - Decrypt encrypted parameter values
+
+
+### `GetParameters`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameters.html)
+
+Properties:
+- **`Names` (array) [required]**
+  - Array of parameter names to query
+- **`WithDecryption` (boolean)**
+  - Decrypt encrypted parameter values
+
+
 ### `GetParametersByPath`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath)
@@ -124,9 +146,7 @@ Properties:
 - [`GetOpsItem`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetOpsItem)
 - [`GetOpsMetadata`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetOpsMetadata)
 - [`GetOpsSummary`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetOpsSummary)
-- [`GetParameter`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameter)
 - [`GetParameterHistory`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameterHistory)
-- [`GetParameters`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameters)
 - [`GetPatchBaseline`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetPatchBaseline)
 - [`GetPatchBaselineForPatchGroup`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetPatchBaselineForPatchGroup)
 - [`GetResourcePolicies`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetResourcePolicies)

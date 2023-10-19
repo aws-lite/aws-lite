@@ -18,29 +18,64 @@ const headers = (method, additional) => ({
 })
 const defaultResponse = ({ payload }) => payload
 
+// Validation types
+const arr = { type: 'array' }
+const bool = { type: 'boolean' }
+// const obj = { type: 'object' }
+const str = { type: 'string' }
+const num = { type: 'number' }
+
+// Reused validation params
+const WithDecryption = { ...bool, comment: 'Decrypt encrypted parameter values' }
+
 /**
  * Plugin maintained by: @architect
  */
+
+const GetParameter = {
+  awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameter.html',
+  validate: {
+    Name: { ...str, required, comment: 'The name of the parameter to query' },
+    WithDecryption,
+  },
+  request: defaultRequest('GetParameter'),
+  response: defaultResponse,
+}
+
+const GetParameters = {
+  awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameters.html',
+  validate: {
+    Names: { ...arr, required, comment: 'Array of parameter names to query' },
+    WithDecryption,
+  },
+  request: defaultRequest('GetParameters'),
+  response: defaultResponse,
+}
+
+const GetParametersByPath = {
+  awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath',
+  validate: {
+    Path:             { ...str, required, comment: 'Parameter path hierarchy, beginning with `/`' },
+    MaxResults:       { ...num, comment: 'Limit the maximum number of items returned' },
+    NextToken:        { ...str, comment: 'Pagination token to start the next set of results' },
+    ParameterFilters: { ...arr, comment: 'Array of filters to limit results' },
+    Recursive:        { ...bool, comment: 'Retrieve all parameters within a hierarchy' },
+    WithDecryption,
+    paginate:         { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+  },
+  request: defaultRequest('GetParametersByPath', {
+    paginator: { cursor: 'NextToken', token: 'NextToken', accumulator: 'Parameters' }
+  }),
+  response: defaultResponse,
+}
+
 export default {
   service,
   property,
   methods: {
-    GetParametersByPath: {
-      awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath',
-      validate: {
-        Path:             { type: 'string', required, comment: 'Parameter path hierarchy, beginning with `/`' },
-        MaxResults:       { type: 'number', comment: 'Limit the maximum number of items returned' },
-        NextToken:        { type: 'string', comment: 'Pagination token to start the next set of results' },
-        ParameterFilters: { type: 'array', comment: 'Array of filters to limit results' },
-        Recursive:        { type: 'boolean', comment: 'Retrieve all parameters within a hierarchy' },
-        WithDecryption:   { type: 'boolean', comment: 'Decrypt encrypted parameter values' },
-        paginate:         { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-      },
-      request: defaultRequest('GetParametersByPath', {
-        paginator: { cursor: 'NextToken', token: 'NextToken', accumulator: 'Parameters' }
-      }),
-      response: defaultResponse,
-    },
+    GetParameter,
+    GetParameters,
+    GetParametersByPath,
     ...incomplete,
   }
 }
