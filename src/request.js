@@ -16,6 +16,24 @@ let XMLregex = /(application|text)\/xml/
 let XMLContentType = ct => ct.match(XMLregex)
 let textNodeName = '#text'
 
+// HTTP client agent cache to prevent generating new agents for every request
+let agentCache = {
+  http: { keepAliveEnabled: null, keepAliveDisabled: null },
+  https: { keepAliveEnabled: null, keepAliveDisabled: null },
+}
+/* istanbul ignore next */
+function getAgent (client, isHTTPS, config) {
+  let http = isHTTPS ? 'https' : 'http'
+
+  let keepAlive = config.keepAlive ?? useAWS()
+  let agent = keepAlive ? 'keepAliveEnabled' : 'keepAliveDisabled'
+
+  if (!agentCache[http][agent]) {
+    agentCache[http][agent] = new client.Agent({ keepAlive })
+  }
+  return agentCache[http][agent]
+}
+
 module.exports = async function _request (params, creds, region, config, metadata) {
   /* istanbul ignore next */ // TODO remove + test
   if ((params.paginator?.default === 'enabled' && params.paginate !== false) ||
@@ -128,7 +146,7 @@ function request (params, creds, region, config, metadata) {
     /* istanbul ignore next */
     if (options.hostname) delete options.hostname
 
-    // Importing http(s) is a bit slow (~1ms), so only instantiate the client we need
+    // Importing http(s) is a bit slow (~1ms), so only instantiate the client and http agent we need
     options.protocol = (params.protocol || config.protocol) + ':'
     let isHTTPS = options.host.includes('.amazonaws.com') || options.protocol === 'https:'
     /* istanbul ignore next */ // eslint-disable-next-line
@@ -138,8 +156,7 @@ function request (params, creds, region, config, metadata) {
     options.port = params.port || config.port
 
     // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
-    /* istanbul ignore next */
-    options.agent = new http.Agent({ keepAlive: config.keepAlive ?? useAWS() })
+    options.agent = getAgent(http, isHTTPS, config)
 
     /* istanbul ignore next */
     if (debug) {
