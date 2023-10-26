@@ -20,7 +20,7 @@ module.exports = async function getRegion (params) {
     if (configRegion) return configRegion
   }
 
-  throw ReferenceError('You must supply AWS region via params, environment variables, or config file')
+  throw ReferenceError('You must supply an AWS region via params, environment variables, or config file')
 }
 
 function getRegionFromEnv () {

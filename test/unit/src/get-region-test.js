@@ -93,7 +93,7 @@ test('Get region from config file', async t => {
     await getRegion({})
   }
   catch (err) {
-    t.match(err.message, /You must supply AWS region/, 'Did not look for config file on disk in Lambda')
+    t.match(err.message, /You must supply an AWS region/, 'Did not look for config file on disk in Lambda')
   }
   resetAWSEnvVars()
 })
@@ -133,7 +133,7 @@ test('Validate config', async t => {
     await getRegion({})
   }
   catch (err) {
-    t.match(err.message, /You must supply AWS region/, 'Threw on no available config (after attempting to checking filesystem)')
+    t.match(err.message, /You must supply an AWS region/, 'Threw on no available config (after attempting to checking filesystem)')
   }
   resetAWSEnvVars()
 
@@ -141,6 +141,6 @@ test('Validate config', async t => {
     await getRegion({})
   }
   catch (err) {
-    t.match(err.message, /You must supply AWS region/, 'Threw on no available config')
+    t.match(err.message, /You must supply an AWS region/, 'Threw on no available config')
   }
 })
