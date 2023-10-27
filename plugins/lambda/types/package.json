@@ -1,0 +1,13 @@
+{
+  "name": "@aws-lite/lambda-types",
+  "description": "Type definitions for the @aws-lite/lambda plugin",
+  "version": "0.0.0",
+  "main": "",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-lambda": "3"
+  }
+}

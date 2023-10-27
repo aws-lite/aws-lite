@@ -540,6 +540,7 @@ async function request (params, utils) {
 <!-- plugins_start -->
 - [API Gateway WebSocket Management API](https://www.npmjs.com/package/@aws-lite/apigatewaymanagementapi)
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
+- [Lambda](https://www.npmjs.com/package/@aws-lite/lambda)
 - [RDS Data Service](https://www.npmjs.com/package/@aws-lite/rds-data)
 - [S3](https://www.npmjs.com/package/@aws-lite/s3)
 - [SNS](https://www.npmjs.com/package/@aws-lite/sns)

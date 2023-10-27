@@ -57,6 +57,7 @@
   "workspaces": [
     "plugins/apigatewaymanagementapi",
     "plugins/dynamodb",
+    "plugins/lambda",
     "plugins/rds-data",
     "plugins/s3",
     "plugins/sns",

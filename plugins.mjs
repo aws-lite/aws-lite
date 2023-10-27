@@ -16,6 +16,7 @@ const plugins = [
     service: 'dynamodb', property: 'DynamoDB',
     display: 'DynamoDB', maintainers: [ '@architect' ]
   },
+  { service: 'lambda', property: 'Lambda', display: 'Lambda', maintainers: [ '@architect' ] },
   {
     service: 'rds-data', property: 'RDSData',
     display: 'RDS Data Service', maintainers: [ '@andybee' ]
