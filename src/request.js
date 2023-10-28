@@ -171,7 +171,7 @@ function request (params, creds, region, config, metadata) {
         url: `${protocol}//${host}${port}${path}`,
         headers: { ...headers, Authorization: headers.Authorization.substring(0, 35) + '...' },
         body: truncatedBody || '<no body>',
-      })
+      }, '\n')
     }
 
     let req = http.request(options, res => {
@@ -242,7 +242,7 @@ function request (params, creds, region, config, metadata) {
             statusCode,
             headers,
             body: truncatedBody || '<no body>',
-          })
+          }, '\n')
         }
         if (ok) resolve({ statusCode, headers, payload })
         else reject({ statusCode, headers, error: payload, metadata })

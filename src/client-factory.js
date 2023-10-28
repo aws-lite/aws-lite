@@ -45,7 +45,7 @@ module.exports = async function clientFactory (config, creds, region) {
       ...credentials,
       secretAccessKey: credentials.secretAccessKey ? '[found / redacted]' : undefined,
       sessionToken: credentials.sessionToken ? '[found / redacted]' : undefined,
-    })
+    }, '\n')
   }
 
   // Service API plugins
