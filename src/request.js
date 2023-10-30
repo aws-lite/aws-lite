@@ -33,6 +33,35 @@ function getAgent (client, isHTTPS, config) {
   }
   return agentCache[http][agent]
 }
+/* istanbul ignore next */
+function instantiateXml () {
+  // eslint-disable-next-line
+  let vendor = require('./_vendor/xml')
+  // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
+  xml = new vendor.XMLParser({
+    attributeNamePrefix: '',
+    htmlEntities: true,
+    ignoreAttributes: false,
+    ignoreDeclaration: true,
+    parseTagValue: false,
+    trimValues: false,
+    tagValueProcessor: (_, val) => (val.trim() === '' && val.includes('\n') ? '' : undefined),
+  })
+  xml.addEntity('#xD', '\r')
+  xml.addEntity('#10', '\n')
+  xml.getValueFromTextNode = vendor.getValueFromTextNode
+}
+function parseXml (body) {
+  let parsed = xml.parse(body)
+  let key = Object.keys(parsed)[0]
+  let payloadToReturn = parsed[key]
+  /* istanbul ignore next */ // TODO remove + test
+  if (payloadToReturn[textNodeName]) {
+    payloadToReturn[key] = payloadToReturn[textNodeName]
+    delete payloadToReturn[textNodeName]
+  }
+  return xml.getValueFromTextNode(payloadToReturn)
+}
 
 module.exports = async function _request (params, creds, region, config, metadata) {
   /* istanbul ignore next */ // TODO remove + test
@@ -200,36 +229,30 @@ function request (params, creds, region, config, metadata) {
         if (body.length && XMLContentType(contentType)) {
           // Only require the vendor if it's actually needed
           /* istanbul ignore next */
-          if (!xml) {
-            // eslint-disable-next-line
-            let vendor = require('./_vendor/xml')
-            // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
-            xml = new vendor.XMLParser({
-              attributeNamePrefix: '',
-              htmlEntities: true,
-              ignoreAttributes: false,
-              ignoreDeclaration: true,
-              parseTagValue: false,
-              trimValues: false,
-              tagValueProcessor: (_, val) => (val.trim() === '' && val.includes('\n') ? '' : undefined),
-            })
-            xml.addEntity('#xD', '\r')
-            xml.addEntity('#10', '\n')
-            xml.getValueFromTextNode = vendor.getValueFromTextNode
-          }
-
-          let parsed = xml.parse(body)
-          let key = Object.keys(parsed)[0]
-          let payloadToReturn = parsed[key]
-          /* istanbul ignore next */ // TODO remove + test
-          if (payloadToReturn[textNodeName]) {
-            payloadToReturn[key] = payloadToReturn[textNodeName]
-            delete payloadToReturn[textNodeName]
-          }
-          payload = xml.getValueFromTextNode(payloadToReturn)
+          if (!xml) instantiateXml()
+          payload = parseXml(body)
 
           /* istanbul ignore next */
           if (debug) rawString = body.toString()
+        }
+        // Sometimes AWS reports JSON and XML errors without a content type (ahem, Lambda) so that's fun
+        /* istanbul ignore next */ // TODO remove + test
+        if (body.length && !ok && !contentType) {
+          try {
+            payload = JSON.parse(body)
+          }
+          catch {
+            try {
+              // Only require the vendor if it's actually needed
+              /* istanbul ignore next */
+              if (!xml) instantiateXml()
+              payload = parseXml(body)
+            }
+            catch {
+              // lolnothingmatters
+              payload = body.toString()
+            }
+          }
         }
         payload = payload || (body.length ? body : null)
 
