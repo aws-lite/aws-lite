@@ -22,7 +22,77 @@ npm i -D @aws-lite/lambda-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `GetFunctionConfiguration`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `Invoke`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`InvocationType` (string)**
+  - Set invocation type to one of: `RequestResponse` (default, synchronous), `Event` (asynchronous), `DryRun` (validate invoke request only)
+- **`Payload` (array, object) [required]**
+  - Event payload to invoke function with
+- **`LogType` (string)**
+  - Set to `Tail` to include the execution log in the `X-Amz-Log-Result` response header of synchronously invoked functions
+- **`ClientContext` (string)**
+  - Up to 3,583 bytes of base64-encoded data to pass to the function in the context object
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `UpdateFunctionConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionConfiguration.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`DeadLetterConfig` (object)**
+  - Dead-letter queue configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_DeadLetterConfig.html)
+- **`Description` (string)**
+  - Description of the function
+- **`Environment` (object)**
+  - Environment variable configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_Environment.html
+- **`EphemeralStorage` (object)**
+  - Size of the function `/tmp` directory (in MB), from 512 (default) to 10240; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_EphemeralStorage.html
+- **`FileSystemConfigs` (array)**
+  - EFS file system connection settings; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_FileSystemConfig.html)
+- **`Handler` (string)**
+  - The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html)
+- **`ImageConfig` (object)**
+  - Container image configuration (overrides Docker file); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_ImageConfig.html)
+- **`KMSKeyArn` (string)**
+  - ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables
+- **`Layers` (array)**
+  - List of function layer ARNs (including version) to add to the function execution environment
+- **`MemorySize` (number)**
+  - Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`Role` (string)**
+  - ARN of the function's execution role
+- **`Runtime` (string)**
+  - Runtime identifier; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+- **`SnapStart` (object)**
+  - SnapStart settings; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_SnapStart.html)
+- **`Timeout` (number)**
+  - Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900
+- **`TracingConfig` (object)**
+  - Sample and trace a subset of incoming requests with X-Ray; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_TracingConfig.html)
+- **`VpcConfig` (object)**
+  - VPC networking configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
 
 
 ### Methods yet to be implemented
@@ -53,7 +123,6 @@ npm i -D @aws-lite/lambda-types
 - [`GetFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html)
 - [`GetFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionCodeSigningConfig.html)
 - [`GetFunctionConcurrency`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConcurrency.html)
-- [`GetFunctionConfiguration`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html)
 - [`GetFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionEventInvokeConfig.html)
 - [`GetFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html)
 - [`GetLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html)
@@ -62,7 +131,6 @@ npm i -D @aws-lite/lambda-types
 - [`GetPolicy`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html)
 - [`GetProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetProvisionedConcurrencyConfig.html)
 - [`GetRuntimeManagementConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetRuntimeManagementConfig.html)
-- [`Invoke`](https://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html)
 - [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
 - [`ListAliases`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html)
@@ -92,7 +160,6 @@ npm i -D @aws-lite/lambda-types
 - [`UpdateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html)
 - [`UpdateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html)
 - [`UpdateFunctionCode`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html)
-- [`UpdateFunctionConfiguration`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionConfiguration.html)
 - [`UpdateFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html)
 - [`UpdateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html)
 <!-- METHOD_DOCS_END -->
