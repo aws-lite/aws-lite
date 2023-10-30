@@ -22,6 +22,59 @@ npm i -D @aws-lite/lambda-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html)
+
+Properties:
+- **`Code` (object) [required]**
+  - Code payload to be run in Lambda; object can contain: `ImageUri` (ECR image), `S3Bucket` + `S3Key` + `S3ObjectVersion` (S3 bucket in the same region, key, and optional version), or `ZipFile` (base64-encoded zip); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_FunctionCode.html)
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Role` (string) [required]**
+  - ARN of the function's execution role
+- **`Architectures` (array)**
+  - System architecture, array can contain either `x86_64` (default) or `arm64`
+- **`CodeSigningConfigArn` (string)**
+  - ARN of a code-signing configuration used to enable code signing for this function
+- **`DeadLetterConfig` (object)**
+  - Dead-letter queue configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_DeadLetterConfig.html)
+- **`Description` (string)**
+  - Description of the function
+- **`Environment` (object)**
+  - Environment variable configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_Environment.html
+- **`EphemeralStorage` (object)**
+  - Size of the function `/tmp` directory (in MB), from 512 (default) to 10240; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_EphemeralStorage.html
+- **`FileSystemConfigs` (array)**
+  - EFS file system connection settings; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_FileSystemConfig.html)
+- **`Handler` (string)**
+  - The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html)
+- **`ImageConfig` (object)**
+  - Container image configuration (overrides Docker file); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_ImageConfig.html)
+- **`KMSKeyArn` (string)**
+  - ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables
+- **`Layers` (array)**
+  - List of function layer ARNs (including version) to add to the function execution environment
+- **`MemorySize` (number)**
+  - Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation
+- **`PackageType` (string)**
+  - Deployment package type, either `Image` (container image) or `Zip` (zip archive)
+- **`Publish` (boolean)**
+  - Set to `true` to publish the first version of the function during creation
+- **`Runtime` (string)**
+  - Runtime identifier; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+- **`SnapStart` (object)**
+  - SnapStart settings; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_SnapStart.html)
+- **`Tags` (array)**
+  - List of tags to apply to the function
+- **`Timeout` (number)**
+  - Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900
+- **`TracingConfig` (object)**
+  - Sample and trace a subset of incoming requests with X-Ray; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_TracingConfig.html)
+- **`VpcConfig` (object)**
+  - VPC networking configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
+
+
 ### `GetFunctionConfiguration`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html)
@@ -104,7 +157,6 @@ Properties:
 - [`CreateAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html)
 - [`CreateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateCodeSigningConfig.html)
 - [`CreateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
-- [`CreateFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html)
 - [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
 - [`DeleteAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html)
 - [`DeleteCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteCodeSigningConfig.html)

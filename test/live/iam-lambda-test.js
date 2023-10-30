@@ -7,14 +7,14 @@ let client = require(sut)
 
 let aws, roleARN
 let region = process.env.AWS_REGION || 'us-west-2'
-let name = process.env.AWS_LITE_TEST_LAMBDA_NAME || 'aws-lite-test-lambda'
+let FunctionName = process.env.AWS_LITE_TEST_LAMBDA_NAME || 'aws-lite-test-lambda'
 
 test('Set up env', async t => {
   t.plan(2)
   t.ok(client, 'aws-lite client is present')
   let plugins = [
     join(__dirname, '_iam.mjs'),
-    join(__dirname, '_lambda.js'),
+    join(cwd, 'plugins', 'lambda', 'src', 'index.mjs'), // We should be able to retire this once we phase out 14.x CI runs
   ]
   aws = await client({ region, plugins })
   t.ok(aws, 'Client ready')
@@ -24,7 +24,7 @@ test('Get Lambda role', async t => {
   t.plan(2)
 
   let role
-  let roleName = name + '-role'
+  let roleName = FunctionName + '-role'
 
   try {
     role = await aws.iam.GetRole({ name: roleName })
@@ -57,7 +57,7 @@ test('Invoke Lambda', async t => {
   t.plan(3)
 
   async function getConfig (tryNum = 1) {
-    let result = await aws.lambda.GetFunctionConfiguration({ name })
+    let result = await aws.lambda.GetFunctionConfiguration({ FunctionName })
     if (result.State === 'Active') return result
     if (result.State === 'Pending') {
       if (++tryNum > 5) {
@@ -90,28 +90,27 @@ test('Invoke Lambda', async t => {
     // Deployment contents must be base64-encoded
     let ZipFile = zip.toBuffer().toString('base64')
 
-    let payload = {
+    await aws.lambda.CreateFunction({
       Architectures: [ 'arm64' ],
       Code: { ZipFile },
       Description: 'aws-lite test Lambda: please do not delete!',
-      FunctionName: name,
+      FunctionName,
       Handler: 'index.handler',
       MemorySize: 256,
       Role: roleARN,
       Runtime: 'nodejs18.x',
-    }
-    await aws.lambda.CreateFunction({ payload })
+    })
 
     // Check to see if the Lambda is online; it'll blow up if not after a few seconds
     config = await getConfig()
   }
 
-  t.equal(config.FunctionName, name, 'Got back function config for test Lambda')
+  t.equal(config.FunctionName, FunctionName, 'Got back function config for test Lambda')
   t.equal(config.State, 'Active', 'Test Lambda is active!')
 
-  let payload = { hello: 'there' }
-  let result = await aws.lambda.Invoke({ name, payload })
-  let expected = { ok: true, event: payload }
+  let Payload = { hello: 'there' }
+  let result = await aws.lambda.Invoke({ FunctionName, Payload })
+  let expected = { ok: true, event: Payload }
   console.log(`Lambda invoke returned:`, result)
-  t.deepEqual(result, expected, 'Lambda invoked with correct payload')
+  t.deepEqual(result.Payload, expected, 'Lambda invoked with correct payload')
 })

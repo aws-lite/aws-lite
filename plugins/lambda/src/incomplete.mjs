@@ -6,7 +6,6 @@ export default {
   CreateAlias:                        { disabled, awsDoc: docRoot + 'API_CreateAlias.html' },
   CreateCodeSigningConfig:            { disabled, awsDoc: docRoot + 'API_CreateCodeSigningConfig.html' },
   CreateEventSourceMapping:           { disabled, awsDoc: docRoot + 'API_CreateEventSourceMapping.html' },
-  CreateFunction:                     { disabled, awsDoc: docRoot + 'API_CreateFunction.html' },
   CreateFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_CreateFunctionUrlConfig.html' },
   DeleteAlias:                        { disabled, awsDoc: docRoot + 'API_DeleteAlias.html' },
   DeleteCodeSigningConfig:            { disabled, awsDoc: docRoot + 'API_DeleteCodeSigningConfig.html' },
