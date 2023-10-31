@@ -63,13 +63,20 @@ async function main () {
     console.log(`Found ${publishing.length} plugins to publish`)
 
     // TODO maybe support RC tagging, but meh
-    let workspaces = publishing.map(w => `--workspace ${w} --access public`).join(' ')
-    let args = `publish ${workspaces}`.split(' ')
+    let args = `publish --access public`.split(' ')
 
-    let child = spawn('npm', args, { stdio: 'inherit' })
-    child.on('close', code => {
-      if (foundErrors || code !== 0) process.exit(1)
-    })
+    for (let mod of publishing) {
+      await new Promise((res, rej) => {
+        let child = spawn('npm', args, {
+          cwd: join(cwd, mod),
+          stdio: 'inherit'
+        })
+        child.on('close', code => {
+          if (foundErrors || code !== 0) rej()
+          else setTimeout(res, 1000)
+        })
+      })
+    }
   }
   else {
     console.log('No aws-lite plugins found to publish')
