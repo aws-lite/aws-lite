@@ -375,6 +375,6 @@ declare interface AwsLiteDynamoDB {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    DynamoDB: AwsLiteDynamoDB;
+    dynamodb: AwsLiteDynamoDB;
   }
 }

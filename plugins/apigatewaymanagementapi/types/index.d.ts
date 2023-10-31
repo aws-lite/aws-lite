@@ -33,6 +33,6 @@ declare interface AwsLiteApiGatewayManagementApi {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    ApiGatewayManagementApi: AwsLiteApiGatewayManagementApi;
+    apigatewaymanagementapi: AwsLiteApiGatewayManagementApi;
   }
 }

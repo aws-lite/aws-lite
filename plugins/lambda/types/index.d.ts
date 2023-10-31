@@ -40,6 +40,6 @@ declare interface AwsLiteLambda {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    Lambda: AwsLiteLambda;
+    lambda: AwsLiteLambda;
   }
 }

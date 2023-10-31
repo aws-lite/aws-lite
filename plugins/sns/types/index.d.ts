@@ -19,6 +19,6 @@ declare interface AwsLiteSNS {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    SNS: AwsLiteSNS;
+    sns: AwsLiteSNS;
   }
 }

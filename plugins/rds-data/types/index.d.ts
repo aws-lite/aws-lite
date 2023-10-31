@@ -50,6 +50,6 @@ declare interface AwsLiteRDSData {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    RDSData: AwsLiteRDSData;
+    'rds-data': AwsLiteRDSData;
   }
 }

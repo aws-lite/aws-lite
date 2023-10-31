@@ -12,6 +12,6 @@ declare interface AwsLite$PROPERTY {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    $PROPERTY: AwsLite$PROPERTY;
+    $SERVICE: AwsLite$PROPERTY;
   }
 }

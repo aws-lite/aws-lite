@@ -19,6 +19,6 @@ declare interface AwsLiteSQS {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    SQS: AwsLiteSQS;
+    sqs: AwsLiteSQS;
   }
 }

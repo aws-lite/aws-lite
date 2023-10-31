@@ -33,6 +33,6 @@ declare interface AwsLiteSSM {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    SSM: AwsLiteSSM;
+    ssm: AwsLiteSSM;
   }
 }

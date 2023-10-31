@@ -40,6 +40,6 @@ declare interface AwsLiteS3 {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    S3: AwsLiteS3;
+    s3: AwsLiteS3;
   }
 }
