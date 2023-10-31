@@ -464,7 +464,7 @@ const ExecuteStatement = {
     ConsistentRead,
     Limit,
     NextToken,
-    Parameters: { ...obj, comment: 'PartiQL statement parameters, if any' },
+    Parameters: { ...arr, comment: 'PartiQL statement parameters, if any' },
     ReturnConsumedCapacity,
     ReturnValuesOnConditionCheckFailure,
   },
