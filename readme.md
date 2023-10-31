@@ -147,7 +147,7 @@ The following options may be passed when instantiating the `aws-lite` client:
 - **`protocol` (string) [default = `https`]**
   - Set the connection protocol to `http`, helpful for local testing
 - **`responseContentType` (string)**
-  - Set an overriding Content-Type header for all responses, helpful for local testing 
+  - Set an overriding Content-Type header for all responses, helpful for local testing
 
 An example:
 
@@ -201,7 +201,7 @@ The following parameters may be passed with individual client requests; only `se
 - **`paginator` (object) [experimental]**
   - Enable automatic pagination for service API via the following properties:
     - **`type` (string) [default = `payload`]** - `payload` (default) passes the cursor via body payload, `query` passes the cursor via query string parameter
-    - **`cursor` (string) [required]** - pagination token from the prior response payload to be passed with the current request; example: in S3 this is the query string parameter `continuation token`
+    - **`cursor` (string) [required]** - pagination token from the prior response payload to be passed with the current request; example: in S3 this is the query string parameter `continuation-token`
     - **`token` (string) [required]** - pagination token returned in each response payload to be passed with the next request as `cursor`; example: in S3, this would be `NextContinuationToken`
     - **`accumulator` (string) [required]** - Response payload array property name to aggregate into final result set; example: in S3, this would be `Contents`
     - **`default` (string)** - set value to `enabled` to enable pagination for all applicable requests by default; individual requests can opt out of pagination by setting `paginate` to `false`
@@ -644,9 +644,9 @@ It also possible to maintain hand-written types alongside generated types by spe
 // plugins/s3/types/index.d.ts
 declare interface AwsLiteS3 {
   // $METHODS_START
-  
+
   /** edited for brevity */
-  
+
   GetObject: (input: ) => Promise<GetObjectResponse>
   HeadObject: (input: ) => Promise<HeadObjectResponse>
   ListObjectsV2: (input: ) => Promise<ListObjectsV2Response>
