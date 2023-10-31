@@ -11,7 +11,7 @@
   "scripts": {
     "gen": "npm run generate-plugins",
     "generate-plugins": "node scripts/generate-plugins/index.mjs",
-    "publish-plugins": "node scripts/publish-plugins",
+    "publish-plugins": "node scripts/publish-plugins.mjs",
     "plugin": "node scripts/version-plugins.mjs",
     "lint": "eslint --fix .",
     "test": "npm run lint && npm run gen && npm run coverage",

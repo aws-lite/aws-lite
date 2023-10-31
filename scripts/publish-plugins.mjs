@@ -1,12 +1,13 @@
-let { readFileSync } = require('fs')
-let { join } = require('path')
-let { exec, spawn } = require('child_process')
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { exec, spawn } from 'node:child_process'
+import mainPlugins from '../plugins.mjs'
 
 let cwd = process.cwd()
 let getPkgJson = path => JSON.parse(readFileSync(join(cwd, path, 'package.json')))
 
-let projectPkg = getPkgJson('.')
-let plugins = projectPkg.workspaces.map(f => f.split('/')[1])
+let typePlugins = mainPlugins.map(p => p.types !== false && `${p.service}-types`).filter(Boolean)
+let plugins = mainPlugins.map(p => p.service).concat(typePlugins)
 
 let moduleNotFound = /'@aws-lite\/.*' is not in this registry/
 let foundErrors = false
@@ -45,12 +46,16 @@ async function main () {
   let publishing = plugins.map(name => {
     if (!results[name]) return
 
-    let modulePkg = getPkgJson(`plugins/${name}`)
+    let service = name.replace(/-types$/, '')
+    let path = `plugins/${service}`
+    if (name.endsWith('-types')) path += '/types'
+
+    let modulePkg = getPkgJson(path)
     let { version } = modulePkg
 
     // Version not found, let's publish it
     if (!results[name].includes(version)) {
-      return `plugins/${name}`
+      return path
     }
   }).filter(Boolean)
 
