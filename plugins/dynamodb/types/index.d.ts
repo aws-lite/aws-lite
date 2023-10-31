@@ -201,7 +201,7 @@ declare interface AwsLiteDynamoDB {
    * - AWS docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteStatement.html DynamoDB: ExecuteStatement}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/dynamodb/readme.md#ExecuteStatement DynamoDB: ExecuteStatement}
    */
-  ExecuteStatement: (input: { TableName: string, Statement: string, ConsistentRead?: boolean, Limit?: number, NextToken?: string, Parameters?: Record<string, any>, ReturnConsumedCapacity?: string, ReturnValuesOnConditionCheckFailure?: string }) => Promise<ExecuteStatementResponse>
+  ExecuteStatement: (input: { TableName: string, Statement: string, ConsistentRead?: boolean, Limit?: number, NextToken?: string, Parameters?: any[], ReturnConsumedCapacity?: string, ReturnValuesOnConditionCheckFailure?: string }) => Promise<ExecuteStatementResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteTransaction.html DynamoDB: ExecuteTransaction}

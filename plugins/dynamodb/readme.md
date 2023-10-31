@@ -311,7 +311,7 @@ Properties:
   - Maximum number of items to evaluate and return
 - **`NextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
-- **`Parameters` (object)**
+- **`Parameters` (array)**
   - PartiQL statement parameters, if any
 - **`ReturnConsumedCapacity` (string)**
   - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
