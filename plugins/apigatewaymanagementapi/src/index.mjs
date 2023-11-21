@@ -8,7 +8,7 @@ const str = { type: 'string' }
 const commonValidations = {
   ApiUrl: { ...str, comment: 'Full API Gateway WebSocket URL, including stage; if using this, do not use `ApiId` and `Stage`; example: `wss://abc123.execute-api.us-west-1.amazonaws.com/$default`' },
   ApiId: { ...str, comment: 'API Gateway ID' },
-  Stage: { ...str, comment: 'API Gateway stage; example: `$default`)' },
+  Stage: { ...str, comment: 'API Gateway stage; example: `$default`' },
   ConnectionId: { ...str, required, comment: 'WebSocket connection ID' },
 }
 

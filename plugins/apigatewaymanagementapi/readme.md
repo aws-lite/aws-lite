@@ -32,7 +32,7 @@ Properties:
 - **`ApiId` (string)**
   - API Gateway ID
 - **`Stage` (string)**
-  - API Gateway stage; example: `$default`)
+  - API Gateway stage; example: `$default`
 - **`ConnectionId` (string) [required]**
   - WebSocket connection ID
 - **`Data` (string, object)**
@@ -49,7 +49,7 @@ Properties:
 - **`ApiId` (string)**
   - API Gateway ID
 - **`Stage` (string)**
-  - API Gateway stage; example: `$default`)
+  - API Gateway stage; example: `$default`
 - **`ConnectionId` (string) [required]**
   - WebSocket connection ID
 
@@ -64,7 +64,7 @@ Properties:
 - **`ApiId` (string)**
   - API Gateway ID
 - **`Stage` (string)**
-  - API Gateway stage; example: `$default`)
+  - API Gateway stage; example: `$default`
 - **`ConnectionId` (string) [required]**
   - WebSocket connection ID
 <!-- METHOD_DOCS_END -->
