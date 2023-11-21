@@ -44,7 +44,7 @@ const GetObject = {
   },
   response: async ({ headers, payload }) => {
     return {
-      Data: payload,
+      Body: payload,
       ...parseHeadersToResults({ headers })
     }
   },
