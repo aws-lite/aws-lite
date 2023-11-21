@@ -64,7 +64,7 @@ npm i @aws-lite/dynamodb
 ```js
 /**
  * Instantiate a client
- * This is a synchronous operation that will attempt to load your AWS credentials, local configuration, region settings, etc.
+ * This is an asynchronous operation that will attempt to load your AWS credentials, local configuration, region settings, etc.
  */
 import awsLite from '@aws-lite/client'
 const config = { region: 'us-west-1' } // Optional
@@ -72,28 +72,27 @@ const aws = await awsLite(config)
 
 /**
  * Reads
- * Fire a GET request by specifying an AWS service name and endpoint
+ * Fire a GET request to the Lambda API by specifying its AWS service name and endpoint
  */
 await aws({
   service: 'lambda',
-  endpoint: '/2015-03-31/functions/my-lambda-name/configuration',
+  endpoint: '/2015-03-31/functions/$function-name/configuration',
 })
 // {
-//   FunctionName: 'my-lambda-name',
+//   FunctionName: '$function-name',
 //   Runtime: 'nodejs18.x',
 //   ...
 // }
 
 /**
  * Writes
- * POST JSON to an endpoint by adding a payload property
+ * POST JSON by adding a payload property
  */
 await aws({
   service: 'lambda',
-  endpoint: '/2015-03-31/functions/my-lambda-name/invocations',
+  endpoint: '/2015-03-31/functions/$function-name/invocations',
   payload: { ok: true },
 })
-// ... whatever your Lambda returned
 ```
 
 
@@ -141,7 +140,6 @@ The following options may be passed when instantiating the `aws-lite` client:
 - **`plugins` (array)**
   - Define `aws-lite` plugins to load; can be module names (e.g. `@aws-lite/dynamodb`) or file paths on the local machine (e.g. `/path/to/my/plugin.mjs`)
   - By default, all installed [official plugins (prefixed with `@aws-lite/`)](#list-of-official-aws-lite-plugins) and unofficial plugins (prefixed with `aws-lite-plugin-`) will be loaded
-  - Specifying plugins will disable auto-loading plugins
 - **`port` (number)**
   - Set a custom port number to use, helpful for local testing
 - **`protocol` (string) [default = `https`]**
@@ -155,7 +153,7 @@ An example:
 import awsLite from '@aws-lite/client'
 
 // Minimal: load everything from env vars
-aws = await awsLite()
+let aws = await awsLite()
 
 // Maximal: specify everything yourself
 aws = await awsLite({
@@ -164,7 +162,7 @@ aws = await awsLite({
   sessionToken: '$sessionToken',
   region: 'us-west-1',
   profile: 'work',
-  autoloadPlugins: false, // Not necessary if manually specifying plugins
+  autoloadPlugins: false,
   debug: true,
   endpointPrefix: '/test/path/',
   host: 'localhost',
@@ -179,10 +177,10 @@ aws = await awsLite({
 
 ### Client requests
 
-The following parameters may be passed with individual client requests; only `service` is required:
+Requests from the bare `aws-lite` client and plugins accept the following parameters; only `service` is required.
 
 - **`awsjson` (boolean or array)**
-  - Enables AWS-flavored JSON encoding; if boolean, your entire body will be encoded; if an array, the key names specified in the array will be encoded, leaving other keys in normal JSON
+  - Enables AWS-flavored JSON encoding; if boolean, your entire body will be encoded; if an array, the key names specified in the array will be encoded, leaving other keys as normal JSON
   - Do not use this option if you intend to pass your own pre-serialized AWS-flavored JSON in the `payload`
 - **`endpoint` (string) [default = `/`]**
   - API endpoint your request will be made to
@@ -191,7 +189,6 @@ The following parameters may be passed with individual client requests; only `se
   - By default, all headers are included in [authentication via AWS signature v4](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html)
   - If your request includes a `payload` that cannot be automatically JSON-encoded and you do not specify a `content-type` header, the default `application/octet-stream` will be used
 - **`payload` (object, buffer, readable stream, string)**
-  - Aliases: `body`, `data`, `json`
   - Payload to be used as the HTTP request body; as a convenience, any passed objects are automatically JSON-encoded (with the appropriate `content-type` header set, if not already present); buffers, streams, and strings simply pass through as-is
   - Readable streams are currently experimental
     - Passing a Node.js readable stream initiates an HTTP data stream to the API endpoint instead of writing a normal HTTP body
@@ -207,6 +204,8 @@ The following parameters may be passed with individual client requests; only `se
     - **`default` (string)** - set value to `enabled` to enable pagination for all applicable requests by default; individual requests can opt out of pagination by setting `paginate` to `false`
 - **`query` (object)**
   - Serialize the passed object and append it to your `endpoint` as a query string in your request
+- **`region` (string)**
+  - Override the client's configured region when making this individual request
 - **`service` (string) [required]**
   - AWS service code, usually just the lowercase form of the service name (e.g. `DynamoDB` = `dynamodb`); [full list can be found here](src/services.js)
 
@@ -264,7 +263,7 @@ The following properties are returned with each non-error client response:
 - **`headers` (object)**
   - Response header names + values
 - **`payload` (object, string, null)**
-  - Response payload; as a convenience, JSON-encoded responses are automatically parsed; XML-encoded responses are returned as plain strings
+  - Response payload; as a convenience, JSON and XML-encoded responses are automatically parsed
   - Responses without an HTTP body return a `null` payload
 
 An example:
@@ -392,7 +391,7 @@ export default {
 
 #### `request()`
 
-The `request()` lifecycle hook is an optional async function that enables that enables mutation of inputs to the final service API request.
+The `request()` lifecycle hook is an optional async function that enables mutation of inputs to the final service API request.
 
 `request()` is executed with two positional arguments:
 
@@ -551,7 +550,7 @@ async function request (params, utils) {
 
 ### Plugin types and [code completion](https://en.wikipedia.org/wiki/Intelligent_code_completion)
 
-`aws-lite/*` plugins can have auto-generated and hand-written types. These type definitions are authored as `.d.ts` files and distributed as separate, optional dependencies. The "ambient" types are automatically loaded by editors (using the official TS Lang Server like VSCode) or declared specifically in a TypeScript project's `tsconfig`.
+`@aws-lite/*` plugins can have auto-generated and hand-written types. These type definitions are authored as `.d.ts` files and distributed as separate, optional dependencies. The "ambient" types are automatically loaded by editors (using the official TS Lang Server like VSCode) or declared specifically in a TypeScript project's `tsconfig`.
 
 #### Installation and usage
 
