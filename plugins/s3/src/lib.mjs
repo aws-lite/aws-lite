@@ -24,6 +24,7 @@ const headerMappings = {
   ContentEncoding:            'content-encoding',
   ContentLanguage:            'content-language',
   ContentLength:              'content-length',
+  ContentRange:               'content-range',
   ContentMD5:                 'content-md5',
   ContentType:                'content-type',
   DeleteMarker:               'x-amz-delete-marker',
@@ -59,6 +60,7 @@ const headerMappings = {
   SSEKMSKeyId:                'x-amz-server-side-encryption-aws-kms-key-id',
   StorageClass:               'x-amz-storage-class',
   Tagging:                    'x-amz-tagging',
+  TagCount:                   'x-amz-tagging-count',
   VersionId:                  'x-amz-version-id',
   WebsiteRedirectLocation:    'x-amz-website-redirect-location',
 }
@@ -128,5 +130,6 @@ export default {
   getHeadersFromParams,
   getQueryFromParams,
   headerMappings,
+  paramMappings,
   parseHeadersToResults,
 }

@@ -1,6 +1,6 @@
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, parseHeadersToResults } = lib
+const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
 import PutObject from './put-object.mjs'
 
 const service = 's3'
@@ -42,7 +42,12 @@ const GetObject = {
       query,
     }
   },
-  response: ({ payload }) => payload,
+  response: async ({ headers, payload }) => {
+    return {
+      Data: payload,
+      ...parseHeadersToResults({ headers })
+    }
+  },
 }
 
 const HeadObject = {
@@ -101,7 +106,12 @@ const ListObjectsV2 = {
       paginator: { type: 'query', cursor: 'continuation-token', token: 'NextContinuationToken', accumulator: 'Contents' }
     }
   },
-  response: ({ payload }) => payload,
+  response: async ({ headers, payload }) => {
+    const res = payload
+    const charged = 'x-amz-request-charged'
+    if (headers[charged]) res[paramMappings[charged]] = headers[charged]
+    return res
+  },
 }
 
 const methods = { GetObject, HeadObject, ListObjectsV2, PutObject, ...incomplete }
