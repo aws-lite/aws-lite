@@ -70,10 +70,10 @@ jobs:
       with:
         script: |
           await github.rest.actions.createWorkflowDispatch({
-            'architect',
-            'aws-lite.org',
-            'workflows/update.yaml',
-            'main',
+            owner: 'architect',
+            repo: 'aws-lite.org',
+            workflow_id: 'workflows/update.yaml',
+            ref: 'main',
           })
 
     - name: Notify
