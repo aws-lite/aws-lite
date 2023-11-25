@@ -271,17 +271,23 @@ function request (params, creds, region, config, metadata) {
         else reject({ statusCode, headers, error: payload, metadata })
       })
     })
-    req.on('error', error => reject({
-      error: error.message,
-      metadata: {
-        ...metadata,
-        rawStack: error.stack,
-        service: params.service,
-        host: options.host,
-        protocol: options.protocol.replace(':', ''),
-        port: options.port,
+    req.on('error', error => {
+      /* istanbul ignore next */
+      if (debug) {
+        console.error('[aws-lite] HTTP error:', error)
       }
-    }))
+      reject({
+        error: error.message || /* istanbul ignore next */ error.code,
+        metadata: {
+          ...metadata,
+          rawStack: error.stack,
+          service: params.service,
+          host: options.host,
+          protocol: options.protocol.replace(':', ''),
+          port: options.port,
+        }
+      })
+    })
 
     if (isStream) {
       body.pipe(req)

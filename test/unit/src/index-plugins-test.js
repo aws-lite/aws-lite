@@ -419,7 +419,11 @@ test('Plugins - error(), error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.noErrorMethod: connect ECONNREFUSED/, 'Error included basic information')
+    // Node.js 20.x changed the HTTP connection error format
+    let re = Number(process.versions.node.split('.')[0]) >= 20
+      ? /\@aws-lite\/client: lambda.noErrorMethod: ECONNREFUSED/
+      : /\@aws-lite\/client: lambda.noErrorMethod: connect ECONNREFUSED/
+    t.match(err.message, re, 'Error included basic information')
     t.equal(err.port, badPort, 'Error has port metadata')
     t.equal(err.service, service, 'Error has service metadata')
     t.equal(err.host, host, 'Error has host metadata')
