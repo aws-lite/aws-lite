@@ -15,19 +15,19 @@ declare interface AwsLiteApiGatewayManagementApi {
    * - AWS docs: {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html API Gateway WebSocket Management API: PostToConnection}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewaymanagementapi/readme.md#PostToConnection API Gateway WebSocket Management API: PostToConnection}
    */
-  PostToConnection: (input: { ApiUrl?: string, ApiId?: string, Stage?: string, ConnectionId: string, Data?: string,object }) => Promise<PostToConnectionResponse>
+  PostToConnection: (input: { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string, Data?: string,object }) => Promise<PostToConnectionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html API Gateway WebSocket Management API: DeleteConnection}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewaymanagementapi/readme.md#DeleteConnection API Gateway WebSocket Management API: DeleteConnection}
    */
-  DeleteConnection: (input: { ApiUrl?: string, ApiId?: string, Stage?: string, ConnectionId: string }) => Promise<DeleteConnectionResponse>
+  DeleteConnection: (input: { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string }) => Promise<DeleteConnectionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html API Gateway WebSocket Management API: GetConnection}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewaymanagementapi/readme.md#GetConnection API Gateway WebSocket Management API: GetConnection}
    */
-  GetConnection: (input: { ApiUrl?: string, ApiId?: string, Stage?: string, ConnectionId: string }) => Promise<GetConnectionResponse>
+  GetConnection: (input: { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string }) => Promise<GetConnectionResponse>
   // $METHODS_END
 }
 

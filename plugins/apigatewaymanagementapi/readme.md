@@ -27,14 +27,14 @@ npm i -D @aws-lite/apigatewaymanagementapi-types
 [Canonical AWS API doc](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
 
 Properties:
+- **`ConnectionId` (string) [required]**
+  - WebSocket connection ID
 - **`ApiUrl` (string)**
   - Full API Gateway WebSocket URL, including stage; if using this, do not use `ApiId` and `Stage`; example: `wss://abc123.execute-api.us-west-1.amazonaws.com/$default`
 - **`ApiId` (string)**
   - API Gateway ID
 - **`Stage` (string)**
   - API Gateway stage; example: `$default`
-- **`ConnectionId` (string) [required]**
-  - WebSocket connection ID
 - **`Data` (string, object)**
   - Data to send to WebSocket client
 
@@ -44,14 +44,14 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
 
 Properties:
+- **`ConnectionId` (string) [required]**
+  - WebSocket connection ID
 - **`ApiUrl` (string)**
   - Full API Gateway WebSocket URL, including stage; if using this, do not use `ApiId` and `Stage`; example: `wss://abc123.execute-api.us-west-1.amazonaws.com/$default`
 - **`ApiId` (string)**
   - API Gateway ID
 - **`Stage` (string)**
   - API Gateway stage; example: `$default`
-- **`ConnectionId` (string) [required]**
-  - WebSocket connection ID
 
 
 ### `GetConnection`
@@ -59,14 +59,14 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html)
 
 Properties:
+- **`ConnectionId` (string) [required]**
+  - WebSocket connection ID
 - **`ApiUrl` (string)**
   - Full API Gateway WebSocket URL, including stage; if using this, do not use `ApiId` and `Stage`; example: `wss://abc123.execute-api.us-west-1.amazonaws.com/$default`
 - **`ApiId` (string)**
   - API Gateway ID
 - **`Stage` (string)**
   - API Gateway stage; example: `$default`
-- **`ConnectionId` (string) [required]**
-  - WebSocket connection ID
 <!-- METHOD_DOCS_END -->
 
 
