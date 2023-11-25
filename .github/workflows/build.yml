@@ -59,8 +59,22 @@ jobs:
       run: npm run test:live
       env:
         CI: true
-        AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    # TODO: temporary location, move to publishing phases once ready
+    - name: Publish aws-lite.org
+      # if: contains(github.ref, 'RC') == false
+      if: matrix.node-version == '20.x' && matrix.os == 'ubuntu-latest'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          await github.rest.actions.createWorkflowDispatch({
+            'architect',
+            'aws-lite.org',
+            'workflows/update.yaml',
+            'main',
+          })
 
     - name: Notify
       uses: sarisia/actions-status-discord@v1
@@ -72,7 +86,7 @@ jobs:
         color: 0x222222
         username: GitHub Actions
 
-  # ----- Only git tag testing + package publishing beyond this point ----- #
+  # ----- Only package publishing beyond this point ----- #
 
   # Publish client to package registries
   publish-client:
