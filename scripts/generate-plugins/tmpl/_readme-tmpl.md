@@ -23,6 +23,11 @@ npm i -D $PACKAGE_NAME-types
 [Reference documentation with examples at aws-lite.org](https://aws-lite.org/services/$SERVICE)
 
 
+## Reference
+
+[Reference documentation with examples at aws-lite.org](https://aws-lite.org/services/$SERVICE)
+
+
 ## Methods
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
