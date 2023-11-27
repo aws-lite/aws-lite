@@ -52,7 +52,8 @@ async function main () {
       // Plugin: readme.md
       let maintainerLinks = maintainers.map(p => `[${p}](https://github.com/${p.replace('@', '')})`).join(', ')
       let readme = readmeTmpl
-        .replace(/\$SERVICE/g, packageName)
+        .replace(/\$PACKAGE_NAME/g, packageName)
+        .replace(/\$SERVICE/g, service)
         .replace(/\$DESC/g, desc)
         .replace(/\$MAINTAINERS/g, maintainerLinks)
       writeFileSync(join(pluginDir, 'readme.md'), readme)
