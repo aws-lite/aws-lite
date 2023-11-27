@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { exec, spawn } from 'node:child_process'
+import gh from '@actions/core'
 import mainPlugins from '../plugins.mjs'
 
 let cwd = process.cwd()
@@ -76,6 +77,10 @@ async function main () {
           else setTimeout(res, 1000)
         })
       })
+    }
+
+    if (process.env.GITHUB_ACTIONS) {
+      gh.setOutput('publish', 'true')
     }
   }
   else {

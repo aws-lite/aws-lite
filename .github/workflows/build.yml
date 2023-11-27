@@ -8,7 +8,6 @@ defaults:
     shell: bash
 
 jobs:
-
   # Test the build
   build:
     # Setup
@@ -61,20 +60,6 @@ jobs:
         CI: true
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-    # TODO: temporary location, move to publishing phases once ready
-    - name: Publish aws-lite.org
-      # if: contains(github.ref, 'RC') == false
-      if: matrix.node-version == '20.x' && matrix.os == 'ubuntu-latest'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          await github.rest.actions.createWorkflowDispatch({
-            owner: 'architect',
-            repo: 'aws-lite.org',
-            workflow_id: 'workflows/update.yaml',
-            ref: 'main',
-          })
 
     - name: Notify
       uses: sarisia/actions-status-discord@v1
@@ -148,9 +133,25 @@ jobs:
 
       # Publish to npm
       - name: Publish plugins@latest to npm
-        run: npm run publish-plugins
+        id: publish
+        run: |
+          npm i -g @actions/core
+          npm run publish-plugins
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish aws-lite.org
+        if: contains(github.ref, 'RC') == false && steps.publish.outputs.publish
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ARC_TOKEN }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: 'architect',
+              repo: 'aws-lite.org',
+              workflow_id: 'build.yml',
+              ref: 'main',
+            })
 
       - name: Notify
         uses: sarisia/actions-status-discord@v1
