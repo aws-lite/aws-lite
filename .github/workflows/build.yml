@@ -132,10 +132,15 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       # Publish to npm
+      # Use this weird npm installation so we don't have to install all devdeps to run the publish script
+      # tbh @actions/setup-node should just include @actions/core
       - name: Publish plugins@latest to npm
         id: publish
         run: |
-          npm i -g @actions/core
+          cd scripts
+          echo {} > package.json
+          npm i @actions/core
+          cd ..
           npm run publish-plugins
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
