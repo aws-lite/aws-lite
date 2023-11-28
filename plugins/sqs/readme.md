@@ -1,4 +1,4 @@
-# `@aws-lite/sqs`
+# [`@aws-lite/sqs`](https://aws-lite.org/services/sqs)
 
 > Official `aws-lite` plugin for SQS
 

@@ -1,4 +1,4 @@
-# `@aws-lite/ssm`
+# [`@aws-lite/ssm`](https://aws-lite.org/services/ssm)
 
 > Official `aws-lite` plugin for SSM
 

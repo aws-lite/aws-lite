@@ -1,4 +1,4 @@
-# `@aws-lite/lambda`
+# [`@aws-lite/lambda`](https://aws-lite.org/services/lambda)
 
 > Official `aws-lite` plugin for Lambda
 

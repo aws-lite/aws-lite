@@ -1,4 +1,4 @@
-# `@aws-lite/apigatewaymanagementapi`
+# [`@aws-lite/apigatewaymanagementapi`](https://aws-lite.org/services/apigatewaymanagementapi)
 
 > Official `aws-lite` plugin for API Gateway WebSocket Management API
 

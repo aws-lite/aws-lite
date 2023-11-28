@@ -1,4 +1,4 @@
-# `@aws-lite/dynamodb`
+# [`@aws-lite/dynamodb`](https://aws-lite.org/services/dynamodb)
 
 > Official `aws-lite` plugin for DynamoDB
 

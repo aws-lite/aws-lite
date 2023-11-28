@@ -1,4 +1,4 @@
-# `@aws-lite/s3`
+# [`@aws-lite/s3`](https://aws-lite.org/services/s3)
 
 > Official `aws-lite` plugin for S3
 

@@ -1,4 +1,4 @@
-# `@aws-lite/sns`
+# [`@aws-lite/sns`](https://aws-lite.org/services/sns)
 
 > Official `aws-lite` plugin for SNS
 

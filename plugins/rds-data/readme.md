@@ -1,4 +1,4 @@
-# `@aws-lite/rds-data`
+# [`@aws-lite/rds-data`](https://aws-lite.org/services/rds-data)
 
 > Official `aws-lite` plugin for RDS Data Service
 
