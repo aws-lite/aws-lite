@@ -6,6 +6,24 @@
 >
 > You can think of it as a community-driven alternative to AWS's JavaScript SDK.
 
+<p>
+  <a href="https://github.com/architect/aws-lite/actions/workflows/build.yml?query=workflow:%22Node+CI%22">
+    <img src=https://github.com/architect/aws-lite/workflows/Node%20CI/badge.svg alt="GitHub CI status">
+  </a>
+  <a href="https://github.com/architect/aws-lite/actions/workflows/build.yml?query=workflow:%22Node+CI%22">
+    <img src="https://img.shields.io/badge/Code_coverage-100%25-green">
+  </a>
+  <a href="https://badge.fury.io/js/%40aws-lite%2Fclient">
+    <img alt="npm version" src="https://badge.fury.io/js/%40aws-lite%2Fclient.svg">
+  </a>
+  <a href="https://opensource.org/licenses/Apache-2.0">
+    <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache-2.0 License">
+  </a>
+  <a href="https://discord.com/invite/y5A2eTsCRX">
+    <img src="https://img.shields.io/discord/880272256100601927.svg?label=Join%20our%20Discord&logo=discord&logoColor=ffffff&color=5865F2&labelColor=grey">
+  </a>
+</p>
+
 - [Who made this?](#who-made-this)
 - [So, what is `aws-lite`?](#so-what-is-aws-lite)
 - [Why not use `aws-sdk` / `@aws-sdk/*`?](#why-not-use-aws-sdk--aws-sdk)
