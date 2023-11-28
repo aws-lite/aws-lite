@@ -5,7 +5,7 @@
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/architect/aws-lite.git",
+    "url": "git+https://github.com/architect/aws-lite.git",
     "directory": "plugins/apigatewaymanagementapi"
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
@@ -17,5 +17,6 @@
   "license": "Apache-2.0",
   "files": [
     "src"
-  ]
+  ],
+  "scripts": {}
 }
