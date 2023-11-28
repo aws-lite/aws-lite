@@ -1,7 +1,7 @@
 {
   "name": "@aws-lite/rds-data-types",
   "description": "Type definitions for the @aws-lite/rds-data plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "",
   "types": "index.d.ts",
   "files": [

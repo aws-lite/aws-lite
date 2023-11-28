@@ -1,7 +1,7 @@
 {
   "name": "@aws-lite/dynamodb-types",
   "description": "Type definitions for the @aws-lite/dynamodb plugin",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "",
   "types": "index.d.ts",
   "files": [
