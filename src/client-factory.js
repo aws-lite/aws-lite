@@ -40,7 +40,10 @@ module.exports = async function clientFactory (config, creds, region) {
 
   /* istanbul ignore next */
   if (config.debug) {
-    console.error('[aws-lite] Client instantiated with this config:', configuration)
+    console.error('[aws-lite] Client instantiated with this config:', {
+      ...configuration,
+      region,
+    })
     console.error('[aws-lite] Client instantiated with these creds:', {
       ...credentials,
       secretAccessKey: credentials.secretAccessKey ? '[found / redacted]' : undefined,
