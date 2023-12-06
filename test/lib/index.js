@@ -1,3 +1,4 @@
+let os = require('os')
 const http = require('http')
 
 // Test defaults
@@ -79,6 +80,18 @@ function basicRequestChecks (t, method, params = {}) {
   resetServer()
 }
 
+let homedirBak
+let tmpHomedir
+function overrideHomedir (tmp) {
+  if (tmp) tmpHomedir = tmp
+  if (!homedirBak) homedirBak = os.homedir
+  os.homedir = () => tmpHomedir
+}
+overrideHomedir.reset = () => {
+  os.homedir = homedirBak
+  homedirBak = undefined
+}
+
 function resetServer () {
   serverData = {
     request: undefined,
@@ -108,6 +121,7 @@ function resetAWSEnvVars () {
 module.exports = {
   basicRequestChecks,
   defaults,
+  overrideHomedir,
   resetAWSEnvVars,
   resetServer,
   server,

@@ -1,8 +1,8 @@
-let os = require('os')
+let { readFileSync } = require('fs')
 let { join } = require('path')
 let test = require('tape')
-let mockFs = require('mock-fs')
-let { resetAWSEnvVars } = require('../../lib')
+let mockTmp = require('mock-tmp')
+let { overrideHomedir, resetAWSEnvVars } = require('../../lib')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'get-creds.js')
 let getCreds = require(sut)
@@ -97,12 +97,12 @@ test('Get credentials from credentials file', async t => {
   }
 
   // Default credentials file location
-  let home = os.homedir()
-  let credsFile = join(home, '.aws', 'credentials')
-  mockFs({ [credsFile]: mockFs.load(credentialsMock) })
+  let credsFile = join('.aws', 'credentials')
+  let homedir = mockTmp({ [credsFile]: readFileSync(credentialsMock) })
+  overrideHomedir(homedir)
   result = await getCreds({})
   t.deepEqual(result, defaultProfile, 'Returned correct credentials from credentials file (~/.aws file location)')
-  mockFs.restore()
+  mockTmp.reset()
   resetAWSEnvVars()
 
   // Configured file locations
@@ -207,4 +207,9 @@ test('Validate credentials', async t => {
     t.match(err.message, /You must supply AWS credentials via params, environment variables, or credentials file/, 'Threw on no available credentials')
   }
   resetAWSEnvVars()
+})
+
+test('Tear down', t => {
+  overrideHomedir.reset()
+  t.end()
 })
