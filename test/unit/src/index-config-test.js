@@ -1,5 +1,5 @@
 let { join } = require('path')
-let mockFs = require('mock-fs')
+let mockTmp = require('mock-tmp')
 let test = require('tape')
 let { basicRequestChecks, defaults, resetAWSEnvVars: reset, server } = require('../../lib')
 let cwd = process.cwd()
@@ -39,7 +39,7 @@ test('Configuration - basic config', async t => {
 
 test('Configuration - plugin loading', async t => {
   t.plan(3)
-  let aws
+  let aws, tmp
 
   // Node.js 14.x + npm 6 does funky things with npm link-ed (symlinked) modules
   // That's cool, we can confidently skip this test for now, the related code path provably works!
@@ -52,21 +52,26 @@ test('Configuration - plugin loading', async t => {
   aws = await client({ accessKeyId, secretAccessKey, region, autoloadPlugins: false })
   t.notOk(aws.dynamodb, 'Client did not auto-load @aws-lite/dynamodb')
 
-  let nodeModules = join(cwd, 'node_modules')
-  mockFs({ [nodeModules]: {} })
+  let nodeModules = 'node_modules'
+  tmp = mockTmp({ [nodeModules]: {} })
+  process.chdir(tmp)
   aws = await client({ accessKeyId, secretAccessKey, region })
   t.notOk(aws.dynamodb, `Client did not auto-load @aws-lite/* plugins it can't find`)
-  mockFs.restore()
+  process.chdir(cwd)
+  mockTmp.reset()
 
   // A bit of a funky test, but we don't need to exercise actually loading an aws-lite-plugin-* plugin, we just need to ensure it attempts to
   try {
-    mockFs({ [join(nodeModules, 'aws-lite-plugin-hi')]: {} })
+    tmp = mockTmp({ [join(nodeModules, 'aws-lite-plugin-hi')]: {} })
+    process.chdir(tmp)
     aws = await client({ accessKeyId, secretAccessKey, region })
+    process.chdir(cwd)
   }
   catch (err) {
     t.match(err.message, /Cannot find module 'aws-lite-plugin-hi'/, 'Found and loaded aws-lite-plugin-*')
   }
-  mockFs.restore()
+  process.chdir(cwd)
+  mockTmp.reset()
 })
 
 test('Configuration - per-request overrides', async t => {
