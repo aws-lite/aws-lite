@@ -1,8 +1,8 @@
-let os = require('os')
+let { readFileSync } = require('fs')
 let { join } = require('path')
 let test = require('tape')
-let mockFs = require('mock-fs')
-let { resetAWSEnvVars } = require('../../lib')
+let mockTmp = require('mock-tmp')
+let { overrideHomedir, resetAWSEnvVars } = require('../../lib')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'get-region.js')
 let getRegion = require(sut)
@@ -54,13 +54,13 @@ test('Get region from config file', async t => {
   let profile = 'profile_1'
 
   // Default config file location
-  let home = os.homedir()
-  let configFile = join(home, '.aws', 'config')
-  mockFs({ [configFile]: mockFs.load(configMock) })
+  let configFile = join('.aws', 'config')
+  let homedir = mockTmp({ [configFile]: readFileSync(configMock) })
+  overrideHomedir(homedir)
   process.env.AWS_SDK_LOAD_CONFIG = true
   result = await getRegion({})
   t.equal(result, west1, 'Returned correct region from config file (~/.aws file location)')
-  mockFs.restore()
+  mockTmp.reset()
   resetAWSEnvVars()
 
   // Configured file locations
@@ -150,4 +150,9 @@ test('Validate config', async t => {
   catch (err) {
     t.match(err.message, /You must supply an AWS region/, 'Threw on no available config')
   }
+})
+
+test('Tear down', t => {
+  overrideHomedir.reset()
+  t.end()
 })
