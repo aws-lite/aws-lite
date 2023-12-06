@@ -48,7 +48,7 @@ test('Get region from env vars', async t => {
 })
 
 test('Get region from config file', async t => {
-  t.plan(5)
+  t.plan(7)
   resetAWSEnvVars()
   let result
   let profile = 'profile_1'
@@ -59,38 +59,36 @@ test('Get region from config file', async t => {
   overrideHomedir(homedir)
   process.env.AWS_SDK_LOAD_CONFIG = true
   result = await getRegion({})
-  t.equal(result, west1, 'Returned correct region from config file (~/.aws file location)')
-  mockTmp.reset()
+  t.equal(result, west1, 'Returned correct region from config file (~/.aws file location) via env var')
   resetAWSEnvVars()
+
+  result = await getRegion({ awsConfigFile: true })
+  t.equal(result, west1, 'Returned correct region from config file (~/.aws file location) via param')
+  mockTmp.reset()
 
   // Configured file locations
   process.env.AWS_SDK_LOAD_CONFIG = true
   process.env.AWS_CONFIG_FILE = configMock
   result = await getRegion({})
-  t.equal(result, west1, 'Returned correct region from config file (default profile)')
+  t.equal(result, west1, 'Returned correct region from config file (default profile) via env var')
   resetAWSEnvVars()
+
+  result = await getRegion({ awsConfigFile: configMock })
+  t.equal(result, west1, 'Returned correct region from config file (default profile) via param')
 
   // params.profile
-  process.env.AWS_SDK_LOAD_CONFIG = true
-  process.env.AWS_CONFIG_FILE = configMock
-  result = await getRegion({ profile: 'profile_1' })
+  result = await getRegion({ awsConfigFile: configMock, profile: 'profile_1' })
   t.equal(result, west2, 'Returned correct region from config file (params.profile)')
-  resetAWSEnvVars()
 
   // AWS_PROFILE env var
-  process.env.AWS_SDK_LOAD_CONFIG = true
-  process.env.AWS_CONFIG_FILE = configMock
   process.env.AWS_PROFILE = profile
-  result = await getRegion({})
+  result = await getRegion({ awsConfigFile: configMock })
   t.equal(result, west2, 'Returned correct region from config file (AWS_PROFILE env var)')
-  resetAWSEnvVars()
 
   // Config file checks are skipped in Lambda
-  process.env.AWS_SDK_LOAD_CONFIG = true
-  process.env.AWS_CONFIG_FILE = configMock
   process.env.AWS_LAMBDA_FUNCTION_NAME = 'true'
   try {
-    await getRegion({})
+    await getRegion({ awsConfigFile: configMock })
   }
   catch (err) {
     t.match(err.message, /You must supply an AWS region/, 'Did not look for config file on disk in Lambda')

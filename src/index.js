@@ -10,6 +10,7 @@ let clientFactory = require('./client-factory')
  * @param {string} [config.region] AWS service region (e.g. `us-west-1`); if not provided, defaults to `AWS_REGION`, `AWS_DEFAULT_REGION`, or `AMAZON_REGION` env vars
  * @param {string} [config.profile] AWS config + credentials profile; if not provided, defaults to `AWS_PROFILE` env var, and then to the `default` profile, if present
  * @param {boolean} [config.autoloadPlugins=true] Automatically load installed `@aws-lite/*` + `aws-lite-plugin-*` plugins
+ * @param {boolean|string} [config.awsConfigFile=false] Load configuration via ~/.aws/config (boolean), or via a passed file path
  * @param {string} [config.debug] Enable debug logging to console
  * @param {boolean} [config.keepAlive=true] Disable Node.js's connection keep-alive, helpful for local testing
  * @param {string} [config.protocol='https'] Set the connection protocol to 'http', helpful for local testing

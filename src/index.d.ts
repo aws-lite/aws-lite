@@ -9,6 +9,7 @@ declare module "@aws-lite/client" {
     region?: string;
     profile?: string;
     autoloadPlugins?: boolean;
+    awsConfigFile?: boolean | string;
     debug?: string;
     endpointPrefix?: string;
     host?: string;

@@ -29,14 +29,16 @@ function getRegionFromEnv (params) {
 }
 
 async function getRegionFromConfig (params) {
+  let { awsConfigFile } = params
   let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE, AWS_PROFILE } = process.env
-  if (!AWS_SDK_LOAD_CONFIG) return false
+  if (!AWS_SDK_LOAD_CONFIG && !awsConfigFile) return false
 
   let profile = params.profile || AWS_PROFILE || 'default'
   let profileName = profile === 'default' ? profile : `profile ${profile}`
   let home = os.homedir()
 
   let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
+  if (typeof awsConfigFile === 'string') configFile = awsConfigFile
   if (await exists(configFile)) {
     let file = await readFile(configFile)
     let config = ini.parse(file.toString())
