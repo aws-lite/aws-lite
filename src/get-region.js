@@ -6,12 +6,10 @@ let ini = require('ini')
 let regions = require('./regions.json')
 
 module.exports = async function getRegion (params) {
-  let { region } = params
+  let paramsRegion = validateRegion(params, params.region)
+  if (paramsRegion) return paramsRegion
 
-  let paramsRegion = validateRegion(region)
-  if (paramsRegion) return region
-
-  let envRegion = getRegionFromEnv()
+  let envRegion = getRegionFromEnv(params)
   if (envRegion) return envRegion
 
   let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
@@ -23,11 +21,11 @@ module.exports = async function getRegion (params) {
   throw ReferenceError('You must supply an AWS region via params, environment variables, or config file')
 }
 
-function getRegionFromEnv () {
+function getRegionFromEnv (params) {
   let { AWS_REGION, AWS_DEFAULT_REGION, AMAZON_REGION } = process.env
   let region = AWS_REGION || AWS_DEFAULT_REGION || AMAZON_REGION
 
-  return validateRegion(region)
+  return validateRegion(params, region)
 }
 
 async function getRegionFromConfig (params) {
@@ -48,16 +46,16 @@ async function getRegionFromConfig (params) {
     }
     let { region } = config[profileName]
 
-    return validateRegion(region)
+    return validateRegion(params, region)
   }
 }
 
-function validateRegion (region) {
+function validateRegion (params, region) {
   if (region) {
     if (typeof region !== 'string') {
       throw TypeError('Region must be a string')
     }
-    if (!regions.includes(region)) {
+    if (!params.host && !regions.includes(region)) {
       throw ReferenceError(`Invalid region specified: ${region}`)
     }
     return region

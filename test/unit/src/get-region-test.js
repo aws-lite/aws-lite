@@ -98,6 +98,13 @@ test('Get region from config file', async t => {
   resetAWSEnvVars()
 })
 
+test('Allow !aws regions when specifying a custom host', async t => {
+  t.plan(1)
+  let region = 'nonstandard-region'
+  let result = await getRegion({ host: 'idk', region })
+  t.equal(result, region, 'Returned correct region from passed params')
+})
+
 test('Validate config', async t => {
   t.plan(5)
   resetAWSEnvVars()
