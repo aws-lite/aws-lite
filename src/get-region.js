@@ -24,27 +24,17 @@ function getRegionFromEnv (params) {
 }
 
 async function getRegionFromConfig (params) {
-  let { awsConfigFile } = params
-  let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE, AWS_PROFILE } = process.env
-  if (!AWS_SDK_LOAD_CONFIG && !awsConfigFile) return false
+  let { loadAwsConfig } = require('./lib')
 
-  let { join } = require('path')
-  let os = require('os')
-  let { exists, readConfig } = require('./lib')
+  let awsConfig = await loadAwsConfig(params)
+  if (awsConfig) {
+    let { profile } = params
+    let profileName = profile === 'default' ? profile : `profile ${profile}`
 
-  let profile = params.profile || AWS_PROFILE || 'default'
-  let profileName = profile === 'default' ? profile : `profile ${profile}`
-  let home = os.homedir()
-
-  let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
-  if (typeof awsConfigFile === 'string') configFile = awsConfigFile
-  if (await exists(configFile)) {
-    let config = await readConfig(configFile)
-
-    if (!config[profileName]) {
+    if (!awsConfig[profileName]) {
       throw TypeError(`Profile not found: ${profile}`)
     }
-    let { region } = config[profileName]
+    let { region } = awsConfig[profileName]
 
     return validateRegion(params, region)
   }

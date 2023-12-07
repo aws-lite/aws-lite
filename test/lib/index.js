@@ -8,6 +8,7 @@ const badPort = 12345
 const debug = false
 const host = 'localhost'
 const keepAlive = false
+const profile = 'default'
 const protocol = 'http'
 const region = 'us-west-1'
 const secretAccessKey = 'bar'
@@ -15,8 +16,8 @@ const sessionToken = 'baz'
 const service = 'lambda'
 const endpoint = '/an/endpoint'
 const port = 1111
-const config = { accessKeyId, secretAccessKey, sessionToken, region, debug, protocol, autoloadPlugins, keepAlive, host, port }
-const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, protocol, region, secretAccessKey, service, endpoint, port }
+const config = { accessKeyId, secretAccessKey, sessionToken, region, debug, profile, protocol, autoloadPlugins, keepAlive, host, port }
+const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, profile, protocol, region, secretAccessKey, service, endpoint, port }
 
 let serverData = {}
 
@@ -108,6 +109,7 @@ function resetAWSEnvVars () {
   delete process.env.AWS_ACCESS_KEY_ID
   delete process.env.AWS_CONFIG_FILE
   delete process.env.AWS_DEFAULT_REGION
+  delete process.env.AWS_ENDPOINT_URL
   delete process.env.AWS_LAMBDA_FUNCTION_NAME
   delete process.env.AWS_PROFILE
   delete process.env.AWS_REGION

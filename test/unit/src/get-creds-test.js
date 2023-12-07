@@ -2,11 +2,12 @@ let { readFileSync } = require('fs')
 let { join } = require('path')
 let test = require('tape')
 let mockTmp = require('mock-tmp')
-let { overrideHomedir, resetAWSEnvVars } = require('../../lib')
+let { defaults, overrideHomedir, resetAWSEnvVars } = require('../../lib')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'get-creds.js')
 let getCreds = require(sut)
 
+let { profile } = defaults
 let mock = join(cwd, 'test', 'mock')
 let ok = 'foo'
 let nope = 'bar'
@@ -74,10 +75,10 @@ test('Get credentials from env vars', async t => {
 })
 
 test('Get credentials from credentials file', async t => {
-  t.plan(6)
+  t.plan(5)
   resetAWSEnvVars()
   let result
-  let profile = 'profile_1'
+  let profile1 = 'profile_1'
   let processProfile = 'profile_2'
 
   let defaultProfile = {
@@ -100,41 +101,33 @@ test('Get credentials from credentials file', async t => {
   let credsFile = join('.aws', 'credentials')
   let homedir = mockTmp({ [credsFile]: readFileSync(credentialsMock) })
   overrideHomedir(homedir)
-  result = await getCreds({})
+  result = await getCreds({ profile })
   t.deepEqual(result, defaultProfile, 'Returned correct credentials from credentials file (~/.aws file location)')
   mockTmp.reset()
   resetAWSEnvVars()
 
   // Configured file locations
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
-  result = await getCreds({})
+  result = await getCreds({ profile })
   t.deepEqual(result, defaultProfile, 'Returned correct credentials from credentials file (default profile)')
   resetAWSEnvVars()
 
-  // params.profile
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
-  result = await getCreds({ profile: 'profile_1' })
-  t.deepEqual(result, nonDefaultProfile, 'Returned correct credentials from credentials file (params.profile)')
-  resetAWSEnvVars()
-
-  // AWS_PROFILE env var
-  process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
-  process.env.AWS_PROFILE = profile
-  result = await getCreds({})
-  t.deepEqual(result, nonDefaultProfile, 'Returned correct credentials from credentials file (AWS_PROFILE env var)')
+  result = await getCreds({ profile: profile1 })
+  t.deepEqual(result, nonDefaultProfile, 'Returned correct credentials from credentials file (!default profile)')
   resetAWSEnvVars()
 
   // Credentials from a process
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
   result = await getCreds({ profile: processProfile })
-  t.deepEqual(result, processProfileCreds, 'Returned correct credentials from credentials file (params.profile)')
+  t.deepEqual(result, processProfileCreds, 'Returned correct credentials from credentials file (credentials process)')
   resetAWSEnvVars()
 
   // Credential file checks are skipped in Lambda
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
   process.env.AWS_LAMBDA_FUNCTION_NAME = 'true'
   try {
-    await getCreds({})
+    await getCreds({ profile })
   }
   catch (err) {
     t.match(err.message, /You must supply AWS credentials via/, 'Did not look for credentials file on disk in Lambda')

@@ -1,3 +1,4 @@
+let getHost = require('./get-host')
 let getCreds = require('./get-creds')
 let getRegion = require('./get-region')
 let clientFactory = require('./client-factory')
@@ -8,7 +9,7 @@ let clientFactory = require('./client-factory')
  * @param {string} [config.secretAccessKey] AWS secret key; if not provided, defaults to `AWS_SECRET_ACCESS_KEY` or `AWS_SECRET_KEY` env var, and then to a `~/.aws/credentials` file, if present
  * @param {string} [config.sessionToken] AWS session token; if not provided, defaults to `AWS_SESSION_TOKEN` env var, and then to a `~/.aws/credentials` file, if present
  * @param {string} [config.region] AWS service region (e.g. `us-west-1`); if not provided, defaults to `AWS_REGION`, `AWS_DEFAULT_REGION`, or `AMAZON_REGION` env vars
- * @param {string} [config.profile] AWS config + credentials profile; if not provided, defaults to `AWS_PROFILE` env var, and then to the `default` profile, if present
+ * @param {string} [config.profile='default'] AWS config + credentials profile; if not provided, defaults to `AWS_PROFILE` env var, and then to the `default` profile, if present
  * @param {boolean} [config.autoloadPlugins=true] Automatically load installed `@aws-lite/*` + `aws-lite-plugin-*` plugins
  * @param {boolean|string} [config.awsConfigFile=false] Load configuration via ~/.aws/config (boolean), or via a passed file path
  * @param {string} [config.debug] Enable debug logging to console
@@ -22,12 +23,14 @@ let clientFactory = require('./client-factory')
  * @returns {Promise<function>} Client async function
  */
 module.exports = async function awsLite (config = {}) {
-  // Creds + region first
+  // Set defaults + essential config
+  config.profile = config.profile || process.env.AWS_PROFILE || 'default'
+  config.protocol = config.protocol ?? 'https'
+  config.host = await getHost(config)
+
+  // Creds + region
   let creds = await getCreds(config)
   let region = await getRegion(config)
-
-  // Set defaults
-  config.protocol = config.protocol ?? 'https'
 
   // Validate, then go
   validateConfig(config)

@@ -7,6 +7,7 @@ let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
 
 let { accessKeyId, badPort, config, endpoint, host, port, protocol, region, secretAccessKey, service } = defaults
+let profile1 = 'profile_1'
 
 test('Set up env', async t => {
   t.plan(1)
@@ -14,17 +15,29 @@ test('Set up env', async t => {
 })
 
 test('Configuration - basic config', async t => {
-  t.plan(3)
+  t.plan(11)
   let aws
 
   aws = await client({ accessKeyId, secretAccessKey, region })
   t.equal(typeof aws, 'function', 'Client configurator returned client function with passed config')
+  t.equal(aws.config.region, region, 'Client uses the passed region')
+  t.equal(aws.config.profile, 'default', 'Client defaults to the, uh, default profile')
+  t.equal(aws.config.host, undefined, 'Client defaults to no host')
+
+  aws = await client({ accessKeyId, secretAccessKey, region, profile: profile1, host })
+  t.equal(aws.config.profile, profile1, 'Client uses the passed !default profile')
+  t.equal(aws.config.host, host, 'Client uses the passed host')
 
   process.env.AWS_ACCESS_KEY_ID = accessKeyId
   process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey
   process.env.AWS_REGION = region
+  process.env.AWS_PROFILE = profile1
+  process.env.AWS_ENDPOINT_URL = host
   aws = await client()
   t.equal(typeof aws, 'function', 'Client configurator returned client function without passed config')
+  t.equal(aws.config.region, region, 'Client uses the env var region')
+  t.equal(aws.config.profile, profile1, 'Client uses the env var !default profile')
+  t.equal(aws.config.host, host, 'Client uses the env var host')
   reset()
 
   try {

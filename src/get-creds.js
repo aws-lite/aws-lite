@@ -25,17 +25,17 @@ function getCredsFromEnv () {
 }
 
 async function getCredsFromFile (params) {
-  let { AWS_SHARED_CREDENTIALS_FILE, AWS_PROFILE } = process.env
-  let profile = params.profile || AWS_PROFILE || 'default'
+  let { profile } = params
+  let { AWS_SHARED_CREDENTIALS_FILE } = process.env
 
   let { join } = require('path')
   let os = require('os')
-  let { exists, readConfig } = require('./lib')
-
+  let { readConfig } = require('./lib')
   let home = os.homedir()
+
   let credsFile = AWS_SHARED_CREDENTIALS_FILE || join(home, '.aws', 'credentials')
-  if (await exists(credsFile)) {
-    let creds = await readConfig(credsFile)
+  let creds = await readConfig(credsFile)
+  if (creds) {
     if (!creds[profile]) {
       throw TypeError(`Profile not found: ${profile}`)
     }

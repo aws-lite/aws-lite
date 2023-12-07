@@ -29,6 +29,34 @@ async function exists (file) {
   catch { return false }
 }
 
+async function loadAwsConfig (params) {
+  let { awsConfigFile } = params
+  let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE } = process.env
+  if (!AWS_SDK_LOAD_CONFIG && !awsConfigFile) return
+
+  let { join } = require('path')
+  let os = require('os')
+  let home = os.homedir()
+
+  let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
+  if (typeof awsConfigFile === 'string') configFile = awsConfigFile
+  return await readConfig(configFile)
+}
+
+let cache = {}
+async function readConfig (file) {
+  if (cache[file]) return cache[file]
+  if (!(await exists(file))) return
+
+  let { readFile } = require('fs/promises')
+  if (!ini) ini = require('ini')
+
+  let data = await readFile(file)
+  let result = ini.parse(data.toString())
+  cache[file] = result
+  return result
+}
+
 // Probably this is going to need some refactoring in Arc 11
 // Certainly it is not reliable in !Arc local Lambda emulation
 let nonLocalEnvs = [ 'staging', 'production' ]
@@ -42,17 +70,4 @@ function useAWS () {
   return true
 }
 
-let cache = {}
-async function readConfig (file) {
-  if (cache[file]) return cache[file]
-
-  let { readFile } = require('fs/promises')
-  if (!ini) ini = require('ini')
-
-  let data = await readFile(file)
-  let result = ini.parse(data.toString())
-  cache[file] = result
-  return result
-}
-
-module.exports = { awsjson, exists, readConfig, useAWS }
+module.exports = { awsjson, exists, loadAwsConfig, readConfig, useAWS }
