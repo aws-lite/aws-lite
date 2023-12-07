@@ -1,8 +1,3 @@
-let { readFile } = require('fs/promises')
-let { exists } = require('./lib')
-let { join } = require('path')
-let os = require('os')
-let ini = require('ini')
 let regions = require('./regions.json')
 
 module.exports = async function getRegion (params) {
@@ -33,6 +28,10 @@ async function getRegionFromConfig (params) {
   let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE, AWS_PROFILE } = process.env
   if (!AWS_SDK_LOAD_CONFIG && !awsConfigFile) return false
 
+  let { join } = require('path')
+  let os = require('os')
+  let { exists, readConfig } = require('./lib')
+
   let profile = params.profile || AWS_PROFILE || 'default'
   let profileName = profile === 'default' ? profile : `profile ${profile}`
   let home = os.homedir()
@@ -40,8 +39,7 @@ async function getRegionFromConfig (params) {
   let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
   if (typeof awsConfigFile === 'string') configFile = awsConfigFile
   if (await exists(configFile)) {
-    let file = await readFile(configFile)
-    let config = ini.parse(file.toString())
+    let config = await readConfig(configFile)
 
     if (!config[profileName]) {
       throw TypeError(`Profile not found: ${profile}`)

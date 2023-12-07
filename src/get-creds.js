@@ -1,10 +1,3 @@
-let { readFile } = require('fs/promises')
-let { exists } = require('./lib')
-let { join } = require('path')
-let { execSync } = require('child_process')
-let os = require('os')
-let ini = require('ini')
-
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
 module.exports = async function getCreds (params) {
   let paramsCreds = validate(params)
@@ -34,13 +27,15 @@ function getCredsFromEnv () {
 async function getCredsFromFile (params) {
   let { AWS_SHARED_CREDENTIALS_FILE, AWS_PROFILE } = process.env
   let profile = params.profile || AWS_PROFILE || 'default'
-  let home = os.homedir()
 
+  let { join } = require('path')
+  let os = require('os')
+  let { exists, readConfig } = require('./lib')
+
+  let home = os.homedir()
   let credsFile = AWS_SHARED_CREDENTIALS_FILE || join(home, '.aws', 'credentials')
   if (await exists(credsFile)) {
-    let file = await readFile(credsFile)
-    let creds = ini.parse(file.toString())
-
+    let creds = await readConfig(credsFile)
     if (!creds[profile]) {
       throw TypeError(`Profile not found: ${profile}`)
     }
@@ -49,11 +44,13 @@ async function getCredsFromFile (params) {
     let secretAccessKey
     let sessionToken
     if (creds[profile].credential_process) {
-      ({
+      let { execSync } = require('child_process')
+      let result = execSync(creds[profile].credential_process, { encoding: 'utf8' })
+      ;({
         AccessKeyId: accessKeyId,
         SecretAccessKey: secretAccessKey,
         SessionToken: sessionToken,
-      } = JSON.parse(execSync(creds[profile].credential_process, { encoding: 'utf8' })))
+      } = JSON.parse(result))
     }
     else {
       ({

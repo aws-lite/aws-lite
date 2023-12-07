@@ -1,11 +1,9 @@
-let { stat } = require('fs/promises')
-let aws
+let aws, ini
 
 // AWS-flavored JSON stuff
 function marshaller (method, obj, awsjsonSetting) {
   if (!aws) {
     // Only require the vendor if + when it's actually needed
-    // eslint-disable-next-line
     aws = require('./_vendor/aws')
   }
 
@@ -26,6 +24,7 @@ let awsjson = {
 }
 
 async function exists (file) {
+  let { stat } = require('fs/promises')
   try { await stat(file); return true }
   catch { return false }
 }
@@ -43,4 +42,17 @@ function useAWS () {
   return true
 }
 
-module.exports = { awsjson, exists, useAWS }
+let cache = {}
+async function readConfig (file) {
+  if (cache[file]) return cache[file]
+
+  let { readFile } = require('fs/promises')
+  if (!ini) ini = require('ini')
+
+  let data = await readFile(file)
+  let result = ini.parse(data.toString())
+  cache[file] = result
+  return result
+}
+
+module.exports = { awsjson, exists, readConfig, useAWS }
