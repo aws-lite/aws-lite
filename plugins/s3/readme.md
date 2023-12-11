@@ -112,6 +112,14 @@ Properties:
   - Sets request header: `x-amz-checksum-mode`
 
 
+### `ListBuckets`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html)
+
+Properties:
+
+
+
 ### `ListObjectsV2`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html)
@@ -285,7 +293,6 @@ Properties:
 - `ListBucketIntelligentTieringConfigurations`
 - `ListBucketInventoryConfigurations`
 - `ListBucketMetricsConfigurations`
-- `ListBuckets`
 - `ListMultipartUploads`
 - `ListObjects`
 - `ListObjectVersions`

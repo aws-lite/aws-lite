@@ -77,6 +77,19 @@ const HeadObject = {
   response: parseHeadersToResults,
 }
 
+const ListBuckets = {
+  awsDoc: 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html',
+  validate: {},
+  request: async () => {
+    return {
+      endpoint: '/',
+    }
+  },
+  response: async ({ payload }) => {
+    return payload
+  },
+}
+
 const ListObjectsV2 = {
   awsDoc: 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html',
   validate: {
@@ -114,5 +127,5 @@ const ListObjectsV2 = {
   },
 }
 
-const methods = { GetObject, HeadObject, ListObjectsV2, PutObject, ...incomplete }
+const methods = { GetObject, HeadObject, ListBuckets, ListObjectsV2, PutObject, ...incomplete }
 export default { service, property, methods }
