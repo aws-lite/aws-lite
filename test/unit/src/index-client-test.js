@@ -226,7 +226,7 @@ test('Primary client - AWS JSON payloads', async t => {
 })
 
 test('Primary client - error handling', async t => {
-  t.plan(19)
+  t.plan(25)
   let responseStatusCode, responseBody, responseHeaders
 
   // Normal error
@@ -242,6 +242,26 @@ test('Primary client - error handling', async t => {
     console.log(err)
     t.match(err.message, /\@aws-lite\/client: lambda: lolno/, 'Error included basic information')
     t.equal(err.other, responseBody.other, 'Error has other metadata')
+    t.equal(err.statusCode, responseStatusCode, 'Error has response status code')
+    t.ok(err.headers, 'Error has response headers')
+    t.equal(err.service, service, 'Error has service')
+    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    reset()
+  }
+
+  // Error payload is an named error object because reasons
+  try {
+    responseStatusCode = 400
+    responseBody = { Error: { message: 'lolno', other: 'metadata' } }
+    responseHeaders = { 'content-type': 'application/json' }
+    server.use({ responseBody, responseHeaders, responseStatusCode })
+    let aws = await client(config)
+    await aws({ service, endpoint })
+  }
+  catch (err) {
+    console.log(err)
+    t.match(err.message, /\@aws-lite\/client: lambda: lolno/, 'Error included basic information')
+    t.equal(err.other, responseBody.Error.other, 'Error has other metadata')
     t.equal(err.statusCode, responseStatusCode, 'Error has response status code')
     t.ok(err.headers, 'Error has response headers')
     t.equal(err.service, service, 'Error has service')
