@@ -12,13 +12,15 @@ const defaultResponse = ({ payload }) => {
   delete response.xmlns
   return response
 }
-const defaultError = params => {
-  if (params?.error?.Error?.Code) {
-    const code = params.error.Error.Code
-    params.error.Error.name = params.error.Error.code = code
-    delete params.error.Error.Code // SDK v2 lowcases `code`
+const defaultError = ({ statusCode, headers, error }) => {
+  if (error.Error) error = error.Error
+  // SDK v2 lowcases `code`
+  if (error?.Code) {
+    error.name = error.code = error.Code
+    delete error.Code
   }
-  return params
+  if (error && headers['x-amzn-requestid']) error.requestId = headers['x-amzn-requestid']
+  return { statusCode, error }
 }
 
 /**
