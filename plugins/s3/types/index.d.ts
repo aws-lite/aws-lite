@@ -3,6 +3,7 @@ import {
   // $IMPORTS_START
   GetObjectCommandOutput as GetObjectResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
+  ListBucketsCommandOutput as ListBucketsResponse,
   ListObjectsV2CommandOutput as ListObjectsV2Response,
   PutObjectCommandOutput as PutObjectResponse,
   // $IMPORTS_END
@@ -23,6 +24,8 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#HeadObject S3: HeadObject}
    */
   HeadObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string }) => Promise<HeadObjectResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBuckets S3: ListBuckets} */
+  ListBuckets: () => Promise<ListBucketsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html S3: ListObjectsV2}
