@@ -30,7 +30,7 @@ module.exports = function errorHandler (input) {
   // Tag the error with whatever metadata we have
   Object.entries(metadata).forEach(([ name, value ]) => {
     // Don't overwrite the error name with the plugin method name, though
-    if (name !== 'name') err[name] = value
+    if (name !== 'name' && value) err[name] = value
   })
 
   // Construct a more useful error message

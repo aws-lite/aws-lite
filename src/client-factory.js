@@ -144,7 +144,7 @@ module.exports = async function clientFactory (config, creds, region) {
               validateInput(method.validate, input, metadata)
             }
 
-            // Run plugin.request()
+            // Run plugin.method.request()
             if (method.request) {
               try {
                 // TODO: probably deep-copy and/or make input immutable?
@@ -166,7 +166,7 @@ module.exports = async function clientFactory (config, creds, region) {
             try {
               let response = await request({ ...params, service }, creds, selectedRegion, config, metadata)
 
-              // Run plugin.response()
+              // Run plugin.method.response()
               if (method.response) {
                 try {
                   var pluginRes = await method.response(response, { ...pluginUtils, region: selectedRegion })
@@ -190,15 +190,18 @@ module.exports = async function clientFactory (config, creds, region) {
               return response
             }
             catch (err) {
-              // Run plugin.error()
+              // Run plugin.method.error()
+              let updatedError
               if (method.error && !(input instanceof Error)) {
                 try {
-                  let updatedError = await method.error(err, { ...pluginUtils, region: selectedRegion })
-                  errorHandler(updatedError || err)
+                  updatedError = await method.error(err, { ...pluginUtils, region: selectedRegion })
                 }
                 catch (methodError) {
-                  errorHandler({ error: methodError, metadata: { service, name } })
+                  errorHandler({ error: methodError, metadata: { service, name, property } })
                 }
+                updatedError = updatedError || err
+                updatedError.metadata = { ...updatedError.metadata, ...metadata }
+                errorHandler(updatedError)
               }
               errorHandler(err)
             }
