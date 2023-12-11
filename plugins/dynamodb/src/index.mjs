@@ -54,6 +54,13 @@ const TargetTableName = { ...str, required, comment: 'Name of the new table into
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => payload
+const defaultError = params => {
+  if (params?.error?.__type) {
+    const name = params.error.__type.split('#')[1]
+    if (name) params.error.name = params.error.code = name
+  }
+  return params
+}
 const unmarshall = keys => ({ payload }) => ({ awsjson: keys, ...payload })
 const headers = (method, additional) => ({ 'X-Amz-Target': `DynamoDB_20120810.${method}`, ...additional })
 const awsjsonContentType = { 'content-type': 'application/x-amz-json-1.0' }
@@ -95,6 +102,7 @@ const BatchExecuteStatement = {
     }
     return payload
   },
+  error: defaultError,
 }
 
 const BatchGetItem = {
@@ -129,6 +137,7 @@ const BatchGetItem = {
     }
     return payload
   },
+  error: defaultError,
 }
 
 const BatchWriteItem = {
@@ -177,7 +186,8 @@ const BatchWriteItem = {
       })
     })
     return { ...payload, UnprocessedItems }
-  }
+  },
+  error: defaultError,
 }
 
 const CreateBackup = {
@@ -191,6 +201,7 @@ const CreateBackup = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const CreateGlobalTable = {
@@ -204,6 +215,7 @@ const CreateGlobalTable = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const CreateTable = {
@@ -227,6 +239,7 @@ const CreateTable = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DeleteBackup = {
@@ -239,6 +252,7 @@ const DeleteBackup = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DeleteItem = {
@@ -265,6 +279,7 @@ const DeleteItem = {
     if (payload?.Attributes) payload.Attributes = awsjsonUnmarshall(payload.Attributes)
     return payload
   },
+  error: defaultError,
 }
 
 const DeleteTable = {
@@ -277,6 +292,7 @@ const DeleteTable = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeBackup = {
@@ -289,6 +305,7 @@ const DescribeBackup = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeContinuousBackups = {
@@ -301,6 +318,7 @@ const DescribeContinuousBackups = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeContributorInsights = {
@@ -314,6 +332,7 @@ const DescribeContributorInsights = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeEndpoints = {
@@ -323,6 +342,7 @@ const DescribeEndpoints = {
     headers: headers('DescribeEndpoints'),
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeExport = {
@@ -335,6 +355,7 @@ const DescribeExport = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeGlobalTable = {
@@ -347,6 +368,7 @@ const DescribeGlobalTable = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeGlobalTableSettings = {
@@ -359,6 +381,7 @@ const DescribeGlobalTableSettings = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeImport = {
@@ -371,6 +394,7 @@ const DescribeImport = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeKinesisStreamingDestination = {
@@ -383,6 +407,7 @@ const DescribeKinesisStreamingDestination = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeLimits = {
@@ -392,6 +417,7 @@ const DescribeLimits = {
     headers: headers('DescribeLimits'),
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeTable = {
@@ -404,6 +430,7 @@ const DescribeTable = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeTableReplicaAutoScaling = {
@@ -416,6 +443,7 @@ const DescribeTableReplicaAutoScaling = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DescribeTimeToLive = {
@@ -428,6 +456,7 @@ const DescribeTimeToLive = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const DisableKinesisStreamingDestination = {
@@ -441,6 +470,7 @@ const DisableKinesisStreamingDestination = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const EnableKinesisStreamingDestination = {
@@ -454,6 +484,7 @@ const EnableKinesisStreamingDestination = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const ExecuteStatement = {
@@ -482,6 +513,7 @@ const ExecuteStatement = {
     payload.awsjson = [ 'LastEvaluatedKey' ]
     return payload
   },
+  error: defaultError,
 }
 
 const ExecuteTransaction = {
@@ -513,6 +545,7 @@ const ExecuteTransaction = {
     }
     return payload
   },
+  error: defaultError,
 }
 
 const ExportTableToPointInTime = {
@@ -533,6 +566,7 @@ const ExportTableToPointInTime = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const GetItem = {
@@ -552,6 +586,7 @@ const GetItem = {
     payload: params,
   }),
   response: unmarshall(awsjsonRes),
+  error: defaultError,
 }
 
 const ImportTable = {
@@ -569,6 +604,7 @@ const ImportTable = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const ListBackups = {
@@ -586,6 +622,7 @@ const ListBackups = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const ListContributorInsights = {
@@ -600,6 +637,7 @@ const ListContributorInsights = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const ListExports = {
@@ -614,6 +652,7 @@ const ListExports = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const ListGlobalTables = {
@@ -628,6 +667,7 @@ const ListGlobalTables = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const ListImports = {
@@ -642,6 +682,7 @@ const ListImports = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const ListTables = {
@@ -655,6 +696,7 @@ const ListTables = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const ListTagsOfResource = {
@@ -668,6 +710,7 @@ const ListTagsOfResource = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const PutItem = {
@@ -691,6 +734,7 @@ const PutItem = {
     payload: params,
   }),
   response: unmarshall([ 'Attributes', ]),
+  error: defaultError,
 }
 
 const Query = {
@@ -735,6 +779,7 @@ const Query = {
     if (payload?.LastEvaluatedKey) payload.awsjson = [ 'LastEvaluatedKey' ]
     return payload
   },
+  error: defaultError,
 }
 
 const RestoreTableFromBackup = {
@@ -753,6 +798,7 @@ const RestoreTableFromBackup = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const RestoreTableToPointInTime = {
@@ -774,6 +820,7 @@ const RestoreTableToPointInTime = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const Scan = {
@@ -816,6 +863,7 @@ const Scan = {
     if (payload?.Items?.length) payload.Items = payload.Items.map(awsjsonUnmarshall)
     return payload
   },
+  error: defaultError,
 }
 
 const TagResource = {
@@ -829,6 +877,7 @@ const TagResource = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const TransactGetItems = {
@@ -855,6 +904,7 @@ const TransactGetItems = {
     })
     return payload
   },
+  error: defaultError,
 }
 
 const TransactWriteItems = {
@@ -918,6 +968,7 @@ const TransactWriteItems = {
     }
     return payload
   },
+  error: defaultError,
 }
 
 const UntagResource = {
@@ -931,6 +982,7 @@ const UntagResource = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const UpdateContinuousBackups = {
@@ -944,6 +996,7 @@ const UpdateContinuousBackups = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const UpdateContributorInsights = {
@@ -958,6 +1011,7 @@ const UpdateContributorInsights = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const UpdateGlobalTable = {
@@ -971,6 +1025,7 @@ const UpdateGlobalTable = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const UpdateGlobalTableSettings = {
@@ -988,6 +1043,7 @@ const UpdateGlobalTableSettings = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const UpdateItem = {
@@ -1021,6 +1077,7 @@ const UpdateItem = {
     payload.awsjson = awsjsonRes
     return payload
   },
+  error: defaultError,
 }
 
 const UpdateTable = {
@@ -1042,6 +1099,7 @@ const UpdateTable = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const UpdateTableReplicaAutoScaling = {
@@ -1057,6 +1115,7 @@ const UpdateTableReplicaAutoScaling = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const UpdateTimeToLive = {
@@ -1070,6 +1129,7 @@ const UpdateTimeToLive = {
     payload: params,
   }),
   response: defaultResponse,
+  error: defaultError,
 }
 
 const methods = { BatchExecuteStatement, BatchGetItem, BatchWriteItem, CreateBackup, CreateGlobalTable, CreateTable, DeleteBackup, DeleteItem, DeleteTable, DescribeBackup, DescribeContinuousBackups, DescribeContributorInsights, DescribeEndpoints, DescribeExport, DescribeGlobalTable, DescribeGlobalTableSettings, DescribeImport, DescribeKinesisStreamingDestination, DescribeLimits, DescribeTable, DescribeTableReplicaAutoScaling, DescribeTimeToLive, DisableKinesisStreamingDestination, EnableKinesisStreamingDestination, ExecuteStatement, ExecuteTransaction, ExportTableToPointInTime, GetItem, ImportTable, ListBackups, ListContributorInsights, ListExports, ListGlobalTables, ListImports, ListTables, ListTagsOfResource, PutItem, Query, RestoreTableFromBackup, RestoreTableToPointInTime, Scan, TagResource, TransactGetItems, TransactWriteItems, UntagResource, UpdateContinuousBackups, UpdateContributorInsights, UpdateGlobalTable, UpdateGlobalTableSettings, UpdateItem, UpdateTable, UpdateTableReplicaAutoScaling, UpdateTimeToLive }
