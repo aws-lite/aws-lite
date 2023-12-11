@@ -6,6 +6,9 @@ module.exports = function errorHandler (input) {
 
   let { statusCode, headers, error, metadata } = input
 
+  // If the payload passed is an object containing an `Error` property, use that
+  if (error.Error) error = error.Error
+
   // If the error passed is an actual Error, it probably came from a plugin method failing, so we should attempt to retain its beautiful, beautiful stack trace
   let err = error instanceof Error ? error : Error()
   if (statusCode) {
@@ -19,7 +22,7 @@ module.exports = function errorHandler (input) {
   if (error && typeof error === 'object') {
     Object.entries(error).forEach(([ name, value ]) => {
       if (name.toLowerCase() === 'message') err.message = value
-      err[name] = value
+      else err[name] = value
     })
   }
   // Less common: sometimes strings (of XML), possibly without a content-type
