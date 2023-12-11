@@ -485,7 +485,7 @@ test('Plugins - error docs (@aws-lite)', async t => {
   catch (err) {
     console.log(err)
     t.equal(err.awsDoc, 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html', 'Error has a doc')
-    t.equal(err.readme, 'https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObject', 'Error has link to method in readme')
+    t.equal(err.readme, 'https://aws-lite.org/services/s3#putobject', 'Error has link to method in readme')
   }
 })
 

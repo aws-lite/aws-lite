@@ -133,7 +133,7 @@ module.exports = async function clientFactory (config, creds, region) {
             }
             // Printed after the AWS doc
             if (pluginName.startsWith('@aws-lite/')) {
-              metadata.readme = `https://github.com/architect/aws-lite/blob/main/plugins/${service}/readme.md#${name}`
+              metadata.readme = `https://aws-lite.org/services/${service}#${name.toLowerCase()}`
             }
             else if (method.readme) {
               metadata.readme = method.readme
