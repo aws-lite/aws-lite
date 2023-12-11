@@ -15,6 +15,17 @@ const num = { type: 'number' }
  * Plugin maintained by: @architect
  */
 
+const defaultError = ({ statusCode, headers, error }) => {
+  if (error.Error) error = error.Error
+  // SDK v2 lowcases `code`
+  if (error?.Code) {
+    error.name = error.code = error.Code
+    delete error.Code
+  }
+  if (error && headers['x-amzn-requestid']) error.requestId = headers['x-amzn-requestid']
+  return { statusCode, error }
+}
+
 const SendMessage = {
   awsDoc: docRoot + 'API_SendMessage.html',
   validate: {
@@ -30,6 +41,8 @@ const SendMessage = {
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     payload: qs.stringify({ Action: 'SendMessage', ...params })
   }),
+  response: ({ payload }) => payload.SendMessageResult,
+  error: defaultError,
 }
 
 export default {
