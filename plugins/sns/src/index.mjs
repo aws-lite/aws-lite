@@ -7,6 +7,20 @@ const docRoot = 'https://docs.aws.amazon.com/sns/latest/api/'
 
 const str = { type: 'string' }
 
+const defaultResponse = ({ payload }) => {
+  let response = payload
+  delete response.xmlns
+  return response
+}
+const defaultError = params => {
+  if (params?.error?.Error?.Code) {
+    const code = params.error.Error.Code
+    params.error.Error.name = params.error.Error.code = code
+    delete params.error.Error.Code // SDK v2 lowcases `code`
+  }
+  return params
+}
+
 /**
  * Plugin maintained by: @architect
  */
@@ -29,6 +43,8 @@ const Publish = {
       ...params,
     }
   }),
+  response: defaultResponse, // v2 lifts PublishResult contents to the top level
+  error: defaultError,
 }
 
 export default {
