@@ -51,6 +51,13 @@ const response = ({ payload }) => {
   return res
 }
 
+function defaultError ({ statusCode, headers, error }) {
+  if (headers['x-amzn-errortype'] && error) {
+    error.name = error.code = headers['x-amzn-errortype']
+  }
+  return { statusCode, error }
+}
+
 /**
  * Plugin maintained by: @architect
  */
@@ -69,6 +76,7 @@ const PostToConnection = {
     }
   },
   response,
+  error: defaultError,
 }
 
 const DeleteConnection = {
@@ -79,6 +87,7 @@ const DeleteConnection = {
     ...getHostAndEndpoint(params, config.region),
   }),
   response,
+  error: defaultError,
 }
 
 const GetConnection = {
@@ -86,6 +95,7 @@ const GetConnection = {
   validate: commonValidations,
   request: (params, { config }) => getHostAndEndpoint(params, config.region),
   response,
+  error: defaultError,
 }
 
 export default {
