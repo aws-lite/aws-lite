@@ -52,7 +52,8 @@ const response = ({ payload }) => {
 }
 
 function defaultError ({ statusCode, headers, error }) {
-  if (headers['x-amzn-errortype'] && error) {
+  if (headers['x-amzn-errortype']) {
+    if (!error) error = {}
     error.name = error.code = headers['x-amzn-errortype']
   }
   return { statusCode, error }
