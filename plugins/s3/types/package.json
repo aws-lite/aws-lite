@@ -1,7 +1,7 @@
 {
   "name": "@aws-lite/s3-types",
   "description": "Type definitions for the @aws-lite/s3 plugin",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "",
   "types": "index.d.ts",
   "files": [
