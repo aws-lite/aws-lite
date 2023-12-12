@@ -40,7 +40,7 @@ const headerMappings = {
   IfModifiedSince:            'if-modified-since',
   IfNoneMatch:                'if-none-match',
   IfUnmodifiedSince:          'if-unmodified-since',
-  LastModified:               'Last-Modified',
+  LastModified:               'last-modified',
   MissingMeta:                'x-amz-missing-meta',
   ObjectLockLegalHoldStatus:  'x-amz-object-lock-legal-hold',
   ObjectLockMode:             'x-amz-object-lock-mode',
@@ -70,7 +70,8 @@ const paramMappings = Object.fromEntries(Object.entries(headerMappings).map(([ k
 // Take a response, and parse its headers into the AWS-named params of headerMappings
 const quoted = /^".*"$/
 const ignoreHeaders = [ 'content-length' ]
-const parseHeadersToResults = ({ headers }) => {
+const isNum = [ 'content-length' ]
+const parseHeadersToResults = ({ headers }, ignore) => {
   let results = Object.entries(headers).reduce((acc, [ header, value ]) => {
     const normalized = header.toLowerCase()
     if (value === 'true') value = true
@@ -78,7 +79,10 @@ const parseHeadersToResults = ({ headers }) => {
     if (value.match(quoted)) {
       value = value.substring(1, value.length - 1)
     }
-    if (paramMappings[normalized] && !ignoreHeaders.includes(normalized)) {
+    let ignored = ignore || ignoreHeaders
+    if (paramMappings[normalized] && !ignored.includes(normalized)) {
+      if (normalized === 'last-modified') value = new Date(value)
+      if (isNum.includes(normalized)) value = Number(value)
       acc[paramMappings[normalized]] = value
     }
     return acc

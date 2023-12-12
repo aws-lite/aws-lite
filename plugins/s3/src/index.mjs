@@ -7,6 +7,15 @@ const service = 's3'
 const property = 'S3'
 const required = true
 
+const defaultError = ({ statusCode, error }) => {
+  // SDK v2 lowcases `code`
+  if (error?.Code) {
+    error.name = error.code = error.Code
+    delete error.Code
+  }
+  return { statusCode, error }
+}
+
 /**
  * Plugin maintained by: @architect
  */
@@ -45,9 +54,10 @@ const GetObject = {
   response: async ({ headers, payload }) => {
     return {
       Body: payload,
-      ...parseHeadersToResults({ headers })
+      ...parseHeadersToResults({ headers }, [])
     }
   },
+  error: defaultError,
 }
 
 const HeadObject = {
@@ -75,6 +85,7 @@ const HeadObject = {
     }
   },
   response: parseHeadersToResults,
+  error: defaultError,
 }
 
 const ListBuckets = {
@@ -88,6 +99,7 @@ const ListBuckets = {
   response: async ({ payload }) => {
     return payload
   },
+  error: defaultError,
 }
 
 const ListObjectsV2 = {
@@ -125,6 +137,7 @@ const ListObjectsV2 = {
     if (headers[charged]) res[paramMappings[charged]] = headers[charged]
     return res
   },
+  error: defaultError,
 }
 
 const methods = { GetObject, HeadObject, ListBuckets, ListObjectsV2, PutObject, ...incomplete }
