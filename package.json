@@ -16,9 +16,9 @@
     "lint": "eslint --fix .",
     "test": "npm run lint && npm run gen && npm run coverage",
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
-    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
-    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-spec",
-    "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-spec",
+    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-arc",
+    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
+    "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "vendor": "scripts/vendor/vendor.sh"
   },
@@ -49,7 +49,7 @@
     "nyc": "^15.1.0",
     "semver": "^7.5.4",
     "simple-git-hooks": "^2.9.0",
-    "tap-spec": "^5.0.0",
+    "tap-arc": "^1.2.2",
     "tape": "^5.7.0"
   },
   "files": [
