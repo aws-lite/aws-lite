@@ -1,3 +1,5 @@
+import incomplete from './incomplete.mjs'
+
 const service = 'apigateway'
 const property = 'APIGateway'
 // const required = true
@@ -8,5 +10,5 @@ const property = 'APIGateway'
 export default {
   service,
   property,
-  methods: {}
+  methods: { ...incomplete }
 }
