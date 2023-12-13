@@ -54,7 +54,7 @@ const GetObject = {
   response: async ({ headers, payload }) => {
     return {
       Body: payload,
-      ...parseHeadersToResults({ headers }, [])
+      ...parseHeadersToResults({ headers }, null, [])
     }
   },
   error: defaultError,
