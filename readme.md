@@ -192,6 +192,7 @@ Open source contributor guidelines, methodology, and instructions
 
 <!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
+- [API Gateway](https://www.npmjs.com/package/@aws-lite/apigateway)
 - [API Gateway WebSocket Management API](https://www.npmjs.com/package/@aws-lite/apigatewaymanagementapi)
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
 - [Lambda](https://www.npmjs.com/package/@aws-lite/lambda)

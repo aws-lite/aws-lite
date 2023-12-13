@@ -8,6 +8,10 @@
  */
 const plugins = [
   {
+    service: 'apigateway', property: 'APIGateway',
+    display: 'API Gateway', maintainers: [ '@architect' ]
+  },
+  {
     // Technically the service here is `execute-api`, but that's not really recognized
     service: 'apigatewaymanagementapi', property: 'ApiGatewayManagementApi',
     display: 'API Gateway WebSocket Management API', maintainers: [ '@architect' ]
