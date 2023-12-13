@@ -14,6 +14,7 @@ const plugins = [
     service: 'apigatewaymanagementapi', property: 'ApiGatewayManagementApi',
     display: 'API Gateway WebSocket Management API', maintainers
   },
+  { service: 'cloudformation', property: 'CloudFormation', display: 'CloudFormation', maintainers },
   { service: 'cloudfront', property: 'CloudFront', display: 'CloudFront', maintainers },
   { service: 'dynamodb', property: 'DynamoDB', display: 'DynamoDB', maintainers },
   { service: 'lambda', property: 'Lambda', display: 'Lambda', maintainers },
