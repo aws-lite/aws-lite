@@ -71,7 +71,7 @@ const paramMappings = Object.fromEntries(Object.entries(headerMappings).map(([ k
 const quoted = /^".*"$/
 const ignoreHeaders = [ 'content-length' ]
 const isNum = [ 'content-length' ]
-const parseHeadersToResults = ({ headers }, ignore) => {
+const parseHeadersToResults = ({ headers }, utils, ignore) => {
   let results = Object.entries(headers).reduce((acc, [ header, value ]) => {
     const normalized = header.toLowerCase()
     if (value === 'true') value = true
