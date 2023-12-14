@@ -1,9 +1,8 @@
-let qs = require('querystring')
 let { Readable } = require('stream')
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
 let { is } = require('./validate')
-let { awsjson, useAWS } = require('./lib')
+let { awsjson, tidyQuery, useAWS } = require('./lib')
 let xml
 
 /* istanbul ignore next */
@@ -103,8 +102,11 @@ function request (params, creds, region, config, metadata) {
       if (!is.object(params.query)) {
         throw ReferenceError('Query property must be an object')
       }
-      // Expect aws4 to handle RFC 3986 encoding when appending the query string to the passed path
-      params.path += '?' + qs.stringify(params.query)
+      let query = tidyQuery(params.query)
+      if (query) {
+        // Expect aws4 to handle RFC 3986 encoding when appending the query string to the passed path
+        params.path += '?' + query
+      }
     }
 
     // Headers, content-type

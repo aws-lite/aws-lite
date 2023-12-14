@@ -17,7 +17,7 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(54)
+  t.plan(64)
   let request, result, payload, query, responseBody, url
 
   let headers = { 'content-type': 'application/json' }
@@ -61,7 +61,20 @@ test('Primary client - core functionality', async t => {
   payload = { ok: true }
   query = { fiz: 'buz', json: JSON.stringify({ ok: false }) }
   url = endpoint + '?' + qs.stringify(query)
-  responseBody = { aws: 'lol' }
+  server.use({ responseBody, responseHeaders: headers })
+  result = await aws({ service, endpoint, payload, query })
+  basicRequestChecks(t, 'POST', { url })
+
+  // Don't pass through nullish query string params
+  query = { fiz: undefined, json: undefined, foo: null }
+  url = endpoint
+  server.use({ responseBody, responseHeaders: headers })
+  result = await aws({ service, endpoint, payload, query })
+  basicRequestChecks(t, 'POST', { url })
+
+  // Pass through defined, non-empty query string params
+  query = { fiz: 'buz', json: false, foo: '' }
+  url = endpoint + '?' + qs.stringify({ fiz: 'buz', json: false })
   server.use({ responseBody, responseHeaders: headers })
   result = await aws({ service, endpoint, payload, query })
   basicRequestChecks(t, 'POST', { url })

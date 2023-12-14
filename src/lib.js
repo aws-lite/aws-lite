@@ -57,6 +57,16 @@ async function readConfig (file) {
   return result
 }
 
+function tidyQuery (obj) {
+  let qs = require('querystring')
+  let tidied = {}
+  Object.entries(obj).forEach(([ k, v ]) => {
+    // Who knows, maybe there's an API service that uses boolean query string params
+    if (v || v === false) tidied[k] = v
+  })
+  if (Object.keys(tidied).length) return qs.stringify(tidied)
+}
+
 // Probably this is going to need some refactoring in Arc 11
 // Certainly it is not reliable in !Arc local Lambda emulation
 let nonLocalEnvs = [ 'staging', 'production' ]
@@ -70,4 +80,4 @@ function useAWS () {
   return true
 }
 
-module.exports = { awsjson, exists, loadAwsConfig, readConfig, useAWS }
+module.exports = { awsjson, exists, loadAwsConfig, readConfig, tidyQuery, useAWS }
