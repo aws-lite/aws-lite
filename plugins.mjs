@@ -8,12 +8,12 @@
  */
 const maintainers = [ '@architect' ]
 const plugins = [
-  { service: 'apigateway', property: 'APIGateway', display: 'API Gateway', maintainers },
   {
     // Technically the service here is `execute-api`, but that's not really recognized
     service: 'apigatewaymanagementapi', property: 'ApiGatewayManagementApi',
     display: 'API Gateway WebSocket Management API', maintainers
   },
+  { service: 'apigatewayv2', property: 'APIGatewayV2', display: 'API Gateway V2', maintainers },
   { service: 'cloudformation', property: 'CloudFormation', display: 'CloudFormation', maintainers },
   { service: 'cloudfront', property: 'CloudFront', display: 'CloudFront', maintainers },
   { service: 'cloudwatch-logs', property: 'CloudWatch Logs', display: 'CloudWatch Logs', maintainers },

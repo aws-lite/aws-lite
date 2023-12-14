@@ -4,7 +4,6 @@ export default {
   CreateApiKey:               { disabled, awsDoc: docRoot + 'API_CreateApiKey.html' },
   CreateAuthorizer:           { disabled, awsDoc: docRoot + 'API_CreateAuthorizer.html' },
   CreateBasePathMapping:      { disabled, awsDoc: docRoot + 'API_CreateBasePathMapping.html' },
-  CreateDeployment:           { disabled, awsDoc: docRoot + 'API_CreateDeployment.html' },
   CreateDocumentationPart:    { disabled, awsDoc: docRoot + 'API_CreateDocumentationPart.html' },
   CreateDocumentationVersion: { disabled, awsDoc: docRoot + 'API_CreateDocumentationVersion.html' },
   CreateDomainName:           { disabled, awsDoc: docRoot + 'API_CreateDomainName.html' },

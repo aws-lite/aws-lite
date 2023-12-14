@@ -58,11 +58,12 @@
   "workspaces": [
     "plugins/apigateway",
     "plugins/apigatewaymanagementapi",
+    "plugins/apigatewayv2",
     "plugins/cloudformation",
     "plugins/cloudfront",
+    "plugins/cloudwatch-logs",
     "plugins/dynamodb",
     "plugins/lambda",
-    "plugins/cloudwatch-logs",
     "plugins/rds-data",
     "plugins/s3",
     "plugins/sns",
