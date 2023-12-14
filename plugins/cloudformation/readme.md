@@ -32,7 +32,54 @@ npm i -D @aws-lite/cloudformation-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `DeleteStack`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStack.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`ClientRequestToken` (string)**
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
+- **`RetainResources` (array)**
+  - List of logical resource IDs to retain after stack deletion
+- **`RoleARN` (string)**
+  - IAM role ARN to assume during deletion
+
+
+### `DescribeStackResources`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResources.html)
+
+Properties:
+- **`StackName` (string)**
+  - Stack name or ID
+- **`LogicalResourceId` (string)**
+  - Logical name of a resource
+- **`PhysicalResourceId` (string)**
+  - Physical name or ID of a resource; if you do not specify `PhysicalResourceId`, you must specify `StackName`
+
+
+### `DescribeStacks`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStacks.html)
+
+Properties:
+- **`StackName` (string)**
+  - Stack name or ID
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+
+
+### `ListStackResources`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackResources.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
 
 
 ### Methods yet to be implemented
@@ -51,7 +98,6 @@ npm i -D @aws-lite/cloudformation-types
 - [`DeactivateOrganizationsAccess`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeactivateOrganizationsAccess.html)
 - [`DeactivateType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeactivateType.html)
 - [`DeleteChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteChangeSet.html)
-- [`DeleteStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStack.html)
 - [`DeleteStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackInstances.html)
 - [`DeleteStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackSet.html)
 - [`DeregisterType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeregisterType.html)
@@ -65,8 +111,6 @@ npm i -D @aws-lite/cloudformation-types
 - [`DescribeStackInstance`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackInstance.html)
 - [`DescribeStackResource`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResource.html)
 - [`DescribeStackResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html)
-- [`DescribeStackResources`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResources.html)
-- [`DescribeStacks`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStacks.html)
 - [`DescribeStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackSet.html)
 - [`DescribeStackSetOperation`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackSetOperation.html)
 - [`DescribeType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeType.html)
@@ -85,7 +129,6 @@ npm i -D @aws-lite/cloudformation-types
 - [`ListImports`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
 - [`ListStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html)
-- [`ListStackResources`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackResources.html)
 - [`ListStacks`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStacks.html)
 - [`ListStackSetOperationResults`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperationResults.html)
 - [`ListStackSetOperations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperations.html)
