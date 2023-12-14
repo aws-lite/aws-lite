@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @architect
+ */
+
 import incomplete from './incomplete.mjs'
 
 const service = 'lambda'
@@ -29,10 +33,6 @@ const SnapStart = { ...obj, comment: `SnapStart settings; [see AWS docs](${docRo
 const Timeout = { ...num, comment: 'Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900' }
 const TracingConfig = { ...obj, comment: `Sample and trace a subset of incoming requests with X-Ray; [see AWS docs](${docRoot}API_TracingConfig.html)` }
 const VpcConfig = { ...obj, comment: `VPC networking configuration; [see AWS docs](${docRoot}API_VpcConfig.html)` }
-
-/**
- * Plugin maintained by: @architect
- */
 
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',

@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @architect
+ */
+
 import incomplete from './incomplete.mjs'
 import { default as qs } from 'node:querystring'
 
@@ -10,10 +14,6 @@ const docRoot = 'https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIRef
 const obj = { type: 'object' }
 const str = { type: 'string' }
 const num = { type: 'number' }
-
-/**
- * Plugin maintained by: @architect
- */
 
 const defaultError = ({ statusCode, headers, error }) => {
   if (error.Error) error = error.Error

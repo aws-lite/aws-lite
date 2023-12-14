@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @architect
+ */
+
 const service = 'dynamodb'
 const property = 'DynamoDB'
 const required = true
@@ -69,10 +73,6 @@ const paginator = {
   token: 'LastEvaluatedKey',
   accumulator: 'Items',
 }
-
-/**
- * Plugin maintained by: @architect
- */
 
 const BatchExecuteStatement = {
   awsDoc: docRoot + 'API_BatchExecuteStatement.html',

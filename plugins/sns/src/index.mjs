@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @architect
+ */
+
 import incomplete from './incomplete.mjs'
 
 const service = 'sns'
@@ -23,9 +27,6 @@ const defaultError = ({ statusCode, headers, error }) => {
   return { statusCode, error }
 }
 
-/**
- * Plugin maintained by: @architect
- */
 const Publish = {
   awsDoc: docRoot + 'API_Publish.html',
   validate: {

@@ -1,10 +1,11 @@
+/**
+ * Plugin maintained by: $MAINTAINERS
+ */
+
 const service = '$SERVICE'
 const property = '$PROPERTY'
 const required = true
 
-/**
- * Plugin maintained by: $MAINTAINERS
- */
 export default {
   service,
   property,

@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @architect
+ */
+
 import incomplete from './incomplete.mjs'
 
 const service = 'ssm'
@@ -27,10 +31,6 @@ const num = { type: 'number' }
 
 // Reused validation params
 const WithDecryption = { ...bool, comment: 'Decrypt encrypted parameter values' }
-
-/**
- * Plugin maintained by: @architect
- */
 
 const GetParameter = {
   awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameter.html',

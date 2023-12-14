@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @architect
+ */
+
 const service = 'execute-api'
 const property = 'ApiGatewayManagementApi'
 const required = true
@@ -58,10 +62,6 @@ function defaultError ({ statusCode, headers, error }) {
   }
   return { statusCode, error }
 }
-
-/**
- * Plugin maintained by: @architect
- */
 
 const PostToConnection = {
   awsDoc,

@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @architect
+ */
+
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
 const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
@@ -15,10 +19,6 @@ const defaultError = ({ statusCode, error }) => {
   }
   return { statusCode, error }
 }
-
-/**
- * Plugin maintained by: @architect
- */
 
 const GetObject = {
   awsDoc: 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html',
