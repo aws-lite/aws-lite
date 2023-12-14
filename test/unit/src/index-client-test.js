@@ -239,7 +239,7 @@ test('Primary client - AWS JSON payloads', async t => {
 })
 
 test('Primary client - error handling', async t => {
-  t.plan(25)
+  t.plan(30)
   let responseStatusCode, responseBody, responseHeaders
 
   // Normal error
@@ -262,7 +262,7 @@ test('Primary client - error handling', async t => {
     reset()
   }
 
-  // Error payload is an named error object because reasons
+  // Error payload is a named error object because reasons
   try {
     responseStatusCode = 400
     responseBody = { Error: { message: 'lolno', other: 'metadata' } }
@@ -279,6 +279,37 @@ test('Primary client - error handling', async t => {
     t.ok(err.headers, 'Error has response headers')
     t.equal(err.service, service, 'Error has service')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    reset()
+  }
+
+  // Use `[Cc]ode` property returned in error payloads
+  try {
+    responseStatusCode = 400
+    responseBody = { Error: { Code: 'idk' } }
+    responseHeaders = { 'content-type': 'application/json' }
+    server.use({ responseBody, responseHeaders, responseStatusCode })
+    let aws = await client(config)
+    await aws({ service, endpoint })
+  }
+  catch (err) {
+    console.log(err)
+    t.equal(err.name, 'idk', 'Error name is set to error.Code')
+    t.equal(err.code, 'idk', 'error.code is set to error.Code')
+    t.notOk(err.Code, 'error.Code was removed')
+    reset()
+  }
+  try {
+    responseStatusCode = 400
+    responseBody = { Error: { code: 'idk' } }
+    responseHeaders = { 'content-type': 'application/json' }
+    server.use({ responseBody, responseHeaders, responseStatusCode })
+    let aws = await client(config)
+    await aws({ service, endpoint })
+  }
+  catch (err) {
+    console.log(err)
+    t.equal(err.name, 'idk', 'Error name is set to error.code')
+    t.equal(err.code, 'idk', 'error.code is set to error.code')
     reset()
   }
 
