@@ -32,7 +32,57 @@ npm i -D @aws-lite/apigatewayv2-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateDeployment`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#CreateDeployment)
+
+Properties:
+- **`ApiId` (string) [required]**
+  - API ID
+- **`Description` (string)**
+  - Deployment description
+- **`StageName` (string)**
+  - Stage name
+
+
+### `GetDeployment`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments-deploymentid.html#GetDeployment)
+
+Properties:
+- **`ApiId` (string) [required]**
+  - API ID
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`MaxResults` (number)**
+  - Maximum number of items to evaluate and return
+
+
+### `UpdateStage`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#UpdateStage)
+
+Properties:
+- **`ApiId` (string) [required]**
+  - API ID
+- **`StageName` (string) [required]**
+  - Stage name
+- **`AccessLogSettings` (object)**
+  - Access log settings for the stage
+- **`AutoDeploy` (boolean)**
+  - Enable automatic deployments upon API updates: `true` or `false` (default)
+- **`ClientCertificateId` (string)**
+  - Client certificate ID for the stage
+- **`DefaultRouteSettings` (object)**
+  - Default route settings for the stage
+- **`DeploymentId` (string)**
+  - Deployment ID for the API stage; cannot be updated if `autoDeploy` is enabled
+- **`Description` (string)**
+  - Deployment description
+- **`RouteSettings` (object)**
+  - Route settings for the stage
+- **`StageVariables` (object)**
+  - Stage variables; names can have alphanumeric and underscore characters, values must match: `[A-Za-z0-9-._~:/?#&=,]+`.
 
 
 ### Methods yet to be implemented
@@ -42,7 +92,6 @@ npm i -D @aws-lite/apigatewayv2-types
 - [`CreateApi`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis.html#CreateApi)
 - [`CreateApiMapping`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#CreateApiMapping)
 - [`CreateAuthorizer`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers.html#CreateAuthorizer)
-- [`CreateDeployment`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#CreateDeployment)
 - [`CreateDomainName`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames.html#CreateDomainName)
 - [`CreateIntegration`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations.html#CreateIntegration)
 - [`CreateIntegrationResponse`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations-integrationid-integrationresponses.html#CreateIntegrationResponse)
@@ -74,7 +123,6 @@ npm i -D @aws-lite/apigatewayv2-types
 - [`GetApis`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis.html#GetApis)
 - [`GetAuthorizer`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers-authorizerid.html#GetAuthorizer)
 - [`GetAuthorizers`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers.html#GetAuthorizers)
-- [`GetDeployment`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments-deploymentid.html#GetDeployment)
 - [`GetDeployments`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#GetDeployments)
 - [`GetDomainName`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname.html#GetDomainName)
 - [`GetDomainNames`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames.html#GetDomainNames)
@@ -109,7 +157,6 @@ npm i -D @aws-lite/apigatewayv2-types
 - [`UpdateModel`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-models-modelid.html#UpdateModel)
 - [`UpdateRoute`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-routes-routeid.html#UpdateRoute)
 - [`UpdateRouteResponse`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-routes-routeid-routeresponses-routeresponseid.html#UpdateRouteResponse)
-- [`UpdateStage`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#UpdateStage)
 - [`UpdateVpcLink`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/vpclinks-vpclinkid.html#UpdateVpcLink)
 <!-- METHOD_DOCS_END -->
 

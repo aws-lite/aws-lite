@@ -4,7 +4,6 @@ export default {
   CreateApi:                   { disabled, awsDoc: docRoot + 'apis.html#CreateApi' },
   CreateApiMapping:            { disabled, awsDoc: docRoot + 'domainnames-domainname-apimappings.html#CreateApiMapping' },
   CreateAuthorizer:            { disabled, awsDoc: docRoot + 'apis-apiid-authorizers.html#CreateAuthorizer' },
-  CreateDeployment:            { disabled, awsDoc: docRoot + 'apis-apiid-deployments.html#CreateDeployment' },
   CreateDomainName:            { disabled, awsDoc: docRoot + 'domainnames.html#CreateDomainName' },
   CreateIntegration:           { disabled, awsDoc: docRoot + 'apis-apiid-integrations.html#CreateIntegration' },
   CreateIntegrationResponse:   { disabled, awsDoc: docRoot + 'apis-apiid-integrations-integrationid-integrationresponses.html#CreateIntegrationResponse' },
@@ -36,7 +35,6 @@ export default {
   GetApis:                     { disabled, awsDoc: docRoot + 'apis.html#GetApis' },
   GetAuthorizer:               { disabled, awsDoc: docRoot + 'apis-apiid-authorizers-authorizerid.html#GetAuthorizer' },
   GetAuthorizers:              { disabled, awsDoc: docRoot + 'apis-apiid-authorizers.html#GetAuthorizers' },
-  GetDeployment:               { disabled, awsDoc: docRoot + 'apis-apiid-deployments-deploymentid.html#GetDeployment' },
   GetDeployments:              { disabled, awsDoc: docRoot + 'apis-apiid-deployments.html#GetDeployments' },
   GetDomainName:               { disabled, awsDoc: docRoot + 'domainnames-domainname.html#GetDomainName' },
   GetDomainNames:              { disabled, awsDoc: docRoot + 'domainnames.html#GetDomainNames' },
@@ -71,6 +69,5 @@ export default {
   UpdateModel:                 { disabled, awsDoc: docRoot + 'apis-apiid-models-modelid.html#UpdateModel' },
   UpdateRoute:                 { disabled, awsDoc: docRoot + 'apis-apiid-routes-routeid.html#UpdateRoute' },
   UpdateRouteResponse:         { disabled, awsDoc: docRoot + 'apis-apiid-routes-routeid-routeresponses-routeresponseid.html#UpdateRouteResponse' },
-  UpdateStage:                 { disabled, awsDoc: docRoot + 'apis-apiid-stages-stagename.html#UpdateStage' },
   UpdateVpcLink:               { disabled, awsDoc: docRoot + 'vpclinks-vpclinkid.html#UpdateVpcLink' },
 }
