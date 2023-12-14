@@ -233,6 +233,8 @@ function request (params, creds, region, config, metadata) {
           /* istanbul ignore next */
           if (!xml) instantiateXml()
           payload = parseXml(body)
+          /* istanbul ignore next */
+          if (payload.xmlns) delete payload.xmlns
 
           /* istanbul ignore next */
           if (debug) rawString = body.toString()
