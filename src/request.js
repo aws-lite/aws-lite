@@ -37,21 +37,27 @@ function instantiateXml () {
   // eslint-disable-next-line
   let vendor = require('./_vendor/xml')
   // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
-  xml = new vendor.XMLParser({
-    attributeNamePrefix: '',
-    htmlEntities: true,
-    ignoreAttributes: false,
-    ignoreDeclaration: true,
-    parseTagValue: false,
-    trimValues: false,
-    tagValueProcessor: (_, val) => (val.trim() === '' && val.includes('\n') ? '' : undefined),
-  })
-  xml.addEntity('#xD', '\r')
-  xml.addEntity('#10', '\n')
-  xml.getValueFromTextNode = vendor.getValueFromTextNode
+  xml = {
+    parser: new vendor.XMLParser({
+      attributeNamePrefix: '',
+      htmlEntities: true,
+      ignoreAttributes: false,
+      ignoreDeclaration: true,
+      parseTagValue: false,
+      trimValues: false,
+      tagValueProcessor: (_, val) => (val.trim() === '' && val.includes('\n') ? '' : undefined),
+    }),
+    builder: new vendor.XMLBuilder(),
+  }
+  xml.parser.addEntity('#xD', '\r')
+  xml.parser.addEntity('#10', '\n')
+  xml.parser.getValueFromTextNode = vendor.getValueFromTextNode
+}
+function buildXml (obj) {
+  return xml.builder.build(obj)
 }
 function parseXml (body) {
-  let parsed = xml.parse(body)
+  let parsed = xml.parser.parse(body)
   let key = Object.keys(parsed)[0]
   let payloadToReturn = parsed[key]
   /* istanbul ignore next */ // TODO remove + test
@@ -59,7 +65,7 @@ function parseXml (body) {
     payloadToReturn[key] = payloadToReturn[textNodeName]
     delete payloadToReturn[textNodeName]
   }
-  return xml.getValueFromTextNode(payloadToReturn)
+  return xml.parser.getValueFromTextNode(payloadToReturn)
 }
 
 module.exports = async function _request (params, creds, region, config, metadata) {
@@ -125,19 +131,26 @@ function request (params, creds, region, config, metadata) {
       // Backfill content-type if it's just an object
       if (!contentType) contentType = 'application/json'
 
-      // A variety of services use AWS JSON; we'll make it easier via a header or passed param
-      // Allow for manual encoding by passing a header while setting awsjson to false
-      let awsjsonEncode = params.awsjson ||
-                          (AwsJSONContentType(contentType) && params.awsjson !== false)
-      if (awsjsonEncode) {
-        // Backfill content-type header yet again
-        if (!AwsJSONContentType(contentType)) {
-          contentType = 'application/x-amz-json-1.0'
-        }
-        body = awsjson.marshall(body, params.awsjson)
+      if (XMLContentType(contentType)) {
+        /* istanbul ignore next */
+        if (!xml) instantiateXml()
+        params.body = buildXml(body)
       }
-      // Final JSON encoding
-      params.body = JSON.stringify(body)
+      else {
+        // A variety of services use AWS JSON; we'll make it easier via a header or passed param
+        // Allow for manual encoding by passing a header while setting awsjson to false
+        let awsjsonEncode = params.awsjson ||
+                            (AwsJSONContentType(contentType) && params.awsjson !== false)
+        if (awsjsonEncode) {
+          // Backfill content-type header yet again
+          if (!AwsJSONContentType(contentType)) {
+            contentType = 'application/x-amz-json-1.0'
+          }
+          body = awsjson.marshall(body, params.awsjson)
+        }
+        // Final JSON encoding
+        params.body = JSON.stringify(body)
+      }
     }
     // Everything besides streams pass through for signing
     else {
