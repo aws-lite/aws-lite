@@ -84,7 +84,7 @@ const HeadObject = {
       query,
     }
   },
-  response: parseHeadersToResults,
+  response: async ({ headers }) => parseHeadersToResults({ headers }, null, []),
   error: defaultError,
 }
 
