@@ -32,7 +32,75 @@ npm i -D @aws-lite/cloudfront-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateDistribution`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html)
+
+Properties:
+- **`DistributionConfig` (object) [required]**
+  - Complete distribution configuration object
+
+
+### `CreateInvalidation`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateInvalidation.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - Distribution ID
+- **`InvalidationBatch` (string) [required]**
+  - Invalidation parameters
+
+
+### `DeleteDistribution`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - Distribution ID
+
+
+### `GetDistribution`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistribution.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - Distribution ID
+
+
+### `GetDistributionConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistributionConfig.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - Distribution ID
+
+
+### `ListDistributions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (string)**
+  - Maximum number of items to return
+
+
+### `UpdateDistribution`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html)
+
+Properties:
+- **`DistributionConfig` (object) [required]**
+  - Complete distribution configuration object from `GetDistribution` call
+- **`Id` (string) [required]**
+  - Distribution ID
+- **`IfMatch` (string) [required]**
+  - Value of previous `GetDistribution` call's `ETag` property
 
 
 ### Methods yet to be implemented
@@ -44,12 +112,10 @@ npm i -D @aws-lite/cloudfront-types
 - [`CreateCachePolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCachePolicy.html)
 - [`CreateCloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCloudFrontOriginAccessIdentity.html)
 - [`CreateContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateContinuousDeploymentPolicy.html)
-- [`CreateDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html)
 - [`CreateDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html)
 - [`CreateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionConfig.html)
 - [`CreateFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionProfile.html)
 - [`CreateFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFunction.html)
-- [`CreateInvalidation`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateInvalidation.html)
 - [`CreateKeyGroup`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyGroup.html)
 - [`CreateKeyValueStore`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyValueStore.html)
 - [`CreateMonitoringSubscription`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateMonitoringSubscription.html)
@@ -63,7 +129,6 @@ npm i -D @aws-lite/cloudfront-types
 - [`DeleteCachePolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCachePolicy.html)
 - [`DeleteCloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCloudFrontOriginAccessIdentity.html)
 - [`DeleteContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteContinuousDeploymentPolicy.html)
-- [`DeleteDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html)
 - [`DeleteFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionConfig.html)
 - [`DeleteFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionProfile.html)
 - [`DeleteFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFunction.html)
@@ -84,8 +149,6 @@ npm i -D @aws-lite/cloudfront-types
 - [`GetCloudFrontOriginAccessIdentityConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCloudFrontOriginAccessIdentityConfig.html)
 - [`GetContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetContinuousDeploymentPolicy.html)
 - [`GetContinuousDeploymentPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetContinuousDeploymentPolicyConfig.html)
-- [`GetDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistribution.html)
-- [`GetDistributionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistributionConfig.html)
 - [`GetFieldLevelEncryption`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryption.html)
 - [`GetFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionConfig.html)
 - [`GetFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionProfile.html)
@@ -110,7 +173,6 @@ npm i -D @aws-lite/cloudfront-types
 - [`ListCloudFrontOriginAccessIdentities`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListCloudFrontOriginAccessIdentities.html)
 - [`ListConflictingAliases`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListConflictingAliases.html)
 - [`ListContinuousDeploymentPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListContinuousDeploymentPolicies.html)
-- [`ListDistributions`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html)
 - [`ListDistributionsByCachePolicyId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByCachePolicyId.html)
 - [`ListDistributionsByKeyGroup`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByKeyGroup.html)
 - [`ListDistributionsByOriginRequestPolicyId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByOriginRequestPolicyId.html)
@@ -137,7 +199,6 @@ npm i -D @aws-lite/cloudfront-types
 - [`UpdateCachePolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCachePolicy.html)
 - [`UpdateCloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCloudFrontOriginAccessIdentity.html)
 - [`UpdateContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateContinuousDeploymentPolicy.html)
-- [`UpdateDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html)
 - [`UpdateDistributionWithStagingConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistributionWithStagingConfig.html)
 - [`UpdateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionConfig.html)
 - [`UpdateFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionProfile.html)
