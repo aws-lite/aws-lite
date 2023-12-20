@@ -32,7 +32,80 @@ npm i -D @aws-lite/cloudwatch-logs-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `DeleteLogGroup`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteLogGroup.html)
+
+Properties:
+- **`logGroupName` (string) [required]**
+  - Name of the log group
+
+
+### `DescribeLogGroups`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html)
+
+Properties:
+- **`accountIdentifiers` (array)**
+  - List of accounts to search when `includeLinkedAccounts` is `true`
+- **`logGroupNamePrefix` (string)**
+  - Prefix to match
+- **`logGroupNamePattern` (string)**
+  - Case-sensitive substring to match
+- **`nextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`limit` (number)**
+  - Maximum number of items to evaluate and return
+- **`includeLinkedAccounts` (boolean)**
+  - Return log groups in the accounts enumerated by `accountIdentifiers`
+- **`logGroupClass` (string) [required]**
+  - Log group class setting: `STANDARD` (supports all CloudWatch Logs features), or `INFREQUENT_ACCESS` (feature subset with lower costs)
+
+
+### `DescribeLogStreams`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogStreams.html)
+
+Properties:
+- **`descending` (boolean)**
+  - Return results in descending order (if `true`)
+- **`limit` (number)**
+  - Maximum number of items to evaluate and return
+- **`logGroupIdentifier` (string)**
+  - Name or ARN of the log group
+- **`logGroupName` (string)**
+  - Name of the log group
+- **`logStreamNamePrefix` (string)**
+  - Prefix to match
+- **`nextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`orderBy` (string)**
+  - Order results by log stream name (`LogStreamName`) or event time (`LastEventTime`)
+
+
+### `GetLogEvents`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogEvents.html)
+
+Properties:
+- **`endTime` (number)**
+  - End of the time range in epoch milliseconds
+- **`limit` (number)**
+  - Maximum number of items to evaluate and return
+- **`logGroupIdentifier` (string)**
+  - Name or ARN of the log group
+- **`logGroupName` (string)**
+  - Name of the log group
+- **`logStreamName` (string)**
+  - Name of the log stream
+- **`nextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`startFromHead` (boolean)**
+  - Return earliest log events first (`true`)
+- **`startTime` (number)**
+  - Start of the time range in epoch milliseconds
+- **`unmask` (boolean)**
+  - Display log event fields with all sensitive data unmasked and visible (`true`)
 
 
 ### Methods yet to be implemented
@@ -54,7 +127,6 @@ npm i -D @aws-lite/cloudwatch-logs-types
 - [`DeleteDeliverySource`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteDeliverySource.html)
 - [`DeleteDestination`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteDestination.html)
 - [`DeleteLogAnomalyDetector`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteLogAnomalyDetector.html)
-- [`DeleteLogGroup`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteLogGroup.html)
 - [`DeleteLogStream`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteLogStream.html)
 - [`DeleteMetricFilter`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteMetricFilter.html)
 - [`DeleteQueryDefinition`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteQueryDefinition.html)
@@ -67,8 +139,6 @@ npm i -D @aws-lite/cloudwatch-logs-types
 - [`DescribeDeliverySources`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeDeliverySources.html)
 - [`DescribeDestinations`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeDestinations.html)
 - [`DescribeExportTasks`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeExportTasks.html)
-- [`DescribeLogGroups`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html)
-- [`DescribeLogStreams`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogStreams.html)
 - [`DescribeMetricFilters`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeMetricFilters.html)
 - [`DescribeQueries`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeQueries.html)
 - [`DescribeQueryDefinitions`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeQueryDefinitions.html)
@@ -82,7 +152,6 @@ npm i -D @aws-lite/cloudwatch-logs-types
 - [`GetDeliveryDestinationPolicy`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetDeliveryDestinationPolicy.html)
 - [`GetDeliverySource`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetDeliverySource.html)
 - [`GetLogAnomalyDetector`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogAnomalyDetector.html)
-- [`GetLogEvents`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogEvents.html)
 - [`GetLogGroupFields`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogGroupFields.html)
 - [`GetLogRecord`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogRecord.html)
 - [`GetQueryResults`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetQueryResults.html)
