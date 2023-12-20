@@ -80,6 +80,15 @@ Properties:
   - VPC networking configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
 
 
+### `DeleteFunctionConcurrency`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+
+
 ### `GetFunctionConfiguration`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html)
@@ -108,6 +117,44 @@ Properties:
   - Up to 3,583 bytes of base64-encoded data to pass to the function in the context object
 - **`Qualifier` (string)**
   - Specify a version or alias to invoke a published version of the function
+
+
+### `PutFunctionConcurrency`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`ReservedConcurrentExecutions` (number) [required]**
+  - number of simultaneous executions to reserve
+
+
+### `UpdateFunctionCode`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Architectures` (array)**
+  - System architecture, array can contain either `x86_64` (default) or `arm64`
+- **`DryRun` (string)**
+  - Validate the request parameters and access permissions without modifying the function code (`true`)
+- **`ImageUri` (string)**
+  - URI of a container image in the Amazon ECR registry (if not using a .zip file)
+- **`Publish` (boolean)**
+  - Publish a new version after after updating the code (`true`); effectively the same as calling `PublishVersion`
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`S3Bucket` (string)**
+  - S3 bucket containing the key of the deployment package; must be in the same region
+- **`S3Key` (string)**
+  - S3 key of the deployment package (must be a .zip file)
+- **`S3ObjectVersion` (string)**
+  - S3 object version to use, if applicable
+- **`ZipFile` (string, object)**
+  - File path or raw buffer of the .zip deployment package
 
 
 ### `UpdateFunctionConfiguration`
@@ -168,7 +215,6 @@ Properties:
 - [`DeleteEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteEventSourceMapping.html)
 - [`DeleteFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
 - [`DeleteFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html)
-- [`DeleteFunctionConcurrency`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html)
 - [`DeleteFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html)
 - [`DeleteFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html)
 - [`DeleteLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html)
@@ -205,7 +251,6 @@ Properties:
 - [`PublishLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html)
 - [`PublishVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html)
 - [`PutFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html)
-- [`PutFunctionConcurrency`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
 - [`PutFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html)
 - [`PutProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html)
 - [`PutRuntimeManagementConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html)
@@ -216,7 +261,6 @@ Properties:
 - [`UpdateAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html)
 - [`UpdateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html)
 - [`UpdateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html)
-- [`UpdateFunctionCode`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html)
 - [`UpdateFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html)
 - [`UpdateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html)
 <!-- METHOD_DOCS_END -->

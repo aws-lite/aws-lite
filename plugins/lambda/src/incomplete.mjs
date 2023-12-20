@@ -12,7 +12,6 @@ export default {
   DeleteEventSourceMapping:           { disabled, awsDoc: docRoot + 'API_DeleteEventSourceMapping.html' },
   DeleteFunction:                     { disabled, awsDoc: docRoot + 'API_DeleteFunction.html' },
   DeleteFunctionCodeSigningConfig:    { disabled, awsDoc: docRoot + 'API_DeleteFunctionCodeSigningConfig.html' },
-  DeleteFunctionConcurrency:          { disabled, awsDoc: docRoot + 'API_DeleteFunctionConcurrency.html' },
   DeleteFunctionEventInvokeConfig:    { disabled, awsDoc: docRoot + 'API_DeleteFunctionEventInvokeConfig.html' },
   DeleteFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_DeleteFunctionUrlConfig.html' },
   DeleteLayerVersion:                 { disabled, awsDoc: docRoot + 'API_DeleteLayerVersion.html' },
@@ -49,7 +48,6 @@ export default {
   PublishLayerVersion:                { disabled, awsDoc: docRoot + 'API_PublishLayerVersion.html' },
   PublishVersion:                     { disabled, awsDoc: docRoot + 'API_PublishVersion.html' },
   PutFunctionCodeSigningConfig:       { disabled, awsDoc: docRoot + 'API_PutFunctionCodeSigningConfig.html' },
-  PutFunctionConcurrency:             { disabled, awsDoc: docRoot + 'API_PutFunctionConcurrency.html' },
   PutFunctionEventInvokeConfig:       { disabled, awsDoc: docRoot + 'API_PutFunctionEventInvokeConfig.html' },
   PutProvisionedConcurrencyConfig:    { disabled, awsDoc: docRoot + 'API_PutProvisionedConcurrencyConfig.html' },
   PutRuntimeManagementConfig:         { disabled, awsDoc: docRoot + 'API_PutRuntimeManagementConfig.html' },
@@ -60,7 +58,6 @@ export default {
   UpdateAlias:                        { disabled, awsDoc: docRoot + 'API_UpdateAlias.html' },
   UpdateCodeSigningConfig:            { disabled, awsDoc: docRoot + 'API_UpdateCodeSigningConfig.html' },
   UpdateEventSourceMapping:           { disabled, awsDoc: docRoot + 'API_UpdateEventSourceMapping.html' },
-  UpdateFunctionCode:                 { disabled, awsDoc: docRoot + 'API_UpdateFunctionCode.html' },
   UpdateFunctionEventInvokeConfig:    { disabled, awsDoc: docRoot + 'API_UpdateFunctionEventInvokeConfig.html' },
   UpdateFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_UpdateFunctionUrlConfig.html' },
 }
