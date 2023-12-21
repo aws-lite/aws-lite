@@ -39,13 +39,15 @@ Properties:
 - **`DelaySeconds` (number)**
   - Seconds, from 0 - 900, to delay a message
 - **`MessageAttributes` (object)**
-  - Message attribute map; [see AWS docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_MessageAttributeValue.html)
+  - Message attribute map
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_MessageAttributeValue.html)
 - **`MessageDeduplicationId` (string)**
   - Ensures request is idempotent; may only be used for FIFO queues
 - **`MessageGroupId` (string)**
   - Tag specifying a specific message group; may only be used for FIFO queues
 - **`MessageSystemAttributes` (object)**
-  - Message system attribute map; [see AWS docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_MessageSystemAttributeValue.html)
+  - Message system attribute map
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_MessageSystemAttributeValue.html)
 
 
 ### Methods yet to be implemented
