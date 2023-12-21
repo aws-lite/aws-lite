@@ -15,13 +15,19 @@ const docRoot = 'https://docs.aws.amazon.com/AmazonS3/latest/API/'
 // Validation types
 // const arr = { type: 'array' }
 const bool = { type: 'boolean' }
-// const obj = { type: 'object' }
+const obj = { type: 'object' }
 const str = { type: 'string' }
 const num = { type: 'number' }
 
+const xml = { 'content-type': 'application/xml' }
+
 const Bucket = { ...str, required, comment: 'S3 bucket name' }
+const Key = { ...str, required, comment: 'S3 key / file name' }
+const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
+const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
 const host = Bucket => `${Bucket}.s3.amazonaws.com`
+const defaultResponse = ({ payload }) => payload
 const defaultError = ({ statusCode, error }) => {
   // SDK v2 lowcases `code`
   if (error?.Code) {
@@ -31,13 +37,89 @@ const defaultError = ({ statusCode, error }) => {
   return { statusCode, error }
 }
 
+const CreateBucket = {
+  awsDoc: docRoot + 'API_CreateBucket.html',
+  validate: {
+    Bucket,
+    CreateBucketConfiguration: { ...obj, required, comment: 'Complete bucket configuration object', ref: docRoot + 'API_CreateBucket.html#API_CreateBucket_RequestSyntax' },
+    ...getValidateHeaders('ACL', 'GrantFullControl', 'GrantRead', 'GrantReadACP', 'GrantWrite', 'GrantWriteACP', 'ObjectLockEnabledForBucket', 'ObjectOwnership'),
+  },
+  request: (params) => {
+    let { Bucket } = params
+    return {
+      host: host(Bucket),
+      method: 'PUT',
+      headers: { ...xml, ...getHeadersFromParams(params) },
+    }
+  },
+  response: ({ headers }) => {
+    return { Location: headers.Location || headers.location }
+  }
+}
+
+const DeleteBucket = {
+  awsDoc: docRoot + 'API_DeleteBucket.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params) => {
+    let { Bucket } = params
+    return {
+      host: host(Bucket),
+      method: 'DELETE',
+      headers: { ...getHeadersFromParams(params) },
+    }
+  },
+  response: () => ({}),
+}
+
+const DeleteObject = {
+  awsDoc: docRoot + 'API_DeleteObject.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('MFA', 'RequestPayer', 'BypassGovernanceRetention', 'ExpectedBucketOwner'),
+  },
+  request: (params) => {
+    const { Bucket } = params
+    return {
+      host: host(Bucket),
+      method: 'DELETE',
+      endpoint: `/${Key}`,
+      headers: { ...xml, ...getHeadersFromParams(params) },
+    }
+  },
+  response: defaultResponse,
+}
+
+const DeleteObjects = {
+  awsDoc: docRoot + 'API_DeleteObjects.html',
+  validate: {
+    Bucket,
+    Delete: { ...obj, required, comment: 'Object deletion request' },
+    ...getValidateHeaders('MFA', 'RequestPayer', 'BypassGovernanceRetention', 'ExpectedBucketOwner', 'ChecksumAlgorithm'),
+  },
+  request: (params) => {
+    const { Bucket, Delete } = params
+    return {
+      host: host(Bucket),
+      endpoint: '/?delete',
+      headers: { ...xml, ...getHeadersFromParams(params) },
+      payload: { Delete },
+    }
+  },
+  response: defaultResponse,
+}
+
 const GetObject = {
   awsDoc: docRoot + 'API_GetObject.html',
   validate: {
     Bucket,
-    Key:                        { ...str, required, comment: 'S3 key / file name' },
-    PartNumber:                 { ...num, comment: 'Part number (between 1 - 10,000) of the object' },
-    VersionId:                  { ...str, comment: 'Reference a specific version of the object' },
+    Key,
+    PartNumber,
+    VersionId,
     // Here come the headers
     ...getValidateHeaders('IfMatch', 'IfModifiedSince', 'IfNoneMatch', 'IfUnmodifiedSince',
       'Range', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer',
@@ -72,13 +154,31 @@ const GetObject = {
   error: defaultError,
 }
 
+const HeadBucket = {
+  awsDoc: docRoot + 'API_HeadBucket.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params) => {
+    let { Bucket } = params
+    return {
+      host: host(Bucket),
+      method: 'HEAD',
+      headers: getHeadersFromParams(params),
+    }
+  },
+  response: parseHeadersToResults,
+  error: defaultError,
+}
+
 const HeadObject = {
   awsDoc: docRoot + 'API_HeadObject.html',
   validate: {
     Bucket,
-    Key:                        { ...str, required, comment: 'S3 key / file name' },
-    PartNumber:                 { ...num, comment: 'Part number (between 1 - 10,000) of the object' },
-    VersionId:                  { ...str, comment: 'Reference a specific version of the object' },
+    Key,
+    PartNumber,
+    VersionId,
     // Here come the headers
     ...getValidateHeaders('IfMatch', 'IfModifiedSince', 'IfNoneMatch', 'IfUnmodifiedSince',
       'Range', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer',
@@ -151,5 +251,5 @@ const ListObjectsV2 = {
   error: defaultError,
 }
 
-const methods = { GetObject, HeadObject, ListBuckets, ListObjectsV2, PutObject, ...incomplete }
+const methods = { CreateBucket, DeleteBucket, DeleteObject, DeleteObjects, GetObject, HeadObject, HeadBucket, ListBuckets, ListObjectsV2, PutObject, ...incomplete }
 export default { service, property, methods }
