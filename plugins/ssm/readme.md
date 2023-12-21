@@ -108,10 +108,13 @@ Properties:
   - Overwrite an existing parameter (defaults to `false`)
 - **`Policies` (array)**
   - Array of policies to apply; supports `Expiration`, `ExpirationNotification`, `NoChangeNotification`
+  - [More details (AWS)](https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html)
 - **`Tags` (array)**
   - Array of tags, such as `Key=OS,Value=macOS`
+  - [More details (AWS)](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_Tag.html)
 - **`Tier` (string)**
   - Parameter tier; can be one of: `Standard`, `Advanced`, `Intelligent-Tiering`
+  - [More details (AWS)](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter.html#systemsmanager-PutParameter-request-Tier)
 - **`Type` (string)**
   - Parameter type; can be one of: `String`, `StringList`,`SecureString`
 

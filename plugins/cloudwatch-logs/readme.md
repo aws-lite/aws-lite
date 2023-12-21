@@ -60,6 +60,7 @@ Properties:
   - Return log groups in the accounts enumerated by `accountIdentifiers`
 - **`logGroupClass` (string) [required]**
   - Log group class setting: `STANDARD` (supports all CloudWatch Logs features), or `INFREQUENT_ACCESS` (feature subset with lower costs)
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html)
 
 
 ### `DescribeLogStreams`

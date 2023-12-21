@@ -95,11 +95,12 @@ async function main () {
         header += `[Canonical AWS API doc](${awsDoc})\n`
         if (validate) {
           header += `\nProperties:\n` + Object.entries(validate).map(([ param, values ]) => {
-            const { type, required, comment } = values
+            const { type, required, comment, ref } = values
             const _typ = Array.isArray(type) ? type.join(', ') : type
             const _req = required ? ' [required]' : ''
             const _com = comment ? `\n  - ${comment}` : ''
-            return `- **\`${param}\` (${_typ})${_req}**${_com}`
+            const _ref = ref ? `\n  - [More details (AWS)](${ref})` : ''
+            return `- **\`${param}\` (${_typ})${_req}**${_com}${_ref}`
           }).join('\n')
         }
         return header

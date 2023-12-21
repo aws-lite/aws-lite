@@ -39,6 +39,7 @@ npm i -D @aws-lite/cloudfront-types
 Properties:
 - **`DistributionConfig` (object) [required]**
   - Complete distribution configuration object
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html#API_CreateDistribution_RequestSyntax)
 
 
 ### `CreateInvalidation`
@@ -50,6 +51,7 @@ Properties:
   - Distribution ID
 - **`InvalidationBatch` (string) [required]**
   - Invalidation parameters
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateInvalidation.html#API_CreateInvalidation_RequestSyntax)
 
 
 ### `DeleteDistribution`
@@ -97,6 +99,7 @@ Properties:
 Properties:
 - **`DistributionConfig` (object) [required]**
   - Complete distribution configuration object from `GetDistribution` call
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html#API_UpdateDistribution_RequestBody)
 - **`Id` (string) [required]**
   - Distribution ID
 - **`IfMatch` (string) [required]**

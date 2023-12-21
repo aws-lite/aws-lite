@@ -35,6 +35,7 @@ Properties:
   - S3 bucket name
 - **`CreateBucketConfiguration` (object) [required]**
   - Complete bucket configuration object
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html#API_CreateBucket_RequestSyntax)
 - **`ACL` (string)**
   - Sets request header: `x-amz-acl`
 - **`GrantFullControl` (string)**

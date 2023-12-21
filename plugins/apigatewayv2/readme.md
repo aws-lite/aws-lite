@@ -69,20 +69,24 @@ Properties:
   - Stage name
 - **`AccessLogSettings` (object)**
   - Access log settings for the stage
+  - [More details (AWS)](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#apis-apiid-stages-stagename-model-accesslogsettings)
 - **`AutoDeploy` (boolean)**
   - Enable automatic deployments upon API updates: `true` or `false` (default)
 - **`ClientCertificateId` (string)**
   - Client certificate ID for the stage
 - **`DefaultRouteSettings` (object)**
   - Default route settings for the stage
+  - [More details (AWS)](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#apis-apiid-stages-stagename-model-routesettings)
 - **`DeploymentId` (string)**
   - Deployment ID for the API stage; cannot be updated if `autoDeploy` is enabled
 - **`Description` (string)**
   - Deployment description
 - **`RouteSettings` (object)**
   - Route settings for the stage
+  - [More details (AWS)](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#apis-apiid-stages-stagename-model-routesettingsmap)
 - **`StageVariables` (object)**
   - Stage variables; names can have alphanumeric and underscore characters, values must match: `[A-Za-z0-9-._~:/?#&=,]+`.
+  - [More details (AWS)](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#apis-apiid-stages-stagename-model-stagevariablesmap)
 
 
 ### Methods yet to be implemented
