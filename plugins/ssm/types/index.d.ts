@@ -1,15 +1,30 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  DeleteParameterCommandOutput as DeleteParameterResponse,
+  DeleteParametersCommandOutput as DeleteParametersResponse,
   GetParameterCommandOutput as GetParameterResponse,
   GetParametersCommandOutput as GetParametersResponse,
   GetParametersByPathCommandOutput as GetParametersByPathResponse,
+  PutParameterCommandOutput as PutParameterResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-ssm";
 
 declare interface AwsLiteSSM {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteParameter SSM: DeleteParameter}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/ssm/readme.md#DeleteParameter SSM: DeleteParameter}
+   */
+  DeleteParameter: (input: { Name: string }) => Promise<DeleteParameterResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteParameters SSM: DeleteParameters}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/ssm/readme.md#DeleteParameters SSM: DeleteParameters}
+   */
+  DeleteParameters: (input: { Names: any[] }) => Promise<DeleteParametersResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameter.html SSM: GetParameter}
@@ -28,6 +43,12 @@ declare interface AwsLiteSSM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/ssm/readme.md#GetParametersByPath SSM: GetParametersByPath}
    */
   GetParametersByPath: (input: { Path: string, MaxResults?: number, NextToken?: string, ParameterFilters?: any[], Recursive?: boolean, WithDecryption?: boolean, paginate?: boolean }) => Promise<GetParametersByPathResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter SSM: PutParameter}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/ssm/readme.md#PutParameter SSM: PutParameter}
+   */
+  PutParameter: (input: { Name: string, Value: string, AllowedPattern?: string, DataType?: string, Description?: string, KeyId?: string, Overwrite?: boolean, Policies?: any[], Tags?: any[], Tier?: string, Type?: string }) => Promise<PutParameterResponse>
   // $METHODS_END
 }
 

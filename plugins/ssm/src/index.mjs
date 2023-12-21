@@ -7,6 +7,8 @@ import incomplete from './incomplete.mjs'
 const service = 'ssm'
 const property = 'SSM'
 const required = true
+const docRoot = 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/'
+
 const defaultRequest = (method, more = {}) => (payload) => {
   let params = { awsjson: false, headers: headers(method), payload, ...more }
   if (payload.paginate) {
@@ -30,12 +32,31 @@ const str = { type: 'string' }
 const num = { type: 'number' }
 
 // Reused validation params
+const Name = { ...str, required, comment: 'The name of the parameter' }
 const WithDecryption = { ...bool, comment: 'Decrypt encrypted parameter values' }
 
-const GetParameter = {
-  awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameter.html',
+const DeleteParameter = {
+  awsDoc: docRoot + 'API_DeleteParameter',
   validate: {
-    Name: { ...str, required, comment: 'The name of the parameter to query' },
+    Name,
+  },
+  request: defaultRequest('DeleteParameter'),
+  response: defaultResponse,
+}
+
+const DeleteParameters = {
+  awsDoc: docRoot + 'API_DeleteParameters',
+  validate: {
+    Names: { ...arr, required, comment: 'Array of parameter names to delete' },
+  },
+  request: defaultRequest('DeleteParameters'),
+  response: defaultResponse,
+}
+
+const GetParameter = {
+  awsDoc: docRoot + 'API_GetParameter.html',
+  validate: {
+    Name,
     WithDecryption,
   },
   request: defaultRequest('GetParameter'),
@@ -43,7 +64,7 @@ const GetParameter = {
 }
 
 const GetParameters = {
-  awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameters.html',
+  awsDoc: docRoot + 'API_GetParameters.html',
   validate: {
     Names: { ...arr, required, comment: 'Array of parameter names to query' },
     WithDecryption,
@@ -53,7 +74,7 @@ const GetParameters = {
 }
 
 const GetParametersByPath = {
-  awsDoc: 'https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath',
+  awsDoc: docRoot + 'API_GetParametersByPath',
   validate: {
     Path:             { ...str, required, comment: 'Parameter path hierarchy, beginning with `/`' },
     MaxResults:       { ...num, comment: 'Limit the maximum number of items returned' },
@@ -69,13 +90,38 @@ const GetParametersByPath = {
   response: defaultResponse,
 }
 
+const PutParameter = {
+  awsDoc: docRoot + 'API_PutParameter',
+  validate: {
+    Name: { ...Name, comment: 'The name of the parameter, including the complete path hierarchy' },
+    Value: { ...str, required, comment: 'Value of the parameter; can be up to 4KB by default, or 8KB if Advanced' },
+    AllowedPattern: { ...str, comment: 'Regular expression used to validate the parameter value' },
+    DataType: { ...str, comment: 'Data type for a `String` parameter; can be one of: `text`, `aws:ec2:image`, `aws:ssm:integration`' },
+    Description: { ...str, comment: 'Description of the parameter' },
+    KeyId: { ...str, comment: 'AWS KMS ID to use to encrypt the parameter' },
+    Overwrite: { ...bool, comment: 'Overwrite an existing parameter (defaults to `false`)' },
+    Policies: { ...arr, comment: 'Array of policies to apply; supports `Expiration`, `ExpirationNotification`, `NoChangeNotification`', ref: 'https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html' },
+    Tags: { ...arr, comment: 'Array of tags, such as `Key=OS,Value=macOS`', ref: docRoot + 'API_Tag.html' },
+    Tier: { ...str, comment: 'Parameter tier; can be one of: `Standard`, `Advanced`, `Intelligent-Tiering`', ref: docRoot + 'API_PutParameter.html#systemsmanager-PutParameter-request-Tier' },
+    Type: { ...str, comment: 'Parameter type; can be one of: `String`, `StringList`,`SecureString`' },
+  },
+  request: (params) => {
+    if (params.Policies) params.Policies = JSON.stringify(params.Policies)
+    return defaultRequest('PutParameter')(params)
+  },
+  response: defaultResponse,
+}
+
 export default {
   service,
   property,
   methods: {
+    DeleteParameter,
+    DeleteParameters,
     GetParameter,
     GetParameters,
     GetParametersByPath,
+    PutParameter,
     ...incomplete,
   }
 }

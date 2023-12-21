@@ -26,13 +26,31 @@ npm i -D @aws-lite/ssm-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `DeleteParameter`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteParameter)
+
+Properties:
+- **`Name` (string) [required]**
+  - The name of the parameter
+
+
+### `DeleteParameters`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteParameters)
+
+Properties:
+- **`Names` (array) [required]**
+  - Array of parameter names to delete
+
+
 ### `GetParameter`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParameter.html)
 
 Properties:
 - **`Name` (string) [required]**
-  - The name of the parameter to query
+  - The name of the parameter
 - **`WithDecryption` (boolean)**
   - Decrypt encrypted parameter values
 
@@ -69,6 +87,35 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `PutParameter`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter)
+
+Properties:
+- **`Name` (string) [required]**
+  - The name of the parameter, including the complete path hierarchy
+- **`Value` (string) [required]**
+  - Value of the parameter; can be up to 4KB by default, or 8KB if Advanced
+- **`AllowedPattern` (string)**
+  - Regular expression used to validate the parameter value
+- **`DataType` (string)**
+  - Data type for a `String` parameter; can be one of: `text`, `aws:ec2:image`, `aws:ssm:integration`
+- **`Description` (string)**
+  - Description of the parameter
+- **`KeyId` (string)**
+  - AWS KMS ID to use to encrypt the parameter
+- **`Overwrite` (boolean)**
+  - Overwrite an existing parameter (defaults to `false`)
+- **`Policies` (array)**
+  - Array of policies to apply; supports `Expiration`, `ExpirationNotification`, `NoChangeNotification`
+- **`Tags` (array)**
+  - Array of tags, such as `Key=OS,Value=macOS`
+- **`Tier` (string)**
+  - Parameter tier; can be one of: `Standard`, `Advanced`, `Intelligent-Tiering`
+- **`Type` (string)**
+  - Parameter type; can be one of: `String`, `StringList`,`SecureString`
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
@@ -92,8 +139,6 @@ Properties:
 - [`DeleteInventory`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteInventory)
 - [`DeleteMaintenanceWindow`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteMaintenanceWindow)
 - [`DeleteOpsMetadata`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteOpsMetadata)
-- [`DeleteParameter`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteParameter)
-- [`DeleteParameters`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteParameters)
 - [`DeletePatchBaseline`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeletePatchBaseline)
 - [`DeleteResourceDataSync`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteResourceDataSync)
 - [`DeleteResourcePolicy`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_DeleteResourcePolicy)
@@ -176,7 +221,6 @@ Properties:
 - [`ModifyDocumentPermission`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_ModifyDocumentPermission)
 - [`PutComplianceItems`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutComplianceItems)
 - [`PutInventory`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutInventory)
-- [`PutParameter`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter)
 - [`PutResourcePolicy`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutResourcePolicy)
 - [`RegisterDefaultPatchBaseline`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_RegisterDefaultPatchBaseline)
 - [`RegisterPatchBaselineForPatchGroup`](https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_RegisterPatchBaselineForPatchGroup)
