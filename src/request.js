@@ -302,6 +302,7 @@ async function paginator (params, creds, region, config, metadata) {
   let originalHeaders = copy(params.headers || {})
   let page = 1
   let items = []
+  let statusCode, headers
   async function get () {
     let result = await request(
       { ...params, headers: copy(originalHeaders) },
@@ -321,9 +322,16 @@ async function paginator (params, creds, region, config, metadata) {
     if (!accumulated) {
       throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' not found`)
     }
-    if (!Array.isArray(accumulated)) {
-      throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' must be an array`)
+
+    // Best effort handling of properties that sometimes are / are not arrays, courtesy of XML
+    // This can perhaps backfire in a few different ways, so hold onto your butts
+    if (accumulated && !Array.isArray(accumulated)) {
+      accumulated = [ accumulated ]
     }
+
+    // Update statusCode and headers for response hooks
+    statusCode = result.statusCode
+    headers = result.headers
 
     // Exit if we're out of results
     if (!accumulated.length) {
@@ -357,14 +365,14 @@ async function paginator (params, creds, region, config, metadata) {
   }
   await get()
   if (nestedAccumulator) {
-    return { payload: reNestAccumulated(accumulator, items) }
+    return { statusCode, headers, payload: reNestAccumulated(accumulator, items) }
   }
-  return { payload: { [accumulator]: items } }
+  return { statusCode, headers, payload: { [accumulator]: items } }
 }
 
 /* istanbul ignore next */
-function reNestAccumulated (parts, val) {
-  parts = Array.isArray(parts) ? parts : parts.split('.')
-  if (!parts.length) return val
-  return { [parts.shift()]: reNestAccumulated(parts, val) }
+function reNestAccumulated (acc, items) {
+  acc = Array.isArray(acc) ? acc : acc.split('.')
+  if (!acc.length) return items
+  return { [acc.shift()]: reNestAccumulated(acc, items) }
 }
