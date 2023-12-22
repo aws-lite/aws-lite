@@ -73,7 +73,6 @@ module.exports = async function clientFactory (config, creds, region) {
         let plugin
         /* istanbul ignore next */
         try {
-          // eslint-disable-next-line
           plugin = require(pluginName)
         }
         catch (err) {
@@ -109,7 +108,6 @@ module.exports = async function clientFactory (config, creds, region) {
 
         // Only require the vendor if it's actually needed
         if (!aws) {
-          // eslint-disable-next-line
           aws = require('./_vendor/aws')
         }
         let pluginUtils = {

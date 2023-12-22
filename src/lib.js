@@ -85,7 +85,6 @@ let textNodeName = '#text'
 /* istanbul ignore next */
 function instantiateXml () {
   if (xml) return
-  // eslint-disable-next-line
   let vendor = require('./_vendor/xml')
   // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
   xml = {

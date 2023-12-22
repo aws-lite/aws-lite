@@ -154,7 +154,7 @@ function request (params, creds, region, config, metadata) {
     // Importing http(s) is a bit slow (~1ms), so only instantiate the client and http agent we need
     options.protocol = (params.protocol || config.protocol) + ':'
     let isHTTPS = options.host.includes('.amazonaws.com') || options.protocol === 'https:'
-    /* istanbul ignore next */ // eslint-disable-next-line
+    /* istanbul ignore next */
     let http = isHTTPS ? require('https') : require('http')
 
     // Port configuration
