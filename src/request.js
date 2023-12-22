@@ -360,7 +360,15 @@ async function paginator (params, creds, region, config, metadata) {
     }
     if (!Array.isArray(result.payload[accumulator])) {
       throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' must be an array`)
+    }
 
+    // Exit if we're out of results
+    if (!result.payload[accumulator].length) {
+      return
+    }
+    // Exit if cursors match
+    if (result.payload[token] === params.payload[cursor]) {
+      return
     }
     items.push(...result.payload[accumulator])
     if (result.payload[token]) {
