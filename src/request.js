@@ -282,6 +282,8 @@ let validPaginationTypes = [ 'payload', 'query' ]
 async function paginator (params, creds, region, config, metadata) {
   let { debug } = config
   let { type, cursor, token, accumulator } = params.paginator
+  let nestedAccumulator = accumulator.split('.').length > 1
+
   if (!cursor || typeof cursor !== 'string') {
     throw ReferenceError(`aws-lite paginator requires a cursor property name (string)`)
   }
@@ -311,22 +313,35 @@ async function paginator (params, creds, region, config, metadata) {
     if (typeof result.payload !== 'object') {
       throw ReferenceError('Pagination error: response must be valid JSON or XML')
     }
-    if (!result.payload[accumulator]) {
+
+    let accumulated = nestedAccumulator
+      ? accumulator.split('.').reduce((parent, child) => parent?.[child], result.payload)
+      : result.payload[accumulator]
+
+    if (!accumulated) {
       throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' not found`)
     }
-    if (!Array.isArray(result.payload[accumulator])) {
+    if (!Array.isArray(accumulated)) {
       throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' must be an array`)
     }
 
     // Exit if we're out of results
-    if (!result.payload[accumulator].length) {
+    if (!accumulated.length) {
       return
     }
-    // Exit if cursors match
-    if (result.payload[token] === params.payload[cursor]) {
+
+    // Some services will just keep re-sending the final page with the final token
+    // Exit here to prevent infinite loops if cursors match
+    if (result.payload[token] && (type === 'payload' || !type) &&
+        result.payload[token] === params.payload[cursor]) {
       return
     }
-    items.push(...result.payload[accumulator])
+    if (result.payload[token] && (type === 'query') &&
+        result.payload[token] === params.query[cursor]) {
+      return
+    }
+
+    items.push(...accumulated)
     if (result.payload[token]) {
       if (type === 'payload' || !type) {
         params.payload[cursor] = result.payload[token]
@@ -341,5 +356,15 @@ async function paginator (params, creds, region, config, metadata) {
     }
   }
   await get()
+  if (nestedAccumulator) {
+    return { payload: reNestAccumulated(accumulator, items) }
+  }
   return { payload: { [accumulator]: items } }
+}
+
+/* istanbul ignore next */
+function reNestAccumulated (parts, val) {
+  parts = Array.isArray(parts) ? parts : parts.split('.')
+  if (!parts.length) return val
+  return { [parts.shift()]: reNestAccumulated(parts, val) }
 }
