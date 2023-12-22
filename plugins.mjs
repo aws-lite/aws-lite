@@ -16,7 +16,7 @@ const plugins = [
   { service: 'apigatewayv2', property: 'APIGatewayV2', display: 'API Gateway V2', maintainers },
   { service: 'cloudformation', property: 'CloudFormation', display: 'CloudFormation', maintainers },
   { service: 'cloudfront', property: 'CloudFront', display: 'CloudFront', maintainers },
-  { service: 'cloudwatch-logs', property: 'CloudWatch Logs', display: 'CloudWatch Logs', maintainers },
+  { service: 'cloudwatch-logs', property: 'CloudWatchLogs', display: 'CloudWatch Logs', maintainers },
   { service: 'dynamodb', property: 'DynamoDB', display: 'DynamoDB', maintainers },
   { service: 'lambda', property: 'Lambda', display: 'Lambda', maintainers },
   {

@@ -20,7 +20,7 @@ module.exports = function errorHandler (input) {
 
   // The most common error response from AWS services
   // Note: many services return a `Code` property; this generally represents the coded error name
-  // (jic, also look for `code`)
+  // (jic, also look for `code` and `__type`)
   if (error && typeof error === 'object') {
     Object.entries(error).forEach(([ n, value ]) => {
       const name = n.toLowerCase()
@@ -28,6 +28,7 @@ module.exports = function errorHandler (input) {
       else if (name === 'code') err[name] = err.name = value
       else err[n] = value
     })
+    if (err.__type && !err.code) err.code = err.name = err.__type
   }
   // Less common: sometimes strings (of XML), possibly without a content-type
   if (typeof error === 'string') {

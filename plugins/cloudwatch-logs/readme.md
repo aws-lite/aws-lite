@@ -61,6 +61,8 @@ Properties:
 - **`logGroupClass` (string) [required]**
   - Log group class setting: `STANDARD` (supports all CloudWatch Logs features), or `INFREQUENT_ACCESS` (feature subset with lower costs)
   - [More details (AWS)](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html)
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `DescribeLogStreams`
@@ -82,6 +84,8 @@ Properties:
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`orderBy` (string)**
   - Order results by log stream name (`LogStreamName`) or event time (`LastEventTime`)
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `GetLogEvents`
@@ -97,7 +101,7 @@ Properties:
   - Name or ARN of the log group
 - **`logGroupName` (string)**
   - Name of the log group
-- **`logStreamName` (string)**
+- **`logStreamName` (string) [required]**
   - Name of the log stream
 - **`nextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
@@ -107,6 +111,8 @@ Properties:
   - Start of the time range in epoch milliseconds
 - **`unmask` (boolean)**
   - Display log event fields with all sensitive data unmasked and visible (`true`)
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### Methods yet to be implemented

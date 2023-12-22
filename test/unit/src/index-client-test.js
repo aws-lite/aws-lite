@@ -265,7 +265,7 @@ test('Primary client - XML payloads', async t => {
 })
 
 test('Primary client - error handling', async t => {
-  t.plan(30)
+  t.plan(33)
   let responseStatusCode, responseBody
 
   // Normal error
@@ -331,7 +331,23 @@ test('Primary client - error handling', async t => {
   catch (err) {
     console.log(err)
     t.equal(err.name, 'idk', 'Error name is set to error.code')
-    t.equal(err.code, 'idk', 'error.code is set to error.code')
+    t.equal(err.code, 'idk', 'error.code is set')
+    reset()
+  }
+
+  // Use `__type` property returned in error payloads
+  try {
+    responseStatusCode = 400
+    responseBody = { Error: { __type: 'idk' } }
+    server.use({ responseBody, responseHeaders: jsonHeaders, responseStatusCode })
+    let aws = await client(config)
+    await aws({ service, endpoint })
+  }
+  catch (err) {
+    console.log(err)
+    t.equal(err.name, 'idk', 'Error name is set to error.Code')
+    t.equal(err.code, 'idk', 'error.code is set to error.__type')
+    t.equal(err.__type, 'idk', 'error.__type is set')
     reset()
   }
 
