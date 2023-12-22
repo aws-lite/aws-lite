@@ -1,4 +1,3 @@
-let { Readable } = require('stream')
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
 let { is } = require('./validate')
@@ -87,7 +86,7 @@ function request (params, creds, region, config, metadata) {
     // Body - JSON-ify payload where convenient!
     let body = params.payload || params.body || params.data || params.json
     let isBuffer = body instanceof Buffer
-    let isStream = body instanceof Readable
+    let isStream = (body?.on && body?._read && body?._readableState)
 
     // Detecting objects leaves open the possibility of some weird valid JSON (like just a null), deal with it if / when we need to I guess
     if (typeof body === 'object' && !isBuffer && !isStream) {
@@ -187,7 +186,9 @@ function request (params, creds, region, config, metadata) {
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
         let body = Buffer.concat(data), payload, rawString
-        let contentType = config.responseContentType || headers['content-type'] || headers['Content-Type'] || ''
+        let contentType = config.responseContentType ||
+                          headers['content-type'] ||
+                          headers['Content-Type'] || ''
         if (body.length && (JSONContentType(contentType) || AwsJSONContentType(contentType))) {
           payload = JSON.parse(body)
 
@@ -203,7 +204,6 @@ function request (params, creds, region, config, metadata) {
           }
         }
         if (body.length && XMLContentType(contentType)) {
-          // Only require the vendor if it's actually needed
           payload = parseXml(body)
           /* istanbul ignore next */
           if (payload.xmlns) delete payload.xmlns
@@ -219,7 +219,6 @@ function request (params, creds, region, config, metadata) {
           }
           catch {
             try {
-              // Only require the vendor if it's actually needed
               payload = parseXml(body)
             }
             catch {
