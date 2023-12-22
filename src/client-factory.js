@@ -1,5 +1,3 @@
-let { readdir } = require('fs/promises')
-let { join } = require('path')
 let { services } = require('./services')
 let request = require('./request')
 let { validateInput } = require('./validate')
@@ -51,6 +49,8 @@ module.exports = async function clientFactory (config, creds, region) {
   // Service API plugins
   let { autoloadPlugins = true, plugins = [] } = config
   if (autoloadPlugins) {
+    let { readdir } = require('fs/promises')
+    let { join } = require('path')
     let awsLite = '@aws-lite'
     let nodeModulesDir
     try { nodeModulesDir = require.resolve('@aws-lite/client').split(awsLite)[0] }
