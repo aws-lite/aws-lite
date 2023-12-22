@@ -190,7 +190,7 @@ module.exports = async function clientFactory (config, creds, region) {
             catch (err) {
               // Run plugin.method.error()
               let updatedError
-              if (method.error && !(input instanceof Error)) {
+              if (method.error && !(err instanceof Error)) {
                 try {
                   updatedError = await method.error(err, { ...pluginUtils, region: selectedRegion })
                 }
