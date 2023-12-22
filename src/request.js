@@ -2,8 +2,7 @@ let { Readable } = require('stream')
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
 let { is } = require('./validate')
-let { awsjson, tidyQuery, useAWS } = require('./lib')
-let xml
+let { awsjson, buildXml, parseXml, tidyQuery, useAWS } = require('./lib')
 
 /* istanbul ignore next */
 let copy = obj => JSON.parse(JSON.stringify(obj))
@@ -13,7 +12,6 @@ let AwsJSONregex = /application\/x-amz-json/
 let AwsJSONContentType = ct => ct.match(AwsJSONregex)
 let XMLregex = /(application|text)\/xml/
 let XMLContentType = ct => ct.match(XMLregex)
-let textNodeName = '#text'
 
 // HTTP client agent cache to prevent generating new agents for every request
 let agentCache = {
@@ -31,41 +29,6 @@ function getAgent (client, isHTTPS, config) {
     agentCache[http][agent] = new client.Agent({ keepAlive })
   }
   return agentCache[http][agent]
-}
-/* istanbul ignore next */
-function instantiateXml () {
-  // eslint-disable-next-line
-  let vendor = require('./_vendor/xml')
-  // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
-  xml = {
-    parser: new vendor.XMLParser({
-      attributeNamePrefix: '',
-      htmlEntities: true,
-      ignoreAttributes: false,
-      ignoreDeclaration: true,
-      parseTagValue: false,
-      trimValues: false,
-      tagValueProcessor: (_, val) => (val.trim() === '' && val.includes('\n') ? '' : undefined),
-    }),
-    builder: new vendor.XMLBuilder(),
-  }
-  xml.parser.addEntity('#xD', '\r')
-  xml.parser.addEntity('#10', '\n')
-  xml.parser.getValueFromTextNode = vendor.getValueFromTextNode
-}
-function buildXml (obj) {
-  return xml.builder.build(obj)
-}
-function parseXml (body) {
-  let parsed = xml.parser.parse(body)
-  let key = Object.keys(parsed)[0]
-  let payloadToReturn = parsed[key]
-  /* istanbul ignore next */ // TODO remove + test
-  if (payloadToReturn[textNodeName]) {
-    payloadToReturn[key] = payloadToReturn[textNodeName]
-    delete payloadToReturn[textNodeName]
-  }
-  return xml.parser.getValueFromTextNode(payloadToReturn)
 }
 
 module.exports = async function _request (params, creds, region, config, metadata) {
@@ -132,8 +95,6 @@ function request (params, creds, region, config, metadata) {
       if (!contentType) contentType = 'application/json'
 
       if (XMLContentType(contentType)) {
-        /* istanbul ignore next */
-        if (!xml) instantiateXml()
         params.body = buildXml(body)
       }
       else {
@@ -243,8 +204,6 @@ function request (params, creds, region, config, metadata) {
         }
         if (body.length && XMLContentType(contentType)) {
           // Only require the vendor if it's actually needed
-          /* istanbul ignore next */
-          if (!xml) instantiateXml()
           payload = parseXml(body)
           /* istanbul ignore next */
           if (payload.xmlns) delete payload.xmlns
@@ -261,8 +220,6 @@ function request (params, creds, region, config, metadata) {
           catch {
             try {
               // Only require the vendor if it's actually needed
-              /* istanbul ignore next */
-              if (!xml) instantiateXml()
               payload = parseXml(body)
             }
             catch {
