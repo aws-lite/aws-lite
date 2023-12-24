@@ -18,8 +18,10 @@ const str = { type: 'string' }
 
 const StackName = { ...str, required, comment: 'Stack name or ID' }
 const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
-const defaultResponse = prop => ({ payload }) => payload[prop]
+// const defaultResponse = ({ payload }) => payload
+const defaultNestedResponse = prop => ({ payload }) => payload[prop]
 const defaultError = ({ statusCode, error }) => ({ statusCode, error })
 
 const DeleteStack = {
@@ -38,7 +40,7 @@ const DeleteStack = {
       }
     }
   },
-  response: defaultResponse('DeleteStackResult'),
+  response: () => ({}),
   error: defaultError,
 }
 
@@ -57,7 +59,7 @@ const DescribeStackResources = {
       }
     }
   },
-  response: defaultResponse('DescribeStackResourcesResult'),
+  response: defaultNestedResponse('DescribeStackResourcesResult'),
   error: defaultError,
 }
 
@@ -66,16 +68,29 @@ const DescribeStacks = {
   validate: {
     StackName: { ...StackName, required: false },
     NextToken,
+    paginate: valPaginate,
   },
   request: async (params) => {
     return {
       query: {
         Action: 'DescribeStacks',
         ...params
-      }
+      },
+      paginator: {
+        cursor: 'NextToken',
+        token: 'NextToken',
+        accumulator: 'DescribeStacksResult.Stacks.member',
+        type: 'query',
+      },
     }
   },
-  response: defaultResponse('DescribeStacksResult'),
+  response: ({ payload }) => {
+    const { Stacks, NextToken } = payload.DescribeStacksResult
+    const result = { Stacks: [] }
+    if (Stacks.member.length) result.Stacks = Stacks.member
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
   error: defaultError,
 }
 
@@ -84,16 +99,29 @@ const ListStackResources = {
   validate: {
     StackName,
     NextToken,
+    paginate: valPaginate,
   },
   request: async (params) => {
     return {
       query: {
         Action: 'ListStackResources',
         ...params
-      }
+      },
+      paginator: {
+        cursor: 'NextToken',
+        token: 'NextToken',
+        accumulator: 'ListStackResourcesResult.StackResourceSummaries.member',
+        type: 'query',
+      },
     }
   },
-  response: defaultResponse('ListStackResourcesResult'),
+  response: ({ payload }) => {
+    const { StackResourceSummaries, NextToken } = payload.ListStackResourcesResult
+    const result = { StackResourceSummaries: [] }
+    if (StackResourceSummaries.member.length) result.StackResourceSummaries = StackResourceSummaries.member
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
   error: defaultError,
 }
 
