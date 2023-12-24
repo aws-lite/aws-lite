@@ -51,13 +51,13 @@ test('Configuration - basic config', async t => {
 })
 
 test('Configuration - plugin loading', async t => {
-  t.plan(3)
+  t.plan(4)
   let aws, tmp
 
   // Node.js 14.x + npm 6 does funky things with npm link-ed (symlinked) modules
   // That's cool, we can confidently skip this test for now, the related code path provably works!
   if (!process.versions.node.startsWith('14')) {
-    t.plan(4)
+    t.plan(5)
     aws = await client({ accessKeyId, secretAccessKey, region })
     t.ok(aws.dynamodb, 'Client auto-loaded @aws-lite/dynamodb')
   }
@@ -67,6 +67,14 @@ test('Configuration - plugin loading', async t => {
 
   let nodeModules = 'node_modules'
   tmp = mockTmp({ [nodeModules]: {} })
+  process.chdir(tmp)
+  aws = await client({ accessKeyId, secretAccessKey, region })
+  t.notOk(aws.dynamodb, `Client did not auto-load @aws-lite/* plugins it can't find`)
+  process.chdir(cwd)
+  mockTmp.reset()
+
+  // Don't assume the existence of node_modules when attempting to load plugins
+  tmp = mockTmp({ hi: {} })
   process.chdir(tmp)
   aws = await client({ accessKeyId, secretAccessKey, region })
   t.notOk(aws.dynamodb, `Client did not auto-load @aws-lite/* plugins it can't find`)
