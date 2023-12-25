@@ -1,11 +1,24 @@
 {
   "name": "@aws-lite/$SERVICE-types",
-  "description": "Type definitions for an @aws-lite plugin",
   "version": "0.0.0",
+  "description": "Type definitions for an `@aws-lite` plugin",
+  "homepage": "https://aws-lite.org/services/$SERVICE",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/architect/aws-lite.git",
+    "directory": "plugins/$SERVICE/types"
+  },
+  "bugs": "https://github.com/architect/aws-lite/issues",
   "main": "",
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "@architect",
+  "license": "Apache-2.0",
   "types": "index.d.ts",
   "files": [
     "index.d.ts"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {}
 }

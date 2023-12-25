@@ -115,7 +115,10 @@ export default async function main ({ service, property, display }) {
     const typesPkg = JSON.parse(typesPackageTmpl)
 
     typesPkg.name = typesPackageName
-    typesPkg.description = `Type definitions for the ${packageName} plugin`
+    typesPkg.description = `Type definitions for the \`${packageName}\` plugin`
+    typesPkg.homepage = `https://aws-lite.org/services/${service}`
+    typesPkg.repository.directory = `plugins/${service}/types`
+
     typesPkg.dependencies[`@aws-sdk/client-${service}`] = '3'
 
     writeFileSync(join(pluginTypesDir, 'package.json'), JSON.stringify(typesPkg, null, 2) + '\n')
