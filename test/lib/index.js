@@ -31,9 +31,10 @@ let server = {
       req.on('end', () => {
         let body
         if (data.length) {
-          body = req.headers?.['content-type']?.includes('json')
-            ? JSON.parse(data)
-            : Buffer.concat(data)
+          const reqType = req.headers?.['content-type']
+          /**/ if (reqType?.includes('json')) body = JSON.parse(data)
+          else if (reqType?.includes('xml')) body = data.toString()
+          else body = Buffer.concat(data)
         }
         serverData.request = {
           url: req.url,
@@ -42,9 +43,11 @@ let server = {
           body,
         }
 
-        let response = serverData.responseHeaders?.['content-type']?.includes('json')
-          ? JSON.stringify(serverData.responseBody)
-          : serverData.responseBody || ''
+        let response
+        const resType = serverData.responseHeaders?.['content-type']
+        /**/ if (resType?.includes('json')) response = JSON.stringify(serverData.responseBody)
+        else if (resType?.includes('xml')) response = serverData.responseBody.toString()
+        else response = serverData.responseBody || ''
         res.writeHead(serverData.responseStatusCode, serverData.responseHeaders)
         res.end(response)
       })
@@ -80,6 +83,8 @@ function basicRequestChecks (t, method, params = {}) {
   t.match(request.headers['authorization'], /Credential=foo/, 'Authorization header is using the access key')
   resetServer()
 }
+
+const copy = obj => JSON.parse(JSON.stringify(obj))
 
 let homedirBak
 let tmpHomedir
@@ -122,6 +127,7 @@ function resetAWSEnvVars () {
 
 module.exports = {
   basicRequestChecks,
+  copy,
   defaults,
   overrideHomedir,
   resetAWSEnvVars,

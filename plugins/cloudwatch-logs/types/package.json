@@ -1,0 +1,13 @@
+{
+  "name": "@aws-lite/cloudwatch-logs-types",
+  "description": "Type definitions for the @aws-lite/cloudwatch-logs plugin",
+  "version": "0.0.0",
+  "main": "",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "3"
+  }
+}

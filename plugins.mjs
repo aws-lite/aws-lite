@@ -6,24 +6,26 @@
  * - maintainers: array of GitHub handles of the individual(s) or org(s) responsible for maintaining the plugin
  * - types: set to `false` to temporarily disable generating type definitions
  */
+const maintainers = [ '@architect' ]
 const plugins = [
   {
     // Technically the service here is `execute-api`, but that's not really recognized
     service: 'apigatewaymanagementapi', property: 'ApiGatewayManagementApi',
-    display: 'API Gateway WebSocket Management API', maintainers: [ '@architect' ]
+    display: 'API Gateway WebSocket Management API', maintainers
   },
-  {
-    service: 'dynamodb', property: 'DynamoDB',
-    display: 'DynamoDB', maintainers: [ '@architect' ]
-  },
-  { service: 'lambda', property: 'Lambda', display: 'Lambda', maintainers: [ '@architect' ] },
+  { service: 'apigatewayv2', property: 'APIGatewayV2', display: 'API Gateway V2', maintainers },
+  { service: 'cloudformation', property: 'CloudFormation', display: 'CloudFormation', maintainers },
+  { service: 'cloudfront', property: 'CloudFront', display: 'CloudFront', maintainers },
+  { service: 'cloudwatch-logs', property: 'CloudWatchLogs', display: 'CloudWatch Logs', maintainers },
+  { service: 'dynamodb', property: 'DynamoDB', display: 'DynamoDB', maintainers },
+  { service: 'lambda', property: 'Lambda', display: 'Lambda', maintainers },
   {
     service: 'rds-data', property: 'RDSData',
     display: 'RDS Data Service', maintainers: [ '@andybee' ]
   },
-  { service: 's3', property: 'S3', display: 'S3', maintainers: [ '@architect' ] },
-  { service: 'sns', property: 'SNS', display: 'SNS', maintainers: [ '@architect' ] },
-  { service: 'sqs', property: 'SQS', display: 'SQS', maintainers: [ '@architect' ] },
-  { service: 'ssm', property: 'SSM', display: 'SSM', maintainers: [ '@architect' ] },
+  { service: 's3', property: 'S3', display: 'S3', maintainers },
+  { service: 'sns', property: 'SNS', display: 'SNS', maintainers },
+  { service: 'sqs', property: 'SQS', display: 'SQS', maintainers },
+  { service: 'ssm', property: 'SSM', display: 'SSM', maintainers },
 ]
 export default plugins.sort((a, b) => a.display > b.display ? 1 : -1)

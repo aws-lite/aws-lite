@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @architect
+ */
+
 import incomplete from './incomplete.mjs'
 
 const service = 'lambda'
@@ -11,36 +15,36 @@ const obj = { type: 'object' }
 const num = { type: 'number' }
 const str = { type: 'string' }
 
-const DeadLetterConfig = { ...obj, comment: `Dead-letter queue configuration; [see AWS docs](${docRoot}API_DeadLetterConfig.html)` }
+const Architectures = { ...arr, comment: 'System architecture, array can contain either `x86_64` (default) or `arm64`' }
+const DeadLetterConfig = { ...obj, comment: 'Dead-letter queue configuration', ref: docRoot + 'API_DeadLetterConfig.html' }
 const Description = { ...str, comment: 'Description of the function' }
-const Environment = { ...obj, comment: `Environment variable configuration; [see AWS docs](${docRoot}API_Environment.html` }
-const EphemeralStorage = { ...obj, comment: `Size of the function \`/tmp\` directory (in MB), from 512 (default) to 10240; [see AWS docs](${docRoot}API_EphemeralStorage.html` }
-const FileSystemConfigs = { ...arr, comment: `EFS file system connection settings; [see AWS docs](${docRoot}API_FileSystemConfig.html)` }
+const Environment = { ...obj, comment: 'Environment variable configuration', ref: docRoot + 'API_Environment.html' }
+const EphemeralStorage = { ...obj, comment: 'Size of the function `/tmp` directory (in MB), from 512 (default) to 10240', ref: docRoot + 'API_EphemeralStorage.html' }
+const FileSystemConfigs = { ...arr, comment: 'EFS file system connection settings', ref: docRoot + 'API_FileSystemConfig.html' }
 const FunctionName = { ...str, required, comment: 'The name of the Lambda function, version, or alias' }
-const Handler = { ...str, comment: `The name of the handler file and method method within your code that Lambda calls to run your function (e.g. \`index.handler\`); [see AWS docs](${docRoot}foundation-progmodel.html)` }
-const ImageConfig = { ...obj, comment: `Container image configuration (overrides Docker file); [see AWS docs](${docRoot}API_ImageConfig.html)` }
+const Handler = { ...str, comment: 'The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`)', ref: docRoot + 'foundation-progmodel.html' }
+const ImageConfig = { ...obj, comment: 'Container image configuration (overrides Docker file)', ref: docRoot + 'API_ImageConfig.html' }
 const KMSKeyArn = { ...str, comment: 'ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables' }
 const Layers = { ...arr, comment: 'List of function layer ARNs (including version) to add to the function execution environment' }
 const MemorySize = { ...num, comment: 'Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation' }
 const Qualifier = { ...str, comment: 'Specify a version or alias to invoke a published version of the function' }
+const RevisionId = { ...str, comment: 'Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it' }
 const Role = { ...str, comment: `ARN of the function's execution role` }
-const Runtime = { ...str, comment: `Runtime identifier; [see AWS docs](${docRoot}lambda-runtimes.html)` }
-const SnapStart = { ...obj, comment: `SnapStart settings; [see AWS docs](${docRoot}API_SnapStart.html)` }
+const Runtime = { ...str, comment: 'Runtime identifier', ref: docRoot + 'lambda-runtimes.html' }
+const SnapStart = { ...obj, comment: 'SnapStart settings', ref: docRoot + 'API_SnapStart.html' }
 const Timeout = { ...num, comment: 'Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900' }
-const TracingConfig = { ...obj, comment: `Sample and trace a subset of incoming requests with X-Ray; [see AWS docs](${docRoot}API_TracingConfig.html)` }
-const VpcConfig = { ...obj, comment: `VPC networking configuration; [see AWS docs](${docRoot}API_VpcConfig.html)` }
+const TracingConfig = { ...obj, comment: 'Sample and trace a subset of incoming requests with X-Ray', ref: docRoot + 'API_TracingConfig.html' }
+const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
 
-/**
- * Plugin maintained by: @architect
- */
+const defaultResponse = ({ payload }) => payload
 
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
   validate: {
-    Code: { ...obj, required, comment: `Code payload to be run in Lambda; object can contain: \`ImageUri\` (ECR image), \`S3Bucket\` + \`S3Key\` + \`S3ObjectVersion\` (S3 bucket in the same region, key, and optional version), or \`ZipFile\` (base64-encoded zip); [see AWS docs](${docRoot}API_FunctionCode.html)` },
+    Code: { ...obj, required, comment: 'Code payload to be run in Lambda; object can contain: `ImageUri` (ECR image), `S3Bucket` + `S3Key` + `S3ObjectVersion` (S3 bucket in the same region, key, and optional version), or `ZipFile` (base64-encoded zip)', ref: docRoot + 'API_FunctionCode.html' },
     FunctionName,
     Role: { ...Role, required },
-    Architectures: { ...arr, comment: 'System architecture, array can contain either `x86_64` (default) or `arm64`' },
+    Architectures,
     CodeSigningConfigArn: { ...str, comment: 'ARN of a code-signing configuration used to enable code signing for this function' },
     DeadLetterConfig,
     Description,
@@ -70,6 +74,20 @@ const CreateFunction = {
   }
 }
 
+const DeleteFunctionConcurrency = {
+  awsDoc: docRoot + 'API_DeleteFunctionConcurrency.html',
+  validate: {
+    FunctionName,
+  },
+  request: ({ FunctionName }) => {
+    return {
+      endpoint: `/2017-10-31/functions/${FunctionName}/concurrency`,
+      method: 'DELETE',
+    }
+  },
+  response: () => ({}),
+}
+
 const GetFunctionConfiguration = {
   awsDoc: docRoot + 'API_GetFunctionConfiguration.html',
   validate: {
@@ -85,7 +103,7 @@ const GetFunctionConfiguration = {
       query,
     }
   },
-  response: async ({ payload }) => payload
+  response: defaultResponse,
 }
 
 const Invoke = {
@@ -128,6 +146,55 @@ const Invoke = {
   }
 }
 
+const PutFunctionConcurrency = {
+  awsDoc: docRoot + 'API_PutFunctionConcurrency.html',
+  validate: {
+    FunctionName,
+    ReservedConcurrentExecutions: { ...num, required, comment: 'number of simultaneous executions to reserve' },
+  },
+  request: (params) => {
+    const { FunctionName, ReservedConcurrentExecutions } = params
+    return {
+      endpoint: `/2017-10-31/functions/${FunctionName}/concurrency`,
+      method: 'PUT',
+      payload: { ReservedConcurrentExecutions },
+    }
+  },
+  response: defaultResponse
+}
+
+const UpdateFunctionCode = {
+  awsDoc: docRoot + 'API_UpdateFunctionCode.html',
+  validate: {
+    FunctionName,
+    Architectures,
+    DryRun: { ...str, comment: 'Validate the request parameters and access permissions without modifying the function code (`true`)' },
+    ImageUri: { ...str, comment: 'URI of a container image in the Amazon ECR registry (if not using a .zip file)' },
+    Publish: { ...bool, comment: 'Publish a new version after after updating the code (`true`); effectively the same as calling `PublishVersion`' },
+    RevisionId,
+    S3Bucket: { ...str, comment: 'S3 bucket containing the key of the deployment package; must be in the same region' },
+    S3Key: { ...str, comment: 'S3 key of the deployment package (must be a .zip file)' },
+    S3ObjectVersion: { ...str, comment: 'S3 object version to use, if applicable' },
+    ZipFile: { type: [ 'string', 'object' ], comment: 'File path or raw buffer of the .zip deployment package' }
+  },
+  request: async (params) => {
+    let { FunctionName, ZipFile } = params
+    if (typeof ZipFile === 'string') {
+      const { readFile } = await import('node:fs/promises')
+      ZipFile = await readFile(ZipFile)
+    }
+    if (ZipFile instanceof Buffer) {
+      params.ZipFile = Buffer.from(ZipFile).toString('base64')
+    }
+    return {
+      endpoint: `/2017-10-31/functions/${FunctionName}/code`,
+      method: 'PUT',
+      payload: params,
+    }
+  },
+  response: defaultResponse
+}
+
 const UpdateFunctionConfiguration = {
   awsDoc: docRoot + 'API_UpdateFunctionConfiguration.html',
   validate: {
@@ -142,7 +209,7 @@ const UpdateFunctionConfiguration = {
     KMSKeyArn,
     Layers,
     MemorySize,
-    RevisionId: { ...str, comment: 'Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it' },
+    RevisionId,
     Role,
     Runtime,
     SnapStart,
@@ -158,7 +225,7 @@ const UpdateFunctionConfiguration = {
       payload: params,
     }
   },
-  response: async ({ payload }) => payload
+  response: defaultResponse,
 }
 
 export default {
@@ -166,8 +233,11 @@ export default {
   property,
   methods: {
     CreateFunction,
+    DeleteFunctionConcurrency,
     GetFunctionConfiguration,
     Invoke,
+    PutFunctionConcurrency,
+    UpdateFunctionCode,
     UpdateFunctionConfiguration,
     ...incomplete,
   }

@@ -33,7 +33,8 @@ npm i -D @aws-lite/lambda-types
 
 Properties:
 - **`Code` (object) [required]**
-  - Code payload to be run in Lambda; object can contain: `ImageUri` (ECR image), `S3Bucket` + `S3Key` + `S3ObjectVersion` (S3 bucket in the same region, key, and optional version), or `ZipFile` (base64-encoded zip); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_FunctionCode.html)
+  - Code payload to be run in Lambda; object can contain: `ImageUri` (ECR image), `S3Bucket` + `S3Key` + `S3ObjectVersion` (S3 bucket in the same region, key, and optional version), or `ZipFile` (base64-encoded zip)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_FunctionCode.html)
 - **`FunctionName` (string) [required]**
   - The name of the Lambda function, version, or alias
 - **`Role` (string) [required]**
@@ -43,19 +44,25 @@ Properties:
 - **`CodeSigningConfigArn` (string)**
   - ARN of a code-signing configuration used to enable code signing for this function
 - **`DeadLetterConfig` (object)**
-  - Dead-letter queue configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_DeadLetterConfig.html)
+  - Dead-letter queue configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_DeadLetterConfig.html)
 - **`Description` (string)**
   - Description of the function
 - **`Environment` (object)**
-  - Environment variable configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_Environment.html
+  - Environment variable configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_Environment.html)
 - **`EphemeralStorage` (object)**
-  - Size of the function `/tmp` directory (in MB), from 512 (default) to 10240; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_EphemeralStorage.html
+  - Size of the function `/tmp` directory (in MB), from 512 (default) to 10240
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_EphemeralStorage.html)
 - **`FileSystemConfigs` (array)**
-  - EFS file system connection settings; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_FileSystemConfig.html)
+  - EFS file system connection settings
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_FileSystemConfig.html)
 - **`Handler` (string)**
-  - The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html)
+  - The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html)
 - **`ImageConfig` (object)**
-  - Container image configuration (overrides Docker file); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_ImageConfig.html)
+  - Container image configuration (overrides Docker file)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ImageConfig.html)
 - **`KMSKeyArn` (string)**
   - ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables
 - **`Layers` (array)**
@@ -67,17 +74,30 @@ Properties:
 - **`Publish` (boolean)**
   - Set to `true` to publish the first version of the function during creation
 - **`Runtime` (string)**
-  - Runtime identifier; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+  - Runtime identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 - **`SnapStart` (object)**
-  - SnapStart settings; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_SnapStart.html)
+  - SnapStart settings
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_SnapStart.html)
 - **`Tags` (array)**
   - List of tags to apply to the function
 - **`Timeout` (number)**
   - Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900
 - **`TracingConfig` (object)**
-  - Sample and trace a subset of incoming requests with X-Ray; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_TracingConfig.html)
+  - Sample and trace a subset of incoming requests with X-Ray
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_TracingConfig.html)
 - **`VpcConfig` (object)**
-  - VPC networking configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
+  - VPC networking configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
+
+
+### `DeleteFunctionConcurrency`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
 
 
 ### `GetFunctionConfiguration`
@@ -110,6 +130,44 @@ Properties:
   - Specify a version or alias to invoke a published version of the function
 
 
+### `PutFunctionConcurrency`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`ReservedConcurrentExecutions` (number) [required]**
+  - number of simultaneous executions to reserve
+
+
+### `UpdateFunctionCode`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Architectures` (array)**
+  - System architecture, array can contain either `x86_64` (default) or `arm64`
+- **`DryRun` (string)**
+  - Validate the request parameters and access permissions without modifying the function code (`true`)
+- **`ImageUri` (string)**
+  - URI of a container image in the Amazon ECR registry (if not using a .zip file)
+- **`Publish` (boolean)**
+  - Publish a new version after after updating the code (`true`); effectively the same as calling `PublishVersion`
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`S3Bucket` (string)**
+  - S3 bucket containing the key of the deployment package; must be in the same region
+- **`S3Key` (string)**
+  - S3 key of the deployment package (must be a .zip file)
+- **`S3ObjectVersion` (string)**
+  - S3 object version to use, if applicable
+- **`ZipFile` (string, object)**
+  - File path or raw buffer of the .zip deployment package
+
+
 ### `UpdateFunctionConfiguration`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionConfiguration.html)
@@ -118,19 +176,25 @@ Properties:
 - **`FunctionName` (string) [required]**
   - The name of the Lambda function, version, or alias
 - **`DeadLetterConfig` (object)**
-  - Dead-letter queue configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_DeadLetterConfig.html)
+  - Dead-letter queue configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_DeadLetterConfig.html)
 - **`Description` (string)**
   - Description of the function
 - **`Environment` (object)**
-  - Environment variable configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_Environment.html
+  - Environment variable configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_Environment.html)
 - **`EphemeralStorage` (object)**
-  - Size of the function `/tmp` directory (in MB), from 512 (default) to 10240; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_EphemeralStorage.html
+  - Size of the function `/tmp` directory (in MB), from 512 (default) to 10240
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_EphemeralStorage.html)
 - **`FileSystemConfigs` (array)**
-  - EFS file system connection settings; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_FileSystemConfig.html)
+  - EFS file system connection settings
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_FileSystemConfig.html)
 - **`Handler` (string)**
-  - The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html)
+  - The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html)
 - **`ImageConfig` (object)**
-  - Container image configuration (overrides Docker file); [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_ImageConfig.html)
+  - Container image configuration (overrides Docker file)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ImageConfig.html)
 - **`KMSKeyArn` (string)**
   - ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables
 - **`Layers` (array)**
@@ -142,15 +206,19 @@ Properties:
 - **`Role` (string)**
   - ARN of the function's execution role
 - **`Runtime` (string)**
-  - Runtime identifier; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+  - Runtime identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 - **`SnapStart` (object)**
-  - SnapStart settings; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_SnapStart.html)
+  - SnapStart settings
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_SnapStart.html)
 - **`Timeout` (number)**
   - Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900
 - **`TracingConfig` (object)**
-  - Sample and trace a subset of incoming requests with X-Ray; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_TracingConfig.html)
+  - Sample and trace a subset of incoming requests with X-Ray
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_TracingConfig.html)
 - **`VpcConfig` (object)**
-  - VPC networking configuration; [see AWS docs](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
+  - VPC networking configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
 
 
 ### Methods yet to be implemented
@@ -168,7 +236,6 @@ Properties:
 - [`DeleteEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteEventSourceMapping.html)
 - [`DeleteFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
 - [`DeleteFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html)
-- [`DeleteFunctionConcurrency`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html)
 - [`DeleteFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html)
 - [`DeleteFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html)
 - [`DeleteLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html)
@@ -205,7 +272,6 @@ Properties:
 - [`PublishLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html)
 - [`PublishVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html)
 - [`PutFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html)
-- [`PutFunctionConcurrency`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
 - [`PutFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html)
 - [`PutProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html)
 - [`PutRuntimeManagementConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html)
@@ -216,7 +282,6 @@ Properties:
 - [`UpdateAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html)
 - [`UpdateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html)
 - [`UpdateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html)
-- [`UpdateFunctionCode`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html)
 - [`UpdateFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html)
 - [`UpdateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html)
 <!-- METHOD_DOCS_END -->

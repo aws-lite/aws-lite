@@ -100,9 +100,11 @@ Properties:
 - **`DeletionProtectionEnabled` (boolean)**
   - Enable or disable deletion protection
 - **`GlobalSecondaryIndexes` (array)**
-  - 1-20 global secondary indexes to be created on the table; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#DDB-CreateTable-request-GlobalSecondaryIndexes)
+  - 1-20 global secondary indexes to be created on the table
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#DDB-CreateTable-request-GlobalSecondaryIndexes)
 - **`LocalSecondaryIndexes` (array)**
-  - 1-5 local secondary indexes to be created on the table; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#DDB-CreateTable-request-LocalSecondaryIndexes)
+  - 1-5 local secondary indexes to be created on the table
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#DDB-CreateTable-request-LocalSecondaryIndexes)
 - **`ProvisionedThroughput` (object)**
   - Provisioned throughput setting
 - **`SSESpecification` (object)**
@@ -136,13 +138,16 @@ Properties:
 - **`ConditionalOperator` (string)**
   - Legacy parameter, use `FilterExpression` instead
 - **`ConditionExpression` (string)**
-  - Condition that must be satisfied in order to complete the operation; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Condition that must be satisfied in order to complete the operation
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`Expected` (object)**
   - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
   - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
@@ -378,7 +383,8 @@ Properties:
 - **`ConsistentRead` (boolean)**
   - Enable strongly consistent reads; by default eventually consistent reads are used
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ProjectionExpression` (string)**
   - Comma separated string that identifies one or more attributes to retrieve from the table
 - **`ReturnConsumedCapacity` (string)**
@@ -395,7 +401,8 @@ Properties:
 - **`S3BucketSource` (object) [required]**
   - Destination S3 bucket of the snapshot import
 - **`TableCreationParameters` (object) [required]**
-  - Parameters for the table to import the data; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableCreationParameters.html)
+  - Parameters for the table to import the data
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableCreationParameters.html)
 - **`ClientToken` (string)**
   - Ensures operation request is idempotent
 - **`InputCompressionType` (string)**
@@ -509,13 +516,16 @@ Properties:
 - **`ConditionalOperator` (string)**
   - Legacy parameter, use `FilterExpression` instead
 - **`ConditionExpression` (string)**
-  - Condition that must be satisfied in order to complete the operation; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Condition that must be satisfied in order to complete the operation
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`Expected` (object)**
   - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
   - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
@@ -542,15 +552,19 @@ Properties:
 - **`ExclusiveStartKey` (object)**
   - Pagination cursor token ARN to be used if `LastEvaluatedKey` was returned in a previous response
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`FilterExpression` (string)**
-  - String of filter conditions applied before data is returned; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
+  - String of filter conditions applied before data is returned
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
 - **`IndexName` (string)**
   - DynamoDB global secondary index name (if applicable)
 - **`KeyConditionExpression` (string)**
-  - Condition specifying the key values for items to be retrieved; the condition must perform an equality test on a single partition key value; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression)
+  - Condition specifying the key values for items to be retrieved; the condition must perform an equality test on a single partition key value
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression)
 - **`KeyConditions` (object)**
   - Legacy parameter, use `KeyConditionExpression` instead
 - **`Limit` (number)**
@@ -564,8 +578,8 @@ Properties:
 - **`ScanIndexForward` (boolean)**
   - Index traversal order: `true` (default) for ascending, `false` for descending order
 - **`Select` (string)**
-  - Attributes to be returned in the result, can be set to: `ALL_ATTRIBUTES`, `ALL_PROJECTED_ATTRIBUTES`,
-    `COUNT`, or `SPECIFIC_ATTRIBUTES`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select)
+  - Attributes to be returned in the result, can be set to: `ALL_ATTRIBUTES`, `ALL_PROJECTED_ATTRIBUTES`, `COUNT`, or `SPECIFIC_ATTRIBUTES`
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select)
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -634,11 +648,14 @@ Properties:
 - **`ExclusiveStartKey` (object)**
   - Pagination cursor token ARN to be used if `LastEvaluatedKey` was returned in a previous response
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`FilterExpression` (string)**
-  - String of filter conditions applied before data is returned; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
+  - String of filter conditions applied before data is returned
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
 - **`IndexName` (string)**
   - DynamoDB global secondary index name (if applicable)
 - **`Limit` (number)**
@@ -650,12 +667,14 @@ Properties:
 - **`ScanFilter` (object)**
   - Legacy parameter, use `FilterExpression` instead
 - **`Segment` (number)**
-  - Individual segment to be scanned in a parallel `Scan` request; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter)
+  - Individual segment to be scanned in a parallel `Scan` request
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter)
 - **`Select` (string)**
-  - Attributes to be returned in the result, can be set to: `ALL_ATTRIBUTES`, `ALL_PROJECTED_ATTRIBUTES`,
-    `COUNT`, or `SPECIFIC_ATTRIBUTES`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Select)
+  - Attributes to be returned in the result, can be set to: `ALL_ATTRIBUTES`, `ALL_PROJECTED_ATTRIBUTES`, `COUNT`, or `SPECIFIC_ATTRIBUTES`
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-Select)
 - **`TotalSegments` (number)**
-  - Total number of segments to be scanned in a parallel `Scan` request; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter)
+  - Total number of segments to be scanned in a parallel `Scan` request
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter)
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -677,7 +696,8 @@ Properties:
 
 Properties:
 - **`TransactItems` (array) [required]**
-  - Ordered array of up to 100 `TransactGetItem` objects, each of which containing a `Get` object; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html#DDB-TransactGetItems-request-TransactItems)
+  - Ordered array of up to 100 `TransactGetItem` objects, each of which containing a `Get` object
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html#DDB-TransactGetItems-request-TransactItems)
 - **`ReturnConsumedCapacity` (string)**
   - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 
@@ -688,7 +708,8 @@ Properties:
 
 Properties:
 - **`TransactItems` (array) [required]**
-  - Ordered array of up to 100 `TransactWriteItem` objects, each of which containing a `ConditionCheck`, `Put`, `Update`, or `Delete` object; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html#DDB-TransactWriteItems-request-TransactItems)
+  - Ordered array of up to 100 `TransactWriteItem` objects, each of which containing a `ConditionCheck`, `Put`, `Update`, or `Delete` object
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html#DDB-TransactWriteItems-request-TransactItems)
 - **`ClientRequestToken` (string)**
   - Ensures operation request is idempotent
 - **`ReturnConsumedCapacity` (string)**
@@ -716,7 +737,8 @@ Properties:
 - **`TableName` (string) [required]**
   - DynamoDB table name
 - **`PointInTimeRecoverySpecification` (object)**
-  - Point in time recovery settings; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PointInTimeRecoverySpecification.html)
+  - Point in time recovery settings
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PointInTimeRecoverySpecification.html)
 
 
 ### `UpdateContributorInsights`
@@ -753,13 +775,16 @@ Properties:
 - **`GlobalTableBillingMode` (string)**
   - Set how the table is charged for read/write throughput: `PROVISIONED`, or `PAY_PER_REQUEST`
 - **`GlobalTableGlobalSecondaryIndexSettingsUpdate` (array)**
-  - 1-20 global secondary indexes to be modified; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalTableGlobalSecondaryIndexSettingsUpdate.html)
+  - 1-20 global secondary indexes to be modified
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalTableGlobalSecondaryIndexSettingsUpdate.html)
 - **`GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate` (object)**
-  - Auto-scaling settings for managing provisioned write capacity; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AutoScalingSettingsUpdate.html)
+  - Auto-scaling settings for managing provisioned write capacity
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AutoScalingSettingsUpdate.html)
 - **`GlobalTableProvisionedWriteCapacityUnits` (number)**
   - Maximum number of writes per second before returning a `ThrottlingException`
 - **`ReplicaSettingsUpdate` (array)**
-  - Global table settings to be modified; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaSettingsUpdate.html)
+  - Global table settings to be modified
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaSettingsUpdate.html)
 
 
 ### `UpdateItem`
@@ -776,13 +801,16 @@ Properties:
 - **`ConditionalOperator` (string)**
   - Legacy parameter, use `ConditionExpression` instead
 - **`ConditionExpression` (string)**
-  - Condition that must be satisfied in order to complete the operation; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Condition that must be satisfied in order to complete the operation
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`Expected` (object)**
   - Legacy parameter, use `ConditionExpression` instead
 - **`ExpressionAttributeNames` (object)**
-  - Substitution tokens for attribute names in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
+  - Substitution tokens for attribute names in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html)
 - **`ExpressionAttributeValues` (object)**
-  - Values that can be substituted in an expression; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+  - Values that can be substituted in an expression
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
 - **`ReturnConsumedCapacity` (string)**
   - Return throughput consumption in response, can be set to one of: `INDEXES`, `TOTAL`, or `NONE`
 - **`ReturnItemCollectionMetrics` (string)**
@@ -792,7 +820,8 @@ Properties:
 - **`ReturnValuesOnConditionCheckFailure` (string)**
   - Return the item attributes that failed  a condition check, can be set to `NONE`, or `ALL_OLD`
 - **`UpdateExpression` (string)**
-  - Expression that defines attributes to be updated, the action to be performed on each, and their new values; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html#DDB-UpdateItem-request-UpdateExpression)
+  - Expression that defines attributes to be updated, the action to be performed on each, and their new values
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html#DDB-UpdateItem-request-UpdateExpression)
 
 
 ### `UpdateTable`
@@ -809,11 +838,13 @@ Properties:
 - **`DeletionProtectionEnabled` (boolean)**
   - Enable or disable deletion protection
 - **`GlobalSecondaryIndexUpdates` (array)**
-  - Global secondary index updates, each of which may be: `Create`, `Update`, or `Delete`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalSecondaryIndexUpdate.html)
+  - Global secondary index updates, each of which may be: `Create`, `Update`, or `Delete`
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalSecondaryIndexUpdate.html)
 - **`ProvisionedThroughput` (object)**
   - Provisioned throughput setting
 - **`ReplicaUpdates` (array)**
-  - Table replica updates, each of which may be: `Create`, `Update`, or `Delete`; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicationGroupUpdate.html)
+  - Table replica updates, each of which may be: `Create`, `Update`, or `Delete`
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicationGroupUpdate.html)
 - **`SSESpecification` (object)**
   - Server-side encryption settings
 - **`StreamSpecification` (object)**
@@ -830,11 +861,14 @@ Properties:
 - **`TableName` (string) [required]**
   - DynamoDB table name
 - **`GlobalSecondaryIndexUpdates` (array)**
-  - Auto-scaling settings of the global secondary indexes of the replica; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalSecondaryIndexAutoScalingUpdate.html)
+  - Auto-scaling settings of the global secondary indexes of the replica
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GlobalSecondaryIndexAutoScalingUpdate.html)
 - **`ProvisionedWriteCapacityAutoScalingUpdate` (object)**
-  - Auto-scaling settings for a global table or global secondary index; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AutoScalingSettingsUpdate.html)
+  - Auto-scaling settings for a global table or global secondary index
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AutoScalingSettingsUpdate.html)
 - **`ReplicaUpdates` (array)**
-  - Auto=scaling settings of table replicas; [see AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaAutoScalingUpdate.html)
+  - Auto=scaling settings of table replicas
+  - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicaAutoScalingUpdate.html)
 
 
 ### `UpdateTimeToLive`

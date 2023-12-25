@@ -1,0 +1,13 @@
+{
+  "name": "@aws-lite/apigatewayv2-types",
+  "description": "Type definitions for the @aws-lite/apigatewayv2 plugin",
+  "version": "0.0.0",
+  "main": "",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-apigatewayv2": "3"
+  }
+}

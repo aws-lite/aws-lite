@@ -1,3 +1,7 @@
+/**
+ * Plugin maintained by: @andybee
+ */
+
 import deprecated from './deprecated.mjs'
 
 const service = 'rds-data'

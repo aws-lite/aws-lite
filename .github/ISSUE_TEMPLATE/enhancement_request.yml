@@ -1,0 +1,41 @@
+name: Enhancement request
+description: Software is never done! Suggest an idea to make this project even better
+labels: [ "enhancement", "triage" ]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for taking the time to help us learn how we can make this project better!
+
+  - type: textarea
+    id: underlying-problem
+    attributes:
+      label: Describe the problem underlying the enhancement request
+      description: A clear and concise description of what the problem underlying the enhancement request
+      value: |
+        Example: I find it frustrating when trying to _____ because _____...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution-description
+    attributes:
+      label: Describe the solution you'd like (if any)
+      description: A clear and concise description of what you'd like to happen. (It's ok if you don't already have specific a solution in mind!)
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternative-solutions
+    attributes:
+      label: Describe alternative solutions you've considered
+      description: A clear and concise description of any alternative solutions or features you've considered. These are quite helpful!
+      value: |
+        Example: If it did _____ instead of _____, users would still have problems because _____...
+    validations:
+      required: true
+
+  - type: textarea
+    id: versionsnotes
+    attributes:
+      label: Additional context or notes
+      description: Add any other context or screenshots about the feature request here.

@@ -1,9 +1,7 @@
-let { readdir } = require('fs/promises')
-let { join } = require('path')
 let { services } = require('./services')
 let request = require('./request')
 let { validateInput } = require('./validate')
-let { awsjson } = require('./lib')
+let { awsjson, exists } = require('./lib')
 let errorHandler = require('./error')
 let aws
 let enumerable = false
@@ -51,20 +49,24 @@ module.exports = async function clientFactory (config, creds, region) {
   // Service API plugins
   let { autoloadPlugins = true, plugins = [] } = config
   if (autoloadPlugins) {
+    let { join } = require('path')
     let awsLite = '@aws-lite'
     let nodeModulesDir
     try { nodeModulesDir = require.resolve('@aws-lite/client').split(awsLite)[0] }
     catch { nodeModulesDir = join(process.cwd(), 'node_modules') } // Likely just aws-lite tests
-    let mods = await readdir(nodeModulesDir)
-    // Find first-party plugins
-    if (mods.includes(awsLite)) {
-      let knownPlugins = await readdir(join(nodeModulesDir, awsLite))
-      let filtered = knownPlugins.filter(p => !ignored.includes(p) && !p.endsWith('-types')).map(p => `@aws-lite/${p}`)
-      plugins.push(...filtered)
+    if (await exists(nodeModulesDir)) {
+      let { readdir } = require('fs/promises')
+      let mods = await readdir(nodeModulesDir)
+      // Find first-party plugins
+      if (mods.includes(awsLite)) {
+        let knownPlugins = await readdir(join(nodeModulesDir, awsLite))
+        let filtered = knownPlugins.filter(p => !ignored.includes(p) && !p.endsWith('-types')).map(p => `@aws-lite/${p}`)
+        plugins.push(...filtered)
+      }
+      // Find correctly namespaced 3rd-party plugins
+      let findPlugins = mod => mod.startsWith('aws-lite-plugin-') && plugins.push(mod)
+      mods.forEach(findPlugins)
     }
-    // Find correctly namespaced 3rd-party plugins
-    let findPlugins = mod => mod.startsWith('aws-lite-plugin-') && plugins.push(mod)
-    mods.forEach(findPlugins)
   }
 
   if (plugins.length) {
@@ -73,7 +75,6 @@ module.exports = async function clientFactory (config, creds, region) {
         let plugin
         /* istanbul ignore next */
         try {
-          // eslint-disable-next-line
           plugin = require(pluginName)
         }
         catch (err) {
@@ -109,7 +110,6 @@ module.exports = async function clientFactory (config, creds, region) {
 
         // Only require the vendor if it's actually needed
         if (!aws) {
-          // eslint-disable-next-line
           aws = require('./_vendor/aws')
         }
         let pluginUtils = {
@@ -192,7 +192,7 @@ module.exports = async function clientFactory (config, creds, region) {
             catch (err) {
               // Run plugin.method.error()
               let updatedError
-              if (method.error && !(input instanceof Error)) {
+              if (method.error && !(err instanceof Error)) {
                 try {
                   updatedError = await method.error(err, { ...pluginUtils, region: selectedRegion })
                 }

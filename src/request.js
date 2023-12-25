@@ -1,10 +1,6 @@
-let qs = require('querystring')
-let { Readable } = require('stream')
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
-let { is } = require('./validate')
-let { awsjson, useAWS } = require('./lib')
-let xml
+let { awsjson, buildXml, parseXml, tidyQuery, useAWS } = require('./lib')
 
 /* istanbul ignore next */
 let copy = obj => JSON.parse(JSON.stringify(obj))
@@ -14,7 +10,6 @@ let AwsJSONregex = /application\/x-amz-json/
 let AwsJSONContentType = ct => ct.match(AwsJSONregex)
 let XMLregex = /(application|text)\/xml/
 let XMLContentType = ct => ct.match(XMLregex)
-let textNodeName = '#text'
 
 // HTTP client agent cache to prevent generating new agents for every request
 let agentCache = {
@@ -32,35 +27,6 @@ function getAgent (client, isHTTPS, config) {
     agentCache[http][agent] = new client.Agent({ keepAlive })
   }
   return agentCache[http][agent]
-}
-/* istanbul ignore next */
-function instantiateXml () {
-  // eslint-disable-next-line
-  let vendor = require('./_vendor/xml')
-  // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
-  xml = new vendor.XMLParser({
-    attributeNamePrefix: '',
-    htmlEntities: true,
-    ignoreAttributes: false,
-    ignoreDeclaration: true,
-    parseTagValue: false,
-    trimValues: false,
-    tagValueProcessor: (_, val) => (val.trim() === '' && val.includes('\n') ? '' : undefined),
-  })
-  xml.addEntity('#xD', '\r')
-  xml.addEntity('#10', '\n')
-  xml.getValueFromTextNode = vendor.getValueFromTextNode
-}
-function parseXml (body) {
-  let parsed = xml.parse(body)
-  let key = Object.keys(parsed)[0]
-  let payloadToReturn = parsed[key]
-  /* istanbul ignore next */ // TODO remove + test
-  if (payloadToReturn[textNodeName]) {
-    payloadToReturn[key] = payloadToReturn[textNodeName]
-    delete payloadToReturn[textNodeName]
-  }
-  return xml.getValueFromTextNode(payloadToReturn)
 }
 
 module.exports = async function _request (params, creds, region, config, metadata) {
@@ -100,11 +66,15 @@ function request (params, creds, region, config, metadata) {
 
     // Structured query string
     if (params.query) {
+      let { is } = require('./validate')
       if (!is.object(params.query)) {
         throw ReferenceError('Query property must be an object')
       }
-      // Expect aws4 to handle RFC 3986 encoding when appending the query string to the passed path
-      params.path += '?' + qs.stringify(params.query)
+      let query = tidyQuery(params.query)
+      if (query) {
+        // Expect aws4 to handle RFC 3986 encoding when appending the query string to the passed path
+        params.path += '?' + query
+      }
     }
 
     // Headers, content-type
@@ -116,26 +86,31 @@ function request (params, creds, region, config, metadata) {
     // Body - JSON-ify payload where convenient!
     let body = params.payload || params.body || params.data || params.json
     let isBuffer = body instanceof Buffer
-    let isStream = body instanceof Readable
+    let isStream = (body?.on && body?._read && body?._readableState)
 
     // Detecting objects leaves open the possibility of some weird valid JSON (like just a null), deal with it if / when we need to I guess
     if (typeof body === 'object' && !isBuffer && !isStream) {
       // Backfill content-type if it's just an object
       if (!contentType) contentType = 'application/json'
 
-      // A variety of services use AWS JSON; we'll make it easier via a header or passed param
-      // Allow for manual encoding by passing a header while setting awsjson to false
-      let awsjsonEncode = params.awsjson ||
-                          (AwsJSONContentType(contentType) && params.awsjson !== false)
-      if (awsjsonEncode) {
-        // Backfill content-type header yet again
-        if (!AwsJSONContentType(contentType)) {
-          contentType = 'application/x-amz-json-1.0'
-        }
-        body = awsjson.marshall(body, params.awsjson)
+      if (XMLContentType(contentType)) {
+        params.body = buildXml(body)
       }
-      // Final JSON encoding
-      params.body = JSON.stringify(body)
+      else {
+        // A variety of services use AWS JSON; we'll make it easier via a header or passed param
+        // Allow for manual encoding by passing a header while setting awsjson to false
+        let awsjsonEncode = params.awsjson ||
+                            (AwsJSONContentType(contentType) && params.awsjson !== false)
+        if (awsjsonEncode) {
+          // Backfill content-type header yet again
+          if (!AwsJSONContentType(contentType)) {
+            contentType = 'application/x-amz-json-1.0'
+          }
+          body = awsjson.marshall(body, params.awsjson)
+        }
+        // Final JSON encoding
+        params.body = JSON.stringify(body)
+      }
     }
     // Everything besides streams pass through for signing
     else {
@@ -178,7 +153,7 @@ function request (params, creds, region, config, metadata) {
     // Importing http(s) is a bit slow (~1ms), so only instantiate the client and http agent we need
     options.protocol = (params.protocol || config.protocol) + ':'
     let isHTTPS = options.host.includes('.amazonaws.com') || options.protocol === 'https:'
-    /* istanbul ignore next */ // eslint-disable-next-line
+    /* istanbul ignore next */
     let http = isHTTPS ? require('https') : require('http')
 
     // Port configuration
@@ -211,7 +186,9 @@ function request (params, creds, region, config, metadata) {
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
         let body = Buffer.concat(data), payload, rawString
-        let contentType = config.responseContentType || headers['content-type'] || headers['Content-Type'] || ''
+        let contentType = config.responseContentType ||
+                          headers['content-type'] ||
+                          headers['Content-Type'] || ''
         if (body.length && (JSONContentType(contentType) || AwsJSONContentType(contentType))) {
           payload = JSON.parse(body)
 
@@ -227,10 +204,9 @@ function request (params, creds, region, config, metadata) {
           }
         }
         if (body.length && XMLContentType(contentType)) {
-          // Only require the vendor if it's actually needed
-          /* istanbul ignore next */
-          if (!xml) instantiateXml()
           payload = parseXml(body)
+          /* istanbul ignore next */
+          if (payload.xmlns) delete payload.xmlns
 
           /* istanbul ignore next */
           if (debug) rawString = body.toString()
@@ -243,9 +219,6 @@ function request (params, creds, region, config, metadata) {
           }
           catch {
             try {
-              // Only require the vendor if it's actually needed
-              /* istanbul ignore next */
-              if (!xml) instantiateXml()
               payload = parseXml(body)
             }
             catch {
@@ -309,6 +282,8 @@ let validPaginationTypes = [ 'payload', 'query' ]
 async function paginator (params, creds, region, config, metadata) {
   let { debug } = config
   let { type, cursor, token, accumulator } = params.paginator
+  let nestedAccumulator = accumulator.split('.').length > 1
+
   if (!cursor || typeof cursor !== 'string') {
     throw ReferenceError(`aws-lite paginator requires a cursor property name (string)`)
   }
@@ -327,6 +302,7 @@ async function paginator (params, creds, region, config, metadata) {
   let originalHeaders = copy(params.headers || {})
   let page = 1
   let items = []
+  let statusCode, headers
   async function get () {
     let result = await request(
       { ...params, headers: copy(originalHeaders) },
@@ -338,14 +314,42 @@ async function paginator (params, creds, region, config, metadata) {
     if (typeof result.payload !== 'object') {
       throw ReferenceError('Pagination error: response must be valid JSON or XML')
     }
-    if (!result.payload[accumulator]) {
+
+    let accumulated = nestedAccumulator
+      ? accumulator.split('.').reduce((parent, child) => parent?.[child], result.payload)
+      : result.payload[accumulator]
+
+    if (!accumulated) {
       throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' not found`)
     }
-    if (!Array.isArray(result.payload[accumulator])) {
-      throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' must be an array`)
 
+    // Best effort handling of properties that sometimes are / are not arrays, courtesy of XML
+    // This can perhaps backfire in a few different ways, so hold onto your butts
+    if (accumulated && !Array.isArray(accumulated)) {
+      accumulated = [ accumulated ]
     }
-    items.push(...result.payload[accumulator])
+
+    // Update statusCode and headers for response hooks
+    statusCode = result.statusCode
+    headers = result.headers
+
+    // Exit if we're out of results
+    if (!accumulated.length) {
+      return
+    }
+
+    // Some services will just keep re-sending the final page with the final token
+    // Exit here to prevent infinite loops if cursors match
+    if (result.payload[token] && (type === 'payload' || !type) &&
+        result.payload[token] === params.payload[cursor]) {
+      return
+    }
+    if (result.payload[token] && (type === 'query') &&
+        result.payload[token] === params.query[cursor]) {
+      return
+    }
+
+    items.push(...accumulated)
     if (result.payload[token]) {
       if (type === 'payload' || !type) {
         params.payload[cursor] = result.payload[token]
@@ -360,5 +364,15 @@ async function paginator (params, creds, region, config, metadata) {
     }
   }
   await get()
-  return { payload: { [accumulator]: items } }
+  if (nestedAccumulator) {
+    return { statusCode, headers, payload: reNestAccumulated(accumulator, items) }
+  }
+  return { statusCode, headers, payload: { [accumulator]: items } }
+}
+
+/* istanbul ignore next */
+function reNestAccumulated (acc, items) {
+  acc = Array.isArray(acc) ? acc : acc.split('.')
+  if (!acc.length) return items
+  return { [acc.shift()]: reNestAccumulated(acc, items) }
 }

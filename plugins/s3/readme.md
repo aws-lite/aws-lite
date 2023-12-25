@@ -26,6 +26,87 @@ npm i -D @aws-lite/s3-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateBucket`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`CreateBucketConfiguration` (object) [required]**
+  - Complete bucket configuration object
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html#API_CreateBucket_RequestSyntax)
+- **`ACL` (string)**
+  - Sets request header: `x-amz-acl`
+- **`GrantFullControl` (string)**
+  - Sets request header: `x-amz-grant-full-control`
+- **`GrantRead` (string)**
+  - Sets request header: `x-amz-grant-read`
+- **`GrantReadACP` (string)**
+  - Sets request header: `x-amz-grant-read-acp`
+- **`GrantWrite` (string)**
+  - Sets request header: `x-amz-grant-write`
+- **`GrantWriteACP` (string)**
+  - Sets request header: `x-amz-grant-write-acp`
+- **`ObjectLockEnabledForBucket` (string)**
+  - Sets request header: `x-amz-bucket-object-lock-enabled`
+- **`ObjectOwnership` (string)**
+  - Sets request header: `x-amz-object-ownership`
+
+
+### `DeleteBucket`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucket.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteObject`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`MFA` (string)**
+  - Sets request header: `x-amz-mfa`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`BypassGovernanceRetention` (string)**
+  - Sets request header: `x-amz-bypass-governance-retention`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteObjects`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjects.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Delete` (object) [required]**
+  - Object deletion request
+- **`MFA` (string)**
+  - Sets request header: `x-amz-mfa`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`BypassGovernanceRetention` (string)**
+  - Sets request header: `x-amz-bypass-governance-retention`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+
+
 ### `GetObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html)
@@ -110,6 +191,17 @@ Properties:
   - Sets request header: `x-amz-expected-bucket-owner`
 - **`ChecksumMode` (string)**
   - Sets request header: `x-amz-checksum-mode`
+
+
+### `HeadBucket`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
 
 
 ### `ListBuckets`
@@ -236,98 +328,95 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- `AbortMultipartUpload`
-- `CompleteMultipartUpload`
-- `CopyObject`
-- `CreateBucket`
-- `CreateMultipartUpload`
-- `DeleteBucket`
-- `DeleteBucketAnalyticsConfiguration`
-- `DeleteBucketCors`
-- `DeleteBucketEncryption`
-- `DeleteBucketIntelligentTieringConfiguration`
-- `DeleteBucketInventoryConfiguration`
-- `DeleteBucketLifecycle`
-- `DeleteBucketMetricsConfiguration`
-- `DeleteBucketOwnershipControls`
-- `DeleteBucketPolicy`
-- `DeleteBucketReplication`
-- `DeleteBucketTagging`
-- `DeleteBucketWebsite`
-- `DeleteObject`
-- `DeleteObjects`
-- `DeleteObjectTagging`
-- `DeletePublicAccessBlock`
-- `GetBucketAccelerateConfiguration`
-- `GetBucketAcl`
-- `GetBucketAnalyticsConfiguration`
-- `GetBucketCors`
-- `GetBucketEncryption`
-- `GetBucketIntelligentTieringConfiguration`
-- `GetBucketInventoryConfiguration`
-- `GetBucketLifecycle`
-- `GetBucketLifecycleConfiguration`
-- `GetBucketLocation`
-- `GetBucketLogging`
-- `GetBucketMetricsConfiguration`
-- `GetBucketNotification`
-- `GetBucketNotificationConfiguration`
-- `GetBucketOwnershipControls`
-- `GetBucketPolicy`
-- `GetBucketPolicyStatus`
-- `GetBucketReplication`
-- `GetBucketRequestPayment`
-- `GetBucketTagging`
-- `GetBucketVersioning`
-- `GetBucketWebsite`
-- `GetObjectAcl`
-- `GetObjectAttributes`
-- `GetObjectLegalHold`
-- `GetObjectLockConfiguration`
-- `GetObjectRetention`
-- `GetObjectTagging`
-- `GetObjectTorrent`
-- `GetPublicAccessBlock`
-- `HeadBucket`
-- `ListBucketAnalyticsConfigurations`
-- `ListBucketIntelligentTieringConfigurations`
-- `ListBucketInventoryConfigurations`
-- `ListBucketMetricsConfigurations`
-- `ListMultipartUploads`
-- `ListObjects`
-- `ListObjectVersions`
-- `ListParts`
-- `PutBucketAccelerateConfiguration`
-- `PutBucketAcl`
-- `PutBucketAnalyticsConfiguration`
-- `PutBucketCors`
-- `PutBucketEncryption`
-- `PutBucketIntelligentTieringConfiguration`
-- `PutBucketInventoryConfiguration`
-- `PutBucketLifecycle`
-- `PutBucketLifecycleConfiguration`
-- `PutBucketLogging`
-- `PutBucketMetricsConfiguration`
-- `PutBucketNotification`
-- `PutBucketNotificationConfiguration`
-- `PutBucketOwnershipControls`
-- `PutBucketPolicy`
-- `PutBucketReplication`
-- `PutBucketRequestPayment`
-- `PutBucketTagging`
-- `PutBucketVersioning`
-- `PutBucketWebsite`
-- `PutObjectAcl`
-- `PutObjectLegalHold`
-- `PutObjectLockConfiguration`
-- `PutObjectRetention`
-- `PutObjectTagging`
-- `PutPublicAccessBlock`
-- `RestoreObject`
-- `SelectObjectContent`
-- `UploadPart`
-- `UploadPartCopy`
-- `WriteGetObjectResponse`
+- [`AbortMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html)
+- [`CompleteMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html)
+- [`CopyObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html)
+- [`CreateMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html)
+- [`CreateSession`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html)
+- [`DeleteBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html)
+- [`DeleteBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketCors.html)
+- [`DeleteBucketEncryption`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html)
+- [`DeleteBucketIntelligentTieringConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketIntelligentTieringConfiguration.html)
+- [`DeleteBucketInventoryConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html)
+- [`DeleteBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketLifecycle.html)
+- [`DeleteBucketMetricsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html)
+- [`DeleteBucketOwnershipControls`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketOwnershipControls.html)
+- [`DeleteBucketPolicy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketPolicy.html)
+- [`DeleteBucketReplication`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketReplication.html)
+- [`DeleteBucketTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html)
+- [`DeleteBucketWebsite`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketWebsite.html)
+- [`DeleteObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html)
+- [`DeletePublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
+- [`GetBucketAccelerateConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html)
+- [`GetBucketAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAcl.html)
+- [`GetBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAnalyticsConfiguration.html)
+- [`GetBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketCors.html)
+- [`GetBucketEncryption`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketEncryption.html)
+- [`GetBucketIntelligentTieringConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketIntelligentTieringConfiguration.html)
+- [`GetBucketInventoryConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketInventoryConfiguration.html)
+- [`GetBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html)
+- [`GetBucketLifecycleConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycleConfiguration.html)
+- [`GetBucketLocation`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLocation.html)
+- [`GetBucketLogging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLogging.html)
+- [`GetBucketMetricsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketMetricsConfiguration.html)
+- [`GetBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotification.html)
+- [`GetBucketNotificationConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotificationConfiguration.html)
+- [`GetBucketOwnershipControls`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketOwnershipControls.html)
+- [`GetBucketPolicy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicy.html)
+- [`GetBucketPolicyStatus`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicyStatus.html)
+- [`GetBucketReplication`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html)
+- [`GetBucketRequestPayment`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketRequestPayment.html)
+- [`GetBucketTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketTagging.html)
+- [`GetBucketVersioning`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html)
+- [`GetBucketWebsite`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketWebsite.html)
+- [`GetObjectAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAcl.html)
+- [`GetObjectAttributes`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html)
+- [`GetObjectLegalHold`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html)
+- [`GetObjectLockConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLockConfiguration.html)
+- [`GetObjectRetention`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectRetention.html)
+- [`GetObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html)
+- [`GetObjectTorrent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html)
+- [`GetPublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html)
+- [`ListBucketAnalyticsConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html)
+- [`ListBucketIntelligentTieringConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html)
+- [`ListBucketInventoryConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html)
+- [`ListBucketMetricsConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html)
+- [`ListDirectoryBuckets`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListDirectoryBuckets.html)
+- [`ListMultipartUploads`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html)
+- [`ListObjects`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html)
+- [`ListObjectVersions`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
+- [`ListParts`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html)
+- [`PutBucketAccelerateConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html)
+- [`PutBucketAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAcl.html)
+- [`PutBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html)
+- [`PutBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html)
+- [`PutBucketEncryption`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html)
+- [`PutBucketIntelligentTieringConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketIntelligentTieringConfiguration.html)
+- [`PutBucketInventoryConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html)
+- [`PutBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html)
+- [`PutBucketLifecycleConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html)
+- [`PutBucketLogging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLogging.html)
+- [`PutBucketMetricsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html)
+- [`PutBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotification.html)
+- [`PutBucketNotificationConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html)
+- [`PutBucketOwnershipControls`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketOwnershipControls.html)
+- [`PutBucketPolicy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html)
+- [`PutBucketReplication`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html)
+- [`PutBucketRequestPayment`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketRequestPayment.html)
+- [`PutBucketTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html)
+- [`PutBucketVersioning`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html)
+- [`PutBucketWebsite`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html)
+- [`PutObjectAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html)
+- [`PutObjectLegalHold`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLegalHold.html)
+- [`PutObjectLockConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLockConfiguration.html)
+- [`PutObjectRetention`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectRetention.html)
+- [`PutObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectTagging.html)
+- [`PutPublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutPublicAccessBlock.html)
+- [`RestoreObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html)
+- [`SelectObjectContent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_SelectObjectContent.html)
+- [`UploadPart`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html)
+- [`UploadPartCopy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html)
+- [`WriteGetObjectResponse`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_WriteGetObjectResponse.html)
 <!-- METHOD_DOCS_END -->
 
 

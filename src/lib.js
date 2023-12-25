@@ -1,4 +1,4 @@
-let aws, ini
+let aws, ini, xml
 
 // AWS-flavored JSON stuff
 function marshaller (method, obj, awsjsonSetting) {
@@ -57,6 +57,16 @@ async function readConfig (file) {
   return result
 }
 
+function tidyQuery (obj) {
+  let qs = require('querystring')
+  let tidied = {}
+  Object.entries(obj).forEach(([ k, v ]) => {
+    // Who knows, maybe there's an API service that uses boolean query string params
+    if (v || v === false) tidied[k] = v
+  })
+  if (Object.keys(tidied).length) return qs.stringify(tidied)
+}
+
 // Probably this is going to need some refactoring in Arc 11
 // Certainly it is not reliable in !Arc local Lambda emulation
 let nonLocalEnvs = [ 'staging', 'production' ]
@@ -70,4 +80,54 @@ function useAWS () {
   return true
 }
 
-module.exports = { awsjson, exists, loadAwsConfig, readConfig, useAWS }
+// XML stuff
+let textNodeName = '#text'
+/* istanbul ignore next */
+function instantiateXml () {
+  if (xml) return
+  // Only require the vendor if + when it's actually needed
+  let vendor = require('./_vendor/xml')
+  // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
+  xml = {
+    parser: new vendor.XMLParser({
+      attributeNamePrefix: '',
+      htmlEntities: true,
+      ignoreAttributes: false,
+      ignoreDeclaration: true,
+      parseTagValue: false,
+      trimValues: false,
+      tagValueProcessor: (_, val) => (val.trim() === '' && val.includes('\n') ? '' : undefined),
+    }),
+    builder: new vendor.XMLBuilder(),
+  }
+  xml.parser.addEntity('#xD', '\r')
+  xml.parser.addEntity('#10', '\n')
+  xml.parser.getValueFromTextNode = vendor.getValueFromTextNode
+}
+function buildXml (obj) {
+  instantiateXml()
+  return xml.builder.build(obj)
+}
+function parseXml (body) {
+  instantiateXml()
+  let parsed = xml.parser.parse(body)
+  let key = Object.keys(parsed)[0]
+  let payloadToReturn = parsed[key]
+  /* istanbul ignore next */ // TODO remove + test
+  if (payloadToReturn[textNodeName]) {
+    payloadToReturn[key] = payloadToReturn[textNodeName]
+    delete payloadToReturn[textNodeName]
+  }
+  return xml.parser.getValueFromTextNode(payloadToReturn)
+}
+
+module.exports = {
+  awsjson,
+  exists,
+  loadAwsConfig,
+  readConfig,
+  tidyQuery,
+  useAWS,
+  buildXml,
+  parseXml,
+}

@@ -192,7 +192,11 @@ Open source contributor guidelines, methodology, and instructions
 
 <!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
+- [API Gateway V2](https://www.npmjs.com/package/@aws-lite/apigatewayv2)
 - [API Gateway WebSocket Management API](https://www.npmjs.com/package/@aws-lite/apigatewaymanagementapi)
+- [CloudFormation](https://www.npmjs.com/package/@aws-lite/cloudformation)
+- [CloudFront](https://www.npmjs.com/package/@aws-lite/cloudfront)
+- [CloudWatch Logs](https://www.npmjs.com/package/@aws-lite/cloudwatch-logs)
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
 - [Lambda](https://www.npmjs.com/package/@aws-lite/lambda)
 - [RDS Data Service](https://www.npmjs.com/package/@aws-lite/rds-data)

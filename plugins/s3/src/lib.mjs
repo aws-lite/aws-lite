@@ -13,6 +13,11 @@ const headerMappings = {
   ACL:                        'x-amz-acl',
   ArchiveStatus:              'x-amz-archive-status',
   BucketKeyEnabled:           'x-amz-server-side-encryption-bucket-key-enabled',
+  BucketLocationType:         'x-amz-bucket-location-type',
+  BucketLocationName:         'x-amz-bucket-location-name',
+  BucketRegion:               'x-amz-bucket-region',
+  AccessPointAlias:           'x-amz-access-point-alias',
+  BypassGovernanceRetention:  'x-amz-bypass-governance-retention',
   CacheControl:               'cache-control',
   ChecksumAlgorithm:          'x-amz-sdk-checksum-algorithm',
   ChecksumCRC32:              'x-amz-checksum-crc32',
@@ -24,8 +29,8 @@ const headerMappings = {
   ContentEncoding:            'content-encoding',
   ContentLanguage:            'content-language',
   ContentLength:              'content-length',
-  ContentRange:               'content-range',
   ContentMD5:                 'content-md5',
+  ContentRange:               'content-range',
   ContentType:                'content-type',
   DeleteMarker:               'x-amz-delete-marker',
   ETag:                       'etag',
@@ -35,16 +40,20 @@ const headerMappings = {
   GrantFullControl:           'x-amz-grant-full-control',
   GrantRead:                  'x-amz-grant-read',
   GrantReadACP:               'x-amz-grant-read-acp',
+  GrantWrite:                 'x-amz-grant-write',
   GrantWriteACP:              'x-amz-grant-write-acp',
   IfMatch:                    'if-match',
   IfModifiedSince:            'if-modified-since',
   IfNoneMatch:                'if-none-match',
   IfUnmodifiedSince:          'if-unmodified-since',
   LastModified:               'last-modified',
+  MFA:                        'x-amz-mfa',
   MissingMeta:                'x-amz-missing-meta',
+  ObjectLockEnabledForBucket: 'x-amz-bucket-object-lock-enabled',
   ObjectLockLegalHoldStatus:  'x-amz-object-lock-legal-hold',
   ObjectLockMode:             'x-amz-object-lock-mode',
   ObjectLockRetainUntilDate:  'x-amz-object-lock-retain-until-date',
+  ObjectOwnership:            'x-amz-object-ownership',
   OptionalObjectAttributes:   'x-amz-optional-object-attributes',
   PartsCount:                 'x-amz-mp-parts-count',
   Range:                      'range',
@@ -59,8 +68,8 @@ const headerMappings = {
   SSEKMSEncryptionContext:    'x-amz-server-side-encryption-context',
   SSEKMSKeyId:                'x-amz-server-side-encryption-aws-kms-key-id',
   StorageClass:               'x-amz-storage-class',
-  Tagging:                    'x-amz-tagging',
   TagCount:                   'x-amz-tagging-count',
+  Tagging:                    'x-amz-tagging',
   VersionId:                  'x-amz-version-id',
   WebsiteRedirectLocation:    'x-amz-website-redirect-location',
 }
@@ -69,14 +78,14 @@ const paramMappings = Object.fromEntries(Object.entries(headerMappings).map(([ k
 
 // Take a response, and parse its headers into the AWS-named params of headerMappings
 const quoted = /^".*"$/
-const ignoreHeaders = [ 'content-length' ]
+const ignoreHeaders = [ 'content-length', 'content-type' ]
 const isNum = [ 'content-length' ]
 const parseHeadersToResults = ({ headers }, utils, ignore) => {
   let results = Object.entries(headers).reduce((acc, [ header, value ]) => {
     const normalized = header.toLowerCase()
-    if (value === 'true') value = true
-    if (value === 'false') value = false
-    if (value.match(quoted)) {
+    /**/ if (value === 'true') value = true
+    else if (value === 'false') value = false
+    else if (value.match(quoted)) {
       value = value.substring(1, value.length - 1)
     }
     let ignored = ignore || ignoreHeaders
