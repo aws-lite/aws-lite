@@ -27,7 +27,7 @@ const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the o
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
 const notTesting = process.env.NODE_ENV !== 'testing'
-const host = Bucket => notTesting ? `${Bucket}.s3.amazonaws.com` : `localhost`
+const host = Bucket => notTesting ? `${Bucket}.s3.amazonaws.com` : 'localhost'
 const endpoint = (Bucket, path) => notTesting ? path : `/${Bucket}${path ? '/' + path : ''}`
 const defaultResponse = ({ payload }) => payload
 const defaultError = ({ statusCode, error }) => {

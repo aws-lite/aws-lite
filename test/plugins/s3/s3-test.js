@@ -21,7 +21,7 @@ test('Set up env', async t => {
     secretAccessKey: 'S3RVER',
     region: 'us-east-1',
     host: 'localhost',
-    port: port,
+    port,
     protocol: 'http',
   })
   t.ok(aws, 'Client ready')
@@ -35,8 +35,7 @@ test('Set up env', async t => {
   t.ok(tmp, `mockTmp directory ${tmp} is present`)
 
   s3rver = new S3rver({
-    port: port,
-    address: '127.0.0.1',
+    port,
     silent: true,
     directory: join(tmp, s3_root_dir),
   })
