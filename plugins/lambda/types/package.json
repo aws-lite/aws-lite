@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/lambda-types",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Type definitions for the `@aws-lite/lambda` plugin",
   "homepage": "https://aws-lite.org/services/lambda",
   "repository": {
