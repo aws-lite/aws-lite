@@ -49,13 +49,13 @@ module.exports = async function clientFactory (config, creds, region) {
   // Service API plugins
   let { autoloadPlugins = true, plugins = [] } = config
   if (autoloadPlugins) {
-    let { readdir } = require('fs/promises')
     let { join } = require('path')
     let awsLite = '@aws-lite'
     let nodeModulesDir
     try { nodeModulesDir = require.resolve('@aws-lite/client').split(awsLite)[0] }
     catch { nodeModulesDir = join(process.cwd(), 'node_modules') } // Likely just aws-lite tests
     if (await exists(nodeModulesDir)) {
+      let { readdir } = require('fs/promises')
       let mods = await readdir(nodeModulesDir)
       // Find first-party plugins
       if (mods.includes(awsLite)) {
