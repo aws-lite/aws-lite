@@ -40,6 +40,6 @@ declare interface AwsLiteCloudWatchLogs {
 
 declare module "@aws-lite/client" {
   interface AwsLiteClient {
-    CloudWatch Logs: AwsLiteCloudWatch Logs;
+    CloudWatchLogs: AwsLiteCloudWatchLogs;
   }
 }

@@ -1,13 +1,26 @@
 {
   "name": "@aws-lite/s3-types",
-  "description": "Type definitions for the @aws-lite/s3 plugin",
   "version": "0.1.7",
+  "description": "Type definitions for the `@aws-lite/s3` plugin",
+  "homepage": "https://aws-lite.org/services/s3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/architect/aws-lite.git",
+    "directory": "plugins/s3/types"
+  },
+  "bugs": "https://github.com/architect/aws-lite/issues",
   "main": "",
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "@architect",
+  "license": "Apache-2.0",
   "types": "index.d.ts",
   "files": [
     "index.d.ts"
   ],
   "dependencies": {
     "@aws-sdk/client-s3": "3"
-  }
+  },
+  "scripts": {}
 }

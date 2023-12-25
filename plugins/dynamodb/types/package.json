@@ -1,13 +1,26 @@
 {
   "name": "@aws-lite/dynamodb-types",
-  "description": "Type definitions for the @aws-lite/dynamodb plugin",
   "version": "0.3.0",
+  "description": "Type definitions for the `@aws-lite/dynamodb` plugin",
+  "homepage": "https://aws-lite.org/services/dynamodb",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/architect/aws-lite.git",
+    "directory": "plugins/dynamodb/types"
+  },
+  "bugs": "https://github.com/architect/aws-lite/issues",
   "main": "",
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "@architect",
+  "license": "Apache-2.0",
   "types": "index.d.ts",
   "files": [
     "index.d.ts"
   ],
   "dependencies": {
     "@aws-sdk/client-dynamodb": "3"
-  }
+  },
+  "scripts": {}
 }
