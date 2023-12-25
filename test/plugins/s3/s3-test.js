@@ -6,27 +6,13 @@ let client = require(sut)
 let test = require('tape')
 let mockTmp = require('mock-tmp')
 
-let aws
+let aws, s3rver, tmp
 let port = 4569
 let bucket_name = 'bucket1'
 let object_name = 'object1'
 let object_content = 'Hello, World!'
 let s3_root_dir = 's3_root_dir'
 let contentType = 'text/plain'
-
-let tmp = mockTmp({
-  // Directory for S3rver
-  [`${s3_root_dir}/${bucket_name}`]: {},
-  // Source file for PutObject
-  [object_name]: object_content,
-})
-
-let s3rver = new S3rver({
-  port: port,
-  address: '127.0.0.1',
-  silent: true,
-  directory: join(tmp, s3_root_dir),
-})
 
 test('Set up env', async t => {
   t.plan(3)
@@ -39,7 +25,21 @@ test('Set up env', async t => {
     protocol: 'http',
   })
   t.ok(aws, 'Client ready')
+
+  tmp = mockTmp({
+  // Directory for S3rver
+    [`${s3_root_dir}/${bucket_name}`]: {},
+    // Source file for PutObject
+    [object_name]: object_content,
+  })
   t.ok(tmp, `mockTmp directory ${tmp} is present`)
+
+  s3rver = new S3rver({
+    port: port,
+    address: '127.0.0.1',
+    silent: true,
+    directory: join(tmp, s3_root_dir),
+  })
   let started = await s3rver.run()
   t.ok(started, 'Started S3rver')
 })
