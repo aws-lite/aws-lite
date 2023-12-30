@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/sqs",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Official `aws-lite` plugin for SQS",
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {
