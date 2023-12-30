@@ -9,7 +9,6 @@ export default {
   DeleteMessage:                { disabled, awsDoc: docRoot + 'API_DeleteMessage.html' },
   DeleteMessageBatch:           { disabled, awsDoc: docRoot + 'API_DeleteMessageBatch.html' },
   DeleteQueue:                  { disabled, awsDoc: docRoot + 'API_DeleteQueue.html' },
-  GetQueueAttributes:           { disabled, awsDoc: docRoot + 'API_GetQueueAttributes.html' },
   GetQueueUrl:                  { disabled, awsDoc: docRoot + 'API_GetQueueUrl.html' },
   ListDeadLetterSourceQueues:   { disabled, awsDoc: docRoot + 'API_ListDeadLetterSourceQueues.html' },
   ListMessageMoveTasks:         { disabled, awsDoc: docRoot + 'API_ListMessageMoveTasks.html' },
