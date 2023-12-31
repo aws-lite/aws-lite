@@ -84,6 +84,17 @@ Properties:
   - The duration (in seconds) for which the call waits for a message to arrive in the queue before returning
 
 
+### `DeleteMessage`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteMessage.html)
+
+Properties:
+- **`QueueUrl` (string) [required]**
+  - SQS queue URL from which messages are deleted
+- **`ReceiptHandle` (string) [required]**
+  - The receipt handle associated with the message to delete
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
@@ -93,7 +104,6 @@ Properties:
 - [`ChangeMessageVisibility`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ChangeMessageVisibility.html)
 - [`ChangeMessageVisibilityBatch`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ChangeMessageVisibilityBatch.html)
 - [`CreateQueue`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html)
-- [`DeleteMessage`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteMessage.html)
 - [`DeleteMessageBatch`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteMessageBatch.html)
 - [`DeleteQueue`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteQueue.html)
 - [`GetQueueUrl`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_GetQueueUrl.html)

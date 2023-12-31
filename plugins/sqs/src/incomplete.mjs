@@ -6,7 +6,6 @@ export default {
   ChangeMessageVisibility:      { disabled, awsDoc: docRoot + 'API_ChangeMessageVisibility.html' },
   ChangeMessageVisibilityBatch: { disabled, awsDoc: docRoot + 'API_ChangeMessageVisibilityBatch.html' },
   CreateQueue:                  { disabled, awsDoc: docRoot + 'API_CreateQueue.html' },
-  DeleteMessage:                { disabled, awsDoc: docRoot + 'API_DeleteMessage.html' },
   DeleteMessageBatch:           { disabled, awsDoc: docRoot + 'API_DeleteMessageBatch.html' },
   DeleteQueue:                  { disabled, awsDoc: docRoot + 'API_DeleteQueue.html' },
   GetQueueUrl:                  { disabled, awsDoc: docRoot + 'API_GetQueueUrl.html' },
