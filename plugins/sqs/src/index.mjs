@@ -86,6 +86,20 @@ const SendMessage = {
   response: ({ payload }) => payload.SendMessageResult,
   error: defaultError,
 }
+const DeleteMessage = {
+  awsDoc: docRoot + 'API_DeleteMessage.html',
+  validate: {
+    QueueUrl: { ...str, required, comment: 'SQS queue URL from which messages are deleted' },
+    ReceiptHandle: { ...str, required, comment: 'The receipt handle associated with the message to delete' },
+  },
+  request: async (params) => ({
+    awsjson: false,
+    headers: headers('DeleteMessage', awsjsonContentType),
+    payload: params
+  }),
+  response: ({ payload }) => payload,
+  error: defaultError,
+}
 
 export default {
   service,
@@ -94,6 +108,7 @@ export default {
     SendMessage,
     GetQueueAttributes,
     ReceiveMessage,
+    DeleteMessage,
     ...incomplete,
   }
 }
