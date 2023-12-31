@@ -61,6 +61,29 @@ Properties:
   - List of attribute names (strings) to retrieve
 
 
+### `ReceiveMessage`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html)
+
+Properties:
+- **`QueueUrl` (string) [required]**
+  - SQS queue URL from which messages are received
+- **`AttributeNames` (array)**
+  - List of attribute names (strings) to be returned along with each message
+- **`MaxNumberOfMessages` (number)**
+  - Maximum number of messages to return
+- **`MessageAttributeNames` (array)**
+  - The name of the message attribute
+- **`MessageSystemAttributeNames` (array)**
+  - A list of attributes that need to be returned along with each message
+- **`ReceiveRequestAttemptId` (string)**
+  - The token used for deduplication of `ReceiveMessage` calls
+- **`VisibilityTimeout` (number)**
+  - The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a `ReceiveMessage` request
+- **`WaitTimeSeconds` (number)**
+  - The duration (in seconds) for which the call waits for a message to arrive in the queue before returning
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
@@ -79,7 +102,6 @@ Properties:
 - [`ListQueues`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ListQueues.html)
 - [`ListQueueTags`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ListQueueTags.html)
 - [`PurgeQueue`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_PurgeQueue.html)
-- [`ReceiveMessage`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html)
 - [`RemovePermission`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_RemovePermission.html)
 - [`SendMessageBatch`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessageBatch.html)
 - [`SetQueueAttributes`](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SetQueueAttributes.html)

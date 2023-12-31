@@ -48,6 +48,26 @@ const GetQueueAttributes = {
   response: ({ payload }) => payload,
   error: defaultError,
 }
+const ReceiveMessage = {
+  awsDoc: docRoot + 'API_ReceiveMessage.html',
+  validate: {
+    QueueUrl: { ...str, required, comment: 'SQS queue URL from which messages are received' },
+    AttributeNames: { ...arr, comment: 'List of attribute names (strings) to be returned along with each message' },
+    MaxNumberOfMessages: { ...num, comment: 'Maximum number of messages to return' },
+    MessageAttributeNames: { ...arr, comment: 'The name of the message attribute' },
+    MessageSystemAttributeNames: { ...arr, comment: 'A list of attributes that need to be returned along with each message' },
+    ReceiveRequestAttemptId: { ...str, comment: 'The token used for deduplication of `ReceiveMessage` calls' },
+    VisibilityTimeout: { ...num, comment: 'The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a `ReceiveMessage` request' },
+    WaitTimeSeconds: { ...num, comment: 'The duration (in seconds) for which the call waits for a message to arrive in the queue before returning' },
+  },
+  request: async (params) => ({
+    awsjson: false,
+    headers: headers('ReceiveMessage', awsjsonContentType),
+    payload: params
+  }),
+  response: ({ payload }) => payload,
+  error: defaultError,
+}
 const SendMessage = {
   awsDoc: docRoot + 'API_SendMessage.html',
   validate: {
@@ -73,6 +93,7 @@ export default {
   methods: {
     SendMessage,
     GetQueueAttributes,
+    ReceiveMessage,
     ...incomplete,
   }
 }
