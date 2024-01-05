@@ -111,7 +111,12 @@ function coerceXMLValues (obj) {
       obj[k] = maybeConvertString(obj[k])
     }
     else if (Array.isArray(obj[k])) {
-      obj[k] = obj[k].map(i => maybeConvertString(i))
+      obj[k] = obj[k].map(i => {
+        if (typeof i === 'object' && !Array.isArray(i)) {
+          return coerceXMLValues(i)
+        }
+        return maybeConvertString(i)
+      })
     }
     else if (typeof obj[k] === 'object') {
       coerceXMLValues(obj[k])

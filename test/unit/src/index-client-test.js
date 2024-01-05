@@ -279,9 +279,14 @@ test('Primary client - XML payloads', async t => {
     <number>1</number>
   </obj>
   <arr>
-    <number>1</number>
-    <number>2</number>
-    <number>3</number>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>
+      <booltrue>true</booltrue>
+      <boolfalse>false</boolfalse>
+      <null>null</null>
+    </item>
   </arr>
 </result>`
   server.use({ responseBody, responseHeaders: xmlHeaders })
@@ -297,7 +302,7 @@ test('Primary client - XML payloads', async t => {
   t.equal(result.payload.empty, '', 'Client returned XML response with empty string')
   t.equal(result.payload.space, '  ', 'Client returned XML response with string of space(s)')
   t.deepEqual(result.payload.obj, { number: 1 }, 'Client returned XML response with parsed nested object values')
-  t.deepEqual(result.payload.arr, { number: [ 1, 2, 3 ] }, 'Client returned XML response with parsed array values')
+  t.deepEqual(result.payload.arr, { item: [ 1, 2, 3, { booltrue: true, boolfalse: false, null: null } ] }, 'Client returned XML response with parsed array values, including nested objects')
   reset()
 })
 
