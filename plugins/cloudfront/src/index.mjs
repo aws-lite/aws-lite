@@ -27,38 +27,7 @@ const returnNestedAs = (prop) => ({ headers, payload }) => {
   const ETag = headers.etag || headers.ETag
   let result = { [prop]: payload }
   if (ETag) result = { [prop]: payload, ETag }
-  parseXMLValues(result)
   return result
-}
-
-function maybeConvertString (str) {
-  /**/ if (str === 'true') return true
-  else if (str === 'false') return false
-  else if (str === '') return str
-  else if (!isNaN(Number(str))) {
-    return Number(str)
-  }
-  try {
-    if (new Date(Date.parse(str)).toISOString() === str) {
-      return new Date(str)
-    }
-  }
-  catch {/* noop */}
-  return str
-}
-
-function parseXMLValues (obj) {
-  Object.keys(obj).forEach(k => {
-    if (typeof obj[k] === 'string') {
-      obj[k] = maybeConvertString(obj[k])
-    }
-    else if (Array.isArray(obj[k])) {
-      obj[k] = obj[k].map(i => maybeConvertString(i))
-    }
-    else if (typeof obj[k] === 'object') {
-      parseXMLValues(obj[k])
-    }
-  })
 }
 
 const CreateDistribution = {
