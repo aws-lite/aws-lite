@@ -82,6 +82,44 @@ function useAWS () {
 
 // XML stuff
 let textNodeName = '#text'
+
+// Interpolate XML string values to booleans, numbers, dates, etc.
+function maybeConvertString (str) {
+  /**/ if (str === 'true') return true
+  else if (str === 'false') return false
+  else if (str === 'null') return null
+  else if (str === '') return str
+  else if (str?.match(/^[ ]+$/)) return str
+  else if (!isNaN(Number(str))) {
+    return Number(str)
+  }
+  try {
+    /* istanbul ignore else */
+    if (new Date(Date.parse(str)).toISOString() === str) {
+      return new Date(str)
+    }
+  }
+  catch { /* noop */ }
+  return str
+}
+
+function coerceXMLValues (obj) {
+  Object.keys(obj).forEach(k => {
+    // For whatever reason ignore else isn't working after object check
+    /* istanbul ignore next */
+    if (typeof obj[k] === 'string') {
+      obj[k] = maybeConvertString(obj[k])
+    }
+    else if (Array.isArray(obj[k])) {
+      obj[k] = obj[k].map(i => maybeConvertString(i))
+    }
+    else if (typeof obj[k] === 'object') {
+      coerceXMLValues(obj[k])
+    }
+  })
+  return obj
+}
+
 /* istanbul ignore next */
 function instantiateXml () {
   if (xml) return
@@ -104,11 +142,11 @@ function instantiateXml () {
   xml.parser.addEntity('#10', '\n')
   xml.parser.getValueFromTextNode = vendor.getValueFromTextNode
 }
-function buildXml (obj) {
+function buildXML (obj) {
   instantiateXml()
   return xml.builder.build(obj)
 }
-function parseXml (body) {
+function parseXML (body) {
   instantiateXml()
   let parsed = xml.parser.parse(body)
   let key = Object.keys(parsed)[0]
@@ -118,7 +156,7 @@ function parseXml (body) {
     payloadToReturn[key] = payloadToReturn[textNodeName]
     delete payloadToReturn[textNodeName]
   }
-  return xml.parser.getValueFromTextNode(payloadToReturn)
+  return coerceXMLValues(xml.parser.getValueFromTextNode(payloadToReturn))
 }
 
 module.exports = {
@@ -128,6 +166,6 @@ module.exports = {
   readConfig,
   tidyQuery,
   useAWS,
-  buildXml,
-  parseXml,
+  buildXML,
+  parseXML,
 }

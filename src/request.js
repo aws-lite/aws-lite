@@ -1,6 +1,6 @@
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
-let { awsjson, buildXml, parseXml, tidyQuery, useAWS } = require('./lib')
+let { awsjson, buildXML, parseXML, tidyQuery, useAWS } = require('./lib')
 
 /* istanbul ignore next */
 let copy = obj => JSON.parse(JSON.stringify(obj))
@@ -94,7 +94,7 @@ function request (params, creds, region, config, metadata) {
       if (!contentType) contentType = 'application/json'
 
       if (XMLContentType(contentType)) {
-        params.body = buildXml(body)
+        params.body = buildXML(body)
       }
       else {
         // A variety of services use AWS JSON; we'll make it easier via a header or passed param
@@ -204,7 +204,7 @@ function request (params, creds, region, config, metadata) {
           }
         }
         if (body.length && XMLContentType(contentType)) {
-          payload = parseXml(body)
+          payload = parseXML(body)
           /* istanbul ignore next */
           if (payload.xmlns) delete payload.xmlns
 
@@ -219,7 +219,7 @@ function request (params, creds, region, config, metadata) {
           }
           catch {
             try {
-              payload = parseXml(body)
+              payload = parseXML(body)
             }
             catch {
               // lolnothingmatters

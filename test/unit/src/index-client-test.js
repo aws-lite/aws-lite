@@ -240,7 +240,7 @@ test('Primary client - AWS JSON payloads', async t => {
 })
 
 test('Primary client - XML payloads', async t => {
-  t.plan(12)
+  t.plan(23)
   let request, result, payload, responseBody
   let aws = await client(config)
 
@@ -261,6 +261,43 @@ test('Primary client - XML payloads', async t => {
   request = server.getCurrentRequest()
   t.deepEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
   basicRequestChecks(t, 'GET')
+  reset()
+
+  // XML string values are parsed to data
+  responseBody = `
+<result>
+  <string>yo</string>
+  <number>1</number>
+  <float>1.23</float>
+  <date>2024-01-01T00:00:00.000Z</date>
+  <booltrue>true</booltrue>
+  <boolfalse>false</boolfalse>
+  <null>null</null>
+  <empty></empty>
+  <space>  </space>
+  <obj>
+    <number>1</number>
+  </obj>
+  <arr>
+    <number>1</number>
+    <number>2</number>
+    <number>3</number>
+  </arr>
+</result>`
+  server.use({ responseBody, responseHeaders: xmlHeaders })
+  result = await aws({ service, endpoint })
+  request = server.getCurrentRequest()
+  t.equal(result.payload.string, 'yo', 'Client returned XML response with parsed string')
+  t.equal(result.payload.number, 1, 'Client returned XML response with parsed number')
+  t.equal(result.payload.float, 1.23, 'Client returned XML response with parsed float')
+  t.deepEqual(result.payload.date, new Date('2024-01-01T00:00:00.000Z'), 'Client returned XML response with parsed date')
+  t.equal(result.payload.booltrue, true, 'Client returned XML response with parsed boolean (true)')
+  t.equal(result.payload.boolfalse, false, 'Client returned XML response with parsed boolean (false)')
+  t.equal(result.payload.null, null, 'Client returned XML response with parsed null')
+  t.equal(result.payload.empty, '', 'Client returned XML response with empty string')
+  t.equal(result.payload.space, '  ', 'Client returned XML response with string of space(s)')
+  t.deepEqual(result.payload.obj, { number: 1 }, 'Client returned XML response with parsed nested object values')
+  t.deepEqual(result.payload.arr, { number: [ 1, 2, 3 ] }, 'Client returned XML response with parsed array values')
   reset()
 })
 
