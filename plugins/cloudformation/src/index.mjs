@@ -20,9 +20,13 @@ const StackName = { ...str, required, comment: 'Stack name or ID' }
 const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
-// const defaultResponse = ({ payload }) => payload
-const defaultNestedResponse = prop => ({ payload }) => payload[prop]
 const defaultError = ({ statusCode, error }) => ({ statusCode, error })
+const deMemberify = (prop) => {
+  let result = []
+  if (Array.isArray(prop.member) && prop.member.length) result = prop.member
+  else if (prop.member) result = [ prop.member ]
+  return result
+}
 
 const DeleteStack = {
   awsDoc: docRoot + 'API_DeleteStack.html',
@@ -59,7 +63,12 @@ const DescribeStackResources = {
       }
     }
   },
-  response: defaultNestedResponse('DescribeStackResourcesResult'),
+  response: ({ payload }) => {
+    const { StackResources, NextToken } = payload.DescribeStackResourcesResult
+    const result = { StackResources: deMemberify(StackResources) }
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
   error: defaultError,
 }
 
@@ -86,8 +95,14 @@ const DescribeStacks = {
   },
   response: ({ payload }) => {
     const { Stacks, NextToken } = payload.DescribeStacksResult
-    const result = { Stacks: [] }
-    if (Stacks.member.length) result.Stacks = Stacks.member
+    const result = { Stacks: deMemberify(Stacks) }
+    if (result.Stacks.length) {
+      result.Stacks = result.Stacks.map(stack => {
+        if (stack.Outputs) stack.Outputs = deMemberify(stack.Outputs)
+        if (stack.Capabilities) stack.Capabilities = deMemberify(stack.Capabilities)
+        return stack
+      })
+    }
     if (NextToken) result.NextToken = NextToken
     return result
   },
@@ -117,8 +132,7 @@ const ListStackResources = {
   },
   response: ({ payload }) => {
     const { StackResourceSummaries, NextToken } = payload.ListStackResourcesResult
-    const result = { StackResourceSummaries: [] }
-    if (StackResourceSummaries.member.length) result.StackResourceSummaries = StackResourceSummaries.member
+    const result = { StackResourceSummaries: deMemberify[StackResourceSummaries] }
     if (NextToken) result.NextToken = NextToken
     return result
   },
