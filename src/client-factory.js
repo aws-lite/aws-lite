@@ -1,7 +1,7 @@
 let { services } = require('./services')
 let request = require('./request')
 let { validateInput } = require('./validate')
-let { awsjson, exists } = require('./lib')
+let { awsjson, exists, buildXML } = require('./lib')
 let errorHandler = require('./error')
 let aws
 let enumerable = false
@@ -117,6 +117,7 @@ module.exports = async function clientFactory (config, creds, region) {
           awsjsonUnmarshall: aws.unmarshall,
           config: configuration,
           credentials,
+          buildXML,
         }
         let clientMethods = {}
         Object.entries(methods).forEach(([ name, method ]) => {
