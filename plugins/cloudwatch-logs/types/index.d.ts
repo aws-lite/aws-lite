@@ -22,7 +22,7 @@ declare interface AwsLiteCloudWatchLogs {
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html CloudWatch Logs: DescribeLogGroups}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudwatch-logs/readme.md#DescribeLogGroups CloudWatch Logs: DescribeLogGroups}
    */
-  DescribeLogGroups: (input: { accountIdentifiers?: any[], logGroupNamePrefix?: string, logGroupNamePattern?: string, nextToken?: string, limit?: number, includeLinkedAccounts?: boolean, logGroupClass: string, paginate?: boolean }) => Promise<DescribeLogGroupsResponse>
+  DescribeLogGroups: (input: { accountIdentifiers?: any[], logGroupNamePrefix?: string, logGroupNamePattern?: string, nextToken?: string, limit?: number, includeLinkedAccounts?: boolean, logGroupClass?: string, paginate?: boolean }) => Promise<DescribeLogGroupsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogStreams.html CloudWatch Logs: DescribeLogStreams}

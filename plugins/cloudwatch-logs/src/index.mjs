@@ -53,7 +53,7 @@ const DescribeLogGroups = {
     nextToken,
     limit,
     includeLinkedAccounts: { ...bool, comment: 'Return log groups in the accounts enumerated by `accountIdentifiers`' },
-    logGroupClass: { ...str, required, comment: 'Log group class setting: `STANDARD` (supports all CloudWatch Logs features), or `INFREQUENT_ACCESS` (feature subset with lower costs)', ref: 'https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html' },
+    logGroupClass: { ...str, comment: 'Log group class setting: `STANDARD` (supports all CloudWatch Logs features), or `INFREQUENT_ACCESS` (feature subset with lower costs)', ref: 'https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html' },
     paginate: valPaginate,
   },
   request: (params) => {
