@@ -105,6 +105,8 @@ Properties:
   - Sets request header: `x-amz-expected-bucket-owner`
 - **`ChecksumAlgorithm` (string)**
   - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
 
 
 ### `GetObject`
