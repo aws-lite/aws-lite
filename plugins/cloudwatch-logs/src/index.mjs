@@ -131,7 +131,7 @@ const GetLogEvents = {
       paginate = true
     }
     return {
-      // awsjson: false,
+      awsjson: false,
       headers: headers('GetLogEvents'),
       payload: params,
       paginate,
