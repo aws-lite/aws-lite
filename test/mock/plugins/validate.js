@@ -9,6 +9,7 @@ module.exports = {
       validate: {
         arr: { type: 'Array' }, // Exercise that toLowerCase!
         bool: { type: 'boolean' },
+        buf: { type: 'buffer' },
         num: { type: 'number' },
         obj: { type: 'object' },
         str: { type: 'string' },

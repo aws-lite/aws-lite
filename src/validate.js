@@ -4,10 +4,13 @@ let errorHandler = require('./error')
 let is = {
   array: item => Array.isArray(item),
   boolean: item => typeof item === 'boolean',
+  buffer: item => Buffer.isBuffer(item),
   number: item => Number.isInteger(item),
   object: item => item && typeof item === 'object' && !Array.isArray(item),
   string: item => typeof item === 'string',
-  // TODO: ARN, partial arn
+  // TODO:
+  // - ARN, partial arn
+  // - stream: item => item?.on && item?._read && item?._readableState,
 }
 
 let payloadAliases = [ 'payload', 'body', 'data', 'json' ]

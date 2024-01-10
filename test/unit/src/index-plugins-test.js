@@ -18,7 +18,7 @@ test('Set up env', async t => {
 })
 
 test('Plugins - validate input', async t => {
-  t.plan(24)
+  t.plan(25)
   let str = 'hi'
   let num = 123
 
@@ -116,7 +116,7 @@ test('Plugins - validate input', async t => {
   }
 
   // Now just test the other various types work (and fail)
-  let validTests = { arr: [], num, bool: true, obj: {}, str }
+  let validTests = { arr: [], num, bool: true, buf: Buffer.from('hi'), obj: {}, str }
   for (let [ k, v ] of Object.entries(validTests)) {
     try {
       await aws.lambda.testTypes({ required: str, host, port, [k]: v })

@@ -1,7 +1,7 @@
 let { join } = require('path')
 let test = require('tape')
 let cwd = process.cwd()
-let validTypes = [ 'array', 'boolean', 'number', 'object', 'string' ]
+let validTypes = [ 'array', 'boolean', 'buffer', 'number', 'object', 'string' ]
 let plugins
 
 test('Set up env', async t => {
