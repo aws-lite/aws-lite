@@ -201,7 +201,13 @@ const HeadObject = {
     }
   },
   response: ({ headers }) => parseHeadersToResults({ headers }, null, []),
-  error: defaultError,
+  error: params => {
+    if (params.statusCode === 404) {
+      params.error = params.error || {}
+      params.error.code = params.error.code || 'NotFound'
+    }
+    return defaultError(params)
+  },
 }
 
 const ListBuckets = {
