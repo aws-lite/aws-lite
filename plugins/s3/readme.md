@@ -254,7 +254,9 @@ Properties:
   - S3 bucket name
 - **`Key` (string) [required]**
   - S3 key / file name
-- **`File` (string) [required]**
+- **`Body` (string, buffer)**
+  - String or buffer to be uploaded
+- **`File` (string)**
   - File path to be read and uploaded from the local filesystem
 - **`MinChunkSize` (number)**
   - Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3

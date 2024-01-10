@@ -24,7 +24,8 @@ const PutObject = {
   validate: {
     Bucket:       { type: 'string', required, comment: 'S3 bucket name' },
     Key:          { type: 'string', required, comment: 'S3 key / file name' },
-    File:         { type: 'string', required, comment: 'File path to be read and uploaded from the local filesystem' },
+    Body:         { type: [ 'string', 'buffer' ], comment: 'String or buffer to be uploaded' },
+    File:         { type: 'string', comment: 'File path to be read and uploaded from the local filesystem' },
     MinChunkSize: { type: 'number', default: minSize, comment: 'Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3' },
     // Here come the headers
     ...getValidateHeaders('ACL', 'BucketKeyEnabled', 'CacheControl', 'ChecksumAlgorithm', 'ChecksumCRC32',
@@ -36,24 +37,37 @@ const PutObject = {
       'SSEKMSKeyId', 'StorageClass', 'Tagging', 'WebsiteRedirectLocation')
   },
   request: async (params, utils) => {
-    let { Bucket, Key, File, MinChunkSize } = params
+    let { Bucket, Key, File, Body, MinChunkSize } = params
     let { credentials, region } = utils
     MinChunkSize = MinChunkSize || minSize
+
+    if (File && Body) {
+      throw ReferenceError('Only `File` or `Body` can be provided, not both')
+    }
+    if (!File && !Body) {
+      throw ReferenceError('Must provide `File` or `Body`')
+    }
 
     let headers = getHeadersFromParams(params)
 
     let dataSize
-    try {
-      let stats = await stat(File)
-      dataSize = stats.size
+
+    if (Body) {
+      dataSize = Body.length
     }
-    catch (err) {
-      console.log(`Error reading file: ${File}`)
-      throw err
+    else {
+      try {
+        let stats = await stat(File)
+        dataSize = stats.size
+      }
+      catch (err) {
+        console.log(`Error reading file: ${File}`)
+        throw err
+      }
     }
 
     if (dataSize <= MinChunkSize) {
-      let payload = await readFile(File)
+      let payload = Body || await readFile(File)
       return {
         path: `/${Bucket}/${Key}`,
         method: 'PUT',
@@ -127,7 +141,7 @@ const PutObject = {
                               `${yyyymmdd}/${canonicalReq.region}/s3/aws4_request\n`
 
       // TODO make this streamable
-      let data = await readFile(File)
+      let data = Body || await readFile(File)
       let stream = new Readable()
       chunks.forEach((chunk, i) => {
         if (chunk.canonicalRequest) return
