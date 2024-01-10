@@ -81,6 +81,7 @@ const DeleteObject = {
     ...getValidateHeaders('MFA', 'RequestPayer', 'BypassGovernanceRetention', 'ExpectedBucketOwner'),
   },
   request: (params, utils) => {
+    const { Key } = params
     return {
       host: host(params, utils),
       method: 'DELETE',
