@@ -132,7 +132,7 @@ const ListStackResources = {
   },
   response: ({ payload }) => {
     const { StackResourceSummaries, NextToken } = payload.ListStackResourcesResult
-    const result = { StackResourceSummaries: deMemberify[StackResourceSummaries] }
+    const result = { StackResourceSummaries: deMemberify(StackResourceSummaries) }
     if (NextToken) result.NextToken = NextToken
     return result
   },
