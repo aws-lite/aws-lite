@@ -175,7 +175,7 @@ const UpdateFunctionCode = {
     S3Bucket: { ...str, comment: 'S3 bucket containing the key of the deployment package; must be in the same region' },
     S3Key: { ...str, comment: 'S3 key of the deployment package (must be a .zip file)' },
     S3ObjectVersion: { ...str, comment: 'S3 object version to use, if applicable' },
-    ZipFile: { type: [ 'string', 'object' ], comment: 'File path or raw buffer of the .zip deployment package' }
+    ZipFile: { type: [ 'string', 'buffer' ], comment: 'File path or raw buffer of the .zip deployment package' }
   },
   request: async (params) => {
     let { FunctionName, ZipFile } = params
@@ -186,10 +186,13 @@ const UpdateFunctionCode = {
     if (ZipFile instanceof Buffer) {
       params.ZipFile = Buffer.from(ZipFile).toString('base64')
     }
+    let payload = { ...params }
+    delete payload.FunctionName
+
     return {
-      endpoint: `/2017-10-31/functions/${FunctionName}/code`,
+      endpoint: `/2015-03-31/functions/${FunctionName}/code`,
       method: 'PUT',
-      payload: params,
+      payload,
     }
   },
   response: defaultResponse

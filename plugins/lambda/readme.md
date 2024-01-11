@@ -164,7 +164,7 @@ Properties:
   - S3 key of the deployment package (must be a .zip file)
 - **`S3ObjectVersion` (string)**
   - S3 object version to use, if applicable
-- **`ZipFile` (string, object)**
+- **`ZipFile` (string, buffer)**
   - File path or raw buffer of the .zip deployment package
 
 
