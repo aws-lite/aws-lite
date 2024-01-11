@@ -33,7 +33,7 @@ npm i -D @aws-lite/s3-types
 Properties:
 - **`Bucket` (string) [required]**
   - S3 bucket name
-- **`CreateBucketConfiguration` (object) [required]**
+- **`CreateBucketConfiguration` (object)**
   - Complete bucket configuration object
   - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html#API_CreateBucket_RequestSyntax)
 - **`ACL` (string)**

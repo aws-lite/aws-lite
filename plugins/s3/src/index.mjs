@@ -41,14 +41,16 @@ const CreateBucket = {
   awsDoc: docRoot + 'API_CreateBucket.html',
   validate: {
     Bucket,
-    CreateBucketConfiguration: { ...obj, required, comment: 'Complete bucket configuration object', ref: docRoot + 'API_CreateBucket.html#API_CreateBucket_RequestSyntax' },
+    CreateBucketConfiguration: { ...obj, comment: 'Complete bucket configuration object', ref: docRoot + 'API_CreateBucket.html#API_CreateBucket_RequestSyntax' },
     ...getValidateHeaders('ACL', 'GrantFullControl', 'GrantRead', 'GrantReadACP', 'GrantWrite', 'GrantWriteACP', 'ObjectLockEnabledForBucket', 'ObjectOwnership'),
   },
   request: (params, utils) => {
+    const { CreateBucketConfiguration = {} } = params
     return {
       host: host(params, utils),
       method: 'PUT',
       headers: { ...xml, ...getHeadersFromParams(params) },
+      payload: { CreateBucketConfiguration },
     }
   },
   response: ({ headers }) => {
