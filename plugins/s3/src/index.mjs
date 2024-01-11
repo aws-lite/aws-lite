@@ -255,6 +255,9 @@ const ListObjectsV2 = {
     const res = payload
     const charged = 'x-amz-request-charged'
     if (headers[charged]) res[paramMappings[charged]] = headers[charged]
+    if (payload.Contents) {
+      payload.Contents = Array.isArray(payload.Contents) ? payload.Contents : [ payload.Contents ]
+    }
     return res
   },
   error: defaultError,
