@@ -2,7 +2,7 @@
 // 'We call declarations that don't define an implementation "ambient".'
 
 declare module "@aws-lite/client" {
-  interface AwsLiteConfig {
+  export interface AwsLiteConfig {
     accessKeyId?: string;
     secretAccessKey?: string;
     sessionToken?: string;
@@ -20,7 +20,7 @@ declare module "@aws-lite/client" {
     responseContentType?: string;
   }
 
-  interface AwsLiteRequest {
+  export interface AwsLiteRequest {
     service: string;
     awsjson?: boolean | string[];
     endpoint?: string;
@@ -40,15 +40,16 @@ declare module "@aws-lite/client" {
   }
 
 
-  interface AwsLiteResponse {
+  export interface AwsLiteResponse {
     headers: Record<string, string>;
     payload: Record<string, any>;
     statusCode: number;
   }
 
-  interface AwsLiteClient {
+  export interface AwsLiteClient {
     (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
   }
 
-  export default function AwsLite(config?: AwsLiteConfig): Promise<AwsLiteClient>;
+  const AwsLite: (config?: AwsLiteConfig) => Promise<AwsLiteClient>;
+  export = AwsLite;
 }
