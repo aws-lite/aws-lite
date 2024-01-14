@@ -26,7 +26,7 @@ const Key = { ...str, required, comment: 'S3 key / file name' }
 const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
-const host = (Bucket, region, host) => host ? `${Bucket}.${host}` : `${Bucket}.s3.${region}.amazonaws.com`
+const host = (Bucket, region, host) => `${Bucket}.` + (host || `s3.${region}.amazonaws.com`)
 const defaultResponse = ({ payload }) => payload
 const defaultError = ({ statusCode, error }) => {
   // SDK v2 lowcases `code`
