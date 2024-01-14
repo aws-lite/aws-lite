@@ -26,9 +26,7 @@ const Key = { ...str, required, comment: 'S3 key / file name' }
 const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
-const notTesting = process.env.NODE_ENV !== 'testing'
-const host = Bucket => notTesting ? `${Bucket}.s3.amazonaws.com` : 'localhost'
-const endpoint = (Bucket, path) => notTesting ? path : `/${Bucket}${path ? '/' + path : ''}`
+const host = (Bucket, region, host) => host ? `${Bucket}.${host}` : `${Bucket}.s3.${region}.amazonaws.com`
 const defaultResponse = ({ payload }) => payload
 const defaultError = ({ statusCode, error }) => {
   // SDK v2 lowcases `code`
@@ -46,12 +44,11 @@ const CreateBucket = {
     CreateBucketConfiguration: { ...obj, required, comment: 'Complete bucket configuration object', ref: docRoot + 'API_CreateBucket.html#API_CreateBucket_RequestSyntax' },
     ...getValidateHeaders('ACL', 'GrantFullControl', 'GrantRead', 'GrantReadACP', 'GrantWrite', 'GrantWriteACP', 'ObjectLockEnabledForBucket', 'ObjectOwnership'),
   },
-  request: (params) => {
+  request: (params, { config }) => {
     let { Bucket } = params
     return {
-      host: host(Bucket),
+      host: host(Bucket, config.region, config.host),
       method: 'PUT',
-      endpoint: endpoint(Bucket),
       headers: { ...xml, ...getHeadersFromParams(params) },
     }
   },
@@ -66,12 +63,11 @@ const DeleteBucket = {
     Bucket,
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
-  request: (params) => {
+  request: (params, { config }) => {
     let { Bucket } = params
     return {
-      host: host(Bucket),
+      host: host(Bucket, config.region, config.host),
       method: 'DELETE',
-      endpoint: endpoint(Bucket),
       headers: { ...getHeadersFromParams(params) },
     }
   },
@@ -86,12 +82,12 @@ const DeleteObject = {
     VersionId,
     ...getValidateHeaders('MFA', 'RequestPayer', 'BypassGovernanceRetention', 'ExpectedBucketOwner'),
   },
-  request: (params) => {
+  request: (params, { config }) => {
     const { Bucket } = params
     return {
-      host: host(Bucket),
+      host: host(Bucket, config.region, config.host),
       method: 'DELETE',
-      endpoint: endpoint(Bucket, `/${Key}`),
+      endpoint: `/${Key}`,
       headers: { ...xml, ...getHeadersFromParams(params) },
     }
   },
@@ -105,11 +101,11 @@ const DeleteObjects = {
     Delete: { ...obj, required, comment: 'Object deletion request' },
     ...getValidateHeaders('MFA', 'RequestPayer', 'BypassGovernanceRetention', 'ExpectedBucketOwner', 'ChecksumAlgorithm'),
   },
-  request: (params) => {
+  request: (params, { config }) => {
     const { Bucket, Delete } = params
     return {
-      host: host(Bucket),
-      endpoint: endpoint(Bucket, '/?delete'),
+      host: host(Bucket, config.region, config.host),
+      endpoint: '/?delete',
       headers: { ...xml, ...getHeadersFromParams(params) },
       payload: { Delete },
     }
@@ -135,7 +131,7 @@ const GetObject = {
     ResponseContentType:        { ...str, comment: 'Sets response header: `content-type`' },
     ResponseExpires:            { ...str, comment: 'Sets response header: `expires`' },
   },
-  request: (params) => {
+  request: (params, { config }) => {
     let { Bucket, Key } = params
     let queryParams = [ 'PartNumber', 'ResponseCacheControl', 'ResponseContentDisposition',
       'ResponseContentEncoding', 'ResponseContentLanguage', 'ResponseContentType',
@@ -143,8 +139,8 @@ const GetObject = {
     let headers = getHeadersFromParams(params, queryParams)
     let query = getQueryFromParams(params, queryParams)
     return {
-      host: host(Bucket),
-      endpoint: endpoint(Bucket, `/${Key}`),
+      host: host(Bucket, config.region, config.host),
+      endpoint: `/${Key}`,
       headers,
       query,
     }
@@ -164,11 +160,10 @@ const HeadBucket = {
     Bucket,
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
-  request: (params) => {
+  request: (params, { config }) => {
     let { Bucket } = params
     return {
-      host: host(Bucket),
-      endpoint: endpoint(Bucket),
+      host: host(Bucket, config.region, config.host),
       method: 'HEAD',
       headers: getHeadersFromParams(params),
     }
@@ -189,14 +184,14 @@ const HeadObject = {
       'Range', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer',
       'ExpectedBucketOwner', 'ChecksumMode'),
   },
-  request: (params) => {
+  request: (params, { config }) => {
     let { Bucket, Key } = params
     let queryParams = [ 'PartNumber', 'VersionId' ]
     let headers = getHeadersFromParams(params, queryParams)
     let query = getQueryFromParams(params, queryParams)
     return {
-      host: host(Bucket),
-      endpoint: endpoint(Bucket, `/${Key}`),
+      host: host(Bucket, config.region, config.host),
+      endpoint: `/${Key}`,
       method: 'HEAD',
       headers,
       query,
@@ -229,15 +224,14 @@ const ListObjectsV2 = {
     ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'OptionalObjectAttributes'),
     paginate:           { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
   },
-  request: (params) => {
+  request: (params, { config }) => {
     let { Bucket, paginate } = params
     let queryParams = [ 'ContinuationToken', 'Delimiter', 'EncodingType', 'FetchOwner', 'MaxKeys', 'Prefix', 'StartAfter' ]
     let headers = getHeadersFromParams(params, queryParams)
     let query = getQueryFromParams(params, queryParams) || {}
     query['list-type'] = 2
     return {
-      host: host(Bucket),
-      endpoint: endpoint(Bucket),
+      host: host(Bucket, config.region, config.host),
       headers,
       query,
       paginate,

@@ -13,22 +13,23 @@ let object_name = 'object1'
 let object_content = 'Hello, World!'
 let s3_root_dir = 's3_root_dir'
 let contentType = 'text/plain'
+let region = 'us-east-1'
 
 test('Set up env', async t => {
   t.plan(3)
   aws = await client({
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
-    region: 'us-east-1',
-    host: 'localhost',
+    region,
+    host: `s3.${region}.localhost`,
     port,
     protocol: 'http',
   })
   t.ok(aws, 'Client ready')
 
   tmp = mockTmp({
-  // Directory for S3rver
-    [`${s3_root_dir}/${bucket_name}`]: {},
+    // Directory for S3rver
+    [`${s3_root_dir}`]: {},
     // Source file for PutObject
     [object_name]: object_content,
   })
@@ -37,13 +38,37 @@ test('Set up env', async t => {
   s3rver = new S3rver({
     port,
     silent: true,
+    serviceEndpoint: 'localhost',
     directory: join(tmp, s3_root_dir),
   })
   let started = await s3rver.run()
   t.ok(started, 'Started S3rver')
 })
 
-test('List buckets', async t => {
+test('List zero buckets', async t => {
+  t.plan(1)
+  let listBucketsResponse = await aws.S3.ListBuckets()
+  // t.ok(listBucketsResponse.Buckets, 'Response has a Buckets element')
+  t.notOk(listBucketsResponse.Buckets, 'Response does not have Buckets element')
+  // TBD - ListBucketsResponse.Buckets should always be an array of buckets.
+  // At present, due to the vagaries of XML/JSON translation, it is missing if
+  // there are no buckets, and a bucket if there is only one bucket.
+  // t.equal(listBucketsResponse.Buckets.length, 1, `One bucket found`)
+  // t.equal(listBucketsResponse.Buckets[0].Name, bucket_name, `Bucket ${bucket_name} found`)
+})
+
+test('Create bucket', async t => {
+  t.plan(1)
+  let createBucketResponse = await aws.S3.CreateBucket({
+    Bucket: bucket_name,
+    CreateBucketConfiguration: {
+      LocationConstraint: region
+    }
+  })
+  t.equal(createBucketResponse.Location, `/${bucket_name}`, `Created bucket ${bucket_name}`)
+})
+
+test('List one bucket', async t => {
   t.plan(2)
   let listBucketsResponse = await aws.S3.ListBuckets()
   t.ok(listBucketsResponse.Buckets, 'Response has a Buckets element')
