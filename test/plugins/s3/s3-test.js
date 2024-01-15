@@ -15,13 +15,17 @@ let s3_root_dir = 's3_root_dir'
 let contentType = 'text/plain'
 let region = 'us-east-1'
 
+// localtest.me and all subdomains resolve to 127.0.0.1
+// See https://readme.localtest.me/
+let serviceEndpoint = 'localtest.me'
+
 test('Set up env', async t => {
   t.plan(3)
   aws = await client({
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
     region,
-    host: `s3.${region}.localhost`,
+    host: `s3.${region}.${serviceEndpoint}`,
     port,
     protocol: 'http',
   })
@@ -38,7 +42,7 @@ test('Set up env', async t => {
   s3rver = new S3rver({
     port,
     silent: true,
-    serviceEndpoint: 'localhost',
+    serviceEndpoint: serviceEndpoint,
     directory: join(tmp, s3_root_dir),
   })
   let started = await s3rver.run()
@@ -84,7 +88,7 @@ test('List objects - empty bucket', async t => {
   t.plan(1)
   let listObjectsV2Response = await aws.S3.ListObjectsV2({ Bucket: bucket_name })
   // TBD - should KeyCount be a Number, rather than a string?
-  t.equals(listObjectsV2Response.KeyCount, '0', 'Zero objects found')
+  t.equals(listObjectsV2Response.KeyCount, 0, 'Zero objects found')
   // TBD - ListObjectsV2Response.Contents should always be an array of objects.
   // At present, due to the vagaries of XML/JSON translation, it is missing if
   // the bucket is empty, and an object if there is only one object in the
@@ -106,7 +110,7 @@ test('Put object', async t => {
 test('List objects - single object', async t => {
   t.plan(1)
   let listObjectsV2Response = await aws.S3.ListObjectsV2({ Bucket: bucket_name })
-  t.equal(listObjectsV2Response.KeyCount, '1', 'One object found')
+  t.equal(listObjectsV2Response.KeyCount, 1, 'One object found')
   // TBD - ListObjectsV2Response.Contents should always be an array of objects.
   // At present, due to the vagaries of XML/JSON translation, it is missing if
   // the bucket is empty, and an object if there is only one object in the
@@ -140,7 +144,7 @@ test('Put second object', async t => {
 test('List objects - two objects', async t => {
   t.plan(2)
   let listObjectsResponse = await aws.S3.ListObjectsV2({ Bucket: bucket_name })
-  t.equal(listObjectsResponse.KeyCount, '2', 'Two objects found')
+  t.equal(listObjectsResponse.KeyCount, 2, 'Two objects found')
   t.equal(listObjectsResponse.Contents.length, 2, 'Two objects returned')
 })
 
