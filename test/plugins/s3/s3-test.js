@@ -41,7 +41,7 @@ test('Set up env', async t => {
 
   s3rver = new S3rver({
     port,
-    address: '127.0.0.1',
+    address: '0.0.0.0',
     silent: true,
     serviceEndpoint: serviceEndpoint,
     directory: join(tmp, s3_root_dir),
