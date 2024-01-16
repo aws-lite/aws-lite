@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/client",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "A simple, fast, extensible AWS client",
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {
