@@ -75,6 +75,7 @@ function arrayifyObject (obj, lastPropertyPath, arraysList = arrayProperties) {
     value = obj[key]
 
     if (Array.isArray(value)) {
+      // Note: this does not currently attempt to recurse arrays containing arrays
       obj[key] = value.map(i => {
         if (typeof i === 'object' && i && !Array.isArray(i)) {
           return arrayifyObject(i, currentPropertyPath)
@@ -95,6 +96,7 @@ function unarrayifyObject (obj, lastPropertyPath) {
     const currentPropertyPath = getPropertyPath(obj, lastPropertyPath, key)
 
     if (Array.isArray(value)) {
+      // Note: this does not currently attempt to recurse arrays containing arrays
       obj[key] = value.map(i => {
         if (typeof i === 'object' && i && !Array.isArray(i)) {
           return unarrayifyObject(i, currentPropertyPath)
