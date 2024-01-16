@@ -5,6 +5,7 @@ let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
 let test = require('tape')
 let mockTmp = require('mock-tmp')
+let dns = require('dns')
 
 let aws, s3rver, tmp
 let port = 4569
@@ -15,9 +16,14 @@ let s3_root_dir = 's3_root_dir'
 let contentType = 'text/plain'
 let region = 'us-east-1'
 
-// localtest.me and all subdomains resolve to 127.0.0.1
+// localtest.me and all subdomains resolve to 127.0.0.1/::1
 // See https://readme.localtest.me/
 let serviceEndpoint = 'localtest.me'
+
+// Set a consistent DNS result order so that client and server both use ipv4
+// rather than one using ipv4 and the other using ipv6, leading to ECONNREFUSED
+// errors.
+dns.setDefaultResultOrder('ipv4first')
 
 test('Set up env', async t => {
   t.plan(3)
@@ -41,7 +47,6 @@ test('Set up env', async t => {
 
   s3rver = new S3rver({
     port,
-    address: '0.0.0.0',
     silent: true,
     serviceEndpoint: serviceEndpoint,
     directory: join(tmp, s3_root_dir),
