@@ -3,6 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
+import { arrayifyItemsProp, arrayifyObject, unarrayifyObject } from './lib.mjs'
 
 const service = 'cloudfront'
 const property = 'CloudFront'
@@ -19,14 +20,13 @@ const str = { type: 'string' }
 
 const xml = { 'content-type': 'application/xml' }
 
-// const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
+const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
 const Id = { ...str, required, comment: 'Distribution ID' }
 
-const returnNestedAs = (prop) => ({ headers, payload }) => {
+const maybeAddETag = (result, headers) => {
   const ETag = headers.etag || headers.ETag
-  let result = { [prop]: payload }
-  if (ETag) result = { [prop]: payload, ETag }
+  if (ETag) result.ETag = ETag
   return result
 }
 
@@ -65,7 +65,10 @@ const CreateDistribution = {
       payload: { DistributionConfig: params }
     }
   },
-  response: returnNestedAs('Distribution'),
+  response: ({ headers, payload }) => {
+    const Distribution = arrayifyObject(payload)
+    return maybeAddETag({ Distribution }, headers)
+  },
 }
 
 const CreateInvalidation = {
@@ -73,20 +76,28 @@ const CreateInvalidation = {
   validate: {
     Id,
     // DistributionId - for whatever reason only this method specifies `DistributionId`, so let's keep things consistent with literally everything else for now
-    InvalidationBatch: { ...str, required, comment: 'Invalidation parameters', ref: docRoot + 'API_CreateInvalidation.html#API_CreateInvalidation_RequestSyntax' },
-    // TODO enable nested validation
-    // CallerReference,
-    // Paths,
+    InvalidationBatch: { type: [ 'string', 'array' ], comment: 'One or more invalidation parameters', ref: docRoot + 'API_CreateInvalidation.html#API_CreateInvalidation_RequestSyntax' },
+    CallerReference,
   },
-  request: ({ Id, InvalidationBatch }) => {
+  request: ({ CallerReference, Id, InvalidationBatch }) => {
+    const Items = Array.isArray(InvalidationBatch) ? InvalidationBatch : [ InvalidationBatch ]
+    const payload = unarrayifyObject({
+      InvalidationBatch: {
+        CallerReference,
+        Paths: { Items, Quantity: Items.length },
+      }
+    })
     return {
       endpoint: `/2020-05-31/distribution/${Id}/invalidation`,
       method: 'POST',
       headers: xml,
-      payload: { InvalidationBatch },
+      payload,
     }
   },
-  response: returnNestedAs('Invalidation'),
+  response: ({ payload }) => {
+    const result = arrayifyObject(payload)
+    return result
+  },
 }
 
 const DeleteDistribution = {
@@ -113,7 +124,12 @@ const GetDistribution = {
       endpoint: `/2020-05-31/distribution/${Id}`,
     }
   },
-  response: returnNestedAs('Distribution'),
+  response: ({ headers, payload }) => {
+    const Distribution = arrayifyObject(payload)
+    // Drop into the distribution config (instead of expecting arrayifyObject to handle things) so as to keep the property paths from having to prepend DistributionConfig
+    Distribution.DistributionConfig = arrayifyObject(Distribution.DistributionConfig)
+    return maybeAddETag({ Distribution }, headers)
+  }
 }
 
 const GetDistributionConfig = {
@@ -126,7 +142,10 @@ const GetDistributionConfig = {
       endpoint: `/2020-05-31/distribution/${Id}/config`,
     }
   },
-  response: returnNestedAs('DistributionConfig'),
+  response: ({ headers, payload }) => {
+    const DistributionConfig = arrayifyObject(payload)
+    return maybeAddETag({ DistributionConfig }, headers)
+  }
 }
 
 const ListDistributions = {
@@ -141,7 +160,11 @@ const ListDistributions = {
       query: params,
     }
   },
-  response: returnNestedAs('DistributionList')
+  response: ({ headers, payload }) => {
+    const DistributionList = arrayifyItemsProp(payload)
+    DistributionList.Items = DistributionList.Items.map(i => arrayifyObject(i))
+    return maybeAddETag({ DistributionList }, headers)
+  }
 }
 
 const UpdateDistribution = {
@@ -152,7 +175,8 @@ const UpdateDistribution = {
     IfMatch: { ...str, required, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' },
   },
   request: (params) => {
-    const { DistributionConfig, Id, IfMatch } = params
+    const { Id, IfMatch } = params
+    const DistributionConfig = unarrayifyObject(params.DistributionConfig)
     return {
       endpoint: `/2020-05-31/distribution/${Id}/config`,
       method: 'PUT',
@@ -160,7 +184,10 @@ const UpdateDistribution = {
       payload: { DistributionConfig },
     }
   },
-  response: returnNestedAs('Distribution')
+  response: ({ headers, payload }) => {
+    const DistributionConfig = arrayifyObject(payload)
+    return maybeAddETag({ DistributionConfig }, headers)
+  }
 }
 
 export default {

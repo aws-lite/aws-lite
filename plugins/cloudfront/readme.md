@@ -49,9 +49,11 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - Distribution ID
-- **`InvalidationBatch` (string) [required]**
-  - Invalidation parameters
+- **`InvalidationBatch` (string, array)**
+  - One or more invalidation parameters
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateInvalidation.html#API_CreateInvalidation_RequestSyntax)
+- **`CallerReference` (string) [required]**
+  - Unique value that ensures that the request cannot be replayed
 
 
 ### `DeleteDistribution`
