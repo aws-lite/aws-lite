@@ -1,6 +1,3 @@
-// https://www.typescriptlang.org/docs/handbook/modules.html#working-with-other-javascript-libraries
-// 'We call declarations that don't define an implementation "ambient".'
-
 interface AwsLiteConfig {
   accessKeyId?: string;
   secretAccessKey?: string;
@@ -44,7 +41,7 @@ interface AwsLiteResponse {
   statusCode: number;
 }
 
-// must be exported so that plugins types can extend it
+// export to allow <plugin>-types to extend AwsLiteClient
 export interface AwsLiteClient {
   (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
 }
