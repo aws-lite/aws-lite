@@ -16,13 +16,14 @@ const docRoot = 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/'
 // const bool = { type: 'boolean' }
 const obj = { type: 'object' }
 const str = { type: 'string' }
-// const num = { type: 'number' }
+const num = { type: 'number' }
 
 const xml = { 'content-type': 'application/xml' }
 
 const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
 const Id = { ...str, required, comment: 'Distribution ID' }
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const maybeAddETag = (result, headers) => {
   const ETag = headers.etag || headers.ETag
@@ -152,15 +153,30 @@ const ListDistributions = {
   awsDoc: docRoot + 'API_ListDistributions.html',
   validate: {
     Marker: { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' },
-    MaxItems: { ...str, comment: 'Maximum number of items to return' },
+    MaxItems: { ...num, comment: 'Maximum number of items to return' },
+    paginate: valPaginate,
   },
   request: (params) => {
     return {
       endpoint: '/2020-05-31/distribution',
       query: params,
+      paginator: {
+        cursor: 'Marker',
+        token: 'NextMarker',
+        accumulator: 'Items',
+        type: 'query',
+      },
     }
   },
   response: ({ headers, payload }) => {
+    const isPaginated = payload.Items.every(i => Array.isArray(i?.DistributionSummary))
+    if (isPaginated) {
+      // In the raw paginated state, each response is its own array nested in an object containing a DistributionSummary property
+      // So we have to pull out all the arrays, concat + flatten them, then re-wrap the array in a single DistributionSummary obj before we run arrayifyItemsProp
+      payload.Items = {
+        DistributionSummary: payload.Items.map(i => i.DistributionSummary).flat()
+      }
+    }
     const DistributionList = arrayifyItemsProp(payload)
     DistributionList.Items = DistributionList.Items.map(i => arrayifyObject(i))
     return maybeAddETag({ DistributionList }, headers)

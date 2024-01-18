@@ -90,8 +90,10 @@ Properties:
 Properties:
 - **`Marker` (string)**
   - Pagination cursor token to be used if `NextMarker` was returned in a previous response
-- **`MaxItems` (string)**
+- **`MaxItems` (number)**
   - Maximum number of items to return
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `UpdateDistribution`
