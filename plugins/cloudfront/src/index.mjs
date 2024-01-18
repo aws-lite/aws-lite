@@ -169,7 +169,8 @@ const ListDistributions = {
     }
   },
   response: ({ headers, payload }) => {
-    const isPaginated = payload.Items.every(i => Array.isArray(i?.DistributionSummary))
+    const isPaginated = Array.isArray(payload.Items) &&
+                        payload.Items.every(i => i?.DistributionSummary)
     if (isPaginated) {
       // In the raw paginated state, each response is its own array nested in an object containing a DistributionSummary property
       // So we have to pull out all the arrays, concat + flatten them, then re-wrap the array in a single DistributionSummary obj before we run arrayifyItemsProp
