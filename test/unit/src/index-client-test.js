@@ -307,7 +307,7 @@ test('Primary client - XML payloads', async t => {
 })
 
 test('Primary client - error handling', async t => {
-  t.plan(33)
+  t.plan(35)
   let responseStatusCode, responseBody
 
   // Normal error
@@ -326,13 +326,14 @@ test('Primary client - error handling', async t => {
     t.ok(err.headers, 'Error has response headers')
     t.equal(err.service, service, 'Error has service')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.ok(err.time, 'Error includes a timestamp')
     reset()
   }
 
   // Error payload is a named error object because reasons
   try {
     responseStatusCode = 400
-    responseBody = { Error: { message: 'lolno', other: 'metadata' } }
+    responseBody = { Error: { message: 'lolno', other: 'metadata', time: 'early' } }
     server.use({ responseBody, responseHeaders: jsonHeaders, responseStatusCode })
     let aws = await client(config)
     await aws({ service, endpoint })
@@ -345,6 +346,7 @@ test('Primary client - error handling', async t => {
     t.ok(err.headers, 'Error has response headers')
     t.equal(err.service, service, 'Error has service')
     t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.equal(err.time, 'early', 'Error includes a timestamp passed from response')
     reset()
   }
 

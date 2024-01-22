@@ -7,7 +7,7 @@ module.exports = function errorHandler (input) {
   let { statusCode, headers, error, metadata } = input
 
   // If the payload passed is an object containing an `Error` property, use that
-  if (error.Error) error = error.Error
+  if (error?.Error) error = error.Error
 
   // If the error passed is an actual Error, it probably came from a plugin method failing, so we should attempt to retain its beautiful, beautiful stack trace
   let err = error instanceof Error ? error : Error()
@@ -48,7 +48,9 @@ module.exports = function errorHandler (input) {
   if (error?.message || err.message) {
     msg += `: ${error.message || err.message}`
   }
+  else msg += ': unknown error'
   err.message = msg
+  if (!err.time) err.time = new Date().toISOString()
 
   throw err
 }

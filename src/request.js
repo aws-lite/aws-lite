@@ -170,6 +170,7 @@ function request (params, creds, region, config, metadata) {
       else if (isStream) truncatedBody = `<readable stream>`
       else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
       console.error('[aws-lite] Request:', {
+        time: new Date().toISOString(),
         service,
         method,
         url: `${protocol}//${host}${port}${path}`,
@@ -235,6 +236,7 @@ function request (params, creds, region, config, metadata) {
           /**/ if (payload instanceof Buffer) truncatedBody = body.length ? `<body buffer of ${body.length}b>` : ''
           else if (rawString) truncatedBody = rawString?.length > 250 ? rawString?.substring(0, 250) + '...' : rawString
           console.error('[aws-lite] Response:', {
+            time: new Date().toISOString(),
             statusCode,
             headers,
             body: truncatedBody || '<no body>',
