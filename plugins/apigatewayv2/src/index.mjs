@@ -21,8 +21,16 @@ const Description = { ...str, comment: 'Deployment description' }
 const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const Limit = { ...num, comment: 'Maximum number of items to evaluate and return' }
 const StageName = { ...str, comment: 'Stage name' }
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
-const defaultResponse = ({ payload }) => payload
+const defaultResponse = ({ payload }) => CamelToPascalParams(payload)
+
+const paginator = {
+  cursor: 'nextToken',
+  token: 'nextToken',
+  accumulator: 'items',
+  type: 'query',
+}
 
 // API Gateway v1 + SDK v2 / v3 use camel-cased params
 // API Gateway v2 also uses camel-cased params, but SDK v3 Pascal-cases API Gateway v2's camel-cased params
@@ -33,6 +41,20 @@ const pascalToCamelParams = obj => Object.fromEntries(
     (acc, [ k, v ]) => acc.concat(
       [ [ k[0].toLowerCase() + k.slice(1), v ] ]
     ), []
+  )
+)
+const isObj = i => i && typeof i === 'object' && !Array.isArray(i)
+const isArr = i => Array.isArray(i)
+const CamelToPascalParams = obj => Object.fromEntries(
+  Object.entries(obj).reduce(
+    (acc, [ k, v ]) => {
+      let val = v
+      if (isObj(v)) val = CamelToPascalParams(v)
+      if (isArr(v)) val = val.map(CamelToPascalParams)
+      return acc.concat(
+        [ [ k[0].toUpperCase() + k.slice(1), val ] ]
+      )
+    }, []
   )
 )
 
@@ -71,6 +93,31 @@ const GetDeployment =  {
   response: defaultResponse,
 }
 
+const GetDeployments = {
+  awsDoc: docRoot + 'apis-apiid-deployments.html#GetDeployments',
+  validate: {
+    ApiId,
+    NextToken,
+    MaxResults: Limit,
+    paginate: valPaginate,
+  },
+  request: async (params) => {
+    const { apiId, nextToken, maxResults } = pascalToCamelParams(params)
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+    return {
+      endpoint: `/v2/apis/${apiId}/deployments`,
+      query: { nextToken, maxResults },
+      paginate,
+      paginator,
+    }
+  },
+  response: defaultResponse,
+}
+
 const UpdateStage =  {
   awsDoc: docRoot + 'apis-apiid-stages-stagename.html#UpdateStage',
   validate: {
@@ -101,5 +148,5 @@ const UpdateStage =  {
 export default {
   service,
   property,
-  methods: { CreateDeployment, GetDeployment, UpdateStage, ...incomplete }
+  methods: { CreateDeployment, GetDeployment, GetDeployments, UpdateStage, ...incomplete }
 }

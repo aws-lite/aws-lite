@@ -35,7 +35,6 @@ export default {
   GetApis:                     { disabled, awsDoc: docRoot + 'apis.html#GetApis' },
   GetAuthorizer:               { disabled, awsDoc: docRoot + 'apis-apiid-authorizers-authorizerid.html#GetAuthorizer' },
   GetAuthorizers:              { disabled, awsDoc: docRoot + 'apis-apiid-authorizers.html#GetAuthorizers' },
-  GetDeployments:              { disabled, awsDoc: docRoot + 'apis-apiid-deployments.html#GetDeployments' },
   GetDomainName:               { disabled, awsDoc: docRoot + 'domainnames-domainname.html#GetDomainName' },
   GetDomainNames:              { disabled, awsDoc: docRoot + 'domainnames.html#GetDomainNames' },
   GetIntegration:              { disabled, awsDoc: docRoot + 'apis-apiid-integrations-integrationid.html#GetIntegration' },

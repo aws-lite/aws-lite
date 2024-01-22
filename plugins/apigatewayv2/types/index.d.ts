@@ -3,6 +3,7 @@ import {
   // $IMPORTS_START
   CreateDeploymentCommandOutput as CreateDeploymentResponse,
   GetDeploymentCommandOutput as GetDeploymentResponse,
+  GetDeploymentsCommandOutput as GetDeploymentsResponse,
   UpdateStageCommandOutput as UpdateStageResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-apigatewayv2";
@@ -22,6 +23,12 @@ declare interface AwsLiteAPIGatewayV2 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#GetDeployment API Gateway V2: GetDeployment}
    */
   GetDeployment: (input: { ApiId: string, NextToken?: string, MaxResults?: number }) => Promise<GetDeploymentResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#GetDeployments API Gateway V2: GetDeployments}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#GetDeployments API Gateway V2: GetDeployments}
+   */
+  GetDeployments: (input: { ApiId: string, NextToken?: string, MaxResults?: number, paginate?: boolean }) => Promise<GetDeploymentsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#UpdateStage API Gateway V2: UpdateStage}
