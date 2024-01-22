@@ -23,6 +23,7 @@ const xml = { 'content-type': 'application/xml' }
 const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
 const Id = { ...str, required, comment: 'Distribution ID' }
+const IfMatch = { ...str, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const maybeAddETag = (result, headers) => {
@@ -59,11 +60,12 @@ const CreateDistribution = {
      */
   },
   request: (params) => {
+    const DistributionConfig = unarrayifyObject(params.DistributionConfig)
     return {
       endpoint: '/2020-05-31/distribution',
       method: 'POST',
       headers: xml,
-      payload: { DistributionConfig: params }
+      payload: { DistributionConfig }
     }
   },
   response: ({ headers, payload }) => {
@@ -105,11 +107,13 @@ const DeleteDistribution = {
   awsDoc: docRoot + 'API_DeleteDistribution.html',
   validate: {
     Id,
+    IfMatch,
   },
-  request: () => {
+  request: ({ Id, IfMatch }) => {
     return {
       endpoint: `/2020-05-31/distribution/${Id}`,
       method: 'DELETE',
+      headers: IfMatch ? { 'if-match': IfMatch } : {},
     }
   },
   response: () => ({}),
@@ -189,7 +193,7 @@ const UpdateDistribution = {
   validate: {
     DistributionConfig: { ...obj, required, comment: 'Complete distribution configuration object from `GetDistribution` call', ref: docRoot + 'API_UpdateDistribution.html#API_UpdateDistribution_RequestBody' },
     Id,
-    IfMatch: { ...str, required, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' },
+    IfMatch: { ...IfMatch, required },
   },
   request: (params) => {
     const { Id, IfMatch } = params

@@ -63,6 +63,8 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - Distribution ID
+- **`IfMatch` (string)**
+  - Value of previous `GetDistribution` call's `ETag` property
 
 
 ### `GetDistribution`
