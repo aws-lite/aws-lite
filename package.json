@@ -46,6 +46,7 @@
     "adm-zip": "^0.5.10",
     "cross-env": "^7.0.3",
     "eslint": "^8.50.0",
+    "evil-dns": "^0.2.0",
     "fast-xml-parser": "^4.3.2",
     "mock-tmp": "^0.0.2",
     "nyc": "^15.1.0",

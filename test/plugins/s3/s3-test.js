@@ -5,6 +5,7 @@ let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
 let test = require('tape')
 let mockTmp = require('mock-tmp')
+let evilDns = require('evil-dns')
 let dns = require('dns')
 
 let aws, s3rver, tmp
@@ -16,14 +17,66 @@ let s3_root_dir = 's3_root_dir'
 let contentType = 'text/plain'
 let region = 'us-east-1'
 
-// localtest.me and all subdomains resolve to 127.0.0.1/::1
-// See https://readme.localtest.me/
-let serviceEndpoint = 'localtest.me'
+// DNS domains with .test TLD can never be registered - see RFC 6761
+let serviceEndpoint = 'endpoint.test'
+let loopback = '127.0.0.1'
 
-// Set a consistent DNS result order so that client and server both use ipv4
-// rather than one using ipv4 and the other using ipv6, leading to ECONNREFUSED
-// errors.
-dns.setDefaultResultOrder('ipv4first')
+// evil-dns doesn't work with Node 20, since it doesn't support options.all,
+// so we need to wrap evil-dns' lookup function and turn the address into
+// an array if necessary.
+// See https://github.com/JamesHight/node-evil-dns/issues/7
+//
+// Also, we wrap the callback with process.nextTick() to avoid an uncatchable
+// error in certain environments when the network is unreachable.
+// See https://github.com/JamesHight/node-evil-dns/issues/5#issuecomment-949881507
+let evilDnsLookup = dns.lookup
+function lookupWrapper (domain, options, callback) {
+
+  if (arguments.length === 2) {
+    callback = options
+    options = {}
+  }
+
+  return evilDnsLookup(domain, options, (err, address, family) => {
+    if (typeof(options) === 'object' && options.all && (!Array.isArray(address))) {
+      // Caller specified options.all, but evil-dns only returns a single
+      // address, so we need to turn it into an array
+      return process.nextTick(() => callback(err, [ { address: address, family: family } ]))
+    }
+    else return process.nextTick(() => callback(err, address, family))
+  })
+}
+dns.lookup = lookupWrapper
+
+// Convenience function for tests, since evil-dns patches node:dns but not
+// node:dns/promises
+async function lookupAsync (domain, options) {
+  return new Promise((resolve, reject) => {
+    dns.lookup(domain, options || {}, (err, address) => {
+      if (err) reject(err)
+      resolve(address)
+    })
+  })
+}
+
+test('Set up DNS lookup override', async t => {
+  t.plan(3)
+
+  // Override DNS lookup to resolve endpoint.test and any of its subdomains to 127.0.0.1
+  evilDns.add(new RegExp(`^(?:[a-zA-Z0-9-]+\.)*${serviceEndpoint.replace('.', '\.')}$`), loopback)
+
+  // Check we haven't broken default DNS resolution - looking up a real domain
+  // with options.all should result in an array of objects, rather than a
+  // single IP address.
+  let githubAddress = await lookupAsync('github.com', { all: true })
+  t.ok(Array.isArray(githubAddress), 'github.com with options.all resolves to an array')
+
+  // Check S3 service endpoint for ListBuckets.
+  t.equal(await lookupAsync(`s3.${region}.${serviceEndpoint}`), loopback, 'S3 service endpoint resolves')
+
+  // Check virtual host-style bucket endpoint for other operations.
+  t.equal(await lookupAsync(`${bucket_name}.s3.${region}.${serviceEndpoint}`), loopback, 'Virtual host-style bucket endpoint resolves')
+})
 
 test('Set up env', async t => {
   t.plan(3)
