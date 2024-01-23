@@ -99,6 +99,7 @@ test('Set up env', async t => {
   t.ok(tmp, `mockTmp directory ${tmp} is present`)
 
   s3rver = new S3rver({
+    address: loopback,
     port,
     silent: true,
     serviceEndpoint: serviceEndpoint,
