@@ -1,16 +1,24 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  CreateStackCommandOutput as CreateStackResponse,
   DeleteStackCommandOutput as DeleteStackResponse,
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
   DescribeStacksCommandOutput as DescribeStacksResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
+  UpdateStackCommandOutput as UpdateStackResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudformation";
 
 declare interface AwsLiteCloudFormation {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStack.html CloudFormation: CreateStack}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudformation/readme.md#CreateStack CloudFormation: CreateStack}
+   */
+  CreateStack: (input: { StackName: string, Capabilities?: any[], ClientRequestToken?: string, DisableRollback?: boolean, EnableTerminationProtection?: boolean, NotificationARNs?: any[], OnFailure?: string, Parameters?: any[], ResourceTypes?: any[], RetainExceptOnCreate?: boolean, RoleARN?: string, RollbackConfiguration?: Record<string, any>, StackPolicyBody?: string,object, StackPolicyURL?: string, Tags?: any[], TemplateBody?: string,object, TemplateURL?: string, TimeoutInMinutes?: number }) => Promise<CreateStackResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStack.html CloudFormation: DeleteStack}
@@ -35,6 +43,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackResources CloudFormation: ListStackResources}
    */
   ListStackResources: (input: { StackName: string, NextToken?: string, paginate?: boolean }) => Promise<ListStackResourcesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html CloudFormation: UpdateStack}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateStack CloudFormation: UpdateStack}
+   */
+  UpdateStack: (input: { StackName: string, Capabilities?: any[], ClientRequestToken?: string, DisableRollback?: boolean, NotificationARNs?: any[], Parameters?: any[], ResourceTypes?: any[], RetainExceptOnCreate?: boolean, RoleARN?: string, RollbackConfiguration?: Record<string, any>, StackPolicyBody?: string,object, StackPolicyURL?: string, Tags?: any[], TemplateBody?: string,object, TemplateURL?: string }) => Promise<UpdateStackResponse>
   // $METHODS_END
 }
 
