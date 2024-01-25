@@ -319,11 +319,8 @@ async function paginator (params, creds, region, config, metadata) {
 
     let accumulated = nestedAccumulator
       ? accumulator.split('.').reduce((parent, child) => parent?.[child], result.payload)
-      : result.payload[accumulator]
-
-    if (!accumulated) {
-      throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' not found`)
-    }
+      // Some responses omit their accumulator property if empty (eg S3 ListObjectsV2...), so backfill it as necessary
+      : result.payload[accumulator] || []
 
     // Best effort handling of properties that sometimes are / are not arrays, courtesy of XML
     // This can perhaps backfire in a few different ways, so hold onto your butts
