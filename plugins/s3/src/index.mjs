@@ -45,12 +45,12 @@ const CreateBucket = {
     ...getValidateHeaders('ACL', 'GrantFullControl', 'GrantRead', 'GrantReadACP', 'GrantWrite', 'GrantWriteACP', 'ObjectLockEnabledForBucket', 'ObjectOwnership'),
   },
   request: (params, utils) => {
-    const { CreateBucketConfiguration = {} } = params
+    const { CreateBucketConfiguration } = params
     return {
       host: host(params, utils),
       method: 'PUT',
       headers: { ...xml, ...getHeadersFromParams(params) },
-      payload: { CreateBucketConfiguration },
+      payload: CreateBucketConfiguration ? { CreateBucketConfiguration } : undefined,
     }
   },
   response: ({ headers }) => {
