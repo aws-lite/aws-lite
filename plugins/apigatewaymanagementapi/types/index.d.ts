@@ -15,7 +15,7 @@ declare interface AwsLiteApiGatewayManagementApi {
    * - AWS docs: {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html API Gateway WebSocket Management API: PostToConnection}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewaymanagementapi/readme.md#PostToConnection API Gateway WebSocket Management API: PostToConnection}
    */
-  PostToConnection: (input: { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string, Data?: string,object }) => Promise<PostToConnectionResponse>
+  PostToConnection: (input: { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string, Data?: string | Record<string, any> }) => Promise<PostToConnectionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html API Gateway WebSocket Management API: DeleteConnection}
