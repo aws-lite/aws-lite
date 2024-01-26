@@ -58,6 +58,21 @@ Properties:
   - Maximum number of items to evaluate and return
 
 
+### `GetDeployments`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#GetDeployments)
+
+Properties:
+- **`ApiId` (string) [required]**
+  - API ID
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`MaxResults` (number)**
+  - Maximum number of items to evaluate and return
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `UpdateStage`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#UpdateStage)
@@ -127,7 +142,6 @@ Properties:
 - [`GetApis`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis.html#GetApis)
 - [`GetAuthorizer`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers-authorizerid.html#GetAuthorizer)
 - [`GetAuthorizers`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers.html#GetAuthorizers)
-- [`GetDeployments`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#GetDeployments)
 - [`GetDomainName`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname.html#GetDomainName)
 - [`GetDomainNames`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames.html#GetDomainNames)
 - [`GetIntegration`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations-integrationid.html#GetIntegration)

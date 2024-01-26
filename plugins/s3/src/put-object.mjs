@@ -169,8 +169,9 @@ const PutObject = {
         chunks[i].signature = chunkSignature
 
         // Now add the chunk to the stream
-        let part = payloadMetadata(chunk.chunkSize, chunkSignature) + body + chunkBreak
-        stream.push(part)
+        stream.push(payloadMetadata(chunk.chunkSize, chunkSignature))
+        stream.push(body)
+        stream.push(chunkBreak)
 
         if (chunk.finalRequest) {
           stream.push(null)

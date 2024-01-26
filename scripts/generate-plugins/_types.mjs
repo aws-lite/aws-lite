@@ -8,6 +8,20 @@ const CWD = cwd()
 const FILE = fileURLToPath(import.meta.url)
 const __dirname = dirname(FILE)
 
+function typeFromValidateEntry (value) {
+  if (Array.isArray(value)) {
+    return value.map(typeFromValidateEntry).join(' | ')
+  }
+  else {
+    switch (value) {
+    case 'object': return 'Record<string, any>'
+    case 'array': return 'any[]'
+    case 'buffer': return 'Buffer'
+    default: return value
+    }
+  }
+}
+
 function createTypesStr ({ methods, service, property, display, existingTypes }) {
   let existingMethods = []
   if (existingTypes) {
@@ -51,16 +65,7 @@ function createTypesStr ({ methods, service, property, display, existingTypes })
         const inputTypeString = []
         for (const key in inputType) {
           const value = inputType[key]
-
-          let type
-          switch (value) {
-          case 'object': type = 'Record<string, any>'
-            break
-          case 'array': type = 'any[]'
-            break
-          default: type = value
-            break
-          }
+          const type = typeFromValidateEntry(value)
 
           inputTypeString.push(`${key}: ${type}`)
         }

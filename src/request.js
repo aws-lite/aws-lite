@@ -170,6 +170,7 @@ function request (params, creds, region, config, metadata) {
       else if (isStream) truncatedBody = `<readable stream>`
       else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
       console.error('[aws-lite] Request:', {
+        time: new Date().toISOString(),
         service,
         method,
         url: `${protocol}//${host}${port ? ':' + port : ''}${path}`,
@@ -235,6 +236,7 @@ function request (params, creds, region, config, metadata) {
           /**/ if (payload instanceof Buffer) truncatedBody = body.length ? `<body buffer of ${body.length}b>` : ''
           else if (rawString) truncatedBody = rawString?.length > 250 ? rawString?.substring(0, 250) + '...' : rawString
           console.error('[aws-lite] Response:', {
+            time: new Date().toISOString(),
             statusCode,
             headers,
             body: truncatedBody || '<no body>',
@@ -317,11 +319,8 @@ async function paginator (params, creds, region, config, metadata) {
 
     let accumulated = nestedAccumulator
       ? accumulator.split('.').reduce((parent, child) => parent?.[child], result.payload)
-      : result.payload[accumulator]
-
-    if (!accumulated) {
-      throw ReferenceError(`Pagination error: response accumulator property '${accumulator}' not found`)
-    }
+      // Some responses omit their accumulator property if empty (eg S3 ListObjectsV2...), so backfill it as necessary
+      : result.payload[accumulator] || []
 
     // Best effort handling of properties that sometimes are / are not arrays, courtesy of XML
     // This can perhaps backfire in a few different ways, so hold onto your butts

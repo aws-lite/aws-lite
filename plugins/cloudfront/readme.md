@@ -49,9 +49,11 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - Distribution ID
-- **`InvalidationBatch` (string) [required]**
-  - Invalidation parameters
+- **`InvalidationBatch` (string, array)**
+  - One or more invalidation parameters
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateInvalidation.html#API_CreateInvalidation_RequestSyntax)
+- **`CallerReference` (string) [required]**
+  - Unique value that ensures that the request cannot be replayed
 
 
 ### `DeleteDistribution`
@@ -61,6 +63,8 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - Distribution ID
+- **`IfMatch` (string)**
+  - Value of previous `GetDistribution` call's `ETag` property
 
 
 ### `GetDistribution`
@@ -88,8 +92,10 @@ Properties:
 Properties:
 - **`Marker` (string)**
   - Pagination cursor token to be used if `NextMarker` was returned in a previous response
-- **`MaxItems` (string)**
+- **`MaxItems` (number)**
   - Maximum number of items to return
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `UpdateDistribution`

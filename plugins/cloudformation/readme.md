@@ -32,6 +32,55 @@ npm i -D @aws-lite/cloudformation-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateStack`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStack.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`Capabilities` (array)**
+  - Array of CloudFormation capabilities necessary for stack creation; can be any of: `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`, `CAPABILITY_AUTO_EXPAND`
+- **`ClientRequestToken` (string)**
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
+- **`DisableRollback` (boolean)**
+  - Set to true to disable rollback of the stack if stack creation failed
+- **`EnableTerminationProtection` (boolean)**
+  - Enable protection against stack deletion
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html)
+- **`NotificationARNs` (array)**
+  - Array of SNS topic ARNs to publish stack related events
+- **`OnFailure` (string)**
+  - Action to be taken if stack creation failes; can be one of: `DO_NOTHING`, `ROLLBACK`, `DELETE`
+- **`Parameters` (array)**
+  - Array of objects specifying stack input parameters
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
+- **`ResourceTypes` (array)**
+  - Array of CloudFormation template resource types with permissions for this create stack action
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html)
+- **`RetainExceptOnCreate` (boolean)**
+  - Set to true to ensure newly created resources are deleted if the operation rolls back, even if marked with a deletion policy of `Retain`
+- **`RoleARN` (string)**
+  - IAM role ARN CloudFormation assumes to create the stack
+- **`RollbackConfiguration` (object)**
+  - Rollback triggers to be monitored during creation and updating
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RollbackConfiguration.html)
+- **`StackPolicyBody` (string, object)**
+  - Stack policy document; an object will be automatically serialized to JSON, or supply pre-serialized JSON
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html)
+- **`StackPolicyURL` (string)**
+  - Stack policy url
+- **`Tags` (array)**
+  - Array of tag objects to associate with the stack
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Tag.html)
+- **`TemplateBody` (string, object)**
+  - CloudFormation template object (which will be automatically serialized to JSON for you), or pre-serialized JSON or YAML; can be up to 51,200 b
+- **`TemplateURL` (string)**
+  - S3 location of CloudFormation template; can be up to 460,800 b
+- **`TimeoutInMinutes` (number)**
+  - Amount of time before the stack status becomes `CREATE_FAILED`
+
+
 ### `DeleteStack`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStack.html)
@@ -86,6 +135,48 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `UpdateStack`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`Capabilities` (array)**
+  - Array of CloudFormation capabilities necessary for stack creation; can be any of: `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`, `CAPABILITY_AUTO_EXPAND`
+- **`ClientRequestToken` (string)**
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
+- **`DisableRollback` (boolean)**
+  - Set to true to disable rollback of the stack if stack creation failed
+- **`NotificationARNs` (array)**
+  - Array of SNS topic ARNs to publish stack related events
+- **`Parameters` (array)**
+  - Array of objects specifying stack input parameters
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
+- **`ResourceTypes` (array)**
+  - Array of CloudFormation template resource types with permissions for this create stack action
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html)
+- **`RetainExceptOnCreate` (boolean)**
+  - Set to true to ensure newly created resources are deleted if the operation rolls back, even if marked with a deletion policy of `Retain`
+- **`RoleARN` (string)**
+  - IAM role ARN CloudFormation assumes to create the stack
+- **`RollbackConfiguration` (object)**
+  - Rollback triggers to be monitored during creation and updating
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RollbackConfiguration.html)
+- **`StackPolicyBody` (string, object)**
+  - Stack policy document; an object will be automatically serialized to JSON, or supply pre-serialized JSON
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html)
+- **`StackPolicyURL` (string)**
+  - Stack policy url
+- **`Tags` (array)**
+  - Array of tag objects to associate with the stack
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Tag.html)
+- **`TemplateBody` (string, object)**
+  - CloudFormation template object (which will be automatically serialized to JSON for you), or pre-serialized JSON or YAML; can be up to 51,200 b
+- **`TemplateURL` (string)**
+  - S3 location of CloudFormation template; can be up to 460,800 b
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
@@ -96,7 +187,6 @@ Properties:
 - [`CancelUpdateStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html)
 - [`ContinueUpdateRollback`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ContinueUpdateRollback.html)
 - [`CreateChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateChangeSet.html)
-- [`CreateStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStack.html)
 - [`CreateStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html)
 - [`CreateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackSet.html)
 - [`DeactivateOrganizationsAccess`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeactivateOrganizationsAccess.html)
@@ -151,7 +241,6 @@ Properties:
 - [`SignalResource`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SignalResource.html)
 - [`StopStackSetOperation`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StopStackSetOperation.html)
 - [`TestType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TestType.html)
-- [`UpdateStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html)
 - [`UpdateStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackInstances.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
 - [`UpdateTerminationProtection`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateTerminationProtection.html)
