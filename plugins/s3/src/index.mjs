@@ -27,7 +27,7 @@ const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the o
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
 const host = ({ Bucket }, { region, config }) => `${Bucket}.` + (config.host || `s3.${region}.amazonaws.com`)
-const defaultResponse = ({ payload }) => payload
+const defaultResponse = ({ payload }) => payload || {}
 const defaultError = ({ statusCode, error }) => {
   // SDK v2 lowcases `code`
   if (error?.Code) {
