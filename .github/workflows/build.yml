@@ -38,6 +38,7 @@ jobs:
         echo "OS ver:     ${{ runner.os }}"
 
     - name: Install
+      # Second install line necessary because Windows
       run: |
         npm install
         npm install test/plugins/ --prefix test/plugins/

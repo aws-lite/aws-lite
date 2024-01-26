@@ -21,7 +21,7 @@
     "install:test:plugins": "cross-env-shell test/plugins/install.sh",
     "lint": "npm run install:test:plugins && eslint --fix .",
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
-    "test:plugins": "npm run install:test:plugins && cross-env NODE_ENV=testing tape 'test/plugins/**/*-test.js' | tap-arc",
+    "test:plugins": "npm run install:test:plugins && cross-env tape 'test/plugins/**/*-test.js' | tap-arc",
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
     "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
     "test": "npm run lint && npm run gen && npm run test:plugins && npm run coverage"
@@ -43,19 +43,19 @@
   "devDependencies": {
     "@actions/core": "^1.10.1",
     "@architect/eslint-config": "^2.1.2",
-    "@aws-sdk/util-dynamodb": "^3.423.0",
-    "@smithy/smithy-client": "^2.1.9",
+    "@aws-sdk/util-dynamodb": "^3.499.0",
+    "@smithy/smithy-client": "^2.3.1",
     "adm-zip": "^0.5.10",
     "cross-env": "^7.0.3",
-    "eslint": "^8.50.0",
+    "eslint": "^8.56.0",
     "evil-dns": "^0.2.0",
-    "fast-xml-parser": "^4.3.2",
+    "fast-xml-parser": "^4.3.3",
     "mock-tmp": "^0.0.2",
     "nyc": "^15.1.0",
     "semver": "^7.5.4",
     "simple-git-hooks": "^2.9.0",
     "tap-arc": "^1.2.2",
-    "tape": "^5.7.0"
+    "tape": "^5.7.4"
   },
   "files": [
     "src"
