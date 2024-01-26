@@ -4,7 +4,7 @@ let test = require('tape')
 let mockTmp = require('mock-tmp')
 let { defaults, overrideHomedir, resetAWSEnvVars } = require('../../lib')
 let cwd = process.cwd()
-let sut = join(cwd, 'src', 'get-host.js')
+let sut = join(cwd, 'src', 'get-endpoint.js')
 let getHost = require(sut)
 
 let { profile } = defaults

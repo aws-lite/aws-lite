@@ -1,4 +1,4 @@
-let getHost = require('./get-host')
+let getEndpoint = require('./get-endpoint')
 let getCreds = require('./get-creds')
 let getRegion = require('./get-region')
 let clientFactory = require('./client-factory')
@@ -26,7 +26,7 @@ module.exports = async function awsLite (config = {}) {
   // Set defaults + essential config
   config.profile = config.profile || process.env.AWS_PROFILE || 'default'
   config.protocol = config.protocol ?? 'https'
-  config.host = await getHost(config)
+  config.host = await getEndpoint(config)
 
   // Creds + region
   let creds = await getCreds(config)
