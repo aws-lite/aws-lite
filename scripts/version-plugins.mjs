@@ -12,8 +12,8 @@ if (!semverArgs.includes(action)) {
   throw ReferenceError(`Version action must be one of: ${semverArgs.join(', ')} (got: ${action})`)
 }
 
-const pluginName = args[1]
-const plugins = pluginName === 'all' ? pluginList.map(({ service }) => service) : [ pluginName ]
+const pluginNames = args.slice(1)
+const plugins = pluginNames === 'all' ? pluginList.map(({ service }) => service) : pluginNames
 
 const status = execSync('git status --porcelain')
 if (status.length) {
