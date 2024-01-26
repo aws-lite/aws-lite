@@ -38,10 +38,7 @@ jobs:
         echo "OS ver:     ${{ runner.os }}"
 
     - name: Install
-      # Second install line necessary because Windows
-      run: |
-        npm install
-        npm install test/plugins/ --prefix test/plugins/
+      run: npm install
 
     - name: Link (npm < 7)
       if: matrix.node-version == '14.x'
