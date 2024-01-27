@@ -765,7 +765,7 @@ const Query = {
       paginate = true
     }
     return {
-      awsjson: [ 'ExpressionAttributeValues' ],
+      awsjson: awsjsonReq,
       headers: headers('Query'),
       paginate,
       paginator,
@@ -849,7 +849,7 @@ const Scan = {
       paginate = true
     }
     return {
-      awsjson: [ 'ExpressionAttributeValues' ],
+      awsjson: awsjsonReq,
       headers: headers('Scan'),
       payload: params,
       paginate,

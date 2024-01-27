@@ -9,18 +9,21 @@
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
   "scripts": {
+    "-----plugins----": "",
     "gen": "npm run generate-plugins",
     "generate-plugins": "node scripts/generate-plugins/index.mjs",
-    "publish-plugins": "node scripts/publish-plugins.mjs",
     "plugin": "node scripts/version-plugins.mjs",
-    "lint": "eslint --fix .",
-    "test": "npm run lint && npm run gen && npm run coverage",
-    "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
-    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-arc",
-    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
-    "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
+    "publish-plugins": "node scripts/publish-plugins.mjs",
+    "------other-----": "",
+    "vendor": "scripts/vendor/vendor.sh",
+    "-----testing----": "",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
-    "vendor": "scripts/vendor/vendor.sh"
+    "lint": "eslint --fix .",
+    "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
+    "test:plugins": "cross-env tape 'plugins/**/test/**/*-test.*js' | tap-arc",
+    "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
+    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
+    "test": "npm run lint && npm run gen && npm run test:plugins && npm run coverage"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run test:precommit",
@@ -39,18 +42,20 @@
   "devDependencies": {
     "@actions/core": "^1.10.1",
     "@architect/eslint-config": "^2.1.2",
-    "@aws-sdk/util-dynamodb": "^3.423.0",
-    "@smithy/smithy-client": "^2.1.9",
+    "@aws-sdk/util-dynamodb": "^3.499.0",
+    "@smithy/smithy-client": "^2.3.1",
     "adm-zip": "^0.5.10",
     "cross-env": "^7.0.3",
-    "eslint": "^8.50.0",
-    "fast-xml-parser": "^4.3.2",
+    "eslint": "^8.56.0",
+    "evil-dns": "^0.2.0",
+    "fast-xml-parser": "^4.3.3",
     "mock-tmp": "^0.0.2",
     "nyc": "^15.1.0",
+    "s3rver": "^3.7.1",
     "semver": "^7.5.4",
     "simple-git-hooks": "^2.9.0",
     "tap-arc": "^1.2.2",
-    "tape": "^5.7.0"
+    "tape": "^5.7.4"
   },
   "files": [
     "src"

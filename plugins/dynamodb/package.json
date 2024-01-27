@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/dynamodb",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Official `aws-lite` plugin for DynamoDB",
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {

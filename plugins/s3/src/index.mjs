@@ -26,7 +26,7 @@ const Key = { ...str, required, comment: 'S3 key / file name' }
 const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
-const host = ({ Bucket }, { region }) => `${Bucket}.s3.${region}.amazonaws.com`
+const host = ({ Bucket }, { region, config }) => `${Bucket}.` + (config.host || `s3.${region}.amazonaws.com`)
 const defaultResponse = ({ payload }) => payload
 const defaultError = ({ statusCode, error }) => {
   // SDK v2 lowcases `code`
@@ -215,11 +215,7 @@ const HeadObject = {
 const ListBuckets = {
   awsDoc: docRoot + 'API_ListBuckets.html',
   validate: {},
-  request: () => {
-    return {
-      endpoint: '/',
-    }
-  },
+  request: () => ({}),
   response: ({ payload }) => payload,
   error: defaultError,
 }
