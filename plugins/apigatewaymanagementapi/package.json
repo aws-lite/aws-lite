@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/apigatewaymanagementapi",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Official `aws-lite` plugin for API Gateway WebSocket Management API",
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {
