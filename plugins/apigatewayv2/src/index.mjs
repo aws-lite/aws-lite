@@ -68,7 +68,7 @@ const CreateDeployment =  {
   request: async (params) => {
     const { apiId, description, stageName } = pascalToCamelParams(params)
     return {
-      endpoint: `/v2/apis/${apiId}/deployments`,
+      path: `/v2/apis/${apiId}/deployments`,
       method: 'POST',
       payload: { description, stageName },
     }
@@ -86,7 +86,7 @@ const GetDeployment =  {
   request: async (params) => {
     const { apiId, nextToken, maxResults } = pascalToCamelParams(params)
     return {
-      endpoint: `/v2/apis/${apiId}/deployments`,
+      path: `/v2/apis/${apiId}/deployments`,
       query: { nextToken, maxResults },
     }
   },
@@ -109,7 +109,7 @@ const GetDeployments = {
       paginate = true
     }
     return {
-      endpoint: `/v2/apis/${apiId}/deployments`,
+      path: `/v2/apis/${apiId}/deployments`,
       query: { nextToken, maxResults },
       paginate,
       paginator,
@@ -137,7 +137,7 @@ const UpdateStage =  {
     const payload = pascalToCamelParams(params)
     const { apiId, stageName } = payload
     return {
-      endpoint: `/v2/apis/${apiId}/stages/${stageName}`,
+      path: `/v2/apis/${apiId}/stages/${stageName}`,
       method: 'PATCH',
       payload,
     }

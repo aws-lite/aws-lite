@@ -7,7 +7,7 @@ let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
 
-let { badPort, config, host, protocol, service, endpoint, port } = defaults
+let { badPort, config, host, protocol, service, path, port } = defaults
 let jsonHeaders = { 'content-type': 'application/json' }
 let xmlHeaders = { 'content-type': 'application/xml' }
 
@@ -37,7 +37,7 @@ test('Primary client - core functionality', async t => {
   t.notOk({}.propertyIsEnumerable.call(aws.credentials, 'sessionToken'), `sessionToken is a non-enumerable property`)
 
   // Basic get request
-  result = await aws({ service, endpoint })
+  result = await aws({ service, path })
   request = server.getCurrentRequest()
   t.notOk(request.body, 'Request included no body')
   t.equal(result.statusCode, 200, 'Client returned status code of response')
@@ -47,15 +47,15 @@ test('Primary client - core functionality', async t => {
 
   // Basic get request with query string params
   query = { foo: 'bar', json: JSON.stringify({ ok: true }) }
-  url = endpoint + '?' + qs.stringify(query)
-  result = await aws({ service, endpoint, query })
+  url = path + '?' + qs.stringify(query)
+  result = await aws({ service, path, query })
   basicRequestChecks(t, 'GET', { url })
 
   // Basic post request
   payload = { ok: true }
   responseBody = { aws: 'lol' }
   server.use({ responseBody, responseHeaders: jsonHeaders })
-  result = await aws({ service, endpoint, payload })
+  result = await aws({ service, path, payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, 'Request included correct body')
   t.deepEqual(result.payload, responseBody, 'Client returned response payload as parsed JSON')
@@ -64,42 +64,42 @@ test('Primary client - core functionality', async t => {
   // Basic post with query string params
   payload = { ok: true }
   query = { fiz: 'buz', json: JSON.stringify({ ok: false }) }
-  url = endpoint + '?' + qs.stringify(query)
+  url = path + '?' + qs.stringify(query)
   server.use({ responseBody, responseHeaders: jsonHeaders })
-  result = await aws({ service, endpoint, payload, query })
+  result = await aws({ service, path, payload, query })
   basicRequestChecks(t, 'POST', { url })
 
   // Don't pass through nullish query string params
   query = { fiz: undefined, json: undefined, foo: null }
-  url = endpoint
+  url = path
   server.use({ responseBody, responseHeaders: jsonHeaders })
-  result = await aws({ service, endpoint, payload, query })
+  result = await aws({ service, path, payload, query })
   basicRequestChecks(t, 'POST', { url })
 
   // Pass through defined, non-empty query string params
   query = { fiz: 'buz', json: false, foo: '' }
-  url = endpoint + '?' + qs.stringify({ fiz: 'buz', json: false })
+  url = path + '?' + qs.stringify({ fiz: 'buz', json: false })
   server.use({ responseBody, responseHeaders: jsonHeaders })
-  result = await aws({ service, endpoint, payload, query })
+  result = await aws({ service, path, payload, query })
   basicRequestChecks(t, 'POST', { url })
 
   // Publish an object while passing headers
   payload = { ok: true }
-  result = await aws({ service, endpoint, payload, headers: copy(jsonHeaders) })
+  result = await aws({ service, path, payload, headers: copy(jsonHeaders) })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, 'Request included correct body (pre-encoded JSON)')
   reset()
 
   // Publish JSON while passing headers
   payload = JSON.stringify({ ok: true })
-  result = await aws({ service, endpoint, payload, headers: copy(jsonHeaders) })
+  result = await aws({ service, path, payload, headers: copy(jsonHeaders) })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, JSON.parse(payload), 'Request included correct body (pre-encoded JSON)')
   reset()
 
   // Publish some other kind of non-JSON request
   payload = 'hi'
-  result = await aws({ service, endpoint, payload })
+  result = await aws({ service, path, payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body.toString(), payload, 'Request included correct body (just a string)')
   reset()
@@ -109,28 +109,28 @@ test('Primary client - core functionality', async t => {
   let text = 'hi\nhello\nyo'
   text.split('').forEach(c => payload.push(c))
   payload.push(null)
-  await aws({ service, endpoint, payload, method: 'POST', headers: { 'content-length': text.length } })
+  await aws({ service, path, payload, method: 'POST', headers: { 'content-length': text.length } })
   request = server.getCurrentRequest()
   t.equal(request.body.toString(), text, 'Request included correct body')
   basicRequestChecks(t, 'POST')
 
-  // Ensure endpoints without leading slashes are handled properly
-  result = await aws({ service, endpoint: 'an/endpoint' })
+  // Ensure paths without leading slashes are handled properly
+  result = await aws({ service, path: 'a/path' })
   request = server.getCurrentRequest()
-  t.deepEqual(request.url, endpoint, 'Request included correct body (just a string)')
+  t.deepEqual(request.url, path, 'Request included correct body (just a string)')
   reset()
 
-  // Endpoint returns XML
+  // Path returns XML
   responseBody = '<result><hello>yo</hello></result>'
   server.use({ responseBody, responseHeaders: xmlHeaders })
-  result = await aws({ service, endpoint })
+  result = await aws({ service, path })
   t.deepEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
   basicRequestChecks(t, 'GET')
 
-  // Endpoint returns a buffer
+  // Path returns a buffer
   responseBody = Buffer.from('ohi')
   server.use({ responseBody, responseHeaders: { 'content-type': 'application/octet-stream' } })
-  result = await aws({ service, endpoint })
+  result = await aws({ service, path })
   t.deepEqual(result.payload, responseBody, 'Client returned response payload as buffer')
   basicRequestChecks(t, 'GET')
 })
@@ -140,43 +140,43 @@ test('Primary client - aliased params', async t => {
   let request
   let aws = await client(config)
 
-  // Endpoint
-  await aws({ service, endpoint })
+  // Path
+  await aws({ service, path })
   request = server.getCurrentRequest()
-  t.equal(request.url, endpoint, 'Made request to correct endpoint (options.endpoint)')
+  t.equal(request.url, path, 'Made request to correct path (options.path)')
   reset()
 
   // Host / hostname
-  await aws({ service, endpoint })
+  await aws({ service, path })
   request = server.getCurrentRequest()
   t.ok(request, 'Made request to correct host (options.host)')
   reset()
-  await aws({ service, hostname: host, port, path: endpoint })
+  await aws({ service, hostname: host, port, path: path })
   request = server.getCurrentRequest()
   t.ok(request, 'Made request to correct host (options.hostname)')
   reset()
 
   // Payload / body / data / json + serialization
   let payload = { ok: true }
-  await aws({ service, endpoint, payload })
+  await aws({ service, path, payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, 'Made request with correct body (options.payload)')
   reset()
-  await aws({ service, endpoint, body: payload })
+  await aws({ service, path, body: payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, 'Made request with correct body (options.body)')
   reset()
-  await aws({ service, endpoint, data: payload })
+  await aws({ service, path, data: payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, 'Made request with correct body (options.data)')
   reset()
-  await aws({ service, endpoint, json: payload })
+  await aws({ service, path, json: payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, 'Made request with correct body (options.json)')
   reset()
 
   let string = 'hi'
-  await aws({ service, endpoint, payload: string })
+  await aws({ service, path, payload: string })
   request = server.getCurrentRequest()
   t.equal(request.body.toString(), string, 'Made request with correct body (plain string)')
   reset()
@@ -193,7 +193,7 @@ test('Primary client - AWS JSON payloads', async t => {
   // Basic post with AWS-flavored JSON
   body = { ok: true }
   server.use({ responseBody, responseHeaders: headers })
-  result = await aws({ service, endpoint, body, headers: copy(headers) })
+  result = await aws({ service, path, body, headers: copy(headers) })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: true } }, 'Request included correct body (raw AWS JSON)')
   t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
@@ -203,7 +203,7 @@ test('Primary client - AWS JSON payloads', async t => {
   // AWS JSON specified via headers
   body = { ok: false }
   server.use({ responseBody, responseHeaders: headers })
-  result = await aws({ service, endpoint, body, headers: copy(headers) })
+  result = await aws({ service, path, body, headers: copy(headers) })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
   t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
@@ -213,7 +213,7 @@ test('Primary client - AWS JSON payloads', async t => {
   // AWS JSON specified via `awsjson` param (bool)
   body = { ok: false }
   server.use({ responseBody, responseHeaders: headers })
-  result = await aws({ service, endpoint, body, awsjson: true })
+  result = await aws({ service, path, body, awsjson: true })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
   t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
@@ -223,7 +223,7 @@ test('Primary client - AWS JSON payloads', async t => {
   // AWS JSON specified via `awsjson` param (array)
   body = { ok: true, fine: false }
   server.use({ responseBody, responseHeaders: headers })
-  result = await aws({ service, endpoint, body, awsjson: [ 'fine' ] })
+  result = await aws({ service, path, body, awsjson: [ 'fine' ] })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, { ok: true, fine: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
   t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
@@ -233,7 +233,7 @@ test('Primary client - AWS JSON payloads', async t => {
   // AWS JSON response, but it's actually just regular JSON because AWS
   let regularJSON = { regular: 'JSON' }
   server.use({ responseBody: regularJSON, responseHeaders: headers })
-  result = await aws({ service, endpoint })
+  result = await aws({ service, path })
   request = server.getCurrentRequest()
   t.deepEqual(result.payload, regularJSON, 'Client returned response payload as parsed, unmarshalled JSON')
   reset()
@@ -248,16 +248,16 @@ test('Primary client - XML payloads', async t => {
   payload = { ok: true }
   responseBody = { aws: 'lol' }
   server.use({ responseBody, responseHeaders: jsonHeaders })
-  await aws({ service, endpoint, headers: copy(xmlHeaders), payload })
+  await aws({ service, path, headers: copy(xmlHeaders), payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, '<ok>true</ok>', 'Request included correct body')
   basicRequestChecks(t, 'POST')
   reset()
 
-  // Endpoint returns XML
+  // Path returns XML
   responseBody = '<result><hello>yo</hello></result>'
   server.use({ responseBody, responseHeaders: xmlHeaders })
-  result = await aws({ service, endpoint })
+  result = await aws({ service, path })
   request = server.getCurrentRequest()
   t.deepEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
   basicRequestChecks(t, 'GET')
@@ -290,7 +290,7 @@ test('Primary client - XML payloads', async t => {
   </arr>
 </result>`
   server.use({ responseBody, responseHeaders: xmlHeaders })
-  result = await aws({ service, endpoint })
+  result = await aws({ service, path })
   request = server.getCurrentRequest()
   t.equal(result.payload.string, 'yo', 'Client returned XML response with parsed string')
   t.equal(result.payload.number, 1, 'Client returned XML response with parsed number')
@@ -316,7 +316,7 @@ test('Primary client - error handling', async t => {
     responseBody = { message: 'lolno', other: 'metadata' }
     server.use({ responseBody, responseHeaders: jsonHeaders, responseStatusCode })
     let aws = await client(config)
-    await aws({ service, endpoint })
+    await aws({ service, path })
   }
   catch (err) {
     console.log(err)
@@ -336,7 +336,7 @@ test('Primary client - error handling', async t => {
     responseBody = { Error: { message: 'lolno', other: 'metadata', time: 'early' } }
     server.use({ responseBody, responseHeaders: jsonHeaders, responseStatusCode })
     let aws = await client(config)
-    await aws({ service, endpoint })
+    await aws({ service, path })
   }
   catch (err) {
     console.log(err)
@@ -356,7 +356,7 @@ test('Primary client - error handling', async t => {
     responseBody = { Error: { Code: 'idk' } }
     server.use({ responseBody, responseHeaders: jsonHeaders, responseStatusCode })
     let aws = await client(config)
-    await aws({ service, endpoint })
+    await aws({ service, path })
   }
   catch (err) {
     console.log(err)
@@ -370,7 +370,7 @@ test('Primary client - error handling', async t => {
     responseBody = { Error: { code: 'idk' } }
     server.use({ responseBody, responseHeaders: jsonHeaders, responseStatusCode })
     let aws = await client(config)
-    await aws({ service, endpoint })
+    await aws({ service, path })
   }
   catch (err) {
     console.log(err)
@@ -385,7 +385,7 @@ test('Primary client - error handling', async t => {
     responseBody = { Error: { __type: 'idk' } }
     server.use({ responseBody, responseHeaders: jsonHeaders, responseStatusCode })
     let aws = await client(config)
-    await aws({ service, endpoint })
+    await aws({ service, path })
   }
   catch (err) {
     console.log(err)
@@ -395,7 +395,7 @@ test('Primary client - error handling', async t => {
     reset()
   }
 
-  // Funky error - some endpoints/error states do things like return XML without a content-type
+  // Funky error - some paths/error states do things like return XML without a content-type
   try {
     responseStatusCode = 400
     responseBody = '<AccessDeniedException>\n' +
@@ -403,7 +403,7 @@ test('Primary client - error handling', async t => {
                    '</AccessDeniedException>\n'
     server.use({ responseBody, responseHeaders: jsonHeaders, responseStatusCode })
     let aws = await client(config)
-    await aws({ service, endpoint })
+    await aws({ service, path })
   }
   catch (err) {
     console.log(err)
@@ -419,7 +419,7 @@ test('Primary client - error handling', async t => {
   // Request-level failure
   try {
     let aws = await client(config)
-    await aws({ service, port: badPort, endpoint })
+    await aws({ service, port: badPort, path })
   }
   catch (err) {
     console.log(err)
@@ -451,7 +451,7 @@ test('Primary client - validation', async t => {
 
   try {
     let aws = await client(config)
-    await aws({ service: 'lolidk', endpoint })
+    await aws({ service: 'lolidk', path })
   }
   catch (err) {
     t.match(err.message, /Invalid AWS service specified/, 'Throw on invalid AWS service')
@@ -460,7 +460,7 @@ test('Primary client - validation', async t => {
 
   try {
     let aws = await client(config)
-    await aws({ service, endpoint, query: [ 'hi', 'there' ] })
+    await aws({ service, path, query: [ 'hi', 'there' ] })
   }
   catch (err) {
     t.match(err.message, /Query property must be an object/, 'Throw on invalid AWS service')

@@ -6,7 +6,7 @@ let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
 
-let { accessKeyId, badPort, config, endpoint, host, port, protocol, region, secretAccessKey, service } = defaults
+let { accessKeyId, badPort, config, host, path, port, protocol, region, secretAccessKey, service } = defaults
 let profile1 = 'profile_1'
 
 test('Set up env', async t => {
@@ -107,18 +107,18 @@ test('Configuration - per-request overrides', async t => {
 
   // Basic host config passthrough, not necessarily per-request overrides
   aws = await client({ ...badConfig, host })
-  await aws({ service, endpoint, port, protocol })
+  await aws({ service, path, port, protocol })
   aws = await client({ ...badConfig, hostname: host, host: undefined })
-  await aws({ service, endpoint, port, protocol })
+  await aws({ service, path, port, protocol })
 
   // None of these should work if per-request overrides aren't overriding
   aws = await client({ ...badConfig, host: badHost })
-  await aws({ service, endpoint, host, port, protocol })
-  await aws({ service, endpoint, hostname: host, port, protocol })
+  await aws({ service, path, host, port, protocol })
+  await aws({ service, path, hostname: host, port, protocol })
 
   aws = await client({ ...badConfig, hostname: badHost, host: undefined })
-  await aws({ service, endpoint, host, port, protocol })
-  await aws({ service, endpoint, hostname: host, port, protocol })
+  await aws({ service, path, host, port, protocol })
+  await aws({ service, path, hostname: host, port, protocol })
 
   basicRequestChecks(t, 'GET')
   reset()
@@ -127,32 +127,61 @@ test('Configuration - per-request overrides', async t => {
   t.pass('Server ended')
 })
 
-test('Configuration - endpoint prefix', async t => {
+test('Configuration - endpoint, url, host', async t => {
+  t.plan(22)
+  let aws
+  let basicConfig = { accessKeyId, secretAccessKey, region, service }
+  let started = await server.start()
+  t.ok(started, 'Started server')
+
+  // Basic requests
+  aws = await client({ ...basicConfig, endpoint: `http://localhost:${port}` })
+  await aws({ service })
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  aws = await client({ ...basicConfig, url: `http://localhost:${port}` })
+  await aws({ service })
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  aws = await client({ ...basicConfig, host, port })
+  await aws({ service })
+  basicRequestChecks(t, 'GET', { url: '/' })
+
+  // Request to path
+  aws = await client({ ...basicConfig, endpoint: `http://localhost:${port}/to/path` })
+  await aws({ service })
+  basicRequestChecks(t, 'GET', { url: '/to/path' })
+
+  await server.end()
+  t.pass('Server ended')
+})
+
+test('Configuration - path prefix', async t => {
   t.plan(22)
   let aws
   let started = await server.start()
   t.ok(started, 'Started server')
 
-  let endpointPrefix
-  endpointPrefix = 'foo'
-  aws = await client({ ...config, endpointPrefix })
-  await aws({ service, endpoint, host, port, protocol })
-  basicRequestChecks(t, 'GET', { url: `/${endpointPrefix}${endpoint}` })
+  let pathPrefix
+  pathPrefix = 'foo'
+  aws = await client({ ...config, pathPrefix })
+  await aws({ service, path, host, port, protocol })
+  basicRequestChecks(t, 'GET', { url: `/${pathPrefix}${path}` })
 
-  endpointPrefix = '/foo/bar'
-  aws = await client({ ...config, endpointPrefix })
-  await aws({ service, endpoint, host, port, protocol })
-  basicRequestChecks(t, 'GET', { url: `${endpointPrefix}${endpoint}` })
+  pathPrefix = '/foo/bar'
+  aws = await client({ ...config, pathPrefix })
+  await aws({ service, path, host, port, protocol })
+  basicRequestChecks(t, 'GET', { url: `${pathPrefix}${path}` })
 
-  endpointPrefix = '/foo//bar'
-  aws = await client({ ...config, endpointPrefix })
-  await aws({ service, endpoint, host, port, protocol })
-  basicRequestChecks(t, 'GET', { url: `/foo/bar${endpoint}` })
+  pathPrefix = '/foo///bar'
+  aws = await client({ ...config, pathPrefix })
+  await aws({ service, path, host, port, protocol })
+  basicRequestChecks(t, 'GET', { url: `/foo/bar${path}` })
 
-  endpointPrefix = 'foo/bar/'
-  aws = await client({ ...config, endpointPrefix })
-  await aws({ service, endpoint, host, port, protocol })
-  basicRequestChecks(t, 'GET', { url: `/foo/bar${endpoint}` })
+  pathPrefix = 'foo/bar/'
+  aws = await client({ ...config, pathPrefix })
+  await aws({ service, path, host, port, protocol })
+  basicRequestChecks(t, 'GET', { url: `/foo/bar${path}` })
 
   await server.end()
   t.pass('Server ended')

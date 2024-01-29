@@ -68,7 +68,7 @@ const CreateFunction = {
   },
   request: async (payload) => {
     return {
-      endpoint: '/2015-03-31/functions',
+      path: '/2015-03-31/functions',
       payload,
     }
   }
@@ -81,7 +81,7 @@ const DeleteFunctionConcurrency = {
   },
   request: ({ FunctionName }) => {
     return {
-      endpoint: `/2017-10-31/functions/${FunctionName}/concurrency`,
+      path: `/2017-10-31/functions/${FunctionName}/concurrency`,
       method: 'DELETE',
     }
   },
@@ -99,7 +99,7 @@ const GetFunctionConfiguration = {
     let query
     if (Qualifier) query = { Qualifier }
     return {
-      endpoint: `/2015-03-31/functions/${FunctionName}/configuration`,
+      path: `/2015-03-31/functions/${FunctionName}/configuration`,
       query,
     }
   },
@@ -128,7 +128,7 @@ const Invoke = {
     if (Qualifier) query = { Qualifier }
 
     return {
-      endpoint: `/2015-03-31/functions/${FunctionName}/invocations`,
+      path: `/2015-03-31/functions/${FunctionName}/invocations`,
       headers,
       query,
       payload,
@@ -155,7 +155,7 @@ const PutFunctionConcurrency = {
   request: (params) => {
     const { FunctionName, ReservedConcurrentExecutions } = params
     return {
-      endpoint: `/2017-10-31/functions/${FunctionName}/concurrency`,
+      path: `/2017-10-31/functions/${FunctionName}/concurrency`,
       method: 'PUT',
       payload: { ReservedConcurrentExecutions },
     }
@@ -190,7 +190,7 @@ const UpdateFunctionCode = {
     delete payload.FunctionName
 
     return {
-      endpoint: `/2015-03-31/functions/${FunctionName}/code`,
+      path: `/2015-03-31/functions/${FunctionName}/code`,
       method: 'PUT',
       payload,
     }
@@ -223,7 +223,7 @@ const UpdateFunctionConfiguration = {
   request: async function (params) {
     const { FunctionName } = params
     return {
-      endpoint: `/2015-03-31/functions/${FunctionName}/configuration`,
+      path: `/2015-03-31/functions/${FunctionName}/configuration`,
       method: 'PUT',
       payload: params,
     }

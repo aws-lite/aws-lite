@@ -62,7 +62,7 @@ const CreateDistribution = {
   request: (params) => {
     const DistributionConfig = unarrayifyObject(params.DistributionConfig)
     return {
-      endpoint: '/2020-05-31/distribution',
+      path: '/2020-05-31/distribution',
       method: 'POST',
       headers: xml,
       payload: { DistributionConfig }
@@ -91,7 +91,7 @@ const CreateInvalidation = {
       }
     })
     return {
-      endpoint: `/2020-05-31/distribution/${Id}/invalidation`,
+      path: `/2020-05-31/distribution/${Id}/invalidation`,
       method: 'POST',
       headers: xml,
       payload,
@@ -111,7 +111,7 @@ const DeleteDistribution = {
   },
   request: ({ Id, IfMatch }) => {
     return {
-      endpoint: `/2020-05-31/distribution/${Id}`,
+      path: `/2020-05-31/distribution/${Id}`,
       method: 'DELETE',
       headers: IfMatch ? { 'if-match': IfMatch } : {},
     }
@@ -126,7 +126,7 @@ const GetDistribution = {
   },
   request: ({ Id }) => {
     return {
-      endpoint: `/2020-05-31/distribution/${Id}`,
+      path: `/2020-05-31/distribution/${Id}`,
     }
   },
   response: ({ headers, payload }) => {
@@ -144,7 +144,7 @@ const GetDistributionConfig = {
   },
   request: ({ Id }) => {
     return {
-      endpoint: `/2020-05-31/distribution/${Id}/config`,
+      path: `/2020-05-31/distribution/${Id}/config`,
     }
   },
   response: ({ headers, payload }) => {
@@ -162,7 +162,7 @@ const ListDistributions = {
   },
   request: (params) => {
     return {
-      endpoint: '/2020-05-31/distribution',
+      path: '/2020-05-31/distribution',
       query: params,
       paginator: {
         cursor: 'Marker',
@@ -199,7 +199,7 @@ const UpdateDistribution = {
     const { Id, IfMatch } = params
     const DistributionConfig = unarrayifyObject(params.DistributionConfig)
     return {
-      endpoint: `/2020-05-31/distribution/${Id}/config`,
+      path: `/2020-05-31/distribution/${Id}/config`,
       method: 'PUT',
       headers: { ...xml, 'if-match': IfMatch },
       payload: { DistributionConfig },

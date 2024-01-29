@@ -36,7 +36,7 @@ const BatchExecuteStatement = {
   },
   request: (payload) => ({
     method: 'POST',
-    endpoint: '/BatchExecute',
+    path: '/BatchExecute',
     payload,
   }),
   response: defaultResponse,
@@ -52,7 +52,7 @@ const BeginTransaction = {
   },
   request: (payload) => ({
     method: 'POST',
-    endpoint: '/BeginTransaction',
+    path: '/BeginTransaction',
     payload,
   }),
   response: defaultResponse,
@@ -67,7 +67,7 @@ const CommitTransaction = {
   },
   request: (payload) => ({
     method: 'POST',
-    endpoint: '/CommitTransaction',
+    path: '/CommitTransaction',
     payload,
   }),
   response: defaultResponse,
@@ -90,7 +90,7 @@ const ExecuteStatement = {
   },
   request: (payload) => ({
     method: 'POST',
-    endpoint: '/Execute',
+    path: '/Execute',
     payload,
   }),
   response: defaultResponse,
@@ -105,7 +105,7 @@ const RollbackTransaction = {
   },
   request: async (payload) => ({
     method: 'POST',
-    endpoint: '/RollbackTransaction',
+    path: '/RollbackTransaction',
     payload,
   }),
   response: defaultResponse,

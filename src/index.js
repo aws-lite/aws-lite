@@ -13,20 +13,20 @@ let clientFactory = require('./client-factory')
  * @param {boolean} [config.autoloadPlugins=true] Automatically load installed `@aws-lite/*` + `aws-lite-plugin-*` plugins
  * @param {boolean|string} [config.awsConfigFile=false] Load configuration via ~/.aws/config (boolean), or via a passed file path
  * @param {boolean} [config.debug] Enable debug logging to console
- * @param {boolean} [config.keepAlive=true] Disable Node.js's connection keep-alive, helpful for local testing
- * @param {string} [config.protocol='https'] Set the connection protocol to 'http', helpful for local testing
+ * @param {string} [config.pathPrefix] Add a path prefix to requests, helpful for local testing
  * @param {string} [config.host] Set a custom host name to use, helpful for local testing
+ * @param {boolean} [config.keepAlive=true] Disable Node.js's connection keep-alive, helpful for local testing
+ * @param {array} [config.plugins] Manually define plugins to load; by default, `@aws-lite/*` + `aws-lite-plugin-*` plugins are auto-loaded
  * @param {number} [config.port] Set a custom port number to use, helpful for local testing
+ * @param {string} [config.protocol='https'] Set the connection protocol to 'http', helpful for local testing
  * @param {string} [config.responseContentType] Set an overriding Content-Type headers for responses, helpful for local testing
- * @param {array} [config.plugins] Define AWS service plugins; by default, `@aws-lite/*` + `aws-lite-plugin-*` plugins are auto-loaded; specifying this option disables plugin auto-loading
  *
  * @returns {Promise<function>} Client async function
  */
 module.exports = async function awsLite (config = {}) {
   // Set defaults + essential config
   config.profile = config.profile || process.env.AWS_PROFILE || 'default'
-  config.protocol = config.protocol ?? 'https'
-  config.host = await getEndpoint(config)
+  config = { ...config, ...(await getEndpoint(config)) }
 
   // Creds + region
   let creds = await getCreds(config)
@@ -38,9 +38,6 @@ module.exports = async function awsLite (config = {}) {
 }
 
 function validateConfig (config) {
-  if (![ 'https', 'http' ].includes(config.protocol)) {
-    throw ReferenceError('Protocol must be `https` or `http`')
-  }
   if (config.plugins && !Array.isArray(config.plugins)) {
     throw TypeError('Plugins must be an array')
   }

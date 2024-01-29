@@ -8,16 +8,16 @@ const badPort = 12345
 const debug = false
 const host = 'localhost'
 const keepAlive = false
+const path = '/a/path'
 const profile = 'default'
 const protocol = 'http'
 const region = 'us-west-1'
 const secretAccessKey = 'bar'
 const sessionToken = 'baz'
 const service = 'lambda'
-const endpoint = '/an/endpoint'
 const port = 1111
 const config = { accessKeyId, secretAccessKey, sessionToken, region, debug, profile, protocol, autoloadPlugins, keepAlive, host, port }
-const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, profile, protocol, region, secretAccessKey, service, endpoint, port }
+const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, profile, protocol, region, secretAccessKey, service, path, port }
 
 let serverData = {}
 
@@ -77,7 +77,7 @@ let server = {
 function basicRequestChecks (t, method, params = {}) {
   let request = server.getCurrentRequest()
   t.equal(request.method, method, `Made a ${method} request`)
-  t.equal(request.url, params.url || endpoint, `Made request to correct endpoint: ${params.url || endpoint}`)
+  t.equal(request.url, params.url || path, `Made request to correct path: ${params.url || path}`)
   t.ok(request.headers['x-amz-date'], 'Made request with x-amz-date header')
   t.ok(request.headers['authorization'], 'Made request with authorization header')
   t.match(request.headers['authorization'], /Credential=foo/, 'Authorization header is using the access key')

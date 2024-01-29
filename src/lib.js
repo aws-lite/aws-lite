@@ -29,6 +29,58 @@ async function exists (file) {
   catch { return false }
 }
 
+// Tidiers
+function tidyPathPrefix (pathPrefix) {
+  if (pathPrefix === '/') {
+    return undefined
+  }
+  if (!pathPrefix.startsWith('/')) {
+    pathPrefix = '/' + pathPrefix
+  }
+  if (pathPrefix.endsWith('/')) {
+    pathPrefix = pathPrefix.substring(0, pathPrefix.length - 1)
+  }
+  return pathPrefix
+}
+// Undefined stuff
+const tidyObj = obj => Object.keys(obj).forEach(k => !obj[k] && delete obj[k])
+
+function getEndpointParams (input) {
+  if (input.endpoint || input.url) {
+    try {
+      let url = new URL(input.endpoint || input.url)
+      let pathPrefix = tidyPathPrefix(url.pathname)
+      let host = url.hostname
+      let port = Number(url.port)
+      let protocol = url.protocol
+
+      let params = { pathPrefix, host, port, protocol }
+      tidyObj(params)
+      return params
+    }
+    catch {
+      return { host: input.endpoint || input.url }
+    }
+  }
+
+  let { pathPrefix, host, hostname, port, protocol } = input
+  try {
+    let url = new URL(host || hostname)
+    host = url.hostname
+  }
+  catch { /* noop */ }
+  if (pathPrefix) pathPrefix = tidyPathPrefix(pathPrefix)
+  if (port) port = Number(port)
+  if (typeof protocol === 'string' && !protocol.endsWith(':')) {
+    protocol += ':'
+  }
+  validateProtocol(protocol)
+
+  let params = { pathPrefix, host: host || hostname, port, protocol }
+  tidyObj(params)
+  return params
+}
+
 async function loadAwsConfig (params) {
   let { awsConfigFile } = params
   let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE } = process.env
@@ -164,13 +216,21 @@ function parseXML (body) {
   return coerceXMLValues(xml.parser.getValueFromTextNode(payloadToReturn))
 }
 
+function validateProtocol (protocol) {
+  if (protocol && ![ 'https:', 'http:' ].includes(protocol)) {
+    throw ReferenceError('Protocol must be `https:` or `http:`')
+  }
+}
+
 module.exports = {
   awsjson,
   exists,
+  getEndpointParams,
   loadAwsConfig,
   readConfig,
   tidyQuery,
   useAWS,
   buildXML,
   parseXML,
+  validateProtocol,
 }

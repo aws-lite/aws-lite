@@ -22,6 +22,6 @@ let globalServices = [
   // Mentioned in aws4 as global but not found Service Endpoints and Quotas
   'ls', 'importexport',
 ]
-let semiGlobalServices = [ 's3', 'sdb' ]
+let semiGlobalServices = [ 's3', 'sdb', 'sts' ]
 
 module.exports = { services, globalServices, semiGlobalServices }

@@ -1,6 +1,6 @@
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
-let { awsjson, buildXML, parseXML, tidyQuery, useAWS } = require('./lib')
+let { awsjson, buildXML, getEndpointParams, parseXML, tidyQuery, useAWS, validateProtocol } = require('./lib')
 
 /* istanbul ignore next */
 let copy = obj => JSON.parse(JSON.stringify(obj))
@@ -42,27 +42,29 @@ function request (params, creds, region, config, metadata) {
   return new Promise((resolve, reject) => {
     let { debug } = config
 
-    // Path
-    // Note: params.path may be passed if the request is coming from a plugin that pre-signed with aws4
-    params.path = params.endpoint || params.path || ''
-    if (params.path && !params.path.startsWith('/')) {
-      params.path = '/' + params.path
-    }
-    if (config.endpointPrefix) {
-      if (!config.endpointPrefix.startsWith('/')) {
-        config.endpointPrefix = '/' + config.endpointPrefix
-      }
-      if (config.endpointPrefix.endsWith('/')) {
-        config.endpointPrefix = config.endpointPrefix.substring(0, config.endpointPrefix.length - 1)
-      }
-      params.path = config.endpointPrefix + params.path
-    }
-    params.path = params.path || '/'
-    params.path = params.path.replace(/\/\//g, '/')
+    let overrides = getEndpointParams(params)
+    let protocol =    overrides.protocol    || config.protocol
+    let host =        overrides.host        || config.host
+    let port =        overrides.port        || config.port
+    let pathPrefix =  overrides.pathPrefix  || config.pathPrefix
+    let path =        params.path           || ''
 
-    // Host
-    params.host = params.host || params.hostname || config.host || config.hostname
+    // Final validation, remove aliases, etc.
+    validateProtocol(protocol)
+    /* istanbul ignore next */
+    if (params.endpoint) delete params.endpoint
+    /* istanbul ignore next */
     if (params.hostname) delete params.hostname
+
+    // Path
+    // Note: params.path may also be passed if the request is coming from a plugin that pre-signed with aws4
+    if (path && !path.startsWith('/')) {
+      path = '/' + path
+    }
+    if (pathPrefix) {
+      path = pathPrefix + path
+    }
+    path = (path || '/').replace(/[\/]{2,}/g, '/') // 2+ slashes reduce to one
 
     // Structured query string
     if (params.query) {
@@ -73,7 +75,7 @@ function request (params, creds, region, config, metadata) {
       let query = tidyQuery(params.query)
       if (query) {
         // Expect aws4 to handle RFC 3986 encoding when appending the query string to the passed path
-        params.path += '?' + query
+        path += '?' + query
       }
     }
 
@@ -129,7 +131,7 @@ function request (params, creds, region, config, metadata) {
     params.headers = headers
 
     // Sign the payload; let aws4 handle (most) logic related to region + service instantiation
-    let signing = { region, ...params }
+    let signing = { region, ...params, protocol, host, port, pathPrefix, path }
 
     /* istanbul ignore next */
     if (globalServices.includes(params.service)) {
@@ -137,22 +139,29 @@ function request (params, creds, region, config, metadata) {
       // Otherwise, exclude the region from the signed headers
       let isSemiGlobal = semiGlobalServices.includes(params.service)
       if (!isSemiGlobal || (isSemiGlobal && region === 'us-east-1')) {
-        signing = params
         delete signing.region // jic the user specified it per-request
       }
     }
 
     // Sign and construct the request
     let options = aws4.sign(signing, creds)
-    // Normalize host (again): aws4 sometimes uses host, sometimes hostname
+    // Normalize host (again)
     /* istanbul ignore next */ // This won't get seen by nyc
     options.host = options.host || options.hostname
     /* istanbul ignore next */
     if (options.hostname) delete options.hostname
 
     // Importing http(s) is a bit slow (~1ms), so only instantiate the client and http agent we need
-    options.protocol = (params.protocol || config.protocol) + ':'
-    let isHTTPS = options.host.includes('.amazonaws.com') || options.protocol === 'https:'
+    let isHTTPS = options.host?.includes('.amazonaws.com') ||
+                  protocol === 'https:'
+
+    // Debug derives protocol from options
+    // This won't get fully exercised in unit tests because we aren't using https
+    /* istanbul ignore next */
+    if (!options.protocol) {
+      options.protocol = isHTTPS ? 'https:' : 'http:'
+    }
+
     /* istanbul ignore next */
     let http = isHTTPS ? require('https') : require('http')
 
@@ -164,17 +173,31 @@ function request (params, creds, region, config, metadata) {
 
     /* istanbul ignore next */
     if (debug) {
-      let { method = 'GET', service, host, path, port, headers, protocol, body } = options
+      let { method = 'GET', protocol, host, port, path, headers, body, service } = options
       let truncatedBody
       /**/ if (isBuffer) truncatedBody = `<body buffer of ${body.length}b>`
       else if (isStream) truncatedBody = `<readable stream>`
       else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
+
+      let { accessKeyId, secretAccessKey } = creds
+
+      let Authorization = headers.Authorization
+        .replace(accessKeyId, accessKeyId.substring(0, 8) + '...')
+        .replace(secretAccessKey, '[redacted]')
+
+      let sigRe = /(Signature=)[^,]*/
+      let fullSig = Authorization.match(sigRe)
+      if (fullSig) {
+        let redactedSig = 'Signature=' + fullSig[0].split('Signature=')[1].substring(0, 8) + '...'
+        Authorization = Authorization.replace(sigRe, redactedSig)
+      }
+
       console.error('[aws-lite] Request:', {
         time: new Date().toISOString(),
         service,
         method,
         url: `${protocol}//${host}${port ? ':' + port : ''}${path}`,
-        headers: { ...headers, Authorization: headers.Authorization.substring(0, 35) + '...' },
+        headers: { ...headers, Authorization },
         body: truncatedBody || '<no body>',
       }, '\n')
     }

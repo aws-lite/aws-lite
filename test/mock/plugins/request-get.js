@@ -13,7 +13,7 @@ module.exports = {
       },
       request: async function ({ name }) {
         return {
-          endpoint: `/2015-03-31/functions/${name}/configuration`
+          path: `/2015-03-31/functions/${name}/configuration`
         }
       },
     },

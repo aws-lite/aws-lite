@@ -87,7 +87,7 @@ const DeleteObject = {
     return {
       host: host(params, utils),
       method: 'DELETE',
-      endpoint: `/${Key}`,
+      path: `/${Key}`,
       headers: { ...xml, ...getHeadersFromParams(params) },
     }
   },
@@ -111,7 +111,7 @@ const DeleteObjects = {
 
     return {
       host: host(params, utils),
-      endpoint: '/?delete',
+      path: '/?delete',
       headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
       payload,
     }
@@ -146,7 +146,7 @@ const GetObject = {
     let query = getQueryFromParams(params, queryParams)
     return {
       host: host(params, utils),
-      endpoint: `/${Key}`,
+      path: `/${Key}`,
       headers,
       query,
     }
@@ -196,7 +196,7 @@ const HeadObject = {
     let query = getQueryFromParams(params, queryParams)
     return {
       host: host(params, utils),
-      endpoint: `/${Key}`,
+      path: `/${Key}`,
       method: 'HEAD',
       headers,
       query,

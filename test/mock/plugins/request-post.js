@@ -13,7 +13,7 @@ module.exports = {
       },
       request: async function ({ name }) {
         return {
-          endpoint: `/2015-03-31/functions/${name}/invocations`
+          path: `/2015-03-31/functions/${name}/invocations`
         }
       },
       error: async function (error) {
