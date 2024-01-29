@@ -9,7 +9,7 @@ const docRoot = 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/
 const devGuide = 'https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/'
 
 // Common params to be AWS-flavored JSON-encoded
-const awsjsonReq = [ 'ExclusiveStartKey', 'ExpressionAttributeValues', 'Item', 'Key', ]
+const awsjsonReq = [ 'ExpressionAttributeValues', 'Item', 'Key', ]
 // ... and decoded
 const awsjsonRes = [ 'Attributes', 'Item' ]
 
@@ -736,6 +736,8 @@ const PutItem = {
   error: defaultError,
 }
 
+// At present we are not automatically (un)marshalling `ExclusiveStartKey`, `LastEvaluatedKey`
+// The paginator does not benefit from response() unmarshalling `LastEvaluatedKey`, which leads to AWS JSON double-encoding during pagination
 const Query = {
   awsDoc: docRoot + 'API_Query.html',
   validate: {
@@ -774,7 +776,6 @@ const Query = {
   },
   response: async ({ payload }, { awsjsonUnmarshall }) => {
     if (payload?.Items?.length) payload.Items = payload.Items.map(awsjsonUnmarshall)
-    if (payload?.LastEvaluatedKey) payload.awsjson = [ 'LastEvaluatedKey' ]
     return payload
   },
   error: defaultError,
@@ -821,6 +822,8 @@ const RestoreTableToPointInTime = {
   error: defaultError,
 }
 
+// At present we are not automatically (un)marshalling `ExclusiveStartKey`, `LastEvaluatedKey`
+// The paginator does not benefit from response() unmarshalling `LastEvaluatedKey`, which leads to AWS JSON double-encoding during pagination
 const Scan = {
   awsDoc: docRoot + 'API_Scan.html',
   validate: {
