@@ -37,8 +37,8 @@ function getHostAndEndpoint (params, region) {
   }
   else throw ReferenceError('Cannot derive WebSocket API URL + stage, please pass ApiUrl param, or ApiId + Stage params')
 
-  let endpoint = path.split('/').map(escape).join('/')
-  return { host, endpoint, port, protocol }
+  path = path.split('/').map(escape).join('/')
+  return { host, path, port, protocol }
 }
 
 const response = ({ payload }) => {
