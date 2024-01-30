@@ -7,9 +7,12 @@ interface AwsLiteConfig {
   autoloadPlugins?: boolean;
   awsConfigFile?: boolean | string;
   debug?: boolean;
-  endpointPrefix?: string;
+  endpoint?: string;
+  /** @description Alias for "endpoint" */
+  url?: string;
   host?: string;
   keepAlive?: boolean;
+  pathPrefix?: string;
   plugins?: any[];
   port?: number;
   protocol?: string;
@@ -19,20 +22,18 @@ interface AwsLiteConfig {
 interface AwsLiteRequest {
   service: string;
   awsjson?: boolean | string[];
-  endpoint?: string;
+  path?: string;
   headers?: Record<string, string>;
+  host?: string;
   payload?: Record<string, any> | Buffer | ReadableStream | string;
   /** @description Alias for "payload" */
   body?: Record<string, any> | Buffer | ReadableStream | string;
   /** @description Alias for "payload" */
   data?: Record<string, any> | Buffer | ReadableStream | string;
-  /** @description Alias for "payload" */
-  json?: Record<string, any> | Buffer | ReadableStream | string;
+  port?: number;
+  protocol?: string;
   query?: Record<string, any>;
   region?: string;
-  protocol?: string;
-  host?: string;
-  port?: number;
 }
 
 interface AwsLiteResponse {
