@@ -136,7 +136,7 @@ test('Primary client - core functionality', async t => {
 })
 
 test('Primary client - aliased params', async t => {
-  t.plan(8)
+  t.plan(7)
   let request
   let aws = await client(config)
 
@@ -169,10 +169,6 @@ test('Primary client - aliased params', async t => {
   await aws({ service, path, data: payload })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, 'Made request with correct body (options.data)')
-  reset()
-  await aws({ service, path, json: payload })
-  request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, 'Made request with correct body (options.json)')
   reset()
 
   let string = 'hi'

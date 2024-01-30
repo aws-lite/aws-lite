@@ -86,7 +86,7 @@ function request (params, creds, region, config, metadata) {
     if (headers['Content-Type']) delete headers['Content-Type']
 
     // Body - JSON-ify payload where convenient!
-    let body = params.payload || params.body || params.data || params.json
+    let body = params.payload || params.body || params.data
     let isBuffer = body instanceof Buffer
     let isStream = (body?.on && body?._read && body?._readableState)
 

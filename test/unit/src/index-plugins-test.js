@@ -180,7 +180,7 @@ test('Plugins - validate input', async t => {
 })
 
 test('Plugins - method construction, request()', async t => {
-  t.plan(29)
+  t.plan(28)
   let name = 'my-lambda'
   let aws, expectedPath, request
 
@@ -217,10 +217,6 @@ test('Plugins - method construction, request()', async t => {
   await aws.lambda.Invoke({ name, body: payload, host, port })
   request = server.getCurrentRequest()
   t.deepEqual(request.body, payload, `Payload can be aliased to 'body'`)
-
-  await aws.lambda.Invoke({ name, json: payload, host, port })
-  request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, `Payload can be aliased to 'json'`)
 
   await aws.lambda.Invoke({ name, payload, host, port, path: '/foo' })
   request = server.getCurrentRequest()
