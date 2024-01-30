@@ -43,7 +43,7 @@ module.exports = async function clientFactory (config, creds, region) {
       ...credentials,
       secretAccessKey: credentials.secretAccessKey ? '[found / redacted]' : undefined,
       sessionToken: credentials.sessionToken ? '[found / redacted]' : undefined,
-    }, '\n')
+    })
   }
 
   // Service API plugins
@@ -70,6 +70,10 @@ module.exports = async function clientFactory (config, creds, region) {
   }
 
   if (plugins.length) {
+    /* istanbul ignore next */
+    if (config.debug) {
+      console.error('[aws-lite] Loading plugins', plugins, '\n')
+    }
     for (let pluginName of plugins) {
       try {
         let plugin
