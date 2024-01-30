@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/s3-types",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "Type definitions for the `@aws-lite/s3` plugin",
   "homepage": "https://aws-lite.org/services/s3",
   "repository": {
