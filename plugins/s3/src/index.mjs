@@ -26,7 +26,17 @@ const Key = { ...str, required, comment: 'S3 key / file name' }
 const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
-const host = ({ Bucket }, { region, config }) => `${Bucket}.` + (config.host || `s3.${region}.amazonaws.com`)
+function getHost ({ Bucket }, { region, config }) {
+  // Deprecated path-style URLs, still necessary for buckets with periods
+  if (/\./.test(Bucket)) {
+    return {
+      host: config.host || `s3.${region}.amazonaws.com`,
+      pathPrefix: `/${Bucket}`
+    }
+  }
+  // Current virtual-hosted-style URls
+  return { host: `${Bucket}.` + (config.host || `s3.${region}.amazonaws.com`) }
+}
 const defaultResponse = ({ payload }) => payload || {}
 const defaultError = ({ statusCode, error }) => {
   // SDK v2 lowcases `code`
@@ -46,9 +56,11 @@ const CreateBucket = {
   },
   request: (params, utils) => {
     const { CreateBucketConfiguration } = params
+    const { host, pathPrefix } = getHost(params, utils)
     return {
-      host: host(params, utils),
       method: 'PUT',
+      host,
+      pathPrefix,
       headers: { ...xml, ...getHeadersFromParams(params) },
       payload: CreateBucketConfiguration ? { CreateBucketConfiguration } : undefined,
     }
@@ -65,9 +77,11 @@ const DeleteBucket = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
     return {
-      host: host(params, utils),
       method: 'DELETE',
+      host,
+      pathPrefix,
       headers: { ...getHeadersFromParams(params) },
     }
   },
@@ -84,9 +98,11 @@ const DeleteObject = {
   },
   request: (params, utils) => {
     const { Key } = params
+    const { host, pathPrefix } = getHost(params, utils)
     return {
-      host: host(params, utils),
       method: 'DELETE',
+      host,
+      pathPrefix,
       path: `/${Key}`,
       headers: { ...xml, ...getHeadersFromParams(params) },
     }
@@ -108,9 +124,11 @@ const DeleteObjects = {
     const payloadXML = buildXML(payload)
     const { createHash } = await import('node:crypto')
     const checksum = Buffer.from(createHash('sha256').update(payloadXML).digest()).toString('base64')
+    const { host, pathPrefix } = getHost(params, utils)
 
     return {
-      host: host(params, utils),
+      host,
+      pathPrefix,
       path: '/?delete',
       headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
       payload,
@@ -138,14 +156,16 @@ const GetObject = {
     ResponseExpires:            { ...str, comment: 'Sets response header: `expires`' },
   },
   request: (params, utils) => {
-    let { Key } = params
-    let queryParams = [ 'PartNumber', 'ResponseCacheControl', 'ResponseContentDisposition',
+    const { Key } = params
+    const queryParams = [ 'PartNumber', 'ResponseCacheControl', 'ResponseContentDisposition',
       'ResponseContentEncoding', 'ResponseContentLanguage', 'ResponseContentType',
       'ResponseExpires', 'VersionId' ]
-    let headers = getHeadersFromParams(params, queryParams)
-    let query = getQueryFromParams(params, queryParams)
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = getQueryFromParams(params, queryParams)
+    const { host, pathPrefix } = getHost(params, utils)
     return {
-      host: host(params, utils),
+      host,
+      pathPrefix,
       path: `/${Key}`,
       headers,
       query,
@@ -167,9 +187,11 @@ const HeadBucket = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
     return {
-      host: host(params, utils),
       method: 'HEAD',
+      host,
+      pathPrefix,
       headers: getHeadersFromParams(params),
     }
   },
@@ -190,14 +212,16 @@ const HeadObject = {
       'ExpectedBucketOwner', 'ChecksumMode'),
   },
   request: (params, utils) => {
-    let { Key } = params
-    let queryParams = [ 'PartNumber', 'VersionId' ]
-    let headers = getHeadersFromParams(params, queryParams)
-    let query = getQueryFromParams(params, queryParams)
+    const { Key } = params
+    const queryParams = [ 'PartNumber', 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = getQueryFromParams(params, queryParams)
+    const { host, pathPrefix } = getHost(params, utils)
     return {
-      host: host(params, utils),
-      path: `/${Key}`,
       method: 'HEAD',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
       headers,
       query,
     }
@@ -236,13 +260,15 @@ const ListObjectsV2 = {
     paginate:           { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
   },
   request: (params, utils) => {
-    let { paginate } = params
-    let queryParams = [ 'ContinuationToken', 'Delimiter', 'EncodingType', 'FetchOwner', 'MaxKeys', 'Prefix', 'StartAfter' ]
-    let headers = getHeadersFromParams(params, queryParams)
-    let query = getQueryFromParams(params, queryParams) || {}
+    const { paginate } = params
+    const queryParams = [ 'ContinuationToken', 'Delimiter', 'EncodingType', 'FetchOwner', 'MaxKeys', 'Prefix', 'StartAfter' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = getQueryFromParams(params, queryParams) || {}
     query['list-type'] = 2
+    const { host, pathPrefix } = getHost(params, utils)
     return {
-      host: host(params, utils),
+      host,
+      pathPrefix,
       headers,
       query,
       paginate,
