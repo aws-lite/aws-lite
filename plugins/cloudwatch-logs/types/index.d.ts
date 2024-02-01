@@ -43,3 +43,13 @@ declare module "@aws-lite/client" {
     CloudWatchLogs: AwsLiteCloudWatchLogs;
   }
 }
+
+export type {
+  /* ! Do not remove EXPORT_START / EXPORT_END ! */
+  // $EXPORT_START
+  DeleteLogGroupResponse,
+  DescribeLogGroupsResponse,
+  DescribeLogStreamsResponse,
+  GetLogEventsResponse,
+  // $EXPORT_END
+}

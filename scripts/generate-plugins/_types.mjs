@@ -45,6 +45,7 @@ function createTypesStr ({ methods, service, property, display, existingTypes })
 
   const outputTypes = []
   const methodTypes = []
+  const exportTypes = []
   for (const method in methods) {
     if (existingMethods.includes(method)) continue
 
@@ -53,6 +54,7 @@ function createTypesStr ({ methods, service, property, display, existingTypes })
     if (methodDef && !methodDef.disabled) {
       const methodResponse = `${method}Response`
       outputTypes.push(`  ${method}CommandOutput as ${methodResponse}`)
+      exportTypes.push(`  ${methodResponse}`)
 
       const { awsDoc, validate } = methodDef
       if (validate && Object.keys(validate).length) {
@@ -86,6 +88,7 @@ function createTypesStr ({ methods, service, property, display, existingTypes })
 
   const importsRegex = /(?<=(\/\/ \$IMPORTS_START\n))[\s\S]*?(?=(\/\/ \$IMPORTS_END))/g
   const methodsRegex = /(?<=(\/\/ \$METHODS_START\n))[\s\S]*?(?=(\/\/ \$METHODS_END))/g
+  const exportRegex = /(?<=(\/\/ \$EXPORT_START\n))[\s\S]*?(?=(\/\/ \$EXPORT_END))/g
   const typesTmpl = existingTypes
     ? existingTypes
     : readFileSync(join(__dirname, 'tmpl', '_types-tmpl.d.ts')).toString()
@@ -95,6 +98,7 @@ function createTypesStr ({ methods, service, property, display, existingTypes })
     .replace(/\$PROPERTY/g, property)
     .replace(importsRegex, outputTypes.join(',\n') + `${trailingComma}\n  `)
     .replace(methodsRegex, methodTypes.join('\n') + '\n  ')
+    .replace(exportRegex, exportTypes.join(',\n') + `${trailingComma}\n  `)
 }
 
 /**

@@ -36,3 +36,12 @@ declare module "@aws-lite/client" {
     ApiGatewayManagementApi: AwsLiteApiGatewayManagementApi;
   }
 }
+
+export type {
+  /* ! Do not remove EXPORT_START / EXPORT_END ! */
+  // $EXPORT_START
+  PostToConnectionResponse,
+  DeleteConnectionResponse,
+  GetConnectionResponse,
+  // $EXPORT_END
+}

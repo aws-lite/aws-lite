@@ -81,3 +81,19 @@ declare module "@aws-lite/client" {
     S3: AwsLiteS3;
   }
 }
+
+export type {
+  /* ! Do not remove EXPORT_START / EXPORT_END ! */
+  // $EXPORT_START
+  CreateBucketResponse,
+  DeleteBucketResponse,
+  DeleteObjectResponse,
+  DeleteObjectsResponse,
+  GetObjectResponse,
+  HeadObjectResponse,
+  HeadBucketResponse,
+  ListBucketsResponse,
+  ListObjectsV2Response,
+  PutObjectResponse,
+  // $EXPORT_END
+}

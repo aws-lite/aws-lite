@@ -43,3 +43,13 @@ declare module "@aws-lite/client" {
     SQS: AwsLiteSQS;
   }
 }
+
+export type {
+  /* ! Do not remove EXPORT_START / EXPORT_END ! */
+  // $EXPORT_START
+  SendMessageResponse,
+  GetQueueAttributesResponse,
+  ReceiveMessageResponse,
+  DeleteMessageResponse,
+  // $EXPORT_END
+}
