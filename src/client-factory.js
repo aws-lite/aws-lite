@@ -170,6 +170,9 @@ module.exports = async function clientFactory (config, creds, region) {
             // Make the request
             try {
               let response = await request({ ...params, service }, creds, selectedRegion, config, metadata)
+              if (input.signQuery) {
+                return response
+              }
 
               // Run plugin.method.response()
               if (method.response) {

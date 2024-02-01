@@ -119,6 +119,11 @@ function tidyQuery (obj) {
   if (Object.keys(tidied).length) return qs.stringify(tidied)
 }
 
+function untidyQuery (queries) {
+  let qs = require('querystring')
+  return qs.parse(queries)
+}
+
 // Probably this is going to need some refactoring in Arc 11
 // Certainly it is not reliable in !Arc local Lambda emulation
 let nonLocalEnvs = [ 'staging', 'production' ]
@@ -229,6 +234,7 @@ module.exports = {
   loadAwsConfig,
   readConfig,
   tidyQuery,
+  untidyQuery,
   useAWS,
   buildXML,
   parseXML,

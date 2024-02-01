@@ -154,6 +154,18 @@ await aws.DynamoDB.GetItem({
 //     ...
 //   }
 // }
+
+/**
+ * Presigned URLs
+ * Set signQuery property to true to get a presigned URL instead of making a request
+ */
+await aws.S3.GetObject({
+  Bucket: 'my-bucket',
+  Key: 'aws-lite.txt',
+  signQuery: true,
+  query: {'X-Amz-Expires': 3600},
+})
+// https://my-bucket.s3.us-west-1.amazonaws.com/aws-lite.txt?X-Amz-Expires=3600&X-Amz-Date=20240201T023407Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAXSRWQ36HL4DYYSGB%2F20240201%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=6af04db66cbedb79e8bad6e8f84a2dbdb3e946c8f612845ce2215f90ffa1cd07
 ```
 
 ## Learn more
