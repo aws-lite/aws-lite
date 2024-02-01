@@ -1,4 +1,6 @@
-<h1><a href="https://aws-lite.org"><code>aws-lite</code></a></h1>
+<a href="https://aws-lite.org">
+  <img src=https://aws-lite.org/_public/img/aws-lite-7af26ade9a.svg alt="aws-lite">
+</a>
 
 > [`aws-lite`][1] is simple, extremely fast, extensible Node.js client for interacting with AWS services.
 >
@@ -118,11 +120,11 @@ const aws = await awsLite(config)
 
 /**
  * Reads
- * Fire a GET request to the Lambda API by specifying its AWS service name and endpoint
+ * Fire a GET request to the Lambda API by specifying its AWS service name and API path
  */
 await aws({
   service: 'lambda',
-  endpoint: '/2015-03-31/functions/$function-name/configuration',
+  path: '/2015-03-31/functions/$function-name/configuration',
 })
 // {
 //   FunctionName: '$function-name',
@@ -136,7 +138,7 @@ await aws({
  */
 await aws({
   service: 'lambda',
-  endpoint: '/2015-03-31/functions/$function-name/invocations',
+  path: '/2015-03-31/functions/$function-name/invocations',
   payload: { ok: true },
 })
 
