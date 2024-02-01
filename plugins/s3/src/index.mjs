@@ -104,7 +104,7 @@ const DeleteObject = {
       host,
       pathPrefix,
       path: `/${Key}`,
-      headers: { ...xml, ...getHeadersFromParams(params) },
+      headers: { ...getHeadersFromParams(params) },
     }
   },
   response: defaultResponse,
