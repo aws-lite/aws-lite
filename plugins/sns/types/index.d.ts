@@ -22,3 +22,10 @@ declare module "@aws-lite/client" {
     SNS: AwsLiteSNS;
   }
 }
+
+export type {
+  /* ! Do not remove EXPORT_START / EXPORT_END ! */
+  // $EXPORT_START
+  PublishResponse,
+  // $EXPORT_END
+}

@@ -64,3 +64,16 @@ declare module "@aws-lite/client" {
     Lambda: AwsLiteLambda;
   }
 }
+
+export type {
+  /* ! Do not remove EXPORT_START / EXPORT_END ! */
+  // $EXPORT_START
+  CreateFunctionResponse,
+  DeleteFunctionConcurrencyResponse,
+  GetFunctionConfigurationResponse,
+  InvokeResponse,
+  PutFunctionConcurrencyResponse,
+  UpdateFunctionCodeResponse,
+  UpdateFunctionConfigurationResponse,
+  // $EXPORT_END
+}

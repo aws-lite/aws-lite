@@ -43,3 +43,13 @@ declare module "@aws-lite/client" {
     APIGatewayV2: AwsLiteAPIGatewayV2;
   }
 }
+
+export type {
+  /* ! Do not remove EXPORT_START / EXPORT_END ! */
+  // $EXPORT_START
+  CreateDeploymentResponse,
+  GetDeploymentResponse,
+  GetDeploymentsResponse,
+  UpdateStageResponse,
+  // $EXPORT_END
+}

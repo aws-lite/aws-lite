@@ -53,3 +53,15 @@ declare module "@aws-lite/client" {
     RDSData: AwsLiteRDSData;
   }
 }
+
+export type {
+  /* ! Do not remove EXPORT_START / EXPORT_END ! */
+  // $EXPORT_START
+  BatchExecuteStatementResponse,
+  BeginTransactionResponse,
+  CommitTransactionResponse,
+  ExecuteStatementResponse,
+  RollbackTransactionResponse,
+  ExecuteSqlResponse,
+  // $EXPORT_END
+}
