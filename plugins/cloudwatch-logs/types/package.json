@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/cloudwatch-logs-types",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Type definitions for the `@aws-lite/cloudwatch-logs` plugin",
   "homepage": "https://aws-lite.org/services/cloudwatch-logs",
   "repository": {

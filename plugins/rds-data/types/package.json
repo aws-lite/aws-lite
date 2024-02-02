@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/rds-data-types",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Type definitions for the `@aws-lite/rds-data` plugin",
   "homepage": "https://aws-lite.org/services/rds-data",
   "repository": {

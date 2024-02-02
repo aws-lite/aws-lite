@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/ssm-types",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Type definitions for the `@aws-lite/ssm` plugin",
   "homepage": "https://aws-lite.org/services/ssm",
   "repository": {
