@@ -227,7 +227,7 @@ test('Get second object', async t => {
   t.ok(getObjectResponse, `Object ${object_names[1]} found`)
   t.equal(getObjectResponse.ContentLength, object_contents[1].length, 'Content has expected length')
   t.equal(getObjectResponse.ContentType, contentTypes[1], 'Content has expected type')
-  t.equal(JSON.stringify(getObjectResponse.Body), object_contents[1], `Object ${object_names[1]} has expected content`)
+  t.deepEqual(getObjectResponse.Body, JSON.parse(object_contents[1]), `Object ${object_names[1]} has expected content`)
 
   // Get as raw payload
   getObjectResponse = await aws.S3.GetObject({ Bucket: bucket_name, Key: object_names[1], rawResponsePayload: true })

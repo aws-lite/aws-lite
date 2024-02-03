@@ -154,6 +154,7 @@ const GetObject = {
     ResponseContentLanguage:    { ...str, comment: 'Sets response header: `content-language`' },
     ResponseContentType:        { ...str, comment: 'Sets response header: `content-type`' },
     ResponseExpires:            { ...str, comment: 'Sets response header: `expires`' },
+    // Not strictly necessary since users can pass this through with any request, but it's good for folks to know it's available on this particular method
     rawResponsePayload:         { ...bool, comment: 'Set to `true` to return all files as buffers, and disable automatic parsing of JSON and XML' }
   },
   request: (params, utils) => {
