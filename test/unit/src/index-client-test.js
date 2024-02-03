@@ -230,7 +230,6 @@ test('Primary client - AWS JSON payloads', async t => {
   let regularJSON = { regular: 'JSON' }
   server.use({ responseBody: regularJSON, responseHeaders: headers })
   result = await aws({ service, path })
-  request = server.getCurrentRequest()
   t.deepEqual(result.payload, regularJSON, 'Client returned response payload as parsed, unmarshalled JSON')
   reset()
 })
@@ -254,7 +253,6 @@ test('Primary client - XML payloads', async t => {
   responseBody = '<result><hello>yo</hello></result>'
   server.use({ responseBody, responseHeaders: xmlHeaders })
   result = await aws({ service, path })
-  request = server.getCurrentRequest()
   t.deepEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
   basicRequestChecks(t, 'GET')
   reset()
@@ -287,7 +285,6 @@ test('Primary client - XML payloads', async t => {
 </result>`
   server.use({ responseBody, responseHeaders: xmlHeaders })
   result = await aws({ service, path })
-  request = server.getCurrentRequest()
   t.equal(result.payload.string, 'yo', 'Client returned XML response with parsed string')
   t.equal(result.payload.number, 1, 'Client returned XML response with parsed number')
   t.equal(result.payload.float, 1.23, 'Client returned XML response with parsed float')
@@ -299,6 +296,28 @@ test('Primary client - XML payloads', async t => {
   t.equal(result.payload.space, '  ', 'Client returned XML response with string of space(s)')
   t.deepEqual(result.payload.obj, { number: 1 }, 'Client returned XML response with parsed nested object values')
   t.deepEqual(result.payload.arr, { item: [ 1, 2, 3, { booltrue: true, boolfalse: false, null: null } ] }, 'Client returned XML response with parsed array values, including nested objects')
+  reset()
+})
+
+test('Primary client - raw response payloads', async t => {
+  t.plan(12)
+  let result, responseBody
+  let aws = await client(config)
+
+  // Requesting raw response payload returns unparsed JSON
+  responseBody = JSON.stringify({ ok: true })
+  server.use({ responseBody, responseHeaders: xmlHeaders })
+  result = await aws({ service, path, rawResponsePayload: true })
+  t.deepEqual(result.payload, Buffer.from(responseBody), `Client returned JSON response payload as unparsed buffer: ${responseBody}`)
+  basicRequestChecks(t, 'GET')
+  reset()
+
+  // Requesting raw response payload returns unparsed XML
+  responseBody = '<result><hello>yo</hello></result>'
+  server.use({ responseBody, responseHeaders: xmlHeaders })
+  result = await aws({ service, path, rawResponsePayload: true })
+  t.deepEqual(result.payload, Buffer.from(responseBody), `Client returned XML response payload as unparsed buffer: ${responseBody}`)
+  basicRequestChecks(t, 'GET')
   reset()
 })
 

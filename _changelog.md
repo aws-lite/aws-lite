@@ -2,6 +2,14 @@
 
 ---
 
+## [0.16.0] 2024-02-03
+
+### Added
+
+- Added `rawResponsePayload` request parameter to disable automatic JSON + XML parsing of responses
+
+---
+
 ## [0.15.0 - 0.15.1] 2024-01-29
 
 ### Added

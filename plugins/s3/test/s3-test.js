@@ -221,12 +221,20 @@ test('Head second object', async t => {
 })
 
 test('Get second object', async t => {
-  t.plan(4)
+  t.plan(8)
+  // Get as parsed payload
   let getObjectResponse = await aws.S3.GetObject({ Bucket: bucket_name, Key: object_names[1] })
   t.ok(getObjectResponse, `Object ${object_names[1]} found`)
   t.equal(getObjectResponse.ContentLength, object_contents[1].length, 'Content has expected length')
   t.equal(getObjectResponse.ContentType, contentTypes[1], 'Content has expected type')
   t.equal(JSON.stringify(getObjectResponse.Body), object_contents[1], `Object ${object_names[1]} has expected content`)
+
+  // Get as raw payload
+  getObjectResponse = await aws.S3.GetObject({ Bucket: bucket_name, Key: object_names[1], rawResponsePayload: true })
+  t.ok(getObjectResponse, `Object ${object_names[1]} found`)
+  t.equal(getObjectResponse.ContentLength, object_contents[1].length, 'Content has expected length')
+  t.equal(getObjectResponse.ContentType, contentTypes[1], 'Content has expected type')
+  t.deepEqual(getObjectResponse.Body, Buffer.from(object_contents[1]), `Object ${object_names[1]} has expected content`)
 })
 
 test('List objects - two objects', async t => {

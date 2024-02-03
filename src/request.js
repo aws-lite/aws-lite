@@ -85,8 +85,9 @@ function request (params, creds, region, config, metadata) {
     /* istanbul ignore next */
     if (headers['Content-Type']) delete headers['Content-Type']
 
-    // Body - JSON-ify payload where convenient!
+    // Body - JSON-ify payload where convenient! Leave raw where needed
     let body = params.payload || params.body || params.data
+    let { rawResponsePayload } = params
     let isBuffer = body instanceof Buffer
     let isStream = (body?.on && body?._read && body?._readableState)
 
@@ -213,41 +214,49 @@ function request (params, creds, region, config, metadata) {
         let contentType = config.responseContentType ||
                           headers['content-type'] ||
                           headers['Content-Type'] || ''
-        if (body.length && (JSONContentType(contentType) || AwsJSONContentType(contentType))) {
-          payload = JSON.parse(body)
-
-          /* istanbul ignore next */
-          if (debug) rawString = body.toString()
-
-          // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
-          if (AwsJSONContentType(contentType)) {
-            try {
-              payload = awsjson.unmarshall(payload)
-            }
-            catch { /* noop, it's already parsed */ }
-          }
-        }
-        if (body.length && XMLContentType(contentType)) {
-          payload = parseXML(body)
-          /* istanbul ignore next */
-          if (payload.xmlns) delete payload.xmlns
+        if (rawResponsePayload) {
+          payload = body
 
           /* istanbul ignore next */
           if (debug) rawString = body.toString()
         }
-        // Sometimes AWS reports JSON and XML errors without a content type (ahem, Lambda) so that's fun
-        /* istanbul ignore next */ // TODO remove + test
-        if (body.length && !ok && !contentType) {
-          try {
+        else {
+          if (body.length && (JSONContentType(contentType) || AwsJSONContentType(contentType))) {
             payload = JSON.parse(body)
+
+            /* istanbul ignore next */
+            if (debug) rawString = body.toString()
+
+            // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
+            if (AwsJSONContentType(contentType)) {
+              try {
+                payload = awsjson.unmarshall(payload)
+              }
+              catch { /* noop, it's already parsed */ }
+            }
           }
-          catch {
+          if (body.length && XMLContentType(contentType)) {
+            payload = parseXML(body)
+            /* istanbul ignore next */
+            if (payload.xmlns) delete payload.xmlns
+
+            /* istanbul ignore next */
+            if (debug) rawString = body.toString()
+          }
+          // Sometimes AWS reports JSON and XML errors without a content type (ahem, Lambda) so that's fun
+          /* istanbul ignore next */ // TODO remove + test
+          if (body.length && !ok && !contentType) {
             try {
-              payload = parseXML(body)
+              payload = JSON.parse(body)
             }
             catch {
-              // lolnothingmatters
-              payload = body.toString()
+              try {
+                payload = parseXML(body)
+              }
+              catch {
+                // lolnothingmatters
+                payload = body.toString()
+              }
             }
           }
         }

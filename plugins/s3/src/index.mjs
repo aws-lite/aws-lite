@@ -154,9 +154,10 @@ const GetObject = {
     ResponseContentLanguage:    { ...str, comment: 'Sets response header: `content-language`' },
     ResponseContentType:        { ...str, comment: 'Sets response header: `content-type`' },
     ResponseExpires:            { ...str, comment: 'Sets response header: `expires`' },
+    rawResponsePayload:         { ...bool, comment: 'Set to `true` to return all files as buffers, and disable automatic parsing of JSON and XML' }
   },
   request: (params, utils) => {
-    const { Key } = params
+    const { Key, rawResponsePayload = false } = params
     const queryParams = [ 'PartNumber', 'ResponseCacheControl', 'ResponseContentDisposition',
       'ResponseContentEncoding', 'ResponseContentLanguage', 'ResponseContentType',
       'ResponseExpires', 'VersionId' ]
@@ -169,6 +170,7 @@ const GetObject = {
       path: `/${Key}`,
       headers,
       query,
+      rawResponsePayload,
     }
   },
   response: ({ headers, payload }) => {
