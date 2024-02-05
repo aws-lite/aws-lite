@@ -2,6 +2,15 @@
 
 ---
 
+## [next] 2024-02-04
+
+### Fixed
+
+- Refactor plugin autoloading strategy to more reliably find aws-lite plugins; hopefully fixes #94
+  - This should hopefully resolve issues where attempting to find aws-lite plugins in node_modules may be impossible if the dependency tree is not flat
+
+---
+
 ## [0.16.0] 2024-02-03
 
 ### Added

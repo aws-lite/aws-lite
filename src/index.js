@@ -1,3 +1,4 @@
+let getPlugins = require('./get-plugins')
 let getEndpoint = require('./get-endpoint')
 let getCreds = require('./get-creds')
 let getRegion = require('./get-region')
@@ -24,21 +25,15 @@ let clientFactory = require('./client-factory')
  * @returns {Promise<function>} Client async function
  */
 module.exports = async function awsLite (config = {}) {
+
   // Set defaults + essential config
   config.profile = config.profile || process.env.AWS_PROFILE || 'default'
+  config.plugins = await getPlugins(config)
   config = { ...config, ...(await getEndpoint(config)) }
 
   // Creds + region
   let creds = await getCreds(config)
   let region = await getRegion(config)
 
-  // Validate, then go
-  validateConfig(config)
   return await clientFactory(config, creds, region)
-}
-
-function validateConfig (config) {
-  if (config.plugins && !Array.isArray(config.plugins)) {
-    throw TypeError('Plugins must be an array')
-  }
 }

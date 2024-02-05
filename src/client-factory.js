@@ -1,7 +1,7 @@
 let { services } = require('./services')
 let request = require('./request')
 let { validateInput } = require('./validate')
-let { awsjson, exists, buildXML } = require('./lib')
+let { awsjson, buildXML } = require('./lib')
 let errorHandler = require('./error')
 let aws
 let enumerable = false
@@ -9,8 +9,6 @@ let enumerable = false
 let credentialProps = [ 'accessKeyId', 'secretAccessKey', 'sessionToken' ]
 let copy = obj => JSON.parse(JSON.stringify(obj))
 
-// Never autoload these `@aws-lite/*` packages:
-let ignored = [ 'client', 'arc' ]
 
 module.exports = async function clientFactory (config, creds, region) {
 
@@ -46,29 +44,7 @@ module.exports = async function clientFactory (config, creds, region) {
     })
   }
 
-  // Service API plugins
-  let { autoloadPlugins = true, plugins = [] } = config
-  if (autoloadPlugins) {
-    let { join } = require('path')
-    let awsLite = '@aws-lite'
-    let nodeModulesDir
-    try { nodeModulesDir = require.resolve('@aws-lite/client').split(awsLite)[0] }
-    catch { nodeModulesDir = join(process.cwd(), 'node_modules') } // Likely just aws-lite tests
-    if (await exists(nodeModulesDir)) {
-      let { readdir } = require('fs/promises')
-      let mods = await readdir(nodeModulesDir)
-      // Find first-party plugins
-      if (mods.includes(awsLite)) {
-        let knownPlugins = await readdir(join(nodeModulesDir, awsLite))
-        let filtered = knownPlugins.filter(p => !ignored.includes(p) && !p.endsWith('-types')).map(p => `@aws-lite/${p}`)
-        plugins.push(...filtered)
-      }
-      // Find correctly namespaced 3rd-party plugins
-      let findPlugins = mod => mod.startsWith('aws-lite-plugin-') && plugins.push(mod)
-      mods.forEach(findPlugins)
-    }
-  }
-
+  let { plugins } = config
   if (plugins.length) {
     /* istanbul ignore next */
     if (config.debug) {
