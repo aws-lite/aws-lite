@@ -2,6 +2,23 @@
 
 ---
 
+## [0.17.0] 2024-02-06
+
+### Changed
+
+- By default, plugins must be loaded manually as objects or import / require statements
+  - String identifiers are no longer accepted
+  - Examples:
+    - `import dynamodb from '@aws-lite/dynamodb'; await awsLite({ plugins: [ dynamodb ] })`
+    - `const dynamodb = require('@aws-lite/dynamodb'); await awsLite({ plugins: [ dynamodb ] })`
+    - `await awsLite({ plugins: [ import('@aws-lite/dynamodb') ] })`
+    - `await awsLite({ plugins: [ await import('@aws-lite/dynamodb') ] })`
+    - `await awsLite({ plugins: [ require('@aws-lite/dynamodb') ] })`
+- `autoloadPlugins` is disabled by default; it is no longer suggested for production use, and should generally be used for quick local iteration
+- These changes pertain to / resolve RFC #96
+
+---
+
 ## [0.16.1] 2024-02-04
 
 ### Fixed

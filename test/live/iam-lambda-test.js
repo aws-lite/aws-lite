@@ -8,13 +8,14 @@ let client = require(sut)
 let aws, roleARN
 let region = process.env.AWS_REGION || 'us-west-2'
 let FunctionName = process.env.AWS_LITE_TEST_LAMBDA_NAME || 'aws-lite-test-lambda'
+let p = path => process.platform.startsWith('win') ? 'file://' + path : path
 
 test('Set up env', async t => {
   t.plan(2)
   t.ok(client, 'aws-lite client is present')
   let plugins = [
-    join(__dirname, '_iam.mjs'),
-    join(cwd, 'plugins', 'lambda', 'src', 'index.mjs'), // We should be able to retire this once we phase out 14.x CI runs
+    import(p(join(__dirname, '_iam.mjs'))),
+    import(p(join(cwd, 'plugins', 'lambda', 'src', 'index.mjs'))), // We should be able to retire this once we phase out 14.x CI runs
   ]
   aws = await client({ region, plugins })
   t.ok(aws, 'Client ready')

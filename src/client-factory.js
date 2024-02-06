@@ -50,27 +50,8 @@ module.exports = async function clientFactory (config, creds, region) {
     if (config.debug) {
       console.error('[aws-lite] Loading plugins', plugins, '\n')
     }
-    for (let pluginName of plugins) {
+    for (let plugin of plugins) {
       try {
-        let plugin
-        /* istanbul ignore next */
-        try {
-          plugin = require(pluginName)
-        }
-        catch (err) {
-          if (hasEsmError(err)) {
-            let path = pluginName
-            if (process.platform.startsWith('win')) {
-              try { path = 'file://' + require.resolve(path) }
-              catch { path = 'file://' + pluginName }
-            }
-            let mod = await import(path)
-            plugin = mod.default ? mod.default : mod
-          }
-          else {
-            throw err
-          }
-        }
         let { service, methods, property } = plugin
         validateService(service)
         if (!methods || (typeof methods !== 'object' || Array.isArray(methods))) {
@@ -113,7 +94,7 @@ module.exports = async function clientFactory (config, creds, region) {
               metadata.awsDoc = method.awsDoc
             }
             // Printed after the AWS doc
-            if (pluginName.startsWith('@aws-lite/')) {
+            if (plugin?.name?.startsWith('@aws-lite/')) {
               metadata.readme = `https://aws-lite.org/services/${service}#${name.toLowerCase()}`
             }
             else if (method.readme) {
@@ -199,7 +180,9 @@ module.exports = async function clientFactory (config, creds, region) {
         }
       }
       catch (err) {
-        console.error(`Plugin error: ${pluginName}`)
+        /* istanbul ignore next */
+        let name = plugin.name ? `: ${plugin.name}` : ''
+        console.error(`Plugin error${name}`)
         throw err
       }
     }
@@ -216,11 +199,3 @@ function validateService (service) {
     throw ReferenceError(`Invalid AWS service specified: ${service}`)
   }
 }
-
-let esmErrors = [
-  'Cannot use import statement outside a module',
-  `Unexpected token 'export'`,
-  'require() of ES Module',
-  'Must use import to load ES Module',
-]
-let hasEsmError = err => esmErrors.some(msg => err.message.includes(msg))

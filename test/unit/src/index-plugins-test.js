@@ -9,6 +9,7 @@ let { badPort, config, host, path, protocol, service, port } = defaults
 let mock = join(cwd, 'test', 'mock')
 let pluginDir = join(mock, 'plugins')
 let invalidPlugins = join(pluginDir, 'invalid')
+let p = path => process.platform.startsWith('win') ? 'file://' + path : path
 
 test('Set up env', async t => {
   t.plan(2)
@@ -22,7 +23,7 @@ test('Plugins - validate input', async t => {
   let str = 'hi'
   let num = 123
 
-  let aws = await client({ ...config, plugins: [ join(pluginDir, 'validate.js') ] })
+  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'validate.js'))) ] })
 
   // No validation
   try {
@@ -185,7 +186,7 @@ test('Plugins - method construction, request()', async t => {
   let aws, expectedPath, request
 
   // Reads
-  aws = await client({ ...config, plugins: [ join(pluginDir, 'request-get.js') ] })
+  aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'request-get.js'))) ] })
   expectedPath = `/2015-03-31/functions/${name}/configuration`
 
   await aws.lambda.GetFunctionConfiguration({ name, host, port })
@@ -200,7 +201,7 @@ test('Plugins - method construction, request()', async t => {
   basicRequestChecks(t, 'GET', { url: expectedPath })
 
   // Writes
-  aws = await client({ ...config, plugins: [ join(pluginDir, 'request-post.js') ] })
+  aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'request-post.js'))) ] })
   expectedPath = `/2015-03-31/functions/${name}/invocations`
   let payload = { ok: true }
 
@@ -228,7 +229,7 @@ test('Plugins - response()', async t => {
   t.plan(83)
   let aws, payload, response, responseBody, responseHeaders
 
-  aws = await client({ ...config, host, port, plugins: [ join(pluginDir, 'response.js') ] })
+  aws = await client({ ...config, host, port, plugins: [ import(p(join(pluginDir, 'response.js'))) ] })
 
   // Pass through by having no response() method
   response = await aws.lambda.NoResponseMethod()
@@ -308,7 +309,7 @@ test('Plugins - response()', async t => {
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // Force content type on response
-  aws = await client({ ...config, responseContentType: 'application/json', plugins: [ join(pluginDir, 'response.js') ] })
+  aws = await client({ ...config, responseContentType: 'application/json', plugins: [ import(p(join(pluginDir, 'response.js'))) ] })
   // Response is forced to another content-type and parsed appropriately
   responseHeaders = { 'content-type': '*/*' }
   payload = { hi: 'there' }
@@ -325,7 +326,7 @@ test('Plugins - error(), error handling', async t => {
   let responseBody, responseHeaders, responseStatusCode
 
   let errorsPlugin = join(pluginDir, 'error.js')
-  let aws = await client({ ...config, plugins: [ errorsPlugin ] })
+  let aws = await client({ ...config, plugins: [ require(errorsPlugin) ] })
 
   // Control
   try {
@@ -472,7 +473,7 @@ test('Plugins - error(), error handling', async t => {
 
 test('Plugins - error docs (@aws-lite)', async t => {
   t.plan(2)
-  let aws = await client({ ...config, plugins: [ '@aws-lite/s3' ] })
+  let aws = await client({ ...config, plugins: [ import('@aws-lite/s3') ] })
 
   try {
     await aws.s3.PutObject()
@@ -487,7 +488,7 @@ test('Plugins - error docs (@aws-lite)', async t => {
 
 test('Plugins - disabled methods', async t => {
   t.plan(3)
-  let aws = await client({ ...config, plugins: [ join(pluginDir, 'misc', 'disabled-methods') ] })
+  let aws = await client({ ...config, plugins: [ require(join(pluginDir, 'misc', 'disabled-methods')) ] })
   t.ok(aws.lambda.ok, 'Client loaded plugin containing disabled methods')
   t.notOk(aws.lambda.disabledByFalsy, 'Client did not load method disabled by boolean false')
   t.notOk(aws.lambda.disabledByParam, `Client did not load method disabled by 'disabled' param`)
@@ -498,7 +499,7 @@ test('Plugins - plugin validation', async t => {
 
   // CJS
   try {
-    await client({ ...config, plugins: [ join(pluginDir, 'cjs') ] })
+    await client({ ...config, plugins: [ require(join(pluginDir, 'cjs')) ] })
     t.pass('CJS plugins work fine (directory import)')
     reset()
   }
@@ -510,10 +511,10 @@ test('Plugins - plugin validation', async t => {
   // ESM
   try {
     // .mjs file
-    await client({ ...config, plugins: [ join(pluginDir, 'esm-mjs', 'index.mjs') ] })
+    await client({ ...config, plugins: [ import(p(join(pluginDir, 'esm-mjs', 'index.mjs'))) ] })
     t.pass('ESM .mjs plugins work fine')
     // .js ext + package.json.type = module
-    await client({ ...config, plugins: [ join(pluginDir, 'esm-pkg', 'index.js') ] })
+    await client({ ...config, plugins: [ import(p(join(pluginDir, 'esm-pkg', 'index.js'))) ] })
     t.pass('ESM .js + package.json plugins work fine')
     reset()
   }
@@ -524,7 +525,7 @@ test('Plugins - plugin validation', async t => {
 
   // Failures
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'invalid-request-method.js') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'invalid-request-method.js')) ] })
   }
   catch (err) {
     t.match(err.message, /All plugin request methods must be a function/, 'Throw on invalid request method')
@@ -532,7 +533,7 @@ test('Plugins - plugin validation', async t => {
   }
 
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'invalid-response-method.js') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'invalid-response-method.js')) ] })
   }
   catch (err) {
     t.match(err.message, /All plugin response methods must be a function/, 'Throw on invalid response method')
@@ -540,7 +541,7 @@ test('Plugins - plugin validation', async t => {
   }
 
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'invalid-error-method.js') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'invalid-error-method.js')) ] })
   }
   catch (err) {
     t.match(err.message, /All plugin error methods must be a function/, 'Throw on invalid error method')
@@ -548,7 +549,7 @@ test('Plugins - plugin validation', async t => {
   }
 
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'invalid-service.js') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'invalid-service.js')) ] })
   }
   catch (err) {
     t.match(err.message, /Invalid AWS service specified: lolidk/, 'Throw on invalid service')
@@ -556,7 +557,7 @@ test('Plugins - plugin validation', async t => {
   }
 
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'this-plugin-does-not-exist.js') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'this-plugin-does-not-exist.js')) ] })
   }
   catch (err) {
     t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
@@ -564,7 +565,7 @@ test('Plugins - plugin validation', async t => {
   }
 
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'invalid-plugin.js') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'invalid-plugin.js')) ] })
   }
   catch (err) {
     t.match(err.message, /lol is not defined/, 'Throw on invalid plugin')
@@ -572,7 +573,7 @@ test('Plugins - plugin validation', async t => {
   }
 
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'invalid-methods-type') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'invalid-methods-type')) ] })
   }
   catch (err) {
     t.match(err.message, /Plugin must export a methods object/, 'Throw on missing methods')
@@ -580,7 +581,7 @@ test('Plugins - plugin validation', async t => {
   }
 
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'invalid-methods-missing') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'invalid-methods-missing')) ] })
   }
   catch (err) {
     t.match(err.message, /Plugin must export a methods object/, 'Throw on missing methods')
@@ -588,7 +589,7 @@ test('Plugins - plugin validation', async t => {
   }
 
   try {
-    await client({ ...config, plugins: [ join(invalidPlugins, 'this-plugin-does-not-exist.js') ] })
+    await client({ ...config, plugins: [ require(join(invalidPlugins, 'this-plugin-does-not-exist.js')) ] })
   }
   catch (err) {
     t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
