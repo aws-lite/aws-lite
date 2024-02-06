@@ -25,9 +25,10 @@ let clientFactory = require('./client-factory')
  *
  * @returns {Promise<function>} Client async function
  */
-module.exports = async function awsLite (config = { verifyService: true }) {
+module.exports = async function awsLite (config = {}) {
 
   // Set defaults + essential config
+  config.verifyService = config.verifyService ?? true
   config.profile = config.profile || process.env.AWS_PROFILE || 'default'
   config.plugins = await getPlugins(config)
   config = { ...config, ...(await getEndpoint(config)) }
