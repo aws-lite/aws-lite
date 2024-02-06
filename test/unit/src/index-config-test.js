@@ -227,3 +227,65 @@ test('Configuration - validation', async t => {
     reset()
   }
 })
+
+test('Configuration - service verification', async t => {
+  t.plan(8)
+  let aws
+  let started = await server.start()
+  t.ok(started, 'Started server')
+
+  // Default behavior: verification enabled
+  aws = await client(config)
+  try {
+    await aws({ service: 'not-a-service' })
+    t.fail('Should throw on unverified service name')
+  }
+  catch (err) {
+    t.match(err.message, /Invalid AWS service/, 'By default, throw on unverified service name')
+  }
+  // Disable service verification at request time
+  try {
+    await aws({ verifyService: false, service: 'not-a-service' })
+    t.pass('Service verification disabled')
+  }
+  catch (err) {
+    t.fail(err)
+  }
+  // Service name still required
+  try {
+    await aws({ verifyService: false })
+    t.fail('Should throw on missing service name')
+  }
+  catch (err) {
+    t.match(err.message, /No AWS service specified/, 'Throw on missing service name')
+  }
+
+  // Disable verification at client
+  aws = await client({ ...config, verifyService: false })
+  try {
+    await aws({ service: 'not-a-service' })
+    t.pass('Service verification disabled')
+  }
+  catch (err) {
+    t.fail(err)
+  }
+  // Request can enable service verification
+  try {
+    await aws({ verifyService: true, service: 'not-a-service' })
+    t.fail('Should throw on unverified service name')
+  }
+  catch (err) {
+    t.match(err.message, /Invalid AWS service/, 'Throw on unverified service name')
+  }
+  // Service name still required
+  try {
+    await aws({ verifyService: true })
+    t.fail('Should throw on missing service name')
+  }
+  catch (err) {
+    t.match(err.message, /No AWS service specified/, 'Throw on missing service name')
+  }
+
+  await server.end()
+  t.pass('Server ended')
+})

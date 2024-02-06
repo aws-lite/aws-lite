@@ -10,6 +10,7 @@ const host = 'localhost'
 const keepAlive = false
 const path = '/a/path'
 const profile = 'default'
+const verifyService = true
 const protocol = 'http'
 const region = 'us-west-1'
 const secretAccessKey = 'bar'
@@ -17,7 +18,7 @@ const sessionToken = 'baz'
 const service = 'lambda'
 const port = 1111
 const config = { accessKeyId, secretAccessKey, sessionToken, region, debug, profile, protocol, autoloadPlugins, keepAlive, host, port }
-const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, profile, protocol, region, secretAccessKey, service, path, port }
+const defaults = { accessKeyId, autoloadPlugins, badPort, config, host, keepAlive, profile, verifyService, protocol, region, secretAccessKey, service, path, port }
 
 let serverData = {}
 

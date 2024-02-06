@@ -180,6 +180,26 @@ test('Plugins - validate input', async t => {
   reset()
 })
 
+test('Plugins - validate service', async t => {
+  t.plan(2)
+  let plugin = require(join(pluginDir, 'misc', 'unverified-service.js'))
+  try {
+    await client({ ...config, plugins: [ plugin ] })
+    t.fail('Plugin with unverified service should throw')
+  }
+  catch (error) {
+    t.match(error.message, /Invalid AWS service/, 'Throw on plugin with unverified service')
+  }
+
+  try {
+    await client({ ...config, verifyService: false, plugins: [ plugin ] })
+    t.pass('"verifyService: false" allows plugin with unverified service')
+  }
+  catch (error) {
+    t.fail('Should have allowed unverified service')
+  }
+})
+
 test('Plugins - method construction, request()', async t => {
   t.plan(28)
   let name = 'my-lambda'

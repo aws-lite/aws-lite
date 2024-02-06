@@ -22,7 +22,8 @@ module.exports = async function clientFactory (config, creds, region) {
   // The basic API client
   async function client (params = {}) {
     let selectedRegion = params.region || region
-    validateService(params.service)
+    let verifyService = params.verifyService ?? config.verifyService ?? true
+    validateService(params.service, verifyService)
     let metadata = { service: params.service }
     try {
       return await request(params, creds, selectedRegion, config, metadata)
@@ -53,7 +54,7 @@ module.exports = async function clientFactory (config, creds, region) {
     for (let plugin of plugins) {
       try {
         let { service, methods, property } = plugin
-        validateService(service)
+        validateService(service, config.verifyService)
         if (!methods || (typeof methods !== 'object' || Array.isArray(methods))) {
           throw TypeError('Plugin must export a methods object')
         }
@@ -191,11 +192,11 @@ module.exports = async function clientFactory (config, creds, region) {
   return client
 }
 
-function validateService (service) {
+function validateService (service, verify = true) {
   if (!service) {
-    throw ReferenceError(`No AWS service specified`)
+    throw ReferenceError('No AWS service specified')
   }
-  if (!services.includes(service)) {
+  if (verify && !services.includes(service)) {
     throw ReferenceError(`Invalid AWS service specified: ${service}`)
   }
 }

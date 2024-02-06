@@ -4,6 +4,13 @@
 
 ## [0.17.0] 2024-02-06
 
+### Added
+
+- Client config option `verifyService` (default: `true`) can be set to `false` to skip checking service name against the internal list of known AWS services on all requests
+  - This option is also considered when loading and validating plugins
+- Request param `verifyService` (default: `true`) does the same, on a per-request basis
+
+
 ### Changed
 
 - By default, plugins must be loaded manually as objects or import / require statements
