@@ -22,7 +22,7 @@ module.exports = async function clientFactory (config, creds, region) {
   // The basic API client
   async function client (params = {}) {
     let selectedRegion = params.region || region
-    let verifyService = params.verifyService ?? config.verifyService
+    let verifyService = params.verifyService ?? config.verifyService ?? true
     validateService(params.service, verifyService)
     let metadata = { service: params.service }
     try {
