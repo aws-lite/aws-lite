@@ -9,6 +9,7 @@ const property = 'APIGateway'
 // const required = true
 
 export default {
+  name: '@aws-lite/apigateway',
   service,
   property,
   methods: { ...incomplete }

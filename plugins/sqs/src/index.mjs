@@ -102,6 +102,7 @@ const DeleteMessage = {
 }
 
 export default {
+  name: '@aws-lite/sqs',
   service,
   property,
   methods: {

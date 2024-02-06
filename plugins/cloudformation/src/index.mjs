@@ -243,6 +243,7 @@ const UpdateStack = {
 }
 
 export default {
+  name: '@aws-lite/cloudformation',
   service,
   property,
   methods: { CreateStack, DeleteStack, DescribeStackResources, DescribeStacks, ListStackResources, UpdateStack, ...incomplete }

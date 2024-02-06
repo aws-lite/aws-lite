@@ -87,6 +87,7 @@ test('Set up env', async t => {
     host: `s3.${region}.${serviceEndpoint}`,
     port,
     protocol: 'http',
+    plugins: [ import('@aws-lite/s3') ]
   })
   t.ok(aws, 'Client ready')
 

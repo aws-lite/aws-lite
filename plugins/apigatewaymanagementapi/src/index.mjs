@@ -100,6 +100,7 @@ const GetConnection = {
 }
 
 export default {
+  name: '@aws-lite/apigatewaymanagementapi',
   service,
   property,
   methods: {

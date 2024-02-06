@@ -51,6 +51,7 @@ const Publish = {
 }
 
 export default {
+  name: '@aws-lite/sns',
   service,
   property,
   methods: {

@@ -146,6 +146,7 @@ const GetLogEvents = {
 }
 
 export default {
+  name: '@aws-lite/cloudwatch-logs',
   service,
   property,
   methods: { DeleteLogGroup, DescribeLogGroups, DescribeLogStreams, GetLogEvents, ...incomplete }

@@ -232,6 +232,7 @@ const UpdateFunctionConfiguration = {
 }
 
 export default {
+  name: '@aws-lite/lambda',
   service,
   property,
   methods: {

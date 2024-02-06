@@ -120,4 +120,4 @@ const methods = {
   ...deprecated,
 }
 
-export default { service, property, methods }
+export default { name: '@aws-lite/rds-data', service, property, methods }

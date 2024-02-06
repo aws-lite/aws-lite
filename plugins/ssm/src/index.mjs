@@ -113,6 +113,7 @@ const PutParameter = {
 }
 
 export default {
+  name: '@aws-lite/ssm',
   service,
   property,
   methods: {

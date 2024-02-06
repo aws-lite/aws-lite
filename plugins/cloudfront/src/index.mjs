@@ -212,6 +212,7 @@ const UpdateDistribution = {
 }
 
 export default {
+  name: '@aws-lite/cloudfront',
   service,
   property,
   methods: { CreateDistribution, CreateInvalidation, DeleteDistribution, GetDistribution, GetDistributionConfig, ListDistributions, UpdateDistribution, ...incomplete }

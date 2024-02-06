@@ -146,6 +146,7 @@ const UpdateStage =  {
 }
 
 export default {
+  name: '@aws-lite/apigatewayv2',
   service,
   property,
   methods: { CreateDeployment, GetDeployment, GetDeployments, UpdateStage, ...incomplete }

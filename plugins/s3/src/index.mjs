@@ -291,4 +291,10 @@ const ListObjectsV2 = {
 }
 
 const methods = { CreateBucket, DeleteBucket, DeleteObject, DeleteObjects, GetObject, HeadObject, HeadBucket, ListBuckets, ListObjectsV2, PutObject, ...incomplete }
-export default { service, property, methods }
+
+export default {
+  name: '@aws-lite/s3',
+  service,
+  property,
+  methods,
+}
