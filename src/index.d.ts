@@ -4,6 +4,7 @@ interface AwsLiteConfig {
   sessionToken?: string;
   region?: string;
   profile?: string;
+  verifyService?: boolean;
   autoloadPlugins?: boolean;
   awsConfigFile?: boolean | string;
   debug?: boolean;
@@ -21,6 +22,7 @@ interface AwsLiteConfig {
 
 interface AwsLiteRequest {
   service: string;
+  verifyService?: boolean;
   awsjson?: boolean | string[];
   path?: string;
   headers?: Record<string, string>;
