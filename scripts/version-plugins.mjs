@@ -13,7 +13,7 @@ if (!semverArgs.includes(action)) {
 }
 
 const pluginNames = args.slice(1)
-const plugins = pluginNames === 'all' ? pluginList.map(({ service }) => service) : pluginNames
+const plugins = pluginNames[0] === 'all' ? pluginList.map(({ service }) => service) : pluginNames
 
 const status = execSync('git status --porcelain')
 if (status.length) {
