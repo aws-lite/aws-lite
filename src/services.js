@@ -24,4 +24,13 @@ let globalServices = [
 ]
 let semiGlobalServices = [ 's3', 'sdb', 'sts' ]
 
-module.exports = { services, globalServices, semiGlobalServices }
+function validateService (service) {
+  if (!service) {
+    throw ReferenceError(`No AWS service specified`)
+  }
+  if (!services.includes(service)) {
+    throw ReferenceError(`Invalid AWS service specified: ${service}`)
+  }
+}
+
+module.exports = { services, globalServices, semiGlobalServices, validateService }
