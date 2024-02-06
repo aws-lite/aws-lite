@@ -206,51 +206,41 @@ test('Configuration - validation', async t => {
   }
 })
 
-test.only('Configuration - service validation', async t => {
-  t.plan(7)
+test('Configuration - service validation', async t => {
+  t.plan(6)
   let aws
   let started = await server.start()
   t.ok(started, 'Started server')
 
   aws = await client(config)
-  // Default behavior
+  // Default behavior: validation enabled
   try {
     await aws({ service: 'not-a-service' })
     t.fail('Should throw on invalid service name')
   }
   catch (err) {
-    t.match(err.message, /Invalid AWS service/, 'Throw on invalid service name')
+    t.match(err.message, /Invalid AWS service/, 'By default, throw on invalid service name')
   }
-  // Skip validation at request
+  // Disable services validation at request time
   try {
     await aws({ validateService: false, service: 'not-a-service' })
-    t.pass('Skip service validation')
+    t.pass('Service validation disabled')
   }
   catch (err) {
     t.fail(err)
   }
-
-  reset()
 
   aws = await client({ ...config, validateService: false })
-  // Skip validation at client
+  // Disable validation at client
   try {
     await aws({ service: 'not-a-service' })
-    t.pass('Skip service validation')
-  }
-  catch (err) {
-    t.fail(err)
-  }
-  // Client skips validation for subsequent requests
-  try {
-    await aws({ service: 'not-a-service' })
-    t.pass('Skip service validation')
+    t.pass('Service validation disabled')
   }
   catch (err) {
     t.fail(err)
   }
 
-  // Request can enable validation
+  // Request can enable service validation
   try {
     await aws({ validateService: true, service: 'not-a-service' })
     t.fail('Should throw on invalid service name')

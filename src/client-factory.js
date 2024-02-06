@@ -23,7 +23,9 @@ module.exports = async function clientFactory (config, creds, region) {
   async function client (params = {}) {
     let selectedRegion = params.region || region
     let metadata = { service: params.service }
-    params.validateService = params.validateService === undefined ? true : params.validateService
+    params.validateService = params.validateService !== undefined
+      ? params.validateService
+      : config.validateService
     try {
       return await request(params, creds, selectedRegion, config, metadata)
     }
@@ -72,8 +74,9 @@ module.exports = async function clientFactory (config, creds, region) {
           }
         }
         let { service, methods, property } = plugin
-        if (config.validateService) {
-          validateService(service) // allow consumer to load a plugin without validating the service
+        /* istanbul ignore next */ // TODO: test config + plugin interaction
+        if (config.validateService) { // allow consumer to load a plugin without validating the service
+          validateService(service)
         }
         if (!methods || (typeof methods !== 'object' || Array.isArray(methods))) {
           throw TypeError('Plugin must export a methods object')

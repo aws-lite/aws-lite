@@ -30,7 +30,7 @@ function getAgent (client, isHTTPS, config) {
 }
 
 module.exports = async function _request (params, creds, region, config, metadata) {
-  if (params.validateService) { // TODO: consider config.validateService and how it combines
+  if (params.validateService) {
     validateService(params.service)
   }
   /* istanbul ignore next */ // TODO remove + test
