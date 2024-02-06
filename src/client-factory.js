@@ -1,4 +1,4 @@
-let { validateService } = require('./services')
+let { services } = require('./services')
 let request = require('./request')
 let { validateInput } = require('./validate')
 let { awsjson, buildXML } = require('./lib')
@@ -22,10 +22,11 @@ module.exports = async function clientFactory (config, creds, region) {
   // The basic API client
   async function client (params = {}) {
     let selectedRegion = params.region || region
+    let verifyService = params.verifyService !== undefined
+      ? params.verifyService
+      : config.verifyService
+    validateService(params.service, verifyService)
     let metadata = { service: params.service }
-    params.validateService = params.validateService !== undefined
-      ? params.validateService
-      : config.validateService
     try {
       return await request(params, creds, selectedRegion, config, metadata)
     }
@@ -74,10 +75,7 @@ module.exports = async function clientFactory (config, creds, region) {
           }
         }
         let { service, methods, property } = plugin
-        /* istanbul ignore next */ // TODO: test config + plugin interaction
-        if (config.validateService) { // allow consumer to load a plugin without validating the service
-          validateService(service)
-        }
+        validateService(service, config.verifyService)
         if (!methods || (typeof methods !== 'object' || Array.isArray(methods))) {
           throw TypeError('Plugin must export a methods object')
         }
@@ -211,6 +209,15 @@ module.exports = async function clientFactory (config, creds, region) {
   }
 
   return client
+}
+
+function validateService (service, verify = true) {
+  if (!service) {
+    throw ReferenceError('No AWS service specified')
+  }
+  if (verify && !services.includes(service)) {
+    throw ReferenceError(`Invalid AWS service specified: ${service}`)
+  }
 }
 
 let esmErrors = [

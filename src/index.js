@@ -11,7 +11,7 @@ let clientFactory = require('./client-factory')
  * @param {string} [config.sessionToken] AWS session token; if not provided, defaults to `AWS_SESSION_TOKEN` env var, and then to a `~/.aws/credentials` file, if present
  * @param {string} [config.region] AWS service region (e.g. `us-west-1`); if not provided, defaults to `AWS_REGION`, `AWS_DEFAULT_REGION`, or `AMAZON_REGION` env vars
  * @param {string} [config.profile='default'] AWS config + credentials profile; if not provided, defaults to `AWS_PROFILE` env var, and then to the `default` profile, if present
- * @param {boolean} [config.validateService=true] Validate service name against aws-lite's known services
+ * @param {boolean} [config.verifyService=true] Validate service name against aws-lite's known services
  * @param {boolean} [config.autoloadPlugins=true] Automatically load installed `@aws-lite/*` + `aws-lite-plugin-*` plugins
  * @param {boolean|string} [config.awsConfigFile=false] Load configuration via ~/.aws/config (boolean), or via a passed file path
  * @param {boolean} [config.debug] Enable debug logging to console
@@ -25,12 +25,11 @@ let clientFactory = require('./client-factory')
  *
  * @returns {Promise<function>} Client async function
  */
-module.exports = async function awsLite (config = {}) {
+module.exports = async function awsLite (config = { verifyService: true }) {
 
   // Set defaults + essential config
   config.profile = config.profile || process.env.AWS_PROFILE || 'default'
   config.plugins = await getPlugins(config)
-  config.validateService = config.validateService === undefined ? true : config.validateService
   config = { ...config, ...(await getEndpoint(config)) }
 
   // Creds + region

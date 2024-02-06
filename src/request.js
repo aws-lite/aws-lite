@@ -1,5 +1,5 @@
 let aws4 = require('aws4')
-let { globalServices, semiGlobalServices, validateService } = require('./services')
+let { globalServices, semiGlobalServices } = require('./services')
 let { awsjson, buildXML, getEndpointParams, parseXML, tidyQuery, useAWS, validateProtocol } = require('./lib')
 
 /* istanbul ignore next */
@@ -30,9 +30,6 @@ function getAgent (client, isHTTPS, config) {
 }
 
 module.exports = async function _request (params, creds, region, config, metadata) {
-  if (params.validateService) {
-    validateService(params.service)
-  }
   /* istanbul ignore next */ // TODO remove + test
   if ((params.paginator?.default === 'enabled' && params.paginate !== false) ||
       (params.paginator && params.paginate)) {
