@@ -28,13 +28,12 @@ test('Load plugins array', async t => {
   if (!process.versions.node.startsWith('14')) {
     t.plan(4)
     // eslint-disable-next-line
-  plugins = await getPlugins({ plugins: [ import('@aws-lite/dynamodb') ] })
+    plugins = await getPlugins({ plugins: [ import('@aws-lite/dynamodb') ] })
     t.equal(plugins[0].service, 'dynamodb', 'Client explicitly loaded ESM plugin with unresolved import')
 
-    // Node.js 14.x / npm 6 symlinking shenanigans
     // eslint-disable-next-line
-  plugins = await getPlugins({ plugins: [ await import('@aws-lite/dynamodb') ] })
-    t.equal(plugins[0].service, 'dynamodb', 'Client explicitly loaded ESM plugin with resolved import')
+    plugins = await getPlugins({ plugins: [ await import('@aws-lite/lambda') ] })
+    t.equal(plugins[0].service, 'lambda', 'Client explicitly loaded ESM plugin with resolved import')
   }
 
   let cjsPluginPath = join(pluginDir, 'cjs')
@@ -45,7 +44,6 @@ test('Load plugins array', async t => {
   plugins = await getPlugins({ plugins: [ plugin ] })
   t.equal(plugins[0].service, 'lambda', 'Client explicitly loaded CJS plugin object')
 })
-
 
 test('Autoload plugins from process node_modules', async t => {
   t.plan(2)
@@ -58,9 +56,9 @@ test('Autoload plugins from process node_modules', async t => {
 
   let tidy = p => p.split('/')[1]
 
-  let packageJson = join(cwd, 'package.json')
-  let package = JSON.parse(readFileSync(packageJson))
-  let expected = package.workspaces.map(tidy)
+  let packageJsonFile = join(cwd, 'package.json')
+  let packageJson = JSON.parse(readFileSync(packageJsonFile))
+  let expected = packageJson.workspaces.map(tidy)
 
   // Since the process node_modules dir should be npm linked to all our plugins, the loaded plugin list should match the package.json workspace property
   let plugins = await getPlugins({ autoloadPlugins: true })
@@ -101,12 +99,19 @@ test('Autoload plugins from project package.json', async t => {
 })
 
 test('Validate params', async t => {
-  t.plan(1)
+  t.plan(2)
 
   try {
     await getPlugins({ plugins: false })
   }
   catch (err) {
     t.match(err.message, /Plugins must be an array/, 'Threw on invalid plugins param')
+  }
+
+  try {
+    await getPlugins({ plugins: [ '@aws-lite/dynamodb' ] })
+  }
+  catch (err) {
+    t.match(err.message, /Plugins must be an imported \/ required module or an import statement/, 'Threw on invalid plugin')
   }
 })

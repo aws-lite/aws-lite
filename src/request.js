@@ -30,7 +30,7 @@ function getAgent (client, isHTTPS, config) {
 }
 
 module.exports = async function _request (params, creds, region, config, metadata) {
-  /* istanbul ignore next */ // TODO remove + test
+  /* istanbul ignore next: TODO remove + test */
   if ((params.paginator?.default === 'enabled' && params.paginate !== false) ||
       (params.paginator && params.paginate)) {
     return await paginator(params, creds, region, config, metadata)
@@ -147,7 +147,7 @@ function request (params, creds, region, config, metadata) {
     // Sign and construct the request
     let options = aws4.sign(signing, creds)
     // Normalize host (again)
-    /* istanbul ignore next */ // This won't get seen by nyc
+    /* istanbul ignore next: this won't get seen by nyc */
     options.host = options.host || options.hostname
     /* istanbul ignore next */
     if (options.hostname) delete options.hostname
@@ -205,7 +205,7 @@ function request (params, creds, region, config, metadata) {
 
     let req = http.request(options, res => {
       let data = []
-      /* istanbul ignore next */ // We can always expect headers, but jic
+      /* istanbul ignore next: we can always expect headers, but jic */
       let { headers = {}, statusCode } = res
       let ok = statusCode >= 200 && statusCode < 303
       res.on('data', chunk => data.push(chunk))

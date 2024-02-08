@@ -2,6 +2,14 @@
 
 ---
 
+## [0.17.2] 2024-02-08
+
+### Fixed
+
+- Changed variable name for extra strict bundlers; fixes #99
+
+---
+
 ## [0.17.0 - 0.17.1] 2024-02-06
 
 ### Added

@@ -208,7 +208,7 @@ function parseXML (body) {
   let parsed = xml.parser.parse(body)
   let key = Object.keys(parsed)[0]
   let payloadToReturn = parsed[key]
-  /* istanbul ignore next */ // TODO remove + test
+  /* istanbul ignore next: TODO remove + test */
   if (payloadToReturn[textNodeName]) {
     payloadToReturn[key] = payloadToReturn[textNodeName]
     delete payloadToReturn[textNodeName]

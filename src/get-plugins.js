@@ -17,11 +17,13 @@ module.exports = async function getPlugin (config) {
     for (let item of plugins) {
       if (item?.then && typeof item.then === 'function') {
         let plugin = await item
+        /* istanbul ignore next: our plugins export default, but others may not */
         plugin = plugin.default ? plugin.default : plugin
         resolved.push(plugin)
         continue
       }
       else if (is.object(item)) {
+        /* istanbul ignore next: our plugins export default, but others may not */
         let plugin = item.default ? item.default : item
         resolved.push(plugin)
         continue
@@ -31,6 +33,7 @@ module.exports = async function getPlugin (config) {
     return resolved
   }
 
+  /* istanbul ignore else */
   if (autoloadPlugins) {
     let { exists } = require('./lib')
     let { join } = require('path')
@@ -38,7 +41,7 @@ module.exports = async function getPlugin (config) {
     let dedupe = arr => [ ...new Set(arr) ]
 
     let processDir = process.cwd()
-    let packageJson = join(processDir, 'package.json')
+    let packageJsonFile = join(processDir, 'package.json')
 
     let processNodeModulesDir = join(process.cwd(), 'node_modules')
     // aws-lite resolving itself may fail during tests, so just swallow that
@@ -55,16 +58,16 @@ module.exports = async function getPlugin (config) {
     }
 
     // Then let's see what's right nearby; this can be unreliable, as package managers may not always properly flatten the dependency tree
-    else if (relativeNodeModulesDir && await exists(relativeNodeModulesDir)) {
+    else /* istanbul ignore next */ if (relativeNodeModulesDir && await exists(relativeNodeModulesDir)) {
       let found = await scanNodeModulesDir(relativeNodeModulesDir)
       if (found.length) pluginsToLoad.push(...dedupe(plugins.concat(found)))
     }
 
     // Perhaps the least reliable due to the likelihood of second-order deps: read the package.json (if possible)
-    else if (await exists(packageJson)) {
+    else if (await exists(packageJsonFile)) {
       let { readFile } = require('fs/promises')
-      let package = JSON.parse(await readFile(packageJson))
-      let { dependencies: deps } = package
+      let packageJson = JSON.parse(await readFile(packageJsonFile))
+      let { dependencies: deps } = packageJson
       if (deps) {
         let found = Object.keys(deps)
           .filter(m => m.startsWith('@aws-lite/') ||
@@ -117,6 +120,7 @@ async function scanNodeModulesDir (dir) {
   let { readdir } = require('fs/promises')
   let mods = await readdir(dir)
   // Find first-party plugins
+  /* istanbul ignore next: TODO code path not run in 14.x tests, remove once deprecated */
   if (mods.includes(awsLite)) {
     let knownPlugins = await readdir(join(dir, awsLite))
     found.push(...knownPlugins.map(p => `@aws-lite/${p}`))

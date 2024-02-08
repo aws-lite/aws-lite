@@ -62,12 +62,12 @@ test('Configuration - plugin loading', async t => {
   if (!process.versions.node.startsWith('14')) {
     t.plan(9)
     // eslint-disable-next-line
-  aws = await client({ ...minConfig, plugins: [ import('@aws-lite/dynamodb') ] })
-    t.ok(aws.dynamodb, 'Client explicitly loaded ESM plugin with unresolved import')
+    aws = await client({ ...minConfig, plugins: [ import('@aws-lite/ssm') ] })
+    t.ok(aws.ssm, 'Client explicitly loaded ESM plugin with unresolved import')
 
     // eslint-disable-next-line
-  aws = await client({ ...minConfig, plugins: [ await import('@aws-lite/dynamodb') ] })
-    t.ok(aws.dynamodb, 'Client explicitly loaded ESM plugin with resolved import')
+    aws = await client({ ...minConfig, plugins: [ await import('@aws-lite/sqs') ] })
+    t.ok(aws.sqs, 'Client explicitly loaded ESM plugin with resolved import')
   }
 
   let cjsPluginPath = join(pluginDir, 'cjs')
