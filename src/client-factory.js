@@ -49,7 +49,7 @@ module.exports = async function clientFactory (config, creds, region) {
   if (plugins.length) {
     /* istanbul ignore next */
     if (config.debug) {
-      console.error('[aws-lite] Loading plugins', plugins, '\n')
+      console.error('[aws-lite] Loading plugins', plugins.map(({ name, service }) => name || service), '\n')
     }
     for (let plugin of plugins) {
       try {
