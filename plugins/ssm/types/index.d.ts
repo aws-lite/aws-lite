@@ -59,6 +59,7 @@ declare module "@aws-lite/client" {
 }
 
 export type {
+  AwsLiteSSM,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   DeleteParameterResponse,

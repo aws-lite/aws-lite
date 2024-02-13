@@ -17,6 +17,7 @@ declare module "@aws-lite/client" {
 }
 
 export type {
+  AwsLite$PROPERTY,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   // $EXPORT_END

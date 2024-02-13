@@ -83,6 +83,7 @@ declare module "@aws-lite/client" {
 }
 
 export type {
+  AwsLiteS3,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   CreateBucketResponse,
