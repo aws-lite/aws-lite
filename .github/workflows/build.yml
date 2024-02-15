@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 14.x, 16.x, 18.x, 20.x ]
+        node-version: [ 16.x, 18.x, 20.x ]
         os: [ windows-latest, ubuntu-latest, macOS-latest ]
 
     # Go
@@ -39,14 +39,6 @@ jobs:
 
     - name: Install
       run: npm install
-
-    - name: Link (npm < 7)
-      if: matrix.node-version == '14.x'
-      run: |
-        cd plugins/s3
-        npm link
-        cd ../../
-        npm link @aws-lite/s3
 
     - name: Test
       run: npm test

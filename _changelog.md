@@ -9,6 +9,11 @@
 - Added integrated testing mode; fixes #102
   - Feature should be considered experimental
 
+
+### Changed
+
+- Removed Node.js 14.x support
+
 ---
 
 ## [0.17.2] 2024-02-08

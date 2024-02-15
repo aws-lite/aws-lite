@@ -70,13 +70,6 @@ test('Testing - main client', async t => {
 })
 
 test('Testing - plugins (not checking response method output)', async t => {
-  // This test relies on workspace linking from npm 8+, so Node.js 14.x / npm 6 should skip it
-  if (process.version.startsWith('v14')) {
-    t.plan(1)
-    t.pass('Skipped test')
-    return
-  }
-
   t.plan(8)
   client.testing.enable()
 
@@ -118,13 +111,6 @@ test('Testing - plugins (not checking response method output)', async t => {
 })
 
 test('Testing - plugins (response method output)', async t => {
-  // This test relies on workspace linking from npm 8+, so Node.js 14.x / npm 6 should skip it
-  if (process.version.startsWith('v14')) {
-    t.plan(1)
-    t.pass('Skipped test')
-    return
-  }
-
   t.plan(8)
   client.testing.enable({ usePluginResponseMethod: true })
 
@@ -166,13 +152,6 @@ test('Testing - plugins (response method output)', async t => {
 })
 
 test('Testing - request / response sequences', async t => {
-  // This test relies on workspace linking from npm 8+, so Node.js 14.x / npm 6 should skip it
-  if (process.version.startsWith('v14')) {
-    t.plan(1)
-    t.pass('Skipped test')
-    return
-  }
-
   t.plan(15)
   let allRes, lastReq, lastRes, reqParams
   client.testing.enable()
@@ -244,13 +223,6 @@ test('Testing - request / response sequences', async t => {
 })
 
 test('Testing - dynamic responses', async t => {
-  // This test relies on workspace linking from npm 8+, so Node.js 14.x / npm 6 should skip it
-  if (process.version.startsWith('v14')) {
-    t.plan(1)
-    t.pass('Skipped test')
-    return
-  }
-
   t.plan(9)
   let rando = () => (Math.random() + 1).toString(36).substring(2)
 
@@ -288,13 +260,6 @@ test('Testing - dynamic responses', async t => {
 })
 
 test('Testing - multiple services', async t => {
-  // This test relies on workspace linking from npm 8+, so Node.js 14.x / npm 6 should skip it
-  if (process.version.startsWith('v14')) {
-    t.plan(1)
-    t.pass('Skipped test')
-    return
-  }
-
   t.plan(14)
   let allRes, lastReq, lastRes, reqParams
   client.testing.enable()
@@ -372,13 +337,6 @@ test('Testing - multiple services', async t => {
 })
 
 test('Testing - errors', async t => {
-  // This test relies on workspace linking from npm 8+, so Node.js 14.x / npm 6 should skip it
-  if (process.version.startsWith('v14')) {
-    t.plan(1)
-    t.pass('Skipped test')
-    return
-  }
-
   t.plan(2)
 
   client.testing.enable()

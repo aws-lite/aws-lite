@@ -47,13 +47,6 @@ test('Load plugins array', async t => {
 
 test('Autoload plugins from process node_modules', async t => {
   t.plan(2)
-  // This test relies on workspace linking from npm 8+, so Node.js 14.x / npm 6 should skip it
-  if (process.version.startsWith('v14')) {
-    t.plan(1)
-    t.pass('Skipped test')
-    return
-  }
-
   let tidy = p => p.split('/')[1]
 
   let packageJsonFile = join(cwd, 'package.json')
@@ -72,13 +65,6 @@ test('Autoload plugins from process node_modules', async t => {
 
 test('Autoload plugins from project package.json', async t => {
   t.plan(2)
-  // This test relies on workspace linking from npm 8+, so Node.js 14.x / npm 6 should skip it
-  if (process.version.startsWith('v14')) {
-    t.plan(1)
-    t.pass('Skipped test')
-    return
-  }
-
   let tmp = mockTmp({
     'package.json': JSON.stringify({
       dependencies: {
