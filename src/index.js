@@ -3,6 +3,7 @@ let getEndpoint = require('./get-endpoint')
 let getCreds = require('./get-creds')
 let getRegion = require('./get-region')
 let clientFactory = require('./client-factory')
+let testing = require('./testing')
 
 /**
  * @param {object} [config] Client configuration options
@@ -25,8 +26,7 @@ let clientFactory = require('./client-factory')
  *
  * @returns {Promise<function>} Client async function
  */
-module.exports = async function awsLite (config = {}) {
-
+async function awsLite (config = {}) {
   // Set defaults + essential config
   config.profile = config.profile || process.env.AWS_PROFILE || 'default'
   config.plugins = await getPlugins(config)
@@ -38,3 +38,7 @@ module.exports = async function awsLite (config = {}) {
 
   return await clientFactory(config, creds, region)
 }
+
+awsLite.testing = testing
+
+module.exports = awsLite

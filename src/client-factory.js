@@ -1,5 +1,6 @@
-let { services } = require('./services')
 let request = require('./request')
+let { services } = require('./services')
+let testing = require('./testing')
 let { validateInput } = require('./validate')
 let { awsjson, buildXML } = require('./lib')
 let errorHandler = require('./error')
@@ -26,6 +27,10 @@ module.exports = async function clientFactory (config, creds, region) {
     validateService(params.service, verifyService)
     let metadata = { service: params.service }
     try {
+      // Use provided mocks if in testing mode
+      let mock = await getMock('aws-lite', 'client', params)
+      if (mock) return mock
+
       return await request(params, creds, selectedRegion, config, metadata)
     }
     catch (err) {
@@ -49,7 +54,7 @@ module.exports = async function clientFactory (config, creds, region) {
   if (plugins.length) {
     /* istanbul ignore next */
     if (config.debug) {
-      console.error('[aws-lite] Loading plugins', plugins, '\n')
+      console.error('[aws-lite] Loading plugins', plugins.map(({ name, service }) => name || service), '\n')
     }
     for (let plugin of plugins) {
       try {
@@ -127,7 +132,19 @@ module.exports = async function clientFactory (config, creds, region) {
 
             // Make the request
             try {
-              let response = await request({ ...params, service }, creds, selectedRegion, config, metadata)
+              let response
+
+              // Use provided mocks if in testing mode
+              let mock = await getMock(property, name, params)
+              /**/ if (mock && !testing.data.usePluginResponseMethod) {
+                return mock
+              }
+              else if (mock) {
+                response = mock
+              }
+              else {
+                response = await request({ ...params, service }, creds, selectedRegion, config, metadata)
+              }
 
               // Run plugin.method.response()
               if (method.response) {
@@ -198,5 +215,39 @@ function validateService (service, verify = true) {
   }
   if (verify && !services.includes(service)) {
     throw ReferenceError(`Invalid AWS service specified: ${service}`)
+  }
+}
+
+async function getMock (property, name, params) {
+  if (testing.data.enabled) {
+    if (!testing.data?.[property]?.[name]?.mocks?.length) {
+      throw ReferenceError(`Mock response not found: ${property}.${name}`)
+    }
+
+    let response
+
+    let item = {
+      method: `${property}.${name}`,
+      time: new Date().toISOString(),
+    }
+    let req = { ...item, request: params }
+    testing.data.allRequests.push(req)
+    testing.data[property][name].requests.push(req)
+
+    if (testing.data[property][name].mocks.length === 1) {
+      response = testing.data[property][name].mocks[0]
+    }
+    else {
+      response = testing.data[property][name].mocks.shift()
+    }
+    if (typeof response === 'function') {
+      response = response.constructor.name === 'AsyncFunction'
+        ? response() : await response()
+    }
+    let res = { ...item, response }
+    testing.data.allResponses.push(res)
+    testing.data[property][name].responses.push(res)
+
+    return response
   }
 }
