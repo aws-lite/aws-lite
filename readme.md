@@ -110,21 +110,41 @@ npm i -D @aws-lite/dynamodb-types
 Now start making calls to AWS:
 
 ```javascript
-/**
- * Instantiate a client
- * This is an asynchronous operation that will attempt to load your AWS credentials, local configuration, region settings, etc.
- */
+// Instantiate a client with the DynamoDB plugin
 import awsLite from '@aws-lite/client'
-const config = { region: 'us-west-1' } // Optional
-const aws = await awsLite(config)
+const aws = await awsLite({ region: 'us-west-1', plugins: [ import('@aws-lite/dynamodb') ] })
 
-/**
- * Reads
- * Fire a GET request to the Lambda API by specifying its AWS service name and API path
- */
+// Easily interact with the AWS services your application relies on
+await aws.DynamoDB.PutItem({
+  TableName: '$table-name',
+  Item: {
+    // AWS-lite automatically de/serializes DynamoDB JSON
+    pk: '$item-key',
+    data: {
+      ok: true,
+      hi: 'friends'
+    }
+  }
+})
+
+await aws.DynamoDB.GetItem({
+  TableName: '$table-name',
+  Key: { pk: '$item-key' }
+})
+// {
+//   Item: {
+//     pk: '$item-key',
+//     data: data: {
+//       ok: true,
+//       hi: 'friends'
+//     }
+//   }
+// }
+
+// Use the lower-level client to fire a GET request by specifying a `service` and `endpoint`
 await aws({
   service: 'lambda',
-  path: '/2015-03-31/functions/$function-name/configuration',
+  endpoint: '/2015-03-31/functions/$function-name/configuration',
 })
 // {
 //   FunctionName: '$function-name',
@@ -132,31 +152,14 @@ await aws({
 //   ...
 // }
 
-/**
- * Writes
- * POST JSON by adding a `payload` property
- */
+// POST JSON by adding a `payload` property
 await aws({
   service: 'lambda',
-  path: '/2015-03-31/functions/$function-name/invocations',
+  endpoint: '/2015-03-31/functions/$function-name/invocations',
   payload: { ok: true },
 })
-
-/**
- * Plugins
- * Use service plugins to more easily interact with the AWS services your application relies on
- */
-await aws.DynamoDB.GetItem({
-  pk: '$item-key',
-})
-// {
-//   Item: {
-//     pk: '$item-key',
-//     data: 'item-data',
-//     ...
-//   }
-// }
 ```
+
 
 ## Learn more
 
