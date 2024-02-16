@@ -16,10 +16,11 @@ let testing = require('./testing')
  * @param {boolean} [config.autoloadPlugins=false] Automatically load installed `@aws-lite/*` + `aws-lite-plugin-*` plugins; not suggested for production use
  * @param {boolean|string} [config.awsConfigFile=false] Load configuration via ~/.aws/config (boolean), or via a passed file path
  * @param {boolean} [config.debug] Enable debug logging to console
+ * @param {string} [config.endpoint] Use a custom service endpoint; must include protocol and full url (e.g. `https://foo.bar/api/path`)
  * @param {string} [config.pathPrefix] Add a path prefix to requests, helpful for local testing
  * @param {string} [config.host] Set a custom host name to use, helpful for local testing
  * @param {boolean} [config.keepAlive=true] Disable Node.js's connection keep-alive, helpful for local testing
- * @param {array} [config.plugins] Specify service plugins; each plugin can be a plugin object or a require or import statement
+ * @param {array} [config.plugins] Specify service plugins; each plugin can be a plugin object or a `require` or `import` statement
  * @param {number} [config.port] Set a custom port number to use, helpful for local testing
  * @param {string} [config.protocol='https'] Set the connection protocol to 'http', helpful for local testing
  * @param {string} [config.responseContentType] Set an overriding Content-Type headers for responses, helpful for local testing
