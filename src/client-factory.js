@@ -1,8 +1,8 @@
 let request = require('./request')
-let { services } = require('./services')
+let { services } = require('./lib/services')
 let testing = require('./testing')
-let { validateInput } = require('./validate')
 let { awsjson, buildXML } = require('./lib')
+let { validateInput } = require('./lib/validate')
 let errorHandler = require('./error')
 let aws
 let enumerable = false

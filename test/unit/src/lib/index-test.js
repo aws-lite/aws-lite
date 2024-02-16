@@ -1,7 +1,7 @@
 let { join } = require('path')
 let test = require('tape')
 let cwd = process.cwd()
-let sut = join(cwd, 'src', 'lib.js')
+let sut = join(cwd, 'src', 'lib', 'index.js')
 let lib = require(sut)
 let { useAWS } = lib
 

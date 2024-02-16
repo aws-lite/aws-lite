@@ -4,7 +4,7 @@ let awsLite = require('../')
 
 // Get the list of current AWS regions
 async function main () {
-  let aws = await awsLite({ region: 'us-east-1' })
+  let aws = await awsLite({ region: 'us-east-1', plugins: [ import('@aws-lite/ssm') ] })
 
   let results = await aws.ssm.GetParametersByPath({
     Path: '/aws/service/global-infrastructure/regions',
@@ -13,7 +13,7 @@ async function main () {
   let regions = results.Parameters.map(({ Value }) => Value).sort().reverse()
   if (!regions.length) throw Error('No regions found! Weird.')
 
-  let file = join(__dirname, '..', 'src', 'regions.json')
+  let file = join(__dirname, '..', 'src', 'config', 'regions.json')
   writeFileSync(file, JSON.stringify(regions))
 }
 main()

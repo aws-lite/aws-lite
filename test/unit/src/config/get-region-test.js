@@ -2,9 +2,9 @@ let { readFileSync } = require('fs')
 let { join } = require('path')
 let test = require('tape')
 let mockTmp = require('mock-tmp')
-let { defaults, overrideHomedir, resetAWSEnvVars } = require('../../lib')
+let { defaults, overrideHomedir, resetAWSEnvVars } = require('../../../lib')
 let cwd = process.cwd()
-let sut = join(cwd, 'src', 'get-region.js')
+let sut = join(cwd, 'src', 'config', 'get-region.js')
 let getRegion = require(sut)
 
 let { profile } = defaults

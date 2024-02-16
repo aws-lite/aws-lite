@@ -1,4 +1,4 @@
-let { getEndpointParams, loadAwsConfig } = require('./lib')
+let { getEndpointParams, loadAwsConfig } = require('../lib')
 
 module.exports = async function getEndpoint (config) {
   let endpointOrHost = config.endpoint || config.url ||

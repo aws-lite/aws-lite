@@ -10,7 +10,7 @@ module.exports = async function getPlugin (config) {
   if (!autoloadPlugins && !plugins.length) return []
 
   if (plugins.length) {
-    let { is } = require('./validate')
+    let { is } = require('../lib/validate')
 
     let resolved = []
 
@@ -35,7 +35,7 @@ module.exports = async function getPlugin (config) {
 
   /* istanbul ignore else */
   if (autoloadPlugins) {
-    let { exists } = require('./lib')
+    let { exists } = require('../lib')
     let { join } = require('path')
 
     let dedupe = arr => [ ...new Set(arr) ]

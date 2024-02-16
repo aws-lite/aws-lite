@@ -30,7 +30,7 @@ async function getCredsFromFile (params) {
 
   let { join } = require('path')
   let os = require('os')
-  let { readConfig } = require('./lib')
+  let { readConfig } = require('../lib')
   let home = os.homedir()
 
   let credsFile = AWS_SHARED_CREDENTIALS_FILE || join(home, '.aws', 'credentials')

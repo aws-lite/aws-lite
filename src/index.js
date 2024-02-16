@@ -1,7 +1,7 @@
-let getPlugins = require('./get-plugins')
-let getEndpoint = require('./get-endpoint')
-let getCreds = require('./get-creds')
-let getRegion = require('./get-region')
+let getPlugins = require('./config/get-plugins')
+let getEndpoint = require('./config/get-endpoint')
+let getCreds = require('./config/get-creds')
+let getRegion = require('./config/get-region')
 let clientFactory = require('./client-factory')
 let testing = require('./testing')
 

@@ -1,4 +1,4 @@
-let errorHandler = require('./error')
+let errorHandler = require('../error')
 
 // Types
 let is = {

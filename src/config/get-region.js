@@ -24,7 +24,7 @@ function getRegionFromEnv (params) {
 }
 
 async function getRegionFromConfig (params) {
-  let { loadAwsConfig } = require('./lib')
+  let { loadAwsConfig } = require('../lib')
 
   let awsConfig = await loadAwsConfig(params)
   if (awsConfig) {

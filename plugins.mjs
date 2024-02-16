@@ -1,6 +1,6 @@
 /**
  * `@aws-lite/*` plugins:
- * - service [required]: the official service name, usually corresponding to the API subdomain; also maps to the package name and plugin folder; for types, this should generally match the AWS SDK v3 package names; example: `cloudformation`, see also: `src/services.js`
+ * - service [required]: the official service name, usually corresponding to the API subdomain; also maps to the package name and plugin folder; for types, this should generally match the AWS SDK v3 package names; example: `cloudformation`, see also: `src/lib/services.js`
  * - property [optional]: service property name to be used in code; an unenumerable lowcase alias will be available in the client
  * - display: the commonly recognized, more formal version (including casing); example: `CloudFormation`
  * - maintainers: array of GitHub handles of the individual(s) or org(s) responsible for maintaining the plugin

@@ -2,7 +2,7 @@ import url from 'url'
 import { join } from 'path'
 import test from 'tape'
 import { readFile } from 'node:fs/promises'
-import { parseXML, buildXML } from '../../../src/lib.js'
+import { parseXML, buildXML } from '../../../src/lib/index.js'
 // arrayifyItemsProp tests inferred via arrayify, but maybe add some standalone tests?
 import { arrayifyObject, unarrayifyObject } from '../src/lib.mjs'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))

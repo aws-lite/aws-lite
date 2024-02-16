@@ -3,7 +3,7 @@ let { join } = require('path')
 let test = require('tape')
 let mockTmp = require('mock-tmp')
 let cwd = process.cwd()
-let sut = join(cwd, 'src', 'get-plugins.js')
+let sut = join(cwd, 'src', 'config', 'get-plugins.js')
 let getPlugins = require(sut)
 
 let mock = join(cwd, 'test', 'mock')

@@ -4,7 +4,7 @@ let aws, ini, xml
 function marshaller (method, obj, awsjsonSetting) {
   if (!aws) {
     // Only require the vendor if + when it's actually needed
-    aws = require('./_vendor/aws')
+    aws = require('../_vendor/aws')
   }
 
   // We may not be able to AWS JSON-[en|de]code the whole payload, check for specified keys
@@ -181,7 +181,7 @@ function coerceXMLValues (obj) {
 function instantiateXml () {
   if (xml) return
   // Only require the vendor if + when it's actually needed
-  let vendor = require('./_vendor/xml')
+  let vendor = require('../_vendor/xml')
   // The following was pulled directly from AWS's implementations of `fast-xml-parser` in SDKv3
   xml = {
     parser: new vendor.XMLParser({
