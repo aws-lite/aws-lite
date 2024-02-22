@@ -66,6 +66,7 @@ declare module "@aws-lite/client" {
 }
 
 export type {
+  AwsLiteCloudFront,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   CreateDistributionResponse,

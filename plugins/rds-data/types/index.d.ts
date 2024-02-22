@@ -55,6 +55,7 @@ declare module "@aws-lite/client" {
 }
 
 export type {
+  AwsLiteRDSData,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   BatchExecuteStatementResponse,

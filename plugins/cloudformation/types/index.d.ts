@@ -59,6 +59,7 @@ declare module "@aws-lite/client" {
 }
 
 export type {
+  AwsLiteCloudFormation,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   CreateStackResponse,

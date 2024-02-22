@@ -16,6 +16,19 @@
 
 ---
 
+## [0.17.3] 2024-02-22
+
+### Added
+
+- Enable debug mode via `AWS_LITE_DEBUG` environment variable
+
+
+### Changed
+
+- Chill out plugin debug enumeration a bit
+
+---
+
 ## [0.17.2] 2024-02-08
 
 ### Fixed

@@ -30,6 +30,7 @@ let testing = require('./testing')
 async function awsLite (config = {}) {
   // Set defaults + essential config
   config.profile = config.profile || process.env.AWS_PROFILE || 'default'
+  config.debug = config.debug || process.env.AWS_LITE_DEBUG
   config.plugins = await getPlugins(config)
   config = { ...config, ...(await getEndpoint(config)) }
 

@@ -24,6 +24,7 @@ declare module "@aws-lite/client" {
 }
 
 export type {
+  AwsLiteSNS,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   PublishResponse,
