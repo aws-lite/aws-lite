@@ -38,7 +38,7 @@ const PutObject = {
   },
   request: async (params, utils) => {
     let { Bucket, Key, File, Body, MinChunkSize } = params
-    let { credentials, region } = utils
+    let { config, credentials, region } = utils
     MinChunkSize = MinChunkSize || minSize
 
     if (File && Body) {
@@ -49,7 +49,6 @@ const PutObject = {
     }
 
     let headers = getHeadersFromParams(params)
-
     let dataSize
 
     if (Body) {
@@ -68,6 +67,10 @@ const PutObject = {
 
     if (dataSize <= MinChunkSize) {
       let payload = Body || await readFile(File)
+      if (config.debug) {
+        let type = typeof payload === 'string' ? 'string' : 'buffer'
+        console.error(`[S3.PutObject] publishing unchunked payload (${payload.length}b ${type})`)
+      }
       return {
         path: `/${Bucket}/${Key}`,
         method: 'PUT',
@@ -76,6 +79,10 @@ const PutObject = {
       }
     }
     else {
+      if (MinChunkSize < 8192) {
+        throw ReferenceError('S3 minimum chunk size cannot be less than 8192b')
+      }
+
       // We'll assemble file indices of chunks here
       let chunks = [
         // Reminder: no payload is sent with the canonical request
@@ -89,6 +96,10 @@ const PutObject = {
 
       // Multipart uploading requires an extra zero-data chunk to denote completion
       let chunkAmount = Math.ceil(dataSize / MinChunkSize) + 1
+
+      if (config.debug) {
+        console.error(`[S3.PutObject] publishing streaming chunked payload (${dataSize}b payload, ${chunkAmount} chunks, ${MinChunkSize}b minimum chunk size)`)
+      }
 
       for (let i = 0; i < chunkAmount; i++) {
         // Get start end byte position for streaming
@@ -173,7 +184,21 @@ const PutObject = {
         stream.push(body)
         stream.push(chunkBreak)
 
+        if (config.debug) {
+          console.error(
+            `\n[S3.PutObject] Added ${chunk.chunkSize}b chunk to stream:\n` +
+            '----------[chunk start]----------\n' +
+            payloadMetadata(chunk.chunkSize, chunkSignature) +
+            `<${body.length}b of data>` +
+            chunkBreak +
+            '\n-----------[chunk end]-----------'
+          )
+        }
+
         if (chunk.finalRequest) {
+          if (config.debug) {
+            console.error(`[S3.PutObject] Added terminating chunk (null)`)
+          }
           stream.push(null)
         }
       })
