@@ -7,6 +7,7 @@ let client = require(sut)
 
 let { config } = defaults
 let jsonHeaders = { 'content-type': 'application/json' }
+let rando = () => (Math.random() + 1).toString(36).substring(2)
 
 test('Set up env', async t => {
   t.plan(1)
@@ -224,8 +225,6 @@ test('Testing - request / response sequences', async t => {
 
 test('Testing - dynamic responses', async t => {
   t.plan(9)
-  let rando = () => (Math.random() + 1).toString(36).substring(2)
-
   client.testing.enable()
 
   // eslint-disable-next-line
@@ -274,7 +273,7 @@ test('Testing - multiple services', async t => {
   client.testing.mock('client', mockRes1)
   client.testing.mock('DynamoDB.GetItem', mockRes2)
   client.testing.mock('Lambda.Invoke', mockRes3)
-  client.testing.mock('Lambda.Invoke', mockRes4) // Add to the sequence
+  client.testing.mock('Lambda.Invoke', mockRes4) // Overwrite the last
 
   let expectedReq1 = {
     service: 's3',
@@ -315,7 +314,7 @@ test('Testing - multiple services', async t => {
 
   t.deepEqual(result1, mockRes1, 'Result matches expected response')
   t.deepEqual(result2, mockRes2, 'Result matches expected response')
-  t.deepEqual(result3, mockRes3, 'Result matches expected response')
+  t.deepEqual(result3, mockRes4, 'Result matches expected response')
   t.deepEqual(result4, mockRes4, 'Result matches expected response')
 
   lastRes = client.testing.getLastResponse('client')
@@ -338,7 +337,6 @@ test('Testing - multiple services', async t => {
 
 test('Testing - errors', async t => {
   t.plan(2)
-
   client.testing.enable()
 
   // eslint-disable-next-line

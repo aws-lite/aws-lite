@@ -244,6 +244,11 @@ async function getMock (property, name, params) {
       response = response.constructor.name === 'AsyncFunction'
         ? response() : await response()
     }
+
+    if (!response.headers) response.headers = {}
+    response.payload = response.payload ?? ''
+    // TODO: validate mocks
+
     let res = { ...item, response }
     testing.data.allResponses.push(res)
     testing.data[property][name].responses.push(res)

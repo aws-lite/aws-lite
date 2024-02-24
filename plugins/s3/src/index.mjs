@@ -134,7 +134,17 @@ const DeleteObjects = {
       payload,
     }
   },
-  response: defaultResponse,
+  response: ({ payload }) => {
+    let res = payload
+
+    if (!payload.Deleted) {
+      res.Deleted = []
+    }
+    if (!Array.isArray(payload.Deleted)) {
+      res.Deleted = [ payload.Deleted ]
+    }
+    return res
+  },
 }
 
 const GetObject = {
@@ -243,7 +253,19 @@ const ListBuckets = {
   awsDoc: docRoot + 'API_ListBuckets.html',
   validate: {},
   request: () => ({}),
-  response: ({ payload }) => payload,
+  response: ({ payload }) => {
+    let res = payload
+
+    // Multiple buckets
+    if (!payload.Buckets) {
+      res.Buckets = []
+    }
+    if (!Array.isArray(payload.Buckets)) {
+      res.Buckets = [ payload.Buckets ]
+    }
+    res.Buckets = res.Buckets.map(i => i.Bucket ? i.Bucket : i)
+    return res
+  },
   error: defaultError,
 }
 
@@ -282,8 +304,12 @@ const ListObjectsV2 = {
     const res = payload
     const charged = 'x-amz-request-charged'
     if (headers[charged]) res[paramMappings[charged]] = headers[charged]
+
+    if (!payload.Contents) {
+      res.Contents = []
+    }
     if (payload.Contents) {
-      payload.Contents = Array.isArray(payload.Contents) ? payload.Contents : [ payload.Contents ]
+      res.Contents = Array.isArray(payload.Contents) ? payload.Contents : [ payload.Contents ]
     }
     return res
   },

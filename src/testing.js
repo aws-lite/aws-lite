@@ -8,9 +8,18 @@ let debug = (params = {}) => {
   return methods.data
 }
 
-let disable = () => reset({ enabled: false })
+function disable () {
+  reset()
+  methods.data.enabled = false
+  methods.data.usePluginResponseMethod = false
+}
 
-let enable = (params) => reset({ enabled: true, ...params })
+function enable (params = {}) {
+  let { usePluginResponseMethod } = params
+  reset()
+  methods.data.enabled = true
+  methods.data.usePluginResponseMethod = usePluginResponseMethod || false
+}
 
 let getAllRequests = () => methods.data.allRequests
 
@@ -32,14 +41,11 @@ function mock (target, mock) {
   let { service, method } = getMethod(target)
   initMethod(service, method)
 
-  if (Array.isArray(mock)) {
-    methods.data[service][method].mocks.push(...mock)
-  }
-  else methods.data[service][method].mocks.push(mock)
+  methods.data[service][method].mocks = Array.isArray(mock) ? mock : [ mock ]
 }
 
-function reset (params = {}) {
-  let { enabled = true, usePluginResponseMethod = false } = params
+function reset () {
+  let { enabled, usePluginResponseMethod } = methods.data || {}
   methods.data = {
     enabled,
     usePluginResponseMethod,
@@ -59,7 +65,7 @@ let methods = {
   mock,
   reset,
 }
-reset({ enabled: false })
+disable()
 module.exports = methods
 
 /**
