@@ -1,6 +1,6 @@
 let { join } = require('path')
 let test = require('tape')
-let { defaults } = require('../../lib')
+let { copy, defaults } = require('../../lib')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)
@@ -8,6 +8,20 @@ let client = require(sut)
 let { config } = defaults
 let jsonHeaders = { 'content-type': 'application/json' }
 let rando = () => (Math.random() + 1).toString(36).substring(2)
+
+let mockRes = {
+  statusCode: 200,
+  headers: jsonHeaders,
+  payload: { ok: true },
+}
+let mockErr = {
+  statusCode: 500,
+  error: {
+    message: 'This blew up',
+    code: 'oh_noes',
+    __type: 'service#specific'
+  }
+}
 
 test('Set up env', async t => {
   t.plan(1)
@@ -33,16 +47,11 @@ test('Testing - activation / deactivation', async t => {
 // TODO: test resetting via enable/disable?
 
 test('Testing - main client', async t => {
-  t.plan(7)
+  t.plan(15)
   client.testing.enable()
   let aws = await client(config)
 
-  let mockRes = {
-    statusCode: 200,
-    headers: jsonHeaders,
-    payload: { ok: true },
-  }
-  client.testing.mock('client', mockRes)
+  client.testing.mock('client', copy(mockRes))
 
   let expectedReq = {
     service: 'lambda',
@@ -64,6 +73,30 @@ test('Testing - main client', async t => {
   let allRes = client.testing.getAllResponses()
   t.equal(allRes.length, 1, 'One response captured')
 
+  // Errors
+  client.testing.reset()
+  client.testing.mock('client', copy(mockErr))
+  try {
+    await aws(expectedReq)
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    let lastReq = client.testing.getLastRequest()
+    t.deepEqual(lastReq.request, expectedReq, 'getLastRequest() matches expected request')
+    let allReq = client.testing.getAllRequests()
+    t.equal(allReq.length, 1, 'One request captured')
+
+    let lastRes = client.testing.getLastResponse()
+    t.deepEqual(lastRes.response, { ...mockErr, headers: {} }, 'getLastResponse() matches specified response params')
+    let allRes = client.testing.getAllResponses()
+    t.equal(allRes.length, 1, 'One response captured')
+
+    t.equal(err.statusCode, mockErr.statusCode, 'Raw client error matches expected statusCode')
+    t.equal(err.name, mockErr.error.code, 'Raw client error matches expected name')
+    t.ok(err.message.includes(mockErr.error.message), 'Raw client error includes expected message')
+    t.equal(err.code, mockErr.error.code, 'Raw client error matches expected code')
+  }
+
   // Resetting
   client.testing.reset()
   t.deepEqual(client.testing.getAllRequests(), [], 'Requests reset')
@@ -71,18 +104,13 @@ test('Testing - main client', async t => {
 })
 
 test('Testing - plugins (not checking response method output)', async t => {
-  t.plan(8)
+  t.plan(17)
   client.testing.enable()
 
   // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
-  let mockRes = {
-    statusCode: 200,
-    headers: jsonHeaders,
-    payload: { ok: true },
-  }
-  client.testing.mock('DynamoDB.GetItem', mockRes)
+  client.testing.mock('DynamoDB.GetItem', copy(mockRes))
 
   let expectedReq = {
     TableName: 'foo',
@@ -105,25 +133,46 @@ test('Testing - plugins (not checking response method output)', async t => {
   let allRes = client.testing.getAllResponses()
   t.equal(allRes.length, 1, 'One response captured')
 
+  // Errors
   client.testing.reset()
+  client.testing.mock('DynamoDB.GetItem', copy(mockErr))
+  try {
+    await aws.DynamoDB.GetItem(expectedReq)
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    let lastReq = client.testing.getLastRequest()
+    let reqParams = { TableName: lastReq.request.TableName, Key: lastReq.request.Key }
+    t.deepEqual(reqParams, expectedReq, 'getLastRequest() contains expected request')
+    t.ok(lastReq.request.headers, 'Plugin method added specific headers')
+    let allReq = client.testing.getAllRequests()
+    t.equal(allReq.length, 1, 'One request captured')
 
+    let lastRes = client.testing.getLastResponse()
+    t.deepEqual(lastRes.response, mockErr, 'getLastResponse() matches specified response params')
+    let allRes = client.testing.getAllResponses()
+    t.equal(allRes.length, 1, 'One response captured')
+
+    t.equal(err.statusCode, mockErr.statusCode, 'Plugin error matches expected statusCode')
+    t.equal(err.name, mockErr.error.code, 'Plugin error matches expected name')
+    t.ok(err.message.includes(mockErr.error.message), 'Plugin error includes expected message')
+    t.equal(err.code, mockErr.error.code, 'Plugin error matches expected code')
+  }
+
+  // Resetting
+  client.testing.reset()
   t.deepEqual(client.testing.getAllRequests(), [], 'Requests reset')
   t.deepEqual(client.testing.getAllResponses(), [], 'Responses reset')
 })
 
 test('Testing - plugins (response method output)', async t => {
-  t.plan(8)
+  t.plan(18)
   client.testing.enable({ usePluginResponseMethod: true })
 
   // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
-  let mockRes = {
-    statusCode: 200,
-    headers: jsonHeaders,
-    payload: { ok: true },
-  }
-  client.testing.mock('DynamoDB.GetItem', mockRes)
+  client.testing.mock('DynamoDB.GetItem', copy(mockRes))
 
   let expectedReq = {
     TableName: 'foo',
@@ -146,8 +195,47 @@ test('Testing - plugins (response method output)', async t => {
   let allRes = client.testing.getAllResponses()
   t.equal(allRes.length, 1, 'One response captured')
 
+  // Empty response payload
   client.testing.reset()
+  let emptyResPayload = copy(mockRes)
+  delete emptyResPayload.payload
+  client.testing.mock('DynamoDB.GetItem', copy(emptyResPayload))
+  result = await aws.DynamoDB.GetItem(expectedReq)
+  t.deepEqual(result, {}, 'Mock response without payload returned as empty object (via AWS JSON unmarshalling)')
 
+  // Errors
+  client.testing.reset()
+  client.testing.mock('DynamoDB.GetItem', copy(mockErr))
+
+  try {
+    await aws.DynamoDB.GetItem(expectedReq)
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    let lastReq = client.testing.getLastRequest()
+    let reqParams = { TableName: lastReq.request.TableName, Key: lastReq.request.Key }
+    t.deepEqual(reqParams, expectedReq, 'getLastRequest() contains expected request')
+    t.ok(lastReq.request.headers, 'Plugin method added specific headers')
+    let allReq = client.testing.getAllRequests()
+    t.equal(allReq.length, 1, 'One request captured')
+
+    let lastRes = client.testing.getLastResponse()
+    let expectedErr = copy(mockErr)
+    expectedErr.error.name = expectedErr.error.code = 'specific'
+    expectedErr.headers = {}
+    t.deepEqual(lastRes.response, expectedErr, 'getLastResponse() matches specified response params')
+    let allRes = client.testing.getAllResponses()
+    t.equal(allRes.length, 1, 'One response captured')
+
+    let expectedErrNameFromRes = mockErr.error.__type.split('#')[1]
+    t.equal(err.statusCode, mockErr.statusCode, 'Raw client error matches expected statusCode')
+    t.equal(err.name, expectedErrNameFromRes, 'Plugin error matches expected name')
+    t.ok(err.message.includes(mockErr.error.message), 'Raw client error includes expected message')
+    t.equal(err.code, expectedErrNameFromRes, 'Raw client error matches expected code')
+  }
+
+  // Resetting
+  client.testing.reset()
   t.deepEqual(client.testing.getAllRequests(), [], 'Requests reset')
   t.deepEqual(client.testing.getAllResponses(), [], 'Responses reset')
 })
@@ -160,9 +248,9 @@ test('Testing - request / response sequences', async t => {
   // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
-  let mockRes1 = { payload: { ok: true } }
-  let mockRes2 = { payload: { ok: false } }
-  client.testing.mock('DynamoDB.GetItem', [ mockRes1, mockRes2 ])
+  let mockRes1 = { ok: true }
+  let mockRes2 = { ok: false }
+  client.testing.mock('DynamoDB.GetItem', [ copy(mockRes1), copy(mockRes2) ])
 
   let expectedReq1 = {
     TableName: 'foo',
@@ -217,8 +305,8 @@ test('Testing - request / response sequences', async t => {
   }))
   t.deepEqual(reduced, [ expectedReq1, expectedReq2, expectedReq2 ], 'Three requests captured')
 
+  // Resetting
   client.testing.reset()
-
   t.deepEqual(client.testing.getAllRequests(), [], 'Requests reset')
   t.deepEqual(client.testing.getAllResponses(), [], 'Responses reset')
 })
@@ -231,8 +319,14 @@ test('Testing - dynamic responses', async t => {
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
   let one, two
-  let mockResSync = () => one = rando()
-  let mockResAsync = async () => two = rando()
+  let mockResSync = params => {
+    one = rando()
+    return { value: one, passed: params.Key }
+  }
+  let mockResAsync = async params => {
+    two = rando()
+    return { value: two, passed: params.Key }
+  }
   client.testing.mock('DynamoDB.GetItem', [ mockResSync, mockResAsync ])
 
   let expectedReq = {
@@ -243,17 +337,17 @@ test('Testing - dynamic responses', async t => {
   let result2 = await aws.DynamoDB.GetItem(expectedReq)
 
   t.ok(result1 && result2, 'Got results back from dynamic mocks')
-  t.equal(result1, one, 'Got expected result from dynamic mock')
-  t.equal(result2, two, 'Got expected result from dynamic mock')
+  t.deepEqual(result1, { value: one, passed: expectedReq.Key }, 'Got expected result from dynamic mock')
+  t.deepEqual(result2, { value: two, passed: expectedReq.Key }, 'Got expected result from dynamic mock')
   t.notEqual(result1, result2, 'Results are different')
 
   let result3 = await aws.DynamoDB.GetItem(expectedReq)
   t.ok(result3, 'Got results back from dynamic mocks')
-  t.equal(result3, two, 'Got expected result from dynamic mock')
+  t.deepEqual(result3, { value: two, passed: expectedReq.Key }, 'Got expected result from dynamic mock')
   t.notEqual(result3, result2, 'Results are different')
 
+  // Resetting
   client.testing.reset()
-
   t.deepEqual(client.testing.getAllRequests(), [], 'Requests reset')
   t.deepEqual(client.testing.getAllResponses(), [], 'Responses reset')
 })
@@ -266,10 +360,10 @@ test('Testing - multiple services', async t => {
   // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb'), import('@aws-lite/lambda') ] })
 
-  let mockRes1 = { payload: { ok: true } }
-  let mockRes2 = { payload: { ok: false } }
-  let mockRes3 = { payload: { ok: 'fine' } }
-  let mockRes4 = { payload: { ok: 'sure' } }
+  let mockRes1 = { statusCode: 200, payload: { ok: true } }
+  let mockRes2 = { ok: false }
+  let mockRes3 = { ok: 'fine' }
+  let mockRes4 = { ok: 'sure' }
   client.testing.mock('client', mockRes1)
   client.testing.mock('DynamoDB.GetItem', mockRes2)
   client.testing.mock('Lambda.Invoke', mockRes3)
@@ -329,18 +423,41 @@ test('Testing - multiple services', async t => {
   allRes = client.testing.getAllResponses()
   t.equal(allRes.length, 4, 'Four responses captured')
 
+  // Resetting
   client.testing.reset()
-
   t.deepEqual(client.testing.getAllRequests(), [], 'Requests reset')
   t.deepEqual(client.testing.getAllResponses(), [], 'Responses reset')
 })
 
-test('Testing - errors', async t => {
-  t.plan(2)
+test('Testing - mock errors', async t => {
+  t.plan(4)
   client.testing.enable()
 
   // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
+
+  try {
+    client.testing.mock('client', {})
+    await aws({ service: 'lambda' })
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    t.match(err.message, /Mock response must include statusCode property/, 'Mock response needs statusCode property')
+  }
+
+  try {
+    client.testing.enable({ usePluginResponseMethod: true })
+    client.testing.mock('DynamoDB.GetItem', {})
+    await aws.DynamoDB.GetItem({
+      TableName: 'foo',
+      Key: { id: 'bar' },
+    })
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    t.match(err.message, /Mock response must include statusCode property/, 'Mock response needs statusCode property')
+    client.testing.enable({ usePluginResponseMethod: false })
+  }
 
   try {
     await aws.DynamoDB.GetItem({

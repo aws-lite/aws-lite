@@ -28,7 +28,7 @@ module.exports = async function clientFactory (config, creds, region) {
     let metadata = { service: params.service }
     try {
       // Use provided mocks if in testing mode
-      let mock = await getMock('aws-lite', 'client', params)
+      let mock = await getMock('aws-lite', 'client', params, metadata)
       if (mock) return mock
 
       return await request(params, creds, selectedRegion, config, metadata)
@@ -135,7 +135,7 @@ module.exports = async function clientFactory (config, creds, region) {
               let response
 
               // Use provided mocks if in testing mode
-              let mock = await getMock(property, name, params)
+              let mock = await getMock(property, name, params, metadata)
               /**/ if (mock && !testing.data.usePluginResponseMethod) {
                 return mock
               }
@@ -170,6 +170,9 @@ module.exports = async function clientFactory (config, creds, region) {
               return response
             }
             catch (err) {
+              if (err?.metadata?.mock && !testing.data.usePluginResponseMethod) {
+                errorHandler(err)
+              }
               // Run plugin.method.error()
               let updatedError
               if (method.error && !(err instanceof Error)) {
@@ -218,11 +221,12 @@ function validateService (service, verify = true) {
   }
 }
 
-async function getMock (property, name, params) {
+async function getMock (property, name, params, metadata) {
   if (testing.data.enabled) {
     if (!testing.data?.[property]?.[name]?.mocks?.length) {
       throw ReferenceError(`Mock response not found: ${property}.${name}`)
     }
+    let clientResponse = property === 'aws-lite' && name === 'client'
 
     let response
 
@@ -242,17 +246,26 @@ async function getMock (property, name, params) {
     }
     if (typeof response === 'function') {
       response = response.constructor.name === 'AsyncFunction'
-        ? response() : await response()
+        ? response(params) : await response(params)
     }
 
-    if (!response.headers) response.headers = {}
-    response.payload = response.payload ?? ''
-    // TODO: validate mocks
+    if (clientResponse || testing.data.usePluginResponseMethod) {
+      if (!response.statusCode) {
+        let method = clientResponse ? 'client' : `${property}.${name}`
+        throw ReferenceError(`Mock response must include statusCode property (${method})`)
+      }
+      if (!response.headers) response.headers = {}
+      if (!response.error) response.payload = response.payload ?? ''
+    }
 
     let res = { ...item, response }
     testing.data.allResponses.push(res)
     testing.data[property][name].responses.push(res)
 
+    if (response.error) throw {
+      ...response,
+      metadata: { ...metadata, mock: true }
+    }
     return response
   }
 }
