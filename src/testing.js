@@ -21,9 +21,17 @@ function enable (params = {}) {
   methods.data.usePluginResponseMethod = usePluginResponseMethod || false
 }
 
-let getAllRequests = () => methods.data.allRequests
+function getAllRequests (target) {
+  if (!target) return methods.data.allRequests
+  let { service, method } = getMethod(target)
+  return methods.data?.[service]?.[method]?.requests
+}
 
-let getAllResponses = () => methods.data.allResponses
+function getAllResponses (target) {
+  if (!target) return methods.data.allResponses
+  let { service, method } = getMethod(target)
+  return methods.data?.[service]?.[method]?.responses
+}
 
 function getLastRequest (target) {
   if (!target) return lastItem(methods.data.allRequests)

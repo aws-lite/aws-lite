@@ -104,7 +104,7 @@ test('Testing - main client', async t => {
 })
 
 test('Testing - plugins (not checking response method output)', async t => {
-  t.plan(17)
+  t.plan(19)
   client.testing.enable()
 
   // eslint-disable-next-line
@@ -125,6 +125,9 @@ test('Testing - plugins (not checking response method output)', async t => {
   t.ok(lastReq.request.headers, 'Plugin method added specific headers')
   let allReq = client.testing.getAllRequests()
   t.equal(allReq.length, 1, 'One request captured')
+  // Just making sure the method param works, too
+  let thisMethodReq = client.testing.getAllRequests('DynamoDB.GetItem')
+  t.deepEqual(allReq, thisMethodReq)
 
   // Responses
   t.deepEqual(result, mockRes, 'Result matches expected response')
@@ -132,6 +135,9 @@ test('Testing - plugins (not checking response method output)', async t => {
   t.deepEqual(lastRes.response, mockRes, 'getLastResponse() matches specified response params')
   let allRes = client.testing.getAllResponses()
   t.equal(allRes.length, 1, 'One response captured')
+  // Just making sure the method param works, too
+  let thisMethodRes = client.testing.getAllResponses('DynamoDB.GetItem')
+  t.deepEqual(allRes, thisMethodRes)
 
   // Errors
   client.testing.reset()
