@@ -1,6 +1,6 @@
 let aws4 = require('aws4')
 let { globalServices, semiGlobalServices } = require('./services')
-let { awsjson, buildXML, getEndpointParams, parseXML, tidyQuery, useAWS, validateProtocol } = require('./lib')
+let { awsjson, buildXML, getEndpointParams, parseXML, tidyQuery, untidyQuery, useAWS, validateProtocol } = require('./lib')
 
 /* istanbul ignore next */
 let copy = obj => JSON.parse(JSON.stringify(obj))
@@ -163,14 +163,8 @@ function request (params, creds, region, config, metadata) {
       options.protocol = isHTTPS ? 'https:' : 'http:'
     }
 
-    /* istanbul ignore next */
-    let http = isHTTPS ? require('https') : require('http')
-
     // Port configuration
     options.port = params.port || config.port
-
-    // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
-    options.agent = getAgent(http, isHTTPS, config)
 
     /* istanbul ignore next */
     if (debug) {
@@ -182,26 +176,49 @@ function request (params, creds, region, config, metadata) {
 
       let { accessKeyId, secretAccessKey } = creds
 
-      let Authorization = headers.Authorization
-        .replace(accessKeyId, accessKeyId.substring(0, 8) + '...')
-        .replace(secretAccessKey, '[redacted]')
+      let debugHeaders, debugPath
+      if (options.signQuery) {
+        debugHeaders = headers
+        let query = untidyQuery(path.split('?')[1])
+        query['X-Amz-Signature'] = query['X-Amz-Signature'].substring(0, 8) + '...'
+        debugPath = tidyQuery(query)
+      }
+      else {
+        let Authorization = headers.Authorization
+          .replace(accessKeyId, accessKeyId.substring(0, 8) + '...')
+          .replace(secretAccessKey, '[redacted]')
 
-      let sigRe = /(Signature=)[^,]*/
-      let fullSig = Authorization.match(sigRe)
-      if (fullSig) {
-        let redactedSig = 'Signature=' + fullSig[0].split('Signature=')[1].substring(0, 8) + '...'
-        Authorization = Authorization.replace(sigRe, redactedSig)
+        let sigRe = /(Signature=)[^,]*/
+        let fullSig = Authorization.match(sigRe)
+        if (fullSig) {
+          let redactedSig = 'Signature=' + fullSig[0].split('Signature=')[1].substring(0, 8) + '...'
+          Authorization = Authorization.replace(sigRe, redactedSig)
+        }
+
+        debugHeaders = { ...headers, Authorization }
+        debugPath = path
       }
 
       console.error('[aws-lite] Request:', {
         time: new Date().toISOString(),
         service,
         method,
-        url: `${protocol}//${host}${port ? ':' + port : ''}${path}`,
-        headers: { ...headers, Authorization },
+        url: `${protocol}//${host}${port ? ':' + port : ''}${debugPath}`,
+        headers: debugHeaders,
         body: truncatedBody || '<no body>',
       }, '\n')
     }
+
+    if (params.signQuery) {
+      resolve(`${options.protocol}//${options.host}${options.path}`)
+      return
+    }
+
+    /* istanbul ignore next */
+    let http = isHTTPS ? require('https') : require('http')
+
+    // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
+    options.agent = getAgent(http, isHTTPS, config)
 
     let req = http.request(options, res => {
       let data = []
