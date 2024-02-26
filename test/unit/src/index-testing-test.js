@@ -29,19 +29,25 @@ test('Set up env', async t => {
 })
 
 test('Testing - activation / deactivation', async t => {
-  t.plan(3)
-  let state
+  t.plan(6)
+  let enabled, state
 
   state = client.testing.debug()
+  enabled = client.testing.isEnabled()
   t.equal(state.enabled, false, 'Testing mode is disabled by default')
+  t.equal(state.enabled, enabled, 'test.isEnabled() shows testing mode disabled')
 
   client.testing.enable()
   state = client.testing.debug()
+  enabled = client.testing.isEnabled()
   t.equal(state.enabled, true, 'test.enable() enables testing')
+  t.equal(state.enabled, enabled, 'test.isEnabled() shows testing mode enabled')
 
   client.testing.disable()
   state = client.testing.debug()
+  enabled = client.testing.isEnabled()
   t.equal(state.enabled, false, 'test.disable() disables testing')
+  t.equal(state.enabled, enabled, 'test.isEnabled() shows testing mode disabled')
 })
 
 // TODO: test resetting via enable/disable?

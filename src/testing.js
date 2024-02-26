@@ -45,6 +45,8 @@ function getLastResponse (target) {
   return lastItem(methods.data?.[service]?.[method]?.responses)
 }
 
+let isEnabled = () => methods.data.enabled
+
 function mock (target, mock) {
   let { service, method } = getMethod(target)
   initMethod(service, method)
@@ -70,6 +72,7 @@ let methods = {
   getAllResponses,
   getLastRequest,
   getLastResponse,
+  isEnabled,
   mock,
   reset,
 }
