@@ -222,6 +222,14 @@ function validateProtocol (protocol) {
   }
 }
 
+// Content type checks
+let JSONregex = /application\/json/
+let JSONContentType = ct => ct.match(JSONregex)
+let AwsJSONregex = /application\/x-amz-json/
+let AwsJSONContentType = ct => ct.match(AwsJSONregex)
+let XMLregex = /(application|text)\/xml/
+let XMLContentType = ct => ct.match(XMLregex)
+
 module.exports = {
   awsjson,
   exists,
@@ -233,4 +241,8 @@ module.exports = {
   buildXML,
   parseXML,
   validateProtocol,
+  // Content types
+  JSONContentType,
+  AwsJSONContentType,
+  XMLContentType,
 }
