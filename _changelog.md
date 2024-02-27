@@ -2,11 +2,12 @@
 
 ---
 
-## [next] 2024-02-15
+## [0.18.0] 2024-02-15
 
 ### Added
 
-- Added integrated testing mode; fixes #102
+- Added integrated testing API; fixes #102
+  - Read more at https://aws-lite.org/testing-api
   - Feature should be considered experimental
 
 
