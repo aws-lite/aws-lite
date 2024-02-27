@@ -1,6 +1,6 @@
 let aws4 = require('aws4')
-let { globalServices, semiGlobalServices } = require('./lib/services')
-let { awsjson, buildXML, getEndpointParams, parseXML, tidyQuery, useAWS, validateProtocol } = require('./lib')
+let { globalServices, semiGlobalServices } = require('../lib/services')
+let { awsjson, buildXML, getEndpointParams, parseXML, tidyQuery, useAWS, validateProtocol } = require('../lib')
 
 /* istanbul ignore next */
 let copy = obj => JSON.parse(JSON.stringify(obj))
@@ -68,7 +68,7 @@ function request (params, creds, region, config, metadata) {
 
     // Structured query string
     if (params.query) {
-      let { is } = require('./lib/validate')
+      let { is } = require('../lib/validate')
       if (!is.object(params.query)) {
         throw ReferenceError('Query property must be an object')
       }
