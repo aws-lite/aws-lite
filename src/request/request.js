@@ -244,7 +244,9 @@ let isOk = statusCode => statusCode >= 200 && statusCode < 303
 // The following transient AWS error codes are also designated retryable: [ 'TimeoutError', 'RequestTimeout', 'RequestTimeoutException' ]
 // see: smithy-typescript/packages/service-error-classification/src/constants.ts
 let reqCompleted = statusCode => statusCode < 500 && statusCode !== 429 /* Throttled */
-const retryableTimeoutErrorCodes = [ 'ECONNRESET', 'EPIPE', 'ETIMEDOUT' ]
+const awsTimeoutErrorCodes = [ 'ECONNRESET', 'EPIPE', 'ETIMEDOUT' ]
+const aws4TimeoutErrorCodes = [ 'EADDRINFO', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'EMFILE' ]
+const retryableTimeoutErrorCodes = awsTimeoutErrorCodes.concat(aws4TimeoutErrorCodes)
 
 const maxRetryBackoff = 20 * 1000
 async function retryDelay (i, reason, debug) {
