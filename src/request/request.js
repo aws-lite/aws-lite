@@ -19,7 +19,50 @@ function getAgent (client, isHTTPS, config) {
   return agentCache[http][agent]
 }
 
-module.exports = function request (params, args) {
+module.exports = async function request (params, args) {
+  let { config, metadata } = args
+  let { debug, maxAttempts } = config
+  maxAttempts = maxAttempts ?? 5
+
+  if (maxAttempts === 0 || isNaN(maxAttempts)) {
+    throw ReferenceError('maxAttempts property must a number be greater than 0')
+  }
+
+  for (let i = 1; i <= maxAttempts; i++) {
+    let retrying = i > 1
+    try {
+      let result = await call(params, args, retrying)
+      if (i === maxAttempts || reqCompleted(result.statusCode)) {
+        if (isOk(result.statusCode)) return result
+
+        let { statusCode, headers, payload } = result
+        throw { statusCode, headers, error: payload, metadata, passthrough: true }
+      }
+      await retryDelay(i, `status code ${result.statusCode}`, debug)
+    }
+    catch (error) {
+      if (i < maxAttempts && retryableTimeoutErrorCodes.includes(error?.error?.code)) {
+        await retryDelay(i, `connection error: ${error.error.code}`, debug)
+      }
+      else {
+        // Unknown / out of band error, not a tidy response or call() rejection
+        if (!error.error) throw error
+
+        // Successful request resulted in an error response
+        if (error.passthrough) {
+          delete error.passthrough
+          throw error
+        }
+
+        // HTTP error; call() properly rejected, prepare the error property for final error handling
+        error.error = error.error.message || /* istanbul ignore next */ error.error.code
+        throw error
+      }
+    }
+  }
+}
+
+function call (params, args, retrying) {
   let { creds, config, metadata, signing, stream } = args
   let { rawResponsePayload } = params
   let { debug } = config
@@ -36,7 +79,7 @@ module.exports = function request (params, args) {
 
     // Importing http(s) is a bit slow (~1ms), so only instantiate the client and http agent we need
     let isHTTPS = options.host?.includes('.amazonaws.com') ||
-                    protocol === 'https:'
+                  protocol === 'https:'
 
     // Debug derives protocol from options
     // This won't get fully exercised in unit tests because we aren't using https
@@ -58,7 +101,7 @@ module.exports = function request (params, args) {
     let isBuffer = body instanceof Buffer
 
     /* istanbul ignore next */
-    if (debug) {
+    if (debug && !retrying) {
       let { method = 'GET', protocol, host, port, path, headers, service } = options
       let truncatedBody
       /**/ if (isBuffer) truncatedBody = `<body buffer of ${body.length}b>`
@@ -92,13 +135,13 @@ module.exports = function request (params, args) {
       let data = []
       /* istanbul ignore next: we can always expect headers, but jic */
       let { headers = {}, statusCode } = res
-      let ok = statusCode >= 200 && statusCode < 303
+      let ok = isOk(statusCode)
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
         let body = Buffer.concat(data), payload, rawString
         let contentType = config.responseContentType ||
-                          headers['content-type'] ||
-                          headers['Content-Type'] || ''
+                        headers['content-type'] ||
+                        headers['Content-Type'] || ''
         if (rawResponsePayload) {
           payload = body
 
@@ -139,14 +182,13 @@ module.exports = function request (params, args) {
                 payload = parseXML(body)
               }
               catch {
-                // lolnothingmatters
+              // lolnothingmatters
                 payload = body.toString()
               }
             }
           }
         }
         payload = payload || (body.length ? body : null)
-
 
         /* istanbul ignore next */
         if (debug) {
@@ -160,8 +202,7 @@ module.exports = function request (params, args) {
             body: truncatedBody || '<no body>',
           }, '\n')
         }
-        if (ok) resolve({ statusCode, headers, payload })
-        else reject({ statusCode, headers, error: payload, metadata })
+        resolve({ statusCode, headers, payload })
       })
     })
     req.on('error', error => {
@@ -170,7 +211,7 @@ module.exports = function request (params, args) {
         console.error('[aws-lite] HTTP error:', error)
       }
       reject({
-        error: error.message || /* istanbul ignore next */ error.code,
+        error,
         metadata: {
           ...metadata,
           rawStack: error.stack,
@@ -195,4 +236,24 @@ module.exports = function request (params, args) {
     }
     else req.end(options.body || '')
   })
+}
+
+let isOk = statusCode => statusCode >= 200 && statusCode < 303
+
+// AWS defines transient error status codes as 500, 502, 503, 504, and error codes as below
+// The following transient AWS error codes are also designated retryable: [ 'TimeoutError', 'RequestTimeout', 'RequestTimeoutException' ]
+// see: smithy-typescript/packages/service-error-classification/src/constants.ts
+let reqCompleted = statusCode => statusCode < 500 && statusCode !== 429 /* Throttled */
+const retryableTimeoutErrorCodes = [ 'ECONNRESET', 'EPIPE', 'ETIMEDOUT' ]
+
+const maxRetryBackoff = 20 * 1000
+async function retryDelay (i, reason, debug) {
+  // A variety of available jitter algos, mhart's aws4fetch impl seemed like a tidy, simple approach
+  let rando = Math.floor(Math.random() * 50 * Math.pow(2, i))
+  let delay = Math.min(rando, maxRetryBackoff)
+  /* istanbul ignore next */
+  if (debug) {
+    console.error(`[aws-lite] Request failed (${reason}), retrying in ${delay} ms`)
+  }
+  await new Promise(res => setTimeout(res, delay))
 }

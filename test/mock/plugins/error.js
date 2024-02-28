@@ -26,7 +26,7 @@ module.exports = {
       readme: 'lolidk',
       request: noop,
       error: async (error) => {
-        if (error.statusCode === 400 &&
+        if (error.statusCode >= 400 && error.statusCode < 500 &&
             error?.error?.message?.match(/validation error/)) {
           error.metadata.type = message
         }

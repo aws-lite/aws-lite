@@ -392,7 +392,7 @@ test('Plugins - error(), error handling', async t => {
   try {
     responseBody = { other: 'metadata' }
     responseHeaders = { 'content-type': 'application/json' }
-    responseStatusCode = 500
+    responseStatusCode = 400
     server.use({ responseBody, responseHeaders, responseStatusCode })
     await aws.lambda.errorMethodMutatesError({ name, payload, host, port })
   }
@@ -413,7 +413,7 @@ test('Plugins - error(), error handling', async t => {
   try {
     responseBody = { message: 'Uh oh, a validation error!', other: 'metadata' }
     responseHeaders = { 'content-type': 'application/json' }
-    responseStatusCode = 400
+    responseStatusCode = 401
     server.use({ responseBody, responseHeaders, responseStatusCode })
     await aws.lambda.errorMethodMutatesError({ name, payload, host, port })
   }
@@ -454,7 +454,7 @@ test('Plugins - error(), error handling', async t => {
   try {
     responseBody = { other: 'metadata' }
     responseHeaders = { 'content-type': 'application/json' }
-    responseStatusCode = 500
+    responseStatusCode = 402
     server.use({ responseBody, responseHeaders, responseStatusCode })
     await aws.lambda.errorMethodNoop({ name, host, port })
   }
@@ -474,7 +474,7 @@ test('Plugins - error(), error handling', async t => {
   try {
     responseBody = { other: 'metadata' }
     responseHeaders = { 'content-type': 'application/json' }
-    responseStatusCode = 500
+    responseStatusCode = 403
     server.use({ responseBody, responseHeaders, responseStatusCode })
     await aws.lambda.errorMethodBlowsUp({ name, host, port })
   }

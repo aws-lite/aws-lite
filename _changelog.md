@@ -2,6 +2,14 @@
 
 ---
 
+## [0.19.0] 2024-02-28
+
+### Added
+
+- Added low-level retries with jitter / backoff; fixes #106
+
+---
+
 ## [0.18.0] 2024-02-15
 
 ### Added
