@@ -4,7 +4,6 @@ interface AwsLiteConfig {
   sessionToken?: string;
   region?: string;
   profile?: string;
-  verifyService?: boolean;
   autoloadPlugins?: boolean;
   awsConfigFile?: boolean | string;
   debug?: boolean;
@@ -19,6 +18,7 @@ interface AwsLiteConfig {
   protocol?: string;
   responseContentType?: string;
   retries?: number;
+  verifyService?: boolean;
 }
 
 interface AwsLiteRequest {
