@@ -24,7 +24,7 @@ let awsjson = {
 }
 
 async function exists (file) {
-  let { stat } = require('fs/promises')
+  let { stat } = require('node:fs/promises')
   try { await stat(file); return true }
   catch { return false }
 }
@@ -100,7 +100,7 @@ async function readConfig (file) {
   if (cache[file]) return cache[file]
   if (!(await exists(file))) return
 
-  let { readFile } = require('fs/promises')
+  let { readFile } = require('node:fs/promises')
   if (!ini) ini = require('ini')
 
   let data = await readFile(file)

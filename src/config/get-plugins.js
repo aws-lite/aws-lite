@@ -65,7 +65,7 @@ module.exports = async function getPlugin (config) {
 
     // Perhaps the least reliable due to the likelihood of second-order deps: read the package.json (if possible)
     else if (await exists(packageJsonFile)) {
-      let { readFile } = require('fs/promises')
+      let { readFile } = require('node:fs/promises')
       let packageJson = JSON.parse(await readFile(packageJsonFile))
       let { dependencies: deps } = packageJson
       if (deps) {
@@ -117,7 +117,7 @@ let tidy = p => !ignored.includes(p) && !p.endsWith('-types')
 async function scanNodeModulesDir (dir) {
   let found = []
   let { join } = require('node:path')
-  let { readdir } = require('fs/promises')
+  let { readdir } = require('node:fs/promises')
   let mods = await readdir(dir)
   // Find first-party plugins
   /* istanbul ignore next: TODO code path not run in 14.x tests, remove once deprecated */
