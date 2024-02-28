@@ -1,4 +1,4 @@
-let { join } = require('path')
+let { join } = require('node:path')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
 let client = require(sut)

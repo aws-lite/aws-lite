@@ -1,4 +1,4 @@
-let { join } = require('path')
+let { join } = require('node:path')
 let test = require('tape')
 let { copy, defaults } = require('../../lib')
 let cwd = process.cwd()

@@ -1,4 +1,4 @@
-let { join } = require('path')
+let { join } = require('node:path')
 let mockTmp = require('mock-tmp')
 let test = require('tape')
 let { basicRequestChecks, defaults, resetAWSEnvVars: reset, server } = require('../../lib')

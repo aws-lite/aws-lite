@@ -28,8 +28,8 @@ async function getCredsFromFile (params) {
   let { profile } = params
   let { AWS_SHARED_CREDENTIALS_FILE } = process.env
 
-  let { join } = require('path')
-  let os = require('os')
+  let { join } = require('node:path')
+  let os = require('node:os')
   let { readConfig } = require('../lib')
   let home = os.homedir()
 
@@ -44,7 +44,7 @@ async function getCredsFromFile (params) {
     let secretAccessKey
     let sessionToken
     if (creds[profile].credential_process) {
-      let { execSync } = require('child_process')
+      let { execSync } = require('node:child_process')
       let result = execSync(creds[profile].credential_process, { encoding: 'utf8' })
       ;({
         AccessKeyId: accessKeyId,

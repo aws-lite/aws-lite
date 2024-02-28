@@ -1,5 +1,5 @@
-let { join } = require('path')
-let http = require('http')
+let { join } = require('node:path')
+let http = require('node:http')
 let test = require('tape')
 let { defaults } = require('../../lib')
 let cwd = process.cwd()

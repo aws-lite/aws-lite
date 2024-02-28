@@ -1,5 +1,5 @@
-let { readFileSync } = require('fs')
-let { join } = require('path')
+let { readFileSync } = require('node:fs')
+let { join } = require('node:path')
 let test = require('tape')
 let mockTmp = require('mock-tmp')
 let cwd = process.cwd()

@@ -1,4 +1,4 @@
-let { join } = require('path')
+let { join } = require('node:path')
 let test = require('tape')
 let { basicRequestChecks, defaults, resetServer: reset, server } = require('../../lib')
 let cwd = process.cwd()

@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
-let { join } = require('path')
-let { execSync }  = require('child_process')
-let { readFileSync } = require('fs')
+let { join } = require('node:path')
+let { execSync }  = require('node:child_process')
+let { readFileSync } = require('node:fs')
 let percentile = require('percentile')
 let { formatSize, roundHalf } = require('./_helpers')
 

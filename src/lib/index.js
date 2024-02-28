@@ -86,8 +86,8 @@ async function loadAwsConfig (params) {
   let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE } = process.env
   if (!AWS_SDK_LOAD_CONFIG && !awsConfigFile) return
 
-  let { join } = require('path')
-  let os = require('os')
+  let { join } = require('node:path')
+  let os = require('node:os')
   let home = os.homedir()
 
   let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
@@ -110,7 +110,7 @@ async function readConfig (file) {
 }
 
 function tidyQuery (obj) {
-  let qs = require('querystring')
+  let qs = require('node:querystring')
   let tidied = {}
   Object.entries(obj).forEach(([ k, v ]) => {
     // Who knows, maybe there's an API service that uses boolean query string params

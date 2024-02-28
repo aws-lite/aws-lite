@@ -1,4 +1,4 @@
-let { join } = require('path')
+let { join } = require('node:path')
 let test = require('tape')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'lib', 'index.js')

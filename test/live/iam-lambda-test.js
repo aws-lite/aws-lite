@@ -1,4 +1,4 @@
-let { join } = require('path')
+let { join } = require('node:path')
 let test = require('tape')
 let Zip = require('adm-zip')
 let cwd = process.cwd()

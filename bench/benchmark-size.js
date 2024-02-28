@@ -1,7 +1,7 @@
 #! /usr/bin/env node
-let { mkdirSync, rmSync, statSync, writeFileSync } = require('fs')
-let { join } = require('path')
-let { execSync }  = require('child_process')
+let { mkdirSync, rmSync, statSync, writeFileSync } = require('node:fs')
+let { join } = require('node:path')
+let { execSync }  = require('node:child_process')
 let { build } = require('esbuild')
 let folderSize = require('fast-folder-size/sync')
 

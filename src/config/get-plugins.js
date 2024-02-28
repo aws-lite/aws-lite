@@ -36,7 +36,7 @@ module.exports = async function getPlugin (config) {
   /* istanbul ignore else */
   if (autoloadPlugins) {
     let { exists } = require('../lib')
-    let { join } = require('path')
+    let { join } = require('node:path')
 
     let dedupe = arr => [ ...new Set(arr) ]
 
@@ -116,7 +116,7 @@ let tidy = p => !ignored.includes(p) && !p.endsWith('-types')
 
 async function scanNodeModulesDir (dir) {
   let found = []
-  let { join } = require('path')
+  let { join } = require('node:path')
   let { readdir } = require('fs/promises')
   let mods = await readdir(dir)
   // Find first-party plugins

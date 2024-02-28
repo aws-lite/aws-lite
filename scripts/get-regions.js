@@ -1,5 +1,5 @@
-let { join } = require('path')
-let { writeFileSync } = require('fs')
+let { join } = require('node:path')
+let { writeFileSync } = require('node:fs')
 let awsLite = require('../')
 
 // Get the list of current AWS regions

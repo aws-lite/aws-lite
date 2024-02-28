@@ -1,4 +1,4 @@
-let { join } = require('path')
+let { join } = require('node:path')
 let test = require('tape')
 let cwd = process.cwd()
 let validTypes = [ 'array', 'boolean', 'buffer', 'number', 'object', 'string' ]

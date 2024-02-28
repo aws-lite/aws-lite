@@ -89,7 +89,7 @@ function call (params, args, retrying) {
     }
 
     /* istanbul ignore next */
-    let http = isHTTPS ? require('https') : require('http')
+    let http = isHTTPS ? require('node:https') : require('node:http')
 
     // Port configuration
     options.port = params.port || config.port

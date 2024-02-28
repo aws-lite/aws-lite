@@ -1,5 +1,5 @@
-let os = require('os')
-const http = require('http')
+let os = require('node:os')
+const http = require('node:http')
 
 // Test defaults
 const accessKeyId = 'foo'
