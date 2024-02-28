@@ -18,6 +18,7 @@ interface AwsLiteConfig {
   port?: number;
   protocol?: string;
   responseContentType?: string;
+  retries?: number;
 }
 
 interface AwsLiteRequest {

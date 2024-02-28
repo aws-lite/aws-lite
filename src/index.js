@@ -24,6 +24,7 @@ let testing = require('./testing')
  * @param {number} [config.port] Set a custom port number to use, helpful for local testing
  * @param {string} [config.protocol='https'] Set the connection protocol to 'http', helpful for local testing
  * @param {string} [config.responseContentType] Set an overriding Content-Type headers for responses, helpful for local testing
+ * @param {number} [config.retries=5] Set the maximum number of request retries; set to 0 to disable retrying
  *
  * @returns {Promise<function>} Client async function
  */

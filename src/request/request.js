@@ -21,18 +21,18 @@ function getAgent (client, isHTTPS, config) {
 
 module.exports = async function request (params, args) {
   let { config, metadata } = args
-  let { debug, maxAttempts } = config
-  maxAttempts = maxAttempts ?? 5
+  let { debug, maxAttempts, retries } = config
+  retries = maxAttempts ?? retries ?? 5
 
-  if (maxAttempts === 0 || isNaN(maxAttempts)) {
-    throw ReferenceError('maxAttempts property must a number be greater than 0')
+  if (isNaN(retries)) {
+    throw ReferenceError('retries property must a number')
   }
 
-  for (let i = 1; i <= maxAttempts; i++) {
-    let retrying = i > 1
+  for (let i = 0; i <= retries; i++) {
+    let retrying = i > 0
     try {
       let result = await call(params, args, retrying)
-      if (i === maxAttempts || reqCompleted(result.statusCode)) {
+      if (i === retries || reqCompleted(result.statusCode)) {
         if (isOk(result.statusCode)) return result
 
         let { statusCode, headers, payload } = result
@@ -41,7 +41,7 @@ module.exports = async function request (params, args) {
       await retryDelay(i, `status code ${result.statusCode}`, debug)
     }
     catch (error) {
-      if (i < maxAttempts && retryableTimeoutErrorCodes.includes(error?.error?.code)) {
+      if (i < retries && retryableTimeoutErrorCodes.includes(error?.error?.code)) {
         await retryDelay(i, `connection error: ${error.error.code}`, debug)
       }
       else {

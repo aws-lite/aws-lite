@@ -46,15 +46,15 @@ test('Set up env', async t => {
 })
 
 test('Retries', async t => {
-  t.plan(6)
-  let aws, maxAttempts, result
+  t.plan(7)
+  let aws, retries, result
 
   /**
    * 500 errors
    */
   // Do not retry
-  maxAttempts = 1
-  aws = await client({ ...config, maxAttempts })
+  retries = 0
+  aws = await client({ ...config, retries })
   try {
     reset()
     responses.push(basicError)
@@ -62,12 +62,24 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
-    t.equal(requests.length, maxAttempts, 'Client did not retry')
+    t.equal(requests.length, 1, 'Client did not retry')
+  }
+
+  // maxAttempts alias
+  aws = await client({ ...config, maxAttempts: retries })
+  try {
+    reset()
+    responses.push(basicError)
+    await aws({ service })
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    t.equal(requests.length, 1, 'Client did not retry')
   }
 
   // Try, then retry (total of 2x attempts)
-  maxAttempts = 2
-  aws = await client({ ...config, maxAttempts })
+  retries = 1
+  aws = await client({ ...config, retries })
   try {
     reset()
     responses.push(basicError, basicError)
@@ -75,12 +87,12 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
-    t.equal(requests.length, maxAttempts, 'Client retried, passed through error')
+    t.equal(requests.length, retries + 1, 'Client retried, passed through error')
   }
 
   // Try, then recover on successful retry
-  maxAttempts = 10
-  aws = await client({ ...config, maxAttempts })
+  retries = 10
+  aws = await client({ ...config, retries })
   try {
     reset()
     responses.push(basicResponse, basicError)
@@ -96,8 +108,8 @@ test('Retries', async t => {
    * 429 throttling errors
    */
   // Try, then retry (total of 2x attempts)
-  maxAttempts = 1
-  aws = await client({ ...config, maxAttempts })
+  retries = 1
+  aws = await client({ ...config, retries })
   try {
     reset()
     responses.push(throttleError, throttleError)
@@ -105,14 +117,14 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
-    t.equal(requests.length, maxAttempts, 'Client retried, passed through error')
+    t.equal(requests.length, retries + 1, 'Client retried, passed through error')
   }
 
   /**
    * Connection errors
    */
-  maxAttempts = 2
-  aws = await client({ ...config, maxAttempts })
+  retries = 2
+  aws = await client({ ...config, retries })
   try {
     reset()
     serverError = 'ECONNRESET'
@@ -120,31 +132,22 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
-    t.equal(requests.length, maxAttempts, 'Client retried, passed through error')
+    t.equal(requests.length, retries + 1, 'Client retried, passed through error')
   }
 })
 
 
 test('Retries - validation', async t => {
-  t.plan(2)
+  t.plan(1)
   let aws
 
-  aws = await client({ ...config, maxAttempts: 0 })
+  aws = await client({ ...config, retries: 'nah' })
   try {
     await aws({ service })
     t.fail('Expected an error')
   }
   catch (err) {
-    t.match(err.message, /greater than 0/, 'Errored on maxAttempts value of 0')
-  }
-
-  aws = await client({ ...config, maxAttempts: 'nah' })
-  try {
-    await aws({ service })
-    t.fail('Expected an error')
-  }
-  catch (err) {
-    t.match(err.message, /greater than 0/, 'Errored on maxAttempts string value')
+    t.match(err.message, /must a number/, 'Errored on retries string value')
   }
 })
 
