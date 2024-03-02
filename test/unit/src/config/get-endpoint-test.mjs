@@ -1,12 +1,12 @@
-let { readFileSync } = require('node:fs')
-let { join } = require('node:path')
-let test = require('tape')
-let mockTmp = require('mock-tmp')
-let { defaults, overrideHomedir, resetAWSEnvVars } = require('../../../lib')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'config', 'get-endpoint.js')
-let getEndpoint = require(sut)
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import test from 'tape'
+import process from 'node:process'
+import mockTmp from 'mock-tmp'
+import { defaults, overrideHomedir, resetAWSEnvVars } from '../../../lib/index.mjs'
 
+let getEndpoint
+let cwd = process.cwd()
 let { profile } = defaults
 let mock = join(cwd, 'test', 'mock')
 let configMock = join(mock, '.aws', 'config')
@@ -18,8 +18,10 @@ let https = 'https:', http = 'http:'
 let pathPrefix = '/foo-bar'
 let protocol = https // https is the sensible default!
 
-test('Set up env', t => {
+test('Set up env', async t => {
   t.plan(1)
+  let sut = 'file://' + join(cwd, 'src', 'config', 'get-endpoint.js')
+  getEndpoint = (await import(sut)).default
   t.ok(getEndpoint, 'getEndpoint module is present')
 })
 

@@ -20,9 +20,9 @@
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint --fix .",
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
-    "test:plugins": "cross-env tape 'plugins/**/test/**/*-test.*js' | tap-arc",
+    "test:plugins": "cross-env tape 'plugins/**/test/**/*-test.mjs' | tap-arc",
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
-    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
+    "test:unit": "cross-env tape 'test/unit/**/*-test.mjs' | tap-arc",
     "test": "npm run lint && npm run gen && npm run test:plugins && npm run coverage"
   },
   "simple-git-hooks": {

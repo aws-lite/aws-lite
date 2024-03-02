@@ -1,5 +1,6 @@
-let os = require('node:os')
-const http = require('node:http')
+import os from 'node:os'
+import http from 'node:http'
+import process from 'node:process'
 
 // Test defaults
 const accessKeyId = 'foo'
@@ -35,7 +36,7 @@ let server = {
           const reqType = req.headers?.['content-type']
           /**/ if (reqType?.includes('json')) body = JSON.parse(data)
           else if (reqType?.includes('xml')) body = data.toString()
-          else body = Buffer.concat(data)
+          else body = data.join('')
         }
         serverData.request = {
           url: req.url,
@@ -126,7 +127,7 @@ function resetAWSEnvVars () {
   delete process.env.AWS_SHARED_CREDENTIALS_FILE
 }
 
-module.exports = {
+export {
   basicRequestChecks,
   copy,
   defaults,

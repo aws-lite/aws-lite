@@ -1,18 +1,22 @@
-let { join } = require('node:path')
-let mockTmp = require('mock-tmp')
-let test = require('tape')
-let { basicRequestChecks, defaults, resetAWSEnvVars: reset, server } = require('../../lib')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'index.js')
-let client = require(sut)
+import module from 'node:module'
+import { join } from 'node:path'
+import process from 'node:process'
+import mockTmp from 'mock-tmp'
+import test from 'tape'
+import { basicRequestChecks, defaults, resetAWSEnvVars as reset, server } from '../../lib/index.mjs'
 
+let client
+let cwd = process.cwd()
 let { accessKeyId, badPort, config, host, path, port, protocol, region, secretAccessKey, service } = defaults
 let profile1 = 'profile_1'
 let mock = join(cwd, 'test', 'mock')
 let pluginDir = join(mock, 'plugins')
+let require = module.createRequire(import.meta.url)
 
 test('Set up env', async t => {
   t.plan(1)
+  let sut = 'file://' + join(cwd, 'src', 'index.js')
+  client = (await import(sut)).default
   t.ok(client, 'aws-lite client is present')
 })
 
@@ -53,22 +57,15 @@ test('Configuration - basic config', async t => {
 })
 
 test('Configuration - plugin loading', async t => {
-  t.plan(6)
+  t.plan(9)
   let aws, tmp
   let minConfig = { accessKeyId, secretAccessKey, region }
 
-  // Node.js 14.x + npm 6 does funky things with npm link-ed (symlinked) modules
-  // That's cool, we can confidently skip this test for now, the related code path provably works!
-  if (!process.versions.node.startsWith('14')) {
-    t.plan(9)
-    // eslint-disable-next-line
-    aws = await client({ ...minConfig, plugins: [ import('@aws-lite/ssm') ] })
-    t.ok(aws.ssm, 'Client explicitly loaded ESM plugin with unresolved import')
+  aws = await client({ ...minConfig, plugins: [ import('@aws-lite/ssm') ] })
+  t.ok(aws.ssm, 'Client explicitly loaded ESM plugin with unresolved import')
 
-    // eslint-disable-next-line
-    aws = await client({ ...minConfig, plugins: [ await import('@aws-lite/sqs') ] })
-    t.ok(aws.sqs, 'Client explicitly loaded ESM plugin with resolved import')
-  }
+  aws = await client({ ...minConfig, plugins: [ await import('@aws-lite/sqs') ] })
+  t.ok(aws.sqs, 'Client explicitly loaded ESM plugin with resolved import')
 
   let cjsPluginPath = join(pluginDir, 'cjs')
   aws = await client({ ...minConfig, plugins: [ require(cjsPluginPath) ] })
@@ -78,11 +75,8 @@ test('Configuration - plugin loading', async t => {
   aws = await client({ ...minConfig, plugins: [ plugin ] })
   t.ok(aws.lambda, 'Client explicitly loaded CJS plugin object')
 
-  // See above
-  if (!process.versions.node.startsWith('14')) {
-    aws = await client({ ...minConfig, autoloadPlugins: true })
-    t.ok(aws.dynamodb, 'Client auto-loaded @aws-lite/dynamodb')
-  }
+  aws = await client({ ...minConfig, autoloadPlugins: true })
+  t.ok(aws.dynamodb, 'Client auto-loaded @aws-lite/dynamodb')
 
   aws = await client({ ...minConfig })
   t.notOk(aws.dynamodb, 'Client did not auto-load @aws-lite/dynamodb')

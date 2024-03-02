@@ -1,20 +1,21 @@
-let { join } = require('node:path')
-let test = require('tape')
+import { join } from 'node:path'
+import process from 'node:process'
+import test from 'tape'
+
 let cwd = process.cwd()
 let validTypes = [ 'array', 'boolean', 'buffer', 'number', 'object', 'string' ]
 let plugins
 
 test('Set up env', async t => {
   t.plan(1)
-  plugins = (await import('../../../plugins.mjs')).default
+  plugins = (await import('file://' + join(cwd, 'plugins.mjs'))).default
   t.ok(plugins.length, `Loaded ${plugins.length} \`@aws-lite/*\` plugins`)
 })
 
 test('Check plugins for docs + validation', async t => {
   let plan = 0
   for (let { service } of plugins) {
-    let prefix = process.platform.startsWith('win') ? 'file://' : ''
-    let path = service => prefix + join(cwd, 'plugins', service, 'src', 'index.mjs')
+    let path = service => 'file://' + join(cwd, 'plugins', service, 'src', 'index.mjs')
     let plugin = (await import(path(service))).default
     t.comment(`@aws-lite/${service}`)
 

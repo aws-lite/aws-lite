@@ -1,15 +1,17 @@
-let { join } = require('node:path')
-let { Readable } = require('node:stream')
-let qs = require('node:querystring')
-let test = require('tape')
-let { basicRequestChecks, copy, defaults, resetServer: reset, server } = require('../../lib')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'index.js')
-let client = require(sut)
+import { join } from 'node:path'
+import { Readable } from 'node:stream'
+import process from 'node:process'
+import qs from 'node:querystring'
+import { Buffer } from 'node:buffer'
+import test from 'tape'
+import { basicRequestChecks, copy, defaults, resetServer as reset, server } from '../../lib/index.mjs'
+import url from 'node:url'
 
+let client
 let { badPort, config, host, protocol, service, path, port } = defaults
 let jsonHeaders = { 'content-type': 'application/json' }
 let xmlHeaders = { 'content-type': 'application/xml' }
+let __filename = url.fileURLToPath(import.meta.url).replace(/\\/g, '/')
 
 /**
  * Reminder!
@@ -18,6 +20,9 @@ let xmlHeaders = { 'content-type': 'application/xml' }
 
 test('Set up env', async t => {
   t.plan(2)
+  let cwd = process.cwd()
+  let sut = 'file://' + join(cwd, 'src', 'index.js')
+  client = (await import(sut)).default
   t.ok(client, 'aws-lite client is present')
   let started = await server.start()
   t.ok(started, 'Started server')

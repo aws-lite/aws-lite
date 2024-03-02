@@ -1,11 +1,10 @@
-let { join } = require('node:path')
-let http = require('node:http')
-let test = require('tape')
-let { defaults } = require('../../lib')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'index.js')
-let client = require(sut)
+import http from 'node:http'
+import { join } from 'node:path'
+import process from 'node:process'
+import test from 'tape'
+import { defaults } from '../../lib/index.mjs'
 
+let client
 let { config, service, port } = defaults
 
 let retryServer, serverError
@@ -23,6 +22,9 @@ function reset () {
 
 test('Set up env', async t => {
   t.plan(2)
+  let cwd = process.cwd()
+  let sut = 'file://' + join(cwd, 'src', 'index.js')
+  client = (await import(sut)).default
   t.ok(client, 'aws-lite client is present')
   retryServer = http.createServer((req, res) => {
     req.on('data', () => {})
@@ -62,6 +64,7 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
+    console.log(err)
     t.equal(requests.length, 1, 'Client did not retry')
   }
 
@@ -74,6 +77,7 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
+    console.log(err)
     t.equal(requests.length, 1, 'Client did not retry')
   }
 
@@ -87,6 +91,7 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
+    console.log(err)
     t.equal(requests.length, retries + 1, 'Client retried, passed through error')
   }
 
@@ -117,6 +122,7 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
+    console.log(err)
     t.equal(requests.length, retries + 1, 'Client retried, passed through error')
   }
 
@@ -132,6 +138,7 @@ test('Retries', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
+    console.log(err)
     t.equal(requests.length, retries + 1, 'Client retried, passed through error')
   }
 })
@@ -147,6 +154,7 @@ test('Retries - validation', async t => {
     t.fail('Expected an error')
   }
   catch (err) {
+    console.log(err)
     t.match(err.message, /must a number/, 'Errored on retries string value')
   }
 })

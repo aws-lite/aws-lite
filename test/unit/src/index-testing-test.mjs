@@ -1,10 +1,9 @@
-let { join } = require('node:path')
-let test = require('tape')
-let { copy, defaults } = require('../../lib')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'index.js')
-let client = require(sut)
+import { join } from 'node:path'
+import process from 'node:process'
+import test from 'tape'
+import { copy, defaults } from '../../lib/index.mjs'
 
+let client
 let { config } = defaults
 let jsonHeaders = { 'content-type': 'application/json' }
 let rando = () => (Math.random() + 1).toString(36).substring(2)
@@ -25,6 +24,9 @@ let mockErr = {
 
 test('Set up env', async t => {
   t.plan(1)
+  let cwd = process.cwd()
+  let sut = 'file://' + join(cwd, 'src', 'index.js')
+  client = (await import(sut)).default
   t.ok(client, 'aws-lite client is present')
 })
 

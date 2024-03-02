@@ -1,5 +1,5 @@
-import url from 'url'
-import { join } from 'path'
+import url from 'node:url'
+import { join } from 'node:path'
 import test from 'tape'
 import { readFile } from 'node:fs/promises'
 import { parseXML, buildXML } from '../../../src/lib/index.js'

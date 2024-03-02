@@ -1,18 +1,19 @@
-let { join } = require('node:path')
-let test = require('tape')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'lib', 'index.js')
-let lib = require(sut)
-let { useAWS } = lib
+import { join } from 'node:path'
+import test from 'tape'
 
+let useAWS
 function reset () {
   delete process.env.ARC_ENV
   delete process.env.ARC_LOCAL
   delete process.env.ARC_SANDBOX
 }
 
-test('Set up env', t => {
+test('Set up env', async t => {
   t.plan(1)
+  let cwd = process.cwd()
+  let sut = 'file://' + join(cwd, 'src', 'lib', 'index.js')
+  let lib = await import(sut)
+  useAWS = lib.useAWS
   t.ok(useAWS, 'useAWS util is present')
 })
 

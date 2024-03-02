@@ -114,7 +114,7 @@ export default async function main ({ service, property, display }) {
   const packageName = `@aws-lite/${service}`
   const pluginTypesDir = join(CWD, 'plugins', service, 'types')
 
-  const { methods } = (await import(join(CWD, 'plugins', service, 'src', 'index.mjs'))).default
+  const { methods } = (await import('file://' + join(CWD, 'plugins', service, 'src', 'index.mjs'))).default
 
   if (!existsSync(pluginTypesDir)) {
     // new plugin types package - this only happens once

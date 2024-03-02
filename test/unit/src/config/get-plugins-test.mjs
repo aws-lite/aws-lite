@@ -1,16 +1,20 @@
-let { readFileSync } = require('node:fs')
-let { join } = require('node:path')
-let test = require('tape')
-let mockTmp = require('mock-tmp')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'config', 'get-plugins.js')
-let getPlugins = require(sut)
+import { readFileSync } from 'node:fs'
+import module from 'node:module'
+import { join } from 'node:path'
+import process from 'node:process'
+import mockTmp from 'mock-tmp'
+import test from 'tape'
 
+let getPlugins
+let cwd = process.cwd()
+let require = module.createRequire(import.meta.url)
 let mock = join(cwd, 'test', 'mock')
 let pluginDir = join(mock, 'plugins')
 
-test('Set up env', t => {
+test('Set up env',  async t => {
   t.plan(1)
+  let sut = 'file://' + join(cwd, 'src', 'config', 'get-plugins.js')
+  getPlugins = (await import(sut)).default
   t.ok(getPlugins, 'getPlugins module is present')
 })
 
@@ -20,21 +24,14 @@ test('Just return an empty array ', async t => {
 })
 
 test('Load plugins array', async t => {
-  t.plan(2)
+  t.plan(4)
   let plugins
 
-  // Node.js 14.x + npm 6 does funky things with npm link-ed (symlinked) modules
-  // That's cool, we can confidently skip this test for now, the related code path provably works!
-  if (!process.versions.node.startsWith('14')) {
-    t.plan(4)
-    // eslint-disable-next-line
-    plugins = await getPlugins({ plugins: [ import('@aws-lite/dynamodb') ] })
-    t.equal(plugins[0].service, 'dynamodb', 'Client explicitly loaded ESM plugin with unresolved import')
+  plugins = await getPlugins({ plugins: [ import('@aws-lite/dynamodb') ] })
+  t.equal(plugins[0].service, 'dynamodb', 'Client explicitly loaded ESM plugin with unresolved import')
 
-    // eslint-disable-next-line
-    plugins = await getPlugins({ plugins: [ await import('@aws-lite/lambda') ] })
-    t.equal(plugins[0].service, 'lambda', 'Client explicitly loaded ESM plugin with resolved import')
-  }
+  plugins = await getPlugins({ plugins: [ await import('@aws-lite/lambda') ] })
+  t.equal(plugins[0].service, 'lambda', 'Client explicitly loaded ESM plugin with resolved import')
 
   let cjsPluginPath = join(pluginDir, 'cjs')
   plugins = await getPlugins({ plugins: [ require(cjsPluginPath) ] })

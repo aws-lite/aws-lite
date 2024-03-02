@@ -1,12 +1,12 @@
-let { readFileSync } = require('node:fs')
-let { join } = require('node:path')
-let test = require('tape')
-let mockTmp = require('mock-tmp')
-let { defaults, overrideHomedir, resetAWSEnvVars } = require('../../../lib')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'config', 'get-creds.js')
-let getCreds = require(sut)
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import process from 'node:process'
+import test from 'tape'
+import mockTmp from 'mock-tmp'
+import { defaults, overrideHomedir, resetAWSEnvVars } from '../../../lib/index.mjs'
 
+let getCreds
+let cwd = process.cwd()
 let { profile } = defaults
 let mock = join(cwd, 'test', 'mock')
 let ok = 'foo'
@@ -14,8 +14,10 @@ let nope = 'bar'
 let num = 1
 let credentialsMock = join(mock, '.aws', 'credentials')
 
-test('Set up env', t => {
+test('Set up env', async t => {
   t.plan(1)
+  let sut = 'file://' + join(cwd, 'src', 'config', 'get-creds.js')
+  getCreds = (await import(sut)).default
   t.ok(getCreds, 'getCreds module is present')
 })
 

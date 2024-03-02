@@ -1,14 +1,11 @@
-let { join } = require('node:path')
-let cwd = process.cwd()
-let sut = join(cwd, 'src', 'index.js')
-let client = require(sut)
-let test = require('tape')
-let mockTmp = require('mock-tmp')
-let { parseXML } = require('../../../src/lib')
-let { defaults } = require('../../../test/lib')
+import { join } from 'node:path'
+import test from 'tape'
+import mockTmp from 'mock-tmp'
+import { parseXML } from '../../../src/lib/index.js'
+import { defaults } from '../../../test/lib/index.mjs'
 let { config } = defaults
 
-let aws, tmp
+let aws, client, tmp
 let bucketName = 'bucket1'
 let objectNames = [ 'object1.txt', 'object2.json' ]
 let objectContents = [ 'Hello, World!', JSON.stringify({ welcome: 'aws-lite' }) ]
@@ -24,6 +21,9 @@ let okXml = {
 
 test('Set up env', async t => {
   t.plan(2)
+  let cwd = process.cwd()
+  let sut = 'file://' + join(cwd, 'src', 'index.js')
+  client = (await import(sut)).default
   client.testing.enable({ usePluginResponseMethod: true })
   aws = await client({ ...config, plugins: [ import('@aws-lite/s3') ] })
   t.ok(aws, 'Client ready')
