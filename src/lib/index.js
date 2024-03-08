@@ -1,22 +1,30 @@
 let aws, ini, xml
 
 // AWS-flavored JSON stuff
-function marshaller (method, obj, awsjsonSetting) {
+function marshaller (method, obj, awsjsonSetting, config) {
   if (!aws) {
     // Only require the vendor if + when it's actually needed
     aws = require('../_vendor/aws')
   }
 
+  // Allow arbitrary AWS JSON marshalling options
+  let { awsjsonMarshall, awsjsonUnmarshall } = config
+  let marshallOptions = method === 'marshall' ? awsjsonMarshall : awsjsonUnmarshall
+  if (marshallOptions) {
+    let { is } = require('./validate')
+    if (!is.object(marshallOptions)) throw ReferenceError('AWS JSON marshall/unmarshall options must be an object')
+  }
+
   // We may not be able to AWS JSON-[en|de]code the whole payload, check for specified keys
   if (Array.isArray(awsjsonSetting)) {
     return Object.entries(obj).reduce((acc, [ k, v ]) => {
-      if (awsjsonSetting.includes(k)) acc[k] = aws[method](v)
+      if (awsjsonSetting.includes(k)) acc[k] = aws[method](v, marshallOptions)
       else acc[k] = v
       return acc
     }, {})
   }
   // Otherwise, just AWS JSON-[en|de]code the whole thing
-  return aws[method](obj)
+  return aws[method](obj, marshallOptions)
 }
 let awsjson = {
   marshall: marshaller.bind({}, 'marshall'),

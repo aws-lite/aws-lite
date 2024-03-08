@@ -158,7 +158,7 @@ function call (params, args, retrying) {
             // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
             if (AwsJSONContentType(contentType)) {
               try {
-                payload = awsjson.unmarshall(payload)
+                payload = awsjson.unmarshall(payload, null, config)
               }
               catch { /* noop, it's already parsed */ }
             }

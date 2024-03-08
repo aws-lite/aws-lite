@@ -82,7 +82,7 @@ async function makeRequest (params, creds, region, config, metadata) {
         if (!AwsJSONContentType(contentType)) {
           contentType = 'application/x-amz-json-1.0'
         }
-        body = awsjson.marshall(body, params.awsjson)
+        body = awsjson.marshall(body, params.awsjson, config)
       }
       // Final JSON encoding
       params.body = JSON.stringify(body)

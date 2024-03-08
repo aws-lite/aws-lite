@@ -159,7 +159,7 @@ module.exports = async function clientFactory (config, creds, region) {
                   if (unmarshalling) {
                     delete pluginRes.awsjson
                     // If a payload property isn't included, it _is_ the payload
-                    let unmarshalled = awsjson.unmarshall(pluginRes.payload || pluginRes, unmarshalling)
+                    let unmarshalled = awsjson.unmarshall(pluginRes.payload || pluginRes, unmarshalling, config)
                     response = pluginRes.payload
                       ? { ...pluginRes, payload: unmarshalled }
                       : unmarshalled

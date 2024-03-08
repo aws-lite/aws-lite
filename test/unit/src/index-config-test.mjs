@@ -111,6 +111,118 @@ test('Configuration - plugin loading', async t => {
   mockTmp.reset()
 })
 
+test('Configuration - AWS-flavored JSON marshalling options', async t => {
+  // We could probably also test the unmarshalling options as well, but we haven't had any requests for that functionality
+  t.plan(5)
+  let aws, req
+
+  let started = await server.start()
+  t.ok(started, 'Started server')
+
+  server.use({
+    responseHeaders: { 'content-type': 'application/json' },
+    responseBody: { ok: true },
+  })
+
+  let basicConfig = {
+    accessKeyId,
+    secretAccessKey,
+    region,
+    endpoint: `http://localhost:${port}`,
+    plugins: [ import('@aws-lite/dynamodb') ]
+  }
+
+  aws = await client(basicConfig)
+
+  try {
+    await aws.dynamodb.PutItem({
+      TableName: 'foo',
+      Item: {
+        id: 'bar',
+        data: {
+          str: 'hi',
+          undef: undefined,
+        }
+      }
+    })
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    t.match(err.message, /removeUndefinedValues=true/, 'Errored because `removeUndefinedValues` was not set to `true`')
+  }
+
+  try {
+    await aws.dynamodb.PutItem({
+      TableName: 'foo',
+      Item: {
+        id: 'bar',
+        data: {
+          str: 'hi',
+          class: new class foo {
+            hello = 'there'
+            #private = 'shh'
+          },
+        }
+      }
+    })
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    t.match(err.message, /convertClassInstanceToMap=true/, 'Errored because `convertClassInstanceToMap` was not set to `true`')
+  }
+
+  aws = await client({
+    ...basicConfig,
+    awsjsonMarshall: {
+      convertEmptyValues: true,
+      removeUndefinedValues: true,
+      convertClassInstanceToMap: true,
+      convertTopLevelContainer: true,
+    },
+  })
+
+  try {
+    await aws.dynamodb.PutItem({
+      TableName: 'foo',
+      Item: {
+        id: 'bar',
+        data: {
+          str: 'hi',
+          empty: '',
+          undef: undefined,
+          class: new class foo {
+            hello = 'there'
+            #private = 'shh'
+          },
+        }
+      }
+    })
+    req = server.getCurrentRequest()
+    t.deepEqual(req.body, {
+      TableName: 'foo',
+      Item: {
+        M: {
+          id: { S: 'bar' },
+          data: {
+            M: {
+              str: { S: 'hi' },
+              empty: { NULL: true },
+              class: { M: { hello: { S: 'there' } } }
+            }
+          }
+        }
+      }
+    }, 'Posted request with marshall options reflected')
+  }
+  catch (err) {
+    console.log(err)
+    t.fail('Did not expect an error')
+  }
+
+  await server.end()
+  t.pass('Server ended')
+})
+
 test('Configuration - per-request overrides', async t => {
   t.plan(7)
   let started = await server.start()
@@ -204,7 +316,7 @@ test('Configuration - path prefix', async t => {
 })
 
 test('Configuration - validation', async t => {
-  t.plan(2)
+  t.plan(3)
   try {
     await client({ ...config, protocol: 'lolidk' })
   }
@@ -218,6 +330,19 @@ test('Configuration - validation', async t => {
   }
   catch (err) {
     t.match(err.message, /Plugins must be an array/, 'Throw on invalid plugins config')
+    reset()
+  }
+
+  try {
+    let aws = await client({ ...config, awsjsonMarshall: true })
+    await aws({
+      service: 'dynamodb',
+      headers: { 'content-type': '/application/x-amz-json/' },
+      payload: { ok: true },
+    })
+  }
+  catch (err) {
+    t.match(err.message, /AWS JSON marshall\/unmarshall options must be an object/, 'Throw on invalid AWS JSON marshall config')
     reset()
   }
 })
