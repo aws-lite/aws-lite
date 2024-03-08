@@ -17,7 +17,7 @@ module.exports = async function _request (params, creds, region, config, metadat
 }
 
 async function makeRequest (params, creds, region, config, metadata) {
-  let overrides = getEndpointParams(params)
+  let overrides =   getEndpointParams(params)
   let protocol =    overrides.protocol    || config.protocol
   let host =        overrides.host        || config.host
   let port =        overrides.port        || config.port
@@ -76,7 +76,7 @@ async function makeRequest (params, creds, region, config, metadata) {
       // A variety of services use AWS JSON; we'll make it easier via a header or passed param
       // Allow for manual encoding by passing a header while setting awsjson to false
       let awsjsonEncode = params.awsjson ||
-                            (AwsJSONContentType(contentType) && params.awsjson !== false)
+                          (AwsJSONContentType(contentType) && params.awsjson !== false)
       if (awsjsonEncode) {
         // Backfill content-type header yet again
         if (!AwsJSONContentType(contentType)) {
@@ -125,14 +125,17 @@ let validPaginationTypes = [ 'payload', 'query' ]
 /* istanbul ignore next */
 async function paginator (params, creds, region, config, metadata) {
   let { debug } = config
-  let { type, cursor, token, accumulator } = params.paginator
+  let { type = 'payload', cursor, token, accumulator } = params.paginator
   let nestedAccumulator = accumulator.split('.').length > 1
 
-  if (!cursor || typeof cursor !== 'string') {
-    throw ReferenceError(`aws-lite paginator requires a cursor property name (string)`)
+  if (!cursor || (!is.string(cursor) && !is.array(cursor))) {
+    throw ReferenceError(`aws-lite paginator requires a cursor property name (string) or cursor property array`)
   }
-  if (!token || typeof token !== 'string') {
-    throw ReferenceError(`aws-lite paginator requires a token property name (string)`)
+  if (!token || (!is.string(token) && !is.array(token))) {
+    throw ReferenceError(`aws-lite paginator requires a token property name (string) or token property array`)
+  }
+  if (typeof cursor !== typeof token) {
+    throw ReferenceError(`aws-lite paginator requires a token and cursor properties to both be a string or array`)
   }
   if (!accumulator || typeof accumulator !== 'string') {
     throw ReferenceError(`aws-lite paginator requires an accumulator property name (string)`)
@@ -179,25 +182,30 @@ async function paginator (params, creds, region, config, metadata) {
       return
     }
 
+    if (is.string(cursor) && is.string(token)) {
+      cursor = [ cursor ]
+      token = [ token ]
+    }
+    if (cursor.length !== token.length) {
+      throw ReferenceError(`aws-lite paginator requires an equal number of cursor and token properties`)
+    }
+
     // Some services will just keep re-sending the final page with the final token
     // Exit here to prevent infinite loops if cursors match
-    if (result.payload[token] && (type === 'payload' || !type) &&
-        result.payload[token] === params.payload[cursor]) {
-      return
-    }
-    if (result.payload[token] && (type === 'query') &&
-        result.payload[token] === params.query[cursor]) {
+    let checkPageEquality = (t, i) => result.payload[t] &&
+                                      result.payload[t] === params[type][cursor[i]]
+    if (token.every(checkPageEquality)) {
       return
     }
 
     items.push(...accumulated)
-    if (result.payload[token]) {
+    if (token.every(t => result.payload[t])) {
       if (type === 'payload' || !type) {
-        params.payload[cursor] = result.payload[token]
+        token.forEach((t, i) => params.payload[cursor[i]] = result.payload[t])
       }
       if (type === 'query') {
         params.query = params.query || {}
-        params.query[cursor] = result.payload[token]
+        token.forEach((t, i) => params.query[cursor[i]] = result.payload[t])
       }
       page++
       if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
