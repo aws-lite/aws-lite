@@ -2,6 +2,16 @@
 
 ---
 
+## [0.20.0] 2024-03-07
+
+### Added
+
+- Added `awsjsonMarshall` / `awsjsonUnmarshall` config options
+- Added pagination support for `cursor` / `token` arrays for APIs that paginate with multiple tokens
+- Added XML namespace support via `xmlns` property
+
+---
+
 ## [0.19.0] 2024-02-28
 
 ### Added
