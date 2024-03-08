@@ -240,7 +240,7 @@ test('Primary client - AWS JSON payloads', async t => {
 })
 
 test('Primary client - XML payloads', async t => {
-  t.plan(23)
+  t.plan(24)
   let request, result, payload, responseBody
   let aws = await client(config)
 
@@ -252,6 +252,16 @@ test('Primary client - XML payloads', async t => {
   request = server.getCurrentRequest()
   t.deepEqual(request.body, '<ok>true</ok>', 'Request included correct body')
   basicRequestChecks(t, 'POST')
+  reset()
+
+  // Publishing XML with a namespace
+  payload = { ok: true }
+  responseBody = { aws: 'lol' }
+  let xmlns = 'https://idk.lol'
+  server.use({ responseBody, responseHeaders: jsonHeaders })
+  await aws({ service, path, headers: copy(xmlHeaders), payload, xmlns })
+  request = server.getCurrentRequest()
+  t.deepEqual(request.body, `<ok xmlns="${xmlns}">true</ok>`, 'Request included correct body')
   reset()
 
   // Path returns XML

@@ -207,9 +207,18 @@ function instantiateXml () {
   xml.parser.addEntity('#10', '\n')
   xml.parser.getValueFromTextNode = vendor.getValueFromTextNode
 }
-function buildXML (obj) {
+function buildXML (obj, params) {
   instantiateXml()
-  return xml.builder.build(obj)
+  let payload = xml.builder.build(obj)
+  // We may need to repeat this (or make a more generic interface) for `xmlns:xsi`, `xsi:type`, etc.
+  if (params?.xmlns) {
+    let parent = Object.keys(obj)[0]
+    payload = payload.replace(
+      `<${parent}>`,
+      `<${parent} xmlns="${params.xmlns}">`
+    )
+  }
+  return payload
 }
 function parseXML (body) {
   instantiateXml()

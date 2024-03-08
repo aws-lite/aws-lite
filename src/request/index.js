@@ -70,7 +70,7 @@ async function makeRequest (params, creds, region, config, metadata) {
     if (!contentType) contentType = 'application/json'
 
     if (XMLContentType(contentType)) {
-      params.body = buildXML(body)
+      params.body = buildXML(body, params)
     }
     else {
       // A variety of services use AWS JSON; we'll make it easier via a header or passed param
