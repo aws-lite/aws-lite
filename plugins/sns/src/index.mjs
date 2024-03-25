@@ -23,7 +23,9 @@ const defaultError = ({ statusCode, headers, error }) => {
     error.name = error.code = error.Code
     delete error.Code
   }
-  if (error && headers['x-amzn-requestid']) error.requestId = headers['x-amzn-requestid']
+  if (error && (headers?.['x-amzn-requestid'] || headers?.['x-amzn-RequestId'])) {
+    error.requestId = headers['x-amzn-requestid'] || headers?.['x-amzn-RequestId']
+  }
   return { statusCode, error }
 }
 

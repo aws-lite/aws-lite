@@ -27,7 +27,9 @@ const defaultError = ({ statusCode, headers, error }) => {
     const name = error.__type.split('#')[1]
     if (name) error.name = error.code = name
   }
-  if (error && headers['x-amzn-requestid']) error.requestId = headers['x-amzn-requestid']
+  if (error && (headers?.['x-amzn-requestid'] || headers?.['x-amzn-RequestId'])) {
+    error.requestId = headers['x-amzn-requestid'] || headers?.['x-amzn-RequestId']
+  }
   return { statusCode, error }
 }
 const headers = (method, additional) => ({ 'X-Amz-Target': `AmazonSQS.${method}`, ...additional })
