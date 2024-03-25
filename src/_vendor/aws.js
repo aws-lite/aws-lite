@@ -581,10 +581,10 @@ var init_tslib_es6 = __esm({
 
 // node_modules/@aws-sdk/util-dynamodb/dist-cjs/convertToAttr.js
 var require_convertToAttr = __commonJS({
-  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/convertToAttr.js"(exports) {
+  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/convertToAttr.js"(exports2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.convertToAttr = void 0;
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.convertToAttr = void 0;
     var convertToAttr2 = (data, options) => {
       var _a, _b, _c, _d, _e, _f;
       if (data === void 0) {
@@ -620,9 +620,9 @@ var require_convertToAttr = __commonJS({
       }
       throw new Error(`Unsupported type passed: ${data}. Pass options.convertClassInstanceToMap=true to marshall typeof object as map attribute.`);
     };
-    exports.convertToAttr = convertToAttr2;
+    exports2.convertToAttr = convertToAttr2;
     var convertToListAttr = (data, options) => ({
-      L: data.filter((item) => !(options === null || options === void 0 ? void 0 : options.removeUndefinedValues) || (options === null || options === void 0 ? void 0 : options.removeUndefinedValues) && item !== void 0).map((item) => (0, exports.convertToAttr)(item, options))
+      L: data.filter((item) => !(options === null || options === void 0 ? void 0 : options.removeUndefinedValues) || (options === null || options === void 0 ? void 0 : options.removeUndefinedValues) && item !== void 0).map((item) => (0, exports2.convertToAttr)(item, options))
     });
     var convertToSetAttr = (set, options) => {
       const setToOperate = (options === null || options === void 0 ? void 0 : options.removeUndefinedValues) ? new Set([...set].filter((value) => value !== void 0)) : set;
@@ -661,7 +661,7 @@ var require_convertToAttr = __commonJS({
         const map = {};
         for (const [key, value] of data2) {
           if (typeof value !== "function" && (value !== void 0 || !(options === null || options === void 0 ? void 0 : options.removeUndefinedValues))) {
-            map[key] = (0, exports.convertToAttr)(value, options);
+            map[key] = (0, exports2.convertToAttr)(value, options);
           }
         }
         return map;
@@ -673,7 +673,7 @@ var require_convertToAttr = __commonJS({
         for (const key in data2) {
           const value = data2[key];
           if (typeof value !== "function" && (value !== void 0 || !(options === null || options === void 0 ? void 0 : options.removeUndefinedValues))) {
-            map[key] = (0, exports.convertToAttr)(value, options);
+            map[key] = (0, exports2.convertToAttr)(value, options);
           }
         }
         return map;
@@ -725,10 +725,10 @@ var require_convertToAttr = __commonJS({
 
 // node_modules/@aws-sdk/util-dynamodb/dist-cjs/convertToNative.js
 var require_convertToNative = __commonJS({
-  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/convertToNative.js"(exports) {
+  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/convertToNative.js"(exports2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.convertToNative = void 0;
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.convertToNative = void 0;
     var convertToNative2 = (data, options) => {
       for (const [key, value] of Object.entries(data)) {
         if (value !== void 0) {
@@ -760,7 +760,7 @@ var require_convertToNative = __commonJS({
       }
       throw new Error(`No value defined: ${JSON.stringify(data)}`);
     };
-    exports.convertToNative = convertToNative2;
+    exports2.convertToNative = convertToNative2;
     var convertNumber = (numString, options) => {
       if (options === null || options === void 0 ? void 0 : options.wrapNumbers) {
         return { value: numString };
@@ -782,17 +782,17 @@ var require_convertToNative = __commonJS({
     };
     var convertString = (stringValue) => stringValue;
     var convertBinary = (binaryValue) => binaryValue;
-    var convertList = (list, options) => list.map((item) => (0, exports.convertToNative)(item, options));
-    var convertMap = (map, options) => Object.entries(map).reduce((acc, [key, value]) => (acc[key] = (0, exports.convertToNative)(value, options), acc), {});
+    var convertList = (list, options) => list.map((item) => (0, exports2.convertToNative)(item, options));
+    var convertMap = (map, options) => Object.entries(map).reduce((acc, [key, value]) => (acc[key] = (0, exports2.convertToNative)(value, options), acc), {});
   }
 });
 
 // node_modules/@aws-sdk/util-dynamodb/dist-cjs/marshall.js
 var require_marshall = __commonJS({
-  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/marshall.js"(exports) {
+  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/marshall.js"(exports2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.marshall = void 0;
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.marshall = void 0;
     var convertToAttr_1 = require_convertToAttr();
     function marshall2(data, options) {
       const attributeValue = (0, convertToAttr_1.convertToAttr)(data, options);
@@ -814,24 +814,24 @@ var require_marshall = __commonJS({
           return attributeValue;
       }
     }
-    exports.marshall = marshall2;
+    exports2.marshall = marshall2;
   }
 });
 
 // node_modules/@aws-sdk/util-dynamodb/dist-cjs/models.js
 var require_models = __commonJS({
-  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/models.js"(exports) {
+  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/models.js"(exports2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
 // node_modules/@aws-sdk/util-dynamodb/dist-cjs/unmarshall.js
 var require_unmarshall = __commonJS({
-  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/unmarshall.js"(exports) {
+  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/unmarshall.js"(exports2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.unmarshall = void 0;
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.unmarshall = void 0;
     var convertToNative_1 = require_convertToNative();
     var unmarshall2 = (data, options) => {
       if (options === null || options === void 0 ? void 0 : options.convertWithoutMapWrapper) {
@@ -839,21 +839,21 @@ var require_unmarshall = __commonJS({
       }
       return (0, convertToNative_1.convertToNative)({ M: data }, options);
     };
-    exports.unmarshall = unmarshall2;
+    exports2.unmarshall = unmarshall2;
   }
 });
 
 // node_modules/@aws-sdk/util-dynamodb/dist-cjs/index.js
 var require_dist_cjs = __commonJS({
-  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/index.js"(exports) {
+  "node_modules/@aws-sdk/util-dynamodb/dist-cjs/index.js"(exports2) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    Object.defineProperty(exports2, "__esModule", { value: true });
     var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
-    tslib_1.__exportStar(require_convertToAttr(), exports);
-    tslib_1.__exportStar(require_convertToNative(), exports);
-    tslib_1.__exportStar(require_marshall(), exports);
-    tslib_1.__exportStar(require_models(), exports);
-    tslib_1.__exportStar(require_unmarshall(), exports);
+    tslib_1.__exportStar(require_convertToAttr(), exports2);
+    tslib_1.__exportStar(require_convertToNative(), exports2);
+    tslib_1.__exportStar(require_marshall(), exports2);
+    tslib_1.__exportStar(require_models(), exports2);
+    tslib_1.__exportStar(require_unmarshall(), exports2);
   }
 });
 
