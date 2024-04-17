@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 interface AwsLiteConfig {
   accessKeyId?: string;
   secretAccessKey?: string;
@@ -50,7 +52,5 @@ export interface AwsLiteClient {
   (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
 }
 
-declare module "@aws-lite/client" {
-  const CreateAwsLite: (config?: AwsLiteConfig) => Promise<AwsLiteClient>;
-  export = CreateAwsLite;
-}
+declare module "@aws-lite/client";
+export default function awsLite(config: AwsLiteConfig): Promise<AwsLiteClient>;

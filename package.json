@@ -44,6 +44,7 @@
     "@architect/eslint-config": "^2.1.2",
     "@aws-sdk/util-dynamodb": "^3.540.0",
     "@smithy/smithy-client": "^2.5.0",
+    "@types/node": "^20.12.7",
     "adm-zip": "^0.5.12",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
