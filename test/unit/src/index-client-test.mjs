@@ -454,9 +454,7 @@ test('Primary client - error handling', async t => {
   catch (err) {
     console.log(err)
     // Node.js 20.x changed the HTTP connection error format
-    let re = Number(process.versions.node.split('.')[0]) >= 20
-      ? /\@aws-lite\/client: lambda: ECONNREFUSED/
-      : /\@aws-lite\/client: lambda: connect ECONNREFUSED/
+    let re = /\@aws-lite\/client: lambda: (connect )?ECONNREFUSED/
     t.match(err.message, re, 'Error included basic information')
     t.equal(err.port, badPort, 'Error has port metadata')
     t.equal(err.service, service, 'Error has service metadata')
