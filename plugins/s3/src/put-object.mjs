@@ -1,5 +1,6 @@
 import aws4 from 'aws4'
 import crypto from 'node:crypto'
+import { createReadStream } from 'node:fs'
 import { readFile, stat } from 'node:fs/promises'
 import { Readable } from 'node:stream'
 import lib from './lib.mjs'
@@ -8,6 +9,7 @@ const { getHeadersFromParams, getValidateHeaders, parseHeadersToResults } = lib
 const required = true
 const chunkBreak = `\r\n`
 const minSize = 1024 * 1024 * 5
+const maxSize = 5 * 1024 * 1024 * 1024 // 5GiB
 const intToHexString = int => String(Number(int).toString(16))
 const algo = 'sha256', utf8 = 'utf8', hex = 'hex'
 const hash = str => crypto.createHash(algo).update(str, utf8).digest(hex)
@@ -26,7 +28,8 @@ const PutObject = {
     Key:          { type: 'string', required, comment: 'S3 key / file name' },
     Body:         { type: [ 'string', 'buffer' ], comment: 'String or buffer to be uploaded' },
     File:         { type: 'string', comment: 'File path to be read and uploaded from the local filesystem' },
-    MinChunkSize: { type: 'number', default: minSize, comment: 'Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3' },
+    ApplyChecksum: { type: 'boolean', comment: 'Sign payload; enabling this option may significantly increase memory and latency' },
+    MinChunkSize: { type: 'number', default: minSize, comment: 'Minimum size (in bytes) to utilize signed, AWS-chunk-encoded uploads to S3' },
     // Here come the headers
     ...getValidateHeaders('ACL', 'BucketKeyEnabled', 'CacheControl', 'ChecksumAlgorithm', 'ChecksumCRC32',
       'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256', 'ContentDisposition', 'ContentEncoding',
@@ -37,7 +40,7 @@ const PutObject = {
       'SSEKMSKeyId', 'StorageClass', 'Tagging', 'WebsiteRedirectLocation')
   },
   request: async (params, utils) => {
-    let { Bucket, Key, File, Body, MinChunkSize } = params
+    let { Bucket, Key, File, Body, MinChunkSize, ApplyChecksum } = params
     let { config, credentials, region } = utils
     MinChunkSize = MinChunkSize || minSize
 
@@ -65,11 +68,35 @@ const PutObject = {
       }
     }
 
+    if (dataSize > maxSize) {
+      throw RangeError(`PutObject data size (${dataSize}B) is greater than 5GiB limit`)
+    }
+
+    if (!ApplyChecksum) {
+      let payload = Body || createReadStream(File)
+      if (config.debug) {
+        let type = Body
+          ? typeof payload === 'string' ? 'string' : 'buffer'
+          : 'read stream'
+        console.error(`[S3.PutObject] publishing unsigned, unchunked payload (${dataSize.length}b ${type})`)
+      }
+      return {
+        path: `/${Bucket}/${Key}`,
+        method: 'PUT',
+        headers: {
+          ...headers,
+          'content-length': dataSize,
+          'x-amz-content-sha256': 'UNSIGNED-PAYLOAD',
+        },
+        payload,
+      }
+    }
+
     if (dataSize <= MinChunkSize) {
       let payload = Body || await readFile(File)
       if (config.debug) {
         let type = typeof payload === 'string' ? 'string' : 'buffer'
-        console.error(`[S3.PutObject] publishing unchunked payload (${payload.length}b ${type})`)
+        console.error(`[S3.PutObject] publishing unsigned, unchunked payload (${dataSize.length}b ${type})`)
       }
       return {
         path: `/${Bucket}/${Key}`,

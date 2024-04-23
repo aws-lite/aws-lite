@@ -260,8 +260,10 @@ Properties:
   - String or buffer to be uploaded
 - **`File` (string)**
   - File path to be read and uploaded from the local filesystem
+- **`ApplyChecksum` (boolean)**
+  - Sign payload; enabling this option may significantly increase memory and latency
 - **`MinChunkSize` (number)**
-  - Minimum size (in bytes) to utilize AWS-chunk-encoded uploads to S3
+  - Minimum size (in bytes) to utilize signed, AWS-chunk-encoded uploads to S3
 - **`ACL` (string)**
   - Sets request header: `x-amz-acl`
 - **`BucketKeyEnabled` (string)**
