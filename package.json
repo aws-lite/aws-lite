@@ -48,7 +48,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "fast-xml-parser": "^4.3.6",
-    "mock-tmp": "^0.0.3",
+    "mock-tmp": "^0.0.4",
     "nyc": "^15.1.0",
     "semver": "^7.6.0",
     "simple-git-hooks": "^2.11.0",
