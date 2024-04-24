@@ -29,7 +29,7 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(64)
+  t.plan(65)
   let request, result, payload, query, responseBody, url
   let aws = await client(config)
 
@@ -118,6 +118,22 @@ test('Primary client - core functionality', async t => {
   request = server.getCurrentRequest()
   t.equal(request.body.toString(), text, 'Request included correct body')
   basicRequestChecks(t, 'POST')
+
+  // Get a streamed response
+  responseBody = Buffer.from('ohi')
+  server.use({ responseBody, responseHeaders: { 'content-type': 'application/octet-stream' } })
+  result = await aws({ service, path, streamResponse: true })
+  let streamedResponse
+  await new Promise((res, rej) => {
+    let chunks = []
+    result.payload.on('data', chunk => chunks.push(chunk))
+    result.payload.on('error', err => rej(err))
+    result.payload.on('end', () => {
+      streamedResponse = Buffer.concat(chunks).toString()
+      res()
+    })
+  })
+  t.equal(streamedResponse, responseBody.toString(), 'Client returned response payload as stream')
 
   // Ensure paths without leading slashes are handled properly
   result = await aws({ service, path: 'a/path' })

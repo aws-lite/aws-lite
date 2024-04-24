@@ -62,10 +62,10 @@ async function makeRequest (params, creds, region, config, metadata) {
   // Body - JSON-ify payload where convenient! Leave raw where needed
   let body = params.payload || params.body || params.data
   let isBuffer = body instanceof Buffer
-  let isStream = is.stream(body)
+  let isReqStream = is.stream(body)
 
   // Detecting objects leaves open the possibility of some weird valid JSON (like just a null), deal with it if / when we need to I guess
-  if (typeof body === 'object' && !isBuffer && !isStream) {
+  if (typeof body === 'object' && !isBuffer && !isReqStream) {
     // Backfill content-type if it's just an object
     if (!contentType) contentType = 'application/json'
 
@@ -90,7 +90,7 @@ async function makeRequest (params, creds, region, config, metadata) {
   }
   // Everything besides streams pass through for signing
   else {
-    params.body = isStream ? undefined : body
+    params.body = isReqStream ? undefined : body
   }
 
   // Finalize headers, content-type
@@ -117,8 +117,9 @@ async function makeRequest (params, creds, region, config, metadata) {
     }
   }
 
-  let stream = isStream ? body : undefined
-  return await request(params, { creds, config, metadata, signing, stream })
+  let streamReq = isReqStream ? body : undefined
+  let streamRes = params.streamResponse
+  return await request(params, { creds, config, metadata, signing, streamReq, streamRes })
 }
 
 let validPaginationTypes = [ 'payload', 'query' ]

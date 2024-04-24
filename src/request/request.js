@@ -63,7 +63,7 @@ module.exports = async function request (params, args) {
 }
 
 function call (params, args, retrying) {
-  let { creds, config, metadata, signing, stream } = args
+  let { creds, config, metadata, signing, streamReq, streamRes } = args
   let { rawResponsePayload } = params
   let { debug } = config
   let { protocol } = signing
@@ -105,7 +105,7 @@ function call (params, args, retrying) {
       let { method = 'GET', protocol, host, port, path, headers, service } = options
       let truncatedBody
       /**/ if (isBuffer) truncatedBody = `<body buffer of ${body.length}b>`
-      else if (stream) truncatedBody = `<readable stream>`
+      else if (streamReq) truncatedBody = `<readable stream>`
       else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
 
       let { accessKeyId, secretAccessKey } = creds
@@ -136,6 +136,22 @@ function call (params, args, retrying) {
       /* istanbul ignore next: we can always expect headers, but jic */
       let { headers = {}, statusCode } = res
       let ok = isOk(statusCode)
+
+      if (streamRes) {
+        /* istanbul ignore next */
+        if (debug) {
+          console.error('[aws-lite] Response:', {
+            time: new Date().toISOString(),
+            statusCode,
+            headers,
+            body: '<stream>',
+          }, '\n')
+        }
+        let { PassThrough } = require('stream')
+        resolve({ statusCode, headers, payload: res.pipe(new PassThrough()) })
+        return
+      }
+
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
         let body = Buffer.concat(data), payload, rawString
@@ -223,12 +239,12 @@ function call (params, args, retrying) {
       })
     })
 
-    if (stream) {
-      stream.pipe(req)
+    if (streamReq) {
+      streamReq.pipe(req)
       /* istanbul ignore next */
       if (debug) {
         let bytes = 0
-        stream.on('data', chunk => {
+        streamReq.on('data', chunk => {
           bytes += chunk.length
           console.error(`Bytes streamed: ${bytes}`)
         })
