@@ -78,7 +78,7 @@ const PutObject = {
         let type = Body
           ? typeof payload === 'string' ? 'string' : 'buffer'
           : 'read stream'
-        console.error(`[S3.PutObject] publishing unsigned, unchunked payload (${dataSize.length}b ${type})`)
+        console.error(`[S3.PutObject] publishing unsigned, unchunked payload (${dataSize}b ${type})`)
       }
       return {
         path: `/${Bucket}/${Key}`,
@@ -96,7 +96,7 @@ const PutObject = {
       let payload = Body || await readFile(File)
       if (config.debug) {
         let type = typeof payload === 'string' ? 'string' : 'buffer'
-        console.error(`[S3.PutObject] publishing unsigned, unchunked payload (${dataSize.length}b ${type})`)
+        console.error(`[S3.PutObject] publishing unsigned, unchunked payload (${dataSize}b ${type})`)
       }
       return {
         path: `/${Bucket}/${Key}`,
