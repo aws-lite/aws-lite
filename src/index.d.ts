@@ -38,7 +38,7 @@ interface AwsLiteRequest {
   query?: Record<string, any>;
   region?: string;
   service: string;
-  streamResponse?: boolean,
+  streamResponsePayload?: boolean,
   verifyService?: boolean;
 }
 
