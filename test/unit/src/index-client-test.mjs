@@ -122,7 +122,7 @@ test('Primary client - core functionality', async t => {
   // Get a streamed response
   responseBody = Buffer.from('ohi')
   server.use({ responseBody, responseHeaders: { 'content-type': 'application/octet-stream' } })
-  result = await aws({ service, path, streamResponse: true })
+  result = await aws({ service, path, streamResponsePayload: true })
   let streamedResponse
   await new Promise((res, rej) => {
     let chunks = []

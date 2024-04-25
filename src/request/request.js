@@ -63,8 +63,8 @@ module.exports = async function request (params, args) {
 }
 
 function call (params, args, retrying) {
-  let { creds, config, metadata, signing, streamReq, streamRes } = args
-  let { rawResponsePayload } = params
+  let { rawResponsePayload, streamResponsePayload } = params
+  let { creds, config, metadata, signing, streamReq } = args
   let { debug } = config
   let { protocol } = signing
 
@@ -137,7 +137,7 @@ function call (params, args, retrying) {
       let { headers = {}, statusCode } = res
       let ok = isOk(statusCode)
 
-      if (streamRes) {
+      if (streamResponsePayload) {
         /* istanbul ignore next */
         if (debug) {
           console.error('[aws-lite] Response:', {

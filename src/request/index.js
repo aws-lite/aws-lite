@@ -118,8 +118,7 @@ async function makeRequest (params, creds, region, config, metadata) {
   }
 
   let streamReq = isReqStream ? body : undefined
-  let streamRes = params.streamResponse
-  return await request(params, { creds, config, metadata, signing, streamReq, streamRes })
+  return await request(params, { creds, config, metadata, signing, streamReq })
 }
 
 let validPaginationTypes = [ 'payload', 'query' ]
