@@ -2,6 +2,14 @@
 
 ---
 
+## [0.21.0] 2024-04-25
+
+### Added
+
+- Added `streamResponsePayload` request parameter to return the response payload as a Node.js stream; partially fixes #65
+
+---
+
 ## [0.20.0] 2024-03-07
 
 ### Added
