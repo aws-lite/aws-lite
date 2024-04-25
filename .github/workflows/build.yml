@@ -20,10 +20,10 @@ jobs:
     # Go
     steps:
     - name: Check out repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
 
@@ -40,7 +40,14 @@ jobs:
     - name: Install
       run: npm install
 
+    - name: Test (Node.js 16.x only)
+      if: matrix.node-version == '16.x'
+      run: npm run test:nolint
+      env:
+        CI: true
+
     - name: Test
+      if: matrix.node-version != '16.x'
       run: npm test
       env:
         CI: true
@@ -56,7 +63,7 @@ jobs:
     - name: Notify
       uses: sarisia/actions-status-discord@v1
       # Only fire alert once
-      if: github.ref == 'refs/heads/main' && failure() && matrix.node-version == '14.x' && matrix.os == 'ubuntu-latest'
+      if: github.ref == 'refs/heads/main' && failure() && matrix.node-version == '20.x' && matrix.os == 'ubuntu-latest'
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
         title: "build and test"
@@ -75,10 +82,10 @@ jobs:
     # Go
     steps:
       - name: Check out repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
@@ -115,10 +122,10 @@ jobs:
     # Go
     steps:
       - name: Check out repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/

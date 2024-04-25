@@ -106,6 +106,7 @@ test('Retries', async t => {
     t.equal(result.statusCode, 200, 'Client returned successful response')
   }
   catch (err) {
+    console.log(err)
     t.fail('Did not expect an error')
   }
 

@@ -202,6 +202,7 @@ test('Plugins - validate service', async t => {
     t.pass('"verifyService: false" allows plugin with unverified service')
   }
   catch (error) {
+    console.log(error)
     t.fail('Should have allowed unverified service')
   }
 })

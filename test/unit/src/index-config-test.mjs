@@ -160,6 +160,7 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
           str: 'hi',
           class: new class foo {
             hello = 'there'
+            // eslint-disable-next-line
             #private = 'shh'
           },
         }
@@ -192,6 +193,7 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
           undef: undefined,
           class: new class foo {
             hello = 'there'
+            // eslint-disable-next-line
             #private = 'shh'
           },
         }
