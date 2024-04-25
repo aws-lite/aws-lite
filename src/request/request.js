@@ -244,9 +244,18 @@ function call (params, args, retrying) {
       /* istanbul ignore next */
       if (debug) {
         let bytes = 0
+        let interval
         streamReq.on('data', chunk => {
           bytes += chunk.length
-          console.error(`Bytes streamed: ${bytes}`)
+          if (!interval) {
+            interval = setInterval(() => console.error(`Bytes streamed: ${bytes}`), 200)
+          }
+        })
+        streamReq.on('end', () => {
+          if (interval) {
+            clearInterval(interval)
+          }
+          console.error(`Total bytes streamed: ${bytes}`)
         })
       }
     }
