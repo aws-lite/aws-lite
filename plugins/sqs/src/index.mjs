@@ -45,7 +45,7 @@ const GetQueueAttributes = {
   request: async (params) => ({
     awsjson: false,
     headers: headers('GetQueueAttributes', awsjsonContentType),
-    payload: params
+    payload: params,
   }),
   response: ({ payload }) => payload,
   error: defaultError,
@@ -65,7 +65,7 @@ const ReceiveMessage = {
   request: async (params) => ({
     awsjson: false,
     headers: headers('ReceiveMessage', awsjsonContentType),
-    payload: params
+    payload: params,
   }),
   response: ({ payload }) => payload,
   error: defaultError,
@@ -83,7 +83,7 @@ const SendMessage = {
   },
   request: async (params) => ({
     headers: formEncodedContentType,
-    payload: qs.stringify({ Action: 'SendMessage', ...params })
+    payload: qs.stringify({ Action: 'SendMessage', ...params }),
   }),
   response: ({ payload }) => payload.SendMessageResult,
   error: defaultError,
@@ -97,7 +97,7 @@ const DeleteMessage = {
   request: async (params) => ({
     awsjson: false,
     headers: headers('DeleteMessage', awsjsonContentType),
-    payload: params
+    payload: params,
   }),
   response: ({ payload }) => payload,
   error: defaultError,
@@ -113,5 +113,5 @@ export default {
     ReceiveMessage,
     DeleteMessage,
     ...incomplete,
-  }
+  },
 }

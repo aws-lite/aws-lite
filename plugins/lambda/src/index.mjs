@@ -71,7 +71,7 @@ const CreateFunction = {
       path: '/2015-03-31/functions',
       payload,
     }
-  }
+  },
 }
 
 const DeleteFunctionConcurrency = {
@@ -143,7 +143,7 @@ const Invoke = {
     if (FunctionError) result.FunctionError = FunctionError
     if (ExecutedVersion) result.ExecutedVersion = ExecutedVersion
     return result
-  }
+  },
 }
 
 const PutFunctionConcurrency = {
@@ -160,7 +160,7 @@ const PutFunctionConcurrency = {
       payload: { ReservedConcurrentExecutions },
     }
   },
-  response: defaultResponse
+  response: defaultResponse,
 }
 
 const UpdateFunctionCode = {
@@ -175,7 +175,7 @@ const UpdateFunctionCode = {
     S3Bucket: { ...str, comment: 'S3 bucket containing the key of the deployment package; must be in the same region' },
     S3Key: { ...str, comment: 'S3 key of the deployment package (must be a .zip file)' },
     S3ObjectVersion: { ...str, comment: 'S3 object version to use, if applicable' },
-    ZipFile: { type: [ 'string', 'buffer' ], comment: 'File path or raw buffer of the .zip deployment package' }
+    ZipFile: { type: [ 'string', 'buffer' ], comment: 'File path or raw buffer of the .zip deployment package' },
   },
   request: async (params) => {
     let { FunctionName, ZipFile } = params
@@ -195,7 +195,7 @@ const UpdateFunctionCode = {
       payload,
     }
   },
-  response: defaultResponse
+  response: defaultResponse,
 }
 
 const UpdateFunctionConfiguration = {
@@ -244,5 +244,5 @@ export default {
     UpdateFunctionCode,
     UpdateFunctionConfiguration,
     ...incomplete,
-  }
+  },
 }

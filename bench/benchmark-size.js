@@ -5,7 +5,6 @@ let { execSync }  = require('node:child_process')
 let { build } = require('esbuild')
 let folderSize = require('fast-folder-size/sync')
 
-// eslint-disable-next-line
 let { formatSize, names, roundHalf } = require('./_helpers')
 
 let installCommands = {

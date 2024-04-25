@@ -63,7 +63,7 @@ const CommitTransaction = {
   validate: {
     resourceArn,
     secretArn,
-    transactionId: { ...transactionId, required, comment: 'Identifier of the transaction to end and commit' }
+    transactionId: { ...transactionId, required, comment: 'Identifier of the transaction to end and commit' },
   },
   request: (payload) => ({
     method: 'POST',
@@ -101,7 +101,7 @@ const RollbackTransaction = {
   validate: {
     resourceArn,
     secretArn,
-    transactionId: { ...transactionId, required, comment: 'Identifier of the transaction to roll back' }
+    transactionId: { ...transactionId, required, comment: 'Identifier of the transaction to roll back' },
   },
   request: async (payload) => ({
     method: 'POST',

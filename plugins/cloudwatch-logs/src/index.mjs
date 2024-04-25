@@ -25,7 +25,7 @@ const valPaginate = { type: 'boolean', comment: 'Enable automatic result paginat
 const headers = (method, additional) => ({
   'X-Amz-Target': `Logs_20140328.${method}`,
   'content-type': 'application/x-amz-json-1.1',
-  ...additional
+  ...additional,
 })
 const defaultResponse = ({ payload }) => payload
 
@@ -149,5 +149,5 @@ export default {
   name: '@aws-lite/cloudwatch-logs',
   service,
   property,
-  methods: { DeleteLogGroup, DescribeLogGroups, DescribeLogStreams, GetLogEvents, ...incomplete }
+  methods: { DeleteLogGroup, DescribeLogGroups, DescribeLogStreams, GetLogEvents, ...incomplete },
 }

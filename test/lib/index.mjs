@@ -73,7 +73,7 @@ let server = {
   use: function (params) {
     serverData = Object.assign(serverData, params)
   },
-  getCurrentRequest: () => serverData.request
+  getCurrentRequest: () => serverData.request,
 }
 
 function basicRequestChecks (t, method, params = {}) {

@@ -215,7 +215,7 @@ function buildXML (obj, params) {
     let parent = Object.keys(obj)[0]
     payload = payload.replace(
       `<${parent}>`,
-      `<${parent} xmlns="${params.xmlns}">`
+      `<${parent} xmlns="${params.xmlns}">`,
     )
   }
   return payload

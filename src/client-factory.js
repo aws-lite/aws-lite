@@ -264,7 +264,7 @@ async function getMock (property, name, params, metadata) {
 
     if (response.error) throw {
       ...response,
-      metadata: { ...metadata, mock: true }
+      metadata: { ...metadata, mock: true },
     }
     return response
   }

@@ -12,5 +12,5 @@ export default {
   name: '@aws-lite/apigateway',
   service,
   property,
-  methods: { ...incomplete }
+  methods: { ...incomplete },
 }

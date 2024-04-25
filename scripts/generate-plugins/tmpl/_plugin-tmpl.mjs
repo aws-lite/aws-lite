@@ -18,7 +18,7 @@ export default {
       },
       request: async ({ name }) => {
         return {
-          path: `/$API_VER/${name}/etc`
+          path: `/$API_VER/${name}/etc`,
         }
       },
       response: async ({ payload }) => payload,
@@ -39,11 +39,11 @@ export default {
       },
       request: async ({ name }) => {
         return {
-          path: `/$API_VER/${name}/etc`
+          path: `/$API_VER/${name}/etc`,
         }
       },
       // response: async ({ payload }) => payload,
       // error: async (err) => err,
     },
-  }
+  },
 }

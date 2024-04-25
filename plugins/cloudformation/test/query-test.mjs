@@ -7,20 +7,20 @@ const params = {
   ClientRequestToken: 'a_client_request_token',
   DisableRollback: true,
   EnableTerminationProtection: false,
-  NotificationARNs: [ 'ARN1', 'ARN2', 'ARN3', ],
+  NotificationARNs: [ 'ARN1', 'ARN2', 'ARN3' ],
   OnFailure: 'DELETE',
   Parameters: [
     {
       ParameterKey: 'A_KEY_1',
       ParameterValue: 'A_VAL_1',
       ResolvedValue: 'RESOLVED_VAL_1',
-      UsePreviousValue: true
+      UsePreviousValue: true,
     },
     {
       ParameterKey: 'A_KEY_2',
       ParameterValue: 'A_VAL_2',
       ResolvedValue: 'RESOLVED_VAL_2',
-      UsePreviousValue: false
+      UsePreviousValue: false,
     },
   ],
   ResourceTypes: [
@@ -32,25 +32,25 @@ const params = {
     RollbackTriggers: [
       {
         Arn: 'arn::rollback',
-        Type: 'rollback_type'
+        Type: 'rollback_type',
       },
-    ]
+    ],
   },
   StackPolicyBody: JSON.stringify({ ok: true }),
   StackPolicyURL: 'stack_policy_url',
   Tags: [
     {
       Key: 'TAG_KEY_1',
-      Value: 'TAG_VAL_1'
+      Value: 'TAG_VAL_1',
     },
     {
       Key: 'TAG_KEY_2',
-      Value: 'TAG_VAL_2'
+      Value: 'TAG_VAL_2',
     },
   ],
   TemplateBody: JSON.stringify({ template: true }),
   TemplateURL: 's3://bucket/template',
-  TimeoutInMinutes: 1
+  TimeoutInMinutes: 1,
 }
 
 const expecting = {

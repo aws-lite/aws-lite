@@ -30,17 +30,17 @@ test('Transform XML', async t => {
           AllowedMethods: {
             CachedMethods: {
               Items: [ 'GET', 'POST', 'DELETE' ],
-              Quantity: 3
+              Quantity: 3,
             },
             Items: [ 'PUT', 'PATCH' ],
-            Quantity: 2
+            Quantity: 2,
           },
           FunctionAssociations: {
             Items: [
               { EventType: 'some-event', FunctionARN: 'some::ARN' },
-              { EventType: 'another-event', FunctionARN: 'another::ARN' }
+              { EventType: 'another-event', FunctionARN: 'another::ARN' },
             ],
-            Quantity: 2
+            Quantity: 2,
           },
           ForwardedValues: {
             Cookies: {
@@ -49,11 +49,11 @@ test('Transform XML', async t => {
                 Items: [],
               },
             },
-          }
-        }
+          },
+        },
       ],
       Quantity: 1,
-    }
+    },
   }
   t.deepEqual(jsObj, same, 'Correctly transformed deeply nested XML `Items` arrays to a sane JS format')
 })

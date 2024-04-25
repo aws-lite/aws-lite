@@ -18,8 +18,8 @@ let mockErr = {
   error: {
     message: 'This blew up',
     code: 'oh_noes',
-    __type: 'service#specific'
-  }
+    __type: 'service#specific',
+  },
 }
 
 test('Set up env', async t => {
@@ -64,7 +64,7 @@ test('Testing - main client', async t => {
   let expectedReq = {
     service: 'lambda',
     method: 'POST',
-    payload: { lambda: 'payload', },
+    payload: { lambda: 'payload' },
   }
   let result = await aws(expectedReq)
 
@@ -115,7 +115,6 @@ test('Testing - plugins (not checking response method output)', async t => {
   t.plan(19)
   client.testing.enable()
 
-  // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
   client.testing.mock('DynamoDB.GetItem', copy(mockRes))
@@ -183,7 +182,6 @@ test('Testing - plugins (response method output)', async t => {
   t.plan(18)
   client.testing.enable({ usePluginResponseMethod: true })
 
-  // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
   client.testing.mock('DynamoDB.GetItem', copy(mockRes))
@@ -259,7 +257,6 @@ test('Testing - request / response sequences', async t => {
   let allRes, lastReq, lastRes, reqParams
   client.testing.enable()
 
-  // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
   let mockRes1 = { ok: true }
@@ -315,7 +312,7 @@ test('Testing - request / response sequences', async t => {
   let allReq = client.testing.getAllRequests()
   let reduced = allReq.map(({ request }) => ({
     TableName: request.TableName,
-    Key: request.Key
+    Key: request.Key,
   }))
   t.deepEqual(reduced, [ expectedReq1, expectedReq2, expectedReq2 ], 'Three requests captured')
 
@@ -329,7 +326,6 @@ test('Testing - dynamic responses', async t => {
   t.plan(9)
   client.testing.enable()
 
-  // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
   let one, two
@@ -371,7 +367,6 @@ test('Testing - multiple services', async t => {
   let allRes, lastReq, lastRes, reqParams
   client.testing.enable()
 
-  // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb'), import('@aws-lite/lambda') ] })
 
   let mockRes1 = { statusCode: 200, payload: { ok: true } }
@@ -386,7 +381,7 @@ test('Testing - multiple services', async t => {
   let expectedReq1 = {
     service: 's3',
     pathPrefix: 'foo',
-    payload: 'bar'
+    payload: 'bar',
   }
   let expectedReq2 = {
     TableName: 'foo',
@@ -447,7 +442,6 @@ test('Testing - mock errors', async t => {
   t.plan(4)
   client.testing.enable()
 
-  // eslint-disable-next-line
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
 
   try {

@@ -8,7 +8,7 @@ async function main () {
 
   let results = await aws.ssm.GetParametersByPath({
     Path: '/aws/service/global-infrastructure/regions',
-    paginate: true
+    paginate: true,
   })
   let regions = results.Parameters.map(({ Value }) => Value).sort().reverse()
   if (!regions.length) throw Error('No regions found! Weird.')

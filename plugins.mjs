@@ -11,7 +11,7 @@ const plugins = [
   {
     // Technically the service here is `execute-api`, but that's not really recognized
     service: 'apigatewaymanagementapi', property: 'ApiGatewayManagementApi',
-    display: 'API Gateway WebSocket Management API', maintainers
+    display: 'API Gateway WebSocket Management API', maintainers,
   },
   { service: 'apigatewayv2', property: 'APIGatewayV2', display: 'API Gateway V2', maintainers },
   { service: 'cloudformation', property: 'CloudFormation', display: 'CloudFormation', maintainers },
@@ -21,7 +21,7 @@ const plugins = [
   { service: 'lambda', property: 'Lambda', display: 'Lambda', maintainers },
   {
     service: 'rds-data', property: 'RDSData',
-    display: 'RDS Data Service', maintainers: [ '@andybee' ]
+    display: 'RDS Data Service', maintainers: [ '@andybee' ],
   },
   { service: 's3', property: 'S3', display: 'S3', maintainers },
   { service: 'sns', property: 'SNS', display: 'SNS', maintainers },

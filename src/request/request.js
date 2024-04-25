@@ -235,7 +235,7 @@ function call (params, args, retrying) {
           host: options.host,
           protocol: options.protocol.replace(':', ''),
           port: options.port,
-        }
+        },
       })
     })
 

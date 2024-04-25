@@ -20,7 +20,7 @@ const defaultRequest = (method, more = {}) => (payload) => {
 const headers = (method, additional) => ({
   'X-Amz-Target': `AmazonSSM.${method}`,
   'content-type': 'application/x-amz-json-1.1',
-  ...additional
+  ...additional,
 })
 const defaultResponse = ({ payload }) => payload
 
@@ -82,10 +82,10 @@ const GetParametersByPath = {
     ParameterFilters: { ...arr, comment: 'Array of filters to limit results' },
     Recursive:        { ...bool, comment: 'Retrieve all parameters within a hierarchy' },
     WithDecryption,
-    paginate:         { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+    paginate:         { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' },
   },
   request: defaultRequest('GetParametersByPath', {
-    paginator: { cursor: 'NextToken', token: 'NextToken', accumulator: 'Parameters' }
+    paginator: { cursor: 'NextToken', token: 'NextToken', accumulator: 'Parameters' },
   }),
   response: defaultResponse,
 }
@@ -124,5 +124,5 @@ export default {
     GetParametersByPath,
     PutParameter,
     ...incomplete,
-  }
+  },
 }

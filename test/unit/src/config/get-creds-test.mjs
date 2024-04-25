@@ -86,17 +86,17 @@ test('Get credentials from credentials file', async t => {
   let defaultProfile = {
     accessKeyId: 'default_aws_access_key_id',
     secretAccessKey: 'default_aws_secret_access_key',
-    sessionToken: undefined
+    sessionToken: undefined,
   }
   let nonDefaultProfile = {
     accessKeyId: 'profile_1_aws_access_key_id',
     secretAccessKey: 'profile_1_aws_secret_access_key',
-    sessionToken: 'profile_1_aws_session_token'
+    sessionToken: 'profile_1_aws_session_token',
   }
   let processProfileCreds = {
     accessKeyId: 'profile_2_aws_access_key_id',
     secretAccessKey: 'profile_2_aws_secret_access_key',
-    sessionToken: undefined
+    sessionToken: undefined,
   }
 
   // Default credentials file location

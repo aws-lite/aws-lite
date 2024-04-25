@@ -153,7 +153,7 @@ async function paginator (params, creds, region, config, metadata) {
   async function get () {
     let result = await makeRequest(
       { ...params, headers: copy(originalHeaders) },
-      creds, region, config, metadata
+      creds, region, config, metadata,
     )
     if (!result.payload) {
       throw ReferenceError('Pagination error: missing API response')

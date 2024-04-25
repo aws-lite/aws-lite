@@ -37,7 +37,7 @@ const PutObject = {
       'GrantFullControl', 'GrantRead', 'GrantReadACP', 'GrantWriteACP', 'ObjectLockLegalHoldStatus',
       'ObjectLockMode', 'ObjectLockRetainUntilDate', 'RequestPayer', 'ServerSideEncryption',
       'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'SSEKMSEncryptionContext',
-      'SSEKMSKeyId', 'StorageClass', 'Tagging', 'WebsiteRedirectLocation')
+      'SSEKMSKeyId', 'StorageClass', 'Tagging', 'WebsiteRedirectLocation'),
   },
   request: async (params, utils) => {
     let { Bucket, Key, File, Body, MinChunkSize, ApplyChecksum } = params
@@ -218,7 +218,7 @@ const PutObject = {
             payloadMetadata(chunk.chunkSize, chunkSignature) +
             `<${body.length}b of data>` +
             chunkBreak +
-            '\n-----------[chunk end]-----------'
+            '\n-----------[chunk end]-----------',
           )
         }
 

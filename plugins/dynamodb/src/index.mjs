@@ -9,7 +9,7 @@ const docRoot = 'https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/
 const devGuide = 'https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/'
 
 // Common params to be AWS-flavored JSON-encoded
-const awsjsonReq = [ 'ExpressionAttributeValues', 'Item', 'Key', ]
+const awsjsonReq = [ 'ExpressionAttributeValues', 'Item', 'Key' ]
 // ... and decoded
 const awsjsonRes = [ 'Attributes', 'Item' ]
 
@@ -88,7 +88,7 @@ const BatchExecuteStatement = {
     return {
       awsjson: false, // Don't re-serialize to AWS-flavored JSON
       headers: headers('BatchExecuteStatement', awsjsonContentType), // Undocumented as of author time
-      payload: { ...params, Statements }
+      payload: { ...params, Statements },
     }
   },
   response: async ({ payload }, { awsjsonUnmarshall }) => {
@@ -119,7 +119,7 @@ const BatchGetItem = {
     return {
       awsjson: false, // Don't re-serialize to AWS-flavored JSON
       headers: headers('BatchGetItem', awsjsonContentType),
-      payload: { ...params, RequestItems }
+      payload: { ...params, RequestItems },
     }
   },
   response: async ({ payload }, { awsjsonUnmarshall }) => {
@@ -131,7 +131,7 @@ const BatchGetItem = {
     if (UnprocessedKeys.length) {
       UnprocessedKeys.forEach(i => payload.UnprocessedKeys[i] = {
         ...payload.UnprocessedKeys[i],
-        Keys: payload.UnprocessedKeys[i]?.Keys?.map(awsjsonUnmarshall)
+        Keys: payload.UnprocessedKeys[i]?.Keys?.map(awsjsonUnmarshall),
       })
     }
     return payload
@@ -165,7 +165,7 @@ const BatchWriteItem = {
     return {
       awsjson: false, // Don't re-serialize to AWS-flavored JSON
       headers: headers('BatchWriteItem', awsjsonContentType),
-      payload: { ...params, RequestItems }
+      payload: { ...params, RequestItems },
     }
   },
   response: async ({ payload }, { awsjsonUnmarshall }) => {
@@ -524,7 +524,7 @@ const ExecuteTransaction = {
     ReturnConsumedCapacity,
   },
   request: async (params, { awsjsonMarshall }) => {
-    if (params.TransactStatements){
+    if (params.TransactStatements) {
       params.TransactStatements = params.TransactStatements.map(i => {
         if (i.Parameters) i.Parameters = i.Parameters.map(awsjsonMarshall)
         return i
@@ -732,7 +732,7 @@ const PutItem = {
     headers: headers('PutItem'),
     payload: params,
   }),
-  response: unmarshall([ 'Attributes', ]),
+  response: unmarshall([ 'Attributes' ]),
   error: defaultError,
 }
 

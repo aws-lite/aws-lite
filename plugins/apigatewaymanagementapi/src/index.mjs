@@ -107,5 +107,5 @@ export default {
     PostToConnection,
     DeleteConnection,
     GetConnection,
-  }
+  },
 }

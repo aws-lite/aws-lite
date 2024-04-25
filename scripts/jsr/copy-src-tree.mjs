@@ -22,7 +22,7 @@ if (existingAwsLiteDirs.length) {
 
 const dirs = [
   cwd,
-  ...pluginList.map(({ service }) => join(cwd, 'plugins', service))
+  ...pluginList.map(({ service }) => join(cwd, 'plugins', service)),
 ]
 dirs.forEach(dir => {
   const pkg = JSON.parse(readFileSync(join(dir, 'package.json')))

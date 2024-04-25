@@ -82,8 +82,8 @@ const CreateStack = {
       query: {
         Action: 'CreateStack',
         Version: '2010-05-15',
-        ...query
-      }
+        ...query,
+      },
     }
   },
   response: ({ payload }) => ({ StackId: payload.CreateStackResult.StackId }),
@@ -101,8 +101,8 @@ const DeleteStack = {
     return {
       query: {
         Action: 'DeleteStack',
-        ...params
-      }
+        ...params,
+      },
     }
   },
   response: () => ({}),
@@ -120,8 +120,8 @@ const DescribeStackResources = {
     return {
       query: {
         Action: 'DescribeStackResources',
-        ...params
-      }
+        ...params,
+      },
     }
   },
   response: ({ payload }) => {
@@ -144,7 +144,7 @@ const DescribeStacks = {
     return {
       query: {
         Action: 'DescribeStacks',
-        ...params
+        ...params,
       },
       paginator: {
         cursor: 'NextToken',
@@ -181,7 +181,7 @@ const ListStackResources = {
     return {
       query: {
         Action: 'ListStackResources',
-        ...params
+        ...params,
       },
       paginator: {
         cursor: 'NextToken',
@@ -235,8 +235,8 @@ const UpdateStack = {
       query: {
         Action: 'UpdateStack',
         Version: '2010-05-15',
-        ...query
-      }
+        ...query,
+      },
     }
   },
   response: ({ payload }) => ({ StackId: payload.UpdateStackResult.StackId }),
@@ -246,5 +246,5 @@ export default {
   name: '@aws-lite/cloudformation',
   service,
   property,
-  methods: { CreateStack, DeleteStack, DescribeStackResources, DescribeStacks, ListStackResources, UpdateStack, ...incomplete }
+  methods: { CreateStack, DeleteStack, DescribeStackResources, DescribeStacks, ListStackResources, UpdateStack, ...incomplete },
 }

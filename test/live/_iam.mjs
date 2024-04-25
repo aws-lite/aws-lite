@@ -9,7 +9,7 @@ export default {
             Action: 'GetRole',
             RoleName: name,
             Version,
-          }
+          },
         }
       },
       response: async ({ payload }) => payload,
@@ -24,10 +24,10 @@ export default {
             Path: path,
             RoleName: name,
             Version,
-          }
+          },
         }
       },
       response: async ({ payload }) => payload,
-    }
-  }
+    },
+  },
 }

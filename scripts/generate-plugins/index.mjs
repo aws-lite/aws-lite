@@ -110,7 +110,7 @@ async function main () {
         methodDocs += `\n\n### Deprecated methods\n\n` +
                       deprecatedMethods.map(({ method, awsDoc }) => awsDoc
                         ? `- [\`${method}\`](${awsDoc})`
-                        : `- \`${method}\``
+                        : `- \`${method}\``,
                       ).join('\n') + '\n'
       }
       if (incompleteMethods.length) {
@@ -118,7 +118,7 @@ async function main () {
                       `> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!\n\n` +
                       incompleteMethods.map(({ method, awsDoc }) => awsDoc
                         ? `- [\`${method}\`](${awsDoc})`
-                        : `- \`${method}\``
+                        : `- \`${method}\``,
                       ).join('\n') + '\n'
       }
       const updatedPluginReadme = pluginReadme.replace(pluginMethodsRegex, methodDocs)

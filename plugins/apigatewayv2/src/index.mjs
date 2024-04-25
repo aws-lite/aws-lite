@@ -39,9 +39,9 @@ const paginator = {
 const pascalToCamelParams = obj => Object.fromEntries(
   Object.entries(obj).reduce(
     (acc, [ k, v ]) => acc.concat(
-      [ [ k[0].toLowerCase() + k.slice(1), v ] ]
-    ), []
-  )
+      [ [ k[0].toLowerCase() + k.slice(1), v ] ],
+    ), [],
+  ),
 )
 const isObj = i => i && typeof i === 'object' && !Array.isArray(i)
 const isArr = i => Array.isArray(i)
@@ -52,10 +52,10 @@ const CamelToPascalParams = obj => Object.fromEntries(
       if (isObj(v)) val = CamelToPascalParams(v)
       if (isArr(v)) val = val.map(CamelToPascalParams)
       return acc.concat(
-        [ [ k[0].toUpperCase() + k.slice(1), val ] ]
+        [ [ k[0].toUpperCase() + k.slice(1), val ] ],
       )
-    }, []
-  )
+    }, [],
+  ),
 )
 
 const CreateDeployment =  {
@@ -126,7 +126,7 @@ const UpdateStage =  {
     AccessLogSettings: { ...obj, comment: 'Access log settings for the stage', ref: docRoot + 'apis-apiid-stages-stagename.html#apis-apiid-stages-stagename-model-accesslogsettings' },
     AutoDeploy: { ...bool, comment: 'Enable automatic deployments upon API updates: `true` or `false` (default)' },
     ClientCertificateId: { ...str, comment: 'Client certificate ID for the stage' },
-    DefaultRouteSettings: { ...obj, comment: 'Default route settings for the stage', ref: docRoot + 'apis-apiid-stages-stagename.html#apis-apiid-stages-stagename-model-routesettings'
+    DefaultRouteSettings: { ...obj, comment: 'Default route settings for the stage', ref: docRoot + 'apis-apiid-stages-stagename.html#apis-apiid-stages-stagename-model-routesettings',
     },
     DeploymentId: { ...str, comment: 'Deployment ID for the API stage; cannot be updated if `autoDeploy` is enabled' },
     Description,
@@ -149,5 +149,5 @@ export default {
   name: '@aws-lite/apigatewayv2',
   service,
   property,
-  methods: { CreateDeployment, GetDeployment, GetDeployments, UpdateStage, ...incomplete }
+  methods: { CreateDeployment, GetDeployment, GetDeployments, UpdateStage, ...incomplete },
 }

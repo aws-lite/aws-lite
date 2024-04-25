@@ -129,7 +129,7 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
     secretAccessKey,
     region,
     endpoint: `http://localhost:${port}`,
-    plugins: [ import('@aws-lite/dynamodb') ]
+    plugins: [ import('@aws-lite/dynamodb') ],
   }
 
   aws = await client(basicConfig)
@@ -142,8 +142,8 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
         data: {
           str: 'hi',
           undef: undefined,
-        }
-      }
+        },
+      },
     })
     t.fail('Expected an error')
   }
@@ -163,8 +163,8 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
             // eslint-disable-next-line
             #private = 'shh'
           },
-        }
-      }
+        },
+      },
     })
     t.fail('Expected an error')
   }
@@ -196,8 +196,8 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
             // eslint-disable-next-line
             #private = 'shh'
           },
-        }
-      }
+        },
+      },
     })
     req = server.getCurrentRequest()
     t.deepEqual(req.body, {
@@ -209,11 +209,11 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
             M: {
               str: { S: 'hi' },
               empty: { NULL: true },
-              class: { M: { hello: { S: 'there' } } }
-            }
-          }
-        }
-      }
+              class: { M: { hello: { S: 'there' } } },
+            },
+          },
+        },
+      },
     }, 'Posted request with marshall options reflected')
   }
   catch (err) {

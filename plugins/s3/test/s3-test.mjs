@@ -54,8 +54,8 @@ test('Create bucket', async t => {
   let createBucketResponse = await aws.S3.CreateBucket({
     Bucket: bucketName,
     CreateBucketConfiguration: {
-      LocationConstraint: region
-    }
+      LocationConstraint: region,
+    },
   })
   t.equal(createBucketResponse.Location, location, `Created bucket ${bucketName}`)
 })
@@ -100,7 +100,7 @@ test('Put first object (from file)', async t => {
     Bucket: bucketName,
     Key: objectNames[0],
     File: join(tmp, objectNames[0]),
-    ContentType: contentTypes[0]
+    ContentType: contentTypes[0],
   })
   t.ok(putObjectResponse, `Object ${objectNames[0]} created`)
 })
@@ -160,7 +160,7 @@ test('Put second object (from string)', async t => {
     Bucket: bucketName,
     Key: `${objectNames[1]}`,
     Body: objectContents[1],
-    ContentType: contentTypes[1]
+    ContentType: contentTypes[1],
   })
   t.ok(putObjectResponse, `Object ${objectNames[1]} created`)
 })
@@ -237,7 +237,7 @@ test('Delete first object', async t => {
   client.testing.mock('S3.DeleteObject', { statusCode: 204 })
   let deleteObjectResponse = await aws.S3.DeleteObject({
     Bucket: bucketName,
-    Key: objectNames[0]
+    Key: objectNames[0],
   })
   t.ok(deleteObjectResponse, `Deleted object ${objectNames[0]}`)
 })
@@ -252,7 +252,7 @@ test('Delete second object', async t => {
 
   let deleteObjectsResponse = await aws.S3.DeleteObjects({
     Bucket: bucketName,
-    Delete: { Objects: [ { Key: objectNames[1] } ] }
+    Delete: { Objects: [ { Key: objectNames[1] } ] },
   })
   t.equal(deleteObjectsResponse.Deleted[0].Key, objectNames[1],  `Deleted object ${objectNames[1]}`)
 })
@@ -261,7 +261,7 @@ test('Delete bucket', async t => {
   t.plan(1)
   client.testing.mock('S3.DeleteBucket', { statusCode: 204 })
   let deleteBucketResponse = await aws.S3.DeleteBucket({
-    Bucket: bucketName
+    Bucket: bucketName,
   })
   t.ok(deleteBucketResponse, `Deleted bucket ${bucketName}`)
 })

@@ -35,7 +35,7 @@ const maybeAddETag = (result, headers) => {
 const CreateDistribution = {
   awsDoc: docRoot + 'API_CreateDistribution.html',
   validate: {
-    DistributionConfig: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistribution.html#API_CreateDistribution_RequestSyntax' }
+    DistributionConfig: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistribution.html#API_CreateDistribution_RequestSyntax' },
     // TODO enable nested validation
     /*
     CallerReference,
@@ -65,7 +65,7 @@ const CreateDistribution = {
       path: '/2020-05-31/distribution',
       method: 'POST',
       headers: xml,
-      payload: { DistributionConfig }
+      payload: { DistributionConfig },
     }
   },
   response: ({ headers, payload }) => {
@@ -88,7 +88,7 @@ const CreateInvalidation = {
       InvalidationBatch: {
         CallerReference,
         Paths: { Items, Quantity: Items.length },
-      }
+      },
     })
     return {
       path: `/2020-05-31/distribution/${Id}/invalidation`,
@@ -134,7 +134,7 @@ const GetDistribution = {
     // Drop into the distribution config (instead of expecting arrayifyObject to handle things) so as to keep the property paths from having to prepend DistributionConfig
     Distribution.DistributionConfig = arrayifyObject(Distribution.DistributionConfig)
     return maybeAddETag({ Distribution }, headers)
-  }
+  },
 }
 
 const GetDistributionConfig = {
@@ -150,7 +150,7 @@ const GetDistributionConfig = {
   response: ({ headers, payload }) => {
     const DistributionConfig = arrayifyObject(payload)
     return maybeAddETag({ DistributionConfig }, headers)
-  }
+  },
 }
 
 const ListDistributions = {
@@ -179,13 +179,13 @@ const ListDistributions = {
       // In the raw paginated state, each response is its own array nested in an object containing a DistributionSummary property
       // So we have to pull out all the arrays, concat + flatten them, then re-wrap the array in a single DistributionSummary obj before we run arrayifyItemsProp
       payload.Items = {
-        DistributionSummary: payload.Items.map(i => i.DistributionSummary).flat()
+        DistributionSummary: payload.Items.map(i => i.DistributionSummary).flat(),
       }
     }
     const DistributionList = arrayifyItemsProp(payload)
     DistributionList.Items = DistributionList.Items.map(i => arrayifyObject(i))
     return maybeAddETag({ DistributionList }, headers)
-  }
+  },
 }
 
 const UpdateDistribution = {
@@ -208,12 +208,12 @@ const UpdateDistribution = {
   response: ({ headers, payload }) => {
     const DistributionConfig = arrayifyObject(payload)
     return maybeAddETag({ DistributionConfig }, headers)
-  }
+  },
 }
 
 export default {
   name: '@aws-lite/cloudfront',
   service,
   property,
-  methods: { CreateDistribution, CreateInvalidation, DeleteDistribution, GetDistribution, GetDistributionConfig, ListDistributions, UpdateDistribution, ...incomplete }
+  methods: { CreateDistribution, CreateInvalidation, DeleteDistribution, GetDistribution, GetDistributionConfig, ListDistributions, UpdateDistribution, ...incomplete },
 }

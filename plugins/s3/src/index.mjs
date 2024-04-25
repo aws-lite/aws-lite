@@ -31,7 +31,7 @@ function getHost ({ Bucket }, { region, config }) {
   if (/\./.test(Bucket)) {
     return {
       host: config.host || `s3.${region}.amazonaws.com`,
-      pathPrefix: `/${Bucket}`
+      pathPrefix: `/${Bucket}`,
     }
   }
   // Current virtual-hosted-style URls
@@ -67,7 +67,7 @@ const CreateBucket = {
   },
   response: ({ headers }) => {
     return { Location: headers.Location || headers.location }
-  }
+  },
 }
 
 const DeleteBucket = {
@@ -189,7 +189,7 @@ const GetObject = {
   response: ({ headers, payload }) => {
     return {
       Body: payload,
-      ...parseHeadersToResults({ headers }, null, [])
+      ...parseHeadersToResults({ headers }, null, []),
     }
   },
   error: defaultError,
@@ -284,7 +284,7 @@ const ListObjectsV2 = {
     StartAfter:         { ...str, comment: 'Starts listing after any specified key in the bucket' },
     // Here come the headers
     ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'OptionalObjectAttributes'),
-    paginate:           { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+    paginate:           { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' },
   },
   request: (params, utils) => {
     const { paginate } = params
@@ -299,7 +299,7 @@ const ListObjectsV2 = {
       headers,
       query,
       paginate,
-      paginator: { type: 'query', cursor: 'continuation-token', token: 'NextContinuationToken', accumulator: 'Contents' }
+      paginator: { type: 'query', cursor: 'continuation-token', token: 'NextContinuationToken', accumulator: 'Contents' },
     }
   },
   response: ({ headers, payload }) => {

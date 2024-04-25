@@ -67,7 +67,7 @@ let benchmarks = {
       `,
       runs: [],
     },
-  }
+  },
 }
 
 let benchmarksToRun = [

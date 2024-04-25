@@ -29,12 +29,12 @@ function querystringifyParams (obj) {
   const query = Object.fromEntries(
     Object.entries(raw)
       .filter(([ , v ]) => typeof v !== 'undefined')
-      .sort(([ kA ], [ kB ]) => kA > kB ? 1 : -1)
+      .sort(([ kA ], [ kB ]) => kA > kB ? 1 : -1),
   )
 
   return query
 }
 
 export {
-  querystringifyParams
+  querystringifyParams,
 }

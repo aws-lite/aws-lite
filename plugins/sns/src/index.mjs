@@ -46,7 +46,7 @@ const Publish = {
     query: {
       Action: 'Publish',
       ...params,
-    }
+    },
   }),
   response: defaultResponse, // v2 lifts PublishResult contents to the top level
   error: defaultError,
@@ -59,5 +59,5 @@ export default {
   methods: {
     Publish,
     ...incomplete,
-  }
+  },
 }

@@ -31,14 +31,14 @@ async function main () {
       KeySchema: [
         {
           AttributeName: 'id',
-          KeyType: 'HASH'
-        }
+          KeyType: 'HASH',
+        },
       ],
       AttributeDefinitions: [
         {
           AttributeName: 'id',
           AttributeType: 'S',
-        }
+        },
       ],
       BillingMode: 'PAY_PER_REQUEST',
     },

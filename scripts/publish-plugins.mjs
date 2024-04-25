@@ -70,7 +70,7 @@ async function main () {
       await new Promise((res, rej) => {
         let child = spawn('npm', args, {
           cwd: join(cwd, mod),
-          stdio: 'inherit'
+          stdio: 'inherit',
         })
         child.on('close', code => {
           if (foundErrors || code !== 0) rej()
