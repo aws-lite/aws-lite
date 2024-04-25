@@ -157,7 +157,9 @@ Properties:
 - **`ResponseExpires` (string)**
   - Sets response header: `expires`
 - **`rawResponsePayload` (boolean)**
-  - Set to `true` to return all files as buffers, and disable automatic parsing of JSON and XML
+  - Set to `true` to return payload as a buffer
+- **`streamResponsePayload` (boolean)**
+  - Set to `true` to return payload as a Node.js stream
 
 
 ### `HeadObject`

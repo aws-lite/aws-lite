@@ -165,10 +165,11 @@ const GetObject = {
     ResponseContentType:        { ...str, comment: 'Sets response header: `content-type`' },
     ResponseExpires:            { ...str, comment: 'Sets response header: `expires`' },
     // Not strictly necessary since users can pass this through with any request, but it's good for folks to know it's available on this particular method
-    rawResponsePayload:         { ...bool, comment: 'Set to `true` to return all files as buffers, and disable automatic parsing of JSON and XML' }
+    rawResponsePayload:         { ...bool, comment: 'Set to `true` to return payload as a buffer' },
+    streamResponsePayload:      { ...bool, comment: 'Set to `true` to return payload as a Node.js stream' },
   },
   request: (params, utils) => {
-    const { Key, rawResponsePayload = false } = params
+    const { Key, rawResponsePayload = false, streamResponsePayload = false } = params
     const queryParams = [ 'PartNumber', 'ResponseCacheControl', 'ResponseContentDisposition',
       'ResponseContentEncoding', 'ResponseContentLanguage', 'ResponseContentType',
       'ResponseExpires', 'VersionId' ]
@@ -182,6 +183,7 @@ const GetObject = {
       headers,
       query,
       rawResponsePayload,
+      streamResponsePayload,
     }
   },
   response: ({ headers, payload }) => {
