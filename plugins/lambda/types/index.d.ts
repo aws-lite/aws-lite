@@ -3,6 +3,9 @@ import {
   // $IMPORTS_START
   CreateFunctionCommandOutput as CreateFunctionResponse,
   DeleteFunctionConcurrencyCommandOutput as DeleteFunctionConcurrencyResponse,
+  GetFunctionCommandOutput as GetFunctionResponse,
+  GetFunctionCodeSigningConfigCommandOutput as GetFunctionCodeSigningConfigResponse,
+  GetFunctionConcurrencyCommandOutput as GetFunctionConcurrencyResponse,
   GetFunctionConfigurationCommandOutput as GetFunctionConfigurationResponse,
   InvokeCommandOutput as InvokeResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
@@ -26,6 +29,24 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionConcurrency Lambda: DeleteFunctionConcurrency}
    */
   DeleteFunctionConcurrency: (input: { FunctionName: string }) => Promise<DeleteFunctionConcurrencyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html Lambda: GetFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetFunction Lambda: GetFunction}
+   */
+  GetFunction: (input: { FunctionName: string, Qualifier?: string }) => Promise<GetFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionCodeSigningConfig.html Lambda: GetFunctionCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetFunctionCodeSigningConfig Lambda: GetFunctionCodeSigningConfig}
+   */
+  GetFunctionCodeSigningConfig: (input: { FunctionName: string }) => Promise<GetFunctionCodeSigningConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConcurrency.html Lambda: GetFunctionConcurrency}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetFunctionConcurrency Lambda: GetFunctionConcurrency}
+   */
+  GetFunctionConcurrency: (input: { FunctionName: string }) => Promise<GetFunctionConcurrencyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html Lambda: GetFunctionConfiguration}
@@ -71,6 +92,9 @@ export type {
   // $EXPORT_START
   CreateFunctionResponse,
   DeleteFunctionConcurrencyResponse,
+  GetFunctionResponse,
+  GetFunctionCodeSigningConfigResponse,
+  GetFunctionConcurrencyResponse,
   GetFunctionConfigurationResponse,
   InvokeResponse,
   PutFunctionConcurrencyResponse,

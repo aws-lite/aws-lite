@@ -100,6 +100,35 @@ Properties:
   - The name of the Lambda function, version, or alias
 
 
+### `GetFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `GetFunctionCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionCodeSigningConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+
+
+### `GetFunctionConcurrency`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConcurrency.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+
+
 ### `GetFunctionConfiguration`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html)
@@ -244,9 +273,6 @@ Properties:
 - [`GetAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAlias.html)
 - [`GetCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetCodeSigningConfig.html)
 - [`GetEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetEventSourceMapping.html)
-- [`GetFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html)
-- [`GetFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionCodeSigningConfig.html)
-- [`GetFunctionConcurrency`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConcurrency.html)
 - [`GetFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionEventInvokeConfig.html)
 - [`GetFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html)
 - [`GetLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html)

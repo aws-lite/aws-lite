@@ -88,14 +88,56 @@ const DeleteFunctionConcurrency = {
   response: () => ({}),
 }
 
+const GetFunction = {
+  awsDoc: docRoot + 'API_GetFunction.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2015-03-31/functions/${FunctionName}`,
+      query,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetFunctionConcurrency = {
+  awsDoc: docRoot + 'API_GetFunctionConcurrency.html',
+  validate: {
+    FunctionName,
+  },
+  request: ({ FunctionName }) => {
+    return {
+      path: `/2019-09-30/functions/${FunctionName}/concurrency`,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetFunctionCodeSigningConfig = {
+  awsDoc: docRoot + 'API_GetFunctionCodeSigningConfig.html',
+  validate: {
+    FunctionName,
+  },
+  request: ({ FunctionName }) => {
+    return {
+      path: `/2020-06-30/functions/${FunctionName}/code-signing-config`,
+    }
+  },
+  response: defaultResponse,
+}
+
 const GetFunctionConfiguration = {
   awsDoc: docRoot + 'API_GetFunctionConfiguration.html',
   validate: {
     FunctionName,
     Qualifier,
   },
-  request: async (params) => {
-    const { FunctionName, Qualifier } = params
+  request: ({ FunctionName, Qualifier }) => {
     let query
     if (Qualifier) query = { Qualifier }
     return {
@@ -238,6 +280,9 @@ export default {
   methods: {
     CreateFunction,
     DeleteFunctionConcurrency,
+    GetFunction,
+    GetFunctionCodeSigningConfig,
+    GetFunctionConcurrency,
     GetFunctionConfiguration,
     Invoke,
     PutFunctionConcurrency,
