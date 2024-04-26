@@ -144,6 +144,15 @@ async function paginator (params, creds, region, config, metadata) {
     throw ReferenceError(`aws-lite paginator type must be one of: ${validPaginationTypes.join(', ')}`)
   }
 
+  // Normalize cursors and tokens into iterables, then validate
+  if (is.string(cursor) && is.string(token)) {
+    cursor = [ cursor ]
+    token = [ token ]
+  }
+  if (cursor.length !== token.length) {
+    throw ReferenceError(`aws-lite paginator requires an equal number of cursor and token properties`)
+  }
+
   // aws4 has a lot of options, so our request() method mutates the passed params and just signs the whole thing
   // That's normally fine! But we need to start from a fresh copy of the original headers each time, or content-length, auth, etc. will be passed by reference, and may get borked across multiple sequential requests
   let originalHeaders = copy(params.headers || {})
@@ -182,30 +191,34 @@ async function paginator (params, creds, region, config, metadata) {
       return
     }
 
-    if (is.string(cursor) && is.string(token)) {
-      cursor = [ cursor ]
-      token = [ token ]
-    }
-    if (cursor.length !== token.length) {
-      throw ReferenceError(`aws-lite paginator requires an equal number of cursor and token properties`)
-    }
-
-    // Some services will just keep re-sending the final page with the final token
-    // Exit here to prevent infinite loops if cursors match
-    let checkPageEquality = (t, i) => result.payload[t] &&
-                                      result.payload[t] === params[type][cursor[i]]
-    if (token.every(checkPageEquality)) {
-      return
-    }
-
+    // Yay, results!
     items.push(...accumulated)
-    if (token.every(t => result.payload[t])) {
+
+    // Determine whether we have tokens, which would necessitate making the next pagination call
+    // Some APIs nest their tokens (e.g. XML responses), so we need to account for those
+    // Moreover, some services will just keep re-sending the final page with the final token, so also prevent infinite loops if cursors match
+    let foundTokens = token.map((t, i) => {
+      let nestedToken = t.split('.').length > 1
+      if (nestedToken) {
+        let foundNestedToken = t.split('.').reduce((parent, child) => parent?.[child], result.payload)
+        // Final page was not re-sent with final token
+        if (foundNestedToken && (foundNestedToken !== params[type][cursor[i]])) {
+          return foundNestedToken
+        }
+      }
+      // Final page was not re-sent with final token
+      else if (result.payload[t] && (result.payload[t] !== params[type][cursor[i]])) {
+        return result.payload[t]
+      }
+    }).filter(Boolean)
+
+    if (foundTokens.length) {
       if (type === 'payload' || !type) {
-        token.forEach((t, i) => params.payload[cursor[i]] = result.payload[t])
+        token.forEach((t, i) => params.payload[cursor[i]] = foundTokens[i])
       }
       if (type === 'query') {
         params.query = params.query || {}
-        token.forEach((t, i) => params.query[cursor[i]] = result.payload[t])
+        token.forEach((t, i) => params.query[cursor[i]] = foundTokens[i])
       }
       page++
       if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
