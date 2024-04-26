@@ -3,10 +3,15 @@ import {
   // $IMPORTS_START
   CreateFunctionCommandOutput as CreateFunctionResponse,
   DeleteFunctionConcurrencyCommandOutput as DeleteFunctionConcurrencyResponse,
+  GetAliasCommandOutput as GetAliasResponse,
+  GetCodeSigningConfigCommandOutput as GetCodeSigningConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
   GetFunctionCodeSigningConfigCommandOutput as GetFunctionCodeSigningConfigResponse,
   GetFunctionConcurrencyCommandOutput as GetFunctionConcurrencyResponse,
   GetFunctionConfigurationCommandOutput as GetFunctionConfigurationResponse,
+  GetFunctionUrlConfigCommandOutput as GetFunctionUrlConfigResponse,
+  GetLayerVersionCommandOutput as GetLayerVersionResponse,
+  GetRuntimeManagementConfigCommandOutput as GetRuntimeManagementConfigResponse,
   InvokeCommandOutput as InvokeResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
@@ -31,6 +36,18 @@ declare interface AwsLiteLambda {
   DeleteFunctionConcurrency: (input: { FunctionName: string }) => Promise<DeleteFunctionConcurrencyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetAlias.html Lambda: GetAlias}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetAlias Lambda: GetAlias}
+   */
+  GetAlias: (input: { FunctionName: string, Name: string }) => Promise<GetAliasResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetCodeSigningConfig.html Lambda: GetCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetCodeSigningConfig Lambda: GetCodeSigningConfig}
+   */
+  GetCodeSigningConfig: (input: { CodeSigningConfigArn?: string }) => Promise<GetCodeSigningConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html Lambda: GetFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetFunction Lambda: GetFunction}
    */
@@ -53,6 +70,24 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetFunctionConfiguration Lambda: GetFunctionConfiguration}
    */
   GetFunctionConfiguration: (input: { FunctionName: string, Qualifier?: string }) => Promise<GetFunctionConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html Lambda: GetFunctionUrlConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetFunctionUrlConfig Lambda: GetFunctionUrlConfig}
+   */
+  GetFunctionUrlConfig: (input: { FunctionName: string, Qualifier?: string }) => Promise<GetFunctionUrlConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html Lambda: GetLayerVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetLayerVersion Lambda: GetLayerVersion}
+   */
+  GetLayerVersion: (input: { LayerName: string, VersionNumber: number }) => Promise<GetLayerVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetRuntimeManagementConfig.html Lambda: GetRuntimeManagementConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetRuntimeManagementConfig Lambda: GetRuntimeManagementConfig}
+   */
+  GetRuntimeManagementConfig: (input: { FunctionName: string, Qualifier?: string }) => Promise<GetRuntimeManagementConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html Lambda: Invoke}
@@ -92,10 +127,15 @@ export type {
   // $EXPORT_START
   CreateFunctionResponse,
   DeleteFunctionConcurrencyResponse,
+  GetAliasResponse,
+  GetCodeSigningConfigResponse,
   GetFunctionResponse,
   GetFunctionCodeSigningConfigResponse,
   GetFunctionConcurrencyResponse,
   GetFunctionConfigurationResponse,
+  GetFunctionUrlConfigResponse,
+  GetLayerVersionResponse,
+  GetRuntimeManagementConfigResponse,
   InvokeResponse,
   PutFunctionConcurrencyResponse,
   UpdateFunctionCodeResponse,

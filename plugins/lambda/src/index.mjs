@@ -88,6 +88,33 @@ const DeleteFunctionConcurrency = {
   response: () => ({}),
 }
 
+const GetAlias = {
+  awsDoc: docRoot + 'API_GetAlias.html',
+  validate: {
+    FunctionName,
+    Name: { ...str, required, comment: 'Name of the function alias' },
+  },
+  request: ({ FunctionName, Name }) => {
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/aliases/${Name}`,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetCodeSigningConfig = {
+  awsDoc: docRoot + 'API_GetCodeSigningConfig.html',
+  validate: {
+    CodeSigningConfigArn: { ...str, comment: 'ARN of the code signing configuration' },
+  },
+  request: ({ CodeSigningConfigArn }) => {
+    return {
+      path: `/2020-04-22/code-signing-configs/${CodeSigningConfigArn}`,
+    }
+  },
+  response: defaultResponse,
+}
+
 const GetFunction = {
   awsDoc: docRoot + 'API_GetFunction.html',
   validate: {
@@ -142,6 +169,54 @@ const GetFunctionConfiguration = {
     if (Qualifier) query = { Qualifier }
     return {
       path: `/2015-03-31/functions/${FunctionName}/configuration`,
+      query,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetFunctionUrlConfig = {
+  awsDoc: docRoot + 'API_GetFunctionUrlConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) =>  {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2021-10-31/functions/${FunctionName}/url`,
+      query,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetLayerVersion = {
+  awsDoc: docRoot + 'API_GetLayerVersion.html',
+  validate: {
+    LayerName: { ...str, required,  comment: 'Name or ARN of the layer' },
+    VersionNumber: { ...num, required, comment: 'The version number of the layer' },
+  },
+  request: ({ LayerName, VersionNumber }) => {
+    return {
+      path: `/2018-10-31/layers/${LayerName}/versions/${VersionNumber}`,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetRuntimeManagementConfig = {
+  awsDoc: docRoot + 'API_GetRuntimeManagementConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = Qualifier
+    return {
+      path: `/2021-07-20/functions/${FunctionName}/runtime-management-config`,
       query,
     }
   },
@@ -280,10 +355,15 @@ export default {
   methods: {
     CreateFunction,
     DeleteFunctionConcurrency,
+    GetAlias,
+    GetCodeSigningConfig,
     GetFunction,
     GetFunctionCodeSigningConfig,
     GetFunctionConcurrency,
     GetFunctionConfiguration,
+    GetFunctionUrlConfig,
+    GetLayerVersion,
+    GetRuntimeManagementConfig,
     Invoke,
     PutFunctionConcurrency,
     UpdateFunctionCode,

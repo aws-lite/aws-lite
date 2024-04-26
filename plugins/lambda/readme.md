@@ -100,6 +100,26 @@ Properties:
   - The name of the Lambda function, version, or alias
 
 
+### `GetAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAlias.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Name` (string) [required]**
+  - Name of the function alias
+
+
+### `GetCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetCodeSigningConfig.html)
+
+Properties:
+- **`CodeSigningConfigArn` (string)**
+  - ARN of the code signing configuration
+
+
 ### `GetFunction`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html)
@@ -132,6 +152,39 @@ Properties:
 ### `GetFunctionConfiguration`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `GetFunctionUrlConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `GetLayerVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+
+
+### `GetRuntimeManagementConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetRuntimeManagementConfig.html)
 
 Properties:
 - **`FunctionName` (string) [required]**
@@ -270,17 +323,12 @@ Properties:
 - [`DeleteLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html)
 - [`DeleteProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteProvisionedConcurrencyConfig.html)
 - [`GetAccountSettings`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAccountSettings.html)
-- [`GetAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAlias.html)
-- [`GetCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetCodeSigningConfig.html)
 - [`GetEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetEventSourceMapping.html)
 - [`GetFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionEventInvokeConfig.html)
-- [`GetFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html)
-- [`GetLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html)
 - [`GetLayerVersionByArn`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionByArn.html)
 - [`GetLayerVersionPolicy`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionPolicy.html)
 - [`GetPolicy`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html)
 - [`GetProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetProvisionedConcurrencyConfig.html)
-- [`GetRuntimeManagementConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetRuntimeManagementConfig.html)
 - [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
 - [`ListAliases`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html)
