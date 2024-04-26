@@ -148,7 +148,7 @@ const DescribeStacks = {
       },
       paginator: {
         cursor: 'NextToken',
-        token: 'NextToken',
+        token: 'DescribeStacksResponse.NextToken',
         accumulator: 'DescribeStacksResult.Stacks.member',
         type: 'query',
       },
@@ -185,7 +185,7 @@ const ListStackResources = {
       },
       paginator: {
         cursor: 'NextToken',
-        token: 'NextToken',
+        token: 'ListStackResourcesResult.NextToken',
         accumulator: 'ListStackResourcesResult.StackResourceSummaries.member',
         type: 'query',
       },
