@@ -2,6 +2,15 @@
 
 ---
 
+## [0.21.1] 2024-04-26
+
+### Fixed
+
+- Allow paginator to accept nested tokens
+  - Because XML, of course
+
+---
+
 ## [0.21.0] 2024-04-25
 
 ### Added
