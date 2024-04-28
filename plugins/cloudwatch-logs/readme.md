@@ -115,6 +115,36 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `GetQueryResults`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetQueryResults.html)
+
+Properties:
+- **`queryId` (string)**
+  - The ID of the query
+
+
+### `StartQuery`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartQuery.html)
+
+Properties:
+- **`endTime` (number)**
+  - End of the time range in epoch seconds
+- **`limit` (number)**
+  - Maximum number of items to evaluate and return
+- **`logGroupIdentifiers` (array)**
+  - List of log groups to query. `StartQuery` requires exactly one of `logGroupName`, `logGroupNames` or `logGroupIdentifiers`.
+- **`logGroupName` (string)**
+  - Name of the log group
+- **`logGroupNames` (array)**
+  - List of log groups to query. `StartQuery` requires exactly one of `logGroupName`, `logGroupNames` or `logGroupIdentifiers`.
+- **`query` (string)**
+  - The query string to use
+- **`startTime` (number)**
+  - Start of the time range in epoch seconds
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
@@ -161,7 +191,6 @@ Properties:
 - [`GetLogAnomalyDetector`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogAnomalyDetector.html)
 - [`GetLogGroupFields`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogGroupFields.html)
 - [`GetLogRecord`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogRecord.html)
-- [`GetQueryResults`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetQueryResults.html)
 - [`ListAnomalies`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_ListAnomalies.html)
 - [`ListLogAnomalyDetectors`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_ListLogAnomalyDetectors.html)
 - [`ListTagsForResource`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_ListTagsForResource.html)
@@ -180,7 +209,6 @@ Properties:
 - [`PutRetentionPolicy`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutRetentionPolicy.html)
 - [`PutSubscriptionFilter`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutSubscriptionFilter.html)
 - [`StartLiveTail`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartLiveTail.html)
-- [`StartQuery`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartQuery.html)
 - [`StopQuery`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StopQuery.html)
 - [`TagLogGroup`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_TagLogGroup.html)
 - [`TagResource`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_TagResource.html)
