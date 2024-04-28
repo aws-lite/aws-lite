@@ -145,9 +145,45 @@ const GetLogEvents = {
   response: defaultResponse,
 }
 
+const GetQueryResults = {
+  awsDoc: docRoot + 'API_GetQueryResults.html',
+  validate: {
+    queryId: { ...str, comment: 'The ID of the query' },
+  },
+  request: (params) => {
+    return {
+      awsjson: false,
+      headers: headers('GetQueryResults'),
+      payload: params,
+    }
+  },
+  response: defaultResponse,
+}
+
+const StartQuery = {
+  awsDoc: docRoot + 'API_StartQuery.html',
+  validate: {
+    endTime: { ...num, comment: 'End of the time range in epoch seconds' },
+    limit,
+    logGroupIdentifiers: { ...arr, comment: 'List of log groups to query. `StartQuery` requires exactly one of `logGroupName`, `logGroupNames` or `logGroupIdentifiers`.' },
+    logGroupName,
+    logGroupNames: { ...arr, comment: 'List of log groups to query. `StartQuery` requires exactly one of `logGroupName`, `logGroupNames` or `logGroupIdentifiers`.' },
+    query: { ...str, comment: 'The query string to use' },
+    startTime: { ...num, comment: 'Start of the time range in epoch seconds' },
+  },
+  request: (params) => {
+    return {
+      awsjson: false,
+      headers: headers('StartQuery'),
+      payload: params,
+    }
+  },
+  response: defaultResponse,
+}
+
 export default {
   name: '@aws-lite/cloudwatch-logs',
   service,
   property,
-  methods: { DeleteLogGroup, DescribeLogGroups, DescribeLogStreams, GetLogEvents, ...incomplete },
+  methods: { DeleteLogGroup, DescribeLogGroups, DescribeLogStreams, GetLogEvents, GetQueryResults, StartQuery, ...incomplete },
 }

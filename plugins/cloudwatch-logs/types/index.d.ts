@@ -5,6 +5,8 @@ import {
   DescribeLogGroupsCommandOutput as DescribeLogGroupsResponse,
   DescribeLogStreamsCommandOutput as DescribeLogStreamsResponse,
   GetLogEventsCommandOutput as GetLogEventsResponse,
+  GetQueryResultsCommandOutput as GetQueryResultsResponse,
+  StartQueryCommandOutput as StartQueryResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudwatch-logs";
 
@@ -35,6 +37,18 @@ declare interface AwsLiteCloudWatchLogs {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudwatch-logs/readme.md#GetLogEvents CloudWatch Logs: GetLogEvents}
    */
   GetLogEvents: (input: { endTime?: number, limit?: number, logGroupIdentifier?: string, logGroupName?: string, logStreamName: string, nextToken?: string, startFromHead?: boolean, startTime?: number, unmask?: boolean, paginate?: boolean }) => Promise<GetLogEventsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetQueryResults.html CloudWatch Logs: GetQueryResults}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudwatch-logs/readme.md#GetQueryResults CloudWatch Logs: GetQueryResults}
+   */
+  GetQueryResults: (input: { queryId?: string }) => Promise<GetQueryResultsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartQuery.html CloudWatch Logs: StartQuery}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudwatch-logs/readme.md#StartQuery CloudWatch Logs: StartQuery}
+   */
+  StartQuery: (input: { endTime?: number, limit?: number, logGroupIdentifiers?: any[], logGroupName?: string, logGroupNames?: any[], query?: string, startTime?: number }) => Promise<StartQueryResponse>
   // $METHODS_END
 }
 
@@ -52,5 +66,7 @@ export type {
   DescribeLogGroupsResponse,
   DescribeLogStreamsResponse,
   GetLogEventsResponse,
+  GetQueryResultsResponse,
+  StartQueryResponse,
   // $EXPORT_END
 }
