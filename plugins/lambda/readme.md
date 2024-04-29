@@ -100,6 +100,14 @@ Properties:
   - The name of the Lambda function, version, or alias
 
 
+### `GetAccountSettings`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAccountSettings.html)
+
+Properties:
+
+
+
 ### `GetAlias`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAlias.html)
@@ -118,6 +126,15 @@ Properties:
 Properties:
 - **`CodeSigningConfigArn` (string)**
   - ARN of the code signing configuration
+
+
+### `GetEventSourceMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetEventSourceMapping.html)
+
+Properties:
+- **`UUID` (string) [required]**
+  - ARN of the eventu source mapping
 
 
 ### `GetFunction`
@@ -160,6 +177,17 @@ Properties:
   - Specify a version or alias to invoke a published version of the function
 
 
+### `GetFunctionEventInvokeConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionEventInvokeConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
 ### `GetFunctionUrlConfig`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html)
@@ -180,6 +208,26 @@ Properties:
   - Name or ARN of the layer
 - **`VersionNumber` (number) [required]**
   - The version number of the layer
+
+
+### `GetLayerVersionByArn`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionByArn.html)
+
+Properties:
+- **`Arn` (string) [required]**
+  - The ARN of the layer version
+
+
+### `GetPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
 
 
 ### `GetRuntimeManagementConfig`
@@ -322,12 +370,7 @@ Properties:
 - [`DeleteFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html)
 - [`DeleteLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html)
 - [`DeleteProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteProvisionedConcurrencyConfig.html)
-- [`GetAccountSettings`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAccountSettings.html)
-- [`GetEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetEventSourceMapping.html)
-- [`GetFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionEventInvokeConfig.html)
-- [`GetLayerVersionByArn`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionByArn.html)
 - [`GetLayerVersionPolicy`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionPolicy.html)
-- [`GetPolicy`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html)
 - [`GetProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetProvisionedConcurrencyConfig.html)
 - [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)

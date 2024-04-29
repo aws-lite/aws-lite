@@ -3,14 +3,19 @@ import {
   // $IMPORTS_START
   CreateFunctionCommandOutput as CreateFunctionResponse,
   DeleteFunctionConcurrencyCommandOutput as DeleteFunctionConcurrencyResponse,
+  GetAccountSettingsCommandOutput as GetAccountSettingsResponse,
   GetAliasCommandOutput as GetAliasResponse,
   GetCodeSigningConfigCommandOutput as GetCodeSigningConfigResponse,
+  GetEventSourceMappingCommandOutput as GetEventSourceMappingResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
   GetFunctionCodeSigningConfigCommandOutput as GetFunctionCodeSigningConfigResponse,
   GetFunctionConcurrencyCommandOutput as GetFunctionConcurrencyResponse,
   GetFunctionConfigurationCommandOutput as GetFunctionConfigurationResponse,
+  GetFunctionEventInvokeConfigCommandOutput as GetFunctionEventInvokeConfigResponse,
   GetFunctionUrlConfigCommandOutput as GetFunctionUrlConfigResponse,
   GetLayerVersionCommandOutput as GetLayerVersionResponse,
+  GetLayerVersionByArnCommandOutput as GetLayerVersionByArnResponse,
+  GetPolicyCommandOutput as GetPolicyResponse,
   GetRuntimeManagementConfigCommandOutput as GetRuntimeManagementConfigResponse,
   InvokeCommandOutput as InvokeResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
@@ -34,6 +39,8 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionConcurrency Lambda: DeleteFunctionConcurrency}
    */
   DeleteFunctionConcurrency: (input: { FunctionName: string }) => Promise<DeleteFunctionConcurrencyResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetAccountSettings Lambda: GetAccountSettings} */
+  GetAccountSettings: () => Promise<GetAccountSettingsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetAlias.html Lambda: GetAlias}
@@ -46,6 +53,12 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetCodeSigningConfig Lambda: GetCodeSigningConfig}
    */
   GetCodeSigningConfig: (input: { CodeSigningConfigArn?: string }) => Promise<GetCodeSigningConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetEventSourceMapping.html Lambda: GetEventSourceMapping}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetEventSourceMapping Lambda: GetEventSourceMapping}
+   */
+  GetEventSourceMapping: (input: { UUID: string }) => Promise<GetEventSourceMappingResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html Lambda: GetFunction}
@@ -72,6 +85,12 @@ declare interface AwsLiteLambda {
   GetFunctionConfiguration: (input: { FunctionName: string, Qualifier?: string }) => Promise<GetFunctionConfigurationResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionEventInvokeConfig.html Lambda: GetFunctionEventInvokeConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetFunctionEventInvokeConfig Lambda: GetFunctionEventInvokeConfig}
+   */
+  GetFunctionEventInvokeConfig: (input: { FunctionName: string, Qualifier?: string }) => Promise<GetFunctionEventInvokeConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html Lambda: GetFunctionUrlConfig}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetFunctionUrlConfig Lambda: GetFunctionUrlConfig}
    */
@@ -82,6 +101,18 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetLayerVersion Lambda: GetLayerVersion}
    */
   GetLayerVersion: (input: { LayerName: string, VersionNumber: number }) => Promise<GetLayerVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionByArn.html Lambda: GetLayerVersionByArn}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetLayerVersionByArn Lambda: GetLayerVersionByArn}
+   */
+  GetLayerVersionByArn: (input: { Arn: string }) => Promise<GetLayerVersionByArnResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html Lambda: GetPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetPolicy Lambda: GetPolicy}
+   */
+  GetPolicy: (input: { FunctionName: string, Qualifier?: string }) => Promise<GetPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetRuntimeManagementConfig.html Lambda: GetRuntimeManagementConfig}
@@ -127,14 +158,19 @@ export type {
   // $EXPORT_START
   CreateFunctionResponse,
   DeleteFunctionConcurrencyResponse,
+  GetAccountSettingsResponse,
   GetAliasResponse,
   GetCodeSigningConfigResponse,
+  GetEventSourceMappingResponse,
   GetFunctionResponse,
   GetFunctionCodeSigningConfigResponse,
   GetFunctionConcurrencyResponse,
   GetFunctionConfigurationResponse,
+  GetFunctionEventInvokeConfigResponse,
   GetFunctionUrlConfigResponse,
   GetLayerVersionResponse,
+  GetLayerVersionByArnResponse,
+  GetPolicyResponse,
   GetRuntimeManagementConfigResponse,
   InvokeResponse,
   PutFunctionConcurrencyResponse,

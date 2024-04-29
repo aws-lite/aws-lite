@@ -88,6 +88,18 @@ const DeleteFunctionConcurrency = {
   response: () => ({}),
 }
 
+const GetAccountSettings = {
+  awsDoc: docRoot + 'API_GetAccountSettings.html',
+  validate: {},
+  request: () => {
+    return {
+      path: '/2016-08-19/account-settings/',
+    }
+  },
+  response: defaultResponse,
+}
+
+
 const GetAlias = {
   awsDoc: docRoot + 'API_GetAlias.html',
   validate: {
@@ -110,6 +122,19 @@ const GetCodeSigningConfig = {
   request: ({ CodeSigningConfigArn }) => {
     return {
       path: `/2020-04-22/code-signing-configs/${CodeSigningConfigArn}`,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetEventSourceMapping = {
+  awsDoc: docRoot + 'API_GetEventSourceMapping.html',
+  validate: {
+    UUID: { ...str, required, comment: 'ARN of the eventu source mapping' },
+  },
+  request: ({ UUID }) => {
+    return {
+      path: `/2015-03-31/event-source-mappings/${UUID}`,
     }
   },
   response: defaultResponse,
@@ -140,6 +165,23 @@ const GetFunctionConcurrency = {
   request: ({ FunctionName }) => {
     return {
       path: `/2019-09-30/functions/${FunctionName}/concurrency`,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetFunctionEventInvokeConfig = {
+  awsDoc: docRoot + 'API_GetFunctionEventInvokeConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2019-09-25/functions/${FunctionName}/event-invoke-config`,
+      query,
     }
   },
   response: defaultResponse,
@@ -181,7 +223,7 @@ const GetFunctionUrlConfig = {
     FunctionName,
     Qualifier,
   },
-  request: ({ FunctionName, Qualifier }) =>  {
+  request: ({ FunctionName, Qualifier }) => {
     let query
     if (Qualifier) query = { Qualifier }
     return {
@@ -195,12 +237,30 @@ const GetFunctionUrlConfig = {
 const GetLayerVersion = {
   awsDoc: docRoot + 'API_GetLayerVersion.html',
   validate: {
-    LayerName: { ...str, required,  comment: 'Name or ARN of the layer' },
+    LayerName: { ...str, required, comment: 'Name or ARN of the layer' },
     VersionNumber: { ...num, required, comment: 'The version number of the layer' },
   },
   request: ({ LayerName, VersionNumber }) => {
     return {
       path: `/2018-10-31/layers/${LayerName}/versions/${VersionNumber}`,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetLayerVersionByArn = {
+  awsDoc: docRoot + 'API_GetLayerVersionByArn.html',
+  validate: {
+    Arn: { ...str, required, comment: 'The ARN of the layer version' },
+  },
+  request: ({ Arn }) => {
+    let query = {
+      find: 'LayerVersion',
+      Arn,
+    }
+    return {
+      path: `/2018-10-31/layers`,
+      query,
     }
   },
   response: defaultResponse,
@@ -214,9 +274,26 @@ const GetRuntimeManagementConfig = {
   },
   request: ({ FunctionName, Qualifier }) => {
     let query
-    if (Qualifier) query = Qualifier
+    if (Qualifier) query = { Qualifier }
     return {
       path: `/2021-07-20/functions/${FunctionName}/runtime-management-config`,
+      query,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetPolicy = {
+  awsDoc: docRoot + 'API_GetPolicy.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/policy`,
       query,
     }
   },
@@ -355,14 +432,19 @@ export default {
   methods: {
     CreateFunction,
     DeleteFunctionConcurrency,
+    GetAccountSettings,
     GetAlias,
     GetCodeSigningConfig,
+    GetEventSourceMapping,
     GetFunction,
     GetFunctionCodeSigningConfig,
     GetFunctionConcurrency,
     GetFunctionConfiguration,
+    GetFunctionEventInvokeConfig,
     GetFunctionUrlConfig,
     GetLayerVersion,
+    GetLayerVersionByArn,
+    GetPolicy,
     GetRuntimeManagementConfig,
     Invoke,
     PutFunctionConcurrency,
