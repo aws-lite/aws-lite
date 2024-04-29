@@ -27,6 +27,24 @@ npm i -D @aws-lite/lambda-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Description` (string)**
+  - Description of the function
+- **`FunctionVersion` (string) [required]**
+  - Version of the aliased function
+- **`Name` (string) [required]**
+  - Name of the alias
+- **`RoutingConfig` (object)**
+  - Configure version weights
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing)
+
+
 ### `CreateFunction`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html)
@@ -89,6 +107,17 @@ Properties:
 - **`VpcConfig` (object)**
   - VPC networking configuration
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
+
+
+### `DeleteAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Name` (string) [required]**
+  - Name of the alias
 
 
 ### `DeleteFunctionConcurrency`
@@ -293,6 +322,26 @@ Properties:
   - number of simultaneous executions to reserve
 
 
+### `UpdateAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Name` (string) [required]**
+  - Name of the alias
+- **`Description` (string)**
+  - Description of the function
+- **`FunctionVersion` (string)**
+  - Version of the original function
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`RoutingConfig` (object)**
+  - Configure version weights
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing)
+
+
 ### `UpdateFunctionCode`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html)
@@ -379,11 +428,9 @@ Properties:
 
 - [`AddLayerVersionPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_AddLayerVersionPermission.html)
 - [`AddPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_AddPermission.html)
-- [`CreateAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html)
 - [`CreateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateCodeSigningConfig.html)
 - [`CreateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
 - [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
-- [`DeleteAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html)
 - [`DeleteCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteCodeSigningConfig.html)
 - [`DeleteEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteEventSourceMapping.html)
 - [`DeleteFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
@@ -416,7 +463,6 @@ Properties:
 - [`RemovePermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html)
 - [`TagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html)
 - [`UntagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_UntagResource.html)
-- [`UpdateAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html)
 - [`UpdateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html)
 - [`UpdateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html)
 - [`UpdateFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html)

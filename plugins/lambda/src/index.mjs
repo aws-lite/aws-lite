@@ -38,6 +38,28 @@ const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoo
 
 const defaultResponse = ({ payload }) => payload
 
+const CreateAlias = {
+  awsDoc: docRoot + 'API_CreateAlias.html',
+  validate: {
+    FunctionName,
+    Description,
+    FunctionVersion: { ...str, required, comment: 'Version of the aliased function' },
+    Name: { ...str, required, comment: 'Name of the alias' },
+    RoutingConfig: { ...obj, comment: 'Configure version weights', ref: docRoot + 'configuration-aliases.html#configuring-alias-routing' },
+  },
+  request: async (params) => {
+    const { FunctionName } = params
+    let payload = { ...params }
+    delete payload.FunctionName
+
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/aliases`,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
   validate: {
@@ -72,6 +94,22 @@ const CreateFunction = {
       payload,
     }
   },
+  response: defaultResponse,
+}
+
+const DeleteAlias = {
+  awsDoc: docRoot + 'API_DeleteAlias.html',
+  validate: {
+    FunctionName,
+    Name: { ...str, required, comment: 'Name of the alias' },
+  },
+  request: ({ FunctionName, Name }) => {
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/aliases/${Name}`,
+      method: 'DELETE',
+    }
+  },
+  response: () => ({}),
 }
 
 const DeleteFunctionConcurrency = {
@@ -386,6 +424,31 @@ const PutFunctionConcurrency = {
   response: defaultResponse,
 }
 
+const UpdateAlias = {
+  awsDoc: docRoot + 'API_UpdateAlias.html',
+  validate: {
+    FunctionName,
+    Name: { ...str, required, comment: 'Name of the alias' },
+    Description,
+    FunctionVersion: { ...str, comment: 'Version of the original function' },
+    RevisionId,
+    RoutingConfig: { ...obj, comment: 'Configure version weights', ref: docRoot + 'configuration-aliases.html#configuring-alias-routing' },
+  },
+  request: async (params) => {
+    const { FunctionName, Name } = params
+    let payload = { ...params }
+    delete payload.FunctionName
+    delete payload.Name
+
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/aliases/${Name}`,
+      method: 'PUT',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
 const UpdateFunctionCode = {
   awsDoc: docRoot + 'API_UpdateFunctionCode.html',
   validate: {
@@ -459,7 +522,9 @@ export default {
   service,
   property,
   methods: {
+    CreateAlias,
     CreateFunction,
+    DeleteAlias,
     DeleteFunctionConcurrency,
     GetAccountSettings,
     GetAlias,
@@ -479,6 +544,7 @@ export default {
     GetRuntimeManagementConfig,
     Invoke,
     PutFunctionConcurrency,
+    UpdateAlias,
     UpdateFunctionCode,
     UpdateFunctionConfiguration,
     ...incomplete,

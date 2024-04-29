@@ -1,7 +1,9 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  CreateAliasCommandOutput as CreateAliasResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
+  DeleteAliasCommandOutput as DeleteAliasResponse,
   DeleteFunctionConcurrencyCommandOutput as DeleteFunctionConcurrencyResponse,
   GetAccountSettingsCommandOutput as GetAccountSettingsResponse,
   GetAliasCommandOutput as GetAliasResponse,
@@ -21,6 +23,7 @@ import {
   GetRuntimeManagementConfigCommandOutput as GetRuntimeManagementConfigResponse,
   InvokeCommandOutput as InvokeResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
+  UpdateAliasCommandOutput as UpdateAliasResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationCommandOutput as UpdateFunctionConfigurationResponse,
   // $IMPORTS_END
@@ -31,10 +34,22 @@ declare interface AwsLiteLambda {
   // $METHODS_START
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html Lambda: CreateAlias}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateAlias Lambda: CreateAlias}
+   */
+  CreateAlias: (input: { FunctionName: string, Description?: string, FunctionVersion: string, Name: string, RoutingConfig?: Record<string, any> }) => Promise<CreateAliasResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html Lambda: CreateFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateFunction Lambda: CreateFunction}
    */
   CreateFunction: (input: { Code: Record<string, any>, FunctionName: string, Role: string, Architectures?: any[], CodeSigningConfigArn?: string, DeadLetterConfig?: Record<string, any>, Description?: string, Environment?: Record<string, any>, EphemeralStorage?: Record<string, any>, FileSystemConfigs?: any[], Handler?: string, ImageConfig?: Record<string, any>, KMSKeyArn?: string, Layers?: any[], MemorySize?: number, PackageType?: string, Publish?: boolean, Runtime?: string, SnapStart?: Record<string, any>, Tags?: any[], Timeout?: number, TracingConfig?: Record<string, any>, VpcConfig?: Record<string, any> }) => Promise<CreateFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html Lambda: DeleteAlias}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteAlias Lambda: DeleteAlias}
+   */
+  DeleteAlias: (input: { FunctionName: string, Name: string }) => Promise<DeleteAliasResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html Lambda: DeleteFunctionConcurrency}
@@ -147,6 +162,12 @@ declare interface AwsLiteLambda {
   PutFunctionConcurrency: (input: { FunctionName: string, ReservedConcurrentExecutions: number }) => Promise<PutFunctionConcurrencyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html Lambda: UpdateAlias}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateAlias Lambda: UpdateAlias}
+   */
+  UpdateAlias: (input: { FunctionName: string, Name: string, Description?: string, FunctionVersion?: string, RevisionId?: string, RoutingConfig?: Record<string, any> }) => Promise<UpdateAliasResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html Lambda: UpdateFunctionCode}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateFunctionCode Lambda: UpdateFunctionCode}
    */
@@ -170,7 +191,9 @@ export type {
   AwsLiteLambda,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
+  CreateAliasResponse,
   CreateFunctionResponse,
+  DeleteAliasResponse,
   DeleteFunctionConcurrencyResponse,
   GetAccountSettingsResponse,
   GetAliasResponse,
@@ -190,6 +213,7 @@ export type {
   GetRuntimeManagementConfigResponse,
   InvokeResponse,
   PutFunctionConcurrencyResponse,
+  UpdateAliasResponse,
   UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationResponse,
   // $EXPORT_END
