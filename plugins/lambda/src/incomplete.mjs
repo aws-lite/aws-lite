@@ -16,8 +16,6 @@ export default {
   DeleteFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_DeleteFunctionUrlConfig.html' },
   DeleteLayerVersion:                 { disabled, awsDoc: docRoot + 'API_DeleteLayerVersion.html' },
   DeleteProvisionedConcurrencyConfig: { disabled, awsDoc: docRoot + 'API_DeleteProvisionedConcurrencyConfig.html' },
-  GetLayerVersionPolicy:              { disabled, awsDoc: docRoot + 'API_GetLayerVersionPolicy.html' },
-  GetProvisionedConcurrencyConfig:    { disabled, awsDoc: docRoot + 'API_GetProvisionedConcurrencyConfig.html' },
   InvokeAsync:                        { disabled, awsDoc: docRoot + 'API_InvokeAsync.html' },
   InvokeWithResponseStream:           { disabled, awsDoc: docRoot + 'API_InvokeWithResponseStream.html' },
   ListAliases:                        { disabled, awsDoc: docRoot + 'API_ListAliases.html' },

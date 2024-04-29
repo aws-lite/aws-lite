@@ -99,7 +99,6 @@ const GetAccountSettings = {
   response: defaultResponse,
 }
 
-
 const GetAlias = {
   awsDoc: docRoot + 'API_GetAlias.html',
   validate: {
@@ -266,18 +265,15 @@ const GetLayerVersionByArn = {
   response: defaultResponse,
 }
 
-const GetRuntimeManagementConfig = {
-  awsDoc: docRoot + 'API_GetRuntimeManagementConfig.html',
+const GetLayerVersionPolicy = {
+  awsDoc: docRoot + 'API_GetLayerVersionPolicy.html',
   validate: {
-    FunctionName,
-    Qualifier,
+    LayerName: { ...str, required, comment: 'The name or ARN of the layer' },
+    VersionNumber: { ...num, required, comment: 'The version number of the layer' },
   },
-  request: ({ FunctionName, Qualifier }) => {
-    let query
-    if (Qualifier) query = { Qualifier }
+  request: ({ LayerName, VersionNumber }) => {
     return {
-      path: `/2021-07-20/functions/${FunctionName}/runtime-management-config`,
-      query,
+      path: `/2018-10-31/layers/${LayerName}/versions/${VersionNumber}/policy`,
     }
   },
   response: defaultResponse,
@@ -294,6 +290,39 @@ const GetPolicy = {
     if (Qualifier) query = { Qualifier }
     return {
       path: `/2015-03-31/functions/${FunctionName}/policy`,
+      query,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetProvisionedConcurrencyConfig = {
+  awsDoc: docRoot + 'API_GetProvisionedConcurrencyConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier: { ...str, required, comment: 'The version number or alias name' },
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query = { Qualifier }
+    return {
+      path: `/2019-09-30/functions/${FunctionName}/provisioned-concurrency`,
+      query,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetRuntimeManagementConfig = {
+  awsDoc: docRoot + 'API_GetRuntimeManagementConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2021-07-20/functions/${FunctionName}/runtime-management-config`,
       query,
     }
   },
@@ -444,7 +473,9 @@ export default {
     GetFunctionUrlConfig,
     GetLayerVersion,
     GetLayerVersionByArn,
+    GetLayerVersionPolicy,
     GetPolicy,
+    GetProvisionedConcurrencyConfig,
     GetRuntimeManagementConfig,
     Invoke,
     PutFunctionConcurrency,

@@ -15,7 +15,9 @@ import {
   GetFunctionUrlConfigCommandOutput as GetFunctionUrlConfigResponse,
   GetLayerVersionCommandOutput as GetLayerVersionResponse,
   GetLayerVersionByArnCommandOutput as GetLayerVersionByArnResponse,
+  GetLayerVersionPolicyCommandOutput as GetLayerVersionPolicyResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
+  GetProvisionedConcurrencyConfigCommandOutput as GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigCommandOutput as GetRuntimeManagementConfigResponse,
   InvokeCommandOutput as InvokeResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
@@ -109,10 +111,22 @@ declare interface AwsLiteLambda {
   GetLayerVersionByArn: (input: { Arn: string }) => Promise<GetLayerVersionByArnResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionPolicy.html Lambda: GetLayerVersionPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetLayerVersionPolicy Lambda: GetLayerVersionPolicy}
+   */
+  GetLayerVersionPolicy: (input: { LayerName: string, VersionNumber: number }) => Promise<GetLayerVersionPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html Lambda: GetPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetPolicy Lambda: GetPolicy}
    */
   GetPolicy: (input: { FunctionName: string, Qualifier?: string }) => Promise<GetPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetProvisionedConcurrencyConfig.html Lambda: GetProvisionedConcurrencyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetProvisionedConcurrencyConfig Lambda: GetProvisionedConcurrencyConfig}
+   */
+  GetProvisionedConcurrencyConfig: (input: { FunctionName: string, Qualifier: string }) => Promise<GetProvisionedConcurrencyConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetRuntimeManagementConfig.html Lambda: GetRuntimeManagementConfig}
@@ -170,7 +184,9 @@ export type {
   GetFunctionUrlConfigResponse,
   GetLayerVersionResponse,
   GetLayerVersionByArnResponse,
+  GetLayerVersionPolicyResponse,
   GetPolicyResponse,
+  GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigResponse,
   InvokeResponse,
   PutFunctionConcurrencyResponse,

@@ -219,6 +219,17 @@ Properties:
   - The ARN of the layer version
 
 
+### `GetLayerVersionPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionPolicy.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - The name or ARN of the layer
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+
+
 ### `GetPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html)
@@ -228,6 +239,17 @@ Properties:
   - The name of the Lambda function, version, or alias
 - **`Qualifier` (string)**
   - Specify a version or alias to invoke a published version of the function
+
+
+### `GetProvisionedConcurrencyConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetProvisionedConcurrencyConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string) [required]**
+  - The version number or alias name
 
 
 ### `GetRuntimeManagementConfig`
@@ -370,8 +392,6 @@ Properties:
 - [`DeleteFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html)
 - [`DeleteLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html)
 - [`DeleteProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteProvisionedConcurrencyConfig.html)
-- [`GetLayerVersionPolicy`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionPolicy.html)
-- [`GetProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetProvisionedConcurrencyConfig.html)
 - [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
 - [`ListAliases`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html)
