@@ -38,6 +38,73 @@ const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoo
 
 const defaultResponse = ({ payload }) => payload
 
+const AddLayerVersionPermission = {
+  awsDoc: docRoot + 'API_AddLayerVersionPermission.html',
+  validate: {
+    LayerName: { ...str, required, comment: 'Name or ARN of the layer' },
+    RevisionId,
+    VersionNumber: { ...num, required, comment: 'The version number of the layer' },
+    Action: { ...str, required, comment: 'The API action that grants access to the layer, for example `lambda:GetLayerVersion`' },
+    OrganizationId: { ...str, comment: 'When `Principal` is set to *, permission will be granted to all accounts in the specified organization' },
+    Principal: { ...str, comment: 'Account ID being granted permissions. Use * along with the `OrganizationId` to grant permissions to all accounts in the specified organization' },
+    StatementId: { ...str, required, comment: 'ID to distinguish the policy from other policies on the same layer version' },
+  },
+  request: async (params) => {
+    const { LayerName, RevisionId, VersionNumber } = params
+    let payload = { ...params }
+    let query
+    delete payload.LayerName
+    delete payload.VersionNumber
+
+    if (RevisionId) {
+      query = RevisionId
+      delete params.RevisionId
+    }
+
+    return {
+      path: `/2018-10-31/layers/${LayerName}/versions/${VersionNumber}/policy`,
+      query,
+      payload,
+    }
+  },
+}
+
+const AddPermission = {
+  awsDoc: docRoot + 'API_AddPermission.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+    Action: { ...str, required, comment: 'Action that the principal can use on the function, for example, `lambda:InvokeFunction`' },
+    EventSourceToken: { ...str, comment: 'A token that Alexa Smart Home requires from the invoker' },
+    FunctionUrlAuthType: { ...str, comment: 'The type of authentication that your function URL uses. Set to AWS_IAM if you want to restrict access to authenticated users only. Set to NONE if you want to bypass IAM authentication to create a public endpoint' },
+    Principal: { ...str, required, comment: 'The AWS service or AWS account that invokes the function' },
+    PrincipalOrgID: { ...str, comment: 'The identifier for your organization in AWS Organizations' },
+    RevisionId,
+    SourceAccount: { ...str, comment: 'ID of the AWS account that owns the resource' },
+    SourceArn: { ...str, comment: 'ARN of the AWS resource that invokes the function, such as an Amazon S3 bucket' },
+    StatementId: { ...str, required, comment: 'A statement identifier that differentiates the statement from others in the same policy' },
+  },
+  request: async (params) => {
+    const { FunctionName, Qualifier } = params
+    let payload = { ...params }
+    let query
+    delete payload.FunctionName
+    delete payload.Qualifier
+
+    if (Qualifier) {
+      query = Qualifier
+      delete payload.Qualifier
+    }
+
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/policy`,
+      query,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
 const CreateAlias = {
   awsDoc: docRoot + 'API_CreateAlias.html',
   validate: {
@@ -154,7 +221,7 @@ const GetAlias = {
 const GetCodeSigningConfig = {
   awsDoc: docRoot + 'API_GetCodeSigningConfig.html',
   validate: {
-    CodeSigningConfigArn: { ...str, comment: 'ARN of the code signing configuration' },
+    CodeSigningConfigArn: { ...str, required, comment: 'ARN of the code signing configuration' },
   },
   request: ({ CodeSigningConfigArn }) => {
     return {
@@ -167,7 +234,7 @@ const GetCodeSigningConfig = {
 const GetEventSourceMapping = {
   awsDoc: docRoot + 'API_GetEventSourceMapping.html',
   validate: {
-    UUID: { ...str, required, comment: 'ARN of the eventu source mapping' },
+    UUID: { ...str, required, comment: 'ARN of the event source mapping' },
   },
   request: ({ UUID }) => {
     return {
@@ -522,6 +589,8 @@ export default {
   service,
   property,
   methods: {
+    AddLayerVersionPermission,
+    AddPermission,
     CreateAlias,
     CreateFunction,
     DeleteAlias,

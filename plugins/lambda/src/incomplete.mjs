@@ -1,8 +1,6 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/lambda/latest/dg/'
 export default {
-  AddLayerVersionPermission:          { disabled, awsDoc: docRoot + 'API_AddLayerVersionPermission.html' },
-  AddPermission:                      { disabled, awsDoc: docRoot + 'API_AddPermission.html' },
   CreateCodeSigningConfig:            { disabled, awsDoc: docRoot + 'API_CreateCodeSigningConfig.html' },
   CreateEventSourceMapping:           { disabled, awsDoc: docRoot + 'API_CreateEventSourceMapping.html' },
   CreateFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_CreateFunctionUrlConfig.html' },
