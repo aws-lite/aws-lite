@@ -50,8 +50,8 @@ const AddLayerVersionPermission = {
     RevisionId,
     VersionNumber,
     Action: { ...str, required, comment: 'The API action that grants access to the layer, for example `lambda:GetLayerVersion`' },
-    OrganizationId: { ...str, comment: 'When `Principal` is set to *, permission will be granted to all accounts in the specified organization' },
-    Principal: { ...str, comment: 'Account ID being granted permissions. Use * along with the `OrganizationId` to grant permissions to all accounts in the specified organization' },
+    OrganizationId: { ...str, comment: 'When `Principal` is set to `*`, permission will be granted to all accounts in the specified organization' },
+    Principal: { ...str, comment: 'Account ID being granted permissions. Use `*` along with the `OrganizationId` to grant permissions to all accounts in the specified organization' },
     StatementId: { ...str, required, comment: 'ID to distinguish the policy from other policies on the same layer version' },
   },
   request: async (params) => {
@@ -62,7 +62,7 @@ const AddLayerVersionPermission = {
     delete payload.VersionNumber
 
     if (RevisionId) {
-      query = RevisionId
+      query = { RevisionId }
       delete params.RevisionId
     }
 
@@ -97,7 +97,7 @@ const AddPermission = {
     delete payload.Qualifier
 
     if (Qualifier) {
-      query = Qualifier
+      query = { Qualifier }
       delete payload.Qualifier
     }
 
@@ -142,7 +142,7 @@ const CreateCodeSigningConfig = {
   request: async (payload) => {
     return {
       path: '/2020-04-22/code-signing-configs/',
-      payload: { ...payload },
+      payload,
     }
   },
   response: defaultResponse,

@@ -41,9 +41,9 @@ Properties:
 - **`Action` (string) [required]**
   - The API action that grants access to the layer, for example `lambda:GetLayerVersion`
 - **`OrganizationId` (string)**
-  - When `Principal` is set to *, permission will be granted to all accounts in the specified organization
+  - When `Principal` is set to `*`, permission will be granted to all accounts in the specified organization
 - **`Principal` (string)**
-  - Account ID being granted permissions. Use * along with the `OrganizationId` to grant permissions to all accounts in the specified organization
+  - Account ID being granted permissions. Use `*` along with the `OrganizationId` to grant permissions to all accounts in the specified organization
 - **`StatementId` (string) [required]**
   - ID to distinguish the policy from other policies on the same layer version
 
