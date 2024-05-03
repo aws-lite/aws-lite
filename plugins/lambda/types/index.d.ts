@@ -4,8 +4,11 @@ import {
   AddLayerVersionPermissionCommandOutput as AddLayerVersionPermissionResponse,
   AddPermissionCommandOutput as AddPermissionResponse,
   CreateAliasCommandOutput as CreateAliasResponse,
+  CreateCodeSigningConfigCommandOutput as CreateCodeSigningConfigResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
   DeleteAliasCommandOutput as DeleteAliasResponse,
+  DeleteCodeSigningConfigCommandOutput as DeleteCodeSigningConfigResponse,
+  DeleteEventSourceMappingCommandOutput as DeleteEventSourceMappingResponse,
   DeleteFunctionConcurrencyCommandOutput as DeleteFunctionConcurrencyResponse,
   GetAccountSettingsCommandOutput as GetAccountSettingsResponse,
   GetAliasCommandOutput as GetAliasResponse,
@@ -54,6 +57,12 @@ declare interface AwsLiteLambda {
   CreateAlias: (input: { FunctionName: string, Description?: string, FunctionVersion: string, Name: string, RoutingConfig?: Record<string, any> }) => Promise<CreateAliasResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateCodeSigningConfig.html Lambda: CreateCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateCodeSigningConfig Lambda: CreateCodeSigningConfig}
+   */
+  CreateCodeSigningConfig: (input: { AllowedPublishers: Record<string, any>, CodeSigningPolicies?: Record<string, any>, Description?: string }) => Promise<CreateCodeSigningConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html Lambda: CreateFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateFunction Lambda: CreateFunction}
    */
@@ -64,6 +73,18 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteAlias Lambda: DeleteAlias}
    */
   DeleteAlias: (input: { FunctionName: string, Name: string }) => Promise<DeleteAliasResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteCodeSigningConfig.html Lambda: DeleteCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteCodeSigningConfig Lambda: DeleteCodeSigningConfig}
+   */
+  DeleteCodeSigningConfig: (input: { CodeSigningConfigArn: string }) => Promise<DeleteCodeSigningConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteEventSourceMapping.html Lambda: DeleteEventSourceMapping}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteEventSourceMapping Lambda: DeleteEventSourceMapping}
+   */
+  DeleteEventSourceMapping: (input: { UUID: string }) => Promise<DeleteEventSourceMappingResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html Lambda: DeleteFunctionConcurrency}
@@ -208,8 +229,11 @@ export type {
   AddLayerVersionPermissionResponse,
   AddPermissionResponse,
   CreateAliasResponse,
+  CreateCodeSigningConfigResponse,
   CreateFunctionResponse,
   DeleteAliasResponse,
+  DeleteCodeSigningConfigResponse,
+  DeleteEventSourceMappingResponse,
   DeleteFunctionConcurrencyResponse,
   GetAccountSettingsResponse,
   GetAliasResponse,

@@ -95,6 +95,21 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing)
 
 
+### `CreateCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateCodeSigningConfig.html)
+
+Properties:
+- **`AllowedPublishers` (object) [required]**
+  - Signing profiles for this code signing configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/api/API_AllowedPublishers.html)
+- **`CodeSigningPolicies` (object)**
+  - Define actions to take if validation checks fail
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/api/API_CodeSigningPolicies.html)
+- **`Description` (string)**
+  - Description of the function
+
+
 ### `CreateFunction`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html)
@@ -168,6 +183,24 @@ Properties:
   - The name of the Lambda function, version, or alias
 - **`Name` (string) [required]**
   - Name of the alias
+
+
+### `DeleteCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteCodeSigningConfig.html)
+
+Properties:
+- **`CodeSigningConfigArn` (string) [required]**
+  - ARN of the code signing configuration
+
+
+### `DeleteEventSourceMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteEventSourceMapping.html)
+
+Properties:
+- **`UUID` (string) [required]**
+  - UUID of the event source mapping
 
 
 ### `DeleteFunctionConcurrency`
@@ -476,11 +509,8 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateCodeSigningConfig.html)
 - [`CreateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
 - [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
-- [`DeleteCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteCodeSigningConfig.html)
-- [`DeleteEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteEventSourceMapping.html)
 - [`DeleteFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
 - [`DeleteFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html)
 - [`DeleteFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html)

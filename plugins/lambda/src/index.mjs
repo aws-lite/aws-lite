@@ -41,6 +41,7 @@ const VersionNumber = { ...num, required, comment: 'The version number of the la
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
 
 const defaultResponse = ({ payload }) => payload
+const emptyResponse = () => { }
 
 const AddLayerVersionPermission = {
   awsDoc: docRoot + 'API_AddLayerVersionPermission.html',
@@ -131,6 +132,22 @@ const CreateAlias = {
   response: defaultResponse,
 }
 
+const CreateCodeSigningConfig = {
+  awsDoc: docRoot + 'API_CreateCodeSigningConfig.html',
+  validate: {
+    AllowedPublishers: { ...obj, required, comment: 'Signing profiles for this code signing configuration', ref: 'https://docs.aws.amazon.com/lambda/latest/api/API_AllowedPublishers.html' },
+    CodeSigningPolicies: { ...obj, comment: 'Define actions to take if validation checks fail', ref: 'https://docs.aws.amazon.com/lambda/latest/api/API_CodeSigningPolicies.html' },
+    Description,
+  },
+  request: async (payload) => {
+    return {
+      path: '/2020-04-22/code-signing-configs/',
+      payload: { ...payload },
+    }
+  },
+  response: defaultResponse,
+}
+
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
   validate: {
@@ -180,7 +197,35 @@ const DeleteAlias = {
       method: 'DELETE',
     }
   },
-  response: () => ({}),
+  response: emptyResponse,
+}
+
+const DeleteCodeSigningConfig = {
+  awsDoc: docRoot + 'API_DeleteCodeSigningConfig.html',
+  validate: {
+    CodeSigningConfigArn: { ...str, required, comment: 'ARN of the code signing configuration' },
+  },
+  request: ({ CodeSigningConfigArn }) => {
+    return {
+      path: `/2020-04-22/code-signing-configs/${CodeSigningConfigArn}`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteEventSourceMapping = {
+  awsDoc: docRoot + 'API_DeleteEventSourceMapping.html',
+  validate: {
+    UUID: { ...str, required, comment: 'UUID of the event source mapping' },
+  },
+  request: ({ UUID }) => {
+    return {
+      path: `/2015-03-31/event-source-mappings/${UUID}`,
+      method: 'DELETE',
+    }
+  },
+  response: defaultResponse,
 }
 
 const DeleteFunctionConcurrency = {
@@ -194,7 +239,7 @@ const DeleteFunctionConcurrency = {
       method: 'DELETE',
     }
   },
-  response: () => ({}),
+  response: emptyResponse,
 }
 
 const GetAccountSettings = {
@@ -596,8 +641,11 @@ export default {
     AddLayerVersionPermission,
     AddPermission,
     CreateAlias,
+    CreateCodeSigningConfig,
     CreateFunction,
     DeleteAlias,
+    DeleteCodeSigningConfig,
+    DeleteEventSourceMapping,
     DeleteFunctionConcurrency,
     GetAccountSettings,
     GetAlias,
