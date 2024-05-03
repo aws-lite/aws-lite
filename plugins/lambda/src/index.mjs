@@ -22,18 +22,22 @@ const Environment = { ...obj, comment: 'Environment variable configuration', ref
 const EphemeralStorage = { ...obj, comment: 'Size of the function `/tmp` directory (in MB), from 512 (default) to 10240', ref: docRoot + 'API_EphemeralStorage.html' }
 const FileSystemConfigs = { ...arr, comment: 'EFS file system connection settings', ref: docRoot + 'API_FileSystemConfig.html' }
 const FunctionName = { ...str, required, comment: 'The name of the Lambda function, version, or alias' }
+const FunctionVersion = { ...str, comment: 'Version of the aliased function' }
 const Handler = { ...str, comment: 'The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`)', ref: docRoot + 'foundation-progmodel.html' }
 const ImageConfig = { ...obj, comment: 'Container image configuration (overrides Docker file)', ref: docRoot + 'API_ImageConfig.html' }
 const KMSKeyArn = { ...str, comment: 'ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables' }
+const LayerName = { ...str, required, comment: 'Name or ARN of the layer' }
 const Layers = { ...arr, comment: 'List of function layer ARNs (including version) to add to the function execution environment' }
 const MemorySize = { ...num, comment: 'Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation' }
 const Qualifier = { ...str, comment: 'Specify a version or alias to invoke a published version of the function' }
 const RevisionId = { ...str, comment: 'Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it' }
 const Role = { ...str, comment: `ARN of the function's execution role` }
+const RoutingConfig = { ...obj, comment: 'Configure function version weights', ref: docRoot + 'configuration-aliases.html#configuring-alias-routing' }
 const Runtime = { ...str, comment: 'Runtime identifier', ref: docRoot + 'lambda-runtimes.html' }
 const SnapStart = { ...obj, comment: 'SnapStart settings', ref: docRoot + 'API_SnapStart.html' }
 const Timeout = { ...num, comment: 'Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900' }
 const TracingConfig = { ...obj, comment: 'Sample and trace a subset of incoming requests with X-Ray', ref: docRoot + 'API_TracingConfig.html' }
+const VersionNumber = { ...num, required, comment: 'The version number of the layer' }
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
 
 const defaultResponse = ({ payload }) => payload
@@ -41,9 +45,9 @@ const defaultResponse = ({ payload }) => payload
 const AddLayerVersionPermission = {
   awsDoc: docRoot + 'API_AddLayerVersionPermission.html',
   validate: {
-    LayerName: { ...str, required, comment: 'Name or ARN of the layer' },
+    LayerName,
     RevisionId,
-    VersionNumber: { ...num, required, comment: 'The version number of the layer' },
+    VersionNumber,
     Action: { ...str, required, comment: 'The API action that grants access to the layer, for example `lambda:GetLayerVersion`' },
     OrganizationId: { ...str, comment: 'When `Principal` is set to *, permission will be granted to all accounts in the specified organization' },
     Principal: { ...str, comment: 'Account ID being granted permissions. Use * along with the `OrganizationId` to grant permissions to all accounts in the specified organization' },
@@ -110,9 +114,9 @@ const CreateAlias = {
   validate: {
     FunctionName,
     Description,
-    FunctionVersion: { ...str, required, comment: 'Version of the aliased function' },
-    Name: { ...str, required, comment: 'Name of the alias' },
-    RoutingConfig: { ...obj, comment: 'Configure version weights', ref: docRoot + 'configuration-aliases.html#configuring-alias-routing' },
+    FunctionVersion: { ...FunctionVersion, required },
+    Name: { ...str, required, comment: 'Name of the alias' }, //
+    RoutingConfig,
   },
   request: async (params) => {
     const { FunctionName } = params
@@ -341,8 +345,8 @@ const GetFunctionUrlConfig = {
 const GetLayerVersion = {
   awsDoc: docRoot + 'API_GetLayerVersion.html',
   validate: {
-    LayerName: { ...str, required, comment: 'Name or ARN of the layer' },
-    VersionNumber: { ...num, required, comment: 'The version number of the layer' },
+    LayerName,
+    VersionNumber,
   },
   request: ({ LayerName, VersionNumber }) => {
     return {
@@ -373,8 +377,8 @@ const GetLayerVersionByArn = {
 const GetLayerVersionPolicy = {
   awsDoc: docRoot + 'API_GetLayerVersionPolicy.html',
   validate: {
-    LayerName: { ...str, required, comment: 'The name or ARN of the layer' },
-    VersionNumber: { ...num, required, comment: 'The version number of the layer' },
+    LayerName,
+    VersionNumber,
   },
   request: ({ LayerName, VersionNumber }) => {
     return {
@@ -497,9 +501,9 @@ const UpdateAlias = {
     FunctionName,
     Name: { ...str, required, comment: 'Name of the alias' },
     Description,
-    FunctionVersion: { ...str, comment: 'Version of the original function' },
+    FunctionVersion,
     RevisionId,
-    RoutingConfig: { ...obj, comment: 'Configure version weights', ref: docRoot + 'configuration-aliases.html#configuring-alias-routing' },
+    RoutingConfig,
   },
   request: async (params) => {
     const { FunctionName, Name } = params

@@ -91,7 +91,7 @@ Properties:
 - **`Name` (string) [required]**
   - Name of the alias
 - **`RoutingConfig` (object)**
-  - Configure version weights
+  - Configure function version weights
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing)
 
 
@@ -304,7 +304,7 @@ Properties:
 
 Properties:
 - **`LayerName` (string) [required]**
-  - The name or ARN of the layer
+  - Name or ARN of the layer
 - **`VersionNumber` (number) [required]**
   - The version number of the layer
 
@@ -384,11 +384,11 @@ Properties:
 - **`Description` (string)**
   - Description of the function
 - **`FunctionVersion` (string)**
-  - Version of the original function
+  - Version of the aliased function
 - **`RevisionId` (string)**
   - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
 - **`RoutingConfig` (object)**
-  - Configure version weights
+  - Configure function version weights
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing)
 
 
