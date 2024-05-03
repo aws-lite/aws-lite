@@ -27,6 +27,89 @@ npm i -D @aws-lite/lambda-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `AddLayerVersionPermission`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_AddLayerVersionPermission.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+- **`Action` (string) [required]**
+  - The API action that grants access to the layer, for example `lambda:GetLayerVersion`
+- **`OrganizationId` (string)**
+  - When `Principal` is set to `*`, permission will be granted to all accounts in the specified organization
+- **`Principal` (string)**
+  - Account ID being granted permissions. Use `*` along with the `OrganizationId` to grant permissions to all accounts in the specified organization
+- **`StatementId` (string) [required]**
+  - ID to distinguish the policy from other policies on the same layer version
+
+
+### `AddPermission`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_AddPermission.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+- **`Action` (string) [required]**
+  - Action that the principal can use on the function, for example, `lambda:InvokeFunction`
+- **`EventSourceToken` (string)**
+  - A token that Alexa Smart Home requires from the invoker
+- **`FunctionUrlAuthType` (string)**
+  - The type of authentication that your function URL uses. Set to AWS_IAM if you want to restrict access to authenticated users only. Set to NONE if you want to bypass IAM authentication to create a public endpoint
+- **`Principal` (string) [required]**
+  - The AWS service or AWS account that invokes the function
+- **`PrincipalOrgID` (string)**
+  - The identifier for your organization in AWS Organizations
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`SourceAccount` (string)**
+  - ID of the AWS account that owns the resource
+- **`SourceArn` (string)**
+  - ARN of the AWS resource that invokes the function, such as an Amazon S3 bucket
+- **`StatementId` (string) [required]**
+  - A statement identifier that differentiates the statement from others in the same policy
+
+
+### `CreateAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Description` (string)**
+  - Description of the function
+- **`FunctionVersion` (string) [required]**
+  - Version of the aliased function
+- **`Name` (string) [required]**
+  - Name of the alias
+- **`RoutingConfig` (object)**
+  - Configure function version weights
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing)
+
+
+### `CreateCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateCodeSigningConfig.html)
+
+Properties:
+- **`AllowedPublishers` (object) [required]**
+  - Signing profiles for this code signing configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/api/API_AllowedPublishers.html)
+- **`CodeSigningPolicies` (object)**
+  - Define actions to take if validation checks fail
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/api/API_CodeSigningPolicies.html)
+- **`Description` (string)**
+  - Description of the function
+
+
 ### `CreateFunction`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html)
@@ -91,6 +174,35 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
 
 
+### `DeleteAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Name` (string) [required]**
+  - Name of the alias
+
+
+### `DeleteCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteCodeSigningConfig.html)
+
+Properties:
+- **`CodeSigningConfigArn` (string) [required]**
+  - ARN of the code signing configuration
+
+
+### `DeleteEventSourceMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteEventSourceMapping.html)
+
+Properties:
+- **`UUID` (string) [required]**
+  - UUID of the event source mapping
+
+
 ### `DeleteFunctionConcurrency`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html)
@@ -100,9 +212,161 @@ Properties:
   - The name of the Lambda function, version, or alias
 
 
+### `GetAccountSettings`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAccountSettings.html)
+
+Properties:
+
+
+
+### `GetAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAlias.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Name` (string) [required]**
+  - Name of the function alias
+
+
+### `GetCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetCodeSigningConfig.html)
+
+Properties:
+- **`CodeSigningConfigArn` (string) [required]**
+  - ARN of the code signing configuration
+
+
+### `GetEventSourceMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetEventSourceMapping.html)
+
+Properties:
+- **`UUID` (string) [required]**
+  - ARN of the event source mapping
+
+
+### `GetFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `GetFunctionCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionCodeSigningConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+
+
+### `GetFunctionConcurrency`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConcurrency.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+
+
 ### `GetFunctionConfiguration`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `GetFunctionEventInvokeConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionEventInvokeConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `GetFunctionUrlConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `GetLayerVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+
+
+### `GetLayerVersionByArn`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionByArn.html)
+
+Properties:
+- **`Arn` (string) [required]**
+  - The ARN of the layer version
+
+
+### `GetLayerVersionPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionPolicy.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+
+
+### `GetPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `GetProvisionedConcurrencyConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetProvisionedConcurrencyConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string) [required]**
+  - The version number or alias name
+
+
+### `GetRuntimeManagementConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetRuntimeManagementConfig.html)
 
 Properties:
 - **`FunctionName` (string) [required]**
@@ -139,6 +403,26 @@ Properties:
   - The name of the Lambda function, version, or alias
 - **`ReservedConcurrentExecutions` (number) [required]**
   - number of simultaneous executions to reserve
+
+
+### `UpdateAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Name` (string) [required]**
+  - Name of the alias
+- **`Description` (string)**
+  - Description of the function
+- **`FunctionVersion` (string)**
+  - Version of the aliased function
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`RoutingConfig` (object)**
+  - Configure function version weights
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing)
 
 
 ### `UpdateFunctionCode`
@@ -225,36 +509,14 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`AddLayerVersionPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_AddLayerVersionPermission.html)
-- [`AddPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_AddPermission.html)
-- [`CreateAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html)
-- [`CreateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateCodeSigningConfig.html)
 - [`CreateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
 - [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
-- [`DeleteAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html)
-- [`DeleteCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteCodeSigningConfig.html)
-- [`DeleteEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteEventSourceMapping.html)
 - [`DeleteFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
 - [`DeleteFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html)
 - [`DeleteFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html)
 - [`DeleteFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html)
 - [`DeleteLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html)
 - [`DeleteProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteProvisionedConcurrencyConfig.html)
-- [`GetAccountSettings`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAccountSettings.html)
-- [`GetAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetAlias.html)
-- [`GetCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetCodeSigningConfig.html)
-- [`GetEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetEventSourceMapping.html)
-- [`GetFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunction.html)
-- [`GetFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionCodeSigningConfig.html)
-- [`GetFunctionConcurrency`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConcurrency.html)
-- [`GetFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionEventInvokeConfig.html)
-- [`GetFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionUrlConfig.html)
-- [`GetLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersion.html)
-- [`GetLayerVersionByArn`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionByArn.html)
-- [`GetLayerVersionPolicy`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetLayerVersionPolicy.html)
-- [`GetPolicy`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetPolicy.html)
-- [`GetProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetProvisionedConcurrencyConfig.html)
-- [`GetRuntimeManagementConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_GetRuntimeManagementConfig.html)
 - [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
 - [`ListAliases`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html)
@@ -279,7 +541,6 @@ Properties:
 - [`RemovePermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html)
 - [`TagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html)
 - [`UntagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_UntagResource.html)
-- [`UpdateAlias`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html)
 - [`UpdateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html)
 - [`UpdateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html)
 - [`UpdateFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html)
