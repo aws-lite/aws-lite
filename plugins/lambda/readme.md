@@ -27,6 +27,56 @@ npm i -D @aws-lite/lambda-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `AddLayerVersionPermission`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_AddLayerVersionPermission.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+- **`Action` (string) [required]**
+  - The API action that grants access to the layer, for example `lambda:GetLayerVersion`
+- **`OrganizationId` (string)**
+  - When `Principal` is set to *, permission will be granted to all accounts in the specified organization
+- **`Principal` (string)**
+  - Account ID being granted permissions. Use * along with the `OrganizationId` to grant permissions to all accounts in the specified organization
+- **`StatementId` (string) [required]**
+  - ID to distinguish the policy from other policies on the same layer version
+
+
+### `AddPermission`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_AddPermission.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+- **`Action` (string) [required]**
+  - Action that the principal can use on the function, for example, `lambda:InvokeFunction`
+- **`EventSourceToken` (string)**
+  - A token that Alexa Smart Home requires from the invoker
+- **`FunctionUrlAuthType` (string)**
+  - The type of authentication that your function URL uses. Set to AWS_IAM if you want to restrict access to authenticated users only. Set to NONE if you want to bypass IAM authentication to create a public endpoint
+- **`Principal` (string) [required]**
+  - The AWS service or AWS account that invokes the function
+- **`PrincipalOrgID` (string)**
+  - The identifier for your organization in AWS Organizations
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`SourceAccount` (string)**
+  - ID of the AWS account that owns the resource
+- **`SourceArn` (string)**
+  - ARN of the AWS resource that invokes the function, such as an Amazon S3 bucket
+- **`StatementId` (string) [required]**
+  - A statement identifier that differentiates the statement from others in the same policy
+
+
 ### `CreateAlias`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html)
@@ -153,7 +203,7 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_GetCodeSigningConfig.html)
 
 Properties:
-- **`CodeSigningConfigArn` (string)**
+- **`CodeSigningConfigArn` (string) [required]**
   - ARN of the code signing configuration
 
 
@@ -163,7 +213,7 @@ Properties:
 
 Properties:
 - **`UUID` (string) [required]**
-  - ARN of the eventu source mapping
+  - ARN of the event source mapping
 
 
 ### `GetFunction`
@@ -426,8 +476,6 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`AddLayerVersionPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_AddLayerVersionPermission.html)
-- [`AddPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_AddPermission.html)
 - [`CreateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateCodeSigningConfig.html)
 - [`CreateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
 - [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)

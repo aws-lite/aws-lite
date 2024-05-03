@@ -1,6 +1,8 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  AddLayerVersionPermissionCommandOutput as AddLayerVersionPermissionResponse,
+  AddPermissionCommandOutput as AddPermissionResponse,
   CreateAliasCommandOutput as CreateAliasResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
   DeleteAliasCommandOutput as DeleteAliasResponse,
@@ -32,6 +34,18 @@ import {
 declare interface AwsLiteLambda {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_AddLayerVersionPermission.html Lambda: AddLayerVersionPermission}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#AddLayerVersionPermission Lambda: AddLayerVersionPermission}
+   */
+  AddLayerVersionPermission: (input: { LayerName: string, RevisionId?: string, VersionNumber: number, Action: string, OrganizationId?: string, Principal?: string, StatementId: string }) => Promise<AddLayerVersionPermissionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_AddPermission.html Lambda: AddPermission}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#AddPermission Lambda: AddPermission}
+   */
+  AddPermission: (input: { FunctionName: string, Qualifier?: string, Action: string, EventSourceToken?: string, FunctionUrlAuthType?: string, Principal: string, PrincipalOrgID?: string, RevisionId?: string, SourceAccount?: string, SourceArn?: string, StatementId: string }) => Promise<AddPermissionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateAlias.html Lambda: CreateAlias}
@@ -69,7 +83,7 @@ declare interface AwsLiteLambda {
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetCodeSigningConfig.html Lambda: GetCodeSigningConfig}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetCodeSigningConfig Lambda: GetCodeSigningConfig}
    */
-  GetCodeSigningConfig: (input: { CodeSigningConfigArn?: string }) => Promise<GetCodeSigningConfigResponse>
+  GetCodeSigningConfig: (input: { CodeSigningConfigArn: string }) => Promise<GetCodeSigningConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_GetEventSourceMapping.html Lambda: GetEventSourceMapping}
@@ -191,6 +205,8 @@ export type {
   AwsLiteLambda,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
+  AddLayerVersionPermissionResponse,
+  AddPermissionResponse,
   CreateAliasResponse,
   CreateFunctionResponse,
   DeleteAliasResponse,
