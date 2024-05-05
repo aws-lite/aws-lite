@@ -205,6 +205,7 @@ Open source contributor guidelines, methodology, and instructions
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
 - [Lambda](https://www.npmjs.com/package/@aws-lite/lambda)
 - [RDS Data Service](https://www.npmjs.com/package/@aws-lite/rds-data)
+- [Route 53](https://www.npmjs.com/package/@aws-lite/route53)
 - [S3](https://www.npmjs.com/package/@aws-lite/s3)
 - [SNS](https://www.npmjs.com/package/@aws-lite/sns)
 - [SQS](https://www.npmjs.com/package/@aws-lite/sqs)

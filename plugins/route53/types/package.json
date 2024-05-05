@@ -1,0 +1,26 @@
+{
+  "name": "@aws-lite/route53-types",
+  "version": "0.0.0",
+  "description": "Type definitions for the `@aws-lite/route53` plugin",
+  "homepage": "https://aws-lite.org/services/route53",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/architect/aws-lite.git",
+    "directory": "plugins/route53/types"
+  },
+  "bugs": "https://github.com/architect/aws-lite/issues",
+  "main": "",
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "@architect",
+  "license": "Apache-2.0",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-route53": "3"
+  },
+  "scripts": {}
+}
