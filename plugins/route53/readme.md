@@ -32,7 +32,23 @@ npm i -D @aws-lite/route53-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `ListResourceRecordSets`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html)
+
+Properties:
+- **`HostedZoneId` (string) [required]**
+  - ID of the hosted zone containing the resource records set
+- **`MaxItems` (number)**
+  - Max number of items to be returned in a response. If the response has more items than `maxitems`, `IsTruncated` will be true and the response will be paginated
+- **`StartRecordIdentifier` (string)**
+  - Pagination cursor when the routing policy is not `simple` and results were truncated for a given DNS
+- **`StartRecordName` (string)**
+  - Name of the first resource record to be listed in lexicographic ordering. If the name doesn't exist, results will begin from the first record with a name greater than the provided value
+- **`StartRecordType` (string)**
+  - The type of resource record to begin listing from
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### Methods yet to be implemented
@@ -94,7 +110,6 @@ npm i -D @aws-lite/route53-types
 - [`ListHostedZonesByName`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListHostedZonesByName.html)
 - [`ListHostedZonesByVPC`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListHostedZonesByVPC.html)
 - [`ListQueryLoggingConfigs`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListQueryLoggingConfigs.html)
-- [`ListResourceRecordSets`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html)
 - [`ListReusableDelegationSets`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListReusableDelegationSets.html)
 - [`ListTagsForResource`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListTagsForResource.html)
 - [`ListTagsForResources`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListTagsForResources.html)

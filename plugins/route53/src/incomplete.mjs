@@ -56,7 +56,6 @@ export default {
   ListHostedZonesByName:                   { disabled, awsDoc: docRoot + 'API_ListHostedZonesByName.html' },
   ListHostedZonesByVPC:                    { disabled, awsDoc: docRoot + 'API_ListHostedZonesByVPC.html' },
   ListQueryLoggingConfigs:                 { disabled, awsDoc: docRoot + 'API_ListQueryLoggingConfigs.html' },
-  ListResourceRecordSets:                  { disabled, awsDoc: docRoot + 'API_ListResourceRecordSets.html' },
   ListReusableDelegationSets:              { disabled, awsDoc: docRoot + 'API_ListReusableDelegationSets.html' },
   ListTagsForResource:                     { disabled, awsDoc: docRoot + 'API_ListTagsForResource.html' },
   ListTagsForResources:                    { disabled, awsDoc: docRoot + 'API_ListTagsForResources.html' },
