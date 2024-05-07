@@ -9,11 +9,49 @@ const property = 'Route53'
 const required = true
 const docRoot = 'https://docs.aws.amazon.com/Route53/latest/APIReference/'
 
+// const arr = { type: 'array' }
 const num = { type: 'number' }
+const obj = { type: 'object' }
 const str = { type: 'string' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
+const xml = { 'content-type': 'application/xml' }
+
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const HostedZoneId = { ...str, required, comment: 'ID of the hosted zone containing the resource records set' }
+
+const ChangeResourceRecordSets = {
+  awsDoc: docRoot + 'API_ChangeResourceRecordSets.html',
+  validate: {
+    // ChangeResourceRecordSetsRequest: { ...obj, required, comment: 'Complete `ChangeResourceRecordSetsRequest` object', ref: docRoot + 'API_ChangeResourceRecordSets.html#API_ChangeResourceRecordSets_RequestSyntax' },
+    HostedZoneId,
+    ChangeBatch: { ...obj, comment: 'Complete `ChangeBatch` object'  },
+  },
+  request: ({ HostedZoneId, ChangeBatch }) => {
+    if (ChangeBatch?.Changes) {
+      ChangeBatch.Changes = ChangeBatch.Changes.map((change) => {
+
+        if (change.ResourceRecordSet?.ResourceRecords) {
+          change.ResourceRecordSet.ResourceRecords = change.ResourceRecordSet.ResourceRecords.map((record) => {
+            return { ResourceRecord: record }
+          }).filter(Boolean)
+        }
+
+        return { Change: change }
+      }).filter(Boolean)
+    }
+
+    const payload = {
+      ChangeResourceRecordSetsRequest: { ChangeBatch },
+    }
+    return {
+      path: `/2013-04-01/hostedzone/${HostedZoneId}/rrset/`,
+      headers: xml,
+      method: 'POST',
+      payload,
+      xmlns: 'https://route53.amazonaws.com/doc/2013-04-01/',
+    }
+  },
+}
 
 const ListResourceRecordSets = {
   awsDoc: docRoot + 'API_ListResourceRecordSets.html',
@@ -87,6 +125,7 @@ export default {
   service,
   property,
   methods: {
+    ChangeResourceRecordSets,
     ListResourceRecordSets,
     ...incomplete,
   },

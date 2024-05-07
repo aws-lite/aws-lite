@@ -4,7 +4,6 @@ export default {
   ActivateKeySigningKey:                   { disabled, awsDoc: docRoot + 'API_ActivateKeySigningKey.html' },
   AssociateVPCWithHostedZone:              { disabled, awsDoc: docRoot + 'API_AssociateVPCWithHostedZone.html' },
   ChangeCidrCollection:                    { disabled, awsDoc: docRoot + 'API_ChangeCidrCollection.html' },
-  ChangeResourceRecordSets:                { disabled, awsDoc: docRoot + 'API_ChangeResourceRecordSets.html' },
   ChangeTagsForResource:                   { disabled, awsDoc: docRoot + 'API_ChangeTagsForResource.html' },
   CreateCidrCollection:                    { disabled, awsDoc: docRoot + 'API_CreateCidrCollection.html' },
   CreateHealthCheck:                       { disabled, awsDoc: docRoot + 'API_CreateHealthCheck.html' },

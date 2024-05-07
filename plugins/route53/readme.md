@@ -32,6 +32,17 @@ npm i -D @aws-lite/route53-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `ChangeResourceRecordSets`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html)
+
+Properties:
+- **`HostedZoneId` (string) [required]**
+  - ID of the hosted zone containing the resource records set
+- **`ChangeBatch` (object)**
+  - Complete `ChangeBatch` object
+
+
 ### `ListResourceRecordSets`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html)
@@ -58,7 +69,6 @@ Properties:
 - [`ActivateKeySigningKey`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ActivateKeySigningKey.html)
 - [`AssociateVPCWithHostedZone`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_AssociateVPCWithHostedZone.html)
 - [`ChangeCidrCollection`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeCidrCollection.html)
-- [`ChangeResourceRecordSets`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html)
 - [`ChangeTagsForResource`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeTagsForResource.html)
 - [`CreateCidrCollection`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateCidrCollection.html)
 - [`CreateHealthCheck`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateHealthCheck.html)
