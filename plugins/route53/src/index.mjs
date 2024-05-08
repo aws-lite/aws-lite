@@ -51,6 +51,10 @@ const ChangeResourceRecordSets = {
       xmlns: 'https://route53.amazonaws.com/doc/2013-04-01/',
     }
   },
+  response: ({ payload }) => {
+    const { ChangeInfo } = payload
+    return ChangeInfo
+  },
 }
 
 const ListResourceRecordSets = {
