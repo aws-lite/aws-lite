@@ -2,6 +2,14 @@
 
 ---
 
+## [0.21.2] 2024-05-08
+
+### Fixed
+
+- Fixed issue where pagination may break if the API that accepts multiple `cursor`s returns only a subset of possible `token`s
+
+---
+
 ## [0.21.1] 2024-04-26
 
 ### Fixed
