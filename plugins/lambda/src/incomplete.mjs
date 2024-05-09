@@ -1,7 +1,7 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/lambda/latest/dg/'
 export default {
-  CreateEventSourceMapping:           { disabled, awsDoc: docRoot + 'API_CreateEventSourceMapping.html' },
+  // CreateEventSourceMapping:           { disabled, awsDoc: docRoot + 'API_CreateEventSourceMapping.html' },
   CreateFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_CreateFunctionUrlConfig.html' },
   DeleteFunction:                     { disabled, awsDoc: docRoot + 'API_DeleteFunction.html' },
   DeleteFunctionCodeSigningConfig:    { disabled, awsDoc: docRoot + 'API_DeleteFunctionCodeSigningConfig.html' },
