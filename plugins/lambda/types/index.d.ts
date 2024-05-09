@@ -10,6 +10,7 @@ import {
   DeleteAliasCommandOutput as DeleteAliasResponse,
   DeleteCodeSigningConfigCommandOutput as DeleteCodeSigningConfigResponse,
   DeleteEventSourceMappingCommandOutput as DeleteEventSourceMappingResponse,
+  DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DeleteFunctionConcurrencyCommandOutput as DeleteFunctionConcurrencyResponse,
   GetAccountSettingsCommandOutput as GetAccountSettingsResponse,
   GetAliasCommandOutput as GetAliasResponse,
@@ -67,7 +68,7 @@ declare interface AwsLiteLambda {
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html Lambda: CreateEventSourceMapping}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateEventSourceMapping Lambda: CreateEventSourceMapping}
    */
-  CreateEventSourceMapping: (input: { FunctionName: string, AmazonManagedKafkaEventSourceConfig?: Record<string, any>, BatchSize?: number, BisectBatchOnFunctionError?: boolean, DestinationConfig?: Record<string, any>, DocumentDBEventSourceConfig?: Record<string, any>, Enabled?: boolean, EventSourceArn?: string, FilterCriteria?: Record<string, any>, FunctionResponseTypes?: any[], MaximumBatchingWindowInSeconds?: number, MaximumRecordAgeInSeconds?: number, MaximumRetryAttempts?: number, ParallelizationFactor?: number, Queues?: any[], ScalingConfig?: Record<string, any>, SelfManagedEventSource?: Record<string, any>, SelfManagedKafkaEventSourceConfig?: Record<string, any>, SourceAccessConfigurations?: any[], StartingPosition?: string, StartingPositionTimestamp?: Record<string, any> }) => Promise<CreateEventSourceMappingResponse>
+  CreateEventSourceMapping: (input: { FunctionName: string, AmazonManagedKafkaEventSourceConfig?: Record<string, any>, BatchSize?: number, BisectBatchOnFunctionError?: boolean, DestinationConfig?: Record<string, any>, DocumentDBEventSourceConfig?: Record<string, any>, Enabled?: boolean, EventSourceArn?: string, FilterCriteria?: Record<string, any>, FunctionResponseTypes?: any[], MaximumBatchingWindowInSeconds?: number, MaximumRecordAgeInSeconds?: number, MaximumRetryAttempts?: number, ParallelizationFactor?: number, Queues?: any[], ScalingConfig?: Record<string, any>, SelfManagedEventSource?: Record<string, any>, SelfManagedKafkaEventSourceConfig?: Record<string, any>, SourceAccessConfigurations?: any[], StartingPosition?: string, StartingPositionTimestamp?: Record<string, any>, Topics?: any[], TumblingWindowInSeconds?: number }) => Promise<CreateEventSourceMappingResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html Lambda: CreateFunction}
@@ -92,6 +93,12 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteEventSourceMapping Lambda: DeleteEventSourceMapping}
    */
   DeleteEventSourceMapping: (input: { UUID: string }) => Promise<DeleteEventSourceMappingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html Lambda: DeleteFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunction Lambda: DeleteFunction}
+   */
+  DeleteFunction: (input: { FunctionName: string, Qualifier?: string }) => Promise<DeleteFunctionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html Lambda: DeleteFunctionConcurrency}
@@ -242,6 +249,7 @@ export type {
   DeleteAliasResponse,
   DeleteCodeSigningConfigResponse,
   DeleteEventSourceMappingResponse,
+  DeleteFunctionResponse,
   DeleteFunctionConcurrencyResponse,
   GetAccountSettingsResponse,
   GetAliasResponse,

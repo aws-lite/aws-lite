@@ -168,6 +168,10 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition)
 - **`StartingPositionTimestamp` (object)**
   - The `timestamp` in `Unix time seconds` used when `StartingPosition` is set to `AT_TIMESTAMP`; cannot be in the future
+- **`Topics` (array)**
+  - Array of exactly 1 string specifying the name of the `Kafka` topic
+- **`TumblingWindowInSeconds` (number)**
+  - Time (in seconds) from 0 to 900 specifying the duration of a processing window for `DynamoDB` and `Kinesis` event stream sources
 
 
 ### `CreateFunction`
@@ -261,6 +265,17 @@ Properties:
 Properties:
 - **`UUID` (string) [required]**
   - UUID of the event source mapping
+
+
+### `DeleteFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
 
 
 ### `DeleteFunctionConcurrency`
@@ -570,7 +585,6 @@ Properties:
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
 - [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
-- [`DeleteFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
 - [`DeleteFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html)
 - [`DeleteFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html)
 - [`DeleteFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html)

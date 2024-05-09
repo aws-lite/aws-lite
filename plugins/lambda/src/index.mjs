@@ -172,8 +172,16 @@ const CreateEventSourceMapping = {
     SourceAccessConfigurations: { ...arr, comment: 'Array of at most 22 `SourceAccessConfiguration` objects to specifying authentication protocols or VPC components required to secure the event source', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SourceAccessConfigurations' },
     StartingPosition: { ...str, comment: 'Position in a stream to begin reading, valid entries are `TRIM_HORIZON` (all available messages), `LATEST` (from now or after) or `AT_TIMESTAMP` (specify timestamp)', ref: docRoot +  'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition' },
     StartingPositionTimestamp: { ...obj, comment: 'The `timestamp` in `Unix time seconds` used when `StartingPosition` is set to `AT_TIMESTAMP`; cannot be in the future' },
-
+    Topics: { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Kafka` topic' },
+    TumblingWindowInSeconds: { ...num, comment: 'Time (in seconds) from 0 to 900 specifying the duration of a processing window for `DynamoDB` and `Kinesis` event stream sources' },
   },
+  request: (params) => {
+    return {
+      path: '/2015-03-31/event-source-mappings/',
+      payload: params,
+    }
+  },
+  response: defaultResponse,
 }
 
 const CreateFunction = {
@@ -254,6 +262,24 @@ const DeleteEventSourceMapping = {
     }
   },
   response: defaultResponse,
+}
+
+const DeleteFunction = {
+  awsDoc: docRoot + 'API_DeleteFunction.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2015-03-31/functions/${FunctionName}`,
+      query,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
 }
 
 const DeleteFunctionConcurrency = {
@@ -675,6 +701,7 @@ export default {
     DeleteAlias,
     DeleteCodeSigningConfig,
     DeleteEventSourceMapping,
+    DeleteFunction,
     DeleteFunctionConcurrency,
     GetAccountSettings,
     GetAlias,
