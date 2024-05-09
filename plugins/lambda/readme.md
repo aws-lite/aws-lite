@@ -58,7 +58,7 @@ Properties:
 - **`Qualifier` (string)**
   - Specify a version or alias to invoke a published version of the function
 - **`Action` (string) [required]**
-  - Action that the principal can use on the function, for example, `lambda:InvokeFunction`
+  - Action that the principal can use on the function; for example, `lambda:InvokeFunction`
 - **`EventSourceToken` (string)**
   - A token that Alexa Smart Home requires from the invoker
 - **`FunctionUrlAuthType` (string)**
@@ -108,6 +108,66 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/api/API_CodeSigningPolicies.html)
 - **`Description` (string)**
   - Description of the function
+
+
+### `CreateEventSourceMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`AmazonManagedKafkaEventSourceConfig` (object)**
+  - Configuration settings for an Amazon Managed Streaming for Apache Kafka event source
+- **`BatchSize` (number)**
+  - Maximum number of records from 1 to 10000 in each batch that Lambda pulls from the stream or queue
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-BatchSize)
+- **`BisectBatchOnFunctionError` (boolean)**
+  - If the function returns an error, divide the batch and try again (only for Kinesis and DynamoDB streams)
+- **`DestinationConfig` (object)**
+  - Specify the destination of an event after being processed by Lambda
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DestinationConfig)
+- **`DocumentDBEventSourceConfig` (object)**
+  - Configuration for a `DocumentDB` event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DocumentDBEventSourceConfig)
+- **`Enabled` (boolean)**
+  - Set to `false` to disable event source upon creation
+- **`EventSourceArn` (string)**
+  - ARN of the event source
+- **`FilterCriteria` (object)**
+  - Define an input filter for events
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FilterCriteria)
+- **`FunctionResponseTypes` (array)**
+  - A list of at most 1 string defining the current response type enum applied to the event source mapping; For Kinesis, DynamoDB Streams, and Amazon SQS
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FunctionResponseTypes)
+- **`MaximumBatchingWindowInSeconds` (number)**
+  - Maximum time (in seconds) from 0 to 300 that Lambda may spend gathering records before invoking the function
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-MaximumBatchingWindowInSeconds)
+- **`MaximumRecordAgeInSeconds` (number)**
+  - Maximum age from -1 (infinite, default) to 604800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams
+- **`MaximumRetryAttempts` (number)**
+  - Maximum number of tries from -1 (infinite, default) to 10000 before a record is discarded; `Kinesis` and `DynamoDB` only 
+- **`ParallelizationFactor` (number)**
+  - Number of batches from 1 to 10 that can be processed from each shard concurrently
+- **`Queues` (array)**
+  - Array of exactly 1 string specifying the name of the `Amazon MQ` broker destination queue to consume
+- **`ScalingConfig` (object)**
+  - Configure scaling for the event source; Amazon SQS only
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-ScalingConfig)
+- **`SelfManagedEventSource` (object)**
+  - A self managed `Apache Kafka` cluster to receive records from
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource)
+- **`SelfManagedKafkaEventSourceConfig` (object)**
+  - Configure a self managed `Apache Kafka` event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource)
+- **`SourceAccessConfigurations` (array)**
+  - Array of at most 22 `SourceAccessConfiguration` objects to specifying authentication protocols or VPC components required to secure the event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SourceAccessConfigurations)
+- **`StartingPosition` (string)**
+  - Position in a stream to begin reading, valid entries are `TRIM_HORIZON` (all available messages), `LATEST` (from now or after) or `AT_TIMESTAMP` (specify timestamp)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition)
+- **`StartingPositionTimestamp` (object)**
+  - The `timestamp` in `Unix time seconds` used when `StartingPosition` is set to `AT_TIMESTAMP`; cannot be in the future
 
 
 ### `CreateFunction`
@@ -509,7 +569,6 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
 - [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
 - [`DeleteFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
 - [`DeleteFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html)

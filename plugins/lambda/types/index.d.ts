@@ -5,6 +5,7 @@ import {
   AddPermissionCommandOutput as AddPermissionResponse,
   CreateAliasCommandOutput as CreateAliasResponse,
   CreateCodeSigningConfigCommandOutput as CreateCodeSigningConfigResponse,
+  CreateEventSourceMappingCommandOutput as CreateEventSourceMappingResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
   DeleteAliasCommandOutput as DeleteAliasResponse,
   DeleteCodeSigningConfigCommandOutput as DeleteCodeSigningConfigResponse,
@@ -61,6 +62,12 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateCodeSigningConfig Lambda: CreateCodeSigningConfig}
    */
   CreateCodeSigningConfig: (input: { AllowedPublishers: Record<string, any>, CodeSigningPolicies?: Record<string, any>, Description?: string }) => Promise<CreateCodeSigningConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html Lambda: CreateEventSourceMapping}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateEventSourceMapping Lambda: CreateEventSourceMapping}
+   */
+  CreateEventSourceMapping: (input: { FunctionName: string, AmazonManagedKafkaEventSourceConfig?: Record<string, any>, BatchSize?: number, BisectBatchOnFunctionError?: boolean, DestinationConfig?: Record<string, any>, DocumentDBEventSourceConfig?: Record<string, any>, Enabled?: boolean, EventSourceArn?: string, FilterCriteria?: Record<string, any>, FunctionResponseTypes?: any[], MaximumBatchingWindowInSeconds?: number, MaximumRecordAgeInSeconds?: number, MaximumRetryAttempts?: number, ParallelizationFactor?: number, Queues?: any[], ScalingConfig?: Record<string, any>, SelfManagedEventSource?: Record<string, any>, SelfManagedKafkaEventSourceConfig?: Record<string, any>, SourceAccessConfigurations?: any[], StartingPosition?: string, StartingPositionTimestamp?: Record<string, any> }) => Promise<CreateEventSourceMappingResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html Lambda: CreateFunction}
@@ -230,6 +237,7 @@ export type {
   AddPermissionResponse,
   CreateAliasResponse,
   CreateCodeSigningConfigResponse,
+  CreateEventSourceMappingResponse,
   CreateFunctionResponse,
   DeleteAliasResponse,
   DeleteCodeSigningConfigResponse,
