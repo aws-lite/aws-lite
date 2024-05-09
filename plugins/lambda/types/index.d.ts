@@ -11,7 +11,12 @@ import {
   DeleteCodeSigningConfigCommandOutput as DeleteCodeSigningConfigResponse,
   DeleteEventSourceMappingCommandOutput as DeleteEventSourceMappingResponse,
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
+  DeleteFunctionCodeSigningConfigCommandOutput as DeleteFunctionCodeSigningConfigResponse,
   DeleteFunctionConcurrencyCommandOutput as DeleteFunctionConcurrencyResponse,
+  DeleteFunctionEventInvokeConfigCommandOutput as DeleteFunctionEventInvokeConfigResponse,
+  DeleteFunctionUrlConfigCommandOutput as DeleteFunctionUrlConfigResponse,
+  DeleteLayerVersionCommandOutput as DeleteLayerVersionResponse,
+  DeleteProvisionedConcurrencyConfigCommandOutput as DeleteProvisionedConcurrencyConfigResponse,
   GetAccountSettingsCommandOutput as GetAccountSettingsResponse,
   GetAliasCommandOutput as GetAliasResponse,
   GetCodeSigningConfigCommandOutput as GetCodeSigningConfigResponse,
@@ -101,10 +106,40 @@ declare interface AwsLiteLambda {
   DeleteFunction: (input: { FunctionName: string, Qualifier?: string }) => Promise<DeleteFunctionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html Lambda: DeleteFunctionCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionCodeSigningConfig Lambda: DeleteFunctionCodeSigningConfig}
+   */
+  DeleteFunctionCodeSigningConfig: (input: { FunctionName: string }) => Promise<DeleteFunctionCodeSigningConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html Lambda: DeleteFunctionConcurrency}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionConcurrency Lambda: DeleteFunctionConcurrency}
    */
   DeleteFunctionConcurrency: (input: { FunctionName: string }) => Promise<DeleteFunctionConcurrencyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html Lambda: DeleteFunctionEventInvokeConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionEventInvokeConfig Lambda: DeleteFunctionEventInvokeConfig}
+   */
+  DeleteFunctionEventInvokeConfig: (input: { FunctionName: string, Qualifier?: string }) => Promise<DeleteFunctionEventInvokeConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html Lambda: DeleteFunctionUrlConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionUrlConfig Lambda: DeleteFunctionUrlConfig}
+   */
+  DeleteFunctionUrlConfig: (input: { FunctionName: string, Qualifier?: string }) => Promise<DeleteFunctionUrlConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html Lambda: DeleteLayerVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteLayerVersion Lambda: DeleteLayerVersion}
+   */
+  DeleteLayerVersion: (input: { LayerName: string, VersionNumber: number }) => Promise<DeleteLayerVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteProvisionedConcurrencyConfig.html Lambda: DeleteProvisionedConcurrencyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteProvisionedConcurrencyConfig Lambda: DeleteProvisionedConcurrencyConfig}
+   */
+  DeleteProvisionedConcurrencyConfig: (input: { FunctionName: string, Qualifier: string }) => Promise<DeleteProvisionedConcurrencyConfigResponse>
   /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetAccountSettings Lambda: GetAccountSettings} */
   GetAccountSettings: () => Promise<GetAccountSettingsResponse>
   /**
@@ -250,7 +285,12 @@ export type {
   DeleteCodeSigningConfigResponse,
   DeleteEventSourceMappingResponse,
   DeleteFunctionResponse,
+  DeleteFunctionCodeSigningConfigResponse,
   DeleteFunctionConcurrencyResponse,
+  DeleteFunctionEventInvokeConfigResponse,
+  DeleteFunctionUrlConfigResponse,
+  DeleteLayerVersionResponse,
+  DeleteProvisionedConcurrencyConfigResponse,
   GetAccountSettingsResponse,
   GetAliasResponse,
   GetCodeSigningConfigResponse,

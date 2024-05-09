@@ -2,12 +2,6 @@ const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/lambda/latest/dg/'
 export default {
   CreateFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_CreateFunctionUrlConfig.html' },
-  // DeleteFunction:                     { disabled, awsDoc: docRoot + 'API_DeleteFunction.html' },
-  DeleteFunctionCodeSigningConfig:    { disabled, awsDoc: docRoot + 'API_DeleteFunctionCodeSigningConfig.html' },
-  DeleteFunctionEventInvokeConfig:    { disabled, awsDoc: docRoot + 'API_DeleteFunctionEventInvokeConfig.html' },
-  DeleteFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_DeleteFunctionUrlConfig.html' },
-  DeleteLayerVersion:                 { disabled, awsDoc: docRoot + 'API_DeleteLayerVersion.html' },
-  DeleteProvisionedConcurrencyConfig: { disabled, awsDoc: docRoot + 'API_DeleteProvisionedConcurrencyConfig.html' },
   InvokeAsync:                        { disabled, awsDoc: docRoot + 'API_InvokeAsync.html' },
   InvokeWithResponseStream:           { disabled, awsDoc: docRoot + 'API_InvokeWithResponseStream.html' },
   ListAliases:                        { disabled, awsDoc: docRoot + 'API_ListAliases.html' },

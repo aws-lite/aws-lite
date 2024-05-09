@@ -2,6 +2,7 @@
  * Plugin maintained by: @architect
  */
 
+
 import incomplete from './incomplete.mjs'
 
 const service = 'lambda'
@@ -282,6 +283,20 @@ const DeleteFunction = {
   response: emptyResponse,
 }
 
+const DeleteFunctionCodeSigningConfig = {
+  awsDoc: docRoot + 'API_DeleteFunctionCodeSigningConfig.html',
+  validate: {
+    FunctionName,
+  },
+  request: ({ FunctionName }) => {
+    return {
+      path: `/2020-06-30/functions/${FunctionName}/code-signing-config`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
 const DeleteFunctionConcurrency = {
   awsDoc: docRoot + 'API_DeleteFunctionConcurrency.html',
   validate: {
@@ -290,6 +305,73 @@ const DeleteFunctionConcurrency = {
   request: ({ FunctionName }) => {
     return {
       path: `/2017-10-31/functions/${FunctionName}/concurrency`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteFunctionEventInvokeConfig = {
+  awsDoc: docRoot + 'API_DeleteFunctionEventInvokeConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2019-09-25/functions/${FunctionName}/event-invoke-config`,
+      query,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteFunctionUrlConfig = {
+  awsDoc: docRoot + 'API_DeleteFunctionUrlConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2021-10-31/functions/${FunctionName}/url`,
+      query,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteLayerVersion = {
+  awsDoc: docRoot + 'API_DeleteLayerVersion.html',
+  validate: {
+    LayerName,
+    VersionNumber,
+  },
+  request: ({ LayerName, VersionNumber }) => {
+    return {
+      path: `/2018-10-31/layers/${LayerName}/versions/${VersionNumber}`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteProvisionedConcurrencyConfig = {
+  awsDoc: docRoot + 'API_DeleteProvisionedConcurrencyConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier: { ...Qualifier, required },
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    return {
+      path: `/2019-09-30/functions/${FunctionName}/provisioned-concurrency`,
+      query: { Qualifier },
       method: 'DELETE',
     }
   },
@@ -702,7 +784,12 @@ export default {
     DeleteCodeSigningConfig,
     DeleteEventSourceMapping,
     DeleteFunction,
+    DeleteFunctionCodeSigningConfig,
     DeleteFunctionConcurrency,
+    DeleteFunctionEventInvokeConfig,
+    DeleteFunctionUrlConfig,
+    DeleteLayerVersion,
+    DeleteProvisionedConcurrencyConfig,
     GetAccountSettings,
     GetAlias,
     GetCodeSigningConfig,
