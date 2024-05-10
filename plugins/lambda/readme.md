@@ -571,6 +571,74 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListFunctions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html)
+
+Properties:
+- **`FunctionVersion` (string)**
+  - Set to `ALL` to include entries for all published versions
+- **`Marker` (string)**
+  - Pagination token
+- **`MasterRegion` (string)**
+  - Display `LambdaEdge` functions replicated from a master function in a specified region; see reference for more details
+- **`MaxItems` (number)**
+  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFunctionUrlConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListLayers`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html)
+
+Properties:
+- **`CompatibleArchitecture` (string)**
+  - Set instruction set architecture to one of: `x86_64`, `arm64`
+- **`CompatibleRuntime` (string)**
+  - Set the runtime identifier to one of: `nodejs`, `nodejs4.3`, `nodejs6.10`, `nodejs8.10`, `nodejs10.x`, `nodejs12.x`, `nodejs14.x`, `nodejs16.x`, `java8`, `java8.al2`, `java11`, `python2.7`, `python3.6`, `python3.7`, `python3.8`, `python3.9`, `dotnetcore1.0`, `dotnetcore2.0`, `dotnetcore2.1`, `dotnetcore3.1`, `dotnet6`, `dotnet8`, `nodejs4.3-edge`, `go1.x`, `ruby2.5`, `ruby2.7`, `provided`, `provided.al2`, `nodejs18.x`, `python3.10`, `java17`, `ruby3.2`, `ruby3.3`, `python3.11`, `nodejs20.x`, `provided.al2023`, `python3.12`, `java21`,
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListLayerVersions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`CompatibleArchitecture` (string)**
+  - Set instruction set architecture to one of: `x86_64`, `arm64`
+- **`CompatibleRuntime` (string)**
+  - Set the runtime identifier to one of: `nodejs`, `nodejs4.3`, `nodejs6.10`, `nodejs8.10`, `nodejs10.x`, `nodejs12.x`, `nodejs14.x`, `nodejs16.x`, `java8`, `java8.al2`, `java11`, `python2.7`, `python3.6`, `python3.7`, `python3.8`, `python3.9`, `dotnetcore1.0`, `dotnetcore2.0`, `dotnetcore2.1`, `dotnetcore3.1`, `dotnet6`, `dotnet8`, `nodejs4.3-edge`, `go1.x`, `ruby2.5`, `ruby2.7`, `provided`, `provided.al2`, `nodejs18.x`, `python3.10`, `java17`, `ruby3.2`, `ruby3.3`, `python3.11`, `nodejs20.x`, `provided.al2023`, `python3.12`, `java21`,
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `PutFunctionConcurrency`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
@@ -690,11 +758,7 @@ Properties:
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
 - [`ListEventSourceMappings`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html)
 - [`ListFunctionEventInvokeConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html)
-- [`ListFunctions`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html)
 - [`ListFunctionsByCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html)
-- [`ListFunctionUrlConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html)
-- [`ListLayers`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html)
-- [`ListLayerVersions`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html)
 - [`ListProvisionedConcurrencyConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html)
 - [`ListTags`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html)
 - [`ListVersionsByFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html)

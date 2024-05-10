@@ -37,6 +37,10 @@ import {
   InvokeCommandOutput as InvokeResponse,
   ListAliasesCommandOutput as ListAliasesResponse,
   ListCodeSigningConfigsCommandOutput as ListCodeSigningConfigsResponse,
+  ListFunctionsCommandOutput as ListFunctionsResponse,
+  ListFunctionUrlConfigsCommandOutput as ListFunctionUrlConfigsResponse,
+  ListLayersCommandOutput as ListLayersResponse,
+  ListLayerVersionsCommandOutput as ListLayerVersionsResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
@@ -261,6 +265,30 @@ declare interface AwsLiteLambda {
   ListCodeSigningConfigs: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListCodeSigningConfigsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html Lambda: ListFunctions}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctions Lambda: ListFunctions}
+   */
+  ListFunctions: (input: { FunctionVersion?: string, Marker?: string, MasterRegion?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html Lambda: ListFunctionUrlConfigs}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionUrlConfigs Lambda: ListFunctionUrlConfigs}
+   */
+  ListFunctionUrlConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionUrlConfigsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html Lambda: ListLayers}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListLayers Lambda: ListLayers}
+   */
+  ListLayers: (input: { CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListLayersResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html Lambda: ListLayerVersions}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListLayerVersions Lambda: ListLayerVersions}
+   */
+  ListLayerVersions: (input: { LayerName: string, CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListLayerVersionsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html Lambda: PutFunctionConcurrency}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionConcurrency Lambda: PutFunctionConcurrency}
    */
@@ -332,6 +360,10 @@ export type {
   InvokeResponse,
   ListAliasesResponse,
   ListCodeSigningConfigsResponse,
+  ListFunctionsResponse,
+  ListFunctionUrlConfigsResponse,
+  ListLayersResponse,
+  ListLayerVersionsResponse,
   PutFunctionConcurrencyResponse,
   UpdateAliasResponse,
   UpdateFunctionCodeResponse,

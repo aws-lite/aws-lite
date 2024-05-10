@@ -17,6 +17,8 @@ const num = { type: 'number' }
 const str = { type: 'string' }
 
 const Architectures = { ...arr, comment: 'System architecture, array can contain either `x86_64` (default) or `arm64`' }
+const CompatibleArchitecture = { ...str, comment: 'Set instruction set architecture to one of: `x86_64`, `arm64`' }
+const CompatibleRuntime = { ...str, comment: 'Set the runtime identifier to one of: `nodejs`, `nodejs4.3`, `nodejs6.10`, `nodejs8.10`, `nodejs10.x`, `nodejs12.x`, `nodejs14.x`, `nodejs16.x`, `java8`, `java8.al2`, `java11`, `python2.7`, `python3.6`, `python3.7`, `python3.8`, `python3.9`, `dotnetcore1.0`, `dotnetcore2.0`, `dotnetcore2.1`, `dotnetcore3.1`, `dotnet6`, `dotnet8`, `nodejs4.3-edge`, `go1.x`, `ruby2.5`, `ruby2.7`, `provided`, `provided.al2`, `nodejs18.x`, `python3.10`, `java17`, `ruby3.2`, `ruby3.3`, `python3.11`, `nodejs20.x`, `provided.al2023`, `python3.12`, `java21`,' }
 const DeadLetterConfig = { ...obj, comment: 'Dead-letter queue configuration', ref: docRoot + 'API_DeadLetterConfig.html' }
 const Description = { ...str, comment: 'Description of the function' }
 const Environment = { ...obj, comment: 'Environment variable configuration', ref: docRoot + 'API_Environment.html' }
@@ -29,6 +31,8 @@ const ImageConfig = { ...obj, comment: 'Container image configuration (overrides
 const KMSKeyArn = { ...str, comment: 'ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables' }
 const LayerName = { ...str, required, comment: 'Name or ARN of the layer' }
 const Layers = { ...arr, comment: 'List of function layer ARNs (including version) to add to the function execution environment' }
+const Marker = { ...str, comment: 'Pagination token' }
+const MaxItems = { ...num, comment: 'Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`' }
 const MemorySize = { ...num, comment: 'Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation' }
 const Qualifier = { ...str, comment: 'Specify a version or alias to invoke a published version of the function' }
 const RevisionId = { ...str, comment: 'Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it' }
@@ -38,14 +42,17 @@ const Runtime = { ...str, comment: 'Runtime identifier', ref: docRoot + 'lambda-
 const SnapStart = { ...obj, comment: 'SnapStart settings', ref: docRoot + 'API_SnapStart.html' }
 const Timeout = { ...num, comment: 'Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900' }
 const TracingConfig = { ...obj, comment: 'Sample and trace a subset of incoming requests with X-Ray', ref: docRoot + 'API_TracingConfig.html' }
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionNumber = { ...num, required, comment: 'The version number of the layer' }
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
-const MaxItems = { ...num, comment: 'Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`' }
-const Marker = { ...str, comment: 'Pagination token' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => payload
 const emptyResponse = () => { }
+const paginator = {
+  type: 'query',
+  token: 'NextMarker',
+  cursor: 'Marker',
+}
 
 const AddLayerVersionPermission = {
   awsDoc: docRoot + 'API_AddLayerVersionPermission.html',
@@ -710,12 +717,7 @@ const ListAliases = {
     return {
       path: `/2015-03-31/functions/${FunctionName}/aliases`,
       paginate,
-      paginator: {
-        type: 'query',
-        token: 'NextMarker',
-        cursor: 'Marker',
-        accumulator: 'Aliases',
-      },
+      paginator: { ...paginator, accumulator: 'Aliases' },
       query,
     }
   },
@@ -740,12 +742,108 @@ const ListCodeSigningConfigs = {
       path: '/2020-04-22/code-signing-configs/',
       query: params,
       paginate,
-      paginator: {
-        type: 'query',
-        token: 'NextMarker',
-        cursor: 'Marker',
-        accumulator: 'CodeSigningConfigs',
-      },
+      paginator: { ...paginator, accumulator: 'CodeSigningConfigs' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListFunctions = {
+  awsDoc: docRoot + 'API_ListFunctions.html',
+  validate: {
+    FunctionVersion: { ...str, comment: 'Set to `ALL` to include entries for all published versions' },
+    Marker,
+    MasterRegion: { ...str, comment: 'Display `LambdaEdge` functions replicated from a master function in a specified region; see reference for more details' },
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+    return {
+      path: '/2015-03-31/functions/',
+      query: { ...params },
+      paginate,
+      paginator: { ...paginator, accumulator: 'Functions' },
+    }
+  },
+}
+
+const ListFunctionUrlConfigs = {
+  awsDoc: docRoot + 'API_ListFunctionUrlConfigs.html',
+  validate: {
+    FunctionName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { FunctionName, paginate } = params
+    let query = { ...params }
+    delete query.FunctionName
+    if (paginate) delete query.paginate
+    return {
+      path: `/2021-10-31/functions/${FunctionName}/urls`,
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'FunctionUrlConfigs' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListLayers = {
+  awsDoc: docRoot + 'API_ListLayers.html',
+  validate: {
+    CompatibleArchitecture,
+    CompatibleRuntime,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+    return {
+      path: '/2018-10-31/layers',
+      query: { ...params },
+      paginate,
+      paginator: { ...paginator, accumulator: 'Layers' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListLayerVersions = {
+  awsDoc: docRoot + 'API_ListLayerVersions.html',
+  validate: {
+    LayerName,
+    CompatibleArchitecture,
+    CompatibleRuntime,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { LayerName } = params
+    let query = { ...params }
+    let paginate
+    delete query.LayerName
+    if (query.paginate) {
+      paginate = true
+      delete query.paginate
+    }
+    return {
+      path: `/2018-10-31/layers/${LayerName}/versions`,
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'LayerVersions' },
     }
   },
   response: defaultResponse,
@@ -902,6 +1000,10 @@ export default {
     Invoke,
     ListAliases,
     ListCodeSigningConfigs,
+    ListFunctions,
+    ListFunctionUrlConfigs,
+    ListLayers,
+    ListLayerVersions,
     PutFunctionConcurrency,
     UpdateAlias,
     UpdateFunctionCode,
