@@ -40,6 +40,9 @@ const Timeout = { ...num, comment: 'Time (in seconds) a function is allowed to r
 const TracingConfig = { ...obj, comment: 'Sample and trace a subset of incoming requests with X-Ray', ref: docRoot + 'API_TracingConfig.html' }
 const VersionNumber = { ...num, required, comment: 'The version number of the layer' }
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
+const MaxItems = { ...num, comment: 'Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`' }
+const Marker = { ...str, comment: 'Pagination token' }
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => payload
 const emptyResponse = () => { }
@@ -216,6 +219,33 @@ const CreateFunction = {
   request: async (payload) => {
     return {
       path: '/2015-03-31/functions',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const CreateFunctionUrlConfig = {
+  awsDoc: docRoot + 'API_CreateFunctionUrlConfig.html',
+  validate: {
+    AuthType: { ...str, required, comment: 'Type of authentication that the function URL will use, either `AWS_IAM` or `NONE`' },
+    FunctionName,
+    Cors: { ...obj, comment: 'Cross-origin resource sharing settings', ref: docRoot +  'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-Cors' },
+    InvokeMode: { ...str, comment: 'Specify how the function will be invoked, either `BUFFERED` (default, uses the `Invoke` API operation) or `RESPONSE_STREAM` (streams results as they become available, uses the `InvokeWithResponseStream` API operation)', ref: docRoot + 'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-InvokeMode' },
+    Qualifier,
+  },
+  request: (params) => {
+    const { FunctionName, Qualifier } = params
+    let payload = { ...params }
+    let query
+    delete payload.FunctionName
+    if (Qualifier) {
+      query = { Qualifier }
+      delete payload.Qualifier
+    }
+    return {
+      path: `/2021-10-31/functions/${FunctionName}/url`,
+      query,
       payload,
     }
   },
@@ -659,6 +689,68 @@ const Invoke = {
   },
 }
 
+const ListAliases = {
+  awsDoc: docRoot + 'API_ListAliases.html',
+  validate: {
+    FunctionName,
+    FunctionVersion,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let { FunctionName } = params
+    let query = { ...params }
+    delete query.FunctionName
+    let paginate
+    if (query.paginate) {
+      delete query.paginate
+      paginate = true
+    }
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/aliases`,
+      paginate,
+      paginator: {
+        type: 'query',
+        token: 'NextMarker',
+        cursor: 'Marker',
+        accumulator: 'Aliases',
+      },
+      query,
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListCodeSigningConfigs = {
+  awsDoc: docRoot + 'API_ListCodeSigningConfigs.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+
+    return {
+      path: '/2020-04-22/code-signing-configs/',
+      query: params,
+      paginate,
+      paginator: {
+        type: 'query',
+        token: 'NextMarker',
+        cursor: 'Marker',
+        accumulator: 'CodeSigningConfigs',
+      },
+    }
+  },
+  response: defaultResponse,
+}
+
 const PutFunctionConcurrency = {
   awsDoc: docRoot + 'API_PutFunctionConcurrency.html',
   validate: {
@@ -780,6 +872,7 @@ export default {
     CreateCodeSigningConfig,
     CreateEventSourceMapping,
     CreateFunction,
+    CreateFunctionUrlConfig,
     DeleteAlias,
     DeleteCodeSigningConfig,
     DeleteEventSourceMapping,
@@ -807,6 +900,8 @@ export default {
     GetProvisionedConcurrencyConfig,
     GetRuntimeManagementConfig,
     Invoke,
+    ListAliases,
+    ListCodeSigningConfigs,
     PutFunctionConcurrency,
     UpdateAlias,
     UpdateFunctionCode,

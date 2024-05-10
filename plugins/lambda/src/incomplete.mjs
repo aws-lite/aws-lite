@@ -1,11 +1,8 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/lambda/latest/dg/'
 export default {
-  CreateFunctionUrlConfig:            { disabled, awsDoc: docRoot + 'API_CreateFunctionUrlConfig.html' },
   InvokeAsync:                        { disabled, awsDoc: docRoot + 'API_InvokeAsync.html' },
   InvokeWithResponseStream:           { disabled, awsDoc: docRoot + 'API_InvokeWithResponseStream.html' },
-  ListAliases:                        { disabled, awsDoc: docRoot + 'API_ListAliases.html' },
-  ListCodeSigningConfigs:             { disabled, awsDoc: docRoot + 'API_ListCodeSigningConfigs.html' },
   ListEventSourceMappings:            { disabled, awsDoc: docRoot + 'API_ListEventSourceMappings.html' },
   ListFunctionEventInvokeConfigs:     { disabled, awsDoc: docRoot + 'API_ListFunctionEventInvokeConfigs.html' },
   ListFunctions:                      { disabled, awsDoc: docRoot + 'API_ListFunctions.html' },

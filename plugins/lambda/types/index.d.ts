@@ -7,6 +7,7 @@ import {
   CreateCodeSigningConfigCommandOutput as CreateCodeSigningConfigResponse,
   CreateEventSourceMappingCommandOutput as CreateEventSourceMappingResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
+  CreateFunctionUrlConfigCommandOutput as CreateFunctionUrlConfigResponse,
   DeleteAliasCommandOutput as DeleteAliasResponse,
   DeleteCodeSigningConfigCommandOutput as DeleteCodeSigningConfigResponse,
   DeleteEventSourceMappingCommandOutput as DeleteEventSourceMappingResponse,
@@ -34,6 +35,8 @@ import {
   GetProvisionedConcurrencyConfigCommandOutput as GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigCommandOutput as GetRuntimeManagementConfigResponse,
   InvokeCommandOutput as InvokeResponse,
+  ListAliasesCommandOutput as ListAliasesResponse,
+  ListCodeSigningConfigsCommandOutput as ListCodeSigningConfigsResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
@@ -80,6 +83,12 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateFunction Lambda: CreateFunction}
    */
   CreateFunction: (input: { Code: Record<string, any>, FunctionName: string, Role: string, Architectures?: any[], CodeSigningConfigArn?: string, DeadLetterConfig?: Record<string, any>, Description?: string, Environment?: Record<string, any>, EphemeralStorage?: Record<string, any>, FileSystemConfigs?: any[], Handler?: string, ImageConfig?: Record<string, any>, KMSKeyArn?: string, Layers?: any[], MemorySize?: number, PackageType?: string, Publish?: boolean, Runtime?: string, SnapStart?: Record<string, any>, Tags?: any[], Timeout?: number, TracingConfig?: Record<string, any>, VpcConfig?: Record<string, any> }) => Promise<CreateFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html Lambda: CreateFunctionUrlConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateFunctionUrlConfig Lambda: CreateFunctionUrlConfig}
+   */
+  CreateFunctionUrlConfig: (input: { AuthType: string, FunctionName: string, Cors?: Record<string, any>, InvokeMode?: string, Qualifier?: string }) => Promise<CreateFunctionUrlConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html Lambda: DeleteAlias}
@@ -240,6 +249,18 @@ declare interface AwsLiteLambda {
   Invoke: (input: { FunctionName: string, InvocationType?: string, Payload: any[] | Record<string, any>, LogType?: string, ClientContext?: string, Qualifier?: string }) => Promise<InvokeResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html Lambda: ListAliases}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListAliases Lambda: ListAliases}
+   */
+  ListAliases: (input: { FunctionName: string, FunctionVersion?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAliasesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListCodeSigningConfigs.html Lambda: ListCodeSigningConfigs}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListCodeSigningConfigs Lambda: ListCodeSigningConfigs}
+   */
+  ListCodeSigningConfigs: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListCodeSigningConfigsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html Lambda: PutFunctionConcurrency}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionConcurrency Lambda: PutFunctionConcurrency}
    */
@@ -281,6 +302,7 @@ export type {
   CreateCodeSigningConfigResponse,
   CreateEventSourceMappingResponse,
   CreateFunctionResponse,
+  CreateFunctionUrlConfigResponse,
   DeleteAliasResponse,
   DeleteCodeSigningConfigResponse,
   DeleteEventSourceMappingResponse,
@@ -308,6 +330,8 @@ export type {
   GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigResponse,
   InvokeResponse,
+  ListAliasesResponse,
+  ListCodeSigningConfigsResponse,
   PutFunctionConcurrencyResponse,
   UpdateAliasResponse,
   UpdateFunctionCodeResponse,

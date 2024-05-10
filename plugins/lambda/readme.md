@@ -238,6 +238,25 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
 
 
+### `CreateFunctionUrlConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
+
+Properties:
+- **`AuthType` (string) [required]**
+  - Type of authentication that the function URL will use, either `AWS_IAM` or `NONE`
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Cors` (object)**
+  - Cross-origin resource sharing settings
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-Cors)
+- **`InvokeMode` (string)**
+  - Specify how the function will be invoked, either `BUFFERED` (default, uses the `Invoke` API operation) or `RESPONSE_STREAM` (streams results as they become available, uses the `InvokeWithResponseStream` API operation)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-InvokeMode)
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
 ### `DeleteAlias`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html)
@@ -522,6 +541,36 @@ Properties:
   - Specify a version or alias to invoke a published version of the function
 
 
+### `ListAliases`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`FunctionVersion` (string)**
+  - Version of the aliased function
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListCodeSigningConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListCodeSigningConfigs.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `PutFunctionConcurrency`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
@@ -637,11 +686,8 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
 - [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
-- [`ListAliases`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html)
-- [`ListCodeSigningConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListCodeSigningConfigs.html)
 - [`ListEventSourceMappings`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html)
 - [`ListFunctionEventInvokeConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html)
 - [`ListFunctions`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html)
