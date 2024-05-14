@@ -6,11 +6,16 @@ import { defaults } from '../../lib/index.mjs'
 
 let client
 let { config, service, port } = defaults
+let j = o => JSON.stringify(o)
 
 let retryServer, serverError
 let requests = []
 let responses = []
 let basicError = { statusCode: 500 }
+let knownErrorName = { statusCode: 400, payload: j({ name: 'whatever#InvalidSignatureException' }) }
+let knownErrorDunderType = { statusCode: 400, payload: j({ __type: 'TooManyRequestsException' }) }
+let knownErrorType = { statusCode: 400, payload: j({ type: 'TimeoutError' }) }
+let unknownNonRetryableError = { statusCode: 400, payload: j({ name: 'SomeNonRetryableError' }) }
 let throttleError = { statusCode: 429 }
 let basicResponse = { statusCode: 200 }
 
@@ -48,7 +53,7 @@ test('Set up env', async t => {
 })
 
 test('Retries', async t => {
-  t.plan(7)
+  t.plan(9)
   let aws, retries, result
 
   /**
@@ -142,8 +147,39 @@ test('Retries', async t => {
     console.log(err)
     t.equal(requests.length, retries + 1, 'Client retried, passed through error')
   }
-})
 
+  /**
+   * Known retryable errors
+   */
+  retries = 2
+  aws = await client({ ...config, retries })
+  try {
+    reset()
+    responses.push(knownErrorName, knownErrorDunderType, knownErrorType)
+    await aws({ service })
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    console.log(err)
+    t.equal(requests.length, retries + 1, 'Client retried, passed through error')
+  }
+
+  /**
+   * Unknown, non-retryable errors
+   */
+  retries = 1
+  aws = await client({ ...config, retries })
+  try {
+    reset()
+    responses.push(unknownNonRetryableError, unknownNonRetryableError)
+    await aws({ service })
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    console.log(err)
+    t.equal(requests.length, retries, 'Client did not retry, passed through error')
+  }
+})
 
 test('Retries - validation', async t => {
   t.plan(1)

@@ -41,8 +41,9 @@ module.exports = async function request (params, args) {
       await retryDelay(i, `status code ${result.statusCode}`, debug)
     }
     catch (error) {
-      if (i < retries && retryableTimeoutErrorCodes.includes(error?.error?.code)) {
-        await retryDelay(i, `connection error: ${error.error.code}`, debug)
+      let retryable = error.error && isRetryableError(error)
+      if (i < retries && retryable) {
+        await retryDelay(i, retryable, debug)
       }
       else {
         // Unknown / out of band error, not a tidy response or call() rejection
@@ -198,7 +199,7 @@ function call (params, args, retrying) {
                 payload = parseXML(body)
               }
               catch {
-              // lolnothingmatters
+                // lolnothingmatters
                 payload = body.toString()
               }
             }
@@ -264,14 +265,39 @@ function call (params, args, retrying) {
 }
 
 let isOk = statusCode => statusCode >= 200 && statusCode < 303
+let reqCompleted = statusCode => statusCode < 500 && statusCode !== 429 /* Throttled */
 
 // AWS defines transient error status codes as 500, 502, 503, 504, and error codes as below
-// The following transient AWS error codes are also designated retryable: [ 'TimeoutError', 'RequestTimeout', 'RequestTimeoutException' ]
-// see: smithy-typescript/packages/service-error-classification/src/constants.ts
-let reqCompleted = statusCode => statusCode < 500 && statusCode !== 429 /* Throttled */
-const awsTimeoutErrorCodes = [ 'ECONNRESET', 'EPIPE', 'ETIMEDOUT' ]
+// See: smithy-typescript/packages/service-error-classification/src/constants.ts
+const awsTimeoutErrorCodes = [ 'ECONNREFUSED', 'ECONNRESET', 'EPIPE', 'ETIMEDOUT' ]
 const aws4TimeoutErrorCodes = [ 'EADDRINFO', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'EMFILE' ]
 const retryableTimeoutErrorCodes = awsTimeoutErrorCodes.concat(aws4TimeoutErrorCodes)
+
+const clockSkewErrorCodes = [
+  'AuthFailure',
+  'InvalidSignatureException',
+  'RequestExpired',
+  'RequestInTheFuture',
+  'RequestTimeTooSkewed',
+  'SignatureDoesNotMatch',
+]
+const throttlingErrorCodes = [
+  'BandwidthLimitExceeded',
+  'EC2ThrottledException',
+  'LimitExceededException',
+  'PriorRequestNotComplete',
+  'ProvisionedThroughputExceededException',
+  'RequestLimitExceeded',
+  'RequestThrottled',
+  'RequestThrottledException',
+  'SlowDown',
+  'ThrottledException',
+  'Throttling',
+  'ThrottlingException',
+  'TooManyRequestsException',
+  'TransactionInProgressException', // DynamoDB
+]
+const transientErrorCodes = [ 'TimeoutError', 'RequestTimeout', 'RequestTimeoutException' ]
 
 const maxRetryBackoff = 20 * 1000
 async function retryDelay (i, reason, debug) {
@@ -283,4 +309,22 @@ async function retryDelay (i, reason, debug) {
     console.error(`[aws-lite] Request failed (${reason}), retrying in ${delay} ms`)
   }
   await new Promise(res => setTimeout(res, delay))
+}
+
+function isRetryableError (error) {
+  let { code, name, __type, type } = error.error
+
+  // code is for connection errors only
+  if (code && retryableTimeoutErrorCodes.includes(code)) {
+    return `connection error: ${code}`
+  }
+
+  // name + __type are fairly common; type is jic
+  for (let factor of [ name, __type, type ].filter(Boolean)) {
+    let bits = String(factor).split('#')
+    let errorCode = bits[bits.length - 1]
+    if (clockSkewErrorCodes.includes(errorCode)) return `clock skew error: ${errorCode}`
+    if (throttlingErrorCodes.includes(errorCode)) return `throttling error: ${errorCode}`
+    if (transientErrorCodes.includes(errorCode)) return `transient error: ${errorCode}`
+  }
 }
