@@ -2,6 +2,20 @@
 
 ---
 
+## [0.21.3] 2024-05-14
+
+### Changed
+
+- Updated dependencies
+
+
+### Fixed
+
+- Inspect error payloads for clock skew, throttling, and transient error codes; fixes #127
+- Update Node.js connection error codes
+
+---
+
 ## [0.21.2] 2024-05-08
 
 ### Fixed
