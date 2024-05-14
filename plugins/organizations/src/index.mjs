@@ -14,7 +14,7 @@ const str = { type: 'string' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const ListAccounts = {
-  awsDoc: docRoot + 'API_ListAccounts',
+  awsDoc: docRoot + 'API_ListAccounts.html',
   validate: {
     MaxResults: { ...num, comment: 'Max number of results per page; results will be paginated if the number of items in the response is greater than `MaxResults`' },
     NextToken: { ...str, comment: 'Pagination token' },
