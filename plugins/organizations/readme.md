@@ -32,7 +32,17 @@ npm i -D @aws-lite/organizations-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `ListAccounts`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/organizations/latest/APIReference/API_ListAccounts)
+
+Properties:
+- **`MaxResults` (number)**
+  - Max number of results per page; results will be paginated if the number of items in the response is greater than `MaxResults`
+- **`NextToken` (string)**
+  - Pagination token
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### Methods yet to be implemented
@@ -70,7 +80,6 @@ npm i -D @aws-lite/organizations-types
 - [`EnablePolicyType`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_EnablePolicyType)
 - [`InviteAccountToOrganization`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_InviteAccountToOrganization)
 - [`LeaveOrganization`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_LeaveOrganization)
-- [`ListAccounts`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_ListAccounts)
 - [`ListAccountsForParent`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_ListAccountsForParent)
 - [`ListAWSServiceAccessForOrganization`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_ListAWSServiceAccessForOrganization)
 - [`ListChildren`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_ListChildren)

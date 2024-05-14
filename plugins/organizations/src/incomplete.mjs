@@ -32,7 +32,7 @@ export default {
   EnablePolicyType:                    { disabled, awsDoc: docRoot + 'API_EnablePolicyType' },
   InviteAccountToOrganization:         { disabled, awsDoc: docRoot + 'API_InviteAccountToOrganization' },
   LeaveOrganization:                   { disabled, awsDoc: docRoot + 'API_LeaveOrganization' },
-  ListAccounts:                        { disabled, awsDoc: docRoot + 'API_ListAccounts' },
+  // ListAccounts:                        { disabled, awsDoc: docRoot + 'API_ListAccounts' },
   ListAccountsForParent:               { disabled, awsDoc: docRoot + 'API_ListAccountsForParent' },
   ListAWSServiceAccessForOrganization: { disabled, awsDoc: docRoot + 'API_ListAWSServiceAccessForOrganization' },
   ListChildren:                        { disabled, awsDoc: docRoot + 'API_ListChildren' },
