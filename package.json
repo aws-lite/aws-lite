@@ -72,7 +72,8 @@
     "plugins/s3",
     "plugins/sns",
     "plugins/sqs",
-    "plugins/ssm"
+    "plugins/ssm",
+    "plugins/sts"
   ],
   "eslintConfig": {
     "extends": "@architect/eslint-config",
