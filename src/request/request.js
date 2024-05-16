@@ -29,9 +29,8 @@ module.exports = async function request (params, args) {
   }
 
   for (let i = 0; i <= retries; i++) {
-    let retrying = i > 0
     try {
-      let result = await call(params, args, retrying)
+      let result = await call(params, args)
       if (i === retries || reqCompleted(result.statusCode)) {
         if (isOk(result.statusCode)) return result
 
@@ -63,7 +62,7 @@ module.exports = async function request (params, args) {
   }
 }
 
-function call (params, args, retrying) {
+function call (params, args) {
   let { rawResponsePayload, streamResponsePayload } = params
   let { creds, config, metadata, signing, streamReq } = args
   let { debug } = config
@@ -102,12 +101,12 @@ function call (params, args, retrying) {
     let isBuffer = body instanceof Buffer
 
     /* istanbul ignore next */
-    if (debug && !retrying) {
+    if (debug) {
       let { method = 'GET', protocol, host, port, path, headers, service } = options
-      let truncatedBody
-      /**/ if (isBuffer) truncatedBody = `<body buffer of ${body.length}b>`
-      else if (streamReq) truncatedBody = `<readable stream>`
-      else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
+      let bodyOutput
+      /**/ if (isBuffer) bodyOutput = `<body buffer of ${body.length}b>`
+      else if (streamReq) bodyOutput = `<readable stream>`
+      else bodyOutput = body || '<no body>'
 
       let { accessKeyId, secretAccessKey } = creds
 
@@ -128,7 +127,7 @@ function call (params, args, retrying) {
         method,
         url: `${protocol}//${host}${port ? ':' + port : ''}${path}`,
         headers: { ...headers, Authorization },
-        body: truncatedBody || '<no body>',
+        body: bodyOutput,
       }, '\n')
     }
 
@@ -209,14 +208,14 @@ function call (params, args, retrying) {
 
         /* istanbul ignore next */
         if (debug) {
-          let truncatedBody
-          /**/ if (payload instanceof Buffer) truncatedBody = body.length ? `<body buffer of ${body.length}b>` : ''
-          else if (rawString) truncatedBody = rawString?.length > 250 ? rawString?.substring(0, 250) + '...' : rawString
+          let bodyOutput
+          if (payload instanceof Buffer) bodyOutput = body.length ? `<body buffer of ${body.length}b>` : ''
+          else bodyOutput = rawString
           console.error('[aws-lite] Response:', {
             time: new Date().toISOString(),
             statusCode,
             headers,
-            body: truncatedBody || '<no body>',
+            body: bodyOutput || '<no body>',
           }, '\n')
         }
         resolve({ statusCode, headers, payload })

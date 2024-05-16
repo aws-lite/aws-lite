@@ -2,6 +2,14 @@
 
 ---
 
+## [0.21.4] 2024-05-16
+
+### Changed
+
+- Increase verbosity of debug output: include paginated requests, include full req / res bodies (if strings)
+
+---
+
 ## [0.21.3] 2024-05-14
 
 ### Changed
