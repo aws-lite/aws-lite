@@ -86,7 +86,7 @@ const CreateDomainName = {
     MutualTlsAuthentication: { ...obj, comment: '`MutualTlsAuthenticationInput` object', ref: docRoot + 'domainnames.html#domainnames-prop-domainname-mutualtlsauthentication' },
     Tags: { ...obj, comment: 'Record containing tags associated with the domain name' },
   },
-  requst: (params) => {
+  request: (params) => {
     return {
       path: '/v2/domainnames',
       payload: params,
