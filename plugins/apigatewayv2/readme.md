@@ -45,6 +45,58 @@ Properties:
   - Stage name
 
 
+### `CreateDomainName`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames.html#CreateDomainName)
+
+Properties:
+- **`DomainName` (string) [required]**
+  - The domain name
+- **`DomainNameConfigurations` (array)**
+  - Array of `DomainNameConfiguration` objects
+  - [More details (AWS)](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames.html#domainnames-prop-createdomainnameinput-domainnameconfigurations)
+- **`MutualTlsAuthentication` (object)**
+  - `MutualTlsAuthenticationInput` object
+  - [More details (AWS)](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames.html#domainnames-prop-domainname-mutualtlsauthentication)
+- **`Tags` (object)**
+  - Record containing tags associated with the domain name
+
+
+### `DeleteApiMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings-apimappingid.html#DeleteApiMapping)
+
+Properties:
+- **`ApiMappingId` (string) [required]**
+  - ID of the API mapping
+- **`DomainName` (string) [required]**
+  - The domain name
+
+
+### `DeleteDomainName`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname.html#DeleteDomainName)
+
+Properties:
+- **`DomainName` (string) [required]**
+  - The domain name
+
+
+### `GetApiMappings`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#GetApiMappings)
+
+Properties:
+- **`DomainName` (string) [required]**
+  - The domain name
+- **`MaxResults` (number)**
+  - Maximum number of items to evaluate and return
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `GetDeployment`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments-deploymentid.html#GetDeployment)
@@ -111,7 +163,6 @@ Properties:
 - [`CreateApi`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis.html#CreateApi)
 - [`CreateApiMapping`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#CreateApiMapping)
 - [`CreateAuthorizer`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers.html#CreateAuthorizer)
-- [`CreateDomainName`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames.html#CreateDomainName)
 - [`CreateIntegration`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations.html#CreateIntegration)
 - [`CreateIntegrationResponse`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations-integrationid-integrationresponses.html#CreateIntegrationResponse)
 - [`CreateModel`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-models.html#CreateModel)
@@ -121,11 +172,9 @@ Properties:
 - [`CreateVpcLink`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/vpclinks.html#CreateVpcLink)
 - [`DeleteAccessLogSettings`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename-accesslogsettings.html#DeleteAccessLogSettings)
 - [`DeleteApi`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid.html#DeleteApi)
-- [`DeleteApiMapping`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings-apimappingid.html#DeleteApiMapping)
 - [`DeleteAuthorizer`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers-authorizerid.html#DeleteAuthorizer)
 - [`DeleteCorsConfiguration`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-cors.html#DeleteCorsConfiguration)
 - [`DeleteDeployment`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments-deploymentid.html#DeleteDeployment)
-- [`DeleteDomainName`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname.html#DeleteDomainName)
 - [`DeleteIntegration`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations-integrationid.html#DeleteIntegration)
 - [`DeleteIntegrationResponse`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations-integrationid-integrationresponses-integrationresponseid.html#DeleteIntegrationResponse)
 - [`DeleteModel`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-models-modelid.html#DeleteModel)
@@ -138,7 +187,6 @@ Properties:
 - [`ExportApi`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-exports-specification.html#ExportApi)
 - [`GetApi`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid.html#GetApi)
 - [`GetApiMapping`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings-apimappingid.html#GetApiMapping)
-- [`GetApiMappings`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#GetApiMappings)
 - [`GetApis`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis.html#GetApis)
 - [`GetAuthorizer`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers-authorizerid.html#GetAuthorizer)
 - [`GetAuthorizers`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers.html#GetAuthorizers)
