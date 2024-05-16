@@ -60,6 +60,7 @@
     "src"
   ],
   "workspaces": [
+    "plugins/acm",
     "plugins/apigateway",
     "plugins/apigatewaymanagementapi",
     "plugins/apigatewayv2",

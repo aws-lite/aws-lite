@@ -1,0 +1,26 @@
+{
+  "name": "@aws-lite/acm-types",
+  "version": "0.0.0",
+  "description": "Type definitions for the `@aws-lite/acm` plugin",
+  "homepage": "https://aws-lite.org/services/acm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/architect/aws-lite.git",
+    "directory": "plugins/acm/types"
+  },
+  "bugs": "https://github.com/architect/aws-lite/issues",
+  "main": "",
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "@architect",
+  "license": "Apache-2.0",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-acm": "3"
+  },
+  "scripts": {}
+}
