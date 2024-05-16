@@ -8,6 +8,7 @@
  */
 const maintainers = [ '@architect' ]
 const plugins = [
+  { service: 'acm', property: 'ACM', display: 'ACM', maintainers },
   {
     // Technically the service here is `execute-api`, but that's not really recognized
     service: 'apigatewaymanagementapi', property: 'ApiGatewayManagementApi',
