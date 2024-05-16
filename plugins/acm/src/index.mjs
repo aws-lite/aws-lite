@@ -35,7 +35,7 @@ const DeleteCertificate = {
       payload: { CertificateArn },
     }
   },
-  response: () => {},
+  response: () => ({}),
 }
 
 const DescribeCertificate = {
