@@ -56,18 +56,18 @@ Properties:
 
 Properties:
 - **`CertificateStatuses` (array)**
-  - Array of status values (strings) to define a filter for certificates; array can contain any of the values `PENDING_VALIDATION`, `ISSUED`, `INACTIVE`, `EXPIRED`, `VALIDATION_TIMED_OUT`, `REVOKED`, `FAILED`
+  - Array of status values (strings) to define a filter for certificates; array can contain: `PENDING_VALIDATION`, `ISSUED`, `INACTIVE`, `EXPIRED`, `VALIDATION_TIMED_OUT`, `REVOKED`, `FAILED`
 - **`Includes` (object)**
   - Object defining a filter for the certificate list
   - [More details (AWS)](https://docs.aws.amazon.com/acm/latest/APIReference/APIReference/API_ListCertificates.html#ACM-ListCertificates-request-Includes)
 - **`MaxItems` (number)**
-  - Maximum number of values to be returned: results will be paginated if the number of results exceeds `MaxItems`
+  - Maximum number of values to be returned
 - **`NextToken` (string)**
   - Pagination token
 - **`SortBy` (string)**
-  - Specify the field used to sort results; value can be `CREATED_AT`: `SortOrder` must also be provided
+  - Specify the create date to sort results; must also specify `SortOrder`
 - **`SortOrder` (string)**
-  - Specify the order results will be sorted; value can be one of `ASCENDING`, `DESCENDING`: `SortBy` must also be provided
+  - Specify the order results will be sorted; value can be one of: `ASCENDING`, `DESCENDING`, must also specify `SortBy`
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -78,29 +78,30 @@ Properties:
 
 Properties:
 - **`DomainName` (string) [required]**
-  - Domain name to be secured with an ACM certificate; use `*` as a wildcard (ex. example.*.com)
+  - Domain name to be secured with an ACM certificate; use `*` as a wildcard; example: `example.*.com`
 - **`CertificateAuthorityArn` (string)**
-  - ARN of a private certificate authority that will issue the certificate: ACM will attempt to issue a public certificate if this is blank
+  - ARN of a private certificate authority that will issue the certificate; ACM will attempt to issue a public certificate if this is not defined
   - [More details (AWS)](https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html#ACM-RequestCertificate-request-CertificateAuthorityArn)
 - **`DomainValidationOptions` (array)**
-  - Array of 1 to 100 `DomainValidationOption` objects that tell ACM where to send emails to validate domain ownership
+  - Array containing 1 to 100 `DomainValidationOption` objects that tell ACM where to send emails to validate domain ownership
   - [More details (AWS)](https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html#ACM-RequestCertificate-request-DomainValidationOptions)
 - **`IdempotencyToken` (string)**
-  - Identifier used to distinguish between calls to `RequestCertificate`. Valid for 1 hour after creation. Any requests within the hour, using the same value will be considered duplicates
+  - Identifier used to distinguish between calls to `RequestCertificate`
+  - [More details (AWS)](https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html#ACM-RequestCertificate-request-IdempotencyToken)
 - **`KeyAlgorithm` (string)**
-  - Specify the encryption algorithm used to generate public/private keys (default: RSA); can be one of `RSA_1024`, `RSA_2048`, `RSA_3072`, `RSA_4096`, `EC_prime256v1`, `EC_secp384r1`, `EC_secp521r1`
+  - Specify the encryption algorithm used to generate public/private keys (default: RSA); can be one of: `RSA_1024`, `RSA_2048`, `RSA_3072`, `RSA_4096`, `EC_prime256v1`, `EC_secp384r1`, `EC_secp521r1`
   - [More details (AWS)](https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html#ACM-RequestCertificate-request-KeyAlgorithm)
 - **`Options` (object)**
   - `CertificateOptions` object to specify if the certificate will be added to a transparency log
   - [More details (AWS)](https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html#ACM-RequestCertificate-request-Options)
 - **`SubjectAlternativeNames` (array)**
-  - Array of 1 to 50 `FQDN`s to be included in the Subject Alternative Name extension of the ACM certificate
+  - Array containing 1 to 50 `FQDN`s to be included in the Subject Alternative Name extension of the ACM certificate
   - [More details (AWS)](https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html#ACM-RequestCertificate-request-SubjectAlternativeNames)
 - **`Tags` (array)**
-  - Array of 1 to 50 `Tag` objects to be associated with the certificate
+  - Array containing 1 to 50 `Tag` objects to be associated with the certificate
   - [More details (AWS)](https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html#ACM-RequestCertificate-request-Tags)
 - **`ValidationMethod` (string)**
-  - Method to use when requesting a public certificate to validate ownership of the domain being secured; can be one of `EMAIL`, `DNS`
+  - Method to use when requesting a public certificate to validate ownership of the domain being secured; can be one of: `EMAIL`, `DNS`
 
 
 ### Methods yet to be implemented
