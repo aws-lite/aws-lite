@@ -211,6 +211,7 @@ Open source contributor guidelines, methodology, and instructions
 - [SNS](https://www.npmjs.com/package/@aws-lite/sns)
 - [SQS](https://www.npmjs.com/package/@aws-lite/sqs)
 - [SSM](https://www.npmjs.com/package/@aws-lite/ssm)
+- [STS](https://www.npmjs.com/package/@aws-lite/sts)
 <!-- plugins_end -->
 
 [1]: https://aws-lite.org

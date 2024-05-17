@@ -29,5 +29,6 @@ const plugins = [
   { service: 'sns', property: 'SNS', display: 'SNS', maintainers },
   { service: 'sqs', property: 'SQS', display: 'SQS', maintainers },
   { service: 'ssm', property: 'SSM', display: 'SSM', maintainers },
+  { service: 'sts', property: 'STS', display: 'STS', maintainers },
 ]
 export default plugins.sort((a, b) => a.display > b.display ? 1 : -1)
