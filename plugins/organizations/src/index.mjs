@@ -16,22 +16,21 @@ const valPaginate = { type: 'boolean', comment: 'Enable automatic result paginat
 const ListAccounts = {
   awsDoc: docRoot + 'API_ListAccounts.html',
   validate: {
-    MaxResults: { ...num, comment: 'Max number of results per page; results will be paginated if the number of items in the response is greater than `MaxResults`' },
+    MaxResults: { ...num, comment: 'Maximum number of items to be returned' },
     NextToken: { ...str, comment: 'Pagination token' },
     paginate: valPaginate,
   },
   request: (params) => {
     let paginate
-
     if (params.paginate) {
       delete params.paginate
       paginate = true
     }
-
-    // Requires `'Content-Type': 'application/x-amz-json-1.1'` in the header, but does not use aws style json in the body.
     return {
       awsjson: false,
-      headers: { 'X-Amz-Target': 'AWSOrganizationsV20161128.ListAccounts', 'Content-Type': 'application/x-amz-json-1.1' },
+      headers: {
+        'X-Amz-Target': 'AWSOrganizationsV20161128.ListAccounts',
+        'Content-Type': 'application/x-amz-json-1.1' },
       payload: params,
       paginate,
       paginator: {

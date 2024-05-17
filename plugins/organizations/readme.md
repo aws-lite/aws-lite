@@ -38,7 +38,7 @@ npm i -D @aws-lite/organizations-types
 
 Properties:
 - **`MaxResults` (number)**
-  - Max number of results per page; results will be paginated if the number of items in the response is greater than `MaxResults`
+  - Maximum number of items to be returned
 - **`NextToken` (string)**
   - Pagination token
 - **`paginate` (boolean)**
