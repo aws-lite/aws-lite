@@ -3,10 +3,10 @@
  */
 
 import incomplete from './incomplete.mjs'
+import { default as qs } from 'node:querystring'
 
 const service = 'sts'
 const property = 'STS'
-// const required = true
 const docRoot = 'https://docs.aws.amazon.com/STS/latest/APIReference/'
 
 const GetCallerIdentity = {
@@ -14,12 +14,14 @@ const GetCallerIdentity = {
   validate: {},
   request: () => {
     return {
-      path: '',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      payload: 'Action=GetCallerIdentity&Version=2011-06-15',
+      payload: qs.stringify({
+        Action: 'GetCallerIdentity',
+        Version: '2011-06-15',
+      }),
     }
   },
-  response: (payload) => { payload },
+  response: ({ payload }) => payload.GetCallerIdentityResult,
 }
 
 export default {
