@@ -22,9 +22,8 @@ const HostedZoneId = { ...str, required, comment: 'ID of the hosted zone contain
 const ChangeResourceRecordSets = {
   awsDoc: docRoot + 'API_ChangeResourceRecordSets.html',
   validate: {
-    // ChangeResourceRecordSetsRequest: { ...obj, required, comment: 'Complete `ChangeResourceRecordSetsRequest` object', ref: docRoot + 'API_ChangeResourceRecordSets.html#API_ChangeResourceRecordSets_RequestSyntax' },
     HostedZoneId,
-    ChangeBatch: { ...obj, comment: 'Complete `ChangeBatch` object'  },
+    ChangeBatch: { ...obj, comment: '`ChangeBatch` object', ref: docRoot + 'API_ChangeResourceRecordSets.html#Route53-ChangeResourceRecordSets-request-ChangeBatch'  },
   },
   request: ({ HostedZoneId, ChangeBatch }) => {
     if (ChangeBatch?.Changes) {
@@ -51,17 +50,14 @@ const ChangeResourceRecordSets = {
       xmlns: 'https://route53.amazonaws.com/doc/2013-04-01/',
     }
   },
-  response: ({ payload }) => {
-    const { ChangeInfo } = payload
-    return ChangeInfo
-  },
+  response: ({ payload }) => payload,
 }
 
 const ListResourceRecordSets = {
   awsDoc: docRoot + 'API_ListResourceRecordSets.html',
   validate: {
     HostedZoneId,
-    MaxItems: { ...num, comment: 'Max number of items to be returned in a response. If the response has more items than `maxitems`, `IsTruncated` will be true and the response will be paginated' },
+    MaxItems: { ...num, comment: 'Maximum number of items to be returned' },
     StartRecordIdentifier: { ...str, comment: 'Pagination cursor when the routing policy is not `simple` and results were truncated for a given DNS' },
     StartRecordName: { ...str, comment: 'Name of the first resource record to be listed in lexicographic ordering. If the name doesn\'t exist, results will begin from the first record with a name greater than the provided value' },
     StartRecordType: { ...str, comment: 'The type of resource record to begin listing from' },

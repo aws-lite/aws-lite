@@ -40,7 +40,8 @@ Properties:
 - **`HostedZoneId` (string) [required]**
   - ID of the hosted zone containing the resource records set
 - **`ChangeBatch` (object)**
-  - Complete `ChangeBatch` object
+  - `ChangeBatch` object
+  - [More details (AWS)](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html#Route53-ChangeResourceRecordSets-request-ChangeBatch)
 
 
 ### `ListResourceRecordSets`
@@ -51,7 +52,7 @@ Properties:
 - **`HostedZoneId` (string) [required]**
   - ID of the hosted zone containing the resource records set
 - **`MaxItems` (number)**
-  - Max number of items to be returned in a response. If the response has more items than `maxitems`, `IsTruncated` will be true and the response will be paginated
+  - Maximum number of items to be returned
 - **`StartRecordIdentifier` (string)**
   - Pagination cursor when the routing policy is not `simple` and results were truncated for a given DNS
 - **`StartRecordName` (string)**
