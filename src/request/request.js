@@ -298,10 +298,11 @@ const throttlingErrorCodes = [
 ]
 const transientErrorCodes = [ 'TimeoutError', 'RequestTimeout', 'RequestTimeoutException' ]
 
+const delayBase = 100 // Smithy's default
 const maxRetryBackoff = 20 * 1000
 async function retryDelay (i, reason, debug) {
-  // A variety of available jitter algos, mhart's aws4fetch impl seemed like a tidy, simple approach
-  let rando = Math.floor(Math.random() * 50 * Math.pow(2, i))
+  // A variety of available jitter algos, mhart's aws4fetch impl seemed like a tidy, simple approach. Smithy's default backoff algo behaves the same way.
+  let rando = Math.floor(Math.random() * delayBase * Math.pow(2, i))
   let delay = Math.min(rando, maxRetryBackoff)
   /* istanbul ignore next */
   if (debug) {

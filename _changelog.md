@@ -2,6 +2,15 @@
 
 ---
 
+## [0.21.5] 2024-05-18
+
+
+### Changed
+
+- Increased retry latency to better match AWS SDK v3's behavior; should improve #127
+
+---
+
 ## [0.21.4] 2024-05-16
 
 ### Changed
