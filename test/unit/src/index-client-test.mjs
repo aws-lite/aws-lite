@@ -512,6 +512,29 @@ test('Primary client - validation', async t => {
   }
 })
 
+test('Primary client - misc', async t => {
+  t.plan(4)
+  let request
+  let aws = await client(config)
+
+  let headers = copy(jsonHeaders)
+  let responseBody = JSON.stringify({ ok: true })
+  let payload1 = JSON.stringify({ hello: 'hi there' })
+  let payload2 = JSON.stringify({ hello: 'well hello, friends' }) // This will fail as prematurely terminated JSON if headers are using previously mutated content-length from aws4 <= 1.2
+  server.use({ responseBody, responseHeaders: jsonHeaders })
+
+  await aws({ service, path, headers, payload: payload1 })
+  request = server.getCurrentRequest()
+  t.deepEqual(headers, jsonHeaders, 'Headers not mutated')
+  t.equal(Number(request.headers['content-length']), payload1.length, `Got correct content-length: ${payload2.length}`)
+  reset()
+
+  await aws({ service, path, headers, payload: payload2 })
+  request = server.getCurrentRequest()
+  t.deepEqual(headers, jsonHeaders, 'Headers not mutated')
+  t.equal(Number(request.headers['content-length']), payload2.length, `Got correct content-length: ${payload2.length}`)
+})
+
 test('Tear down env', async t => {
   t.plan(1)
   await server.end()
