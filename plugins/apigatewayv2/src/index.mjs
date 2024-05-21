@@ -10,7 +10,7 @@ const required = true
 const docRoot = 'https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/'
 
 // Validation types
-// const arr = { type: 'array' }
+const arr = { type: 'array' }
 const bool = { type: 'boolean' }
 const obj = { type: 'object' }
 const str = { type: 'string' }
@@ -18,12 +18,14 @@ const num = { type: 'number' }
 
 const ApiId = { ...str, required, comment: 'API ID' }
 const Description = { ...str, comment: 'Deployment description' }
-const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
+const DomainName = { ...str, required, comment: 'The domain name' }
 const Limit = { ...num, comment: 'Maximum number of items to evaluate and return' }
+const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const StageName = { ...str, comment: 'Stage name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => CamelToPascalParams(payload)
+const emptyResponse = () => ({})
 
 const paginator = {
   cursor: 'nextToken',
@@ -71,6 +73,72 @@ const CreateDeployment =  {
       path: `/v2/apis/${apiId}/deployments`,
       method: 'POST',
       payload: { description, stageName },
+    }
+  },
+  response: defaultResponse,
+}
+
+const CreateDomainName = {
+  awsDoc: docRoot + 'domainnames.html#CreateDomainName',
+  validate: {
+    DomainName,
+    DomainNameConfigurations: { ...arr, comment: 'Array of `DomainNameConfiguration` objects', ref: docRoot + 'domainnames.html#domainnames-prop-createdomainnameinput-domainnameconfigurations' },
+    MutualTlsAuthentication: { ...obj, comment: '`MutualTlsAuthenticationInput` object', ref: docRoot + 'domainnames.html#domainnames-prop-domainname-mutualtlsauthentication' },
+    Tags: { ...obj, comment: 'Record containing tags associated with the domain name' },
+  },
+  request: (params) => {
+    return {
+      path: '/v2/domainnames',
+      payload: pascalToCamelParams(params),
+    }
+  },
+  response: defaultResponse,
+}
+
+const DeleteApiMapping = {
+  awsDoc: docRoot + 'domainnames-domainname-apimappings-apimappingid.html#DeleteApiMapping',
+  validate: {
+    ApiMappingId: { ...str, required, comment: 'ID of the API mapping' },
+    DomainName,
+  },
+  request: ({ ApiMappingId, DomainName }) => {
+    return {
+      path: `/v2/domainnames/${DomainName}/apimappings/${ApiMappingId}`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteDomainName = {
+  awsDoc: docRoot + 'domainnames-domainname.html#DeleteDomainName',
+  validate: {
+    DomainName,
+  },
+  request: ({ DomainName }) => {
+    return {
+      path: `/v2/domainnames/${DomainName}`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const GetApiMappings = {
+  awsDoc: docRoot + 'domainnames-domainname-apimappings.html#GetApiMappings',
+  validate: {
+    DomainName,
+    MaxResults: Limit,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { domainName, maxResults, nextToken } = pascalToCamelParams(params)
+    return {
+      path: `/v2/domainnames/${domainName}/apimappings`,
+      query: { maxResults, nextToken },
+      paginate: params.paginate,
+      paginator,
     }
   },
   response: defaultResponse,
@@ -149,5 +217,14 @@ export default {
   name: '@aws-lite/apigatewayv2',
   service,
   property,
-  methods: { CreateDeployment, GetDeployment, GetDeployments, UpdateStage, ...incomplete },
+  methods: {
+    CreateDeployment,
+    CreateDomainName,
+    DeleteApiMapping,
+    DeleteDomainName,
+    GetApiMappings,
+    GetDeployment,
+    GetDeployments,
+    UpdateStage,
+    ...incomplete },
 }

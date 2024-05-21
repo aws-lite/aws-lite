@@ -2,6 +2,10 @@ import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
   CreateDeploymentCommandOutput as CreateDeploymentResponse,
+  CreateDomainNameCommandOutput as CreateDomainNameResponse,
+  DeleteApiMappingCommandOutput as DeleteApiMappingResponse,
+  DeleteDomainNameCommandOutput as DeleteDomainNameResponse,
+  GetApiMappingsCommandOutput as GetApiMappingsResponse,
   GetDeploymentCommandOutput as GetDeploymentResponse,
   GetDeploymentsCommandOutput as GetDeploymentsResponse,
   UpdateStageCommandOutput as UpdateStageResponse,
@@ -17,6 +21,30 @@ declare interface AwsLiteAPIGatewayV2 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#CreateDeployment API Gateway V2: CreateDeployment}
    */
   CreateDeployment: (input: { ApiId: string, Description?: string, StageName?: string }) => Promise<CreateDeploymentResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames.html#CreateDomainName API Gateway V2: CreateDomainName}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#CreateDomainName API Gateway V2: CreateDomainName}
+   */
+  CreateDomainName: (input: { DomainName: string, DomainNameConfigurations?: any[], MutualTlsAuthentication?: Record<string, any>, Tags?: Record<string, any> }) => Promise<CreateDomainNameResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings-apimappingid.html#DeleteApiMapping API Gateway V2: DeleteApiMapping}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#DeleteApiMapping API Gateway V2: DeleteApiMapping}
+   */
+  DeleteApiMapping: (input: { ApiMappingId: string, DomainName: string }) => Promise<DeleteApiMappingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname.html#DeleteDomainName API Gateway V2: DeleteDomainName}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#DeleteDomainName API Gateway V2: DeleteDomainName}
+   */
+  DeleteDomainName: (input: { DomainName: string }) => Promise<DeleteDomainNameResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#GetApiMappings API Gateway V2: GetApiMappings}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#GetApiMappings API Gateway V2: GetApiMappings}
+   */
+  GetApiMappings: (input: { DomainName: string, MaxResults?: number, NextToken?: string, paginate?: boolean }) => Promise<GetApiMappingsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments-deploymentid.html#GetDeployment API Gateway V2: GetDeployment}
@@ -49,6 +77,10 @@ export type {
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   CreateDeploymentResponse,
+  CreateDomainNameResponse,
+  DeleteApiMappingResponse,
+  DeleteDomainNameResponse,
+  GetApiMappingsResponse,
   GetDeploymentResponse,
   GetDeploymentsResponse,
   UpdateStageResponse,
