@@ -9,7 +9,6 @@ const property = 'Route53'
 const required = true
 const docRoot = 'https://docs.aws.amazon.com/Route53/latest/APIReference/'
 
-// const arr = { type: 'array' }
 const num = { type: 'number' }
 const obj = { type: 'object' }
 const str = { type: 'string' }
@@ -25,28 +24,20 @@ const ChangeResourceRecordSets = {
     HostedZoneId,
     ChangeBatch: { ...obj, comment: '`ChangeBatch` object', ref: docRoot + 'API_ChangeResourceRecordSets.html#Route53-ChangeResourceRecordSets-request-ChangeBatch'  },
   },
-  request: ({ HostedZoneId, ChangeBatch }) => {
-    if (ChangeBatch?.Changes) {
-      ChangeBatch.Changes = ChangeBatch.Changes.map((change) => {
-
-        if (change.ResourceRecordSet?.ResourceRecords) {
-          change.ResourceRecordSet.ResourceRecords = change.ResourceRecordSet.ResourceRecords.map((record) => {
-            return { ResourceRecord: record }
-          }).filter(Boolean)
-        }
-
-        return { Change: change }
-      }).filter(Boolean)
-    }
-
-    const payload = {
-      ChangeResourceRecordSetsRequest: { ChangeBatch },
-    }
+  request: (params) => {
+    const { HostedZoneId } = params
+    let ChangeBatch = { ...params.ChangeBatch }
+    ChangeBatch.Changes = { Change: ChangeBatch.Changes }
+    ChangeBatch.Changes.Change.forEach(i => {
+      if (i.ResourceRecordSet.ResourceRecords) {
+        i.ResourceRecordSet.ResourceRecords = { ResourceRecord: i.ResourceRecordSet.ResourceRecords }
+      }
+    })
     return {
       path: `/2013-04-01/hostedzone/${HostedZoneId}/rrset/`,
       headers: xml,
       method: 'POST',
-      payload,
+      payload: { ChangeResourceRecordSetsRequest: { ChangeBatch } },
       xmlns: 'https://route53.amazonaws.com/doc/2013-04-01/',
     }
   },
