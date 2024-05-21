@@ -971,6 +971,67 @@ const ListProvisionedConcurrencyConfigs = {
   response: defaultResponse,
 }
 
+const ListTags = {
+  awsDoc: docRoot + 'API_ListTags.html',
+  validate: {
+    Resource: { ...str, required, comment: 'ARN of the lambda function' },
+  },
+  request: ({ Resource: ARN }) => {
+    return {
+      path: `/2017-03-31/tags/${ARN}`,
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListVersionsByFunction = {
+  awsDoc: docRoot + 'API_ListVersionsByFunction.html',
+  validate: {
+    FunctionName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { FunctionName } = params
+    let query = { ...params }
+    let paginate
+    delete query.FunctionName
+    if (query.paginate) {
+      delete query.paginate
+      paginate = true
+    }
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/versions`,
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'Versions' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const PublishLayerVersion = {
+  awsDoc: docRoot + 'API_PublishLayerVersion.html',
+  validate: {
+    Content: { ...obj, required, comment: 'Contents of the layer; object can contain: `S3Bucket`, `S3Key`, `S3ObjectVersion`, or `ZipFile` (base64-encoded zip)', ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-Content' },
+    CompatibleArchitectures: { ...arr, comment: 'Array with a maximum of 2 strings specifying instruction set architecture; array can contain: `x86_64`, `arm64`', ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleArchitectures' },
+    CompatibleRuntimes: { ...arr, comment: 'Array with a maximum of 15 strings specifying compatible runtime environments', ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleRuntimes'  },
+    Description,
+    LiscenceInfo: { ...str, comment: `The layer's software license`, ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-LicenseInfo' },
+  },
+  request: (params) => {
+    const { LayerName } = params
+    let payload = { ...params }
+    delete payload.LayerName
+    return {
+      path: `/2018-10-31/layers/${LayerName}/versions`,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
 const PutFunctionConcurrency = {
   awsDoc: docRoot + 'API_PutFunctionConcurrency.html',
   validate: {
@@ -983,6 +1044,26 @@ const PutFunctionConcurrency = {
       path: `/2017-10-31/functions/${FunctionName}/concurrency`,
       method: 'PUT',
       payload: { ReservedConcurrentExecutions },
+    }
+  },
+  response: defaultResponse,
+}
+
+const PublishVersion = {
+  awsDoc: docRoot + 'API_PublishVersion.html',
+  validate: {
+    FunctionName,
+    CodeSha256: { ...str, comment: 'Checksum to confirm the function has not changed since being updated', ref: docRoot + 'API_PublishVersion.html#lambda-PublishVersion-request-CodeSha256' },
+    Description,
+    RevisionId,
+  },
+  request: (params) => {
+    const { FunctionName } = params
+    let payload = { ...params }
+    delete payload.FunctionName
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/versions`,
+      payload,
     }
   },
   response: defaultResponse,
@@ -1131,6 +1212,10 @@ export default {
     ListLayers,
     ListLayerVersions,
     ListProvisionedConcurrencyConfigs,
+    ListTags,
+    ListVersionsByFunction,
+    PublishLayerVersion,
+    PublishVersion,
     PutFunctionConcurrency,
     UpdateAlias,
     UpdateFunctionCode,

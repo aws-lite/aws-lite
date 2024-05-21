@@ -46,6 +46,10 @@ import {
   ListLayersCommandOutput as ListLayersResponse,
   ListLayerVersionsCommandOutput as ListLayerVersionsResponse,
   ListProvisionedConcurrencyConfigsCommandOutput as ListProvisionedConcurrencyConfigsResponse,
+  ListTagsCommandOutput as ListTagsResponse,
+  ListVersionsByFunctionCommandOutput as ListVersionsByFunctionResponse,
+  PublishLayerVersionCommandOutput as PublishLayerVersionResponse,
+  PublishVersionCommandOutput as PublishVersionResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
@@ -324,6 +328,30 @@ declare interface AwsLiteLambda {
   ListProvisionedConcurrencyConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListProvisionedConcurrencyConfigsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html Lambda: ListTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListTags Lambda: ListTags}
+   */
+  ListTags: (input: { Resource: string }) => Promise<ListTagsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html Lambda: ListVersionsByFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListVersionsByFunction Lambda: ListVersionsByFunction}
+   */
+  ListVersionsByFunction: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListVersionsByFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html Lambda: PublishLayerVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PublishLayerVersion Lambda: PublishLayerVersion}
+   */
+  PublishLayerVersion: (input: { Content: Record<string, any>, CompatibleArchitectures?: any[], CompatibleRuntimes?: any[], Description?: string, LiscenceInfo?: string }) => Promise<PublishLayerVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html Lambda: PublishVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PublishVersion Lambda: PublishVersion}
+   */
+  PublishVersion: (input: { FunctionName: string, CodeSha256?: string, Description?: string, RevisionId?: string }) => Promise<PublishVersionResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html Lambda: PutFunctionConcurrency}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionConcurrency Lambda: PutFunctionConcurrency}
    */
@@ -404,6 +432,10 @@ export type {
   ListLayersResponse,
   ListLayerVersionsResponse,
   ListProvisionedConcurrencyConfigsResponse,
+  ListTagsResponse,
+  ListVersionsByFunctionResponse,
+  PublishLayerVersionResponse,
+  PublishVersionResponse,
   PutFunctionConcurrencyResponse,
   UpdateAliasResponse,
   UpdateFunctionCodeResponse,

@@ -704,6 +704,67 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListTags`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of the lambda function
+
+
+### `ListVersionsByFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `PublishLayerVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html)
+
+Properties:
+- **`Content` (object) [required]**
+  - Contents of the layer; object can contain: `S3Bucket`, `S3Key`, `S3ObjectVersion`, or `ZipFile` (base64-encoded zip)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-Content)
+- **`CompatibleArchitectures` (array)**
+  - Array with a maximum of 2 strings specifying instruction set architecture; array can contain: `x86_64`, `arm64`
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleArchitectures)
+- **`CompatibleRuntimes` (array)**
+  - Array with a maximum of 15 strings specifying compatible runtime environments
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleRuntimes)
+- **`Description` (string)**
+  - Description of the function
+- **`LiscenceInfo` (string)**
+  - The layer's software license
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-LicenseInfo)
+
+
+### `PublishVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`CodeSha256` (string)**
+  - Checksum to confirm the function has not changed since being updated
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html#lambda-PublishVersion-request-CodeSha256)
+- **`Description` (string)**
+  - Description of the function
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+
+
 ### `PutFunctionConcurrency`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
@@ -825,10 +886,6 @@ Properties:
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
-- [`ListTags`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html)
-- [`ListVersionsByFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html)
-- [`PublishLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html)
-- [`PublishVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html)
 - [`PutFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html)
 - [`PutFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html)
 - [`PutProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html)

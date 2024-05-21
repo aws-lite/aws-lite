@@ -2,10 +2,6 @@ const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/lambda/latest/dg/'
 export default {
   InvokeWithResponseStream:           { disabled, awsDoc: docRoot + 'API_InvokeWithResponseStream.html' },
-  ListTags:                           { disabled, awsDoc: docRoot + 'API_ListTags.html' },
-  ListVersionsByFunction:             { disabled, awsDoc: docRoot + 'API_ListVersionsByFunction.html' },
-  PublishLayerVersion:                { disabled, awsDoc: docRoot + 'API_PublishLayerVersion.html' },
-  PublishVersion:                     { disabled, awsDoc: docRoot + 'API_PublishVersion.html' },
   PutFunctionCodeSigningConfig:       { disabled, awsDoc: docRoot + 'API_PutFunctionCodeSigningConfig.html' },
   PutFunctionEventInvokeConfig:       { disabled, awsDoc: docRoot + 'API_PutFunctionEventInvokeConfig.html' },
   PutProvisionedConcurrencyConfig:    { disabled, awsDoc: docRoot + 'API_PutProvisionedConcurrencyConfig.html' },
