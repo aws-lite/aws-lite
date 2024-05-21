@@ -197,6 +197,7 @@ Open source contributor guidelines, methodology, and instructions
 
 <!-- ! Do not remove plugins_start / plugins_end ! -->
 <!-- plugins_start -->
+- [ACM](https://www.npmjs.com/package/@aws-lite/acm)
 - [API Gateway V2](https://www.npmjs.com/package/@aws-lite/apigatewayv2)
 - [API Gateway WebSocket Management API](https://www.npmjs.com/package/@aws-lite/apigatewaymanagementapi)
 - [CloudFormation](https://www.npmjs.com/package/@aws-lite/cloudformation)
@@ -206,10 +207,12 @@ Open source contributor guidelines, methodology, and instructions
 - [Lambda](https://www.npmjs.com/package/@aws-lite/lambda)
 - [Organizations](https://www.npmjs.com/package/@aws-lite/organizations)
 - [RDS Data Service](https://www.npmjs.com/package/@aws-lite/rds-data)
+- [Route 53](https://www.npmjs.com/package/@aws-lite/route53)
 - [S3](https://www.npmjs.com/package/@aws-lite/s3)
 - [SNS](https://www.npmjs.com/package/@aws-lite/sns)
 - [SQS](https://www.npmjs.com/package/@aws-lite/sqs)
 - [SSM](https://www.npmjs.com/package/@aws-lite/ssm)
+- [STS](https://www.npmjs.com/package/@aws-lite/sts)
 <!-- plugins_end -->
 
 [1]: https://aws-lite.org

@@ -29,9 +29,8 @@ module.exports = async function request (params, args) {
   }
 
   for (let i = 0; i <= retries; i++) {
-    let retrying = i > 0
     try {
-      let result = await call(params, args, retrying)
+      let result = await call(params, args)
       if (i === retries || reqCompleted(result.statusCode)) {
         if (isOk(result.statusCode)) return result
 
@@ -41,8 +40,9 @@ module.exports = async function request (params, args) {
       await retryDelay(i, `status code ${result.statusCode}`, debug)
     }
     catch (error) {
-      if (i < retries && retryableTimeoutErrorCodes.includes(error?.error?.code)) {
-        await retryDelay(i, `connection error: ${error.error.code}`, debug)
+      let retryable = error.error && isRetryableError(error)
+      if (i < retries && retryable) {
+        await retryDelay(i, retryable, debug)
       }
       else {
         // Unknown / out of band error, not a tidy response or call() rejection
@@ -62,7 +62,7 @@ module.exports = async function request (params, args) {
   }
 }
 
-function call (params, args, retrying) {
+function call (params, args) {
   let { rawResponsePayload, streamResponsePayload } = params
   let { creds, config, metadata, signing, streamReq } = args
   let { debug } = config
@@ -101,12 +101,12 @@ function call (params, args, retrying) {
     let isBuffer = body instanceof Buffer
 
     /* istanbul ignore next */
-    if (debug && !retrying) {
+    if (debug) {
       let { method = 'GET', protocol, host, port, path, headers, service } = options
-      let truncatedBody
-      /**/ if (isBuffer) truncatedBody = `<body buffer of ${body.length}b>`
-      else if (streamReq) truncatedBody = `<readable stream>`
-      else truncatedBody = body?.length > 1000 ? body?.substring(0, 1000) + '...' : body
+      let bodyOutput
+      /**/ if (isBuffer) bodyOutput = `<body buffer of ${body.length}b>`
+      else if (streamReq) bodyOutput = `<readable stream>`
+      else bodyOutput = body || '<no body>'
 
       let { accessKeyId, secretAccessKey } = creds
 
@@ -127,7 +127,7 @@ function call (params, args, retrying) {
         method,
         url: `${protocol}//${host}${port ? ':' + port : ''}${path}`,
         headers: { ...headers, Authorization },
-        body: truncatedBody || '<no body>',
+        body: bodyOutput,
       }, '\n')
     }
 
@@ -198,7 +198,7 @@ function call (params, args, retrying) {
                 payload = parseXML(body)
               }
               catch {
-              // lolnothingmatters
+                // lolnothingmatters
                 payload = body.toString()
               }
             }
@@ -208,14 +208,14 @@ function call (params, args, retrying) {
 
         /* istanbul ignore next */
         if (debug) {
-          let truncatedBody
-          /**/ if (payload instanceof Buffer) truncatedBody = body.length ? `<body buffer of ${body.length}b>` : ''
-          else if (rawString) truncatedBody = rawString?.length > 250 ? rawString?.substring(0, 250) + '...' : rawString
+          let bodyOutput
+          if (payload instanceof Buffer) bodyOutput = body.length ? `<body buffer of ${body.length}b>` : ''
+          else bodyOutput = rawString
           console.error('[aws-lite] Response:', {
             time: new Date().toISOString(),
             statusCode,
             headers,
-            body: truncatedBody || '<no body>',
+            body: bodyOutput || '<no body>',
           }, '\n')
         }
         resolve({ statusCode, headers, payload })
@@ -264,23 +264,67 @@ function call (params, args, retrying) {
 }
 
 let isOk = statusCode => statusCode >= 200 && statusCode < 303
+let reqCompleted = statusCode => statusCode < 500 && statusCode !== 429 /* Throttled */
 
 // AWS defines transient error status codes as 500, 502, 503, 504, and error codes as below
-// The following transient AWS error codes are also designated retryable: [ 'TimeoutError', 'RequestTimeout', 'RequestTimeoutException' ]
-// see: smithy-typescript/packages/service-error-classification/src/constants.ts
-let reqCompleted = statusCode => statusCode < 500 && statusCode !== 429 /* Throttled */
-const awsTimeoutErrorCodes = [ 'ECONNRESET', 'EPIPE', 'ETIMEDOUT' ]
+// See: smithy-typescript/packages/service-error-classification/src/constants.ts
+const awsTimeoutErrorCodes = [ 'ECONNREFUSED', 'ECONNRESET', 'EPIPE', 'ETIMEDOUT' ]
 const aws4TimeoutErrorCodes = [ 'EADDRINFO', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'EMFILE' ]
 const retryableTimeoutErrorCodes = awsTimeoutErrorCodes.concat(aws4TimeoutErrorCodes)
 
+const clockSkewErrorCodes = [
+  'AuthFailure',
+  'InvalidSignatureException',
+  'RequestExpired',
+  'RequestInTheFuture',
+  'RequestTimeTooSkewed',
+  'SignatureDoesNotMatch',
+]
+const throttlingErrorCodes = [
+  'BandwidthLimitExceeded',
+  'EC2ThrottledException',
+  'LimitExceededException',
+  'PriorRequestNotComplete',
+  'ProvisionedThroughputExceededException',
+  'RequestLimitExceeded',
+  'RequestThrottled',
+  'RequestThrottledException',
+  'SlowDown',
+  'ThrottledException',
+  'Throttling',
+  'ThrottlingException',
+  'TooManyRequestsException',
+  'TransactionInProgressException', // DynamoDB
+]
+const transientErrorCodes = [ 'TimeoutError', 'RequestTimeout', 'RequestTimeoutException' ]
+
+const delayBase = 100 // Smithy's default
 const maxRetryBackoff = 20 * 1000
 async function retryDelay (i, reason, debug) {
-  // A variety of available jitter algos, mhart's aws4fetch impl seemed like a tidy, simple approach
-  let rando = Math.floor(Math.random() * 50 * Math.pow(2, i))
+  // A variety of available jitter algos, mhart's aws4fetch impl seemed like a tidy, simple approach. Smithy's default backoff algo behaves the same way.
+  let rando = Math.floor(Math.random() * delayBase * Math.pow(2, i))
   let delay = Math.min(rando, maxRetryBackoff)
   /* istanbul ignore next */
   if (debug) {
     console.error(`[aws-lite] Request failed (${reason}), retrying in ${delay} ms`)
   }
   await new Promise(res => setTimeout(res, delay))
+}
+
+function isRetryableError (error) {
+  let { code, name, __type, type } = error.error
+
+  // code is for connection errors only
+  if (code && retryableTimeoutErrorCodes.includes(code)) {
+    return `connection error: ${code}`
+  }
+
+  // name + __type are fairly common; type is jic
+  for (let factor of [ name, __type, type ].filter(Boolean)) {
+    let bits = String(factor).split('#')
+    let errorCode = bits[bits.length - 1]
+    if (clockSkewErrorCodes.includes(errorCode)) return `clock skew error: ${errorCode}`
+    if (throttlingErrorCodes.includes(errorCode)) return `throttling error: ${errorCode}`
+    if (transientErrorCodes.includes(errorCode)) return `transient error: ${errorCode}`
+  }
 }

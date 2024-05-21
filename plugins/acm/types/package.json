@@ -1,12 +1,12 @@
 {
-  "name": "@aws-lite/apigatewayv2-types",
-  "version": "0.0.7",
-  "description": "Type definitions for the `@aws-lite/apigatewayv2` plugin",
-  "homepage": "https://aws-lite.org/services/apigatewayv2",
+  "name": "@aws-lite/acm-types",
+  "version": "0.0.0",
+  "description": "Type definitions for the `@aws-lite/acm` plugin",
+  "homepage": "https://aws-lite.org/services/acm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/architect/aws-lite.git",
-    "directory": "plugins/apigatewayv2/types"
+    "directory": "plugins/acm/types"
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
   "main": "",
@@ -20,7 +20,7 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@aws-sdk/client-apigatewayv2": "3"
+    "@aws-sdk/client-acm": "3"
   },
   "scripts": {}
 }

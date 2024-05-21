@@ -1,12 +1,12 @@
 {
-  "name": "@aws-lite/lambda",
-  "version": "0.1.1",
-  "description": "Official `aws-lite` plugin for Lambda",
+  "name": "@aws-lite/route53",
+  "version": "0.0.1",
+  "description": "Official `aws-lite` plugin for Route 53",
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/architect/aws-lite.git",
-    "directory": "plugins/lambda"
+    "directory": "plugins/route53"
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
   "main": "src/index.mjs",

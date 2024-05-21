@@ -1,12 +1,12 @@
 {
-  "name": "@aws-lite/apigatewayv2-types",
-  "version": "0.0.7",
-  "description": "Type definitions for the `@aws-lite/apigatewayv2` plugin",
-  "homepage": "https://aws-lite.org/services/apigatewayv2",
+  "name": "@aws-lite/route53-types",
+  "version": "0.0.1",
+  "description": "Type definitions for the `@aws-lite/route53` plugin",
+  "homepage": "https://aws-lite.org/services/route53",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/architect/aws-lite.git",
-    "directory": "plugins/apigatewayv2/types"
+    "directory": "plugins/route53/types"
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
   "main": "",
@@ -20,7 +20,7 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@aws-sdk/client-apigatewayv2": "3"
+    "@aws-sdk/client-route53": "3"
   },
   "scripts": {}
 }

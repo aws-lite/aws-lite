@@ -8,6 +8,7 @@
  */
 const maintainers = [ '@architect' ]
 const plugins = [
+  { service: 'acm', property: 'ACM', display: 'ACM', maintainers },
   {
     // Technically the service here is `execute-api`, but that's not really recognized
     service: 'apigatewaymanagementapi', property: 'ApiGatewayManagementApi',
@@ -24,9 +25,11 @@ const plugins = [
     service: 'rds-data', property: 'RDSData',
     display: 'RDS Data Service', maintainers: [ '@andybee' ],
   },
+  { service: 'route53', property: 'Route53', display: 'Route 53', maintainers },
   { service: 's3', property: 'S3', display: 'S3', maintainers },
   { service: 'sns', property: 'SNS', display: 'SNS', maintainers },
   { service: 'sqs', property: 'SQS', display: 'SQS', maintainers },
   { service: 'ssm', property: 'SSM', display: 'SSM', maintainers },
+  { service: 'sts', property: 'STS', display: 'STS', maintainers },
 ]
 export default plugins.sort((a, b) => a.display > b.display ? 1 : -1)

@@ -6,7 +6,6 @@ let request = require('./request')
 /* istanbul ignore next */
 let copy = obj => JSON.parse(JSON.stringify(obj))
 
-
 module.exports = async function _request (params, creds, region, config, metadata) {
   /* istanbul ignore next: TODO remove + test */
   if ((params.paginator?.default === 'enabled' && params.paginate !== false) ||
@@ -195,7 +194,8 @@ async function paginator (params, creds, region, config, metadata) {
     items.push(...accumulated)
 
     // Determine whether we have tokens, which would necessitate making the next pagination call
-    // Some APIs nest their tokens (e.g. XML responses), so we need to account for those
+    // Some APIs (e.g. CloudFormation) nest their tokens, so we need to account for those
+    // Other APIs (e.g. Route 53) use some, but not all, of the specified cursors and tokens
     // Moreover, some services will just keep re-sending the final page with the final token, so also prevent infinite loops if cursors match
     let foundTokens = token.map((t, i) => {
       let nestedToken = t.split('.').length > 1
@@ -203,22 +203,23 @@ async function paginator (params, creds, region, config, metadata) {
         let foundNestedToken = t.split('.').reduce((parent, child) => parent?.[child], result.payload)
         // Final page was not re-sent with final token
         if (foundNestedToken && (foundNestedToken !== params[type][cursor[i]])) {
-          return foundNestedToken
+          return [ cursor[i], foundNestedToken ]
         }
       }
       // Final page was not re-sent with final token
       else if (result.payload[t] && (result.payload[t] !== params[type][cursor[i]])) {
-        return result.payload[t]
+        return [ cursor[i], result.payload[t] ]
       }
     }).filter(Boolean)
 
     if (foundTokens.length) {
+
       if (type === 'payload' || !type) {
-        token.forEach((t, i) => params.payload[cursor[i]] = foundTokens[i])
+        foundTokens.forEach(([ cur, val ]) => params.payload[cur] = val)
       }
       if (type === 'query') {
         params.query = params.query || {}
-        token.forEach((t, i) => params.query[cursor[i]] = foundTokens[i])
+        foundTokens.forEach(([ cur, val ]) => params.query[cur] = val)
       }
       page++
       if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)

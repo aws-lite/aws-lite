@@ -18,7 +18,7 @@ let globalServices = [
   // Global services that are no longer strictly global, and may or may not have global and regional endpoints (see: semi-global below). Just let aws4 figure it out:
   's3', 'sdb',
   // Known global services:
-  'cloudfront', 'globalaccelerator', 'organizations', 'route53', 'iam', 'sts', 'waf', 'waf-fips',
+  'acm', 'cloudfront', 'globalaccelerator', 'organizations', 'route53', 'iam', 'sts', 'waf', 'waf-fips',
   // Mentioned in aws4 as global but not found Service Endpoints and Quotas
   'ls', 'importexport',
 ]
