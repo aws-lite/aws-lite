@@ -18,7 +18,7 @@ const str = { type: 'string' }
 
 const Architectures = { ...arr, comment: 'System architecture, array can contain either `x86_64` (default) or `arm64`' }
 const CompatibleArchitecture = { ...str, comment: 'Set instruction set architecture to one of: `x86_64`, `arm64`' }
-const CompatibleRuntime = { ...str, comment: 'Set the runtime identifier to one of: `nodejs`, `nodejs4.3`, `nodejs6.10`, `nodejs8.10`, `nodejs10.x`, `nodejs12.x`, `nodejs14.x`, `nodejs16.x`, `java8`, `java8.al2`, `java11`, `python2.7`, `python3.6`, `python3.7`, `python3.8`, `python3.9`, `dotnetcore1.0`, `dotnetcore2.0`, `dotnetcore2.1`, `dotnetcore3.1`, `dotnet6`, `dotnet8`, `nodejs4.3-edge`, `go1.x`, `ruby2.5`, `ruby2.7`, `provided`, `provided.al2`, `nodejs18.x`, `python3.10`, `java17`, `ruby3.2`, `ruby3.3`, `python3.11`, `nodejs20.x`, `provided.al2023`, `python3.12`, `java21`,' }
+const CompatibleRuntime = { ...str, comment: 'Set the runtime identifier' }
 const DeadLetterConfig = { ...obj, comment: 'Dead-letter queue configuration', ref: docRoot + 'API_DeadLetterConfig.html' }
 const Description = { ...str, comment: 'Description of the function' }
 const Environment = { ...obj, comment: 'Environment variable configuration', ref: docRoot + 'API_Environment.html' }
@@ -32,7 +32,7 @@ const KMSKeyArn = { ...str, comment: 'ARN of the Key Management Service (KMS) cu
 const LayerName = { ...str, required, comment: 'Name or ARN of the layer' }
 const Layers = { ...arr, comment: 'List of function layer ARNs (including version) to add to the function execution environment' }
 const Marker = { ...str, comment: 'Pagination token' }
-const MaxItems = { ...num, comment: 'Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`' }
+const MaxItems = { ...num, comment: 'Maximum number of items to be returned; maximum 10,000' }
 const MemorySize = { ...num, comment: 'Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation' }
 const Qualifier = { ...str, comment: 'Specify a version or alias to invoke a published version of the function' }
 const RevisionId = { ...str, comment: 'Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it' }
@@ -170,12 +170,12 @@ const CreateEventSourceMapping = {
     DocumentDBEventSourceConfig: { ...obj, comment: 'Configuration for a `DocumentDB` event source', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DocumentDBEventSourceConfig' },
     Enabled: { ...bool, comment: 'Set to `false` to disable event source upon creation' },
     EventSourceArn: { ...str, comment: 'ARN of the event source' },
-    FilterCriteria: { ...obj, comment: 'Define an input filter for events', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FilterCriteria' },
+    FilterCriteria: { ...obj, comment: 'Define how incoming events will be filtered', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FilterCriteria' },
     FunctionResponseTypes: { ...arr, comment: 'A list of at most 1 string defining the current response type enum applied to the event source mapping; For Kinesis, DynamoDB Streams, and Amazon SQS', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FunctionResponseTypes' },
     MaximumBatchingWindowInSeconds: { ...num, comment: 'Maximum time (in seconds) from 0 to 300 that Lambda may spend gathering records before invoking the function', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-MaximumBatchingWindowInSeconds' },
-    MaximumRecordAgeInSeconds: { ...num, comment: 'Maximum age from -1 (infinite, default) to 604800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams' },
-    MaximumRetryAttempts: { ...num, comment: 'Maximum number of tries from -1 (infinite, default) to 10000 before a record is discarded; `Kinesis` and `DynamoDB` only ' },
-    ParallelizationFactor: { ...num, comment: 'Number of batches from 1 to 10 that can be processed from each shard concurrently' },
+    MaximumRecordAgeInSeconds: { ...num, comment: 'Maximum age between -1 (infinite, default) to 604,800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams' },
+    MaximumRetryAttempts: { ...num, comment: 'Maximum number of tries between -1 (infinite, default) to 10,000 before a record is discarded; `Kinesis` and `DynamoDB` only ' },
+    ParallelizationFactor: { ...num, comment: 'Number of batches between 1 to 10 that can be processed from each shard concurrently' },
     Queues: { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Amazon MQ` broker destination queue to consume' },
     ScalingConfig: { ...obj, comment: 'Configure scaling for the event source; Amazon SQS only', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-ScalingConfig' },
     SelfManagedEventSource: { ...obj, comment: 'A self managed `Apache Kafka` cluster to receive records from', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
@@ -753,7 +753,7 @@ const ListFunctions = {
   validate: {
     FunctionVersion: { ...str, comment: 'Set to `ALL` to include entries for all published versions' },
     Marker,
-    MasterRegion: { ...str, comment: 'Display `LambdaEdge` functions replicated from a master function in a specified region; see reference for more details' },
+    MasterRegion: { ...str, comment: 'Display `LambdaEdge` functions replicated from a master function in a specified region', ref: docRoot + 'API_ListFunctions.html#API_ListFunctions_RequestSyntax' },
     MaxItems,
     paginate: valPaginate,
   },
@@ -765,7 +765,7 @@ const ListFunctions = {
     }
     return {
       path: '/2015-03-31/functions/',
-      query: { ...params },
+      query: params,
       paginate,
       paginator: { ...paginator, accumulator: 'Functions' },
     }
@@ -799,7 +799,7 @@ const ListLayers = {
   awsDoc: docRoot + 'API_ListLayers.html',
   validate: {
     CompatibleArchitecture,
-    CompatibleRuntime,
+    CompatibleRuntime: { ...CompatibleRuntime, ref: docRoot + 'API_ListLayers.html#API_ListLayers_RequestSyntax' },
     Marker,
     MaxItems,
     paginate: valPaginate,
@@ -812,7 +812,7 @@ const ListLayers = {
     }
     return {
       path: '/2018-10-31/layers',
-      query: { ...params },
+      query: params,
       paginate,
       paginator: { ...paginator, accumulator: 'Layers' },
     }
@@ -825,7 +825,7 @@ const ListLayerVersions = {
   validate: {
     LayerName,
     CompatibleArchitecture,
-    CompatibleRuntime,
+    CompatibleRuntime: { ...CompatibleRuntime, ref: docRoot + 'API_ListLayerVersions.html#API_ListLayerVersions_RequestSyntax' },
     Marker,
     MaxItems,
     paginate: valPaginate,

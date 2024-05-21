@@ -135,7 +135,7 @@ Properties:
 - **`EventSourceArn` (string)**
   - ARN of the event source
 - **`FilterCriteria` (object)**
-  - Define an input filter for events
+  - Define how incoming events will be filtered
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FilterCriteria)
 - **`FunctionResponseTypes` (array)**
   - A list of at most 1 string defining the current response type enum applied to the event source mapping; For Kinesis, DynamoDB Streams, and Amazon SQS
@@ -144,11 +144,11 @@ Properties:
   - Maximum time (in seconds) from 0 to 300 that Lambda may spend gathering records before invoking the function
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-MaximumBatchingWindowInSeconds)
 - **`MaximumRecordAgeInSeconds` (number)**
-  - Maximum age from -1 (infinite, default) to 604800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams
+  - Maximum age between -1 (infinite, default) to 604,800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams
 - **`MaximumRetryAttempts` (number)**
-  - Maximum number of tries from -1 (infinite, default) to 10000 before a record is discarded; `Kinesis` and `DynamoDB` only 
+  - Maximum number of tries between -1 (infinite, default) to 10,000 before a record is discarded; `Kinesis` and `DynamoDB` only 
 - **`ParallelizationFactor` (number)**
-  - Number of batches from 1 to 10 that can be processed from each shard concurrently
+  - Number of batches between 1 to 10 that can be processed from each shard concurrently
 - **`Queues` (array)**
   - Array of exactly 1 string specifying the name of the `Amazon MQ` broker destination queue to consume
 - **`ScalingConfig` (object)**
@@ -553,7 +553,7 @@ Properties:
 - **`Marker` (string)**
   - Pagination token
 - **`MaxItems` (number)**
-  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+  - Maximum number of items to be returned; maximum 10,000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -566,7 +566,7 @@ Properties:
 - **`Marker` (string)**
   - Pagination token
 - **`MaxItems` (number)**
-  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+  - Maximum number of items to be returned; maximum 10,000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -581,9 +581,10 @@ Properties:
 - **`Marker` (string)**
   - Pagination token
 - **`MasterRegion` (string)**
-  - Display `LambdaEdge` functions replicated from a master function in a specified region; see reference for more details
+  - Display `LambdaEdge` functions replicated from a master function in a specified region
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html#API_ListFunctions_RequestSyntax)
 - **`MaxItems` (number)**
-  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+  - Maximum number of items to be returned; maximum 10,000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -598,7 +599,7 @@ Properties:
 - **`Marker` (string)**
   - Pagination token
 - **`MaxItems` (number)**
-  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+  - Maximum number of items to be returned; maximum 10,000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -611,11 +612,12 @@ Properties:
 - **`CompatibleArchitecture` (string)**
   - Set instruction set architecture to one of: `x86_64`, `arm64`
 - **`CompatibleRuntime` (string)**
-  - Set the runtime identifier to one of: `nodejs`, `nodejs4.3`, `nodejs6.10`, `nodejs8.10`, `nodejs10.x`, `nodejs12.x`, `nodejs14.x`, `nodejs16.x`, `java8`, `java8.al2`, `java11`, `python2.7`, `python3.6`, `python3.7`, `python3.8`, `python3.9`, `dotnetcore1.0`, `dotnetcore2.0`, `dotnetcore2.1`, `dotnetcore3.1`, `dotnet6`, `dotnet8`, `nodejs4.3-edge`, `go1.x`, `ruby2.5`, `ruby2.7`, `provided`, `provided.al2`, `nodejs18.x`, `python3.10`, `java17`, `ruby3.2`, `ruby3.3`, `python3.11`, `nodejs20.x`, `provided.al2023`, `python3.12`, `java21`,
+  - Set the runtime identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html#API_ListLayers_RequestSyntax)
 - **`Marker` (string)**
   - Pagination token
 - **`MaxItems` (number)**
-  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+  - Maximum number of items to be returned; maximum 10,000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -630,11 +632,12 @@ Properties:
 - **`CompatibleArchitecture` (string)**
   - Set instruction set architecture to one of: `x86_64`, `arm64`
 - **`CompatibleRuntime` (string)**
-  - Set the runtime identifier to one of: `nodejs`, `nodejs4.3`, `nodejs6.10`, `nodejs8.10`, `nodejs10.x`, `nodejs12.x`, `nodejs14.x`, `nodejs16.x`, `java8`, `java8.al2`, `java11`, `python2.7`, `python3.6`, `python3.7`, `python3.8`, `python3.9`, `dotnetcore1.0`, `dotnetcore2.0`, `dotnetcore2.1`, `dotnetcore3.1`, `dotnet6`, `dotnet8`, `nodejs4.3-edge`, `go1.x`, `ruby2.5`, `ruby2.7`, `provided`, `provided.al2`, `nodejs18.x`, `python3.10`, `java17`, `ruby3.2`, `ruby3.3`, `python3.11`, `nodejs20.x`, `provided.al2023`, `python3.12`, `java21`,
+  - Set the runtime identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html#API_ListLayerVersions_RequestSyntax)
 - **`Marker` (string)**
   - Pagination token
 - **`MaxItems` (number)**
-  - Maximum number of items from 1 to 10000 in a response; will attempt to paginate if the existing number of aliases exceeds `MaxItems`
+  - Maximum number of items to be returned; maximum 10,000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
