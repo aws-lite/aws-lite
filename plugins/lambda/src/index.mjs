@@ -696,6 +696,22 @@ const Invoke = {
   },
 }
 
+const InvokeAsync = {
+  awsDoc: docRoot + 'API_InvokeAsync.html',
+  deprecated: true,
+  validate: {
+    FunctionName,
+    InvokeArgs: { ...obj, required, comment: 'Function arguments', ref: docRoot + 'API_InvokeAsync.html#API_InvokeAsync_RequestSyntax' },
+  },
+  request: ({ FunctionName, InvokeArgs }) => {
+    return {
+      path: `/2014-11-13/functions/${FunctionName}/invoke-async/`,
+      payload: InvokeArgs,
+    }
+  },
+  response: ({ statusCode }) => ({ Status: statusCode }),
+}
+
 const ListAliases = {
   awsDoc: docRoot + 'API_ListAliases.html',
   validate: {
@@ -748,6 +764,57 @@ const ListCodeSigningConfigs = {
   response: defaultResponse,
 }
 
+const ListEventSourceMappings = {
+  awsDoc: docRoot + 'API_ListEventSourceMappings.html',
+  validate: {
+    EventSourceArn: { ...str, comment: 'ARN of the event source' },
+    FunctionName: { ...FunctionName, required: false },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (query) => {
+    let paginate
+    if (query.paginate) {
+      delete query.paginate
+      paginate = true
+    }
+    return {
+      path: '/2015-03-31/event-source-mappings/',
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'EventSourceMappings' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListFunctionEventInvokeConfigs = {
+  awsDoc: docRoot + 'API_ListFunctionEventInvokeConfigs.html',
+  validate: {
+    FunctionName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (query) => {
+    const { FunctionName } = query
+    let paginate
+    delete query.FuncionName
+    if (query.paginate) {
+      delete query.paginate
+      paginate = true
+    }
+    return {
+      path: `/2019-09-25/functions/${FunctionName}/event-invoke-config/list`,
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'FunctionEventInvokeConfigs' },
+    }
+  },
+  response: defaultResponse,
+}
+
 const ListFunctions = {
   awsDoc: docRoot + 'API_ListFunctions.html',
   validate: {
@@ -770,6 +837,33 @@ const ListFunctions = {
       paginator: { ...paginator, accumulator: 'Functions' },
     }
   },
+}
+
+const ListFunctionsByCodeSigningConfig = {
+  awsDoc: docRoot + 'API_ListFunctionsByCodeSigningConfig.html',
+  validate: {
+    CodeSigningConfigArn: { ...str, required, comment: 'ARN of the code signing configuration' },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { CodeSigningConfigArn } = params
+    let query = { ...params }
+    let paginate
+    delete query.CodeSigningConfigArn
+    if (query.paginate) {
+      delete query.paginate
+      paginate = true
+    }
+    return {
+      path: `/2020-04-22/code-signing-configs/${CodeSigningConfigArn}/functions`,
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'FunctionArns' },
+    }
+  },
+  response: defaultResponse,
 }
 
 const ListFunctionUrlConfigs = {
@@ -844,6 +938,34 @@ const ListLayerVersions = {
       query,
       paginate,
       paginator: { ...paginator, accumulator: 'LayerVersions' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListProvisionedConcurrencyConfigs = {
+  awsDoc: docRoot + 'API_ListProvisionedConcurrencyConfigs.html',
+  validate: {
+    FunctionName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { FunctionName } = params
+    let query = { ...params }
+    let paginate
+    query.List = 'ALL'
+    delete query.FunctionName
+    if (query.paginate) {
+      delete query.paginate
+      paginate = true
+    }
+    return {
+      path: `/2019-09-30/functions/${FunctionName}/provisioned-concurrency`,
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'ProvisionedConcurrencyConfigs' },
     }
   },
   response: defaultResponse,
@@ -998,12 +1120,17 @@ export default {
     GetProvisionedConcurrencyConfig,
     GetRuntimeManagementConfig,
     Invoke,
+    InvokeAsync,
     ListAliases,
     ListCodeSigningConfigs,
+    ListEventSourceMappings,
+    ListFunctionEventInvokeConfigs,
     ListFunctions,
+    ListFunctionsByCodeSigningConfig,
     ListFunctionUrlConfigs,
     ListLayers,
     ListLayerVersions,
+    ListProvisionedConcurrencyConfigs,
     PutFunctionConcurrency,
     UpdateAlias,
     UpdateFunctionCode,

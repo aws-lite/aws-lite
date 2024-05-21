@@ -571,6 +571,38 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListEventSourceMappings`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html)
+
+Properties:
+- **`EventSourceArn` (string)**
+  - ARN of the event source
+- **`FunctionName` (string)**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFunctionEventInvokeConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListFunctions`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html)
@@ -583,6 +615,21 @@ Properties:
 - **`MasterRegion` (string)**
   - Display `LambdaEdge` functions replicated from a master function in a specified region
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html#API_ListFunctions_RequestSyntax)
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFunctionsByCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html)
+
+Properties:
+- **`CodeSigningConfigArn` (string) [required]**
+  - ARN of the code signing configuration
+- **`Marker` (string)**
+  - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
 - **`paginate` (boolean)**
@@ -634,6 +681,21 @@ Properties:
 - **`CompatibleRuntime` (string)**
   - Set the runtime identifier
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html#API_ListLayerVersions_RequestSyntax)
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListProvisionedConcurrencyConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
 - **`Marker` (string)**
   - Pagination token
 - **`MaxItems` (number)**
@@ -753,16 +815,16 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
 
 
+### Deprecated methods
+
+- [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
-- [`ListEventSourceMappings`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html)
-- [`ListFunctionEventInvokeConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html)
-- [`ListFunctionsByCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html)
-- [`ListProvisionedConcurrencyConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html)
 - [`ListTags`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html)
 - [`ListVersionsByFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html)
 - [`PublishLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html)

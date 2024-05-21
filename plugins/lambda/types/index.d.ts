@@ -35,12 +35,17 @@ import {
   GetProvisionedConcurrencyConfigCommandOutput as GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigCommandOutput as GetRuntimeManagementConfigResponse,
   InvokeCommandOutput as InvokeResponse,
+  InvokeAsyncCommandOutput as InvokeAsyncResponse,
   ListAliasesCommandOutput as ListAliasesResponse,
   ListCodeSigningConfigsCommandOutput as ListCodeSigningConfigsResponse,
+  ListEventSourceMappingsCommandOutput as ListEventSourceMappingsResponse,
+  ListFunctionEventInvokeConfigsCommandOutput as ListFunctionEventInvokeConfigsResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
+  ListFunctionsByCodeSigningConfigCommandOutput as ListFunctionsByCodeSigningConfigResponse,
   ListFunctionUrlConfigsCommandOutput as ListFunctionUrlConfigsResponse,
   ListLayersCommandOutput as ListLayersResponse,
   ListLayerVersionsCommandOutput as ListLayerVersionsResponse,
+  ListProvisionedConcurrencyConfigsCommandOutput as ListProvisionedConcurrencyConfigsResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
@@ -253,6 +258,12 @@ declare interface AwsLiteLambda {
   Invoke: (input: { FunctionName: string, InvocationType?: string, Payload: any[] | Record<string, any>, LogType?: string, ClientContext?: string, Qualifier?: string }) => Promise<InvokeResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html Lambda: InvokeAsync}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#InvokeAsync Lambda: InvokeAsync}
+   */
+  InvokeAsync: (input: { FunctionName: string, InvokeArgs: Record<string, any> }) => Promise<InvokeAsyncResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html Lambda: ListAliases}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListAliases Lambda: ListAliases}
    */
@@ -265,10 +276,28 @@ declare interface AwsLiteLambda {
   ListCodeSigningConfigs: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListCodeSigningConfigsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html Lambda: ListEventSourceMappings}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListEventSourceMappings Lambda: ListEventSourceMappings}
+   */
+  ListEventSourceMappings: (input: { EventSourceArn?: string, FunctionName?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListEventSourceMappingsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html Lambda: ListFunctionEventInvokeConfigs}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionEventInvokeConfigs Lambda: ListFunctionEventInvokeConfigs}
+   */
+  ListFunctionEventInvokeConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionEventInvokeConfigsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html Lambda: ListFunctions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctions Lambda: ListFunctions}
    */
   ListFunctions: (input: { FunctionVersion?: string, Marker?: string, MasterRegion?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html Lambda: ListFunctionsByCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionsByCodeSigningConfig Lambda: ListFunctionsByCodeSigningConfig}
+   */
+  ListFunctionsByCodeSigningConfig: (input: { CodeSigningConfigArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionsByCodeSigningConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html Lambda: ListFunctionUrlConfigs}
@@ -287,6 +316,12 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListLayerVersions Lambda: ListLayerVersions}
    */
   ListLayerVersions: (input: { LayerName: string, CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListLayerVersionsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html Lambda: ListProvisionedConcurrencyConfigs}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListProvisionedConcurrencyConfigs Lambda: ListProvisionedConcurrencyConfigs}
+   */
+  ListProvisionedConcurrencyConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListProvisionedConcurrencyConfigsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html Lambda: PutFunctionConcurrency}
@@ -358,12 +393,17 @@ export type {
   GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigResponse,
   InvokeResponse,
+  InvokeAsyncResponse,
   ListAliasesResponse,
   ListCodeSigningConfigsResponse,
+  ListEventSourceMappingsResponse,
+  ListFunctionEventInvokeConfigsResponse,
   ListFunctionsResponse,
+  ListFunctionsByCodeSigningConfigResponse,
   ListFunctionUrlConfigsResponse,
   ListLayersResponse,
   ListLayerVersionsResponse,
+  ListProvisionedConcurrencyConfigsResponse,
   PutFunctionConcurrencyResponse,
   UpdateAliasResponse,
   UpdateFunctionCodeResponse,
