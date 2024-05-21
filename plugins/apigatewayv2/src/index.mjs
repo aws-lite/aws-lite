@@ -25,7 +25,7 @@ const StageName = { ...str, comment: 'Stage name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => CamelToPascalParams(payload)
-const emptyResponse = () => {}
+const emptyResponse = () => ({})
 
 const paginator = {
   cursor: 'nextToken',
@@ -89,7 +89,7 @@ const CreateDomainName = {
   request: (params) => {
     return {
       path: '/v2/domainnames',
-      payload: params,
+      payload: pascalToCamelParams(params),
     }
   },
   response: defaultResponse,
@@ -103,7 +103,7 @@ const DeleteApiMapping = {
   },
   request: ({ ApiMappingId, DomainName }) => {
     return {
-      path: `v2/domainnames/${DomainName}/apimappings/${ApiMappingId}`,
+      path: `/v2/domainnames/${DomainName}/apimappings/${ApiMappingId}`,
       method: 'DELETE',
     }
   },
@@ -133,13 +133,11 @@ const GetApiMappings = {
     paginate: valPaginate,
   },
   request: (params) => {
-    const { domainName, maxResults, nextToken  } = pascalToCamelParams(params)
-    let paginate
-    if (params.paginate) paginate = true
+    const { domainName, maxResults, nextToken } = pascalToCamelParams(params)
     return {
-      path: `v2/domainnames/${domainName}/apimappings`,
+      path: `/v2/domainnames/${domainName}/apimappings`,
       query: { maxResults, nextToken },
-      paginate,
+      paginate: params.paginate,
       paginator,
     }
   },
