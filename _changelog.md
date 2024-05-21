@@ -2,6 +2,14 @@
 
 ---
 
+## [0.21.7] 2024-05-21
+
+### Fixed
+
+- Fixed regression caused by previous fix
+
+---
+
 ## [0.21.6] 2024-05-20
 
 ### Fixed
