@@ -24,7 +24,9 @@ const ChangeResourceRecordSets = {
     HostedZoneId,
     ChangeBatch: { ...obj, comment: '`ChangeBatch` object', ref: docRoot + 'API_ChangeResourceRecordSets.html#Route53-ChangeResourceRecordSets-request-ChangeBatch'  },
   },
-  request: ({ HostedZoneId, ChangeBatch }) => {
+  request: (params) => {
+    const { HostedZoneId } = params
+    let ChangeBatch = { ...params.ChangeBatch }
     ChangeBatch.Changes = { Change: ChangeBatch.Changes }
     ChangeBatch.Changes.Change.forEach(i => {
       if (i.ResourceRecordSet.ResourceRecords) {
