@@ -31,6 +31,8 @@ let awsjson = {
   unmarshall: marshaller.bind({}, 'unmarshall'),
 }
 
+let copy = obj => JSON.parse(JSON.stringify(obj))
+
 async function exists (file) {
   let { stat } = require('node:fs/promises')
   try { await stat(file); return true }
@@ -249,6 +251,7 @@ let XMLContentType = ct => ct.match(XMLregex)
 
 module.exports = {
   awsjson,
+  copy,
   exists,
   getEndpointParams,
   loadAwsConfig,

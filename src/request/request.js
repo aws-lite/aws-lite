@@ -1,5 +1,5 @@
 let aws4 = require('aws4')
-let { awsjson, parseXML, useAWS, JSONContentType, AwsJSONContentType, XMLContentType } = require('../lib')
+let { awsjson, copy, parseXML, useAWS, JSONContentType, AwsJSONContentType, XMLContentType } = require('../lib')
 
 // HTTP client agent cache to prevent generating new agents for every request
 let agentCache = {
@@ -69,8 +69,8 @@ function call (params, args) {
   let { protocol } = signing
 
   return new Promise((resolve, reject) => {
-    // Sign and construct the request
-    let options = aws4.sign(signing, creds)
+    // Sign and construct the request; hard, deep copy because aws4 mutates its inputs
+    let options = aws4.sign(copy(signing), creds)
     // Normalize host (again)
     /* istanbul ignore next: this won't get seen by nyc */
     options.host = options.host || options.hostname
