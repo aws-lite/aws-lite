@@ -29,7 +29,7 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
-  t.plan(65)
+  t.plan(66)
   let request, result, payload, query, responseBody, url
   let aws = await client(config)
 
@@ -101,6 +101,12 @@ test('Primary client - core functionality', async t => {
   request = server.getCurrentRequest()
   t.deepEqual(request.body, JSON.parse(payload), 'Request included correct body (pre-encoded JSON)')
   reset()
+
+  // Publish a buffer
+  payload = Buffer.from(JSON.stringify({ ok: true }))
+  result = await aws({ service, path, payload })
+  request = server.getCurrentRequest()
+  t.deepEqual(request.body.toString(), payload.toString(), 'Request included correct body (buffer)')
 
   // Publish some other kind of non-JSON request
   payload = 'hi'
