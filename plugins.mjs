@@ -20,6 +20,7 @@ const plugins = [
   { service: 'cloudwatch-logs', property: 'CloudWatchLogs', display: 'CloudWatch Logs', maintainers },
   { service: 'dynamodb', property: 'DynamoDB', display: 'DynamoDB', maintainers },
   { service: 'lambda', property: 'Lambda', display: 'Lambda', maintainers },
+  { service: 'organizations', property: 'Organizations', display: 'Organizations', maintainers },
   {
     service: 'rds-data', property: 'RDSData',
     display: 'RDS Data Service', maintainers: [ '@andybee' ],

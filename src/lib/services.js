@@ -11,14 +11,14 @@ let services = [ 'access-analyzer', 'access-analyzer-fips', 'acm', 'acm-fips', '
 
 
 /**
- * These global services still specify region and aren't currently accounted for in aws4, so for now will not be enumerated here: 'organizations', 'shield', 'shield-fips'
+ * These global services still specify region and aren't currently accounted for in aws4, so for now will not be enumerated here: 'shield', 'shield-fips'
  * 'directconnect' + 'fms' are both listed as a global services here: https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/ – however, they appear to have normal regional endpoints, so perhaps that's errata?
  */
 let globalServices = [
   // Global services that are no longer strictly global, and may or may not have global and regional endpoints (see: semi-global below). Just let aws4 figure it out:
   's3', 'sdb',
   // Known global services:
-  'acm', 'cloudfront', 'globalaccelerator', 'route53', 'iam', 'sts', 'waf', 'waf-fips',
+  'acm', 'cloudfront', 'globalaccelerator', 'organizations', 'route53', 'iam', 'sts', 'waf', 'waf-fips',
   // Mentioned in aws4 as global but not found Service Endpoints and Quotas
   'ls', 'importexport',
 ]
