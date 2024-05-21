@@ -58,7 +58,7 @@ Properties:
 - **`Qualifier` (string)**
   - Specify a version or alias to invoke a published version of the function
 - **`Action` (string) [required]**
-  - Action that the principal can use on the function, for example, `lambda:InvokeFunction`
+  - Action that the principal can use on the function; for example, `lambda:InvokeFunction`
 - **`EventSourceToken` (string)**
   - A token that Alexa Smart Home requires from the invoker
 - **`FunctionUrlAuthType` (string)**
@@ -108,6 +108,70 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/api/API_CodeSigningPolicies.html)
 - **`Description` (string)**
   - Description of the function
+
+
+### `CreateEventSourceMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`AmazonManagedKafkaEventSourceConfig` (object)**
+  - Configuration settings for an Amazon Managed Streaming for Apache Kafka event source
+- **`BatchSize` (number)**
+  - Maximum number of records from 1 to 10000 in each batch that Lambda pulls from the stream or queue
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-BatchSize)
+- **`BisectBatchOnFunctionError` (boolean)**
+  - If the function returns an error, divide the batch and try again (only for Kinesis and DynamoDB streams)
+- **`DestinationConfig` (object)**
+  - Specify the destination of an event after being processed by Lambda
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DestinationConfig)
+- **`DocumentDBEventSourceConfig` (object)**
+  - Configuration for a `DocumentDB` event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DocumentDBEventSourceConfig)
+- **`Enabled` (boolean)**
+  - Set to `false` to disable event source upon creation
+- **`EventSourceArn` (string)**
+  - ARN of the event source
+- **`FilterCriteria` (object)**
+  - Define how incoming events will be filtered
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FilterCriteria)
+- **`FunctionResponseTypes` (array)**
+  - A list of at most 1 string defining the current response type enum applied to the event source mapping; For Kinesis, DynamoDB Streams, and Amazon SQS
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FunctionResponseTypes)
+- **`MaximumBatchingWindowInSeconds` (number)**
+  - Maximum time (in seconds) from 0 to 300 that Lambda may spend gathering records before invoking the function
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-MaximumBatchingWindowInSeconds)
+- **`MaximumRecordAgeInSeconds` (number)**
+  - Maximum age between -1 (infinite, default) to 604,800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams
+- **`MaximumRetryAttempts` (number)**
+  - Maximum number of tries between -1 (infinite, default) to 10,000 before a record is discarded; `Kinesis` and `DynamoDB` only 
+- **`ParallelizationFactor` (number)**
+  - Number of batches between 1 to 10 that can be processed from each shard concurrently
+- **`Queues` (array)**
+  - Array of exactly 1 string specifying the name of the `Amazon MQ` broker destination queue to consume
+- **`ScalingConfig` (object)**
+  - Configure scaling for the event source; Amazon SQS only
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-ScalingConfig)
+- **`SelfManagedEventSource` (object)**
+  - A self managed `Apache Kafka` cluster to receive records from
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource)
+- **`SelfManagedKafkaEventSourceConfig` (object)**
+  - Configure a self managed `Apache Kafka` event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource)
+- **`SourceAccessConfigurations` (array)**
+  - Array of at most 22 `SourceAccessConfiguration` objects to specifying authentication protocols or VPC components required to secure the event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SourceAccessConfigurations)
+- **`StartingPosition` (string)**
+  - Position in a stream to begin reading, valid entries are `TRIM_HORIZON` (all available messages), `LATEST` (from now or after) or `AT_TIMESTAMP` (specify timestamp)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition)
+- **`StartingPositionTimestamp` (object)**
+  - The `timestamp` in `Unix time seconds` used when `StartingPosition` is set to `AT_TIMESTAMP`; cannot be in the future
+- **`Topics` (array)**
+  - Array of exactly 1 string specifying the name of the `Kafka` topic
+- **`TumblingWindowInSeconds` (number)**
+  - Time (in seconds) from 0 to 900 specifying the duration of a processing window for `DynamoDB` and `Kinesis` event stream sources
 
 
 ### `CreateFunction`
@@ -174,6 +238,25 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
 
 
+### `CreateFunctionUrlConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
+
+Properties:
+- **`AuthType` (string) [required]**
+  - Type of authentication that the function URL will use, either `AWS_IAM` or `NONE`
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Cors` (object)**
+  - Cross-origin resource sharing settings
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-Cors)
+- **`InvokeMode` (string)**
+  - Specify how the function will be invoked, either `BUFFERED` (default, uses the `Invoke` API operation) or `RESPONSE_STREAM` (streams results as they become available, uses the `InvokeWithResponseStream` API operation)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-InvokeMode)
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
 ### `DeleteAlias`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html)
@@ -203,6 +286,26 @@ Properties:
   - UUID of the event source mapping
 
 
+### `DeleteFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `DeleteFunctionCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+
+
 ### `DeleteFunctionConcurrency`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html)
@@ -210,6 +313,50 @@ Properties:
 Properties:
 - **`FunctionName` (string) [required]**
   - The name of the Lambda function, version, or alias
+
+
+### `DeleteFunctionEventInvokeConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `DeleteFunctionUrlConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `DeleteLayerVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+
+
+### `DeleteProvisionedConcurrencyConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteProvisionedConcurrencyConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Qualifier` (string) [required]**
+  - Specify a version or alias to invoke a published version of the function
 
 
 ### `GetAccountSettings`
@@ -394,6 +541,107 @@ Properties:
   - Specify a version or alias to invoke a published version of the function
 
 
+### `ListAliases`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`FunctionVersion` (string)**
+  - Version of the aliased function
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListCodeSigningConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListCodeSigningConfigs.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFunctions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html)
+
+Properties:
+- **`FunctionVersion` (string)**
+  - Set to `ALL` to include entries for all published versions
+- **`Marker` (string)**
+  - Pagination token
+- **`MasterRegion` (string)**
+  - Display `LambdaEdge` functions replicated from a master function in a specified region
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html#API_ListFunctions_RequestSyntax)
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFunctionUrlConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListLayers`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html)
+
+Properties:
+- **`CompatibleArchitecture` (string)**
+  - Set instruction set architecture to one of: `x86_64`, `arm64`
+- **`CompatibleRuntime` (string)**
+  - Set the runtime identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html#API_ListLayers_RequestSyntax)
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListLayerVersions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`CompatibleArchitecture` (string)**
+  - Set instruction set architecture to one of: `x86_64`, `arm64`
+- **`CompatibleRuntime` (string)**
+  - Set the runtime identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html#API_ListLayerVersions_RequestSyntax)
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `PutFunctionConcurrency`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
@@ -509,25 +757,11 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html)
-- [`CreateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html)
-- [`DeleteFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html)
-- [`DeleteFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html)
-- [`DeleteFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html)
-- [`DeleteFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html)
-- [`DeleteLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html)
-- [`DeleteProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteProvisionedConcurrencyConfig.html)
 - [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
-- [`ListAliases`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html)
-- [`ListCodeSigningConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListCodeSigningConfigs.html)
 - [`ListEventSourceMappings`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html)
 - [`ListFunctionEventInvokeConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html)
-- [`ListFunctions`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html)
 - [`ListFunctionsByCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html)
-- [`ListFunctionUrlConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html)
-- [`ListLayers`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html)
-- [`ListLayerVersions`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html)
 - [`ListProvisionedConcurrencyConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html)
 - [`ListTags`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html)
 - [`ListVersionsByFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html)

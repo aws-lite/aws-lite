@@ -5,11 +5,19 @@ import {
   AddPermissionCommandOutput as AddPermissionResponse,
   CreateAliasCommandOutput as CreateAliasResponse,
   CreateCodeSigningConfigCommandOutput as CreateCodeSigningConfigResponse,
+  CreateEventSourceMappingCommandOutput as CreateEventSourceMappingResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
+  CreateFunctionUrlConfigCommandOutput as CreateFunctionUrlConfigResponse,
   DeleteAliasCommandOutput as DeleteAliasResponse,
   DeleteCodeSigningConfigCommandOutput as DeleteCodeSigningConfigResponse,
   DeleteEventSourceMappingCommandOutput as DeleteEventSourceMappingResponse,
+  DeleteFunctionCommandOutput as DeleteFunctionResponse,
+  DeleteFunctionCodeSigningConfigCommandOutput as DeleteFunctionCodeSigningConfigResponse,
   DeleteFunctionConcurrencyCommandOutput as DeleteFunctionConcurrencyResponse,
+  DeleteFunctionEventInvokeConfigCommandOutput as DeleteFunctionEventInvokeConfigResponse,
+  DeleteFunctionUrlConfigCommandOutput as DeleteFunctionUrlConfigResponse,
+  DeleteLayerVersionCommandOutput as DeleteLayerVersionResponse,
+  DeleteProvisionedConcurrencyConfigCommandOutput as DeleteProvisionedConcurrencyConfigResponse,
   GetAccountSettingsCommandOutput as GetAccountSettingsResponse,
   GetAliasCommandOutput as GetAliasResponse,
   GetCodeSigningConfigCommandOutput as GetCodeSigningConfigResponse,
@@ -27,6 +35,12 @@ import {
   GetProvisionedConcurrencyConfigCommandOutput as GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigCommandOutput as GetRuntimeManagementConfigResponse,
   InvokeCommandOutput as InvokeResponse,
+  ListAliasesCommandOutput as ListAliasesResponse,
+  ListCodeSigningConfigsCommandOutput as ListCodeSigningConfigsResponse,
+  ListFunctionsCommandOutput as ListFunctionsResponse,
+  ListFunctionUrlConfigsCommandOutput as ListFunctionUrlConfigsResponse,
+  ListLayersCommandOutput as ListLayersResponse,
+  ListLayerVersionsCommandOutput as ListLayerVersionsResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
@@ -63,10 +77,22 @@ declare interface AwsLiteLambda {
   CreateCodeSigningConfig: (input: { AllowedPublishers: Record<string, any>, CodeSigningPolicies?: Record<string, any>, Description?: string }) => Promise<CreateCodeSigningConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html Lambda: CreateEventSourceMapping}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateEventSourceMapping Lambda: CreateEventSourceMapping}
+   */
+  CreateEventSourceMapping: (input: { FunctionName: string, AmazonManagedKafkaEventSourceConfig?: Record<string, any>, BatchSize?: number, BisectBatchOnFunctionError?: boolean, DestinationConfig?: Record<string, any>, DocumentDBEventSourceConfig?: Record<string, any>, Enabled?: boolean, EventSourceArn?: string, FilterCriteria?: Record<string, any>, FunctionResponseTypes?: any[], MaximumBatchingWindowInSeconds?: number, MaximumRecordAgeInSeconds?: number, MaximumRetryAttempts?: number, ParallelizationFactor?: number, Queues?: any[], ScalingConfig?: Record<string, any>, SelfManagedEventSource?: Record<string, any>, SelfManagedKafkaEventSourceConfig?: Record<string, any>, SourceAccessConfigurations?: any[], StartingPosition?: string, StartingPositionTimestamp?: Record<string, any>, Topics?: any[], TumblingWindowInSeconds?: number }) => Promise<CreateEventSourceMappingResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html Lambda: CreateFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateFunction Lambda: CreateFunction}
    */
   CreateFunction: (input: { Code: Record<string, any>, FunctionName: string, Role: string, Architectures?: any[], CodeSigningConfigArn?: string, DeadLetterConfig?: Record<string, any>, Description?: string, Environment?: Record<string, any>, EphemeralStorage?: Record<string, any>, FileSystemConfigs?: any[], Handler?: string, ImageConfig?: Record<string, any>, KMSKeyArn?: string, Layers?: any[], MemorySize?: number, PackageType?: string, Publish?: boolean, Runtime?: string, SnapStart?: Record<string, any>, Tags?: any[], Timeout?: number, TracingConfig?: Record<string, any>, VpcConfig?: Record<string, any> }) => Promise<CreateFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunctionUrlConfig.html Lambda: CreateFunctionUrlConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#CreateFunctionUrlConfig Lambda: CreateFunctionUrlConfig}
+   */
+  CreateFunctionUrlConfig: (input: { AuthType: string, FunctionName: string, Cors?: Record<string, any>, InvokeMode?: string, Qualifier?: string }) => Promise<CreateFunctionUrlConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteAlias.html Lambda: DeleteAlias}
@@ -87,10 +113,46 @@ declare interface AwsLiteLambda {
   DeleteEventSourceMapping: (input: { UUID: string }) => Promise<DeleteEventSourceMappingResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html Lambda: DeleteFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunction Lambda: DeleteFunction}
+   */
+  DeleteFunction: (input: { FunctionName: string, Qualifier?: string }) => Promise<DeleteFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionCodeSigningConfig.html Lambda: DeleteFunctionCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionCodeSigningConfig Lambda: DeleteFunctionCodeSigningConfig}
+   */
+  DeleteFunctionCodeSigningConfig: (input: { FunctionName: string }) => Promise<DeleteFunctionCodeSigningConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionConcurrency.html Lambda: DeleteFunctionConcurrency}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionConcurrency Lambda: DeleteFunctionConcurrency}
    */
   DeleteFunctionConcurrency: (input: { FunctionName: string }) => Promise<DeleteFunctionConcurrencyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionEventInvokeConfig.html Lambda: DeleteFunctionEventInvokeConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionEventInvokeConfig Lambda: DeleteFunctionEventInvokeConfig}
+   */
+  DeleteFunctionEventInvokeConfig: (input: { FunctionName: string, Qualifier?: string }) => Promise<DeleteFunctionEventInvokeConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunctionUrlConfig.html Lambda: DeleteFunctionUrlConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteFunctionUrlConfig Lambda: DeleteFunctionUrlConfig}
+   */
+  DeleteFunctionUrlConfig: (input: { FunctionName: string, Qualifier?: string }) => Promise<DeleteFunctionUrlConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteLayerVersion.html Lambda: DeleteLayerVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteLayerVersion Lambda: DeleteLayerVersion}
+   */
+  DeleteLayerVersion: (input: { LayerName: string, VersionNumber: number }) => Promise<DeleteLayerVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteProvisionedConcurrencyConfig.html Lambda: DeleteProvisionedConcurrencyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#DeleteProvisionedConcurrencyConfig Lambda: DeleteProvisionedConcurrencyConfig}
+   */
+  DeleteProvisionedConcurrencyConfig: (input: { FunctionName: string, Qualifier: string }) => Promise<DeleteProvisionedConcurrencyConfigResponse>
   /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#GetAccountSettings Lambda: GetAccountSettings} */
   GetAccountSettings: () => Promise<GetAccountSettingsResponse>
   /**
@@ -191,6 +253,42 @@ declare interface AwsLiteLambda {
   Invoke: (input: { FunctionName: string, InvocationType?: string, Payload: any[] | Record<string, any>, LogType?: string, ClientContext?: string, Qualifier?: string }) => Promise<InvokeResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html Lambda: ListAliases}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListAliases Lambda: ListAliases}
+   */
+  ListAliases: (input: { FunctionName: string, FunctionVersion?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAliasesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListCodeSigningConfigs.html Lambda: ListCodeSigningConfigs}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListCodeSigningConfigs Lambda: ListCodeSigningConfigs}
+   */
+  ListCodeSigningConfigs: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListCodeSigningConfigsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html Lambda: ListFunctions}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctions Lambda: ListFunctions}
+   */
+  ListFunctions: (input: { FunctionVersion?: string, Marker?: string, MasterRegion?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html Lambda: ListFunctionUrlConfigs}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionUrlConfigs Lambda: ListFunctionUrlConfigs}
+   */
+  ListFunctionUrlConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionUrlConfigsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html Lambda: ListLayers}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListLayers Lambda: ListLayers}
+   */
+  ListLayers: (input: { CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListLayersResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html Lambda: ListLayerVersions}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListLayerVersions Lambda: ListLayerVersions}
+   */
+  ListLayerVersions: (input: { LayerName: string, CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListLayerVersionsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html Lambda: PutFunctionConcurrency}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionConcurrency Lambda: PutFunctionConcurrency}
    */
@@ -230,11 +328,19 @@ export type {
   AddPermissionResponse,
   CreateAliasResponse,
   CreateCodeSigningConfigResponse,
+  CreateEventSourceMappingResponse,
   CreateFunctionResponse,
+  CreateFunctionUrlConfigResponse,
   DeleteAliasResponse,
   DeleteCodeSigningConfigResponse,
   DeleteEventSourceMappingResponse,
+  DeleteFunctionResponse,
+  DeleteFunctionCodeSigningConfigResponse,
   DeleteFunctionConcurrencyResponse,
+  DeleteFunctionEventInvokeConfigResponse,
+  DeleteFunctionUrlConfigResponse,
+  DeleteLayerVersionResponse,
+  DeleteProvisionedConcurrencyConfigResponse,
   GetAccountSettingsResponse,
   GetAliasResponse,
   GetCodeSigningConfigResponse,
@@ -252,6 +358,12 @@ export type {
   GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigResponse,
   InvokeResponse,
+  ListAliasesResponse,
+  ListCodeSigningConfigsResponse,
+  ListFunctionsResponse,
+  ListFunctionUrlConfigsResponse,
+  ListLayersResponse,
+  ListLayerVersionsResponse,
   PutFunctionConcurrencyResponse,
   UpdateAliasResponse,
   UpdateFunctionCodeResponse,

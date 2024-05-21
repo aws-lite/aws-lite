@@ -2,6 +2,7 @@
  * Plugin maintained by: @architect
  */
 
+
 import incomplete from './incomplete.mjs'
 
 const service = 'lambda'
@@ -16,6 +17,8 @@ const num = { type: 'number' }
 const str = { type: 'string' }
 
 const Architectures = { ...arr, comment: 'System architecture, array can contain either `x86_64` (default) or `arm64`' }
+const CompatibleArchitecture = { ...str, comment: 'Set instruction set architecture to one of: `x86_64`, `arm64`' }
+const CompatibleRuntime = { ...str, comment: 'Set the runtime identifier' }
 const DeadLetterConfig = { ...obj, comment: 'Dead-letter queue configuration', ref: docRoot + 'API_DeadLetterConfig.html' }
 const Description = { ...str, comment: 'Description of the function' }
 const Environment = { ...obj, comment: 'Environment variable configuration', ref: docRoot + 'API_Environment.html' }
@@ -28,6 +31,8 @@ const ImageConfig = { ...obj, comment: 'Container image configuration (overrides
 const KMSKeyArn = { ...str, comment: 'ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables' }
 const LayerName = { ...str, required, comment: 'Name or ARN of the layer' }
 const Layers = { ...arr, comment: 'List of function layer ARNs (including version) to add to the function execution environment' }
+const Marker = { ...str, comment: 'Pagination token' }
+const MaxItems = { ...num, comment: 'Maximum number of items to be returned; maximum 10,000' }
 const MemorySize = { ...num, comment: 'Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation' }
 const Qualifier = { ...str, comment: 'Specify a version or alias to invoke a published version of the function' }
 const RevisionId = { ...str, comment: 'Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it' }
@@ -37,11 +42,17 @@ const Runtime = { ...str, comment: 'Runtime identifier', ref: docRoot + 'lambda-
 const SnapStart = { ...obj, comment: 'SnapStart settings', ref: docRoot + 'API_SnapStart.html' }
 const Timeout = { ...num, comment: 'Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900' }
 const TracingConfig = { ...obj, comment: 'Sample and trace a subset of incoming requests with X-Ray', ref: docRoot + 'API_TracingConfig.html' }
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionNumber = { ...num, required, comment: 'The version number of the layer' }
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
 
 const defaultResponse = ({ payload }) => payload
 const emptyResponse = () => { }
+const paginator = {
+  type: 'query',
+  token: 'NextMarker',
+  cursor: 'Marker',
+}
 
 const AddLayerVersionPermission = {
   awsDoc: docRoot + 'API_AddLayerVersionPermission.html',
@@ -79,7 +90,7 @@ const AddPermission = {
   validate: {
     FunctionName,
     Qualifier,
-    Action: { ...str, required, comment: 'Action that the principal can use on the function, for example, `lambda:InvokeFunction`' },
+    Action: { ...str, required, comment: 'Action that the principal can use on the function; for example, `lambda:InvokeFunction`' },
     EventSourceToken: { ...str, comment: 'A token that Alexa Smart Home requires from the invoker' },
     FunctionUrlAuthType: { ...str, comment: 'The type of authentication that your function URL uses. Set to AWS_IAM if you want to restrict access to authenticated users only. Set to NONE if you want to bypass IAM authentication to create a public endpoint' },
     Principal: { ...str, required, comment: 'The AWS service or AWS account that invokes the function' },
@@ -148,6 +159,42 @@ const CreateCodeSigningConfig = {
   response: defaultResponse,
 }
 
+const CreateEventSourceMapping = {
+  awsDoc: docRoot + 'API_CreateEventSourceMapping.html',
+  validate: {
+    FunctionName,
+    AmazonManagedKafkaEventSourceConfig: { ...obj, comment: 'Configuration settings for an Amazon Managed Streaming for Apache Kafka event source' },
+    BatchSize: { ...num, comment: 'Maximum number of records from 1 to 10000 in each batch that Lambda pulls from the stream or queue', ref:  docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-BatchSize' },
+    BisectBatchOnFunctionError: { ...bool, comment: 'If the function returns an error, divide the batch and try again (only for Kinesis and DynamoDB streams)' },
+    DestinationConfig: { ...obj, comment: 'Specify the destination of an event after being processed by Lambda', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DestinationConfig' },
+    DocumentDBEventSourceConfig: { ...obj, comment: 'Configuration for a `DocumentDB` event source', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DocumentDBEventSourceConfig' },
+    Enabled: { ...bool, comment: 'Set to `false` to disable event source upon creation' },
+    EventSourceArn: { ...str, comment: 'ARN of the event source' },
+    FilterCriteria: { ...obj, comment: 'Define how incoming events will be filtered', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FilterCriteria' },
+    FunctionResponseTypes: { ...arr, comment: 'A list of at most 1 string defining the current response type enum applied to the event source mapping; For Kinesis, DynamoDB Streams, and Amazon SQS', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FunctionResponseTypes' },
+    MaximumBatchingWindowInSeconds: { ...num, comment: 'Maximum time (in seconds) from 0 to 300 that Lambda may spend gathering records before invoking the function', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-MaximumBatchingWindowInSeconds' },
+    MaximumRecordAgeInSeconds: { ...num, comment: 'Maximum age between -1 (infinite, default) to 604,800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams' },
+    MaximumRetryAttempts: { ...num, comment: 'Maximum number of tries between -1 (infinite, default) to 10,000 before a record is discarded; `Kinesis` and `DynamoDB` only ' },
+    ParallelizationFactor: { ...num, comment: 'Number of batches between 1 to 10 that can be processed from each shard concurrently' },
+    Queues: { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Amazon MQ` broker destination queue to consume' },
+    ScalingConfig: { ...obj, comment: 'Configure scaling for the event source; Amazon SQS only', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-ScalingConfig' },
+    SelfManagedEventSource: { ...obj, comment: 'A self managed `Apache Kafka` cluster to receive records from', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
+    SelfManagedKafkaEventSourceConfig: { ...obj, comment: 'Configure a self managed `Apache Kafka` event source', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
+    SourceAccessConfigurations: { ...arr, comment: 'Array of at most 22 `SourceAccessConfiguration` objects to specifying authentication protocols or VPC components required to secure the event source', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SourceAccessConfigurations' },
+    StartingPosition: { ...str, comment: 'Position in a stream to begin reading, valid entries are `TRIM_HORIZON` (all available messages), `LATEST` (from now or after) or `AT_TIMESTAMP` (specify timestamp)', ref: docRoot +  'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition' },
+    StartingPositionTimestamp: { ...obj, comment: 'The `timestamp` in `Unix time seconds` used when `StartingPosition` is set to `AT_TIMESTAMP`; cannot be in the future' },
+    Topics: { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Kafka` topic' },
+    TumblingWindowInSeconds: { ...num, comment: 'Time (in seconds) from 0 to 900 specifying the duration of a processing window for `DynamoDB` and `Kinesis` event stream sources' },
+  },
+  request: (params) => {
+    return {
+      path: '/2015-03-31/event-source-mappings/',
+      payload: params,
+    }
+  },
+  response: defaultResponse,
+}
+
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
   validate: {
@@ -179,6 +226,33 @@ const CreateFunction = {
   request: async (payload) => {
     return {
       path: '/2015-03-31/functions',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const CreateFunctionUrlConfig = {
+  awsDoc: docRoot + 'API_CreateFunctionUrlConfig.html',
+  validate: {
+    AuthType: { ...str, required, comment: 'Type of authentication that the function URL will use, either `AWS_IAM` or `NONE`' },
+    FunctionName,
+    Cors: { ...obj, comment: 'Cross-origin resource sharing settings', ref: docRoot +  'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-Cors' },
+    InvokeMode: { ...str, comment: 'Specify how the function will be invoked, either `BUFFERED` (default, uses the `Invoke` API operation) or `RESPONSE_STREAM` (streams results as they become available, uses the `InvokeWithResponseStream` API operation)', ref: docRoot + 'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-InvokeMode' },
+    Qualifier,
+  },
+  request: (params) => {
+    const { FunctionName, Qualifier } = params
+    let payload = { ...params }
+    let query
+    delete payload.FunctionName
+    if (Qualifier) {
+      query = { Qualifier }
+      delete payload.Qualifier
+    }
+    return {
+      path: `/2021-10-31/functions/${FunctionName}/url`,
+      query,
       payload,
     }
   },
@@ -228,6 +302,38 @@ const DeleteEventSourceMapping = {
   response: defaultResponse,
 }
 
+const DeleteFunction = {
+  awsDoc: docRoot + 'API_DeleteFunction.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2015-03-31/functions/${FunctionName}`,
+      query,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteFunctionCodeSigningConfig = {
+  awsDoc: docRoot + 'API_DeleteFunctionCodeSigningConfig.html',
+  validate: {
+    FunctionName,
+  },
+  request: ({ FunctionName }) => {
+    return {
+      path: `/2020-06-30/functions/${FunctionName}/code-signing-config`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
 const DeleteFunctionConcurrency = {
   awsDoc: docRoot + 'API_DeleteFunctionConcurrency.html',
   validate: {
@@ -236,6 +342,73 @@ const DeleteFunctionConcurrency = {
   request: ({ FunctionName }) => {
     return {
       path: `/2017-10-31/functions/${FunctionName}/concurrency`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteFunctionEventInvokeConfig = {
+  awsDoc: docRoot + 'API_DeleteFunctionEventInvokeConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2019-09-25/functions/${FunctionName}/event-invoke-config`,
+      query,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteFunctionUrlConfig = {
+  awsDoc: docRoot + 'API_DeleteFunctionUrlConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier,
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    let query
+    if (Qualifier) query = { Qualifier }
+    return {
+      path: `/2021-10-31/functions/${FunctionName}/url`,
+      query,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteLayerVersion = {
+  awsDoc: docRoot + 'API_DeleteLayerVersion.html',
+  validate: {
+    LayerName,
+    VersionNumber,
+  },
+  request: ({ LayerName, VersionNumber }) => {
+    return {
+      path: `/2018-10-31/layers/${LayerName}/versions/${VersionNumber}`,
+      method: 'DELETE',
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteProvisionedConcurrencyConfig = {
+  awsDoc: docRoot + 'API_DeleteProvisionedConcurrencyConfig.html',
+  validate: {
+    FunctionName,
+    Qualifier: { ...Qualifier, required },
+  },
+  request: ({ FunctionName, Qualifier }) => {
+    return {
+      path: `/2019-09-30/functions/${FunctionName}/provisioned-concurrency`,
+      query: { Qualifier },
       method: 'DELETE',
     }
   },
@@ -523,6 +696,159 @@ const Invoke = {
   },
 }
 
+const ListAliases = {
+  awsDoc: docRoot + 'API_ListAliases.html',
+  validate: {
+    FunctionName,
+    FunctionVersion,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let { FunctionName } = params
+    let query = { ...params }
+    delete query.FunctionName
+    let paginate
+    if (query.paginate) {
+      delete query.paginate
+      paginate = true
+    }
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/aliases`,
+      paginate,
+      paginator: { ...paginator, accumulator: 'Aliases' },
+      query,
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListCodeSigningConfigs = {
+  awsDoc: docRoot + 'API_ListCodeSigningConfigs.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+
+    return {
+      path: '/2020-04-22/code-signing-configs/',
+      query: params,
+      paginate,
+      paginator: { ...paginator, accumulator: 'CodeSigningConfigs' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListFunctions = {
+  awsDoc: docRoot + 'API_ListFunctions.html',
+  validate: {
+    FunctionVersion: { ...str, comment: 'Set to `ALL` to include entries for all published versions' },
+    Marker,
+    MasterRegion: { ...str, comment: 'Display `LambdaEdge` functions replicated from a master function in a specified region', ref: docRoot + 'API_ListFunctions.html#API_ListFunctions_RequestSyntax' },
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+    return {
+      path: '/2015-03-31/functions/',
+      query: params,
+      paginate,
+      paginator: { ...paginator, accumulator: 'Functions' },
+    }
+  },
+}
+
+const ListFunctionUrlConfigs = {
+  awsDoc: docRoot + 'API_ListFunctionUrlConfigs.html',
+  validate: {
+    FunctionName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { FunctionName, paginate } = params
+    let query = { ...params }
+    delete query.FunctionName
+    if (paginate) delete query.paginate
+    return {
+      path: `/2021-10-31/functions/${FunctionName}/urls`,
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'FunctionUrlConfigs' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListLayers = {
+  awsDoc: docRoot + 'API_ListLayers.html',
+  validate: {
+    CompatibleArchitecture,
+    CompatibleRuntime: { ...CompatibleRuntime, ref: docRoot + 'API_ListLayers.html#API_ListLayers_RequestSyntax' },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let paginate
+    if (params.paginate) {
+      delete params.paginate
+      paginate = true
+    }
+    return {
+      path: '/2018-10-31/layers',
+      query: params,
+      paginate,
+      paginator: { ...paginator, accumulator: 'Layers' },
+    }
+  },
+  response: defaultResponse,
+}
+
+const ListLayerVersions = {
+  awsDoc: docRoot + 'API_ListLayerVersions.html',
+  validate: {
+    LayerName,
+    CompatibleArchitecture,
+    CompatibleRuntime: { ...CompatibleRuntime, ref: docRoot + 'API_ListLayerVersions.html#API_ListLayerVersions_RequestSyntax' },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { LayerName } = params
+    let query = { ...params }
+    let paginate
+    delete query.LayerName
+    if (query.paginate) {
+      paginate = true
+      delete query.paginate
+    }
+    return {
+      path: `/2018-10-31/layers/${LayerName}/versions`,
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'LayerVersions' },
+    }
+  },
+  response: defaultResponse,
+}
+
 const PutFunctionConcurrency = {
   awsDoc: docRoot + 'API_PutFunctionConcurrency.html',
   validate: {
@@ -642,11 +968,19 @@ export default {
     AddPermission,
     CreateAlias,
     CreateCodeSigningConfig,
+    CreateEventSourceMapping,
     CreateFunction,
+    CreateFunctionUrlConfig,
     DeleteAlias,
     DeleteCodeSigningConfig,
     DeleteEventSourceMapping,
+    DeleteFunction,
+    DeleteFunctionCodeSigningConfig,
     DeleteFunctionConcurrency,
+    DeleteFunctionEventInvokeConfig,
+    DeleteFunctionUrlConfig,
+    DeleteLayerVersion,
+    DeleteProvisionedConcurrencyConfig,
     GetAccountSettings,
     GetAlias,
     GetCodeSigningConfig,
@@ -664,6 +998,12 @@ export default {
     GetProvisionedConcurrencyConfig,
     GetRuntimeManagementConfig,
     Invoke,
+    ListAliases,
+    ListCodeSigningConfigs,
+    ListFunctions,
+    ListFunctionUrlConfigs,
+    ListLayers,
+    ListLayerVersions,
     PutFunctionConcurrency,
     UpdateAlias,
     UpdateFunctionCode,
