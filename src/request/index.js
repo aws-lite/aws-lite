@@ -1,10 +1,7 @@
-let { awsjson, buildXML, getEndpointParams, tidyQuery, validateProtocol, AwsJSONContentType, XMLContentType } = require('../lib')
+let { awsjson, copy, buildXML, getEndpointParams, tidyQuery, validateProtocol, AwsJSONContentType, XMLContentType } = require('../lib')
 let { globalServices, semiGlobalServices } = require('../lib/services')
 let { is } = require('../lib/validate')
 let request = require('./request')
-
-/* istanbul ignore next */
-let copy = obj => JSON.parse(JSON.stringify(obj))
 
 module.exports = async function _request (params, creds, region, config, metadata) {
   /* istanbul ignore next: TODO remove + test */

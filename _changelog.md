@@ -2,12 +2,19 @@
 
 ---
 
-## [0.21.5] 2024-05-18
+## [0.21.6] 2024-05-20
 
+### Fixed
+
+- Fixed issue where `aws4` mutates values passed as references, possibly breaking sequential requests; thanks @w5mix!
+
+---
+
+## [0.21.5] 2024-05-18
 
 ### Changed
 
-- Increased retry latency to better match AWS SDK v3's behavior; should improve #127
+- Increased retry latency to better match AWS SDK v3's behavior; should improve #127; thanks @alexbepple!
 
 ---
 
