@@ -37,18 +37,18 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "aws4": "^1.12.0",
+    "aws4": "^1.13.0",
     "ini": "^4.1.2"
   },
   "devDependencies": {
     "@actions/core": "^1.10.1",
     "@architect/eslint-config": "^3.0.0",
-    "@aws-sdk/util-dynamodb": "^3.575.0",
-    "@smithy/smithy-client": "^3.0.0",
+    "@aws-sdk/util-dynamodb": "^3.577.0",
+    "@smithy/smithy-client": "^3.0.1",
     "adm-zip": "^0.5.12",
     "cross-env": "^7.0.3",
-    "eslint": "^9.2.0",
-    "fast-xml-parser": "^4.3.6",
+    "eslint": "^9.3.0",
+    "fast-xml-parser": "^4.4.0",
     "mock-tmp": "^0.0.4",
     "nyc": "^15.1.0",
     "semver": "^7.6.2",
