@@ -60,8 +60,12 @@ import {
   TagResourceCommandOutput as TagResourceResponse,
   UntagResourceCommandOutput as UntagResourceResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
+  UpdateCodeSigningConfigCommandOutput as UpdateCodeSigningConfigResponse,
+  UpdateEventSourceMappingCommandOutput as UpdateEventSourceMappingResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationCommandOutput as UpdateFunctionConfigurationResponse,
+  UpdateFunctionEventInvokeConfigCommandOutput as UpdateFunctionEventInvokeConfigResponse,
+  UpdateFunctionUrlConfigCommandOutput as UpdateFunctionUrlConfigResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-lambda";
 
@@ -420,6 +424,18 @@ declare interface AwsLiteLambda {
   UpdateAlias: (input: { FunctionName: string, Name: string, Description?: string, FunctionVersion?: string, RevisionId?: string, RoutingConfig?: Record<string, any> }) => Promise<UpdateAliasResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html Lambda: UpdateCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateCodeSigningConfig Lambda: UpdateCodeSigningConfig}
+   */
+  UpdateCodeSigningConfig: (input: { CodeSigningConfigArn: string, AllowedPublishers?: Record<string, any>, CodeSigningPolicies?: Record<string, any>, Description?: string }) => Promise<UpdateCodeSigningConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html Lambda: UpdateEventSourceMapping}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateEventSourceMapping Lambda: UpdateEventSourceMapping}
+   */
+  UpdateEventSourceMapping: (input: { UUID: string, AmazonManagedKafkaEventSourceConfig?: Record<string, any>, BatchSize?: number, BisectBatchOnFunctionError?: boolean, DestinationConfig?: Record<string, any>, DocumentDBEventSourceConfig?: Record<string, any>, Enabled?: boolean, FilterCriteria?: Record<string, any>, FunctionName?: string, FunctionResponseTypes?: any[], MaximumBatchingWindowInSeconds?: number, MaximumRecordAgeInSeconds?: number, MaximumRetryAttempts?: number, ParallelizationFactor?: number, Queues?: any[], ScalingConfig?: Record<string, any>, SourceAccessConfigurations?: any[], TumblingWindowInSeconds?: number }) => Promise<UpdateEventSourceMappingResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html Lambda: UpdateFunctionCode}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateFunctionCode Lambda: UpdateFunctionCode}
    */
@@ -430,6 +446,18 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateFunctionConfiguration Lambda: UpdateFunctionConfiguration}
    */
   UpdateFunctionConfiguration: (input: { FunctionName: string, DeadLetterConfig?: Record<string, any>, Description?: string, Environment?: Record<string, any>, EphemeralStorage?: Record<string, any>, FileSystemConfigs?: any[], Handler?: string, ImageConfig?: Record<string, any>, KMSKeyArn?: string, Layers?: any[], MemorySize?: number, RevisionId?: string, Role?: string, Runtime?: string, SnapStart?: Record<string, any>, Timeout?: number, TracingConfig?: Record<string, any>, VpcConfig?: Record<string, any> }) => Promise<UpdateFunctionConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html Lambda: UpdateFunctionEventInvokeConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateFunctionEventInvokeConfig Lambda: UpdateFunctionEventInvokeConfig}
+   */
+  UpdateFunctionEventInvokeConfig: (input: { FunctionName: string, DestinationConfig?: Record<string, any>, MaximumEventAgeInSeconds?: number, MaximumRetryAttempts?: number }) => Promise<UpdateFunctionEventInvokeConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html Lambda: UpdateFunctionUrlConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateFunctionUrlConfig Lambda: UpdateFunctionUrlConfig}
+   */
+  UpdateFunctionUrlConfig: (input: { FunctionName: string, AuthType?: string, Cors?: Record<string, any>, InvokeMode?: string, Qualifier?: string }) => Promise<UpdateFunctionUrlConfigResponse>
   // $METHODS_END
 }
 
@@ -502,7 +530,11 @@ export type {
   TagResourceResponse,
   UntagResourceResponse,
   UpdateAliasResponse,
+  UpdateCodeSigningConfigResponse,
+  UpdateEventSourceMappingResponse,
   UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationResponse,
+  UpdateFunctionEventInvokeConfigResponse,
+  UpdateFunctionUrlConfigResponse,
   // $EXPORT_END
 }

@@ -16,33 +16,61 @@ const obj = { type: 'object' }
 const num = { type: 'number' }
 const str = { type: 'string' }
 
+const AmazonManagedKafkaEventSourceConfig = { ...obj, comment: 'Configuration settings for an Amazon Managed Streaming for Apache Kafka event source' }
 const Architectures = { ...arr, comment: 'System architecture, array can contain either `x86_64` (default) or `arm64`' }
+const AuthType = { ...str, required, comment: 'Type of authentication that the function URL will use, either `AWS_IAM` or `NONE`' }
+const BatchSize = { ...num, comment: 'Maximum number of records from 1 to 10000 in each batch that Lambda pulls from the stream or queue' }
+const BisectBatchOnFunctionError = { ...bool, comment: 'If the function returns an error, divide the batch and try again (only for Kinesis and DynamoDB streams)' }
+const CodeSigningConfigArn = { ...str, required, comment: 'ARN of the code signing configuration' }
+const CodeSigningPolicies = { ...obj, comment: 'Define actions to take if validation checks fail' }
 const CompatibleArchitecture = { ...str, comment: 'Set instruction set architecture to one of: `x86_64`, `arm64`' }
 const CompatibleRuntime = { ...str, comment: 'Set the runtime identifier' }
+const Cors = { ...obj, comment: 'Cross-origin resource sharing settings' }
 const DeadLetterConfig = { ...obj, comment: 'Dead-letter queue configuration', ref: docRoot + 'API_DeadLetterConfig.html' }
 const Description = { ...str, comment: 'Description of the function' }
+const DestinationConfig = { ...obj, comment: 'Specify the destination of an event after being processed by Lambda' }
+const DocumentDBEventSourceConfig = { ...obj, comment: 'Configuration for a `DocumentDB` event source' }
+const Enabled = { ...bool, comment: 'Set to `false` to disable event source upon creation' }
 const Environment = { ...obj, comment: 'Environment variable configuration', ref: docRoot + 'API_Environment.html' }
 const EphemeralStorage = { ...obj, comment: 'Size of the function `/tmp` directory (in MB), from 512 (default) to 10240', ref: docRoot + 'API_EphemeralStorage.html' }
+const EventSourceArn = { ...str, comment: 'ARN of the event source' }
 const FileSystemConfigs = { ...arr, comment: 'EFS file system connection settings', ref: docRoot + 'API_FileSystemConfig.html' }
+const FilterCriteria = { ...obj, comment: 'Define how incoming events will be filtered' }
 const FunctionName = { ...str, required, comment: 'The name of the Lambda function, version, or alias' }
+const FunctionResponseTypes = { ...arr, comment: 'A list of at most 1 string defining the current response type enum applied to the event source mapping; For Kinesis, DynamoDB Streams, and Amazon SQS' }
 const FunctionVersion = { ...str, comment: 'Version of the aliased function' }
 const Handler = { ...str, comment: 'The name of the handler file and method method within your code that Lambda calls to run your function (e.g. `index.handler`)', ref: docRoot + 'foundation-progmodel.html' }
 const ImageConfig = { ...obj, comment: 'Container image configuration (overrides Docker file)', ref: docRoot + 'API_ImageConfig.html' }
+const InvokeMode = { ...str, comment: 'Specify how the function will be invoked, either `BUFFERED` (default, uses the `Invoke` API operation) or `RESPONSE_STREAM` (streams results as they become available, uses the `InvokeWithResponseStream` API operation)' }
 const KMSKeyArn = { ...str, comment: 'ARN of the Key Management Service (KMS) customer managed key used to encrypt your function environment variables' }
 const LayerName = { ...str, required, comment: 'Name or ARN of the layer' }
 const Layers = { ...arr, comment: 'List of function layer ARNs (including version) to add to the function execution environment' }
 const Marker = { ...str, comment: 'Pagination token' }
+const MaximumBatchingWindowInSeconds = { ...num, comment: 'Maximum time (in seconds) from 0 to 300 that Lambda may spend gathering records before invoking the function' }
+const MaximumEventAgeInSeconds = { ...num, comment: 'Set a maximum age in whole seconds between 60 and 21,600 (inclusive) for events to be processed' }
+const MaximumRecordAgeInSeconds = { ...num, comment: 'Maximum age between -1 (infinite, default) to 604,800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams' }
+const MaximumRetryAttempts = { ...num, comment: 'Maximum number of tries between -1 (infinite, default) to 10,000 before a record is discarded; `Kinesis` and `DynamoDB` only ' }
 const MaxItems = { ...num, comment: 'Maximum number of items to be returned; maximum 10,000' }
 const MemorySize = { ...num, comment: 'Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation' }
+const ParallelizationFactor = { ...num, comment: 'Number of batches between 1 to 10 that can be processed from each shard concurrently' }
 const Qualifier = { ...str, comment: 'Specify a version or alias to invoke a published version of the function' }
+const Queues = { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Amazon MQ` broker destination queue to consume' }
 const Resource = { ...str, required, comment: 'ARN of the lambda function' }
 const RevisionId = { ...str, comment: 'Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it' }
 const Role = { ...str, comment: `ARN of the function's execution role` }
 const RoutingConfig = { ...obj, comment: 'Configure function version weights', ref: docRoot + 'configuration-aliases.html#configuring-alias-routing' }
 const Runtime = { ...str, comment: 'Runtime identifier', ref: docRoot + 'lambda-runtimes.html' }
+const ScalingConfig = { ...obj, comment: 'Configure scaling for the event source; Amazon SQS only' }
+const SelfManagedEventSource = { ...obj, comment: 'A self managed `Apache Kafka` cluster to receive records from' }
+const SelfManagedKafkaEventSourceConfig = { ...obj, comment: 'Configure a self managed `Apache Kafka` event source' }
 const SnapStart = { ...obj, comment: 'SnapStart settings', ref: docRoot + 'API_SnapStart.html' }
+const SourceAccessConfigurations = { ...arr, comment: 'Array of at most 22 `SourceAccessConfiguration` objects to specifying authentication protocols or VPC components required to secure the event source' }
+const StartingPosition = { ...str, comment: 'Position in a stream to begin reading, valid entries are `TRIM_HORIZON` (all available messages), `LATEST` (from now or after) or `AT_TIMESTAMP` (specify timestamp)' }
+const StartingPositionTimestamp = { ...obj, comment: 'The `timestamp` in `Unix time seconds` used when `StartingPosition` is set to `AT_TIMESTAMP`; cannot be in the future' }
 const Timeout = { ...num, comment: 'Time (in seconds) a function is allowed to run before being stopped, from 3 (default) to 900' }
+const Topics = { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Kafka` topic' }
 const TracingConfig = { ...obj, comment: 'Sample and trace a subset of incoming requests with X-Ray', ref: docRoot + 'API_TracingConfig.html' }
+const TumblingWindowInSeconds = { ...num, comment: 'Time (in seconds) from 0 to 900 specifying the duration of a processing window for `DynamoDB` and `Kinesis` event stream sources' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionNumber = { ...num, required, comment: 'The version number of the layer' }
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
@@ -148,7 +176,7 @@ const CreateCodeSigningConfig = {
   awsDoc: docRoot + 'API_CreateCodeSigningConfig.html',
   validate: {
     AllowedPublishers: { ...obj, required, comment: 'Signing profiles for this code signing configuration', ref: 'https://docs.aws.amazon.com/lambda/latest/api/API_AllowedPublishers.html' },
-    CodeSigningPolicies: { ...obj, comment: 'Define actions to take if validation checks fail', ref: 'https://docs.aws.amazon.com/lambda/latest/api/API_CodeSigningPolicies.html' },
+    CodeSigningPolicies: { ...CodeSigningPolicies, ref: 'https://docs.aws.amazon.com/lambda/latest/api/API_CodeSigningPolicies.html' },
     Description,
   },
   request: async (payload) => {
@@ -164,28 +192,28 @@ const CreateEventSourceMapping = {
   awsDoc: docRoot + 'API_CreateEventSourceMapping.html',
   validate: {
     FunctionName,
-    AmazonManagedKafkaEventSourceConfig: { ...obj, comment: 'Configuration settings for an Amazon Managed Streaming for Apache Kafka event source' },
-    BatchSize: { ...num, comment: 'Maximum number of records from 1 to 10000 in each batch that Lambda pulls from the stream or queue', ref:  docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-BatchSize' },
-    BisectBatchOnFunctionError: { ...bool, comment: 'If the function returns an error, divide the batch and try again (only for Kinesis and DynamoDB streams)' },
-    DestinationConfig: { ...obj, comment: 'Specify the destination of an event after being processed by Lambda', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DestinationConfig' },
-    DocumentDBEventSourceConfig: { ...obj, comment: 'Configuration for a `DocumentDB` event source', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DocumentDBEventSourceConfig' },
-    Enabled: { ...bool, comment: 'Set to `false` to disable event source upon creation' },
-    EventSourceArn: { ...str, comment: 'ARN of the event source' },
-    FilterCriteria: { ...obj, comment: 'Define how incoming events will be filtered', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FilterCriteria' },
-    FunctionResponseTypes: { ...arr, comment: 'A list of at most 1 string defining the current response type enum applied to the event source mapping; For Kinesis, DynamoDB Streams, and Amazon SQS', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FunctionResponseTypes' },
-    MaximumBatchingWindowInSeconds: { ...num, comment: 'Maximum time (in seconds) from 0 to 300 that Lambda may spend gathering records before invoking the function', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-MaximumBatchingWindowInSeconds' },
-    MaximumRecordAgeInSeconds: { ...num, comment: 'Maximum age between -1 (infinite, default) to 604,800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams' },
-    MaximumRetryAttempts: { ...num, comment: 'Maximum number of tries between -1 (infinite, default) to 10,000 before a record is discarded; `Kinesis` and `DynamoDB` only ' },
-    ParallelizationFactor: { ...num, comment: 'Number of batches between 1 to 10 that can be processed from each shard concurrently' },
-    Queues: { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Amazon MQ` broker destination queue to consume' },
-    ScalingConfig: { ...obj, comment: 'Configure scaling for the event source; Amazon SQS only', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-ScalingConfig' },
-    SelfManagedEventSource: { ...obj, comment: 'A self managed `Apache Kafka` cluster to receive records from', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
-    SelfManagedKafkaEventSourceConfig: { ...obj, comment: 'Configure a self managed `Apache Kafka` event source', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
-    SourceAccessConfigurations: { ...arr, comment: 'Array of at most 22 `SourceAccessConfiguration` objects to specifying authentication protocols or VPC components required to secure the event source', ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SourceAccessConfigurations' },
-    StartingPosition: { ...str, comment: 'Position in a stream to begin reading, valid entries are `TRIM_HORIZON` (all available messages), `LATEST` (from now or after) or `AT_TIMESTAMP` (specify timestamp)', ref: docRoot +  'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition' },
-    StartingPositionTimestamp: { ...obj, comment: 'The `timestamp` in `Unix time seconds` used when `StartingPosition` is set to `AT_TIMESTAMP`; cannot be in the future' },
-    Topics: { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Kafka` topic' },
-    TumblingWindowInSeconds: { ...num, comment: 'Time (in seconds) from 0 to 900 specifying the duration of a processing window for `DynamoDB` and `Kinesis` event stream sources' },
+    AmazonManagedKafkaEventSourceConfig: { ...AmazonManagedKafkaEventSourceConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-AmazonManagedKafkaEventSourceConfig' },
+    BatchSize: { ...BatchSize, ref:  docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-BatchSize' },
+    BisectBatchOnFunctionError,
+    DestinationConfig: { ...DestinationConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DestinationConfig' },
+    DocumentDBEventSourceConfig: { ...DocumentDBEventSourceConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DocumentDBEventSourceConfig' },
+    Enabled,
+    EventSourceArn,
+    FilterCriteria: { ...FilterCriteria, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FilterCriteria' },
+    FunctionResponseTypes: { ...FunctionResponseTypes, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-FunctionResponseTypes' },
+    MaximumBatchingWindowInSeconds: { ...MaximumBatchingWindowInSeconds, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-MaximumBatchingWindowInSeconds' },
+    MaximumRecordAgeInSeconds: { ...MaximumRecordAgeInSeconds },
+    MaximumRetryAttempts,
+    ParallelizationFactor,
+    Queues,
+    ScalingConfig: { ...ScalingConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-ScalingConfig' },
+    SelfManagedEventSource: { ...SelfManagedEventSource, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
+    SelfManagedKafkaEventSourceConfig: { ...SelfManagedKafkaEventSourceConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
+    SourceAccessConfigurations,
+    StartingPosition: { ...StartingPosition, ref: docRoot +  'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition' },
+    StartingPositionTimestamp,
+    Topics,
+    TumblingWindowInSeconds,
   },
   request: (params) => {
     return {
@@ -236,10 +264,10 @@ const CreateFunction = {
 const CreateFunctionUrlConfig = {
   awsDoc: docRoot + 'API_CreateFunctionUrlConfig.html',
   validate: {
-    AuthType: { ...str, required, comment: 'Type of authentication that the function URL will use, either `AWS_IAM` or `NONE`' },
+    AuthType,
     FunctionName,
-    Cors: { ...obj, comment: 'Cross-origin resource sharing settings', ref: docRoot +  'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-Cors' },
-    InvokeMode: { ...str, comment: 'Specify how the function will be invoked, either `BUFFERED` (default, uses the `Invoke` API operation) or `RESPONSE_STREAM` (streams results as they become available, uses the `InvokeWithResponseStream` API operation)', ref: docRoot + 'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-InvokeMode' },
+    Cors: { ...Cors, ref: docRoot +  'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-Cors' },
+    InvokeMode: { ...InvokeMode, ref: docRoot + 'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-InvokeMode' },
     Qualifier,
   },
   request: (params) => {
@@ -278,7 +306,7 @@ const DeleteAlias = {
 const DeleteCodeSigningConfig = {
   awsDoc: docRoot + 'API_DeleteCodeSigningConfig.html',
   validate: {
-    CodeSigningConfigArn: { ...str, required, comment: 'ARN of the code signing configuration' },
+    CodeSigningConfigArn,
   },
   request: ({ CodeSigningConfigArn }) => {
     return {
@@ -444,7 +472,7 @@ const GetAlias = {
 const GetCodeSigningConfig = {
   awsDoc: docRoot + 'API_GetCodeSigningConfig.html',
   validate: {
-    CodeSigningConfigArn: { ...str, required, comment: 'ARN of the code signing configuration' },
+    CodeSigningConfigArn,
   },
   request: ({ CodeSigningConfigArn }) => {
     return {
@@ -843,7 +871,7 @@ const ListFunctions = {
 const ListFunctionsByCodeSigningConfig = {
   awsDoc: docRoot + 'API_ListFunctionsByCodeSigningConfig.html',
   validate: {
-    CodeSigningConfigArn: { ...str, required, comment: 'ARN of the code signing configuration' },
+    CodeSigningConfigArn,
     Marker,
     MaxItems,
     paginate: valPaginate,
@@ -1057,7 +1085,7 @@ const PutFunctionCodeSigningConfig = {
   awsDoc: docRoot + 'API_PutFunctionCodeSigningConfig.html',
   validate: {
     FunctionName,
-    CodeSigningConfigArn: { ...str, required, comment: 'ARN of the code signing configuration' },
+    CodeSigningConfigArn,
   },
   request: ({ FunctionName, CodeSigningConfigArn }) => {
     return {
@@ -1090,8 +1118,8 @@ const PutFunctionEventInvokeConfig = {
   awsDoc: docRoot + 'API_PutFunctionEventInvokeConfig.html',
   validate: {
     FunctionName,
-    DestinationConfig: { ...obj, comment: 'Specify a destination for events after being passed to the function', ref: docRoot + 'API_PutFunctionEventInvokeConfig.html#lambda-PutFunctionEventInvokeConfig-request-DestinationConfig' },
-    MaximumEventAgeInSeconds: { ...num, comment: 'Set a maximum age in whole seconds between 60 and 21,600 (inclusive) for events to be processed'  },
+    DestinationConfig: { ...DestinationConfig, ref: docRoot + 'API_PutFunctionEventInvokeConfig.html#lambda-PutFunctionEventInvokeConfig-request-DestinationConfig' },
+    MaximumEventAgeInSeconds,
     MaximumRetryAttempts: { ...num, comment: 'Set a maximum number of retries between 0 and 2 (inclusive) when the function returns an error' },
     Qualifier,
   },
@@ -1261,6 +1289,62 @@ const UpdateAlias = {
   response: defaultResponse,
 }
 
+const UpdateCodeSigningConfig = {
+  awsDoc: docRoot + 'API_UpdateCodeSigningConfig.html',
+  validate: {
+    CodeSigningConfigArn,
+    AllowedPublishers: { ...obj, comment: 'Signing profiles for this code signing configuration', ref: docRoot + 'API_UpdateCodeSigningConfig.html#lambda-UpdateCodeSigningConfig-request-AllowedPublishers' },
+    CodeSigningPolicies: { ...CodeSigningPolicies, ref: docRoot + 'API_UpdateCodeSigningConfig.html#lambda-UpdateCodeSigningConfig-request-CodeSigningPolicies' },
+    Description,
+  },
+  request: (params) => {
+    const { CodeSigningConfigArn } = params
+    let payload = { ...params }
+    delete payload.CodeSigningConfigArn
+    return {
+      path: `/2020-04-22/code-signing-configs/${CodeSigningConfigArn}`,
+      method: 'PUT',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const UpdateEventSourceMapping = {
+  awsDoc: docRoot + 'API_UpdateEventSourceMapping.html',
+  validate: {
+    UUID: { ...str, required, comment: 'UUID of the event source mapping' },
+    AmazonManagedKafkaEventSourceConfig: { ...AmazonManagedKafkaEventSourceConfig, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-BatchSize' },
+    BatchSize: { ...BatchSize, ref:  docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-BatchSize' },
+    BisectBatchOnFunctionError,
+    DestinationConfig: { ...DestinationConfig, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-DestinationConfig' },
+    DocumentDBEventSourceConfig: { ...DocumentDBEventSourceConfig, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-DocumentDBEventSourceConfig' },
+    Enabled,
+    FilterCriteria: { ...FilterCriteria, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-FilterCriteria' },
+    FunctionName: { ...FunctionName, required: false },
+    FunctionResponseTypes: { ...FunctionResponseTypes, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-FunctionResponseTypes' },
+    MaximumBatchingWindowInSeconds: { ...MaximumBatchingWindowInSeconds, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-MaximumBatchingWindowInSeconds' },
+    MaximumRecordAgeInSeconds: { ...MaximumRecordAgeInSeconds },
+    MaximumRetryAttempts,
+    ParallelizationFactor,
+    Queues,
+    ScalingConfig: { ...ScalingConfig, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-ScalingConfig' },
+    SourceAccessConfigurations,
+    TumblingWindowInSeconds,
+  },
+  request: (params) => {
+    const { UUID } = params
+    let payload = { ...params }
+    delete payload.UUID
+    return {
+      path: `/2015-03-31/event-source-mappings/${UUID}`,
+      method: 'PUT',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
 const UpdateFunctionCode = {
   awsDoc: docRoot + 'API_UpdateFunctionCode.html',
   validate: {
@@ -1324,6 +1408,60 @@ const UpdateFunctionConfiguration = {
       path: `/2015-03-31/functions/${FunctionName}/configuration`,
       method: 'PUT',
       payload: params,
+    }
+  },
+  response: defaultResponse,
+}
+
+const UpdateFunctionEventInvokeConfig = {
+  awsDoc: docRoot + 'API_UpdateFunctionEventInvokeConfig.html',
+  validate: {
+    FunctionName,
+    DestinationConfig: { ...DestinationConfig, ref: docRoot + 'API_UpdateFunctionEventInvokeConfig.html#lambda-UpdateFunctionEventInvokeConfig-request-DestinationConfig' },
+    MaximumEventAgeInSeconds,
+    MaximumRetryAttempts,
+  },
+  request: (params) => {
+    const { FunctionName, Qualifier } = params
+    let query
+    let payload = { ...params }
+    delete payload.FunctionName
+    if (Qualifier) {
+      delete payload.Qualifier
+      query = { Qualifier }
+    }
+    return {
+      path: `/2019-09-25/functions/${FunctionName}/event-invoke-config`,
+      query,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const UpdateFunctionUrlConfig = {
+  awsDoc: docRoot + 'API_UpdateFunctionUrlConfig.html',
+  validate: {
+    FunctionName,
+    AuthType: { ...AuthType, required: false },
+    Cors: { ...Cors, ref: docRoot + 'API_UpdateFunctionUrlConfig.html#lambda-UpdateFunctionUrlConfig-request-Cors' },
+    InvokeMode: { ...InvokeMode, ref: docRoot + 'API_UpdateFunctionUrlConfig.html#lambda-UpdateFunctionUrlConfig-request-InvokeMode' },
+    Qualifier,
+  },
+  request: (params) => {
+    const { FunctionName, Qualifier } = params
+    let query
+    let payload = { ...params }
+    delete payload.FunctionName
+    if (Qualifier) {
+      delete payload.Qualifier
+      query = { Qualifier }
+    }
+    return {
+      path: `/2021-10-31/functions/${FunctionName}/url`,
+      method: 'PUT',
+      query,
+      payload,
     }
   },
   response: defaultResponse,
@@ -1393,8 +1531,12 @@ export default {
     TagResource,
     UntagResource,
     UpdateAlias,
+    UpdateCodeSigningConfig,
+    UpdateEventSourceMapping,
     UpdateFunctionCode,
     UpdateFunctionConfiguration,
+    UpdateFunctionEventInvokeConfig,
+    UpdateFunctionUrlConfig,
     ...incomplete,
   },
 }
