@@ -50,7 +50,11 @@ import {
   ListVersionsByFunctionCommandOutput as ListVersionsByFunctionResponse,
   PublishLayerVersionCommandOutput as PublishLayerVersionResponse,
   PublishVersionCommandOutput as PublishVersionResponse,
+  PutFunctionCodeSigningConfigCommandOutput as PutFunctionCodeSigningConfigResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
+  PutFunctionEventInvokeConfigCommandOutput as PutFunctionEventInvokeConfigResponse,
+  PutProvisionedConcurrencyConfigCommandOutput as PutProvisionedConcurrencyConfigResponse,
+  PutRuntimeManagementConfigCommandOutput as PutRuntimeManagementConfigResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationCommandOutput as UpdateFunctionConfigurationResponse,
@@ -352,10 +356,34 @@ declare interface AwsLiteLambda {
   PublishVersion: (input: { FunctionName: string, CodeSha256?: string, Description?: string, RevisionId?: string }) => Promise<PublishVersionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html Lambda: PutFunctionCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionCodeSigningConfig Lambda: PutFunctionCodeSigningConfig}
+   */
+  PutFunctionCodeSigningConfig: (input: { FunctionName: string, CodeSigningConfigArn: string }) => Promise<PutFunctionCodeSigningConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html Lambda: PutFunctionConcurrency}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionConcurrency Lambda: PutFunctionConcurrency}
    */
   PutFunctionConcurrency: (input: { FunctionName: string, ReservedConcurrentExecutions: number }) => Promise<PutFunctionConcurrencyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html Lambda: PutFunctionEventInvokeConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionEventInvokeConfig Lambda: PutFunctionEventInvokeConfig}
+   */
+  PutFunctionEventInvokeConfig: (input: { FunctionName: string, DestinationConfig?: Record<string, any>, MaximumEventAgeInSeconds?: number, MaximumRetryAttempts?: number, Qualifier?: string }) => Promise<PutFunctionEventInvokeConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html Lambda: PutProvisionedConcurrencyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutProvisionedConcurrencyConfig Lambda: PutProvisionedConcurrencyConfig}
+   */
+  PutProvisionedConcurrencyConfig: (input: { FunctionName: string, ProvisionedConcurrentExecutions: number, Qualifier: string }) => Promise<PutProvisionedConcurrencyConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html Lambda: PutRuntimeManagementConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutRuntimeManagementConfig Lambda: PutRuntimeManagementConfig}
+   */
+  PutRuntimeManagementConfig: (input: { FunctionName: string, UpdateRuntimeOn: string, Qualifier?: string, RuntimeVersionArn?: string }) => Promise<PutRuntimeManagementConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html Lambda: UpdateAlias}
@@ -436,7 +464,11 @@ export type {
   ListVersionsByFunctionResponse,
   PublishLayerVersionResponse,
   PublishVersionResponse,
+  PutFunctionCodeSigningConfigResponse,
   PutFunctionConcurrencyResponse,
+  PutFunctionEventInvokeConfigResponse,
+  PutProvisionedConcurrencyConfigResponse,
+  PutRuntimeManagementConfigResponse,
   UpdateAliasResponse,
   UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationResponse,

@@ -1032,6 +1032,42 @@ const PublishLayerVersion = {
   response: defaultResponse,
 }
 
+const PublishVersion = {
+  awsDoc: docRoot + 'API_PublishVersion.html',
+  validate: {
+    FunctionName,
+    CodeSha256: { ...str, comment: 'Checksum to confirm the function has not changed since being updated', ref: docRoot + 'API_PublishVersion.html#lambda-PublishVersion-request-CodeSha256' },
+    Description,
+    RevisionId,
+  },
+  request: (params) => {
+    const { FunctionName } = params
+    let payload = { ...params }
+    delete payload.FunctionName
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/versions`,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutFunctionCodeSigningConfig = {
+  awsDoc: docRoot + 'API_PutFunctionCodeSigningConfig.html',
+  validate: {
+    FunctionName,
+    CodeSigningConfigArn: { ...str, required, comment: 'ARN of the code signing configuration' },
+  },
+  request: ({ FunctionName, CodeSigningConfigArn }) => {
+    return {
+      path: `/2020-06-30/functions/${FunctionName}/code-signing-config`,
+      method: 'PUT',
+      payload: { CodeSigningConfigArn },
+    }
+  },
+  response: defaultResponse,
+}
+
 const PutFunctionConcurrency = {
   awsDoc: docRoot + 'API_PutFunctionConcurrency.html',
   validate: {
@@ -1049,20 +1085,74 @@ const PutFunctionConcurrency = {
   response: defaultResponse,
 }
 
-const PublishVersion = {
-  awsDoc: docRoot + 'API_PublishVersion.html',
+const PutFunctionEventInvokeConfig = {
+  awsDoc: docRoot + 'API_PutFunctionEventInvokeConfig.html',
   validate: {
     FunctionName,
-    CodeSha256: { ...str, comment: 'Checksum to confirm the function has not changed since being updated', ref: docRoot + 'API_PublishVersion.html#lambda-PublishVersion-request-CodeSha256' },
-    Description,
-    RevisionId,
+    DestinationConfig: { ...obj, comment: 'Specify a destination for events after being passed to the function', ref: docRoot + 'API_PutFunctionEventInvokeConfig.html#lambda-PutFunctionEventInvokeConfig-request-DestinationConfig' },
+    MaximumEventAgeInSeconds: { ...num, comment: 'Set a maximum age in whole seconds between 60 and 21,600 (inclusive) for events to be processed'  },
+    MaximumRetryAttempts: { ...num, comment: 'Set a maximum number of retries between 0 and 2 (inclusive) when the function returns an error' },
+    Qualifier,
   },
   request: (params) => {
-    const { FunctionName } = params
+    const { FunctionName, Qualifier } = params
+    let query
     let payload = { ...params }
     delete payload.FunctionName
+    if (Qualifier) {
+      query = { Qualifier }
+      delete payload.Qualifier
+    }
     return {
-      path: `/2015-03-31/functions/${FunctionName}/versions`,
+      path: `/2019-09-25/functions/${FunctionName}/event-invoke-config`,
+      method: 'PUT',
+      query,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutProvisionedConcurrencyConfig = {
+  awsDoc: docRoot + 'API_PutProvisionedConcurrencyConfig.html',
+  validate: {
+    FunctionName,
+    ProvisionedConcurrentExecutions: { ...num, required, comment: 'Amount of provisioned concurrency of at least 1, to allocate for the version or alias' },
+    Qualifier: { ...Qualifier, required },
+  },
+  request: (params) => {
+    const { FunctionName, Qualifier, ProvisionedConcurrentExecutions } = params
+    return {
+      path: `/2019-09-30/functions/${FunctionName}/provisioned-concurrency`,
+      method: 'PUT',
+      query: { Qualifier },
+      payload: { ProvisionedConcurrentExecutions },
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutRuntimeManagementConfig = {
+  awsDoc: docRoot + 'API_PutRuntimeManagementConfig.html',
+  validate: {
+    FunctionName,
+    UpdateRuntimeOn: { ...str, required, comment: 'Specify the runtime update mode; can be one of: `Auto` (default), `FunctionUpdate`, `Manual`', ref: docRoot + 'API_PutRuntimeManagementConfig.html#lambda-PutRuntimeManagementConfig-request-UpdateRuntimeOn' },
+    Qualifier: { ...str, comment: 'Specify a version of the function', ref: docRoot + 'API_PutRuntimeManagementConfig.html#API_PutRuntimeManagementConfig_RequestSyntax#Qualifier' },
+    RuntimeVersionArn: { ...str, comment: 'ARN of the runtime version the function will use' },
+  },
+  request: (params) => {
+    const { FunctionName, Qualifier } = params
+    let query
+    let payload = { ...params }
+    delete payload.FunctionName
+    if (Qualifier) {
+      query = { Qualifier }
+      delete payload.Qualifier
+    }
+    return {
+      path: `/2021-07-20/functions/${FunctionName}/runtime-management-config`,
+      method: 'PUT',
+      query,
       payload,
     }
   },
@@ -1216,7 +1306,11 @@ export default {
     ListVersionsByFunction,
     PublishLayerVersion,
     PublishVersion,
+    PutFunctionCodeSigningConfig,
     PutFunctionConcurrency,
+    PutFunctionEventInvokeConfig,
+    PutProvisionedConcurrencyConfig,
+    PutRuntimeManagementConfig,
     UpdateAlias,
     UpdateFunctionCode,
     UpdateFunctionConfiguration,

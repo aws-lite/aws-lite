@@ -765,6 +765,17 @@ Properties:
   - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
 
 
+### `PutFunctionCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`CodeSigningConfigArn` (string) [required]**
+  - ARN of the code signing configuration
+
+
 ### `PutFunctionConcurrency`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
@@ -774,6 +785,54 @@ Properties:
   - The name of the Lambda function, version, or alias
 - **`ReservedConcurrentExecutions` (number) [required]**
   - number of simultaneous executions to reserve
+
+
+### `PutFunctionEventInvokeConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`DestinationConfig` (object)**
+  - Specify a destination for events after being passed to the function
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html#lambda-PutFunctionEventInvokeConfig-request-DestinationConfig)
+- **`MaximumEventAgeInSeconds` (number)**
+  - Set a maximum age in whole seconds between 60 and 21,600 (inclusive) for events to be processed
+- **`MaximumRetryAttempts` (number)**
+  - Set a maximum number of retries between 0 and 2 (inclusive) when the function returns an error
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `PutProvisionedConcurrencyConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`ProvisionedConcurrentExecutions` (number) [required]**
+  - Amount of provisioned concurrency of at least 1, to allocate for the version or alias
+- **`Qualifier` (string) [required]**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `PutRuntimeManagementConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`UpdateRuntimeOn` (string) [required]**
+  - Specify the runtime update mode; can be one of: `Auto` (default), `FunctionUpdate`, `Manual`
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html#lambda-PutRuntimeManagementConfig-request-UpdateRuntimeOn)
+- **`Qualifier` (string)**
+  - Specify a version of the function
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html#API_PutRuntimeManagementConfig_RequestSyntax#Qualifier)
+- **`RuntimeVersionArn` (string)**
+  - ARN of the runtime version the function will use
 
 
 ### `UpdateAlias`
@@ -886,10 +945,6 @@ Properties:
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
-- [`PutFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html)
-- [`PutFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html)
-- [`PutProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html)
-- [`PutRuntimeManagementConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html)
 - [`RemoveLayerVersionPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_RemoveLayerVersionPermission.html)
 - [`RemovePermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html)
 - [`TagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html)
