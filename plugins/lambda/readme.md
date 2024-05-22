@@ -835,6 +835,59 @@ Properties:
   - ARN of the runtime version the function will use
 
 
+### `RemoveLayerVersionPermission`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_RemoveLayerVersionPermission.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`StatementId` (string) [required]**
+  - Identifier specified when the statement was added
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+
+
+### `RemovePermission`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`StatementId` (string) [required]**
+  - Statement ID of the permission to remove
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `TagResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of the lambda function
+- **`Tags` (object) [required]**
+  - Record of tags to be applied to the function
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html#lambda-TagResource-request-Tags)
+
+
+### `UntagResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UntagResource.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of the lambda function
+- **`TagKeys` (array) [required]**
+  - Array of tag keys (strings) to removed from the function
+
+
 ### `UpdateAlias`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html)
@@ -945,10 +998,6 @@ Properties:
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
-- [`RemoveLayerVersionPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_RemoveLayerVersionPermission.html)
-- [`RemovePermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html)
-- [`TagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html)
-- [`UntagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_UntagResource.html)
 - [`UpdateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html)
 - [`UpdateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html)
 - [`UpdateFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html)

@@ -55,6 +55,10 @@ import {
   PutFunctionEventInvokeConfigCommandOutput as PutFunctionEventInvokeConfigResponse,
   PutProvisionedConcurrencyConfigCommandOutput as PutProvisionedConcurrencyConfigResponse,
   PutRuntimeManagementConfigCommandOutput as PutRuntimeManagementConfigResponse,
+  RemoveLayerVersionPermissionCommandOutput as RemoveLayerVersionPermissionResponse,
+  RemovePermissionCommandOutput as RemovePermissionResponse,
+  TagResourceCommandOutput as TagResourceResponse,
+  UntagResourceCommandOutput as UntagResourceResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationCommandOutput as UpdateFunctionConfigurationResponse,
@@ -386,6 +390,30 @@ declare interface AwsLiteLambda {
   PutRuntimeManagementConfig: (input: { FunctionName: string, UpdateRuntimeOn: string, Qualifier?: string, RuntimeVersionArn?: string }) => Promise<PutRuntimeManagementConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_RemoveLayerVersionPermission.html Lambda: RemoveLayerVersionPermission}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#RemoveLayerVersionPermission Lambda: RemoveLayerVersionPermission}
+   */
+  RemoveLayerVersionPermission: (input: { LayerName: string, StatementId: string, VersionNumber: number, RevisionId?: string }) => Promise<RemoveLayerVersionPermissionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html Lambda: RemovePermission}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#RemovePermission Lambda: RemovePermission}
+   */
+  RemovePermission: (input: { FunctionName: string, StatementId: string, RevisionId?: string, Qualifier?: string }) => Promise<RemovePermissionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html Lambda: TagResource}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#TagResource Lambda: TagResource}
+   */
+  TagResource: (input: { Resource: string, Tags: Record<string, any> }) => Promise<TagResourceResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UntagResource.html Lambda: UntagResource}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UntagResource Lambda: UntagResource}
+   */
+  UntagResource: (input: { Resource: string, TagKeys: any[] }) => Promise<UntagResourceResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html Lambda: UpdateAlias}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateAlias Lambda: UpdateAlias}
    */
@@ -469,6 +497,10 @@ export type {
   PutFunctionEventInvokeConfigResponse,
   PutProvisionedConcurrencyConfigResponse,
   PutRuntimeManagementConfigResponse,
+  RemoveLayerVersionPermissionResponse,
+  RemovePermissionResponse,
+  TagResourceResponse,
+  UntagResourceResponse,
   UpdateAliasResponse,
   UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationResponse,

@@ -35,6 +35,7 @@ const Marker = { ...str, comment: 'Pagination token' }
 const MaxItems = { ...num, comment: 'Maximum number of items to be returned; maximum 10,000' }
 const MemorySize = { ...num, comment: 'Amount of memory available (in MB) at runtime from 128 to 10240; increasing memory also increases CPU allocation' }
 const Qualifier = { ...str, comment: 'Specify a version or alias to invoke a published version of the function' }
+const Resource = { ...str, required, comment: 'ARN of the lambda function' }
 const RevisionId = { ...str, comment: 'Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it' }
 const Role = { ...str, comment: `ARN of the function's execution role` }
 const RoutingConfig = { ...obj, comment: 'Configure function version weights', ref: docRoot + 'configuration-aliases.html#configuring-alias-routing' }
@@ -47,7 +48,7 @@ const VersionNumber = { ...num, required, comment: 'The version number of the la
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
 
 const defaultResponse = ({ payload }) => payload
-const emptyResponse = () => { }
+const emptyResponse = () => ({ })
 const paginator = {
   type: 'query',
   token: 'NextMarker',
@@ -974,7 +975,7 @@ const ListProvisionedConcurrencyConfigs = {
 const ListTags = {
   awsDoc: docRoot + 'API_ListTags.html',
   validate: {
-    Resource: { ...str, required, comment: 'ARN of the lambda function' },
+    Resource,
   },
   request: ({ Resource: ARN }) => {
     return {
@@ -1159,6 +1160,82 @@ const PutRuntimeManagementConfig = {
   response: defaultResponse,
 }
 
+const RemoveLayerVersionPermission = {
+  awsDoc: docRoot + 'API_RemoveLayerVersionPermission.html',
+  validate: {
+    LayerName,
+    StatementId: { ...str, required, comment: 'Identifier specified when the statement was added' },
+    VersionNumber,
+    RevisionId,
+  },
+  request: (params) => {
+    const { LayerName, StatementId, VersionNumber, RevisionId } = params
+    let query
+    if (RevisionId) {
+      query = { RevisionId }
+    }
+    return {
+      path: `/2018-10-31/layers/${LayerName}/versions/${VersionNumber}/policy/${StatementId}`,
+      method: 'DELETE',
+      query,
+    }
+  },
+  response: emptyResponse,
+}
+
+const RemovePermission = {
+  awsDoc: docRoot + 'API_RemovePermission.html',
+  validate: {
+    FunctionName,
+    StatementId: { ...str, required, comment: 'Statement ID of the permission to remove' },
+    RevisionId,
+    Qualifier,
+  },
+  request: (params) => {
+    const { FunctionName, StatementId } = params
+    let query = { ...params }
+    delete query.FunctionName
+    delete query.StatementId
+    return {
+      path: `/2015-03-31/functions/${FunctionName}/policy/${StatementId}`,
+      method: 'DELETE',
+      query,
+    }
+  },
+  response: emptyResponse,
+}
+
+const TagResource = {
+  awsDoc: docRoot + 'API_TagResource.html',
+  validate: {
+    Resource,
+    Tags: { ...obj, required, comment: 'Record of tags to be applied to the function', ref: docRoot + 'API_TagResource.html#lambda-TagResource-request-Tags' },
+  },
+  request: ({ Resource, Tags }) => {
+    return {
+      path: `/2017-03-31/tags/${Resource}`,
+      payload: { Tags },
+    }
+  },
+  response: emptyResponse,
+}
+
+const UntagResource = {
+  awsDoc: docRoot + 'API_UntagResource.html',
+  validate: {
+    Resource,
+    TagKeys: { ...arr, required, comment: 'Array of tag keys (strings) to removed from the function' },
+  },
+  request: ({ Resource, TagKeys }) => {
+    return {
+      path: `/2017-03-31/tags/${Resource}`,
+      method: 'DELETE',
+      query: { tagKeys: TagKeys },
+    }
+  },
+  response: emptyResponse,
+}
+
 const UpdateAlias = {
   awsDoc: docRoot + 'API_UpdateAlias.html',
   validate: {
@@ -1311,6 +1388,10 @@ export default {
     PutFunctionEventInvokeConfig,
     PutProvisionedConcurrencyConfig,
     PutRuntimeManagementConfig,
+    RemoveLayerVersionPermission,
+    RemovePermission,
+    TagResource,
+    UntagResource,
     UpdateAlias,
     UpdateFunctionCode,
     UpdateFunctionConfiguration,
