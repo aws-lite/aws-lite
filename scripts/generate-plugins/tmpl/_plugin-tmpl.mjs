@@ -7,6 +7,7 @@ const property = '$PROPERTY'
 const required = true
 
 export default {
+  name: '@aws-lite/$SERVICE',
   service,
   property,
   methods: {
