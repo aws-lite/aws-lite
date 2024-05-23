@@ -19,6 +19,7 @@ const plugins = [
   { service: 'cloudfront', property: 'CloudFront', display: 'CloudFront', maintainers },
   { service: 'cloudwatch-logs', property: 'CloudWatchLogs', display: 'CloudWatch Logs', maintainers },
   { service: 'dynamodb', property: 'DynamoDB', display: 'DynamoDB', maintainers },
+  { service: 'iam', property: 'IAM', display: 'IAM', maintainers },
   { service: 'lambda', property: 'Lambda', display: 'Lambda', maintainers },
   { service: 'organizations', property: 'Organizations', display: 'Organizations', maintainers },
   {

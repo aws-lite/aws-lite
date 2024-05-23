@@ -68,6 +68,7 @@
     "plugins/cloudfront",
     "plugins/cloudwatch-logs",
     "plugins/dynamodb",
+    "plugins/iam",
     "plugins/lambda",
     "plugins/organizations",
     "plugins/rds-data",

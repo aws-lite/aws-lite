@@ -204,6 +204,7 @@ Open source contributor guidelines, methodology, and instructions
 - [CloudFront](https://www.npmjs.com/package/@aws-lite/cloudfront)
 - [CloudWatch Logs](https://www.npmjs.com/package/@aws-lite/cloudwatch-logs)
 - [DynamoDB](https://www.npmjs.com/package/@aws-lite/dynamodb)
+- [IAM](https://www.npmjs.com/package/@aws-lite/iam)
 - [Lambda](https://www.npmjs.com/package/@aws-lite/lambda)
 - [Organizations](https://www.npmjs.com/package/@aws-lite/organizations)
 - [RDS Data Service](https://www.npmjs.com/package/@aws-lite/rds-data)
