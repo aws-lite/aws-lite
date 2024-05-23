@@ -14,6 +14,8 @@ test('Set up env', async t => {
 
 test('Check plugins for docs + validation', async t => {
   let plan = 0
+  let activeMethods = 0
+  let totalMethods = 0
   for (let { service } of plugins) {
     let path = service => 'file://' + join(cwd, 'plugins', service, 'src', 'index.mjs')
     let plugin = (await import(path(service))).default
@@ -26,16 +28,21 @@ test('Check plugins for docs + validation', async t => {
       if (method === false) {
         t.pass(`${name}: method disabled by boolean`)
         plan++
+        totalMethods++
       }
       else if (method.deprecated === true) {
         t.pass(`${name}: method deprecated by property`)
         plan++
+        totalMethods++
       }
       else if (method.disabled === true) {
         t.pass(`${name}: method disabled by property`)
         plan++
+        totalMethods++
       }
       else {
+        activeMethods++
+        totalMethods++
         t.match(method.awsDoc, /^https:\/\/docs.aws.amazon.com/, `${name}: method has AWS doc`)
         t.ok(method.validate, `${name}: method has validate object`)
         let validations = Object.entries(method.validate)
@@ -53,4 +60,5 @@ test('Check plugins for docs + validation', async t => {
     }
   }
   t.plan(plan)
+  console.log(`Found ${activeMethods} active methods, and ${totalMethods} total methods across ${plugins.length} plugins`)
 })
