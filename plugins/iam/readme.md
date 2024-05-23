@@ -32,7 +32,58 @@ npm i -D @aws-lite/iam-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateRole`
 
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
+
+Properties:
+- **`AssumeRolePolicyDocument` (string, object) [required]**
+  - Trust relationship policy document granting an entity permission to assume the role; can be an object, or JSON or YAML string
+- **`RoleName` (string) [required]**
+  - Name of the role
+- **`Description` (string)**
+  - Description of the role
+- **`MaxSessionDuration` (number)**
+  - Maximum session duration (in seconds) to set for the specified role
+- **`Path` (string)**
+  - Path for the role identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
+- **`PermissionsBoundary` (string)**
+  - ARN of a managed policy to be used to set the role's permissions boundary
+- **`Tags` (array)**
+  - List of tags to attach to the role
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
+### `DeleteRole`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRole.html)
+
+Properties:
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
+### `GetRole`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html)
+
+Properties:
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
+### `UpdateRole`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html)
+
+Properties:
+- **`RoleName` (string) [required]**
+  - Name of the role
+- **`Description` (string)**
+  - Description of the role
+- **`MaxSessionDuration` (number)**
+  - Maximum session duration (in seconds) to set for the specified role
 
 
 ### Methods yet to be implemented
@@ -54,7 +105,6 @@ npm i -D @aws-lite/iam-types
 - [`CreateOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
 - [`CreatePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
 - [`CreatePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
-- [`CreateRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
 - [`CreateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateSAMLProvider.html)
 - [`CreateServiceLinkedRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceLinkedRole.html)
 - [`CreateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html)
@@ -71,7 +121,6 @@ npm i -D @aws-lite/iam-types
 - [`DeleteOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
 - [`DeletePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html)
 - [`DeletePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
-- [`DeleteRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRole.html)
 - [`DeleteRolePermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html)
 - [`DeleteRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePolicy.html)
 - [`DeleteSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSAMLProvider.html)
@@ -107,7 +156,6 @@ npm i -D @aws-lite/iam-types
 - [`GetOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html)
 - [`GetPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html)
 - [`GetPolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html)
-- [`GetRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html)
 - [`GetRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
 - [`GetSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSAMLProvider.html)
 - [`GetServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html)
@@ -187,7 +235,6 @@ npm i -D @aws-lite/iam-types
 - [`UpdateGroup`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateGroup.html)
 - [`UpdateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateLoginProfile.html)
 - [`UpdateOpenIDConnectProviderThumbprint`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
-- [`UpdateRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html)
 - [`UpdateRoleDescription`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRoleDescription.html)
 - [`UpdateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSAMLProvider.html)
 - [`UpdateServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html)

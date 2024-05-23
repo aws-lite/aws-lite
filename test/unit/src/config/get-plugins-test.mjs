@@ -54,7 +54,7 @@ test('Autoload plugins from process node_modules', async t => {
   let plugins = await getPlugins({ autoloadPlugins: true })
   t.equal(plugins.length, expected.length, 'Loaded the correct number of plugins')
 
-  let loadedAll = expected.every(svc => plugins.find(({ name }) =>  svc === tidy(name)))
+  let loadedAll = expected.every(svc => plugins.find(({ name }) => svc === tidy(name)))
   t.ok(loadedAll, 'Loaded plugins from process node_modules')
 })
 
