@@ -54,6 +54,69 @@ Properties:
   - Sets request header: `x-amz-object-ownership`
 
 
+### `CreateMultipartUpload`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`ACL` (string)**
+  - Sets request header: `x-amz-acl`
+- **`CacheControl` (string)**
+  - Sets request header: `cache-control`
+- **`ContentDisposition` (string)**
+  - Sets request header: `content-disposition`
+- **`ContentEncoding` (string)**
+  - Sets request header: `content-encoding`
+- **`ContentLanguage` (string)**
+  - Sets request header: `content-language`
+- **`ContentType` (string)**
+  - Sets request header: `content-type`
+- **`Expires` (string)**
+  - Sets request header: `expires`
+- **`GrantFullControl` (string)**
+  - Sets request header: `x-amz-grant-full-control`
+- **`GrantRead` (string)**
+  - Sets request header: `x-amz-grant-read`
+- **`GrantReadACP` (string)**
+  - Sets request header: `x-amz-grant-read-acp`
+- **`GrantWriteACP` (string)**
+  - Sets request header: `x-amz-grant-write-acp`
+- **`ServerSideEncryption` (string)**
+  - Sets request header: `x-amz-server-side-encryption`
+- **`StorageClass` (string)**
+  - Sets request header: `x-amz-storage-class`
+- **`WebsiteRedirectLocation` (string)**
+  - Sets request header: `x-amz-website-redirect-location`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
+- **`SSEKMSKeyId` (string)**
+  - Sets request header: `x-amz-server-side-encryption-aws-kms-key-id`
+- **`SSEKMSEncryptionContext` (string)**
+  - Sets request header: `x-amz-server-side-encryption-context`
+- **`BucketKeyEnabled` (string)**
+  - Sets request header: `x-amz-server-side-encryption-bucket-key-enabled`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`Tagging` (string)**
+  - Sets request header: `x-amz-tagging`
+- **`ObjectLockMode` (string)**
+  - Sets request header: `x-amz-object-lock-mode`
+- **`ObjectLockRetainUntilDate` (string)**
+  - Sets request header: `x-amz-object-lock-retain-until-date`
+- **`ObjectLockLegalHoldStatus` (string)**
+  - Sets request header: `x-amz-object-lock-legal-hold`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+
+
 ### `DeleteBucket`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucket.html)
@@ -107,6 +170,19 @@ Properties:
   - Sets request header: `x-amz-sdk-checksum-algorithm`
 - **`ContentMD5` (string)**
   - Sets request header: `content-md5`
+
+
+### `GetBucketAccelerateConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
 
 
 ### `GetObject`
@@ -216,6 +292,29 @@ Properties:
 
 Properties:
 
+
+
+### `ListMultipartUploads`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Delimiter` (string)**
+  - Delimiter character used to group keys
+- **`EncodingType` (string)**
+  - Object key encoding type (must be `url`)
+- **`KeyMarker` (string)**
+  - Deal with this later
+- **`MaxUploads` (number)**
+  - Maximum number of uploads between 1 and 1000 (inclusive) to return in the response
+- **`UploadIdMarker` (string)**
+  - Deal with this later
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
 
 
 ### `ListObjectsV2`
@@ -341,7 +440,6 @@ Properties:
 - [`AbortMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html)
 - [`CompleteMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html)
 - [`CopyObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html)
-- [`CreateMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html)
 - [`CreateSession`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html)
 - [`DeleteBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html)
 - [`DeleteBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketCors.html)
@@ -357,7 +455,6 @@ Properties:
 - [`DeleteBucketWebsite`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketWebsite.html)
 - [`DeleteObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html)
 - [`DeletePublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
-- [`GetBucketAccelerateConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html)
 - [`GetBucketAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAcl.html)
 - [`GetBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAnalyticsConfiguration.html)
 - [`GetBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketCors.html)
@@ -392,7 +489,6 @@ Properties:
 - [`ListBucketInventoryConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html)
 - [`ListBucketMetricsConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html)
 - [`ListDirectoryBuckets`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListDirectoryBuckets.html)
-- [`ListMultipartUploads`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html)
 - [`ListObjects`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html)
 - [`ListObjectVersions`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
 - [`ListParts`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html)

@@ -6,6 +6,7 @@ import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
 const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
 import PutObject from './put-object.mjs'
+// import { parseXML } from '../../../src/lib/index.js'
 
 const service = 's3'
 const property = 'S3'
@@ -25,6 +26,10 @@ const Bucket = { ...str, required, comment: 'S3 bucket name' }
 const Key = { ...str, required, comment: 'S3 key / file name' }
 const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
+const Delimiter = { ...str, comment: 'Delimiter character used to group keys' }
+const EncodingType = { ...str, comment: 'Object key encoding type (must be `url`)' }
+const Prefix = { ...str, comment: 'Limit response to keys that begin with the specified prefix' }
+
 
 function getHost ({ Bucket }, { region, config }) {
   // Deprecated path-style URLs, still necessary for buckets with periods
@@ -68,6 +73,33 @@ const CreateBucket = {
   response: ({ headers }) => {
     return { Location: headers.Location || headers.location }
   },
+}
+
+// TODO: Check if this is working properly and fix the response
+const CreateMultipartUpload = {
+  awsDoc: docRoot + 'API_CreateMultipartUpload.html',
+  validate: {
+    Bucket,
+    Key,
+    ...getValidateHeaders('ACL', 'CacheControl', 'ContentDisposition', 'ContentEncoding', 'ContentLanguage', 'ContentType', 'Expires', 'GrantFullControl',
+      'GrantRead', 'GrantReadACP', 'GrantWriteACP', 'ServerSideEncryption', 'StorageClass', 'WebsiteRedirectLocation', 'SSECustomerAlgorithm',
+      'SSECustomerKeyMD5', 'SSEKMSKeyId', 'SSEKMSEncryptionContext', 'BucketKeyEnabled', 'RequestPayer', 'Tagging', 'ObjectLockMode',
+      'ObjectLockRetainUntilDate', 'ObjectLockLegalHoldStatus', 'ExpectedBucketOwner', 'ChecksumAlgorithm' ),
+
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      method: 'POST',
+      host,
+      pathPrefix,
+      path: `/${Key}?uploads`,
+      headers: { ...getHeadersFromParams(params) },
+      streamResponsePayload: true,
+    }
+  },
+  response: (payload) => payload,
 }
 
 const DeleteBucket = {
@@ -144,6 +176,36 @@ const DeleteObjects = {
       res.Deleted = [ payload.Deleted ]
     }
     return res
+  },
+}
+
+// TODO: Check if this is working properly and fix the response
+const GetBucketAccelerateConfiguration = {
+  awsDoc: docRoot + 'API_GetBucketAccelerateConfiguration.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      // Added to path because empty query isn't getting through
+      path: '/?accelerate',
+      host,
+      pathPrefix,
+      headers: { ...getHeadersFromParams(params) },
+      // Not sure if this is correct
+      streamResponsePayload: true,
+    }
+  },
+  // Response gives back an encoded buffer (UTF-8?) with an XML.
+  // The data taken from streamResponsePayload gives me an XML string.
+  response: (payload) => {
+    return payload
+    // return {
+    //   AccelerateConfiguration,
+    //   ...parseHeadersToResults({ headers }, null, []),
+    // }
   },
 }
 
@@ -271,16 +333,43 @@ const ListBuckets = {
   error: defaultError,
 }
 
+// TODO: Check if this is working properly and fix the response
+const ListMultipartUploads = {
+  awsDoc: docRoot + 'API_ListMultipartUploads.html',
+  validate: {
+    Bucket,
+    Delimiter,
+    EncodingType,
+    KeyMarker: { ...str, comment: 'Deal with this later' },
+    MaxUploads: { ...num, comment: 'Maximum number of uploads between 1 and 1000 (inclusive) to return in the response' },
+    UploadIdMarker: { ...str, comment: 'Deal with this later' },
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Delimiter', 'EncodingType', 'KeyMarker', 'MaxUploads', 'UploadMarker' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = getQueryFromParams(params, queryParams) || {}
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      headers,
+      query,
+    }
+  },
+  response: payload => payload,
+}
+
 const ListObjectsV2 = {
   awsDoc: docRoot + 'API_ListObjectsV2.html',
   validate: {
     Bucket,
     ContinuationToken:  { ...str, comment: 'Pagination cursor token (returned as `NextContinuationToken`' },
-    Delimiter:          { ...str, comment: 'Delimiter character used to group keys' },
-    EncodingType:       { ...str, comment: 'Object key encoding type (must be `url`)' },
+    Delimiter,
+    EncodingType,
     FetchOwner:         { ...str, comment: 'Return owner field with results' },
     MaxKeys:            { ...num, comment: 'Set the maximum number of keys returned per response' },
-    Prefix:             { ...str, comment: 'Limit response to keys that begin with the specified prefix' },
+    Prefix,
     StartAfter:         { ...str, comment: 'Starts listing after any specified key in the bucket' },
     // Here come the headers
     ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'OptionalObjectAttributes'),
@@ -318,7 +407,21 @@ const ListObjectsV2 = {
   error: defaultError,
 }
 
-const methods = { CreateBucket, DeleteBucket, DeleteObject, DeleteObjects, GetObject, HeadObject, HeadBucket, ListBuckets, ListObjectsV2, PutObject, ...incomplete }
+const methods = {
+  CreateBucket,
+  CreateMultipartUpload,
+  DeleteBucket,
+  DeleteObject,
+  DeleteObjects,
+  GetBucketAccelerateConfiguration,
+  GetObject,
+  HeadObject,
+  HeadBucket,
+  ListBuckets,
+  ListMultipartUploads,
+  ListObjectsV2,
+  PutObject,
+  ...incomplete }
 
 export default {
   name: '@aws-lite/s3',
