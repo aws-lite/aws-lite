@@ -135,7 +135,6 @@ function call (params, args) {
       let data = []
       /* istanbul ignore next: we can always expect headers, but jic */
       let { headers = {}, statusCode } = res
-      let ok = isOk(statusCode)
 
       if (streamResponsePayload) {
         /* istanbul ignore next */
@@ -187,9 +186,9 @@ function call (params, args) {
             /* istanbul ignore next */
             if (debug) rawString = body.toString()
           }
-          // Sometimes AWS reports JSON and XML errors without a content type (ahem, Lambda) so that's fun
+          // Sometimes AWS omits content type from responses (cough, S3) and errors (ahem, Lambda) so that's fun
           /* istanbul ignore next */ // TODO remove + test
-          if (body.length && !ok && !contentType) {
+          if (body.length && !contentType) {
             try {
               payload = JSON.parse(body)
             }
