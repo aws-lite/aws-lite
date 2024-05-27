@@ -124,7 +124,8 @@ function tidyQuery (obj) {
   let tidied = {}
   Object.entries(obj).forEach(([ k, v ]) => {
     // Who knows, maybe there's an API service that uses boolean query string params
-    if (v || v === false) tidied[k] = v
+    // For now, otherwise continue to ignore especially falsy values
+    if (v || v === false || v === 0) tidied[k] = v
   })
   if (Object.keys(tidied).length) return qs.stringify(tidied)
 }
