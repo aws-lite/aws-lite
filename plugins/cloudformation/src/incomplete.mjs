@@ -63,6 +63,5 @@ export default {
   TestType:                          { disabled, awsDoc: docRoot + 'API_TestType.html' },
   UpdateStackInstances:              { disabled, awsDoc: docRoot + 'API_UpdateStackInstances.html' },
   UpdateStackSet:                    { disabled, awsDoc: docRoot + 'API_UpdateStackSet.html' },
-  UpdateTerminationProtection:       { disabled, awsDoc: docRoot + 'API_UpdateTerminationProtection.html' },
   ValidateTemplate:                  { disabled, awsDoc: docRoot + 'API_ValidateTemplate.html' },
 }

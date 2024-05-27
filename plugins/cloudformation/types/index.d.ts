@@ -7,6 +7,7 @@ import {
   DescribeStacksCommandOutput as DescribeStacksResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
+  UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudformation";
 
@@ -49,6 +50,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateStack CloudFormation: UpdateStack}
    */
   UpdateStack: (input: { StackName: string, Capabilities?: any[], ClientRequestToken?: string, DisableRollback?: boolean, NotificationARNs?: any[], Parameters?: any[], ResourceTypes?: any[], RetainExceptOnCreate?: boolean, RoleARN?: string, RollbackConfiguration?: Record<string, any>, StackPolicyBody?: string | Record<string, any>, StackPolicyURL?: string, Tags?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string }) => Promise<UpdateStackResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateTerminationProtection.html CloudFormation: UpdateTerminationProtection}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateTerminationProtection CloudFormation: UpdateTerminationProtection}
+   */
+  UpdateTerminationProtection: (input: { StackName: string, EnableTerminationProtection: boolean }) => Promise<UpdateTerminationProtectionResponse>
   // $METHODS_END
 }
 
@@ -68,5 +75,6 @@ export type {
   DescribeStacksResponse,
   ListStackResourcesResponse,
   UpdateStackResponse,
+  UpdateTerminationProtectionResponse,
   // $EXPORT_END
 }
