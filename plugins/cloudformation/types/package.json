@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/cloudformation-types",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Type definitions for the `@aws-lite/cloudformation` plugin",
   "homepage": "https://aws-lite.org/services/cloudformation",
   "repository": {
