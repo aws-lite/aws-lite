@@ -114,7 +114,9 @@ const QueryParamMappings = {
   Delimiter: 'delimiter',
   EncodingType: 'encoding-type',
   FetchOwner: 'fetch-owner',
+  KeyMarker: 'key-marker',
   MaxKeys: 'max-keys',
+  MaxUploads: 'max-uploads',
   PartNumber: 'partNumber',
   Prefix: 'prefix',
   ResponseCacheControl: 'response-cache-control',
@@ -124,6 +126,8 @@ const QueryParamMappings = {
   ResponseContentType: 'response-content-type',
   ResponseExpires: 'response-expires',
   StartAfter: 'start-after',
+  UploadId: 'uploadId',
+  UploadIdMarker: 'upload-id-marker',
   VersionId: 'versionId',
 }
 

@@ -26,6 +26,57 @@ npm i -D @aws-lite/s3-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `AbortMultipartUpload`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`UploadId` (string) [required]**
+  - ID of the multipart upload
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+
+
+### `CompleteMultipartUpload`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`UploadId` (string) [required]**
+  - ID of the multipart upload
+- **`MultipartUpload` (object)**
+  - `MultipartUpload` object containing details about the completed uploads
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html#AmazonS3-CompleteMultipartUpload-request-MultipartUpload)
+- **`ChecksumCRC32` (string)**
+  - Sets request header: `x-amz-checksum-crc32`
+- **`ChecksumCRC32C` (string)**
+  - Sets request header: `x-amz-checksum-crc32c`
+- **`ChecksumSHA1` (string)**
+  - Sets request header: `x-amz-checksum-sha1`
+- **`ChecksumSHA256` (string)**
+  - Sets request header: `x-amz-checksum-sha256`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKey` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
+
+
 ### `CreateBucket`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html)
@@ -306,7 +357,7 @@ Properties:
 - **`EncodingType` (string)**
   - Object key encoding type (must be `url`)
 - **`KeyMarker` (string)**
-  - Deal with this later
+  - Pagination cursor
 - **`MaxUploads` (number)**
   - Maximum number of uploads between 1 and 1000 (inclusive) to return in the response
 - **`UploadIdMarker` (string)**
@@ -315,6 +366,8 @@ Properties:
   - Sets request header: `x-amz-expected-bucket-owner`
 - **`RequestPayer` (string)**
   - Sets request header: `x-amz-request-payer`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `ListObjectsV2`
@@ -433,12 +486,50 @@ Properties:
   - Sets request header: `x-amz-website-redirect-location`
 
 
+### `UploadPart`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`PartNumber` (number)**
+  - Part number (between 1 - 10,000) of the object
+- **`Body` (object)**
+  - Stream of data to be uploaded
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody)
+- **`ContentLength` (string)**
+  - Sets request header: `content-length`
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ChecksumCRC32` (string)**
+  - Sets request header: `x-amz-checksum-crc32`
+- **`ChecksumCRC32C` (string)**
+  - Sets request header: `x-amz-checksum-crc32c`
+- **`ChecksumSHA1` (string)**
+  - Sets request header: `x-amz-checksum-sha1`
+- **`ChecksumSHA256` (string)**
+  - Sets request header: `x-amz-checksum-sha256`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKey` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`AbortMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html)
-- [`CompleteMultipartUpload`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html)
 - [`CopyObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html)
 - [`CreateSession`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html)
 - [`DeleteBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html)
@@ -520,7 +611,6 @@ Properties:
 - [`PutPublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutPublicAccessBlock.html)
 - [`RestoreObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html)
 - [`SelectObjectContent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_SelectObjectContent.html)
-- [`UploadPart`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html)
 - [`UploadPartCopy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html)
 - [`WriteGetObjectResponse`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_WriteGetObjectResponse.html)
 <!-- METHOD_DOCS_END -->

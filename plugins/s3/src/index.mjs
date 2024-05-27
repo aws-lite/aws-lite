@@ -6,7 +6,6 @@ import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
 const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
 import PutObject from './put-object.mjs'
-// import { parseXML } from '../../../src/lib/index.js'
 
 const service = 's3'
 const property = 'S3'
@@ -29,7 +28,8 @@ const VersionId = { ...str, comment: 'Reference a specific version of the object
 const Delimiter = { ...str, comment: 'Delimiter character used to group keys' }
 const EncodingType = { ...str, comment: 'Object key encoding type (must be `url`)' }
 const Prefix = { ...str, comment: 'Limit response to keys that begin with the specified prefix' }
-
+const valPaginate = { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const UploadId = { ...str, required, comment: 'ID of the multipart upload' }
 
 function getHost ({ Bucket }, { region, config }) {
   // Deprecated path-style URLs, still necessary for buckets with periods
@@ -50,6 +50,71 @@ const defaultError = ({ statusCode, error }) => {
     delete error.Code
   }
   return { statusCode, error }
+}
+
+const AbortMultipartUpload = {
+  awsDoc: docRoot + 'API_AbortMultipartUpload.html',
+  validate: {
+    Bucket,
+    Key,
+    UploadId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'UploadId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = getQueryFromParams(params, queryParams)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: `/${params.Key}`,
+      query,
+      headers,
+    }
+  },
+  response: defaultResponse,
+}
+
+const CompleteMultipartUpload = {
+  awsDoc: docRoot + 'API_CompleteMultipartUpload.html',
+  validate: {
+    Bucket,
+    Key,
+    UploadId,
+    MultipartUpload: { ...obj, comment: '`MultipartUpload` object containing details about the completed uploads', ref: docRoot + 'API_CompleteMultipartUpload.html#AmazonS3-CompleteMultipartUpload-request-MultipartUpload' },
+    ...getValidateHeaders(
+      'ChecksumCRC32',
+      'ChecksumCRC32C',
+      'ChecksumSHA1',
+      'ChecksumSHA256',
+      'RequestPayer',
+      'ExpectedBucketOwner',
+      'SSECustomerAlgorithm',
+      'SSECustomerKey',
+      'SSECustomerKeyMD5',
+    ),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'UploadId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const query = getQueryFromParams(params, queryParams)
+    const CompleteMultipartUpload = {
+      Part: params.MultipartUpload?.Parts || [],
+    }
+
+    return {
+      host,
+      pathPrefix,
+      path: `/${params.Key}`,
+      query,
+      headers: { ...xml, ...getHeadersFromParams(params, queryParams) },
+      payload: { CompleteMultipartUpload },
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+    }
+  },
+  response: defaultResponse,
 }
 
 const CreateBucket = {
@@ -81,11 +146,34 @@ const CreateMultipartUpload = {
   validate: {
     Bucket,
     Key,
-    ...getValidateHeaders('ACL', 'CacheControl', 'ContentDisposition', 'ContentEncoding', 'ContentLanguage', 'ContentType', 'Expires', 'GrantFullControl',
-      'GrantRead', 'GrantReadACP', 'GrantWriteACP', 'ServerSideEncryption', 'StorageClass', 'WebsiteRedirectLocation', 'SSECustomerAlgorithm',
-      'SSECustomerKeyMD5', 'SSEKMSKeyId', 'SSEKMSEncryptionContext', 'BucketKeyEnabled', 'RequestPayer', 'Tagging', 'ObjectLockMode',
-      'ObjectLockRetainUntilDate', 'ObjectLockLegalHoldStatus', 'ExpectedBucketOwner', 'ChecksumAlgorithm' ),
-
+    ...getValidateHeaders(
+      'ACL',
+      'CacheControl',
+      'ContentDisposition',
+      'ContentEncoding',
+      'ContentLanguage',
+      'ContentType',
+      'Expires',
+      'GrantFullControl',
+      'GrantRead',
+      'GrantReadACP',
+      'GrantWriteACP',
+      'ServerSideEncryption',
+      'StorageClass',
+      'WebsiteRedirectLocation',
+      'SSECustomerAlgorithm',
+      'SSECustomerKeyMD5',
+      'SSEKMSKeyId',
+      'SSEKMSEncryptionContext',
+      'BucketKeyEnabled',
+      'RequestPayer',
+      'Tagging',
+      'ObjectLockMode',
+      'ObjectLockRetainUntilDate',
+      'ObjectLockLegalHoldStatus',
+      'ExpectedBucketOwner',
+      'ChecksumAlgorithm',
+    ),
   },
   request: (params, utils) => {
     const { Key } = params
@@ -96,10 +184,16 @@ const CreateMultipartUpload = {
       pathPrefix,
       path: `/${Key}?uploads`,
       headers: { ...getHeadersFromParams(params) },
-      streamResponsePayload: true,
     }
   },
-  response: (payload) => payload,
+  response: ({ payload }) => {
+    const { Bucket, Key, UploadId } = payload
+    return {
+      Bucket,
+      Key,
+      UploadId,
+    }
+  },
 }
 
 const DeleteBucket = {
@@ -179,7 +273,6 @@ const DeleteObjects = {
   },
 }
 
-// TODO: Check if this is working properly and fix the response
 const GetBucketAccelerateConfiguration = {
   awsDoc: docRoot + 'API_GetBucketAccelerateConfiguration.html',
   validate: {
@@ -189,24 +282,19 @@ const GetBucketAccelerateConfiguration = {
   request: (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
     return {
-      // Added to path because empty query isn't getting through
       path: '/?accelerate',
       host,
       pathPrefix,
       headers: { ...getHeadersFromParams(params) },
-      // Not sure if this is correct
-      streamResponsePayload: true,
     }
   },
-  // Response gives back an encoded buffer (UTF-8?) with an XML.
-  // The data taken from streamResponsePayload gives me an XML string.
-  response: (payload) => {
-    return payload
-    // return {
-    //   AccelerateConfiguration,
-    //   ...parseHeadersToResults({ headers }, null, []),
-    // }
+  response: ({ headers, payload }) => {
+    return {
+      Status: payload.Status,
+      ...parseHeadersToResults({ headers }),
+    }
   },
+  error: defaultError,
 }
 
 const GetObject = {
@@ -217,9 +305,19 @@ const GetObject = {
     PartNumber,
     VersionId,
     // Here come the headers
-    ...getValidateHeaders('IfMatch', 'IfModifiedSince', 'IfNoneMatch', 'IfUnmodifiedSince',
-      'Range', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer',
-      'ExpectedBucketOwner', 'ChecksumMode'),
+    ...getValidateHeaders(
+      'IfMatch',
+      'IfModifiedSince',
+      'IfNoneMatch',
+      'IfUnmodifiedSince',
+      'Range',
+      'SSECustomerAlgorithm',
+      'SSECustomerKey',
+      'SSECustomerKeyMD5',
+      'RequestPayer',
+      'ExpectedBucketOwner',
+      'ChecksumMode',
+    ),
     ResponseCacheControl:       { ...str, comment: 'Sets response header: `cache-control`' },
     ResponseContentDisposition: { ...str, comment: 'Sets response header: `content-disposition`' },
     ResponseContentEncoding:    { ...str, comment: 'Sets response header: `content-encoding`' },
@@ -333,31 +431,49 @@ const ListBuckets = {
   error: defaultError,
 }
 
-// TODO: Check if this is working properly and fix the response
 const ListMultipartUploads = {
   awsDoc: docRoot + 'API_ListMultipartUploads.html',
   validate: {
     Bucket,
     Delimiter,
     EncodingType,
-    KeyMarker: { ...str, comment: 'Deal with this later' },
+    KeyMarker: { ...str, comment: 'Pagination cursor' },
     MaxUploads: { ...num, comment: 'Maximum number of uploads between 1 and 1000 (inclusive) to return in the response' },
     UploadIdMarker: { ...str, comment: 'Deal with this later' },
     ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+    paginate: valPaginate,
   },
   request: (params, utils) => {
     const queryParams = [ 'Delimiter', 'EncodingType', 'KeyMarker', 'MaxUploads', 'UploadMarker' ]
-    const headers = getHeadersFromParams(params, queryParams)
-    const query = getQueryFromParams(params, queryParams) || {}
     const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
+    let query = { uploads: ' ',  ...getQueryFromParams(params, queryParams) }
+    let paginate
+    if (params.paginate) paginate = true
     return {
       host,
       pathPrefix,
       headers,
       query,
+      paginate,
+      paginator: {
+        type: 'query',
+        cursor: [ 'key-marker', 'upload-id-marker' ],
+        token: [ 'NextKeyMarker', 'NextUploadIdMarker' ],
+        accumulator: 'Upload',
+      },
     }
   },
-  response: payload => payload,
+  response: ({ payload }) => {
+    const Upload = payload.Upload
+    if (Array.isArray(Upload)) {
+      return { Uploads: Upload }
+    }
+    else if (typeof Upload === 'object') {
+      return { Uploads: [ Upload ] }
+    }
+    return []
+  },
 }
 
 const ListObjectsV2 = {
@@ -373,7 +489,7 @@ const ListObjectsV2 = {
     StartAfter:         { ...str, comment: 'Starts listing after any specified key in the bucket' },
     // Here come the headers
     ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'OptionalObjectAttributes'),
-    paginate:           { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' },
+    paginate:           valPaginate,
   },
   request: (params, utils) => {
     const { paginate } = params
@@ -407,7 +523,51 @@ const ListObjectsV2 = {
   error: defaultError,
 }
 
+const UploadPart = {
+  awsDoc: docRoot + 'API_UploadPart.html',
+  validate: {
+    Bucket,
+    Key,
+    PartNumber,
+    Body: { ...obj, comment: 'Stream of data to be uploaded', ref: docRoot + 'AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody' },
+    ...getValidateHeaders(
+      'ContentLength',
+      'ContentMD5',
+      'ChecksumAlgorithm',
+      'ChecksumCRC32',
+      'ChecksumCRC32C',
+      'ChecksumSHA1',
+      'ChecksumSHA256',
+      'SSECustomerAlgorithm',
+      'SSECustomerKey',
+      'SSECustomerKeyMD5',
+      'RequestPayer',
+      'ExpectedBucketOwner',
+    ),
+  },
+  request: (params, utils) => {
+    const { Key, Body } = params
+    const queryParams = [ 'PartNumber', 'UploadId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    const query = getQueryFromParams(params, queryParams)
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query,
+      headers,
+      payload: { ...Body },
+    }
+  },
+  response: defaultResponse,
+}
+
+
 const methods = {
+  AbortMultipartUpload,
+  CompleteMultipartUpload,
   CreateBucket,
   CreateMultipartUpload,
   DeleteBucket,
@@ -421,6 +581,7 @@ const methods = {
   ListMultipartUploads,
   ListObjectsV2,
   PutObject,
+  UploadPart,
   ...incomplete }
 
 export default {

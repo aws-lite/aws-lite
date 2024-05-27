@@ -1,10 +1,7 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/AmazonS3/latest/API/'
 export default {
-  AbortMultipartUpload:                        { disabled, awsDoc: docRoot + 'API_AbortMultipartUpload.html' },
-  CompleteMultipartUpload:                     { disabled, awsDoc: docRoot + 'API_CompleteMultipartUpload.html' },
   CopyObject:                                  { disabled, awsDoc: docRoot + 'API_CopyObject.html' },
-  // CreateMultipartUpload:                       { disabled, awsDoc: docRoot + 'API_CreateMultipartUpload.html' },
   CreateSession:                               { disabled, awsDoc: docRoot + 'API_CreateSession.html' },
   DeleteBucketAnalyticsConfiguration:          { disabled, awsDoc: docRoot + 'API_DeleteBucketAnalyticsConfiguration.html' },
   DeleteBucketCors:                            { disabled, awsDoc: docRoot + 'API_DeleteBucketCors.html' },
@@ -20,7 +17,6 @@ export default {
   DeleteBucketWebsite:                         { disabled, awsDoc: docRoot + 'API_DeleteBucketWebsite.html' },
   DeleteObjectTagging:                         { disabled, awsDoc: docRoot + 'API_DeleteObjectTagging.html' },
   DeletePublicAccessBlock:                     { disabled, awsDoc: docRoot + 'API_DeletePublicAccessBlock.html' },
-  // GetBucketAccelerateConfiguration:            { disabled, awsDoc: docRoot + 'API_GetBucketAccelerateConfiguration.html' },
   GetBucketAcl:                                { disabled, awsDoc: docRoot + 'API_GetBucketAcl.html' },
   GetBucketAnalyticsConfiguration:             { disabled, awsDoc: docRoot + 'API_GetBucketAnalyticsConfiguration.html' },
   GetBucketCors:                               { disabled, awsDoc: docRoot + 'API_GetBucketCors.html' },
@@ -55,7 +51,6 @@ export default {
   ListBucketInventoryConfigurations:           { disabled, awsDoc: docRoot + 'API_ListBucketInventoryConfigurations.html' },
   ListBucketMetricsConfigurations:             { disabled, awsDoc: docRoot + 'API_ListBucketMetricsConfigurations.html' },
   ListDirectoryBuckets:                        { disabled, awsDoc: docRoot + 'API_ListDirectoryBuckets.html' },
-  // ListMultipartUploads:                        { disabled, awsDoc: docRoot + 'API_ListMultipartUploads.html' },
   ListObjects:                                 { disabled, awsDoc: docRoot + 'API_ListObjects.html' },
   ListObjectVersions:                          { disabled, awsDoc: docRoot + 'API_ListObjectVersions.html' },
   ListParts:                                   { disabled, awsDoc: docRoot + 'API_ListParts.html' },
@@ -87,7 +82,6 @@ export default {
   PutPublicAccessBlock:                        { disabled, awsDoc: docRoot + 'API_PutPublicAccessBlock.html' },
   RestoreObject:                               { disabled, awsDoc: docRoot + 'API_RestoreObject.html' },
   SelectObjectContent:                         { disabled, awsDoc: docRoot + 'API_SelectObjectContent.html' },
-  UploadPart:                                  { disabled, awsDoc: docRoot + 'API_UploadPart.html' },
   UploadPartCopy:                              { disabled, awsDoc: docRoot + 'API_UploadPartCopy.html' },
   WriteGetObjectResponse:                      { disabled, awsDoc: docRoot + 'API_WriteGetObjectResponse.html' },
 }
