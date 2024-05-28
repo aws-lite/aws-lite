@@ -17,10 +17,7 @@ export default {
   DeleteBucketWebsite:                         { disabled, awsDoc: docRoot + 'API_DeleteBucketWebsite.html' },
   DeleteObjectTagging:                         { disabled, awsDoc: docRoot + 'API_DeleteObjectTagging.html' },
   DeletePublicAccessBlock:                     { disabled, awsDoc: docRoot + 'API_DeletePublicAccessBlock.html' },
-  GetBucketIntelligentTieringConfiguration:    { disabled, awsDoc: docRoot + 'API_GetBucketIntelligentTieringConfiguration.html' },
-  GetBucketInventoryConfiguration:             { disabled, awsDoc: docRoot + 'API_GetBucketInventoryConfiguration.html' },
-  GetBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_GetBucketLifecycle.html' },
-  GetBucketLifecycleConfiguration:             { disabled, awsDoc: docRoot + 'API_GetBucketLifecycleConfiguration.html' },
+  GetBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_GetBucketLifecycle.html' }, // Does not exist anymore, replaced by `GetBucketLifecycleConfiguration`
   GetBucketLocation:                           { disabled, awsDoc: docRoot + 'API_GetBucketLocation.html' },
   GetBucketLogging:                            { disabled, awsDoc: docRoot + 'API_GetBucketLogging.html' },
   GetBucketMetricsConfiguration:               { disabled, awsDoc: docRoot + 'API_GetBucketMetricsConfiguration.html' },

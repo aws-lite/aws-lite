@@ -406,6 +406,134 @@ const GetBucketEncryption = {
   },
 }
 
+const GetBucketIntelligentTieringConfiguration = {
+  awsDoc: docRoot + 'API_GetBucketIntelligentTieringConfiguration.html',
+  validate: {
+    Bucket,
+    Id: { ...str, required, comment: 'Id of the intelligent tiering configuration' },
+  },
+  request: (params, utils) => {
+    const { Id: id } = params
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      query: { 'intelligent-tiering': ' ', id },
+    }
+  },
+  response: ({ payload }) => {
+
+
+    if (!Array.isArray(payload.Tiering)) {
+      payload.Tierings = [ payload.Tiering ]
+    }
+    else {
+      payload.Tierings = payload.Tiering
+    }
+    delete payload.Tiering
+
+    if (!payload.Filter) {
+      payload.Filter = {}
+    }
+
+    if (payload.Filter?.And?.Tag) {
+      if (!Array.isArray(payload.Filter.And.Tag)) {
+        payload.Filter.And.Tags = [ payload.Filter.And.Tag ]
+      }
+      else {
+        payload.Filter.And.Tags = payload.Filter.And.Tag
+      }
+      delete payload.Filter.And.Tag
+    }
+
+    return { IntelligentTieringConfiguration: payload }
+  },
+}
+
+const GetBucketInventoryConfiguration = {
+  awsDoc: docRoot + 'API_GetBucketInventoryConfiguration.html',
+  validate: {
+    Bucket,
+    Id: { ...str, required, comment: 'Id of the inventory configuration' },
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { Id: id } = params
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      query: { 'inventory': ' ', id },
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    if (!payload.OptionalFields) {
+      payload.OptionalFields = []
+    }
+    else {
+      payload.OptionalFields = payload.OptionalFields.Field
+    }
+    delete payload.xmlns
+    return { InventoryConfiguration: payload }
+  },
+}
+
+const GetBucketLifecycleConfiguration = {
+  awsDoc: docRoot + 'API_GetBucketLifecycle.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?lifecycle',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    if (!Array.isArray(payload.Rule)) {
+      payload.Rule = [ payload.Rule ]
+    }
+
+    payload.Rule.forEach(i => {
+      if (i.Transition) {
+        if (!Array.isArray(i.Transition)) {
+          i.Transition = [ i.Transition ]
+        }
+        i.Transitions = i.Transition
+        delete i.Transition
+      }
+
+      if (i.NoncurrentVersionTransition) {
+        if (!Array.isArray(i.NoncurrentVersionTransition)) {
+          i.NoncurrentVersionTransition = [ i.NoncurrentVersionTransition ]
+        }
+        i.NoncurrentVersionTransitions = i.NoncurrentVersionTransition
+        delete i.NoncurrentVersionTransition
+      }
+
+      if (!i.Filter) {
+        i.Filter = {}
+      }
+
+      if (i.Filter?.And?.Tag) {
+        if (!Array.isArray(i.Filter.And.Tag)) {
+          i.Filter.And.Tag = [ i.Filter.And.Tag ]
+        }
+        i.Filter.And.Tags = i.Filter.And.Tag
+        delete i.Filter.And.Tag
+      }
+    })
+    return { Rules: payload.Rule }
+  },
+}
+
 const GetObject = {
   awsDoc: docRoot + 'API_GetObject.html',
   validate: {
@@ -661,9 +789,12 @@ const methods = {
   GetBucketAccelerateConfiguration,
   GetBucketAcl,
   GetBucketAnalyticsConfiguration,
-  GetObject,
   GetBucketCors,
   GetBucketEncryption,
+  GetBucketIntelligentTieringConfiguration,
+  GetBucketInventoryConfiguration,
+  GetBucketLifecycleConfiguration,
+  GetObject,
   HeadObject,
   HeadBucket,
   ListBuckets,

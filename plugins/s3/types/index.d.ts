@@ -11,9 +11,12 @@ import {
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
   GetBucketAclCommandOutput as GetBucketAclResponse,
   GetBucketAnalyticsConfigurationCommandOutput as GetBucketAnalyticsConfigurationResponse,
-  GetObjectCommandOutput as GetObjectResponse,
   GetBucketCorsCommandOutput as GetBucketCorsResponse,
   GetBucketEncryptionCommandOutput as GetBucketEncryptionResponse,
+  GetBucketIntelligentTieringConfigurationCommandOutput as GetBucketIntelligentTieringConfigurationResponse,
+  GetBucketInventoryConfigurationCommandOutput as GetBucketInventoryConfigurationResponse,
+  GetBucketLifecycleConfigurationCommandOutput as GetBucketLifecycleConfigurationResponse,
+  GetObjectCommandOutput as GetObjectResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
   ListBucketsCommandOutput as ListBucketsResponse,
@@ -89,12 +92,6 @@ declare interface AwsLiteS3 {
   GetBucketAnalyticsConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<GetBucketAnalyticsConfigurationResponse>
   /**
    * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html S3: GetObject}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObject S3: GetObject}
-   */
-  GetObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string, ResponseCacheControl?: string, ResponseContentDisposition?: string, ResponseContentEncoding?: string, ResponseContentLanguage?: string, ResponseContentType?: string, ResponseExpires?: string, rawResponsePayload?: boolean, streamResponsePayload?: boolean }) => Promise<GetObjectResponse>
-  /**
-   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketCors.html S3: GetBucketCors}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketCors S3: GetBucketCors}
    */
@@ -105,6 +102,30 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketEncryption S3: GetBucketEncryption}
    */
   GetBucketEncryption: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketEncryptionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketIntelligentTieringConfiguration.html S3: GetBucketIntelligentTieringConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketIntelligentTieringConfiguration S3: GetBucketIntelligentTieringConfiguration}
+   */
+  GetBucketIntelligentTieringConfiguration: (input: { Bucket: string, Id: string }) => Promise<GetBucketIntelligentTieringConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketInventoryConfiguration.html S3: GetBucketInventoryConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketInventoryConfiguration S3: GetBucketInventoryConfiguration}
+   */
+  GetBucketInventoryConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<GetBucketInventoryConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html S3: GetBucketLifecycleConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketLifecycleConfiguration S3: GetBucketLifecycleConfiguration}
+   */
+  GetBucketLifecycleConfiguration: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketLifecycleConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html S3: GetObject}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObject S3: GetObject}
+   */
+  GetObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string, ResponseCacheControl?: string, ResponseContentDisposition?: string, ResponseContentEncoding?: string, ResponseContentLanguage?: string, ResponseContentType?: string, ResponseExpires?: string, rawResponsePayload?: boolean, streamResponsePayload?: boolean }) => Promise<GetObjectResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html S3: HeadObject}
@@ -166,9 +187,12 @@ export type {
   GetBucketAccelerateConfigurationResponse,
   GetBucketAclResponse,
   GetBucketAnalyticsConfigurationResponse,
-  GetObjectResponse,
   GetBucketCorsResponse,
   GetBucketEncryptionResponse,
+  GetBucketIntelligentTieringConfigurationResponse,
+  GetBucketInventoryConfigurationResponse,
+  GetBucketLifecycleConfigurationResponse,
+  GetObjectResponse,
   HeadObjectResponse,
   HeadBucketResponse,
   ListBucketsResponse,
