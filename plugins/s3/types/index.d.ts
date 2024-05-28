@@ -9,7 +9,11 @@ import {
   DeleteObjectCommandOutput as DeleteObjectResponse,
   DeleteObjectsCommandOutput as DeleteObjectsResponse,
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
+  GetBucketAclCommandOutput as GetBucketAclResponse,
+  GetBucketAnalyticsConfigurationCommandOutput as GetBucketAnalyticsConfigurationResponse,
   GetObjectCommandOutput as GetObjectResponse,
+  GetBucketCorsCommandOutput as GetBucketCorsResponse,
+  GetBucketEncryptionCommandOutput as GetBucketEncryptionResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
   ListBucketsCommandOutput as ListBucketsResponse,
@@ -73,10 +77,34 @@ declare interface AwsLiteS3 {
   GetBucketAccelerateConfiguration: (input: { Bucket: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetBucketAccelerateConfigurationResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAcl.html S3: GetBucketAcl}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketAcl S3: GetBucketAcl}
+   */
+  GetBucketAcl: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketAclResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAnalyticsConfiguration.html S3: GetBucketAnalyticsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketAnalyticsConfiguration S3: GetBucketAnalyticsConfiguration}
+   */
+  GetBucketAnalyticsConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<GetBucketAnalyticsConfigurationResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html S3: GetObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObject S3: GetObject}
    */
   GetObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string, ResponseCacheControl?: string, ResponseContentDisposition?: string, ResponseContentEncoding?: string, ResponseContentLanguage?: string, ResponseContentType?: string, ResponseExpires?: string, rawResponsePayload?: boolean, streamResponsePayload?: boolean }) => Promise<GetObjectResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketCors.html S3: GetBucketCors}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketCors S3: GetBucketCors}
+   */
+  GetBucketCors: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketCorsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketEncryption.html S3: GetBucketEncryption}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketEncryption S3: GetBucketEncryption}
+   */
+  GetBucketEncryption: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketEncryptionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html S3: HeadObject}
@@ -136,7 +164,11 @@ export type {
   DeleteObjectResponse,
   DeleteObjectsResponse,
   GetBucketAccelerateConfigurationResponse,
+  GetBucketAclResponse,
+  GetBucketAnalyticsConfigurationResponse,
   GetObjectResponse,
+  GetBucketCorsResponse,
+  GetBucketEncryptionResponse,
   HeadObjectResponse,
   HeadBucketResponse,
   ListBucketsResponse,

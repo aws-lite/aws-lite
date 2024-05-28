@@ -236,6 +236,30 @@ Properties:
   - Sets request header: `x-amz-request-payer`
 
 
+### `GetBucketAcl`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAcl.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `GetBucketAnalyticsConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAnalyticsConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - Id of the analytics configuration
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `GetObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html)
@@ -287,6 +311,28 @@ Properties:
   - Set to `true` to return payload as a buffer
 - **`streamResponsePayload` (boolean)**
   - Set to `true` to return payload as a Node.js stream
+
+
+### `GetBucketCors`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketCors.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `GetBucketEncryption`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketEncryption.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
 
 
 ### `HeadObject`
@@ -546,10 +592,6 @@ Properties:
 - [`DeleteBucketWebsite`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketWebsite.html)
 - [`DeleteObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html)
 - [`DeletePublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
-- [`GetBucketAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAcl.html)
-- [`GetBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAnalyticsConfiguration.html)
-- [`GetBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketCors.html)
-- [`GetBucketEncryption`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketEncryption.html)
 - [`GetBucketIntelligentTieringConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketIntelligentTieringConfiguration.html)
 - [`GetBucketInventoryConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketInventoryConfiguration.html)
 - [`GetBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html)

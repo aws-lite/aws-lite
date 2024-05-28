@@ -114,6 +114,7 @@ const QueryParamMappings = {
   Delimiter: 'delimiter',
   EncodingType: 'encoding-type',
   FetchOwner: 'fetch-owner',
+  Id: 'id',
   KeyMarker: 'key-marker',
   MaxKeys: 'max-keys',
   MaxUploads: 'max-uploads',

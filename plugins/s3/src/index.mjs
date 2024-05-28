@@ -43,14 +43,6 @@ function getHost ({ Bucket }, { region, config }) {
   return { host: `${Bucket}.` + (config.host || `s3.${region}.amazonaws.com`) }
 }
 const defaultResponse = ({ payload }) => payload || {}
-const defaultError = ({ statusCode, error }) => {
-  // SDK v2 lowcases `code`
-  if (error?.Code) {
-    error.name = error.code = error.Code
-    delete error.Code
-  }
-  return { statusCode, error }
-}
 
 const AbortMultipartUpload = {
   awsDoc: docRoot + 'API_AbortMultipartUpload.html',
@@ -84,16 +76,8 @@ const CompleteMultipartUpload = {
     Key,
     UploadId,
     MultipartUpload: { ...obj, comment: '`MultipartUpload` object containing details about the completed uploads', ref: docRoot + 'API_CompleteMultipartUpload.html#AmazonS3-CompleteMultipartUpload-request-MultipartUpload' },
-    ...getValidateHeaders(
-      'ChecksumCRC32',
-      'ChecksumCRC32C',
-      'ChecksumSHA1',
-      'ChecksumSHA256',
-      'RequestPayer',
-      'ExpectedBucketOwner',
-      'SSECustomerAlgorithm',
-      'SSECustomerKey',
-      'SSECustomerKeyMD5',
+    ...getValidateHeaders( 'ChecksumCRC32', 'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256',
+      'RequestPayer', 'ExpectedBucketOwner', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5',
     ),
   },
   request: (params, utils) => {
@@ -140,39 +124,18 @@ const CreateBucket = {
   },
 }
 
-// TODO: Check if this is working properly and fix the response
 const CreateMultipartUpload = {
   awsDoc: docRoot + 'API_CreateMultipartUpload.html',
   validate: {
     Bucket,
     Key,
-    ...getValidateHeaders(
-      'ACL',
-      'CacheControl',
-      'ContentDisposition',
-      'ContentEncoding',
-      'ContentLanguage',
-      'ContentType',
-      'Expires',
-      'GrantFullControl',
-      'GrantRead',
-      'GrantReadACP',
-      'GrantWriteACP',
-      'ServerSideEncryption',
-      'StorageClass',
-      'WebsiteRedirectLocation',
-      'SSECustomerAlgorithm',
-      'SSECustomerKeyMD5',
-      'SSEKMSKeyId',
-      'SSEKMSEncryptionContext',
-      'BucketKeyEnabled',
-      'RequestPayer',
-      'Tagging',
-      'ObjectLockMode',
-      'ObjectLockRetainUntilDate',
-      'ObjectLockLegalHoldStatus',
-      'ExpectedBucketOwner',
-      'ChecksumAlgorithm',
+    ...getValidateHeaders( 'ACL', 'CacheControl', 'ContentDisposition', 'ContentEncoding',
+      'ContentLanguage', 'ContentType', 'Expires', 'GrantFullControl',
+      'GrantRead', 'GrantReadACP', 'GrantWriteACP', 'ServerSideEncryption',
+      'StorageClass', 'WebsiteRedirectLocation', 'SSECustomerAlgorithm', 'SSECustomerKeyMD5',
+      'SSEKMSKeyId', 'SSEKMSEncryptionContext', 'BucketKeyEnabled', 'RequestPayer',
+      'Tagging', 'ObjectLockMode', 'ObjectLockRetainUntilDate', 'ObjectLockLegalHoldStatus',
+      'ExpectedBucketOwner', 'ChecksumAlgorithm',
     ),
   },
   request: (params, utils) => {
@@ -211,7 +174,7 @@ const DeleteBucket = {
       headers: { ...getHeadersFromParams(params) },
     }
   },
-  response: () => ({}),
+  response: defaultResponse,
 }
 
 const DeleteObject = {
@@ -294,7 +257,153 @@ const GetBucketAccelerateConfiguration = {
       ...parseHeadersToResults({ headers }),
     }
   },
-  error: defaultError,
+}
+
+const GetBucketAcl = {
+  awsDoc: docRoot + 'API_GetBucketAcl.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: '/?acl',
+      headers: { ...getHeadersFromParams(params) },
+    }
+  },
+  response: ({ payload }) => {
+    let { Owner, AccessControlList: Grants } = payload
+    if (Array.isArray(Grants)) {
+      Grants = Grants.map(i => ({ ...i }))
+    }
+    else if (typeof Grants === 'object') {
+      Grants = [ Grants.Grant ]
+    }
+    else {
+      Grants = []
+    }
+
+    return {
+      Owner,
+      Grants,
+    }
+  },
+}
+
+const GetBucketAnalyticsConfiguration = {
+  awsDoc: docRoot + 'API_GetBucketAnalyticsConfiguration.html',
+  validate: {
+    Bucket,
+    Id: { ...str, required, comment: 'Id of the analytics configuration' },
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Id' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const query = { analytics: ' ', ...getQueryFromParams(params, queryParams) }
+    const headers = getHeadersFromParams(params, queryParams)
+    return {
+      host,
+      pathPrefix,
+      query,
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    if (payload.Filter?.And?.Tag) {
+      if (Array.isArray(payload.Filter.And.Tag)) {
+        payload.Filter.And.Tags = payload.Filter.And.Tag
+      }
+      else {
+        payload.Filter.And.Tags = [ payload.Filter.And.Tag ]
+      }
+      delete payload.Filter.And.Tag
+    }
+
+    if (!payload.StorageClassAnalysis) {
+      payload.StorageClassAnalysis = {}
+    }
+
+    delete payload.xmlns
+    return { AnalyticsConfiguration: payload }
+  },
+}
+
+const GetBucketCors = {
+  awsDoc: docRoot + 'API_GetBucketCors.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?cors',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    const CorsParamMapping = {
+      AllowedHeader: 'AllowedHeaders',
+      AllowedMethod: 'AllowedMethods',
+      AllowedOrigin: 'AllowedOrigins',
+      ExposeHeader: 'ExposeHeaders',
+    }
+
+    let { CORSRule: CORSRules } = payload
+
+    if (!Array.isArray(CORSRules)) {
+      CORSRules = [ CORSRules ]
+    }
+
+    CORSRules.forEach(cors => {
+      Object.keys(cors).filter(key => CorsParamMapping[key]).forEach(key => {
+        if (Array.isArray(cors[key])) {
+          cors[CorsParamMapping[key]] = cors[key]
+        }
+        else {
+          cors[CorsParamMapping[key]] = [ cors[key] ]
+        }
+        delete cors[key]
+      })
+    })
+
+    return { CORSRules }
+  },
+}
+
+const GetBucketEncryption = {
+  awsDoc: docRoot + 'API_GetBucketEncryption.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?encryption',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    let { Rule: Rules } = payload
+    if (typeof Rules === 'object' && !Array.isArray(Rules)) {
+      Rules = [ Rules ]
+    }
+    else if (!Rules) {
+      Rules = []
+    }
+    return { Rules }
+  },
 }
 
 const GetObject = {
@@ -305,18 +414,9 @@ const GetObject = {
     PartNumber,
     VersionId,
     // Here come the headers
-    ...getValidateHeaders(
-      'IfMatch',
-      'IfModifiedSince',
-      'IfNoneMatch',
-      'IfUnmodifiedSince',
-      'Range',
-      'SSECustomerAlgorithm',
-      'SSECustomerKey',
-      'SSECustomerKeyMD5',
-      'RequestPayer',
-      'ExpectedBucketOwner',
-      'ChecksumMode',
+    ...getValidateHeaders('IfMatch', 'IfModifiedSince', 'IfNoneMatch', 'IfUnmodifiedSince',
+      'Range', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5',
+      'RequestPayer', 'ExpectedBucketOwner', 'ChecksumMode',
     ),
     ResponseCacheControl:       { ...str, comment: 'Sets response header: `cache-control`' },
     ResponseContentDisposition: { ...str, comment: 'Sets response header: `content-disposition`' },
@@ -352,7 +452,6 @@ const GetObject = {
       ...parseHeadersToResults({ headers }, null, []),
     }
   },
-  error: defaultError,
 }
 
 const HeadBucket = {
@@ -371,7 +470,6 @@ const HeadBucket = {
     }
   },
   response: parseHeadersToResults,
-  error: defaultError,
 }
 
 const HeadObject = {
@@ -407,7 +505,7 @@ const HeadObject = {
       params.error = params.error || {}
       params.error.code = params.error.code || 'NotFound'
     }
-    return defaultError(params)
+    return params
   },
 }
 
@@ -428,7 +526,6 @@ const ListBuckets = {
     res.Buckets = res.Buckets.map(i => i.Bucket ? i.Bucket : i)
     return res
   },
-  error: defaultError,
 }
 
 const ListMultipartUploads = {
@@ -465,14 +562,14 @@ const ListMultipartUploads = {
     }
   },
   response: ({ payload }) => {
-    const Upload = payload.Upload
-    if (Array.isArray(Upload)) {
-      return { Uploads: Upload }
+    let { Upload: Uploads } = payload
+    if (typeof Uploads === 'object' && !Array.isArray(Uploads)) {
+      Uploads = [ Uploads ]
     }
-    else if (typeof Upload === 'object') {
-      return { Uploads: [ Upload ] }
+    else if (!Uploads) {
+      Uploads = []
     }
-    return []
+    return { Uploads }
   },
 }
 
@@ -520,7 +617,6 @@ const ListObjectsV2 = {
     }
     return res
   },
-  error: defaultError,
 }
 
 const UploadPart = {
@@ -530,19 +626,9 @@ const UploadPart = {
     Key,
     PartNumber,
     Body: { ...obj, comment: 'Stream of data to be uploaded', ref: docRoot + 'AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody' },
-    ...getValidateHeaders(
-      'ContentLength',
-      'ContentMD5',
-      'ChecksumAlgorithm',
-      'ChecksumCRC32',
-      'ChecksumCRC32C',
-      'ChecksumSHA1',
-      'ChecksumSHA256',
-      'SSECustomerAlgorithm',
-      'SSECustomerKey',
-      'SSECustomerKeyMD5',
-      'RequestPayer',
-      'ExpectedBucketOwner',
+    ...getValidateHeaders( 'ContentLength', 'ContentMD5', 'ChecksumAlgorithm', 'ChecksumCRC32',
+      'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256', 'SSECustomerAlgorithm',
+      'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner',
     ),
   },
   request: (params, utils) => {
@@ -564,7 +650,6 @@ const UploadPart = {
   response: defaultResponse,
 }
 
-
 const methods = {
   AbortMultipartUpload,
   CompleteMultipartUpload,
@@ -574,7 +659,11 @@ const methods = {
   DeleteObject,
   DeleteObjects,
   GetBucketAccelerateConfiguration,
+  GetBucketAcl,
+  GetBucketAnalyticsConfiguration,
   GetObject,
+  GetBucketCors,
+  GetBucketEncryption,
   HeadObject,
   HeadBucket,
   ListBuckets,
