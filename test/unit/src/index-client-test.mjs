@@ -83,7 +83,7 @@ test('Primary client - core functionality', async t => {
 
   // Pass through defined, non-empty query string params
   query = { fiz: 'buz', json: false, foo: '' }
-  url = path + '?' + qs.stringify({ fiz: 'buz', json: false })
+  url = path + '?' + qs.stringify({ fiz: 'buz', json: false, foo: '' })
   server.use({ responseBody, responseHeaders: jsonHeaders })
   result = await aws({ service, path, payload, query })
   basicRequestChecks(t, 'POST', { url })

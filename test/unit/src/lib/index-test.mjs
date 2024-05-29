@@ -53,11 +53,11 @@ test('tidyQuery', t => {
   result = tidyQuery({ ok: 'hi', hello: 'there' })
   t.equal(result, 'ok=hi&hello=there', 'Got back correct basic query string parameters')
 
-  result = tidyQuery({ ok: 'hi', hello: 'there', yo: '' })
-  t.equal(result, 'ok=hi&hello=there', 'Ignored empty query string param')
-
   result = tidyQuery({ ok: 'hi', hello: 'there', yo: undefined })
   t.equal(result, 'ok=hi&hello=there', 'Ignored empty query string param')
+
+  result = tidyQuery({ ok: 'hi', hello: 'there', yo: '' })
+  t.equal(result, 'ok=hi&hello=there&yo=', 'Got back correct empty string query string parameter')
 
   result = tidyQuery({ ok: 'hi', hello: true })
   t.equal(result, 'ok=hi&hello=true', 'Got back correct boolean true query string parameter')
