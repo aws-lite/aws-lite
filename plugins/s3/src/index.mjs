@@ -303,7 +303,7 @@ const GetBucketAnalyticsConfiguration = {
   request: (params, utils) => {
     const queryParams = [ 'Id' ]
     const { host, pathPrefix } = getHost(params, utils)
-    const query = { analytics: ' ', ...getQueryFromParams(params, queryParams) }
+    const query = { analytics: '', ...getQueryFromParams(params, queryParams) }
     const headers = getHeadersFromParams(params, queryParams)
     return {
       host,
@@ -418,7 +418,7 @@ const GetBucketIntelligentTieringConfiguration = {
     return {
       host,
       pathPrefix,
-      query: { 'intelligent-tiering': ' ', id },
+      query: { 'intelligent-tiering': '', id },
     }
   },
   response: ({ payload }) => {
@@ -464,7 +464,7 @@ const GetBucketInventoryConfiguration = {
     return {
       host,
       pathPrefix,
-      query: { 'inventory': ' ', id },
+      query: { 'inventory': '', id },
       headers,
     }
   },
@@ -672,7 +672,7 @@ const ListMultipartUploads = {
     const queryParams = [ 'Delimiter', 'EncodingType', 'KeyMarker', 'MaxUploads', 'UploadMarker' ]
     const { host, pathPrefix } = getHost(params, utils)
     const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
-    let query = { uploads: ' ',  ...getQueryFromParams(params, queryParams) }
+    let query = { uploads: '',  ...getQueryFromParams(params, queryParams) }
     let paginate
     if (params.paginate) paginate = true
     return {
