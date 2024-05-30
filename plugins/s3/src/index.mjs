@@ -275,16 +275,14 @@ const GetBucketAcl = {
     }
   },
   response: ({ payload }) => {
-    let { Owner, AccessControlList: Grants } = payload
+    let { Owner } = payload
+    let Grants = payload.AccessControlList.Grant
 
-    if (Array.isArray(Grants)) {
-      Grants = Grants.map(i => ({ ...i }))
-    }
-    else if (typeof Grants === 'object') {
-      Grants = [ Grants.Grant ]
-    }
-    else {
+    if (!Grants) {
       Grants = []
+    }
+    else if (!Array.isArray(Grants)) {
+      Grants = [ Grants ]
     }
 
     return {
@@ -344,30 +342,30 @@ const GetBucketCors = {
     }
   },
   response: ({ payload }) => {
-    const CorsParamMapping = {
-      AllowedHeader: 'AllowedHeaders',
-      AllowedMethod: 'AllowedMethods',
-      AllowedOrigin: 'AllowedOrigins',
-      ExposeHeader: 'ExposeHeaders',
-    }
-
     let { CORSRule: CORSRules } = payload
 
     if (!Array.isArray(CORSRules)) {
       CORSRules = [ CORSRules ]
     }
 
-    CORSRules.forEach(cors => {
-      Object.keys(cors).filter(key => CorsParamMapping[key]).forEach(key => {
-        if (Array.isArray(cors[key])) {
-          cors[CorsParamMapping[key]] = cors[key]
-        }
-        else {
-          cors[CorsParamMapping[key]] = [ cors[key] ]
-        }
-        delete cors[key]
-      })
+    CORSRules.forEach(i => {
+      if (i.AllowedHeader) {
+        arrayifyAndMoveObject(i, 'AllowedHeader', 'AllowedHeaders')
+      }
+
+      if (i.AllowedMethod) {
+        arrayifyAndMoveObject(i, 'AllowedMethod', 'AllowedMethods')
+      }
+
+      if (i.AllowedOrigin) {
+        arrayifyAndMoveObject(i, 'AllowedOrigin', 'AllowedOrigins')
+      }
+
+      if (i.ExposeHeader) {
+        arrayifyAndMoveObject(i, 'ExposeHeader', 'ExposeHeaders')
+      }
     })
+
 
     return { CORSRules }
   },
@@ -390,14 +388,9 @@ const GetBucketEncryption = {
     }
   },
   response: ({ payload }) => {
-    let { Rule: Rules } = payload
-    if (typeof Rules === 'object' && !Array.isArray(Rules)) {
-      Rules = [ Rules ]
-    }
-    else if (!Rules) {
-      Rules = []
-    }
-    return { Rules }
+    arrayifyAndMoveObject(payload, 'Rule', 'Rules')
+    return {
+      ServerSideEncryptionConfiguration: { Rules: payload.Rules } }
   },
 }
 
@@ -417,13 +410,7 @@ const GetBucketIntelligentTieringConfiguration = {
     }
   },
   response: ({ payload }) => {
-    if (!Array.isArray(payload.Tiering)) {
-      payload.Tierings = [ payload.Tiering ]
-    }
-    else {
-      payload.Tierings = payload.Tiering
-    }
-    delete payload.Tiering
+    arrayifyAndMoveObject(payload, 'Tiering', 'Tierings')
 
     if (payload.Filter) {
       arrayifyFilter(payload.Filter)
@@ -481,37 +468,20 @@ const GetBucketLifecycleConfiguration = {
     }
   },
   response: ({ payload }) => {
-    let { Rule } = payload
-    if (!Array.isArray(Rule)) {
-      Rule = [ Rule ]
-    }
+    arrayifyAndMoveObject(payload, 'Rule', 'Rules')
+    payload.Rules.forEach(i => {
+      if (i.Transition) arrayifyAndMoveObject(i, 'Transition', 'Transitions')
 
-    Rule.forEach(i => {
-      let { Transition, NoncurrentVersionTransition, Filter } = i
-      if (Transition) {
-        if (!Array.isArray(Transition)) {
-          Transition = [ Transition ]
-        }
-        i.Transitions = Transition
-        delete i.Transition
-      }
+      if (i.NonCurrentVersionTransition) arrayifyAndMoveObject(i, 'NoncurrentVersionTransition', 'NoncurrentVersionTransitions')
 
-      if (NoncurrentVersionTransition) {
-        if (!Array.isArray(NoncurrentVersionTransition)) {
-          NoncurrentVersionTransition = [ NoncurrentVersionTransition ]
-        }
-        i.NoncurrentVersionTransitions = NoncurrentVersionTransition
-        delete i.NoncurrentVersionTransition
-      }
-
-      if (Filter) {
-        arrayifyFilter(Filter)
+      if (i.Filter) {
+        arrayifyFilter(i.Filter)
       }
       else {
         i.Filter = {}
       }
     })
-    return { Rules: Rule }
+    return { Rules: payload.Rules }
   },
 }
 
