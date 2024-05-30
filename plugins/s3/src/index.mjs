@@ -698,6 +698,100 @@ const GetBucketReplication = {
   },
 }
 
+const GetBucketRequestPayment = {
+  awsDoc: docRoot + 'API_GetBucketRequestPayment.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?requestPayment',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    return { Payer: payload.Payer }
+  },
+}
+
+const GetBucketTagging = {
+  awsDoc: docRoot + 'API_GetBucketTagging.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?tagging',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    let TagSet = payload.TagSet.Tag
+
+    if (!Array.isArray(TagSet)) TagSet = [ TagSet ]
+    return { TagSet }
+  },
+}
+
+const GetBucketVersioning = {
+  awsDoc: docRoot + 'API_GetBucketVersioning.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?versioning',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    delete payload.xmlns
+    return payload
+  },
+}
+
+const GetBucketWebsite = {
+  awsDoc: docRoot + 'API_GetBucketWebsite.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?website',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    if (payload.RoutingRules) {
+      if (!Array.isArray(payload.RoutingRules.RoutingRule)) {
+        payload.RoutingRules.RoutingRule = [ payload.RoutingRules.RoutingRule ]
+      }
+      payload.RoutingRules = payload.RoutingRules.RoutingRule
+    }
+    return payload
+  },
+}
+
 const GetObject = {
   awsDoc: docRoot + 'API_GetObject.html',
   validate: {
@@ -966,6 +1060,10 @@ const methods = {
   GetBucketPolicy,
   GetBucketPolicyStatus,
   GetBucketReplication,
+  GetBucketRequestPayment,
+  GetBucketTagging,
+  GetBucketVersioning,
+  GetBucketWebsite,
   GetObject,
   HeadObject,
   HeadBucket,

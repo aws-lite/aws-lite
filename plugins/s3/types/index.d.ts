@@ -24,6 +24,10 @@ import {
   GetBucketPolicyCommandOutput as GetBucketPolicyResponse,
   GetBucketPolicyStatusCommandOutput as GetBucketPolicyStatusResponse,
   GetBucketReplicationCommandOutput as GetBucketReplicationResponse,
+  GetBucketRequestPaymentCommandOutput as GetBucketRequestPaymentResponse,
+  GetBucketTaggingCommandOutput as GetBucketTaggingResponse,
+  GetBucketVersioningCommandOutput as GetBucketVersioningResponse,
+  GetBucketWebsiteCommandOutput as GetBucketWebsiteResponse,
   GetObjectCommandOutput as GetObjectResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
@@ -178,6 +182,30 @@ declare interface AwsLiteS3 {
   GetBucketReplication: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketReplicationResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketRequestPayment.html S3: GetBucketRequestPayment}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketRequestPayment S3: GetBucketRequestPayment}
+   */
+  GetBucketRequestPayment: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketRequestPaymentResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketTagging.html S3: GetBucketTagging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketTagging S3: GetBucketTagging}
+   */
+  GetBucketTagging: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketTaggingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html S3: GetBucketVersioning}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketVersioning S3: GetBucketVersioning}
+   */
+  GetBucketVersioning: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketVersioningResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketWebsite.html S3: GetBucketWebsite}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketWebsite S3: GetBucketWebsite}
+   */
+  GetBucketWebsite: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketWebsiteResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html S3: GetObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObject S3: GetObject}
    */
@@ -256,6 +284,10 @@ export type {
   GetBucketPolicyResponse,
   GetBucketPolicyStatusResponse,
   GetBucketReplicationResponse,
+  GetBucketRequestPaymentResponse,
+  GetBucketTaggingResponse,
+  GetBucketVersioningResponse,
+  GetBucketWebsiteResponse,
   GetObjectResponse,
   HeadObjectResponse,
   HeadBucketResponse,

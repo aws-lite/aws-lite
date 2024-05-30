@@ -19,10 +19,6 @@ export default {
   DeletePublicAccessBlock:                     { disabled, awsDoc: docRoot + 'API_DeletePublicAccessBlock.html' },
   GetBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_GetBucketLifecycle.html' }, // Does not exist anymore, replaced by `GetBucketLifecycleConfiguration`
   GetBucketNotification:                       { disabled, awsDoc: docRoot + 'API_GetBucketNotification.html' }, // Does not exist anymore, replaced by `GetBucketNotificationConfiguration`
-  GetBucketRequestPayment:                     { disabled, awsDoc: docRoot + 'API_GetBucketRequestPayment.html' },
-  GetBucketTagging:                            { disabled, awsDoc: docRoot + 'API_GetBucketTagging.html' },
-  GetBucketVersioning:                         { disabled, awsDoc: docRoot + 'API_GetBucketVersioning.html' },
-  GetBucketWebsite:                            { disabled, awsDoc: docRoot + 'API_GetBucketWebsite.html' },
   GetObjectAcl:                                { disabled, awsDoc: docRoot + 'API_GetObjectAcl.html' },
   GetObjectAttributes:                         { disabled, awsDoc: docRoot + 'API_GetObjectAttributes.html' },
   GetObjectLegalHold:                          { disabled, awsDoc: docRoot + 'API_GetObjectLegalHold.html' },
