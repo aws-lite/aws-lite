@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
+const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
 import PutObject from './put-object.mjs'
 
 const service = 's3'
@@ -276,6 +276,7 @@ const GetBucketAcl = {
   },
   response: ({ payload }) => {
     let { Owner, AccessControlList: Grants } = payload
+
     if (Array.isArray(Grants)) {
       Grants = Grants.map(i => ({ ...i }))
     }
@@ -313,14 +314,8 @@ const GetBucketAnalyticsConfiguration = {
     }
   },
   response: ({ payload }) => {
-    if (payload.Filter?.And?.Tag) {
-      if (Array.isArray(payload.Filter.And.Tag)) {
-        payload.Filter.And.Tags = payload.Filter.And.Tag
-      }
-      else {
-        payload.Filter.And.Tags = [ payload.Filter.And.Tag ]
-      }
-      delete payload.Filter.And.Tag
+    if (payload.Filter) {
+      arrayifyFilter(payload.Filter)
     }
 
     if (!payload.StorageClassAnalysis) {
@@ -422,8 +417,6 @@ const GetBucketIntelligentTieringConfiguration = {
     }
   },
   response: ({ payload }) => {
-
-
     if (!Array.isArray(payload.Tiering)) {
       payload.Tierings = [ payload.Tiering ]
     }
@@ -432,20 +425,11 @@ const GetBucketIntelligentTieringConfiguration = {
     }
     delete payload.Tiering
 
-    if (!payload.Filter) {
-      payload.Filter = {}
+    if (payload.Filter) {
+      arrayifyFilter(payload.Filter)
     }
 
-    if (payload.Filter?.And?.Tag) {
-      if (!Array.isArray(payload.Filter.And.Tag)) {
-        payload.Filter.And.Tags = [ payload.Filter.And.Tag ]
-      }
-      else {
-        payload.Filter.And.Tags = payload.Filter.And.Tag
-      }
-      delete payload.Filter.And.Tag
-    }
-
+    delete payload.xmlns
     return { IntelligentTieringConfiguration: payload }
   },
 }
@@ -497,40 +481,155 @@ const GetBucketLifecycleConfiguration = {
     }
   },
   response: ({ payload }) => {
-    if (!Array.isArray(payload.Rule)) {
-      payload.Rule = [ payload.Rule ]
+    let { Rule } = payload
+    if (!Array.isArray(Rule)) {
+      Rule = [ Rule ]
     }
 
-    payload.Rule.forEach(i => {
-      if (i.Transition) {
-        if (!Array.isArray(i.Transition)) {
-          i.Transition = [ i.Transition ]
+    Rule.forEach(i => {
+      let { Transition, NoncurrentVersionTransition, Filter } = i
+      if (Transition) {
+        if (!Array.isArray(Transition)) {
+          Transition = [ Transition ]
         }
-        i.Transitions = i.Transition
+        i.Transitions = Transition
         delete i.Transition
       }
 
-      if (i.NoncurrentVersionTransition) {
-        if (!Array.isArray(i.NoncurrentVersionTransition)) {
-          i.NoncurrentVersionTransition = [ i.NoncurrentVersionTransition ]
+      if (NoncurrentVersionTransition) {
+        if (!Array.isArray(NoncurrentVersionTransition)) {
+          NoncurrentVersionTransition = [ NoncurrentVersionTransition ]
         }
-        i.NoncurrentVersionTransitions = i.NoncurrentVersionTransition
+        i.NoncurrentVersionTransitions = NoncurrentVersionTransition
         delete i.NoncurrentVersionTransition
       }
 
-      if (!i.Filter) {
+      if (Filter) {
+        arrayifyFilter(Filter)
+      }
+      else {
         i.Filter = {}
       }
-
-      if (i.Filter?.And?.Tag) {
-        if (!Array.isArray(i.Filter.And.Tag)) {
-          i.Filter.And.Tag = [ i.Filter.And.Tag ]
-        }
-        i.Filter.And.Tags = i.Filter.And.Tag
-        delete i.Filter.And.Tag
-      }
     })
-    return { Rules: payload.Rule }
+    return { Rules: Rule }
+  },
+}
+
+const GetBucketLocation = {
+  awsDoc: docRoot + 'API_GetBucketLocation.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?location',
+      headers,
+    }
+  },
+  response: defaultResponse,
+}
+
+const GetBucketLogging = {
+  awsDoc: docRoot + 'API_GetBucketLogging.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?logging',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    let { LoggingEnabled } = payload
+    if (!LoggingEnabled.TargetGrants) {
+      LoggingEnabled.TargetGrants = []
+    }
+    else if (!Array.isArray(LoggingEnabled.TargetGrants.Grant)) {
+      LoggingEnabled.TargetGrants = [ LoggingEnabled.TargetGrants.Grant ]
+    }
+    else {
+      LoggingEnabled.TargetGrants = LoggingEnabled.TargetGrants.Grant
+    }
+
+    return payload
+  },
+}
+
+const GetBucketMetricsConfiguration = {
+  awsDoc: docRoot + 'API_GetBucketMetricsConfiguration.html',
+  validate: {
+    Bucket,
+    Id: { ...str, required, comment: 'Id of the metrics configuration' },
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Id' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { metrics: ' ', ...getQueryFromParams(params, queryParams ) }
+    return {
+      host,
+      pathPrefix,
+      query,
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    if (payload.Filter) {
+      arrayifyFilter(payload.Filter)
+    }
+
+    delete payload.xmlns
+    return { MetricsConfiguration: payload }
+  },
+}
+
+const GetBucketNotificationConfiguration = {
+  awsDoc: docRoot + 'API_GetBucketNotificationConfiguration.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?notification',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    const arrayify = (oldRoot, newRoot) => {
+      if (payload[oldRoot]) {
+        arrayifyAndMoveObject(payload, oldRoot, newRoot)
+        payload[newRoot].forEach(i => {
+          arrayifyAndMoveObject(i, 'Event', 'Events')
+          if (i.Filter?.S3Key?.FilterRule) {
+            arrayifyAndMoveObject(i.Filter.S3Key, 'FilterRule', 'FilterRules')
+            i.Filter.Keys = i.Filter.S3Key
+            delete i.Filter.S3Key
+          }
+        })
+      }
+    }
+    arrayify('CloudFunctionConfiguration', 'LambdaFunctionConfigurations')
+    arrayify('TopicConfiguration', 'TopicConfigurations')
+    arrayify('QueueConfiguration', 'QueueConfigurations')
+    delete payload.xmlns
+    return payload
   },
 }
 
@@ -794,6 +893,10 @@ const methods = {
   GetBucketIntelligentTieringConfiguration,
   GetBucketInventoryConfiguration,
   GetBucketLifecycleConfiguration,
+  GetBucketLocation,
+  GetBucketLogging,
+  GetBucketMetricsConfiguration,
+  GetBucketNotificationConfiguration,
   GetObject,
   HeadObject,
   HeadBucket,

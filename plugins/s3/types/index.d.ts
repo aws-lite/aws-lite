@@ -16,6 +16,10 @@ import {
   GetBucketIntelligentTieringConfigurationCommandOutput as GetBucketIntelligentTieringConfigurationResponse,
   GetBucketInventoryConfigurationCommandOutput as GetBucketInventoryConfigurationResponse,
   GetBucketLifecycleConfigurationCommandOutput as GetBucketLifecycleConfigurationResponse,
+  GetBucketLocationCommandOutput as GetBucketLocationResponse,
+  GetBucketLoggingCommandOutput as GetBucketLoggingResponse,
+  GetBucketMetricsConfigurationCommandOutput as GetBucketMetricsConfigurationResponse,
+  GetBucketNotificationConfigurationCommandOutput as GetBucketNotificationConfigurationResponse,
   GetObjectCommandOutput as GetObjectResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
@@ -122,6 +126,30 @@ declare interface AwsLiteS3 {
   GetBucketLifecycleConfiguration: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketLifecycleConfigurationResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLocation.html S3: GetBucketLocation}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketLocation S3: GetBucketLocation}
+   */
+  GetBucketLocation: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketLocationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLogging.html S3: GetBucketLogging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketLogging S3: GetBucketLogging}
+   */
+  GetBucketLogging: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketLoggingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketMetricsConfiguration.html S3: GetBucketMetricsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketMetricsConfiguration S3: GetBucketMetricsConfiguration}
+   */
+  GetBucketMetricsConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<GetBucketMetricsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotificationConfiguration.html S3: GetBucketNotificationConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketNotificationConfiguration S3: GetBucketNotificationConfiguration}
+   */
+  GetBucketNotificationConfiguration: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketNotificationConfigurationResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html S3: GetObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObject S3: GetObject}
    */
@@ -192,6 +220,10 @@ export type {
   GetBucketIntelligentTieringConfigurationResponse,
   GetBucketInventoryConfigurationResponse,
   GetBucketLifecycleConfigurationResponse,
+  GetBucketLocationResponse,
+  GetBucketLoggingResponse,
+  GetBucketMetricsConfigurationResponse,
+  GetBucketNotificationConfigurationResponse,
   GetObjectResponse,
   HeadObjectResponse,
   HeadBucketResponse,

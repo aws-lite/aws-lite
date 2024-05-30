@@ -18,11 +18,7 @@ export default {
   DeleteObjectTagging:                         { disabled, awsDoc: docRoot + 'API_DeleteObjectTagging.html' },
   DeletePublicAccessBlock:                     { disabled, awsDoc: docRoot + 'API_DeletePublicAccessBlock.html' },
   GetBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_GetBucketLifecycle.html' }, // Does not exist anymore, replaced by `GetBucketLifecycleConfiguration`
-  GetBucketLocation:                           { disabled, awsDoc: docRoot + 'API_GetBucketLocation.html' },
-  GetBucketLogging:                            { disabled, awsDoc: docRoot + 'API_GetBucketLogging.html' },
-  GetBucketMetricsConfiguration:               { disabled, awsDoc: docRoot + 'API_GetBucketMetricsConfiguration.html' },
-  GetBucketNotification:                       { disabled, awsDoc: docRoot + 'API_GetBucketNotification.html' },
-  GetBucketNotificationConfiguration:          { disabled, awsDoc: docRoot + 'API_GetBucketNotificationConfiguration.html' },
+  GetBucketNotification:                       { disabled, awsDoc: docRoot + 'API_GetBucketNotification.html' }, // Does not exist anymore, replaced by `GetBucketNotificationConfiguration`
   GetBucketOwnershipControls:                  { disabled, awsDoc: docRoot + 'API_GetBucketOwnershipControls.html' },
   GetBucketPolicy:                             { disabled, awsDoc: docRoot + 'API_GetBucketPolicy.html' },
   GetBucketPolicyStatus:                       { disabled, awsDoc: docRoot + 'API_GetBucketPolicyStatus.html' },

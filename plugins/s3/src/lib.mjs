@@ -132,6 +132,11 @@ const QueryParamMappings = {
   VersionId: 'versionId',
 }
 
+function moveObjectField (object, oldKey, newKey) {
+  object[newKey] = object[oldKey]
+  delete object[oldKey]
+}
+
 function getQueryFromParams (params, queryParams) {
   let query
   queryParams.forEach(p => {
@@ -143,7 +148,30 @@ function getQueryFromParams (params, queryParams) {
   return query
 }
 
+function arrayifyFilter (Filter) {
+  if (Filter.And?.Tag) {
+    if (Array.isArray(Filter.And.Tag)) {
+      Filter.And.Tags = Filter.And.Tag
+    }
+    else {
+      Filter.And.Tags = [ Filter.And.Tag ]
+    }
+    delete Filter.And.Tag
+  }
+}
+
+function arrayifyAndMoveObject (object, oldKey, newKey) {
+  if (!Array.isArray(object[oldKey])) {
+    object[oldKey] = [ object[oldKey] ]
+  }
+  moveObjectField(object, oldKey, newKey)
+}
+
+
 export default {
+  moveObjectField,
+  arrayifyAndMoveObject,
+  arrayifyFilter,
   getValidateHeaders,
   getHeadersFromParams,
   getQueryFromParams,
