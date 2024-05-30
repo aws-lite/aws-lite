@@ -603,6 +603,101 @@ const GetBucketNotificationConfiguration = {
   },
 }
 
+const GetBucketOwnershipControls = {
+  awsDoc: docRoot + 'API_GetBucketOwnershipControls.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?ownershipControls',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    arrayifyAndMoveObject(payload, 'Rule', 'Rules')
+    return { OwnershipControls: payload.Rules }
+  },
+}
+
+const GetBucketPolicy = {
+  awsDoc: docRoot + 'API_GetBucketPolicy.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?policy',
+      headers,
+    }
+  },
+  response: ({ payload: Policy }) => {
+    return { Policy }
+  },
+}
+
+const GetBucketPolicyStatus = {
+  awsDoc: docRoot + 'API_GetBucketPolicyStatus.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?policyStatus',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    const { IsPublic } = payload
+    return { PolicyStatus: { IsPublic: IsPublic } }
+  },
+}
+
+const GetBucketReplication = {
+  awsDoc: docRoot + 'API_GetBucketReplication.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      host,
+      pathPrefix,
+      path: '/?replication',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    arrayifyAndMoveObject(payload, 'Rule', 'Rules')
+    payload.Rules.forEach(i => {
+      if (i.Filter) arrayifyFilter(i.Filter)
+    })
+    return {
+      ReplicationConfiguration: {
+        Role: payload.Role,
+        Rules: payload.Rules,
+      },
+    }
+  },
+}
+
 const GetObject = {
   awsDoc: docRoot + 'API_GetObject.html',
   validate: {
@@ -867,6 +962,10 @@ const methods = {
   GetBucketLogging,
   GetBucketMetricsConfiguration,
   GetBucketNotificationConfiguration,
+  GetBucketOwnershipControls,
+  GetBucketPolicy,
+  GetBucketPolicyStatus,
+  GetBucketReplication,
   GetObject,
   HeadObject,
   HeadBucket,

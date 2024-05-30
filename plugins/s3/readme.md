@@ -363,6 +363,50 @@ Properties:
   - Sets request header: `x-amz-expected-bucket-owner`
 
 
+### `GetBucketOwnershipControls`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketOwnershipControls.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `GetBucketPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicy.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `GetBucketPolicyStatus`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicyStatus.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `GetBucketReplication`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `GetObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html)
@@ -675,10 +719,6 @@ Properties:
 - [`DeletePublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
 - [`GetBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html)
 - [`GetBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotification.html)
-- [`GetBucketOwnershipControls`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketOwnershipControls.html)
-- [`GetBucketPolicy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicy.html)
-- [`GetBucketPolicyStatus`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicyStatus.html)
-- [`GetBucketReplication`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html)
 - [`GetBucketRequestPayment`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketRequestPayment.html)
 - [`GetBucketTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketTagging.html)
 - [`GetBucketVersioning`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html)

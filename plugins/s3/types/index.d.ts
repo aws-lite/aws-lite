@@ -20,6 +20,10 @@ import {
   GetBucketLoggingCommandOutput as GetBucketLoggingResponse,
   GetBucketMetricsConfigurationCommandOutput as GetBucketMetricsConfigurationResponse,
   GetBucketNotificationConfigurationCommandOutput as GetBucketNotificationConfigurationResponse,
+  GetBucketOwnershipControlsCommandOutput as GetBucketOwnershipControlsResponse,
+  GetBucketPolicyCommandOutput as GetBucketPolicyResponse,
+  GetBucketPolicyStatusCommandOutput as GetBucketPolicyStatusResponse,
+  GetBucketReplicationCommandOutput as GetBucketReplicationResponse,
   GetObjectCommandOutput as GetObjectResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
@@ -150,6 +154,30 @@ declare interface AwsLiteS3 {
   GetBucketNotificationConfiguration: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketNotificationConfigurationResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketOwnershipControls.html S3: GetBucketOwnershipControls}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketOwnershipControls S3: GetBucketOwnershipControls}
+   */
+  GetBucketOwnershipControls: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketOwnershipControlsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicy.html S3: GetBucketPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketPolicy S3: GetBucketPolicy}
+   */
+  GetBucketPolicy: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicyStatus.html S3: GetBucketPolicyStatus}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketPolicyStatus S3: GetBucketPolicyStatus}
+   */
+  GetBucketPolicyStatus: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketPolicyStatusResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html S3: GetBucketReplication}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketReplication S3: GetBucketReplication}
+   */
+  GetBucketReplication: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetBucketReplicationResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html S3: GetObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObject S3: GetObject}
    */
@@ -224,6 +252,10 @@ export type {
   GetBucketLoggingResponse,
   GetBucketMetricsConfigurationResponse,
   GetBucketNotificationConfigurationResponse,
+  GetBucketOwnershipControlsResponse,
+  GetBucketPolicyResponse,
+  GetBucketPolicyStatusResponse,
+  GetBucketReplicationResponse,
   GetObjectResponse,
   HeadObjectResponse,
   HeadBucketResponse,
