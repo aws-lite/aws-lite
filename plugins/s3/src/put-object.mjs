@@ -26,7 +26,7 @@ const PutObject = {
   validate: {
     Bucket:       { type: 'string', required, comment: 'S3 bucket name' },
     Key:          { type: 'string', required, comment: 'S3 key / file name' },
-    Body:         { type: [ 'string', 'buffer' ], comment: 'String or buffer to be uploaded' },
+    Body:         { type: [ 'buffer', 'stream', 'string' ], comment: 'String or buffer to be uploaded' },
     File:         { type: 'string', comment: 'File path to be read and uploaded from the local filesystem' },
     ApplyChecksum: { type: 'boolean', comment: 'Sign payload; enabling this option may significantly increase memory and latency' },
     MinChunkSize: { type: 'number', default: minSize, comment: 'Minimum size (in bytes) to utilize signed, AWS-chunk-encoded uploads to S3' },
@@ -54,6 +54,16 @@ const PutObject = {
     let headers = getHeadersFromParams(params)
     let dataSize
 
+    let bodyIsStream = Body?.on && Body?._read && Body?._readableState
+
+    if (bodyIsStream) {
+      let buf = []
+      for await (let data of Body) {
+        buf.push(data)
+      }
+      Body = Buffer.concat(buf)
+    }
+
     if (Body) {
       dataSize = Body.length
     }
@@ -75,9 +85,9 @@ const PutObject = {
     if (!ApplyChecksum) {
       let payload = Body || createReadStream(File)
       if (config.debug) {
-        let type = Body
-          ? typeof payload === 'string' ? 'string' : 'buffer'
-          : 'read stream'
+        let type
+        if (bodyIsStream || !Body) type = 'read stream'
+        else type = typeof payload === 'string' ? 'string' : 'buffer'
         console.error(`[S3.PutObject] publishing unsigned, unchunked payload (${dataSize}b ${type})`)
       }
       return {

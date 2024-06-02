@@ -3,7 +3,7 @@ import process from 'node:process'
 import test from 'tape'
 
 let cwd = process.cwd()
-let validTypes = [ 'array', 'boolean', 'buffer', 'number', 'object', 'string' ]
+let validTypes = [ 'array', 'boolean', 'buffer', 'number', 'object', 'stream', 'string' ]
 let plugins
 
 test('Set up env', async t => {

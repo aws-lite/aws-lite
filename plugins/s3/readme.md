@@ -625,7 +625,7 @@ Properties:
   - S3 bucket name
 - **`Key` (string) [required]**
   - S3 key / file name
-- **`Body` (string, buffer)**
+- **`Body` (buffer, stream, string)**
   - String or buffer to be uploaded
 - **`File` (string)**
   - File path to be read and uploaded from the local filesystem
