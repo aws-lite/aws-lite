@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
+const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, makeChecksumSHA256, moveObjectField, paramMappings, parseHeadersToResults } = lib
 import PutObject from './put-object.mjs'
 
 const service = 's3'
@@ -1005,6 +1005,173 @@ const ListObjectsV2 = {
   },
 }
 
+const PutBucketAccelerateConfiguration = {
+  awsDoc: docRoot + 'API_PutBucketAccelerateConfiguration.html',
+  validate: {
+    AccelerationConfiguration: { ...obj, required, comment: 'Object specifying acceleration configurations; can contain one of: `Status: \'Enabled\'`, `Status: \'Suspended\'`', ref: docRoot + 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html#AmazonS3-PutBucketAccelerateConfiguration-request-Status' },
+    Bucket,
+    ...getValidateHeaders('ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = { ...xml, ...getHeadersFromParams(params) }
+    const { AccelerationConfiguration } = params
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?accelerate',
+      headers,
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload: { AccelerationConfiguration },
+    }
+  },
+  response: defaultResponse,
+}
+
+// const PutBucketAcl = {
+//   awsDoc: docRoot + 'API_PutBucketAcl.html',
+//   validate: {
+//     Bucket,
+//     AccessControlPolicy: { ...obj, comment: 'Object defining the access control policy', ref: docRoot + 'API_PutBucketAcl.html#AmazonS3-PutBucketAcl-request-AccessControlPolicy' },
+//     ...getValidateHeaders('ACL', 'ContentMD5', 'ChecksumAlgorithm', 'GrantFullControl',
+//       'GrantRead', 'GrantReadACP', 'GrantWrite', 'GrantWriteACP', 'ExpectedBucketOwner'),
+//   },
+//   request: (params, utils) => {
+//     const { host, pathPrefix } = getHost(params, utils)
+//     const headers = { ...xml, ...getHeadersFromParams(params) }
+//     let { AccessControlPolicy } = params
+
+//     if (AccessControlPolicy.Grants) {
+//       AccessControlPolicy.Grants = AccessControlPolicy.Grants.map(i => {
+//         i.Grantee['xsi:type'] = i.Grantee.Type
+//         delete i.Grantee.Type
+//         return i
+//       })
+
+//       console.log(AccessControlPolicy.Grants)
+//       AccessControlPolicy.AccessControlList = {
+//         Grant: AccessControlPolicy.Grants,
+//       }
+//       delete AccessControlPolicy.Grants
+
+//     }
+
+//     return {
+//       method: 'PUT',
+//       host,
+//       pathPrefix,
+//       path: '/?acl',
+//       headers,
+//       payload: { AccessControlPolicy },
+//       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+//     }
+//   },
+//   response: defaultResponse,
+// }
+
+const PutBucketAnalyticsConfiguration = {
+  awsDoc: docRoot + 'API_PutBucketAnalyticsConfiguration.html',
+  validate: {
+    Bucket,
+    Id: { ...str, required, comment: 'Id of the analytics configuration' },
+    AnalyticsConfiguration: { ...obj, required, comment: 'Object defining the analytics configuration', ref: docRoot + 'API_PutBucketAnalyticsConfiguration.html#AmazonS3-PutBucketAnalyticsConfiguration-request-AnalyticsConfiguration' },
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Id' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = { ...xml, ...getHeadersFromParams(params, queryParams) }
+    const query = { analytics: '', ...getQueryFromParams(params, queryParams) }
+    let { AnalyticsConfiguration } = params
+
+    if (AnalyticsConfiguration.Filter?.And?.Tags) {
+      AnalyticsConfiguration.Filter.And.Tag = AnalyticsConfiguration.Filter.And.Tags
+      delete AnalyticsConfiguration.Filter.And.Tags
+    }
+
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      query,
+      headers,
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload: { AnalyticsConfiguration },
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketCors = {
+  awsDoc: docRoot + 'API_PutBucketCors.html',
+  validate: {
+    Bucket,
+    CORSConfiguration: { ...obj, required, comment: 'Object defining the CORS configuration', ref: docRoot + 'API_PutBucketCors.html#AmazonS3-PutBucketCors-request-CORSConfiguration' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    let { CORSConfiguration } = params
+    const payload = {
+      CORSConfiguration: { CORSRule: CORSConfiguration.CORSRules.map(i => {
+        if (i.AllowedHeaders) {
+          moveObjectField(i, 'AllowedHeaders', 'AllowedHeader')
+        }
+
+        if (i.AllowedMethods) {
+          moveObjectField(i, 'AllowedMethods', 'AllowedMethod')
+        }
+
+        if (i.AllowedOrigins) {
+          moveObjectField(i, 'AllowedOrigins', 'AllowedOrigin')
+        }
+
+        if (i.ExposeHeaders) {
+          moveObjectField(i, 'ExposeHeaders', 'ExposeHeader')
+        }
+        return i
+      }) },
+    }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?cors',
+      headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketEncryption = {
+  awsDoc: docRoot + 'API_PutBucketEncryption.html',
+  validate: {
+    Bucket,
+    ServerSideEncryptionConfiguration: { ...obj, required, comment: 'Object defining the server side encryption configuration', ref: docRoot + 'API_PutBucketEncryption.html#AmazonS3-PutBucketEncryption-request-ServerSideEncryptionConfiguration' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { ServerSideEncryptionConfiguration } = params
+    const payload = { ServerSideEncryptionConfiguration: { Rule: ServerSideEncryptionConfiguration.Rules } }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?encryption',
+      headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
 const UploadPart = {
   awsDoc: docRoot + 'API_UploadPart.html',
   validate: {
@@ -1070,6 +1237,10 @@ const methods = {
   ListBuckets,
   ListMultipartUploads,
   ListObjectsV2,
+  PutBucketAccelerateConfiguration,
+  PutBucketAnalyticsConfiguration,
+  PutBucketCors,
+  PutBucketEncryption,
   PutObject,
   UploadPart,
   ...incomplete }

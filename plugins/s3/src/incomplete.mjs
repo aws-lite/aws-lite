@@ -35,11 +35,7 @@ export default {
   ListObjects:                                 { disabled, awsDoc: docRoot + 'API_ListObjects.html' },
   ListObjectVersions:                          { disabled, awsDoc: docRoot + 'API_ListObjectVersions.html' },
   ListParts:                                   { disabled, awsDoc: docRoot + 'API_ListParts.html' },
-  PutBucketAccelerateConfiguration:            { disabled, awsDoc: docRoot + 'API_PutBucketAccelerateConfiguration.html' },
-  PutBucketAcl:                                { disabled, awsDoc: docRoot + 'API_PutBucketAcl.html' },
-  PutBucketAnalyticsConfiguration:             { disabled, awsDoc: docRoot + 'API_PutBucketAnalyticsConfiguration.html' },
-  PutBucketCors:                               { disabled, awsDoc: docRoot + 'API_PutBucketCors.html' },
-  PutBucketEncryption:                         { disabled, awsDoc: docRoot + 'API_PutBucketEncryption.html' },
+  PutBucketAcl:                                { disabled, awsDoc: docRoot + 'API_PutBucketAcl.html' }, // Requires nested XML attributes
   PutBucketIntelligentTieringConfiguration:    { disabled, awsDoc: docRoot + 'API_PutBucketIntelligentTieringConfiguration.html' },
   PutBucketInventoryConfiguration:             { disabled, awsDoc: docRoot + 'API_PutBucketInventoryConfiguration.html' },
   PutBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_PutBucketLifecycle.html' },

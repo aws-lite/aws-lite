@@ -34,6 +34,10 @@ import {
   ListBucketsCommandOutput as ListBucketsResponse,
   ListMultipartUploadsCommandOutput as ListMultipartUploadsResponse,
   ListObjectsV2CommandOutput as ListObjectsV2Response,
+  PutBucketAccelerateConfigurationCommandOutput as PutBucketAccelerateConfigurationResponse,
+  PutBucketAnalyticsConfigurationCommandOutput as PutBucketAnalyticsConfigurationResponse,
+  PutBucketCorsCommandOutput as PutBucketCorsResponse,
+  PutBucketEncryptionCommandOutput as PutBucketEncryptionResponse,
   PutObjectCommandOutput as PutObjectResponse,
   UploadPartCommandOutput as UploadPartResponse,
   // $IMPORTS_END
@@ -238,6 +242,30 @@ declare interface AwsLiteS3 {
   ListObjectsV2: (input: { Bucket: string, ContinuationToken?: string, Delimiter?: string, EncodingType?: string, FetchOwner?: string, MaxKeys?: number, Prefix?: string, StartAfter?: string, RequestPayer?: string, ExpectedBucketOwner?: string, OptionalObjectAttributes?: string, paginate?: boolean }) => Promise<ListObjectsV2Response>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html S3: PutBucketAccelerateConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketAccelerateConfiguration S3: PutBucketAccelerateConfiguration}
+   */
+  PutBucketAccelerateConfiguration: (input: { AccelerationConfiguration: Record<string, any>, Bucket: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketAccelerateConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html S3: PutBucketAnalyticsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketAnalyticsConfiguration S3: PutBucketAnalyticsConfiguration}
+   */
+  PutBucketAnalyticsConfiguration: (input: { Bucket: string, Id: string, AnalyticsConfiguration: Record<string, any>, ExpectedBucketOwner?: string }) => Promise<PutBucketAnalyticsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html S3: PutBucketCors}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketCors S3: PutBucketCors}
+   */
+  PutBucketCors: (input: { Bucket: string, CORSConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketCorsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html S3: PutBucketEncryption}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketEncryption S3: PutBucketEncryption}
+   */
+  PutBucketEncryption: (input: { Bucket: string, ServerSideEncryptionConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketEncryptionResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html S3: PutObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObject S3: PutObject}
    */
@@ -294,6 +322,10 @@ export type {
   ListBucketsResponse,
   ListMultipartUploadsResponse,
   ListObjectsV2Response,
+  PutBucketAccelerateConfigurationResponse,
+  PutBucketAnalyticsConfigurationResponse,
+  PutBucketCorsResponse,
+  PutBucketEncryptionResponse,
   PutObjectResponse,
   UploadPartResponse,
   // $EXPORT_END

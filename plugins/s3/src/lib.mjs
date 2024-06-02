@@ -167,11 +167,19 @@ function arrayifyAndMoveObject (object, oldKey, newKey) {
   moveObjectField(object, oldKey, newKey)
 }
 
+async function makeChecksumSHA256 (utils, payload, params) {
+  const { buildXML } = utils
+  const payloadXML = buildXML(payload, params)
+  const { createHash } = await import('node:crypto')
+  const checksum = Buffer.from(createHash('sha256').update(payloadXML).digest()).toString('base64')
+  return checksum
+}
 
 export default {
   moveObjectField,
   arrayifyAndMoveObject,
   arrayifyFilter,
+  makeChecksumSHA256,
   getValidateHeaders,
   getHeadersFromParams,
   getQueryFromParams,

@@ -616,6 +616,74 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `PutBucketAccelerateConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html)
+
+Properties:
+- **`AccelerationConfiguration` (object) [required]**
+  - Object specifying acceleration configurations; can contain one of: `Status: 'Enabled'`, `Status: 'Suspended'`
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html#AmazonS3-PutBucketAccelerateConfiguration-request-Status)
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketAnalyticsConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - Id of the analytics configuration
+- **`AnalyticsConfiguration` (object) [required]**
+  - Object defining the analytics configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html#AmazonS3-PutBucketAnalyticsConfiguration-request-AnalyticsConfiguration)
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketCors`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`CORSConfiguration` (object) [required]**
+  - Object defining the CORS configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html#AmazonS3-PutBucketCors-request-CORSConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketEncryption`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ServerSideEncryptionConfiguration` (object) [required]**
+  - Object defining the server side encryption configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html#AmazonS3-PutBucketEncryption-request-ServerSideEncryptionConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `PutObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html)
@@ -779,11 +847,7 @@ Properties:
 - [`ListObjects`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html)
 - [`ListObjectVersions`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
 - [`ListParts`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html)
-- [`PutBucketAccelerateConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html)
 - [`PutBucketAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAcl.html)
-- [`PutBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html)
-- [`PutBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html)
-- [`PutBucketEncryption`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html)
 - [`PutBucketIntelligentTieringConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketIntelligentTieringConfiguration.html)
 - [`PutBucketInventoryConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html)
 - [`PutBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html)
