@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, makeChecksumSHA256, moveObjectField, paramMappings, parseHeadersToResults, unArrayifyFilter } = lib
+const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, makeChecksumSHA256, changeObjectKey, paramMappings, parseHeadersToResults, unArrayifyFilter } = lib
 import PutObject from './put-object.mjs'
 
 const service = 's3'
@@ -1114,10 +1114,10 @@ const PutBucketCors = {
     let { CORSConfiguration } = params
     const payload = {
       CORSConfiguration: { CORSRule: CORSConfiguration.CORSRules.map(i => {
-        moveObjectField(i, 'AllowedHeaders', 'AllowedHeader')
-        moveObjectField(i, 'AllowedMethods', 'AllowedMethod')
-        moveObjectField(i, 'AllowedOrigins', 'AllowedOrigin')
-        moveObjectField(i, 'ExposeHeaders', 'ExposeHeader')
+        changeObjectKey(i, 'AllowedHeaders', 'AllowedHeader')
+        changeObjectKey(i, 'AllowedMethods', 'AllowedMethod')
+        changeObjectKey(i, 'AllowedOrigins', 'AllowedOrigin')
+        changeObjectKey(i, 'ExposeHeaders', 'ExposeHeader')
         return i
       }),
       },
@@ -1174,7 +1174,7 @@ const PutBucketIntelligentTieringConfiguration = {
     let { IntelligentTieringConfiguration } = params
     unArrayifyFilter(IntelligentTieringConfiguration)
     if (IntelligentTieringConfiguration.Tierings) {
-      moveObjectField(IntelligentTieringConfiguration, 'Tierings', 'Tiering')
+      changeObjectKey(IntelligentTieringConfiguration, 'Tierings', 'Tiering')
     }
     return {
       method: 'PUT',
@@ -1232,8 +1232,8 @@ const PutBucketLifecycleConfiguration = {
     const payload = { LifecycleConfiguration: { Rule:
       LifecycleConfiguration.Rules.map(i => {
         unArrayifyFilter(i)
-        moveObjectField(i, 'Transitions', 'Transition')
-        moveObjectField(i, 'NoncurrentVersionTransitions', 'NoncurrentVersionTransition')
+        changeObjectKey(i, 'Transitions', 'Transition')
+        changeObjectKey(i, 'NoncurrentVersionTransitions', 'NoncurrentVersionTransition')
         return i
       }),
     },
@@ -1287,10 +1287,12 @@ const PutBucketMetricsConfiguration = {
     Bucket,
     Id,
     MetricsConfiguration: { ...obj, required, comment: 'Object defining the metrics configuration', ref: docRoot + 'API_PutBucketMetricsConfiguration.html#AmazonS3-PutBucketMetricsConfiguration-request-MetricsConfiguration' },
+    ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: async (params, utils) => {
+    const queryParams = [ 'Id' ]
     const { host, pathPrefix } = getHost(params, utils)
-    const query = { metrics: '', ...getQueryFromParams(params, [ 'Id' ]) }
+    const query = { metrics: '', ...getQueryFromParams(params, queryParams) }
     let { MetricsConfiguration } = params
     unArrayifyFilter(MetricsConfiguration)
     return {
@@ -1298,9 +1300,119 @@ const PutBucketMetricsConfiguration = {
       host,
       pathPrefix,
       query,
-      headers: xml,
+      headers: { ...xml, ...getHeadersFromParams(params, queryParams) },
       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
       payload: { MetricsConfiguration },
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketNotificationConfiguration = {
+  awsDoc: docRoot + 'API_PutBucketNotificationConfiguration.html',
+  validate: {
+    Bucket,
+    NotificationConfiguration: { ...obj, required, comment: 'Object defining the notification configuration', ref: docRoot + 'API_PutBucketNotificationConfiguration.html#AmazonS3-PutBucketNotificationConfiguration-request-NotificationConfiguration' },
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { NotificationConfiguration } = params
+    const { TopicConfigurations, QueueConfigurations, LambdaFunctionConfigurations, EventBridgeConfiguration } = NotificationConfiguration
+    let payload = { EventBridgeConfiguration }
+
+    if (TopicConfigurations) {
+      payload.TopicConfiguration = TopicConfigurations.map(i => {
+        let result = {
+          Event: i.Events,
+          Topic: i.TopicArn,
+        }
+
+        if (i.Filter?.Key?.FilterRules) {
+          result.Filter =  {
+            S3Key: {
+              FilterRule: i.Filter.Key.FilterRules,
+            },
+          }
+        }
+        return result
+      })
+    }
+
+    if (QueueConfigurations) {
+      payload.QueueConfiguration = QueueConfigurations.map(i => {
+        let result = {
+          Event: i.Events,
+          Queue: i.QueueArn,
+        }
+
+        if (i.Filter?.Key?.FilterRules) {
+          result.Filter =  {
+            S3Key: {
+              FilterRule: i.Filter.Key.FilterRules,
+            },
+          }
+        }
+        return result
+      })
+    }
+
+    if (LambdaFunctionConfigurations) {
+      payload.CloudFunctionConfiguration = QueueConfigurations.map(i => {
+        let result = {
+          Event: i.Events,
+          CloudFunction: i.LambdaFunctionArn,
+        }
+
+        if (i.Filter?.Key?.FilterRules) {
+          result.Filter =  {
+            S3Key: {
+              FilterRule: i.Filter.Key.FilterRules,
+            },
+          }
+        }
+        return result
+      })
+    }
+
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?notification',
+      headers: { ...xml, ...getHeadersFromParams(params) },
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload: { NotificationConfiguration: payload },
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketOwnershipControls = {
+  awsDoc: docRoot + 'API_PutBucketOwnershipControls.html',
+  validate: {
+    Bucket,
+    OwnershipControls: { ...obj, required, comment: 'Object defining the ownership controls', ref:  docRoot + 'API_PutBucketOwnershipControls.html#AmazonS3-PutBucketOwnershipControls-request-OwnershipControls' },
+    ...getValidateHeaders('ContentMD5', 'ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { OwnershipControls } = params
+
+    const payload = {
+      OwnershipControls: {
+        Rule: OwnershipControls.Rules,
+      },
+    }
+
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?ownershipControls',
+      headers: { ...xml, ...getHeadersFromParams(params) },
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload,
     }
   },
   response: defaultResponse,
@@ -1379,6 +1491,8 @@ const methods = {
   PutBucketInventoryConfiguration,
   PutBucketLifecycleConfiguration,
   PutBucketMetricsConfiguration,
+  PutBucketNotificationConfiguration,
+  PutBucketOwnershipControls,
   PutObject,
   UploadPart,
   ...incomplete }

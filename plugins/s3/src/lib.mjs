@@ -62,6 +62,7 @@ const headerMappings = {
   RequestPayer:               'x-amz-request-payer',
   Restore:                    'x-amz-restore',
   ServerSideEncryption:       'x-amz-server-side-encryption',
+  SkipDestinationValidation:  'x-amz-skip-destination-validation',
   SSECustomerAlgorithm:       'x-amz-server-side-encryption-customer-algorithm',
   SSECustomerKey:             'x-amz-server-side-encryption-customer-key',
   SSECustomerKeyMD5:          'x-amz-server-side-encryption-customer-key-md5',
@@ -132,7 +133,7 @@ const QueryParamMappings = {
   VersionId: 'versionId',
 }
 
-function moveObjectField (object, oldKey, newKey) {
+function changeObjectKey (object, oldKey, newKey) {
   if (object[oldKey]) {
     object[newKey] = object[oldKey]
     delete object[oldKey]
@@ -173,7 +174,7 @@ function arrayifyAndMoveObject (object, oldKey, newKey) {
   if (!Array.isArray(object[oldKey])) {
     object[oldKey] = [ object[oldKey] ]
   }
-  moveObjectField(object, oldKey, newKey)
+  changeObjectKey(object, oldKey, newKey)
 }
 
 async function makeChecksumSHA256 (utils, payload, params) {
@@ -185,7 +186,7 @@ async function makeChecksumSHA256 (utils, payload, params) {
 }
 
 export default {
-  moveObjectField,
+  changeObjectKey,
   arrayifyAndMoveObject,
   arrayifyFilter,
   makeChecksumSHA256,

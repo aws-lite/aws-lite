@@ -42,6 +42,8 @@ import {
   PutBucketInventoryConfigurationCommandOutput as PutBucketInventoryConfigurationResponse,
   PutBucketLifecycleConfigurationCommandOutput as PutBucketLifecycleConfigurationResponse,
   PutBucketMetricsConfigurationCommandOutput as PutBucketMetricsConfigurationResponse,
+  PutBucketNotificationConfigurationCommandOutput as PutBucketNotificationConfigurationResponse,
+  PutBucketOwnershipControlsCommandOutput as PutBucketOwnershipControlsResponse,
   PutObjectCommandOutput as PutObjectResponse,
   UploadPartCommandOutput as UploadPartResponse,
   // $IMPORTS_END
@@ -291,7 +293,19 @@ declare interface AwsLiteS3 {
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html S3: PutBucketMetricsConfiguration}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketMetricsConfiguration S3: PutBucketMetricsConfiguration}
    */
-  PutBucketMetricsConfiguration: (input: { Bucket: string, Id: string, MetricsConfiguration: Record<string, any> }) => Promise<PutBucketMetricsConfigurationResponse>
+  PutBucketMetricsConfiguration: (input: { Bucket: string, Id: string, MetricsConfiguration: Record<string, any>, ExpectedBucketOwner?: string }) => Promise<PutBucketMetricsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html S3: PutBucketNotificationConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketNotificationConfiguration S3: PutBucketNotificationConfiguration}
+   */
+  PutBucketNotificationConfiguration: (input: { Bucket: string, NotificationConfiguration: Record<string, any>, ExpectedBucketOwner?: string }) => Promise<PutBucketNotificationConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketOwnershipControls.html S3: PutBucketOwnershipControls}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketOwnershipControls S3: PutBucketOwnershipControls}
+   */
+  PutBucketOwnershipControls: (input: { Bucket: string, OwnershipControls: Record<string, any>, ContentMD5?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketOwnershipControlsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html S3: PutObject}
@@ -358,6 +372,8 @@ export type {
   PutBucketInventoryConfigurationResponse,
   PutBucketLifecycleConfigurationResponse,
   PutBucketMetricsConfigurationResponse,
+  PutBucketNotificationConfigurationResponse,
+  PutBucketOwnershipControlsResponse,
   PutObjectResponse,
   UploadPartResponse,
   // $EXPORT_END
