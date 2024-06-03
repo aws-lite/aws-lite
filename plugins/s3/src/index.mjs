@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, makeChecksumSHA256, moveObjectField, paramMappings, parseHeadersToResults } = lib
+const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, makeChecksumSHA256, moveObjectField, paramMappings, parseHeadersToResults, unArrayifyFilter } = lib
 import PutObject from './put-object.mjs'
 
 const service = 's3'
@@ -30,6 +30,7 @@ const EncodingType = { ...str, comment: 'Object key encoding type (must be `url`
 const Prefix = { ...str, comment: 'Limit response to keys that begin with the specified prefix' }
 const valPaginate = { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const UploadId = { ...str, required, comment: 'ID of the multipart upload' }
+const Id = { ...str, required, comment: 'ID of the object' }
 
 function getHost ({ Bucket }, { region, config }) {
   // Deprecated path-style URLs, still necessary for buckets with periods
@@ -1029,6 +1030,7 @@ const PutBucketAccelerateConfiguration = {
   response: defaultResponse,
 }
 
+// TODO: Add support for nested XML attributes
 // const PutBucketAcl = {
 //   awsDoc: docRoot + 'API_PutBucketAcl.html',
 //   validate: {
@@ -1049,7 +1051,6 @@ const PutBucketAccelerateConfiguration = {
 //         return i
 //       })
 
-//       console.log(AccessControlPolicy.Grants)
 //       AccessControlPolicy.AccessControlList = {
 //         Grant: AccessControlPolicy.Grants,
 //       }
@@ -1084,12 +1085,10 @@ const PutBucketAnalyticsConfiguration = {
     const headers = { ...xml, ...getHeadersFromParams(params, queryParams) }
     const query = { analytics: '', ...getQueryFromParams(params, queryParams) }
     let { AnalyticsConfiguration } = params
-
     if (AnalyticsConfiguration.Filter?.And?.Tags) {
       AnalyticsConfiguration.Filter.And.Tag = AnalyticsConfiguration.Filter.And.Tags
       delete AnalyticsConfiguration.Filter.And.Tags
     }
-
     return {
       method: 'PUT',
       host,
@@ -1115,23 +1114,13 @@ const PutBucketCors = {
     let { CORSConfiguration } = params
     const payload = {
       CORSConfiguration: { CORSRule: CORSConfiguration.CORSRules.map(i => {
-        if (i.AllowedHeaders) {
-          moveObjectField(i, 'AllowedHeaders', 'AllowedHeader')
-        }
-
-        if (i.AllowedMethods) {
-          moveObjectField(i, 'AllowedMethods', 'AllowedMethod')
-        }
-
-        if (i.AllowedOrigins) {
-          moveObjectField(i, 'AllowedOrigins', 'AllowedOrigin')
-        }
-
-        if (i.ExposeHeaders) {
-          moveObjectField(i, 'ExposeHeaders', 'ExposeHeader')
-        }
+        moveObjectField(i, 'AllowedHeaders', 'AllowedHeader')
+        moveObjectField(i, 'AllowedMethods', 'AllowedMethod')
+        moveObjectField(i, 'AllowedOrigins', 'AllowedOrigin')
+        moveObjectField(i, 'ExposeHeaders', 'ExposeHeader')
         return i
-      }) },
+      }),
+      },
     }
     const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
     return {
@@ -1167,6 +1156,151 @@ const PutBucketEncryption = {
       headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
       payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketIntelligentTieringConfiguration = {
+  awsDoc: docRoot + 'API_PutBucketIntelligentTieringConfiguration.html',
+  validate: {
+    Bucket,
+    Id: { ...str, required, comment: 'Id of the intelligent tiering configuration' },
+    IntelligentTieringConfiguration: { ...obj, required, comment: 'Object defining the intelligent tiering configuration; required fields are: `Id`, `Status`, `Tierings` ', ref: docRoot + 'API_PutBucketIntelligentTieringConfiguration.html#AmazonS3-PutBucketIntelligentTieringConfiguration-request-IntelligentTieringConfiguration' },
+  },
+  request: (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const query = { 'intelligent-tiering': '', ...getQueryFromParams(params, [ 'Id' ]) }
+    let { IntelligentTieringConfiguration } = params
+    unArrayifyFilter(IntelligentTieringConfiguration)
+    if (IntelligentTieringConfiguration.Tierings) {
+      moveObjectField(IntelligentTieringConfiguration, 'Tierings', 'Tiering')
+    }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      query,
+      headers: xml,
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload: { IntelligentTieringConfiguration },
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketInventoryConfiguration = {
+  awsDoc: docRoot + 'API_PutBucketInventoryConfiguration.html',
+  validate: {
+    Bucket,
+    Id,
+    InventoryConfiguration: { ...obj, required, comment: 'Object defining the inventory configuration; required config fields are: `Id`, `IsEnabled`, `IncludedObjectVersion`, `Destination`, `Schedule`', ref: docRoot + 'API/API_PutBucketInventoryConfiguration.html#AmazonS3-PutBucketInventoryConfiguration-request-InventoryConfiguration' },
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Id' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const query = { 'inventory': '', ...getQueryFromParams(params, queryParams) }
+    const headers = { ...xml, ...getHeadersFromParams(params, queryParams) }
+    let { InventoryConfiguration } = params
+    if (InventoryConfiguration.OptionalFields) {
+      InventoryConfiguration.OptionalFields = { Field: InventoryConfiguration.OptionalFields }
+    }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      query,
+      headers,
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload: { InventoryConfiguration },
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketLifecycleConfiguration = {
+  awsDoc: docRoot + 'API_PutBucketLifecycleConfiguration.html',
+  validate: {
+    Bucket,
+    LifecycleConfiguration: { ...obj, required, comment: 'Object defining the lifecycle configuration', ref: docRoot + 'API_PutBucketLifecycleConfiguration.html#AmazonS3-PutBucketLifecycleConfiguration-request-LifecycleConfiguration' },
+    ...getValidateHeaders('ChecksumAlgorithm', 'ExpectedBucketOwner', 'ContentMD5'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { LifecycleConfiguration } = params
+    const payload = { LifecycleConfiguration: { Rule:
+      LifecycleConfiguration.Rules.map(i => {
+        unArrayifyFilter(i)
+        moveObjectField(i, 'Transitions', 'Transition')
+        moveObjectField(i, 'NoncurrentVersionTransitions', 'NoncurrentVersionTransition')
+        return i
+      }),
+    },
+    }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' } )
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?lifecycle',
+      headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+// TODO: Add support for nested XML attributes
+// const PutBucketLogging = {
+//   awsDoc: docRoot + 'API_PutBucketLogging.html',
+//   validate: {
+//     Bucket,
+//     BucketLoggingStatus: { ...obj, required, comment: 'Object defining the logging status', ref: docRoot + 'AmazonS3/latest/API/API_PutBucketLogging.html#AmazonS3-PutBucketLogging-request-BucketLoggingStatus' },
+//     ...getValidateHeaders('ChecksumAlgorithm', 'ExpectedBucketOwner', 'ContentMD5'),
+//   },
+//   request: async (params, utils) => {
+//     const { host, pathPrefix } = getHost(params, utils)
+//     let { BucketLoggingStatus } = params
+//     if (BucketLoggingStatus.LoggingEnabled?.TargetGrants) {
+//       BucketLoggingStatus.TargetGrants = { Grant: BucketLoggingStatus.TargetGrants }
+//     }
+//     const payload = { BucketLoggingStatus }
+//     const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' } )
+//     return {
+//       method: 'PUT',
+//       host,
+//       pathPrefix,
+//       path: '/?logging',
+//       headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
+//       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+//       payload,
+//     }
+//   },
+//   response: defaultResponse,
+// }
+
+const PutBucketMetricsConfiguration = {
+  awsDoc: docRoot + 'API_PutBucketMetricsConfiguration.html',
+  validate: {
+    Bucket,
+    Id,
+    MetricsConfiguration: { ...obj, required, comment: 'Object defining the metrics configuration', ref: docRoot + 'API_PutBucketMetricsConfiguration.html#AmazonS3-PutBucketMetricsConfiguration-request-MetricsConfiguration' },
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const query = { metrics: '', ...getQueryFromParams(params, [ 'Id' ]) }
+    let { MetricsConfiguration } = params
+    unArrayifyFilter(MetricsConfiguration)
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      query,
+      headers: xml,
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload: { MetricsConfiguration },
     }
   },
   response: defaultResponse,
@@ -1241,6 +1375,10 @@ const methods = {
   PutBucketAnalyticsConfiguration,
   PutBucketCors,
   PutBucketEncryption,
+  PutBucketIntelligentTieringConfiguration,
+  PutBucketInventoryConfiguration,
+  PutBucketLifecycleConfiguration,
+  PutBucketMetricsConfiguration,
   PutObject,
   UploadPart,
   ...incomplete }

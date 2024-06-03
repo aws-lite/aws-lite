@@ -17,8 +17,8 @@ export default {
   DeleteBucketWebsite:                         { disabled, awsDoc: docRoot + 'API_DeleteBucketWebsite.html' },
   DeleteObjectTagging:                         { disabled, awsDoc: docRoot + 'API_DeleteObjectTagging.html' },
   DeletePublicAccessBlock:                     { disabled, awsDoc: docRoot + 'API_DeletePublicAccessBlock.html' },
-  GetBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_GetBucketLifecycle.html' }, // Does not exist anymore, replaced by `GetBucketLifecycleConfiguration`
-  GetBucketNotification:                       { disabled, awsDoc: docRoot + 'API_GetBucketNotification.html' }, // Does not exist anymore, replaced by `GetBucketNotificationConfiguration`
+  GetBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_GetBucketLifecycle.html' }, // Replaced by `GetBucketLifecycleConfiguration`
+  GetBucketNotification:                       { disabled, awsDoc: docRoot + 'API_GetBucketNotification.html' }, // Replaced by `GetBucketNotificationConfiguration`
   GetObjectAcl:                                { disabled, awsDoc: docRoot + 'API_GetObjectAcl.html' },
   GetObjectAttributes:                         { disabled, awsDoc: docRoot + 'API_GetObjectAttributes.html' },
   GetObjectLegalHold:                          { disabled, awsDoc: docRoot + 'API_GetObjectLegalHold.html' },
@@ -36,12 +36,8 @@ export default {
   ListObjectVersions:                          { disabled, awsDoc: docRoot + 'API_ListObjectVersions.html' },
   ListParts:                                   { disabled, awsDoc: docRoot + 'API_ListParts.html' },
   PutBucketAcl:                                { disabled, awsDoc: docRoot + 'API_PutBucketAcl.html' }, // Requires nested XML attributes
-  PutBucketIntelligentTieringConfiguration:    { disabled, awsDoc: docRoot + 'API_PutBucketIntelligentTieringConfiguration.html' },
-  PutBucketInventoryConfiguration:             { disabled, awsDoc: docRoot + 'API_PutBucketInventoryConfiguration.html' },
-  PutBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_PutBucketLifecycle.html' },
-  PutBucketLifecycleConfiguration:             { disabled, awsDoc: docRoot + 'API_PutBucketLifecycleConfiguration.html' },
-  PutBucketLogging:                            { disabled, awsDoc: docRoot + 'API_PutBucketLogging.html' },
-  PutBucketMetricsConfiguration:               { disabled, awsDoc: docRoot + 'API_PutBucketMetricsConfiguration.html' },
+  PutBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_PutBucketLifecycle.html' }, // Replaced by `PutBucketLifecycleConfiguration`
+  PutBucketLogging:                            { disabled, awsDoc: docRoot + 'API_PutBucketLogging.html' }, // Requires nested XML attributes
   PutBucketNotification:                       { disabled, awsDoc: docRoot + 'API_PutBucketNotification.html' },
   PutBucketNotificationConfiguration:          { disabled, awsDoc: docRoot + 'API_PutBucketNotificationConfiguration.html' },
   PutBucketOwnershipControls:                  { disabled, awsDoc: docRoot + 'API_PutBucketOwnershipControls.html' },

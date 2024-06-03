@@ -38,6 +38,10 @@ import {
   PutBucketAnalyticsConfigurationCommandOutput as PutBucketAnalyticsConfigurationResponse,
   PutBucketCorsCommandOutput as PutBucketCorsResponse,
   PutBucketEncryptionCommandOutput as PutBucketEncryptionResponse,
+  PutBucketIntelligentTieringConfigurationCommandOutput as PutBucketIntelligentTieringConfigurationResponse,
+  PutBucketInventoryConfigurationCommandOutput as PutBucketInventoryConfigurationResponse,
+  PutBucketLifecycleConfigurationCommandOutput as PutBucketLifecycleConfigurationResponse,
+  PutBucketMetricsConfigurationCommandOutput as PutBucketMetricsConfigurationResponse,
   PutObjectCommandOutput as PutObjectResponse,
   UploadPartCommandOutput as UploadPartResponse,
   // $IMPORTS_END
@@ -266,6 +270,30 @@ declare interface AwsLiteS3 {
   PutBucketEncryption: (input: { Bucket: string, ServerSideEncryptionConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketEncryptionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketIntelligentTieringConfiguration.html S3: PutBucketIntelligentTieringConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketIntelligentTieringConfiguration S3: PutBucketIntelligentTieringConfiguration}
+   */
+  PutBucketIntelligentTieringConfiguration: (input: { Bucket: string, Id: string, IntelligentTieringConfiguration: Record<string, any> }) => Promise<PutBucketIntelligentTieringConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html S3: PutBucketInventoryConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketInventoryConfiguration S3: PutBucketInventoryConfiguration}
+   */
+  PutBucketInventoryConfiguration: (input: { Bucket: string, Id: string, InventoryConfiguration: Record<string, any>, ExpectedBucketOwner?: string }) => Promise<PutBucketInventoryConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html S3: PutBucketLifecycleConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketLifecycleConfiguration S3: PutBucketLifecycleConfiguration}
+   */
+  PutBucketLifecycleConfiguration: (input: { Bucket: string, LifecycleConfiguration: Record<string, any>, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string, ContentMD5?: string }) => Promise<PutBucketLifecycleConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html S3: PutBucketMetricsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketMetricsConfiguration S3: PutBucketMetricsConfiguration}
+   */
+  PutBucketMetricsConfiguration: (input: { Bucket: string, Id: string, MetricsConfiguration: Record<string, any> }) => Promise<PutBucketMetricsConfigurationResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html S3: PutObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObject S3: PutObject}
    */
@@ -326,6 +354,10 @@ export type {
   PutBucketAnalyticsConfigurationResponse,
   PutBucketCorsResponse,
   PutBucketEncryptionResponse,
+  PutBucketIntelligentTieringConfigurationResponse,
+  PutBucketInventoryConfigurationResponse,
+  PutBucketLifecycleConfigurationResponse,
+  PutBucketMetricsConfigurationResponse,
   PutObjectResponse,
   UploadPartResponse,
   // $EXPORT_END

@@ -133,8 +133,10 @@ const QueryParamMappings = {
 }
 
 function moveObjectField (object, oldKey, newKey) {
-  object[newKey] = object[oldKey]
-  delete object[oldKey]
+  if (object[oldKey]) {
+    object[newKey] = object[oldKey]
+    delete object[oldKey]
+  }
 }
 
 function getQueryFromParams (params, queryParams) {
@@ -157,6 +159,13 @@ function arrayifyFilter (Filter) {
       Filter.And.Tags = [ Filter.And.Tag ]
     }
     delete Filter.And.Tag
+  }
+}
+
+function unArrayifyFilter (object) {
+  if (object.Filter?.And?.Tags) {
+    object.Filter.And.Tag = object.Filter.And.Tags
+    delete object.Filter.And.Tags
   }
 }
 
@@ -186,4 +195,5 @@ export default {
   headerMappings,
   paramMappings,
   parseHeadersToResults,
+  unArrayifyFilter,
 }
