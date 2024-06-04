@@ -621,7 +621,7 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html)
 
 Properties:
-- **`AccelerationConfiguration` (object) [required]**
+- **`AccelerateConfiguration` (object) [required]**
   - Object specifying acceleration configurations; can contain one of: `Status: 'Enabled'`, `Status: 'Suspended'`
   - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html#AmazonS3-PutBucketAccelerateConfiguration-request-Status)
 - **`Bucket` (string) [required]**

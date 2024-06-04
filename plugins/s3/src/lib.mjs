@@ -151,22 +151,28 @@ function getQueryFromParams (params, queryParams) {
   return query
 }
 
-function arrayifyFilter (Filter) {
-  if (Filter.And?.Tag) {
-    if (Array.isArray(Filter.And.Tag)) {
-      Filter.And.Tags = Filter.And.Tag
-    }
-    else {
-      Filter.And.Tags = [ Filter.And.Tag ]
-    }
-    delete Filter.And.Tag
+function serializeRequestFilter (Filter) {
+  const { And, Prefix, Tag } = Filter
+  let result = {}
+  if (And) {
+    const { Prefix, Tags } = And
+    result.And = {}
+    if (Prefix) result.And.Prefix = Prefix
+    if (Tags) result.And.Tag = Tags
   }
+  else if (Prefix) {
+    result.Prefix = Prefix
+  }
+  else {
+    result.Tag = Tag
+  }
+  return result
 }
 
-function unArrayifyFilter (object) {
-  if (object.Filter?.And?.Tags) {
-    object.Filter.And.Tag = object.Filter.And.Tags
-    delete object.Filter.And.Tags
+function normalizeResponseFilter (Filter) {
+  if (Filter.And?.Tag) {
+    Filter.And.Tags = Filter.And.Tag
+    delete Filter.And.Tag
   }
 }
 
@@ -188,7 +194,7 @@ async function makeChecksumSHA256 (utils, payload, params) {
 export default {
   changeObjectKey,
   arrayifyAndMoveObject,
-  arrayifyFilter,
+  serializeRequestFilter,
   makeChecksumSHA256,
   getValidateHeaders,
   getHeadersFromParams,
@@ -196,5 +202,5 @@ export default {
   headerMappings,
   paramMappings,
   parseHeadersToResults,
-  unArrayifyFilter,
+  normalizeResponseFilter,
 }

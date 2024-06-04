@@ -251,7 +251,7 @@ declare interface AwsLiteS3 {
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html S3: PutBucketAccelerateConfiguration}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketAccelerateConfiguration S3: PutBucketAccelerateConfiguration}
    */
-  PutBucketAccelerateConfiguration: (input: { AccelerationConfiguration: Record<string, any>, Bucket: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketAccelerateConfigurationResponse>
+  PutBucketAccelerateConfiguration: (input: { AccelerateConfiguration: Record<string, any>, Bucket: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketAccelerateConfigurationResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html S3: PutBucketAnalyticsConfiguration}

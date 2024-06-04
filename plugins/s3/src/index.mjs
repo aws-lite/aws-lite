@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, makeChecksumSHA256, changeObjectKey, paramMappings, parseHeadersToResults, unArrayifyFilter } = lib
+const { arrayifyAndMoveObject, serializeRequestFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, makeChecksumSHA256, changeObjectKey, paramMappings, parseHeadersToResults, normalizeResponseFilter } = lib
 import PutObject from './put-object.mjs'
 
 const service = 's3'
@@ -77,7 +77,7 @@ const CompleteMultipartUpload = {
     Key,
     UploadId,
     MultipartUpload: { ...obj, comment: '`MultipartUpload` object containing details about the completed uploads', ref: docRoot + 'API_CompleteMultipartUpload.html#AmazonS3-CompleteMultipartUpload-request-MultipartUpload' },
-    ...getValidateHeaders( 'ChecksumCRC32', 'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256',
+    ...getValidateHeaders('ChecksumCRC32', 'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256',
       'RequestPayer', 'ExpectedBucketOwner', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5',
     ),
   },
@@ -130,7 +130,7 @@ const CreateMultipartUpload = {
   validate: {
     Bucket,
     Key,
-    ...getValidateHeaders( 'ACL', 'CacheControl', 'ContentDisposition', 'ContentEncoding',
+    ...getValidateHeaders('ACL', 'CacheControl', 'ContentDisposition', 'ContentEncoding',
       'ContentLanguage', 'ContentType', 'Expires', 'GrantFullControl',
       'GrantRead', 'GrantReadACP', 'GrantWriteACP', 'ServerSideEncryption',
       'StorageClass', 'WebsiteRedirectLocation', 'SSECustomerAlgorithm', 'SSECustomerKeyMD5',
@@ -313,9 +313,7 @@ const GetBucketAnalyticsConfiguration = {
     }
   },
   response: ({ payload }) => {
-    if (payload.Filter) {
-      arrayifyFilter(payload.Filter)
-    }
+    if (payload.Filter) normalizeResponseFilter(payload.Filter)
 
     if (!payload.StorageClassAnalysis) {
       payload.StorageClassAnalysis = {}
@@ -391,7 +389,8 @@ const GetBucketEncryption = {
   response: ({ payload }) => {
     arrayifyAndMoveObject(payload, 'Rule', 'Rules')
     return {
-      ServerSideEncryptionConfiguration: { Rules: payload.Rules } }
+      ServerSideEncryptionConfiguration: { Rules: payload.Rules },
+    }
   },
 }
 
@@ -412,11 +411,7 @@ const GetBucketIntelligentTieringConfiguration = {
   },
   response: ({ payload }) => {
     arrayifyAndMoveObject(payload, 'Tiering', 'Tierings')
-
-    if (payload.Filter) {
-      arrayifyFilter(payload.Filter)
-    }
-
+    if (payload.Filter) normalizeResponseFilter(payload.Filter)
     delete payload.xmlns
     return { IntelligentTieringConfiguration: payload }
   },
@@ -476,7 +471,7 @@ const GetBucketLifecycleConfiguration = {
       if (i.NonCurrentVersionTransition) arrayifyAndMoveObject(i, 'NoncurrentVersionTransition', 'NoncurrentVersionTransitions')
 
       if (i.Filter) {
-        arrayifyFilter(i.Filter)
+        normalizeResponseFilter(i.Filter)
       }
       else {
         i.Filter = {}
@@ -548,7 +543,7 @@ const GetBucketMetricsConfiguration = {
     const queryParams = [ 'Id' ]
     const { host, pathPrefix } = getHost(params, utils)
     const headers = getHeadersFromParams(params, queryParams)
-    const query = { metrics: ' ', ...getQueryFromParams(params, queryParams ) }
+    const query = { metrics: ' ', ...getQueryFromParams(params, queryParams) }
     return {
       host,
       pathPrefix,
@@ -557,10 +552,7 @@ const GetBucketMetricsConfiguration = {
     }
   },
   response: ({ payload }) => {
-    if (payload.Filter) {
-      arrayifyFilter(payload.Filter)
-    }
-
+    if (payload.Filter) normalizeResponseFilter(payload.Filter)
     delete payload.xmlns
     return { MetricsConfiguration: payload }
   },
@@ -583,24 +575,51 @@ const GetBucketNotificationConfiguration = {
     }
   },
   response: ({ payload }) => {
-    const arrayify = (oldRoot, newRoot) => {
-      if (payload[oldRoot]) {
-        arrayifyAndMoveObject(payload, oldRoot, newRoot)
-        payload[newRoot].forEach(i => {
-          arrayifyAndMoveObject(i, 'Event', 'Events')
-          if (i.Filter?.S3Key?.FilterRule) {
-            arrayifyAndMoveObject(i.Filter.S3Key, 'FilterRule', 'FilterRules')
-            i.Filter.Keys = i.Filter.S3Key
-            delete i.Filter.S3Key
-          }
-        })
+    const normalizeFilter = (Filter) => {
+      const { S3Key } = Filter
+      let { FilterRule } = S3Key
+      if (!Array.isArray(FilterRule)) FilterRule = [ FilterRule ]
+
+      return {
+        Key: {
+          FilterRules: FilterRule,
+        },
       }
     }
-    arrayify('CloudFunctionConfiguration', 'LambdaFunctionConfigurations')
-    arrayify('TopicConfiguration', 'TopicConfigurations')
-    arrayify('QueueConfiguration', 'QueueConfigurations')
-    delete payload.xmlns
-    return payload
+    const normalizeConfig = (config, oldArnKey, newArnKey) => {
+      if (!Array.isArray(config))
+        config = [ config ]
+
+      return config.map(i => {
+        const { Filter, Event, Id } = i
+        let result = { Id }
+        result[newArnKey] = i[oldArnKey]
+
+        if (!Array.isArray(Event)) {
+          result.Events = [ Event ]
+        }
+        else {
+          result.Events = Event
+        }
+
+        if (Filter) result.Filter = normalizeFilter(Filter)
+        return result
+      })
+    }
+
+    const { TopicConfiguration, QueueConfiguration, CloudFunctionConfiguration, EventBridgeConfiguration } = payload
+    let result = {}
+    result.EventBridgeConfiguration = EventBridgeConfiguration ? EventBridgeConfiguration : {}
+    if (TopicConfiguration)
+      result.TopicConfigurations = normalizeConfig(TopicConfiguration, 'Topic', 'TopicArn')
+
+    if (QueueConfiguration)
+      result.QueueConfigurations = normalizeConfig(QueueConfiguration, 'Queue', 'QueueArn')
+
+    if (CloudFunctionConfiguration)
+      result.LambdaFunctionConfigurations = normalizeConfig(CloudFunctionConfiguration, 'CloudFunction', 'LambdaFunctionArn')
+
+    return result
   },
 }
 
@@ -621,8 +640,18 @@ const GetBucketOwnershipControls = {
     }
   },
   response: ({ payload }) => {
-    arrayifyAndMoveObject(payload, 'Rule', 'Rules')
-    return { OwnershipControls: payload.Rules }
+    const { Rule } = payload
+    let result = {}
+    if (!Rule) {
+      result.Rules = []
+    }
+    else if (!Array.isArray(Rule)) {
+      result.Rules = [ Rule ]
+    }
+    else {
+      result.Rule = Rule
+    }
+    return { OwnershipControls: result }
   },
 }
 
@@ -688,7 +717,7 @@ const GetBucketReplication = {
   response: ({ payload }) => {
     arrayifyAndMoveObject(payload, 'Rule', 'Rules')
     payload.Rules.forEach(i => {
-      if (i.Filter) arrayifyFilter(i.Filter)
+      if (i.Filter) normalizeResponseFilter(i.Filter)
     })
     return {
       ReplicationConfiguration: {
@@ -805,15 +834,15 @@ const GetObject = {
       'Range', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5',
       'RequestPayer', 'ExpectedBucketOwner', 'ChecksumMode',
     ),
-    ResponseCacheControl:       { ...str, comment: 'Sets response header: `cache-control`' },
+    ResponseCacheControl: { ...str, comment: 'Sets response header: `cache-control`' },
     ResponseContentDisposition: { ...str, comment: 'Sets response header: `content-disposition`' },
-    ResponseContentEncoding:    { ...str, comment: 'Sets response header: `content-encoding`' },
-    ResponseContentLanguage:    { ...str, comment: 'Sets response header: `content-language`' },
-    ResponseContentType:        { ...str, comment: 'Sets response header: `content-type`' },
-    ResponseExpires:            { ...str, comment: 'Sets response header: `expires`' },
+    ResponseContentEncoding: { ...str, comment: 'Sets response header: `content-encoding`' },
+    ResponseContentLanguage: { ...str, comment: 'Sets response header: `content-language`' },
+    ResponseContentType: { ...str, comment: 'Sets response header: `content-type`' },
+    ResponseExpires: { ...str, comment: 'Sets response header: `expires`' },
     // Not strictly necessary since users can pass this through with any request, but it's good for folks to know it's available on this particular method
-    rawResponsePayload:         { ...bool, comment: 'Set to `true` to return payload as a buffer' },
-    streamResponsePayload:      { ...bool, comment: 'Set to `true` to return payload as a Node.js stream' },
+    rawResponsePayload: { ...bool, comment: 'Set to `true` to return payload as a buffer' },
+    streamResponsePayload: { ...bool, comment: 'Set to `true` to return payload as a Node.js stream' },
   },
   request: (params, utils) => {
     const { Key, rawResponsePayload = false, streamResponsePayload = false } = params
@@ -931,7 +960,7 @@ const ListMultipartUploads = {
     const queryParams = [ 'Delimiter', 'EncodingType', 'KeyMarker', 'MaxUploads', 'UploadMarker' ]
     const { host, pathPrefix } = getHost(params, utils)
     const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
-    let query = { uploads: '',  ...getQueryFromParams(params, queryParams) }
+    let query = { uploads: '', ...getQueryFromParams(params, queryParams) }
     let paginate
     if (params.paginate) paginate = true
     return {
@@ -964,16 +993,16 @@ const ListObjectsV2 = {
   awsDoc: docRoot + 'API_ListObjectsV2.html',
   validate: {
     Bucket,
-    ContinuationToken:  { ...str, comment: 'Pagination cursor token (returned as `NextContinuationToken`' },
+    ContinuationToken: { ...str, comment: 'Pagination cursor token (returned as `NextContinuationToken`' },
     Delimiter,
     EncodingType,
-    FetchOwner:         { ...str, comment: 'Return owner field with results' },
-    MaxKeys:            { ...num, comment: 'Set the maximum number of keys returned per response' },
+    FetchOwner: { ...str, comment: 'Return owner field with results' },
+    MaxKeys: { ...num, comment: 'Set the maximum number of keys returned per response' },
     Prefix,
-    StartAfter:         { ...str, comment: 'Starts listing after any specified key in the bucket' },
+    StartAfter: { ...str, comment: 'Starts listing after any specified key in the bucket' },
     // Here come the headers
     ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'OptionalObjectAttributes'),
-    paginate:           valPaginate,
+    paginate: valPaginate,
   },
   request: (params, utils) => {
     const { paginate } = params
@@ -1009,14 +1038,14 @@ const ListObjectsV2 = {
 const PutBucketAccelerateConfiguration = {
   awsDoc: docRoot + 'API_PutBucketAccelerateConfiguration.html',
   validate: {
-    AccelerationConfiguration: { ...obj, required, comment: 'Object specifying acceleration configurations; can contain one of: `Status: \'Enabled\'`, `Status: \'Suspended\'`', ref: docRoot + 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html#AmazonS3-PutBucketAccelerateConfiguration-request-Status' },
+    AccelerateConfiguration: { ...obj, required, comment: 'Object specifying acceleration configurations; can contain one of: `Status: \'Enabled\'`, `Status: \'Suspended\'`', ref: docRoot + 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html#AmazonS3-PutBucketAccelerateConfiguration-request-Status' },
     Bucket,
     ...getValidateHeaders('ChecksumAlgorithm', 'ExpectedBucketOwner'),
   },
   request: (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
     const headers = { ...xml, ...getHeadersFromParams(params) }
-    const { AccelerationConfiguration } = params
+    const { AccelerateConfiguration } = params
     return {
       method: 'PUT',
       host,
@@ -1024,7 +1053,7 @@ const PutBucketAccelerateConfiguration = {
       path: '/?accelerate',
       headers,
       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
-      payload: { AccelerationConfiguration },
+      payload: { AccelerateConfiguration },
     }
   },
   response: defaultResponse,
@@ -1084,11 +1113,10 @@ const PutBucketAnalyticsConfiguration = {
     const { host, pathPrefix } = getHost(params, utils)
     const headers = { ...xml, ...getHeadersFromParams(params, queryParams) }
     const query = { analytics: '', ...getQueryFromParams(params, queryParams) }
-    let { AnalyticsConfiguration } = params
-    if (AnalyticsConfiguration.Filter?.And?.Tags) {
-      AnalyticsConfiguration.Filter.And.Tag = AnalyticsConfiguration.Filter.And.Tags
-      delete AnalyticsConfiguration.Filter.And.Tags
-    }
+    const { AnalyticsConfiguration } = params
+    const { Id, Filter, StorageClassAnalysis } = AnalyticsConfiguration
+    let payload = { Id, StorageClassAnalysis }
+    if (Filter) payload.Filter = serializeRequestFilter(Filter)
     return {
       method: 'PUT',
       host,
@@ -1096,7 +1124,7 @@ const PutBucketAnalyticsConfiguration = {
       query,
       headers,
       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
-      payload: { AnalyticsConfiguration },
+      payload: { AnalyticsConfiguration: payload },
     }
   },
   response: defaultResponse,
@@ -1111,15 +1139,30 @@ const PutBucketCors = {
   },
   request: async (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
-    let { CORSConfiguration } = params
+    const { CORSConfiguration } = params
     const payload = {
-      CORSConfiguration: { CORSRule: CORSConfiguration.CORSRules.map(i => {
-        changeObjectKey(i, 'AllowedHeaders', 'AllowedHeader')
-        changeObjectKey(i, 'AllowedMethods', 'AllowedMethod')
-        changeObjectKey(i, 'AllowedOrigins', 'AllowedOrigin')
-        changeObjectKey(i, 'ExposeHeaders', 'ExposeHeader')
-        return i
-      }),
+      CORSConfiguration: {
+        CORSRule: CORSConfiguration.CORSRules.map(i => {
+          const { AllowedHeaders, AllowedMethods, AllowedOrigins, ExposeHeaders } = i
+          let result = { ...i }
+          if (AllowedHeaders) {
+            result.AllowedHeader = AllowedHeaders
+            delete result.AllowedHeaders
+          }
+          if (AllowedMethods) {
+            result.AllowedMethod = AllowedMethods
+            delete result.AllowedMethods
+          }
+          if (AllowedOrigins) {
+            result.AllowedOrigin = AllowedOrigins
+            delete result.AllowedOrigins
+          }
+          if (ExposeHeaders) {
+            result.ExposeHeader = ExposeHeaders
+            delete result.ExposeHeaders
+          }
+          return result
+        }),
       },
     }
     const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
@@ -1171,11 +1214,10 @@ const PutBucketIntelligentTieringConfiguration = {
   request: (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
     const query = { 'intelligent-tiering': '', ...getQueryFromParams(params, [ 'Id' ]) }
-    let { IntelligentTieringConfiguration } = params
-    unArrayifyFilter(IntelligentTieringConfiguration)
-    if (IntelligentTieringConfiguration.Tierings) {
-      changeObjectKey(IntelligentTieringConfiguration, 'Tierings', 'Tiering')
-    }
+    const { IntelligentTieringConfiguration } = params
+    const { Id, Filter, Status, Tierings } = IntelligentTieringConfiguration
+    let payload = { Id, Status, Tiering: Tierings }
+    if (Filter) payload.Filter = serializeRequestFilter(Filter)
     return {
       method: 'PUT',
       host,
@@ -1183,7 +1225,7 @@ const PutBucketIntelligentTieringConfiguration = {
       query,
       headers: xml,
       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
-      payload: { IntelligentTieringConfiguration },
+      payload: { IntelligentTieringConfiguration: payload },
     }
   },
   response: defaultResponse,
@@ -1202,10 +1244,9 @@ const PutBucketInventoryConfiguration = {
     const { host, pathPrefix } = getHost(params, utils)
     const query = { 'inventory': '', ...getQueryFromParams(params, queryParams) }
     const headers = { ...xml, ...getHeadersFromParams(params, queryParams) }
-    let { InventoryConfiguration } = params
-    if (InventoryConfiguration.OptionalFields) {
-      InventoryConfiguration.OptionalFields = { Field: InventoryConfiguration.OptionalFields }
-    }
+    const { InventoryConfiguration } = params
+    let payload = { ...InventoryConfiguration }
+    if (payload.OptionalFields) payload.OptionalFields = { Field: payload.OptionalFields }
     return {
       method: 'PUT',
       host,
@@ -1213,7 +1254,7 @@ const PutBucketInventoryConfiguration = {
       query,
       headers,
       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
-      payload: { InventoryConfiguration },
+      payload: { InventoryConfiguration: payload },
     }
   },
   response: defaultResponse,
@@ -1229,16 +1270,18 @@ const PutBucketLifecycleConfiguration = {
   request: async (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
     const { LifecycleConfiguration } = params
-    const payload = { LifecycleConfiguration: { Rule:
-      LifecycleConfiguration.Rules.map(i => {
-        unArrayifyFilter(i)
-        changeObjectKey(i, 'Transitions', 'Transition')
-        changeObjectKey(i, 'NoncurrentVersionTransitions', 'NoncurrentVersionTransition')
-        return i
-      }),
-    },
+    const payload = {
+      LifecycleConfiguration: {
+        Rule: LifecycleConfiguration.Rules.map(i => {
+          let result = { ...i }
+          if (result.Filter) result.Filter = serializeRequestFilter(result.Filter)
+          changeObjectKey(result, 'Transitions', 'Transition')
+          changeObjectKey(result, 'NoncurrentVersionTransitions', 'NoncurrentVersionTransition')
+          return result
+        }),
+      },
     }
-    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' } )
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
     return {
       method: 'PUT',
       host,
@@ -1293,8 +1336,15 @@ const PutBucketMetricsConfiguration = {
     const queryParams = [ 'Id' ]
     const { host, pathPrefix } = getHost(params, utils)
     const query = { metrics: '', ...getQueryFromParams(params, queryParams) }
-    let { MetricsConfiguration } = params
-    unArrayifyFilter(MetricsConfiguration)
+    const { MetricsConfiguration } = params
+    let { Id, Filter } = MetricsConfiguration
+    if (Filter) Filter = serializeRequestFilter(Filter)
+    const payload = {
+      MetricsConfiguration: {
+        Id,
+        Filter,
+      },
+    }
     return {
       method: 'PUT',
       host,
@@ -1302,7 +1352,7 @@ const PutBucketMetricsConfiguration = {
       query,
       headers: { ...xml, ...getHeadersFromParams(params, queryParams) },
       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
-      payload: { MetricsConfiguration },
+      payload,
     }
   },
   response: defaultResponse,
@@ -1321,59 +1371,33 @@ const PutBucketNotificationConfiguration = {
     const { TopicConfigurations, QueueConfigurations, LambdaFunctionConfigurations, EventBridgeConfiguration } = NotificationConfiguration
     let payload = { EventBridgeConfiguration }
 
-    if (TopicConfigurations) {
-      payload.TopicConfiguration = TopicConfigurations.map(i => {
+    const serializeFilter = Filter => {
+      return {
+        S3Key: {
+          FilterRule: Filter.Key.FilterRules,
+        },
+      }
+    }
+    const serializeConfig = (config, oldArnKey, newArnKey) => {
+      return config.map(i => {
         let result = {
           Event: i.Events,
           Topic: i.TopicArn,
+          Id: i.Id,
         }
-
-        if (i.Filter?.Key?.FilterRules) {
-          result.Filter =  {
-            S3Key: {
-              FilterRule: i.Filter.Key.FilterRules,
-            },
-          }
-        }
+        result[newArnKey] = i[oldArnKey]
+        if (i.Filter) result.Filter = serializeFilter(i.Filter)
         return result
       })
     }
+    if (TopicConfigurations)
+      payload.TopicConfiguration = serializeConfig(TopicConfigurations, 'TopicArn', 'Topic')
 
-    if (QueueConfigurations) {
-      payload.QueueConfiguration = QueueConfigurations.map(i => {
-        let result = {
-          Event: i.Events,
-          Queue: i.QueueArn,
-        }
+    if (QueueConfigurations)
+      payload.QueueConfiguration = serializeConfig(QueueConfigurations, 'QueueArn', 'Queue')
 
-        if (i.Filter?.Key?.FilterRules) {
-          result.Filter =  {
-            S3Key: {
-              FilterRule: i.Filter.Key.FilterRules,
-            },
-          }
-        }
-        return result
-      })
-    }
-
-    if (LambdaFunctionConfigurations) {
-      payload.CloudFunctionConfiguration = QueueConfigurations.map(i => {
-        let result = {
-          Event: i.Events,
-          CloudFunction: i.LambdaFunctionArn,
-        }
-
-        if (i.Filter?.Key?.FilterRules) {
-          result.Filter =  {
-            S3Key: {
-              FilterRule: i.Filter.Key.FilterRules,
-            },
-          }
-        }
-        return result
-      })
-    }
+    if (LambdaFunctionConfigurations)
+      payload.CloudFunctionConfiguration = serializeConfig(LambdaFunctionConfigurations, 'LambdaFunctionArn', 'CloudFunction')
 
     return {
       method: 'PUT',
@@ -1392,19 +1416,17 @@ const PutBucketOwnershipControls = {
   awsDoc: docRoot + 'API_PutBucketOwnershipControls.html',
   validate: {
     Bucket,
-    OwnershipControls: { ...obj, required, comment: 'Object defining the ownership controls', ref:  docRoot + 'API_PutBucketOwnershipControls.html#AmazonS3-PutBucketOwnershipControls-request-OwnershipControls' },
+    OwnershipControls: { ...obj, required, comment: 'Object defining the ownership controls', ref: docRoot + 'API_PutBucketOwnershipControls.html#AmazonS3-PutBucketOwnershipControls-request-OwnershipControls' },
     ...getValidateHeaders('ContentMD5', 'ExpectedBucketOwner'),
   },
   request: (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
     const { OwnershipControls } = params
-
     const payload = {
       OwnershipControls: {
         Rule: OwnershipControls.Rules,
       },
     }
-
     return {
       method: 'PUT',
       host,
@@ -1425,7 +1447,7 @@ const UploadPart = {
     Key,
     PartNumber,
     Body: { ...obj, comment: 'Stream of data to be uploaded', ref: docRoot + 'AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody' },
-    ...getValidateHeaders( 'ContentLength', 'ContentMD5', 'ChecksumAlgorithm', 'ChecksumCRC32',
+    ...getValidateHeaders('ContentLength', 'ContentMD5', 'ChecksumAlgorithm', 'ChecksumCRC32',
       'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256', 'SSECustomerAlgorithm',
       'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner',
     ),
@@ -1495,7 +1517,8 @@ const methods = {
   PutBucketOwnershipControls,
   PutObject,
   UploadPart,
-  ...incomplete }
+  ...incomplete,
+}
 
 export default {
   name: '@aws-lite/s3',
