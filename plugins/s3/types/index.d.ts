@@ -44,6 +44,10 @@ import {
   PutBucketMetricsConfigurationCommandOutput as PutBucketMetricsConfigurationResponse,
   PutBucketNotificationConfigurationCommandOutput as PutBucketNotificationConfigurationResponse,
   PutBucketOwnershipControlsCommandOutput as PutBucketOwnershipControlsResponse,
+  PutBucketPolicyCommandOutput as PutBucketPolicyResponse,
+  PutBucketReplicationCommandOutput as PutBucketReplicationResponse,
+  PutBucketRequestPaymentCommandOutput as PutBucketRequestPaymentResponse,
+  PutBucketTaggingCommandOutput as PutBucketTaggingResponse,
   PutObjectCommandOutput as PutObjectResponse,
   UploadPartCommandOutput as UploadPartResponse,
   // $IMPORTS_END
@@ -308,6 +312,30 @@ declare interface AwsLiteS3 {
   PutBucketOwnershipControls: (input: { Bucket: string, OwnershipControls: Record<string, any>, ContentMD5?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketOwnershipControlsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html S3: PutBucketPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketPolicy S3: PutBucketPolicy}
+   */
+  PutBucketPolicy: (input: { Bucket: string, Policy: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ConfirmRemoveSelfBucketAccess?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html S3: PutBucketReplication}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketReplication S3: PutBucketReplication}
+   */
+  PutBucketReplication: (input: { Bucket: string, ReplicationConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, Token?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketReplicationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketRequestPayment.html S3: PutBucketRequestPayment}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketRequestPayment S3: PutBucketRequestPayment}
+   */
+  PutBucketRequestPayment: (input: { Bucket: string, RequestPaymentConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketRequestPaymentResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html S3: PutBucketTagging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketTagging S3: PutBucketTagging}
+   */
+  PutBucketTagging: (input: { Bucket: string, Tagging: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketTaggingResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html S3: PutObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObject S3: PutObject}
    */
@@ -374,6 +402,10 @@ export type {
   PutBucketMetricsConfigurationResponse,
   PutBucketNotificationConfigurationResponse,
   PutBucketOwnershipControlsResponse,
+  PutBucketPolicyResponse,
+  PutBucketReplicationResponse,
+  PutBucketRequestPaymentResponse,
+  PutBucketTaggingResponse,
   PutObjectResponse,
   UploadPartResponse,
   // $EXPORT_END

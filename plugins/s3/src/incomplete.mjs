@@ -39,10 +39,6 @@ export default {
   PutBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_PutBucketLifecycle.html' }, // Deprecated, use `PutBucketLifecycleConfiguration`
   PutBucketLogging:                            { disabled, awsDoc: docRoot + 'API_PutBucketLogging.html' }, // Requires nested XML attributes
   PutBucketNotification:                       { disabled, awsDoc: docRoot + 'API_PutBucketNotification.html' }, // Deprecated, use `PutBucketNotificationConfiguration`
-  PutBucketPolicy:                             { disabled, awsDoc: docRoot + 'API_PutBucketPolicy.html' },
-  PutBucketReplication:                        { disabled, awsDoc: docRoot + 'API_PutBucketReplication.html' },
-  PutBucketRequestPayment:                     { disabled, awsDoc: docRoot + 'API_PutBucketRequestPayment.html' },
-  PutBucketTagging:                            { disabled, awsDoc: docRoot + 'API_PutBucketTagging.html' },
   PutBucketVersioning:                         { disabled, awsDoc: docRoot + 'API_PutBucketVersioning.html' },
   PutBucketWebsite:                            { disabled, awsDoc: docRoot + 'API_PutBucketWebsite.html' },
   PutObjectAcl:                                { disabled, awsDoc: docRoot + 'API_PutObjectAcl.html' },

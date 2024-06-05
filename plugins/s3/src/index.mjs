@@ -1440,6 +1440,131 @@ const PutBucketOwnershipControls = {
   response: defaultResponse,
 }
 
+const PutBucketPolicy = {
+  awsDoc: docRoot + 'API_PutBucketPolicy.html',
+  validate: {
+    Bucket,
+    Policy: { ...obj, required, comment: 'Object defining the policy', ref: docRoot + 'API_PutBucketPolicy.html#API_PutBucketPolicy_RequestBody' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ConfirmRemoveSelfBucketAccess',  'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { Policy: payload } = params
+    const { host, pathPrefix } = getHost(params, utils)
+    const { createHash } = await import('node:crypto')
+    const payloadString = JSON.stringify(payload)
+    const checksum = Buffer.from(createHash('sha256').update(payloadString).digest()).toString('base64')
+    const headers = { ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?policy',
+      headers,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketReplication = {
+  awsDoc: docRoot + 'API_PutBucketReplication.html',
+  validate: {
+    Bucket,
+    ReplicationConfiguration: { ...obj, required, comment: 'Object defining the replication configuration', ref: docRoot + 'API_PutBucketReplication.html#AmazonS3-PutBucketReplication-request-ReplicationConfiguration' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'Token', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { ReplicationConfiguration } = params
+    let { Role, Rules } = ReplicationConfiguration
+
+    Rules = Rules.map(i => {
+      const { Filter } = i
+      let result = { ...i }
+      if (Filter) result.Filter = serializeRequestFilter(Filter)
+      return result
+    })
+
+    const payload = {
+      ReplicationConfiguration: {
+        Role,
+        Rule: Rules,
+      },
+    }
+
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?replication',
+      headers,
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketRequestPayment = {
+  awsDoc: docRoot + 'API_PutBucketRequestPayment.html',
+  validate: {
+    Bucket,
+    RequestPaymentConfiguration: { ...obj, required, comment: 'Object defining the payment configuration; must contain `Payer`, which can be one of: `Requester`, `BucketOwner`' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { RequestPaymentConfiguration } = params
+    const payload = { RequestPaymentConfiguration }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?requestPayment',
+      headers,
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketTagging = {
+  awsDoc: docRoot + 'API_PutBucketTagging.html',
+  validate: {
+    Bucket,
+    Tagging: { ...obj, required, comment: 'Object defining the tag set', ref:  docRoot + 'API_PutBucketTagging.html#AmazonS3-PutBucketTagging-request-Tagging' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { Tagging } = params
+    const payload = {
+      Tagging: {
+        TagSet: {
+          Tag: Tagging.TagSet,
+        },
+      },
+    }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?tagging',
+      headers,
+      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
 const UploadPart = {
   awsDoc: docRoot + 'API_UploadPart.html',
   validate: {
@@ -1515,6 +1640,10 @@ const methods = {
   PutBucketMetricsConfiguration,
   PutBucketNotificationConfiguration,
   PutBucketOwnershipControls,
+  PutBucketPolicy,
+  PutBucketReplication,
+  PutBucketRequestPayment,
+  PutBucketTagging,
   PutObject,
   UploadPart,
   ...incomplete,

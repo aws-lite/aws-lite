@@ -778,6 +778,81 @@ Properties:
   - Sets request header: `x-amz-expected-bucket-owner`
 
 
+### `PutBucketPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Policy` (object) [required]**
+  - Object defining the policy
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html#API_PutBucketPolicy_RequestBody)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ConfirmRemoveSelfBucketAccess` (string)**
+  - Sets request header: `x-amz-confirm-remove-self-bucket-access`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketReplication`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ReplicationConfiguration` (object) [required]**
+  - Object defining the replication configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html#AmazonS3-PutBucketReplication-request-ReplicationConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`Token` (string)**
+  - Sets request header: `x-amz-bucket-object-lock-token`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketRequestPayment`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketRequestPayment.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`RequestPaymentConfiguration` (object) [required]**
+  - Object defining the payment configuration; must contain `Payer`, which can be one of: `Requester`, `BucketOwner`
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketTagging`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Tagging` (object) [required]**
+  - Object defining the tag set
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html#AmazonS3-PutBucketTagging-request-Tagging)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `PutObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html)
@@ -945,10 +1020,6 @@ Properties:
 - [`PutBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html)
 - [`PutBucketLogging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLogging.html)
 - [`PutBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotification.html)
-- [`PutBucketPolicy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html)
-- [`PutBucketReplication`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html)
-- [`PutBucketRequestPayment`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketRequestPayment.html)
-- [`PutBucketTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html)
 - [`PutBucketVersioning`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html)
 - [`PutBucketWebsite`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html)
 - [`PutObjectAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html)
