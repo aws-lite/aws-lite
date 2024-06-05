@@ -48,6 +48,8 @@ import {
   PutBucketReplicationCommandOutput as PutBucketReplicationResponse,
   PutBucketRequestPaymentCommandOutput as PutBucketRequestPaymentResponse,
   PutBucketTaggingCommandOutput as PutBucketTaggingResponse,
+  PutBucketVersioningCommandOutput as PutBucketVersioningResponse,
+  PutBucketWebsiteCommandOutput as PutBucketWebsiteResponse,
   PutObjectCommandOutput as PutObjectResponse,
   UploadPartCommandOutput as UploadPartResponse,
   // $IMPORTS_END
@@ -336,6 +338,18 @@ declare interface AwsLiteS3 {
   PutBucketTagging: (input: { Bucket: string, Tagging: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketTaggingResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html S3: PutBucketVersioning}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketVersioning S3: PutBucketVersioning}
+   */
+  PutBucketVersioning: (input: { Bucket: string, VersioningConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, MFA?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketVersioningResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html S3: PutBucketWebsite}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketWebsite S3: PutBucketWebsite}
+   */
+  PutBucketWebsite: (input: { Bucket: string, WebsiteConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketWebsiteResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html S3: PutObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObject S3: PutObject}
    */
@@ -406,6 +420,8 @@ export type {
   PutBucketReplicationResponse,
   PutBucketRequestPaymentResponse,
   PutBucketTaggingResponse,
+  PutBucketVersioningResponse,
+  PutBucketWebsiteResponse,
   PutObjectResponse,
   UploadPartResponse,
   // $EXPORT_END

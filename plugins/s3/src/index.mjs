@@ -20,6 +20,7 @@ const str = { type: 'string' }
 const num = { type: 'number' }
 
 const xml = { 'content-type': 'application/xml' }
+const xmlns = 'http://s3.amazonaws.com/doc/2006-03-01/'
 
 const Bucket = { ...str, required, comment: 'S3 bucket name' }
 const Key = { ...str, required, comment: 'S3 key / file name' }
@@ -96,7 +97,7 @@ const CompleteMultipartUpload = {
       query,
       headers: { ...xml, ...getHeadersFromParams(params, queryParams) },
       payload: { CompleteMultipartUpload },
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
     }
   },
   response: defaultResponse,
@@ -790,8 +791,8 @@ const GetBucketVersioning = {
     }
   },
   response: ({ payload }) => {
-    delete payload.xmlns
-    return payload
+    const { Status, MfaDelete: MFADelete } = payload
+    return { Status, MFADelete }
   },
 }
 
@@ -1052,7 +1053,7 @@ const PutBucketAccelerateConfiguration = {
       pathPrefix,
       path: '/?accelerate',
       headers,
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload: { AccelerateConfiguration },
     }
   },
@@ -1094,7 +1095,7 @@ const PutBucketAccelerateConfiguration = {
 //       path: '/?acl',
 //       headers,
 //       payload: { AccessControlPolicy },
-//       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+//       xmlns,
 //     }
 //   },
 //   response: defaultResponse,
@@ -1123,7 +1124,7 @@ const PutBucketAnalyticsConfiguration = {
       pathPrefix,
       query,
       headers,
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload: { AnalyticsConfiguration: payload },
     }
   },
@@ -1165,14 +1166,14 @@ const PutBucketCors = {
         }),
       },
     }
-    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
     return {
       method: 'PUT',
       host,
       pathPrefix,
       path: '/?cors',
       headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload,
     }
   },
@@ -1189,15 +1190,16 @@ const PutBucketEncryption = {
   request: async (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
     const { ServerSideEncryptionConfiguration } = params
-    const payload = { ServerSideEncryptionConfiguration: { Rule: ServerSideEncryptionConfiguration.Rules } }
-    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const { Rules: Rule } = ServerSideEncryptionConfiguration
+    const payload = { ServerSideEncryptionConfiguration: { Rule } }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
     return {
       method: 'PUT',
       host,
       pathPrefix,
       path: '/?encryption',
       headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload,
     }
   },
@@ -1215,8 +1217,8 @@ const PutBucketIntelligentTieringConfiguration = {
     const { host, pathPrefix } = getHost(params, utils)
     const query = { 'intelligent-tiering': '', ...getQueryFromParams(params, [ 'Id' ]) }
     const { IntelligentTieringConfiguration } = params
-    const { Id, Filter, Status, Tierings } = IntelligentTieringConfiguration
-    let payload = { Id, Status, Tiering: Tierings }
+    const { Id, Filter, Status, Tierings: Tiering } = IntelligentTieringConfiguration
+    let payload = { Id, Status, Tiering }
     if (Filter) payload.Filter = serializeRequestFilter(Filter)
     return {
       method: 'PUT',
@@ -1224,7 +1226,7 @@ const PutBucketIntelligentTieringConfiguration = {
       pathPrefix,
       query,
       headers: xml,
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload: { IntelligentTieringConfiguration: payload },
     }
   },
@@ -1253,7 +1255,7 @@ const PutBucketInventoryConfiguration = {
       pathPrefix,
       query,
       headers,
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload: { InventoryConfiguration: payload },
     }
   },
@@ -1281,14 +1283,14 @@ const PutBucketLifecycleConfiguration = {
         }),
       },
     }
-    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
     return {
       method: 'PUT',
       host,
       pathPrefix,
       path: '/?lifecycle',
       headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload,
     }
   },
@@ -1310,14 +1312,14 @@ const PutBucketLifecycleConfiguration = {
 //       BucketLoggingStatus.TargetGrants = { Grant: BucketLoggingStatus.TargetGrants }
 //     }
 //     const payload = { BucketLoggingStatus }
-//     const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' } )
+//     const checksum = await makeChecksumSHA256(utils, payload, { xmlns } )
 //     return {
 //       method: 'PUT',
 //       host,
 //       pathPrefix,
 //       path: '/?logging',
 //       headers: { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum },
-//       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+//       xmlns,
 //       payload,
 //     }
 //   },
@@ -1351,7 +1353,7 @@ const PutBucketMetricsConfiguration = {
       pathPrefix,
       query,
       headers: { ...xml, ...getHeadersFromParams(params, queryParams) },
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload,
     }
   },
@@ -1405,7 +1407,7 @@ const PutBucketNotificationConfiguration = {
       pathPrefix,
       path: '/?notification',
       headers: { ...xml, ...getHeadersFromParams(params) },
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload: { NotificationConfiguration: payload },
     }
   },
@@ -1422,9 +1424,10 @@ const PutBucketOwnershipControls = {
   request: (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
     const { OwnershipControls } = params
+    const { Rules: Rule } = OwnershipControls
     const payload = {
       OwnershipControls: {
-        Rule: OwnershipControls.Rules,
+        Rule,
       },
     }
     return {
@@ -1433,7 +1436,7 @@ const PutBucketOwnershipControls = {
       pathPrefix,
       path: '/?ownershipControls',
       headers: { ...xml, ...getHeadersFromParams(params) },
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload,
     }
   },
@@ -1476,9 +1479,9 @@ const PutBucketReplication = {
   request: async (params, utils) => {
     const { host, pathPrefix } = getHost(params, utils)
     const { ReplicationConfiguration } = params
-    let { Role, Rules } = ReplicationConfiguration
+    let { Role, Rules: Rule } = ReplicationConfiguration
 
-    Rules = Rules.map(i => {
+    Rule = Rule.map(i => {
       const { Filter } = i
       let result = { ...i }
       if (Filter) result.Filter = serializeRequestFilter(Filter)
@@ -1488,11 +1491,11 @@ const PutBucketReplication = {
     const payload = {
       ReplicationConfiguration: {
         Role,
-        Rule: Rules,
+        Rule,
       },
     }
 
-    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
     const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
     return {
       method: 'PUT',
@@ -1500,7 +1503,7 @@ const PutBucketReplication = {
       pathPrefix,
       path: '/?replication',
       headers,
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload,
     }
   },
@@ -1518,7 +1521,7 @@ const PutBucketRequestPayment = {
     const { host, pathPrefix } = getHost(params, utils)
     const { RequestPaymentConfiguration } = params
     const payload = { RequestPaymentConfiguration }
-    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
     const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
     return {
       method: 'PUT',
@@ -1526,7 +1529,7 @@ const PutBucketRequestPayment = {
       pathPrefix,
       path: '/?requestPayment',
       headers,
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
       payload,
     }
   },
@@ -1550,7 +1553,7 @@ const PutBucketTagging = {
         },
       },
     }
-    const checksum = await makeChecksumSHA256(utils, payload, { xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/' })
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
     const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
     return {
       method: 'PUT',
@@ -1558,7 +1561,67 @@ const PutBucketTagging = {
       pathPrefix,
       path: '/?tagging',
       headers,
-      xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
+      xmlns,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketVersioning = {
+  awsDoc: docRoot + 'API_PutBucketVersioning.html',
+  validate: {
+    Bucket,
+    VersioningConfiguration: { ...obj, required, comment: 'Object defining the versioning configuration', ref: docRoot + 'API_PutBucketVersioning.html#AmazonS3-PutBucketVersioning-request-VersioningConfiguration' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'MFA', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { VersioningConfiguration } = params
+    const { Status, MFADelete: MfaDelete } = VersioningConfiguration
+    const payload = {
+      VersioningConfiguration: {
+        MfaDelete,
+        Status,
+      },
+    }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
+    const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?versioning',
+      headers,
+      xmlns,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const PutBucketWebsite = {
+  awsDoc: docRoot + 'API_PutBucketWebsite.html',
+  validate: {
+    Bucket,
+    WebsiteConfiguration: { ...obj, required, comment: 'Object defining the website configuration', ref: docRoot + 'API_PutBucketWebsite.html#AmazonS3-PutBucketWebsite-request-WebsiteConfiguration' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { WebsiteConfiguration } = params
+    const { RoutingRules: RoutingRule } = WebsiteConfiguration
+    let payload = { WebsiteConfiguration: { ...WebsiteConfiguration } }
+    if (RoutingRule) payload.WebsiteConfiguration.RoutingRules = { RoutingRule }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
+    const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?website',
+      headers,
+      xmlns,
       payload,
     }
   },
@@ -1644,6 +1707,8 @@ const methods = {
   PutBucketReplication,
   PutBucketRequestPayment,
   PutBucketTagging,
+  PutBucketVersioning,
+  PutBucketWebsite,
   PutObject,
   UploadPart,
   ...incomplete,
