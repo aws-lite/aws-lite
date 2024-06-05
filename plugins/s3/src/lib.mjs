@@ -109,6 +109,11 @@ const parseHeadersToResults = ({ headers }, utils, ignore) => {
       if (normalized === 'last-modified') value = new Date(value)
       if (isNum.includes(normalized)) value = Number(value)
       acc[paramMappings[normalized]] = value
+    } else if (normalized.startsWith('x-amz-meta-')) {
+      // Handle user-defined metadata
+      const metaKey = normalized.substring('x-amz-meta-'.length)
+      acc.Metadata = acc.Metadata || {}
+      acc.Metadata[metaKey] = value
     }
     return acc
   }, {})
