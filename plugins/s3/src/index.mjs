@@ -44,6 +44,21 @@ function getHost ({ Bucket }, { region, config }) {
   // Current virtual-hosted-style URls
   return { host: `${Bucket}.` + (config.host || `s3.${region}.amazonaws.com`) }
 }
+
+function makeDeleteRequest (params, utils) {
+  const { query, queryParams, path } = params
+  const { host, pathPrefix } = getHost(params, utils)
+  const headers = getHeadersFromParams(params, queryParams)
+  return {
+    method: 'DELETE',
+    host,
+    pathPrefix,
+    path,
+    query,
+    headers,
+  }
+}
+
 const defaultResponse = ({ payload }) => payload || {}
 
 const AbortMultipartUpload = {
@@ -178,6 +193,81 @@ const DeleteBucket = {
   },
   response: defaultResponse,
 }
+
+const DeleteBucketAnalyticsConfiguration = {
+  awsDoc: docRoot + 'API_DeleteBucketAnalyticsConfiguration.html',
+  validate: {
+    Bucket,
+    Id,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Id' ]
+    const query = { analytics: '', ...getQueryFromParams(params, queryParams) }
+    const parm = { query, queryParams, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketCors = {
+  awsDoc: docRoot + 'API_DeleteBucketCors.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const path = '/?cors'
+    const parm = { path, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketEncryption = {
+  awsDoc: docRoot + 'API_DeleteBucketEncryption.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const path = '/?encryption'
+    return makeDeleteRequest({ ...params, path }, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketIntelligentTieringConfiguration = {
+  awsDoc: docRoot + 'API_DeleteBucketIntelligentTieringConfiguration.html',
+  validate: {
+    Bucket,
+    Id,
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Id' ]
+    const query = { 'intelligent-tiering': '', ...getQueryFromParams(params, queryParams) }
+    const parm = { query, queryParams, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketInventoryConfiguration = {
+  awsDoc: docRoot + 'API_DeleteBucketInventoryConfiguration.html',
+  validate: {
+    Bucket,
+    Id,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Id' ]
+    const query = { inventory: '', ...getQueryFromParams(params, queryParams) }
+    const parm = { query, queryParams, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
 
 const DeleteObject = {
   awsDoc: docRoot + 'API_DeleteObject.html',
@@ -1665,6 +1755,11 @@ const methods = {
   CreateBucket,
   CreateMultipartUpload,
   DeleteBucket,
+  DeleteBucketAnalyticsConfiguration,
+  DeleteBucketCors,
+  DeleteBucketEncryption,
+  DeleteBucketIntelligentTieringConfiguration,
+  DeleteBucketInventoryConfiguration,
   DeleteObject,
   DeleteObjects,
   GetBucketAccelerateConfiguration,

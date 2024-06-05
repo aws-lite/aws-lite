@@ -6,6 +6,11 @@ import {
   CreateBucketCommandOutput as CreateBucketResponse,
   CreateMultipartUploadCommandOutput as CreateMultipartUploadResponse,
   DeleteBucketCommandOutput as DeleteBucketResponse,
+  DeleteBucketAnalyticsConfigurationCommandOutput as DeleteBucketAnalyticsConfigurationResponse,
+  DeleteBucketCorsCommandOutput as DeleteBucketCorsResponse,
+  DeleteBucketEncryptionCommandOutput as DeleteBucketEncryptionResponse,
+  DeleteBucketIntelligentTieringConfigurationCommandOutput as DeleteBucketIntelligentTieringConfigurationResponse,
+  DeleteBucketInventoryConfigurationCommandOutput as DeleteBucketInventoryConfigurationResponse,
   DeleteObjectCommandOutput as DeleteObjectResponse,
   DeleteObjectsCommandOutput as DeleteObjectsResponse,
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
@@ -88,6 +93,36 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucket S3: DeleteBucket}
    */
   DeleteBucket: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html S3: DeleteBucketAnalyticsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketAnalyticsConfiguration S3: DeleteBucketAnalyticsConfiguration}
+   */
+  DeleteBucketAnalyticsConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketAnalyticsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketCors.html S3: DeleteBucketCors}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketCors S3: DeleteBucketCors}
+   */
+  DeleteBucketCors: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketCorsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html S3: DeleteBucketEncryption}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketEncryption S3: DeleteBucketEncryption}
+   */
+  DeleteBucketEncryption: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketEncryptionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketIntelligentTieringConfiguration.html S3: DeleteBucketIntelligentTieringConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketIntelligentTieringConfiguration S3: DeleteBucketIntelligentTieringConfiguration}
+   */
+  DeleteBucketIntelligentTieringConfiguration: (input: { Bucket: string, Id: string }) => Promise<DeleteBucketIntelligentTieringConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html S3: DeleteBucketInventoryConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketInventoryConfiguration S3: DeleteBucketInventoryConfiguration}
+   */
+  DeleteBucketInventoryConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketInventoryConfigurationResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html S3: DeleteObject}
@@ -378,6 +413,11 @@ export type {
   CreateBucketResponse,
   CreateMultipartUploadResponse,
   DeleteBucketResponse,
+  DeleteBucketAnalyticsConfigurationResponse,
+  DeleteBucketCorsResponse,
+  DeleteBucketEncryptionResponse,
+  DeleteBucketIntelligentTieringConfigurationResponse,
+  DeleteBucketInventoryConfigurationResponse,
   DeleteObjectResponse,
   DeleteObjectsResponse,
   GetBucketAccelerateConfigurationResponse,
