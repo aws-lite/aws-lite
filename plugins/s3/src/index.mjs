@@ -268,6 +268,63 @@ const DeleteBucketInventoryConfiguration = {
   response: defaultResponse,
 }
 
+const DeleteBucketLifecycle = {
+  awsDoc: docRoot + 'API_DeleteBucketLifecycle.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const path = '/?lifecycle'
+    const parm = { path, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketMetricsConfiguration = {
+  awsDoc: docRoot + 'API_DeleteBucketMetricsConfiguration.html',
+  validate: {
+    Bucket,
+    Id,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Id' ]
+    const query = { metrics: '', ...getQueryFromParams(params, queryParams) }
+    const parm = { query, queryParams, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketOwnershipControls = {
+  awsDoc: docRoot + 'API_DeleteBucketOwnershipControls.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const path = '/?ownershipControls'
+    const parm = { path, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketPolicy = {
+  awsDoc: docRoot + 'API_DeleteBucketPolicy.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const path = '/?policy'
+    const parm = { path, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
 
 const DeleteObject = {
   awsDoc: docRoot + 'API_DeleteObject.html',
@@ -1760,6 +1817,10 @@ const methods = {
   DeleteBucketEncryption,
   DeleteBucketIntelligentTieringConfiguration,
   DeleteBucketInventoryConfiguration,
+  DeleteBucketLifecycle,
+  DeleteBucketMetricsConfiguration,
+  DeleteBucketOwnershipControls,
+  DeleteBucketPolicy,
   DeleteObject,
   DeleteObjects,
   GetBucketAccelerateConfiguration,

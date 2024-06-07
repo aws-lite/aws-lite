@@ -11,6 +11,10 @@ import {
   DeleteBucketEncryptionCommandOutput as DeleteBucketEncryptionResponse,
   DeleteBucketIntelligentTieringConfigurationCommandOutput as DeleteBucketIntelligentTieringConfigurationResponse,
   DeleteBucketInventoryConfigurationCommandOutput as DeleteBucketInventoryConfigurationResponse,
+  DeleteBucketLifecycleCommandOutput as DeleteBucketLifecycleResponse,
+  DeleteBucketMetricsConfigurationCommandOutput as DeleteBucketMetricsConfigurationResponse,
+  DeleteBucketOwnershipControlsCommandOutput as DeleteBucketOwnershipControlsResponse,
+  DeleteBucketPolicyCommandOutput as DeleteBucketPolicyResponse,
   DeleteObjectCommandOutput as DeleteObjectResponse,
   DeleteObjectsCommandOutput as DeleteObjectsResponse,
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
@@ -123,6 +127,30 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketInventoryConfiguration S3: DeleteBucketInventoryConfiguration}
    */
   DeleteBucketInventoryConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketInventoryConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketLifecycle.html S3: DeleteBucketLifecycle}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketLifecycle S3: DeleteBucketLifecycle}
+   */
+  DeleteBucketLifecycle: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketLifecycleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html S3: DeleteBucketMetricsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketMetricsConfiguration S3: DeleteBucketMetricsConfiguration}
+   */
+  DeleteBucketMetricsConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketMetricsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketOwnershipControls.html S3: DeleteBucketOwnershipControls}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketOwnershipControls S3: DeleteBucketOwnershipControls}
+   */
+  DeleteBucketOwnershipControls: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketOwnershipControlsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketPolicy.html S3: DeleteBucketPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketPolicy S3: DeleteBucketPolicy}
+   */
+  DeleteBucketPolicy: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html S3: DeleteObject}
@@ -418,6 +446,10 @@ export type {
   DeleteBucketEncryptionResponse,
   DeleteBucketIntelligentTieringConfigurationResponse,
   DeleteBucketInventoryConfigurationResponse,
+  DeleteBucketLifecycleResponse,
+  DeleteBucketMetricsConfigurationResponse,
+  DeleteBucketOwnershipControlsResponse,
+  DeleteBucketPolicyResponse,
   DeleteObjectResponse,
   DeleteObjectsResponse,
   GetBucketAccelerateConfigurationResponse,
