@@ -326,6 +326,48 @@ const DeleteBucketPolicy = {
   response: defaultResponse,
 }
 
+const DeleteBucketReplication = {
+  awsDoc: docRoot + 'API_DeleteBucketReplication.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const path = '/?replication'
+    const parm = { path, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketTagging = {
+  awsDoc: docRoot + 'API_DeleteBucketTagging.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const path = '/?tagging'
+    const parm = { path, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
+const DeleteBucketWebsite = {
+  awsDoc: docRoot + 'API_DeleteBucketWebsite.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const path = '/?website'
+    const parm = { path, ...params }
+    return makeDeleteRequest(parm, utils)
+  },
+  response: defaultResponse,
+}
+
 const DeleteObject = {
   awsDoc: docRoot + 'API_DeleteObject.html',
   validate: {
@@ -1821,6 +1863,9 @@ const methods = {
   DeleteBucketMetricsConfiguration,
   DeleteBucketOwnershipControls,
   DeleteBucketPolicy,
+  DeleteBucketReplication,
+  DeleteBucketTagging,
+  DeleteBucketWebsite,
   DeleteObject,
   DeleteObjects,
   GetBucketAccelerateConfiguration,

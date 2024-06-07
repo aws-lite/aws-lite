@@ -3,9 +3,6 @@ const docRoot = 'https://docs.aws.amazon.com/AmazonS3/latest/API/'
 export default {
   CopyObject:                                  { disabled, awsDoc: docRoot + 'API_CopyObject.html' },
   CreateSession:                               { disabled, awsDoc: docRoot + 'API_CreateSession.html' },
-  DeleteBucketReplication:                     { disabled, awsDoc: docRoot + 'API_DeleteBucketReplication.html' },
-  DeleteBucketTagging:                         { disabled, awsDoc: docRoot + 'API_DeleteBucketTagging.html' },
-  DeleteBucketWebsite:                         { disabled, awsDoc: docRoot + 'API_DeleteBucketWebsite.html' },
   DeleteObjectTagging:                         { disabled, awsDoc: docRoot + 'API_DeleteObjectTagging.html' },
   DeletePublicAccessBlock:                     { disabled, awsDoc: docRoot + 'API_DeletePublicAccessBlock.html' },
   GetBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_GetBucketLifecycle.html' }, // Deprecated, use `GetBucketLifecycleConfiguration`

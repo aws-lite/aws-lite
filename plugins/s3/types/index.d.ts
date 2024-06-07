@@ -15,6 +15,9 @@ import {
   DeleteBucketMetricsConfigurationCommandOutput as DeleteBucketMetricsConfigurationResponse,
   DeleteBucketOwnershipControlsCommandOutput as DeleteBucketOwnershipControlsResponse,
   DeleteBucketPolicyCommandOutput as DeleteBucketPolicyResponse,
+  DeleteBucketReplicationCommandOutput as DeleteBucketReplicationResponse,
+  DeleteBucketTaggingCommandOutput as DeleteBucketTaggingResponse,
+  DeleteBucketWebsiteCommandOutput as DeleteBucketWebsiteResponse,
   DeleteObjectCommandOutput as DeleteObjectResponse,
   DeleteObjectsCommandOutput as DeleteObjectsResponse,
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
@@ -151,6 +154,24 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketPolicy S3: DeleteBucketPolicy}
    */
   DeleteBucketPolicy: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketReplication.html S3: DeleteBucketReplication}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketReplication S3: DeleteBucketReplication}
+   */
+  DeleteBucketReplication: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketReplicationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html S3: DeleteBucketTagging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketTagging S3: DeleteBucketTagging}
+   */
+  DeleteBucketTagging: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketTaggingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketWebsite.html S3: DeleteBucketWebsite}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketWebsite S3: DeleteBucketWebsite}
+   */
+  DeleteBucketWebsite: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketWebsiteResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html S3: DeleteObject}
@@ -450,6 +471,9 @@ export type {
   DeleteBucketMetricsConfigurationResponse,
   DeleteBucketOwnershipControlsResponse,
   DeleteBucketPolicyResponse,
+  DeleteBucketReplicationResponse,
+  DeleteBucketTaggingResponse,
+  DeleteBucketWebsiteResponse,
   DeleteObjectResponse,
   DeleteObjectsResponse,
   GetBucketAccelerateConfigurationResponse,
