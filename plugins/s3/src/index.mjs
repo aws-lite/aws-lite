@@ -23,15 +23,17 @@ const xml = { 'content-type': 'application/xml' }
 const xmlns = 'http://s3.amazonaws.com/doc/2006-03-01/'
 
 const Bucket = { ...str, required, comment: 'S3 bucket name' }
-const Key = { ...str, required, comment: 'S3 key / file name' }
-const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
-const VersionId = { ...str, comment: 'Reference a specific version of the object' }
+const ContinuationToken = { ...str, comment: 'Pagination cursor token (returned as `NextContinuationToken`' }
 const Delimiter = { ...str, comment: 'Delimiter character used to group keys' }
 const EncodingType = { ...str, comment: 'Object key encoding type (must be `url`)' }
-const Prefix = { ...str, comment: 'Limit response to keys that begin with the specified prefix' }
-const valPaginate = { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-const UploadId = { ...str, required, comment: 'ID of the multipart upload' }
 const Id = { ...str, required, comment: 'ID of the object' }
+const Key = { ...str, required, comment: 'S3 key / file name' }
+const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
+const Prefix = { ...str, comment: 'Limit response to keys that begin with the specified prefix' }
+const UploadId = { ...str, required, comment: 'ID of the multipart upload' }
+const valPaginate = { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const VersionId = { ...str, comment: 'Reference a specific version of the object' }
+
 
 function getHost ({ Bucket }, { region, config }) {
   // Deprecated path-style URLs, still necessary for buckets with periods
@@ -1115,6 +1117,173 @@ const HeadObject = {
   },
 }
 
+const ListBucketAnalyticsConfigurations = {
+  awsDoc: docRoot + 'API_ListBucketAnalyticsConfigurations.html',
+  validate: {
+    Bucket,
+    ContinuationToken,
+    paginate: valPaginate,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'ContinuationToken' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
+    let query = { analytics: '', ...getQueryFromParams(params, queryParams) }
+    let paginate
+    if (params.paginate) paginate = true
+    return {
+      host,
+      pathPrefix,
+      headers,
+      query,
+      paginate,
+      paginator: { type: 'query', cursor: 'continuation-token', token: 'NextContinuationToken', accumulator: 'AnalyticsConfiguration' },
+    }
+  },
+  response: ({ payload }) => {
+    let { AnalyticsConfiguration: resultList } = payload
+    if (resultList) {
+      resultList = resultList.map(i => {
+        let result = { ...i }
+        if (result.Filter) normalizeResponseFilter(result.Filter)
+        return result
+      })
+    }
+    else {
+      resultList = []
+    }
+    return resultList
+  },
+}
+
+const ListBucketIntelligentTieringConfigurations = {
+  awsDoc: docRoot + 'API_ListBucketIntelligentTieringConfigurations.html',
+  validate: {
+    Bucket,
+    ContinuationToken,
+    paginate: valPaginate,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'ContinuationToken' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
+    let query = { 'intelligent-tiering': '', ...getQueryFromParams(params, queryParams) }
+    let paginate
+    if (params.paginate) paginate = true
+    return {
+      host,
+      pathPrefix,
+      headers,
+      query,
+      paginate,
+      paginator: { type: 'query', cursor: 'continuation-token', token: 'NextContinuationToken', accumulator: 'IntelligentTieringConfiguration' },
+    }
+  },
+  response: ({ payload }) => {
+    let { IntelligentTieringConfiguration: resultList } = payload
+    if (resultList) {
+      resultList = resultList.map(i => {
+        let result = { ...i }
+        if (result.Filter) normalizeResponseFilter(result.Filter)
+        if (!Array.isArray(result.Tiering)) result.Tiering = [ result.Tiering ]
+        result.Tierings = result.Tiering
+        delete result.Tiering
+        return result
+      })
+    }
+    else {
+      resultList = []
+    }
+    return resultList
+  },
+}
+
+const ListBucketInventoryConfigurations = {
+  awsDoc: docRoot + 'API_ListBucketInventoryConfigurations.html',
+  validate: {
+    Bucket,
+    ContinuationToken,
+    paginate: valPaginate,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'ContinuationToken' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
+    let query = { 'inventory': '', ...getQueryFromParams(params, queryParams) }
+    let paginate
+    if (params.paginate) paginate = true
+    return {
+      host,
+      pathPrefix,
+      headers,
+      query,
+      paginate,
+      paginator: { type: 'query', cursor: 'continuation-token', token: 'NextContinuationToken', accumulator: 'InventoryConfiguration' },
+    }
+  },
+  response: ({ payload }) => {
+    let { InventoryConfiguration: resultList } = payload
+    if (resultList) {
+      resultList = resultList.map(i => {
+        const { OptionalFields } = i
+        let result = { ...i }
+        if (OptionalFields) {
+          const { Field } = OptionalFields
+          result.OptionalFields = Array.isArray(Field) ? Field : [ Field ]
+        }
+        return result
+      })
+    }
+    else {
+      resultList = []
+    }
+    return resultList
+  },
+}
+
+const ListBucketMetricsConfigurations = {
+  awsDoc: docRoot + 'API_ListBucketMetricsConfigurations.html',
+  validate: {
+    Bucket,
+    ContinuationToken,
+    paginate: valPaginate,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'ContinuationToken' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
+    let query = { 'metrics': '', ...getQueryFromParams(params, queryParams) }
+    let paginate
+    if (params.paginate) paginate = true
+    return {
+      host,
+      pathPrefix,
+      headers,
+      query,
+      paginate,
+      paginator: { type: 'query', cursor: 'continuation-token', token: 'NextContinuationToken', accumulator: 'MetricsConfiguration' },
+    }
+  },
+  response: ({ payload }) => {
+    let { MetricsConfiguration: resultList } = payload
+    if (resultList) {
+      resultList = resultList.map(i => {
+        let result = { ...i }
+        if (result.Filter) normalizeResponseFilter(result.Filter)
+        return result
+      })
+    }
+    else {
+      resultList = []
+    }
+    return resultList
+  },
+}
+
 const ListBuckets = {
   awsDoc: docRoot + 'API_ListBuckets.html',
   validate: {},
@@ -1183,7 +1352,7 @@ const ListObjectsV2 = {
   awsDoc: docRoot + 'API_ListObjectsV2.html',
   validate: {
     Bucket,
-    ContinuationToken: { ...str, comment: 'Pagination cursor token (returned as `NextContinuationToken`' },
+    ContinuationToken,
     Delimiter,
     EncodingType,
     FetchOwner: { ...str, comment: 'Return owner field with results' },
@@ -1889,8 +2058,12 @@ const methods = {
   GetBucketVersioning,
   GetBucketWebsite,
   GetObject,
-  HeadObject,
   HeadBucket,
+  HeadObject,
+  ListBucketAnalyticsConfigurations,
+  ListBucketIntelligentTieringConfigurations,
+  ListBucketInventoryConfigurations,
+  ListBucketMetricsConfigurations,
   ListBuckets,
   ListMultipartUploads,
   ListObjectsV2,

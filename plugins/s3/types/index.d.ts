@@ -41,8 +41,12 @@ import {
   GetBucketVersioningCommandOutput as GetBucketVersioningResponse,
   GetBucketWebsiteCommandOutput as GetBucketWebsiteResponse,
   GetObjectCommandOutput as GetObjectResponse,
-  HeadObjectCommandOutput as HeadObjectResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
+  HeadObjectCommandOutput as HeadObjectResponse,
+  ListBucketAnalyticsConfigurationsCommandOutput as ListBucketAnalyticsConfigurationsResponse,
+  ListBucketIntelligentTieringConfigurationsCommandOutput as ListBucketIntelligentTieringConfigurationsResponse,
+  ListBucketInventoryConfigurationsCommandOutput as ListBucketInventoryConfigurationsResponse,
+  ListBucketMetricsConfigurationsCommandOutput as ListBucketMetricsConfigurationsResponse,
   ListBucketsCommandOutput as ListBucketsResponse,
   ListMultipartUploadsCommandOutput as ListMultipartUploadsResponse,
   ListObjectsV2CommandOutput as ListObjectsV2Response,
@@ -312,16 +316,40 @@ declare interface AwsLiteS3 {
   GetObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string, ResponseCacheControl?: string, ResponseContentDisposition?: string, ResponseContentEncoding?: string, ResponseContentLanguage?: string, ResponseContentType?: string, ResponseExpires?: string, rawResponsePayload?: boolean, streamResponsePayload?: boolean }) => Promise<GetObjectResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html S3: HeadBucket}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#HeadBucket S3: HeadBucket}
+   */
+  HeadBucket: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<HeadBucketResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html S3: HeadObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#HeadObject S3: HeadObject}
    */
   HeadObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string }) => Promise<HeadObjectResponse>
   /**
    * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html S3: HeadBucket}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#HeadBucket S3: HeadBucket}
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html S3: ListBucketAnalyticsConfigurations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBucketAnalyticsConfigurations S3: ListBucketAnalyticsConfigurations}
    */
-  HeadBucket: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<HeadBucketResponse>
+  ListBucketAnalyticsConfigurations: (input: { Bucket: string, ContinuationToken?: string, paginate?: boolean, ExpectedBucketOwner?: string }) => Promise<ListBucketAnalyticsConfigurationsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html S3: ListBucketIntelligentTieringConfigurations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBucketIntelligentTieringConfigurations S3: ListBucketIntelligentTieringConfigurations}
+   */
+  ListBucketIntelligentTieringConfigurations: (input: { Bucket: string, ContinuationToken?: string, paginate?: boolean, ExpectedBucketOwner?: string }) => Promise<ListBucketIntelligentTieringConfigurationsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html S3: ListBucketInventoryConfigurations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBucketInventoryConfigurations S3: ListBucketInventoryConfigurations}
+   */
+  ListBucketInventoryConfigurations: (input: { Bucket: string, ContinuationToken?: string, paginate?: boolean, ExpectedBucketOwner?: string }) => Promise<ListBucketInventoryConfigurationsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html S3: ListBucketMetricsConfigurations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBucketMetricsConfigurations S3: ListBucketMetricsConfigurations}
+   */
+  ListBucketMetricsConfigurations: (input: { Bucket: string, ContinuationToken?: string, paginate?: boolean, ExpectedBucketOwner?: string }) => Promise<ListBucketMetricsConfigurationsResponse>
   /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBuckets S3: ListBuckets} */
   ListBuckets: () => Promise<ListBucketsResponse>
   /**
@@ -497,8 +525,12 @@ export type {
   GetBucketVersioningResponse,
   GetBucketWebsiteResponse,
   GetObjectResponse,
-  HeadObjectResponse,
   HeadBucketResponse,
+  HeadObjectResponse,
+  ListBucketAnalyticsConfigurationsResponse,
+  ListBucketIntelligentTieringConfigurationsResponse,
+  ListBucketInventoryConfigurationsResponse,
+  ListBucketMetricsConfigurationsResponse,
   ListBucketsResponse,
   ListMultipartUploadsResponse,
   ListObjectsV2Response,

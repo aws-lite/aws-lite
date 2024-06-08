@@ -642,6 +642,17 @@ Properties:
   - Set to `true` to return payload as a Node.js stream
 
 
+### `HeadBucket`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `HeadObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html)
@@ -679,13 +690,62 @@ Properties:
   - Sets request header: `x-amz-checksum-mode`
 
 
-### `HeadBucket`
+### `ListBucketAnalyticsConfigurations`
 
-[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html)
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html)
 
 Properties:
 - **`Bucket` (string) [required]**
   - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `ListBucketIntelligentTieringConfigurations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `ListBucketInventoryConfigurations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `ListBucketMetricsConfigurations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`ExpectedBucketOwner` (string)**
   - Sets request header: `x-amz-expected-bucket-owner`
 
@@ -1172,10 +1232,6 @@ Properties:
 - [`GetObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html)
 - [`GetObjectTorrent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html)
 - [`GetPublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html)
-- [`ListBucketAnalyticsConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html)
-- [`ListBucketIntelligentTieringConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html)
-- [`ListBucketInventoryConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html)
-- [`ListBucketMetricsConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html)
 - [`ListDirectoryBuckets`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListDirectoryBuckets.html)
 - [`ListObjects`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html)
 - [`ListObjectVersions`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
