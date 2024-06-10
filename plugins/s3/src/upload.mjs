@@ -1,7 +1,7 @@
 import { createReadStream } from 'node:fs'
 import { Readable } from 'node:stream'
 import lib from './lib.mjs'
-const { getHeadersFromParams, getHost, getQueryFromParams, getValidateHeaders } = lib
+const { getHeadersFromParams, getHost, getQueryFromParams, getValidateHeaders, parseHeadersToResults } = lib
 
 const required = true
 const MB = 1024 * 1024
@@ -28,7 +28,7 @@ const Upload = {
     ),
   },
   request,
-  response: ({ payload }) => payload || {},
+  response: ({ payload, headers }) => ({ ...payload || {}, ...parseHeadersToResults({ headers }) }),
 }
 
 async function request (params, utils) {
@@ -70,11 +70,10 @@ async function request (params, utils) {
     path: `/${params.Key}`,
     query,
     headers: { ...xml, ...headers },
-    payload: { CompleteMultipartUpload: { Part: Parts } },
+    payload: { CompleteMultipartUpload: { Part: Parts } }, // XML interpolation shenanigans
     xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
   }
 }
-
 
 function processUpload (params, utils, UploadId) {
   return new Promise((res, rej) => {

@@ -100,11 +100,11 @@ const CompleteMultipartUpload = {
       path: `/${params.Key}`,
       query,
       headers: { ...xml, ...getHeadersFromParams(params, queryParams) },
-      payload: { CompleteMultipartUpload }, // TODO we probably need to format this
+      payload: { CompleteMultipartUpload },
       xmlns,
     }
   },
-  response: defaultResponse, // TODO fix
+  response: ({ payload, headers }) => ({ ...payload || {}, ...parseHeadersToResults({ headers }) }),
 }
 
 const CreateBucket = {
