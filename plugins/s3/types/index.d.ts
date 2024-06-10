@@ -6,6 +6,18 @@ import {
   CreateBucketCommandOutput as CreateBucketResponse,
   CreateMultipartUploadCommandOutput as CreateMultipartUploadResponse,
   DeleteBucketCommandOutput as DeleteBucketResponse,
+  DeleteBucketAnalyticsConfigurationCommandOutput as DeleteBucketAnalyticsConfigurationResponse,
+  DeleteBucketCorsCommandOutput as DeleteBucketCorsResponse,
+  DeleteBucketEncryptionCommandOutput as DeleteBucketEncryptionResponse,
+  DeleteBucketIntelligentTieringConfigurationCommandOutput as DeleteBucketIntelligentTieringConfigurationResponse,
+  DeleteBucketInventoryConfigurationCommandOutput as DeleteBucketInventoryConfigurationResponse,
+  DeleteBucketLifecycleCommandOutput as DeleteBucketLifecycleResponse,
+  DeleteBucketMetricsConfigurationCommandOutput as DeleteBucketMetricsConfigurationResponse,
+  DeleteBucketOwnershipControlsCommandOutput as DeleteBucketOwnershipControlsResponse,
+  DeleteBucketPolicyCommandOutput as DeleteBucketPolicyResponse,
+  DeleteBucketReplicationCommandOutput as DeleteBucketReplicationResponse,
+  DeleteBucketTaggingCommandOutput as DeleteBucketTaggingResponse,
+  DeleteBucketWebsiteCommandOutput as DeleteBucketWebsiteResponse,
   DeleteObjectCommandOutput as DeleteObjectResponse,
   DeleteObjectsCommandOutput as DeleteObjectsResponse,
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
@@ -29,11 +41,31 @@ import {
   GetBucketVersioningCommandOutput as GetBucketVersioningResponse,
   GetBucketWebsiteCommandOutput as GetBucketWebsiteResponse,
   GetObjectCommandOutput as GetObjectResponse,
-  HeadObjectCommandOutput as HeadObjectResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
+  HeadObjectCommandOutput as HeadObjectResponse,
+  ListBucketAnalyticsConfigurationsCommandOutput as ListBucketAnalyticsConfigurationsResponse,
+  ListBucketIntelligentTieringConfigurationsCommandOutput as ListBucketIntelligentTieringConfigurationsResponse,
+  ListBucketInventoryConfigurationsCommandOutput as ListBucketInventoryConfigurationsResponse,
+  ListBucketMetricsConfigurationsCommandOutput as ListBucketMetricsConfigurationsResponse,
   ListBucketsCommandOutput as ListBucketsResponse,
   ListMultipartUploadsCommandOutput as ListMultipartUploadsResponse,
   ListObjectsV2CommandOutput as ListObjectsV2Response,
+  PutBucketAccelerateConfigurationCommandOutput as PutBucketAccelerateConfigurationResponse,
+  PutBucketAnalyticsConfigurationCommandOutput as PutBucketAnalyticsConfigurationResponse,
+  PutBucketCorsCommandOutput as PutBucketCorsResponse,
+  PutBucketEncryptionCommandOutput as PutBucketEncryptionResponse,
+  PutBucketIntelligentTieringConfigurationCommandOutput as PutBucketIntelligentTieringConfigurationResponse,
+  PutBucketInventoryConfigurationCommandOutput as PutBucketInventoryConfigurationResponse,
+  PutBucketLifecycleConfigurationCommandOutput as PutBucketLifecycleConfigurationResponse,
+  PutBucketMetricsConfigurationCommandOutput as PutBucketMetricsConfigurationResponse,
+  PutBucketNotificationConfigurationCommandOutput as PutBucketNotificationConfigurationResponse,
+  PutBucketOwnershipControlsCommandOutput as PutBucketOwnershipControlsResponse,
+  PutBucketPolicyCommandOutput as PutBucketPolicyResponse,
+  PutBucketReplicationCommandOutput as PutBucketReplicationResponse,
+  PutBucketRequestPaymentCommandOutput as PutBucketRequestPaymentResponse,
+  PutBucketTaggingCommandOutput as PutBucketTaggingResponse,
+  PutBucketVersioningCommandOutput as PutBucketVersioningResponse,
+  PutBucketWebsiteCommandOutput as PutBucketWebsiteResponse,
   PutObjectCommandOutput as PutObjectResponse,
   UploadCommandOutput as UploadResponse,
   UploadPartCommandOutput as UploadPartResponse,
@@ -73,6 +105,78 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucket S3: DeleteBucket}
    */
   DeleteBucket: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html S3: DeleteBucketAnalyticsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketAnalyticsConfiguration S3: DeleteBucketAnalyticsConfiguration}
+   */
+  DeleteBucketAnalyticsConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketAnalyticsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketCors.html S3: DeleteBucketCors}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketCors S3: DeleteBucketCors}
+   */
+  DeleteBucketCors: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketCorsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html S3: DeleteBucketEncryption}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketEncryption S3: DeleteBucketEncryption}
+   */
+  DeleteBucketEncryption: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketEncryptionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketIntelligentTieringConfiguration.html S3: DeleteBucketIntelligentTieringConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketIntelligentTieringConfiguration S3: DeleteBucketIntelligentTieringConfiguration}
+   */
+  DeleteBucketIntelligentTieringConfiguration: (input: { Bucket: string, Id: string }) => Promise<DeleteBucketIntelligentTieringConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html S3: DeleteBucketInventoryConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketInventoryConfiguration S3: DeleteBucketInventoryConfiguration}
+   */
+  DeleteBucketInventoryConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketInventoryConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketLifecycle.html S3: DeleteBucketLifecycle}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketLifecycle S3: DeleteBucketLifecycle}
+   */
+  DeleteBucketLifecycle: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketLifecycleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html S3: DeleteBucketMetricsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketMetricsConfiguration S3: DeleteBucketMetricsConfiguration}
+   */
+  DeleteBucketMetricsConfiguration: (input: { Bucket: string, Id: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketMetricsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketOwnershipControls.html S3: DeleteBucketOwnershipControls}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketOwnershipControls S3: DeleteBucketOwnershipControls}
+   */
+  DeleteBucketOwnershipControls: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketOwnershipControlsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketPolicy.html S3: DeleteBucketPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketPolicy S3: DeleteBucketPolicy}
+   */
+  DeleteBucketPolicy: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketReplication.html S3: DeleteBucketReplication}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketReplication S3: DeleteBucketReplication}
+   */
+  DeleteBucketReplication: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketReplicationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html S3: DeleteBucketTagging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketTagging S3: DeleteBucketTagging}
+   */
+  DeleteBucketTagging: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketTaggingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketWebsite.html S3: DeleteBucketWebsite}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteBucketWebsite S3: DeleteBucketWebsite}
+   */
+  DeleteBucketWebsite: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeleteBucketWebsiteResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html S3: DeleteObject}
@@ -213,16 +317,40 @@ declare interface AwsLiteS3 {
   GetObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string, ResponseCacheControl?: string, ResponseContentDisposition?: string, ResponseContentEncoding?: string, ResponseContentLanguage?: string, ResponseContentType?: string, ResponseExpires?: string, rawResponsePayload?: boolean, streamResponsePayload?: boolean }) => Promise<GetObjectResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html S3: HeadBucket}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#HeadBucket S3: HeadBucket}
+   */
+  HeadBucket: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<HeadBucketResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html S3: HeadObject}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#HeadObject S3: HeadObject}
    */
   HeadObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string }) => Promise<HeadObjectResponse>
   /**
    * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html S3: HeadBucket}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#HeadBucket S3: HeadBucket}
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html S3: ListBucketAnalyticsConfigurations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBucketAnalyticsConfigurations S3: ListBucketAnalyticsConfigurations}
    */
-  HeadBucket: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<HeadBucketResponse>
+  ListBucketAnalyticsConfigurations: (input: { Bucket: string, ContinuationToken?: string, paginate?: boolean, ExpectedBucketOwner?: string }) => Promise<ListBucketAnalyticsConfigurationsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html S3: ListBucketIntelligentTieringConfigurations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBucketIntelligentTieringConfigurations S3: ListBucketIntelligentTieringConfigurations}
+   */
+  ListBucketIntelligentTieringConfigurations: (input: { Bucket: string, ContinuationToken?: string, paginate?: boolean, ExpectedBucketOwner?: string }) => Promise<ListBucketIntelligentTieringConfigurationsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html S3: ListBucketInventoryConfigurations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBucketInventoryConfigurations S3: ListBucketInventoryConfigurations}
+   */
+  ListBucketInventoryConfigurations: (input: { Bucket: string, ContinuationToken?: string, paginate?: boolean, ExpectedBucketOwner?: string }) => Promise<ListBucketInventoryConfigurationsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html S3: ListBucketMetricsConfigurations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBucketMetricsConfigurations S3: ListBucketMetricsConfigurations}
+   */
+  ListBucketMetricsConfigurations: (input: { Bucket: string, ContinuationToken?: string, paginate?: boolean, ExpectedBucketOwner?: string }) => Promise<ListBucketMetricsConfigurationsResponse>
   /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListBuckets S3: ListBuckets} */
   ListBuckets: () => Promise<ListBucketsResponse>
   /**
@@ -237,6 +365,102 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListObjectsV2 S3: ListObjectsV2}
    */
   ListObjectsV2: (input: { Bucket: string, ContinuationToken?: string, Delimiter?: string, EncodingType?: string, FetchOwner?: string, MaxKeys?: number, Prefix?: string, StartAfter?: string, RequestPayer?: string, ExpectedBucketOwner?: string, OptionalObjectAttributes?: string, paginate?: boolean }) => Promise<ListObjectsV2Response>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html S3: PutBucketAccelerateConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketAccelerateConfiguration S3: PutBucketAccelerateConfiguration}
+   */
+  PutBucketAccelerateConfiguration: (input: { AccelerateConfiguration: Record<string, any>, Bucket: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketAccelerateConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html S3: PutBucketAnalyticsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketAnalyticsConfiguration S3: PutBucketAnalyticsConfiguration}
+   */
+  PutBucketAnalyticsConfiguration: (input: { Bucket: string, Id: string, AnalyticsConfiguration: Record<string, any>, ExpectedBucketOwner?: string }) => Promise<PutBucketAnalyticsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html S3: PutBucketCors}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketCors S3: PutBucketCors}
+   */
+  PutBucketCors: (input: { Bucket: string, CORSConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketCorsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html S3: PutBucketEncryption}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketEncryption S3: PutBucketEncryption}
+   */
+  PutBucketEncryption: (input: { Bucket: string, ServerSideEncryptionConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketEncryptionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketIntelligentTieringConfiguration.html S3: PutBucketIntelligentTieringConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketIntelligentTieringConfiguration S3: PutBucketIntelligentTieringConfiguration}
+   */
+  PutBucketIntelligentTieringConfiguration: (input: { Bucket: string, Id: string, IntelligentTieringConfiguration: Record<string, any> }) => Promise<PutBucketIntelligentTieringConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html S3: PutBucketInventoryConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketInventoryConfiguration S3: PutBucketInventoryConfiguration}
+   */
+  PutBucketInventoryConfiguration: (input: { Bucket: string, Id: string, InventoryConfiguration: Record<string, any>, ExpectedBucketOwner?: string }) => Promise<PutBucketInventoryConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html S3: PutBucketLifecycleConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketLifecycleConfiguration S3: PutBucketLifecycleConfiguration}
+   */
+  PutBucketLifecycleConfiguration: (input: { Bucket: string, LifecycleConfiguration: Record<string, any>, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string, ContentMD5?: string }) => Promise<PutBucketLifecycleConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html S3: PutBucketMetricsConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketMetricsConfiguration S3: PutBucketMetricsConfiguration}
+   */
+  PutBucketMetricsConfiguration: (input: { Bucket: string, Id: string, MetricsConfiguration: Record<string, any>, ExpectedBucketOwner?: string }) => Promise<PutBucketMetricsConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html S3: PutBucketNotificationConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketNotificationConfiguration S3: PutBucketNotificationConfiguration}
+   */
+  PutBucketNotificationConfiguration: (input: { Bucket: string, NotificationConfiguration: Record<string, any>, ExpectedBucketOwner?: string }) => Promise<PutBucketNotificationConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketOwnershipControls.html S3: PutBucketOwnershipControls}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketOwnershipControls S3: PutBucketOwnershipControls}
+   */
+  PutBucketOwnershipControls: (input: { Bucket: string, OwnershipControls: Record<string, any>, ContentMD5?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketOwnershipControlsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html S3: PutBucketPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketPolicy S3: PutBucketPolicy}
+   */
+  PutBucketPolicy: (input: { Bucket: string, Policy: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ConfirmRemoveSelfBucketAccess?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html S3: PutBucketReplication}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketReplication S3: PutBucketReplication}
+   */
+  PutBucketReplication: (input: { Bucket: string, ReplicationConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, Token?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketReplicationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketRequestPayment.html S3: PutBucketRequestPayment}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketRequestPayment S3: PutBucketRequestPayment}
+   */
+  PutBucketRequestPayment: (input: { Bucket: string, RequestPaymentConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketRequestPaymentResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html S3: PutBucketTagging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketTagging S3: PutBucketTagging}
+   */
+  PutBucketTagging: (input: { Bucket: string, Tagging: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketTaggingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html S3: PutBucketVersioning}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketVersioning S3: PutBucketVersioning}
+   */
+  PutBucketVersioning: (input: { Bucket: string, VersioningConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, MFA?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketVersioningResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html S3: PutBucketWebsite}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketWebsite S3: PutBucketWebsite}
+   */
+  PutBucketWebsite: (input: { Bucket: string, WebsiteConfiguration: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutBucketWebsiteResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html S3: PutObject}
@@ -272,6 +496,18 @@ export type {
   CreateBucketResponse,
   CreateMultipartUploadResponse,
   DeleteBucketResponse,
+  DeleteBucketAnalyticsConfigurationResponse,
+  DeleteBucketCorsResponse,
+  DeleteBucketEncryptionResponse,
+  DeleteBucketIntelligentTieringConfigurationResponse,
+  DeleteBucketInventoryConfigurationResponse,
+  DeleteBucketLifecycleResponse,
+  DeleteBucketMetricsConfigurationResponse,
+  DeleteBucketOwnershipControlsResponse,
+  DeleteBucketPolicyResponse,
+  DeleteBucketReplicationResponse,
+  DeleteBucketTaggingResponse,
+  DeleteBucketWebsiteResponse,
   DeleteObjectResponse,
   DeleteObjectsResponse,
   GetBucketAccelerateConfigurationResponse,
@@ -295,11 +531,31 @@ export type {
   GetBucketVersioningResponse,
   GetBucketWebsiteResponse,
   GetObjectResponse,
-  HeadObjectResponse,
   HeadBucketResponse,
+  HeadObjectResponse,
+  ListBucketAnalyticsConfigurationsResponse,
+  ListBucketIntelligentTieringConfigurationsResponse,
+  ListBucketInventoryConfigurationsResponse,
+  ListBucketMetricsConfigurationsResponse,
   ListBucketsResponse,
   ListMultipartUploadsResponse,
   ListObjectsV2Response,
+  PutBucketAccelerateConfigurationResponse,
+  PutBucketAnalyticsConfigurationResponse,
+  PutBucketCorsResponse,
+  PutBucketEncryptionResponse,
+  PutBucketIntelligentTieringConfigurationResponse,
+  PutBucketInventoryConfigurationResponse,
+  PutBucketLifecycleConfigurationResponse,
+  PutBucketMetricsConfigurationResponse,
+  PutBucketNotificationConfigurationResponse,
+  PutBucketOwnershipControlsResponse,
+  PutBucketPolicyResponse,
+  PutBucketReplicationResponse,
+  PutBucketRequestPaymentResponse,
+  PutBucketTaggingResponse,
+  PutBucketVersioningResponse,
+  PutBucketWebsiteResponse,
   PutObjectResponse,
   UploadResponse,
   UploadPartResponse,

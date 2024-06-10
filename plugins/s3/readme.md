@@ -179,6 +179,144 @@ Properties:
   - Sets request header: `x-amz-expected-bucket-owner`
 
 
+### `DeleteBucketAnalyticsConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - ID of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketCors`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketCors.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketEncryption`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketIntelligentTieringConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketIntelligentTieringConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - ID of the object
+
+
+### `DeleteBucketInventoryConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - ID of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketLifecycle`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketLifecycle.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketMetricsConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - ID of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketOwnershipControls`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketOwnershipControls.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketPolicy.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketReplication`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketReplication.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketTagging`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeleteBucketWebsite`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketWebsite.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `DeleteObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html)
@@ -504,6 +642,17 @@ Properties:
   - Set to `true` to return payload as a Node.js stream
 
 
+### `HeadBucket`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `HeadObject`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html)
@@ -541,13 +690,62 @@ Properties:
   - Sets request header: `x-amz-checksum-mode`
 
 
-### `HeadBucket`
+### `ListBucketAnalyticsConfigurations`
 
-[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html)
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html)
 
 Properties:
 - **`Bucket` (string) [required]**
   - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `ListBucketIntelligentTieringConfigurations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `ListBucketInventoryConfigurations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `ListBucketMetricsConfigurations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ContinuationToken` (string)**
+  - Pagination cursor token (returned as `NextContinuationToken`
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`ExpectedBucketOwner` (string)**
   - Sets request header: `x-amz-expected-bucket-owner`
 
@@ -614,6 +812,281 @@ Properties:
   - Sets request header: `x-amz-optional-object-attributes`
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `PutBucketAccelerateConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html)
+
+Properties:
+- **`AccelerateConfiguration` (object) [required]**
+  - Object specifying acceleration configurations; can contain one of: `Status: 'Enabled'`, `Status: 'Suspended'`
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html#AmazonS3-PutBucketAccelerateConfiguration-request-Status)
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketAnalyticsConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - Id of the analytics configuration
+- **`AnalyticsConfiguration` (object) [required]**
+  - Object defining the analytics configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html#AmazonS3-PutBucketAnalyticsConfiguration-request-AnalyticsConfiguration)
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketCors`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`CORSConfiguration` (object) [required]**
+  - Object defining the CORS configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html#AmazonS3-PutBucketCors-request-CORSConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketEncryption`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ServerSideEncryptionConfiguration` (object) [required]**
+  - Object defining the server side encryption configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html#AmazonS3-PutBucketEncryption-request-ServerSideEncryptionConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketIntelligentTieringConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketIntelligentTieringConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - Id of the intelligent tiering configuration
+- **`IntelligentTieringConfiguration` (object) [required]**
+  - Object defining the intelligent tiering configuration; required fields are: `Id`, `Status`, `Tierings` 
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketIntelligentTieringConfiguration.html#AmazonS3-PutBucketIntelligentTieringConfiguration-request-IntelligentTieringConfiguration)
+
+
+### `PutBucketInventoryConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - ID of the object
+- **`InventoryConfiguration` (object) [required]**
+  - Object defining the inventory configuration; required config fields are: `Id`, `IsEnabled`, `IncludedObjectVersion`, `Destination`, `Schedule`
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API/API_PutBucketInventoryConfiguration.html#AmazonS3-PutBucketInventoryConfiguration-request-InventoryConfiguration)
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketLifecycleConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`LifecycleConfiguration` (object) [required]**
+  - Object defining the lifecycle configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html#AmazonS3-PutBucketLifecycleConfiguration-request-LifecycleConfiguration)
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+
+
+### `PutBucketMetricsConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Id` (string) [required]**
+  - ID of the object
+- **`MetricsConfiguration` (object) [required]**
+  - Object defining the metrics configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html#AmazonS3-PutBucketMetricsConfiguration-request-MetricsConfiguration)
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketNotificationConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`NotificationConfiguration` (object) [required]**
+  - Object defining the notification configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html#AmazonS3-PutBucketNotificationConfiguration-request-NotificationConfiguration)
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketOwnershipControls`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketOwnershipControls.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`OwnershipControls` (object) [required]**
+  - Object defining the ownership controls
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketOwnershipControls.html#AmazonS3-PutBucketOwnershipControls-request-OwnershipControls)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Policy` (object) [required]**
+  - Object defining the policy
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html#API_PutBucketPolicy_RequestBody)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ConfirmRemoveSelfBucketAccess` (string)**
+  - Sets request header: `x-amz-confirm-remove-self-bucket-access`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketReplication`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ReplicationConfiguration` (object) [required]**
+  - Object defining the replication configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html#AmazonS3-PutBucketReplication-request-ReplicationConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`Token` (string)**
+  - Sets request header: `x-amz-bucket-object-lock-token`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketRequestPayment`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketRequestPayment.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`RequestPaymentConfiguration` (object) [required]**
+  - Object defining the payment configuration; must contain `Payer`, which can be one of: `Requester`, `BucketOwner`
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketTagging`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Tagging` (object) [required]**
+  - Object defining the tag set
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html#AmazonS3-PutBucketTagging-request-Tagging)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketVersioning`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`VersioningConfiguration` (object) [required]**
+  - Object defining the versioning configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html#AmazonS3-PutBucketVersioning-request-VersioningConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`MFA` (string)**
+  - Sets request header: `x-amz-mfa`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutBucketWebsite`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`WebsiteConfiguration` (object) [required]**
+  - Object defining the website configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html#AmazonS3-PutBucketWebsite-request-WebsiteConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
 
 
 ### `PutObject`
@@ -827,18 +1300,6 @@ Properties:
 
 - [`CopyObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html)
 - [`CreateSession`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html)
-- [`DeleteBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html)
-- [`DeleteBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketCors.html)
-- [`DeleteBucketEncryption`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html)
-- [`DeleteBucketIntelligentTieringConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketIntelligentTieringConfiguration.html)
-- [`DeleteBucketInventoryConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html)
-- [`DeleteBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketLifecycle.html)
-- [`DeleteBucketMetricsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html)
-- [`DeleteBucketOwnershipControls`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketOwnershipControls.html)
-- [`DeleteBucketPolicy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketPolicy.html)
-- [`DeleteBucketReplication`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketReplication.html)
-- [`DeleteBucketTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html)
-- [`DeleteBucketWebsite`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketWebsite.html)
 - [`DeleteObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html)
 - [`DeletePublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
 - [`GetBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html)
@@ -851,34 +1312,14 @@ Properties:
 - [`GetObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html)
 - [`GetObjectTorrent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html)
 - [`GetPublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html)
-- [`ListBucketAnalyticsConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html)
-- [`ListBucketIntelligentTieringConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html)
-- [`ListBucketInventoryConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html)
-- [`ListBucketMetricsConfigurations`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html)
 - [`ListDirectoryBuckets`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListDirectoryBuckets.html)
 - [`ListObjects`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html)
 - [`ListObjectVersions`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
 - [`ListParts`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html)
-- [`PutBucketAccelerateConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html)
 - [`PutBucketAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAcl.html)
-- [`PutBucketAnalyticsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html)
-- [`PutBucketCors`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html)
-- [`PutBucketEncryption`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html)
-- [`PutBucketIntelligentTieringConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketIntelligentTieringConfiguration.html)
-- [`PutBucketInventoryConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html)
 - [`PutBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html)
-- [`PutBucketLifecycleConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html)
 - [`PutBucketLogging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLogging.html)
-- [`PutBucketMetricsConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html)
 - [`PutBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotification.html)
-- [`PutBucketNotificationConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotificationConfiguration.html)
-- [`PutBucketOwnershipControls`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketOwnershipControls.html)
-- [`PutBucketPolicy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketPolicy.html)
-- [`PutBucketReplication`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html)
-- [`PutBucketRequestPayment`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketRequestPayment.html)
-- [`PutBucketTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html)
-- [`PutBucketVersioning`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html)
-- [`PutBucketWebsite`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html)
 - [`PutObjectAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html)
 - [`PutObjectLegalHold`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLegalHold.html)
 - [`PutObjectLockConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLockConfiguration.html)
