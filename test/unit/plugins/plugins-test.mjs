@@ -36,7 +36,12 @@ test('Check plugins for docs + validation', async t => {
         plan++
       }
       else {
-        t.match(method.awsDoc, /^https:\/\/docs.aws.amazon.com/, `${name}: method has AWS doc`)
+        if (method.awsDoc === false) {
+          t.pass(`${name}: method does not have an AWS doc`)
+        }
+        else {
+          t.match(method.awsDoc, /^https:\/\/docs.aws.amazon.com/, `${name}: method has AWS doc`)
+        }
         t.ok(method.validate, `${name}: method has validate object`)
         let validations = Object.entries(method.validate)
         for (let [ param, { type, comment } ] of validations) {

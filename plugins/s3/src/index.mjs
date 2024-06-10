@@ -4,8 +4,9 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { arrayifyAndMoveObject, arrayifyFilter, getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
+const { arrayifyAndMoveObject, arrayifyFilter, getHost, getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
 import PutObject from './put-object.mjs'
+import Upload from './upload.mjs'
 
 const service = 's3'
 const property = 'S3'
@@ -31,17 +32,6 @@ const Prefix = { ...str, comment: 'Limit response to keys that begin with the sp
 const valPaginate = { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const UploadId = { ...str, required, comment: 'ID of the multipart upload' }
 
-function getHost ({ Bucket }, { region, config }) {
-  // Deprecated path-style URLs, still necessary for buckets with periods
-  if (/\./.test(Bucket)) {
-    return {
-      host: config.host || `s3.${region}.amazonaws.com`,
-      pathPrefix: `/${Bucket}`,
-    }
-  }
-  // Current virtual-hosted-style URls
-  return { host: `${Bucket}.` + (config.host || `s3.${region}.amazonaws.com`) }
-}
 const defaultResponse = ({ payload }) => payload || {}
 
 const AbortMultipartUpload = {
@@ -66,7 +56,7 @@ const AbortMultipartUpload = {
       headers,
     }
   },
-  response: defaultResponse,
+  response: ({ headers }) => parseHeadersToResults({ headers }),
 }
 
 const CompleteMultipartUpload = {
@@ -94,11 +84,11 @@ const CompleteMultipartUpload = {
       path: `/${params.Key}`,
       query,
       headers: { ...xml, ...getHeadersFromParams(params, queryParams) },
-      payload: { CompleteMultipartUpload },
+      payload: { CompleteMultipartUpload }, // TODO we probably need to format this
       xmlns: 'http://s3.amazonaws.com/doc/2006-03-01/',
     }
   },
-  response: defaultResponse,
+  response: defaultResponse, // TODO fix
 }
 
 const CreateBucket = {
@@ -1011,7 +1001,7 @@ const UploadPart = {
     Bucket,
     Key,
     PartNumber,
-    Body: { ...obj, comment: 'Stream of data to be uploaded', ref: docRoot + 'AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody' },
+    Body: { type: [ 'buffer', 'stream', 'string' ], comment: 'Stream of data to be uploaded', ref: docRoot + 'AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody' },
     ...getValidateHeaders( 'ContentLength', 'ContentMD5', 'ChecksumAlgorithm', 'ChecksumCRC32',
       'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256', 'SSECustomerAlgorithm',
       'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner',
@@ -1030,10 +1020,10 @@ const UploadPart = {
       path: `/${Key}`,
       query,
       headers,
-      payload: { ...Body },
+      payload: Body,
     }
   },
-  response: defaultResponse,
+  response: ({ headers }) => parseHeadersToResults({ headers }),
 }
 
 const methods = {
@@ -1071,6 +1061,7 @@ const methods = {
   ListMultipartUploads,
   ListObjectsV2,
   PutObject,
+  Upload,
   UploadPart,
   ...incomplete }
 

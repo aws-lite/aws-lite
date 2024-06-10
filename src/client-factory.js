@@ -114,7 +114,7 @@ module.exports = async function clientFactory (config, creds, region) {
             if (method.request) {
               try {
                 // TODO: probably deep-copy and/or make input immutable?
-                var req = await method.request(input, { ...pluginUtils, region: selectedRegion })
+                var req = await method.request(input, { ...pluginUtils, region: selectedRegion, client })
                 req = req || {}
               }
               catch (methodError) {

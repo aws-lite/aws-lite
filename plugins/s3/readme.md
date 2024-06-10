@@ -701,6 +701,86 @@ Properties:
   - Sets request header: `x-amz-website-redirect-location`
 
 
+### `Upload`
+
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`Body` (buffer, stream, string)**
+  - String or buffer to be uploaded
+- **`File` (string)**
+  - File path to be read and uploaded from the local filesystem
+- **`ChunkSize` (number)**
+  - Size of each chunk to upload in byes (also aliased to `partSize`); default is 10 MB
+- **`Concurrency` (number)**
+  - Maximum concurrent uploads (also aliased to `queueSize`); default is 5, setting to 1 synchronously, sequentially uploads chunks; memory consumption is (`ChunkSize` + 1) * `Concurrency`
+- **`ACL` (string)**
+  - Sets request header: `x-amz-acl`
+- **`BucketKeyEnabled` (string)**
+  - Sets request header: `x-amz-server-side-encryption-bucket-key-enabled`
+- **`CacheControl` (string)**
+  - Sets request header: `cache-control`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ChecksumCRC32` (string)**
+  - Sets request header: `x-amz-checksum-crc32`
+- **`ChecksumCRC32C` (string)**
+  - Sets request header: `x-amz-checksum-crc32c`
+- **`ChecksumSHA1` (string)**
+  - Sets request header: `x-amz-checksum-sha1`
+- **`ChecksumSHA256` (string)**
+  - Sets request header: `x-amz-checksum-sha256`
+- **`ContentDisposition` (string)**
+  - Sets request header: `content-disposition`
+- **`ContentEncoding` (string)**
+  - Sets request header: `content-encoding`
+- **`ContentLanguage` (string)**
+  - Sets request header: `content-language`
+- **`ContentType` (string)**
+  - Sets request header: `content-type`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`Expires` (string)**
+  - Sets request header: `expires`
+- **`GrantFullControl` (string)**
+  - Sets request header: `x-amz-grant-full-control`
+- **`GrantRead` (string)**
+  - Sets request header: `x-amz-grant-read`
+- **`GrantReadACP` (string)**
+  - Sets request header: `x-amz-grant-read-acp`
+- **`GrantWriteACP` (string)**
+  - Sets request header: `x-amz-grant-write-acp`
+- **`ObjectLockLegalHoldStatus` (string)**
+  - Sets request header: `x-amz-object-lock-legal-hold`
+- **`ObjectLockMode` (string)**
+  - Sets request header: `x-amz-object-lock-mode`
+- **`ObjectLockRetainUntilDate` (string)**
+  - Sets request header: `x-amz-object-lock-retain-until-date`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ServerSideEncryption` (string)**
+  - Sets request header: `x-amz-server-side-encryption`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKey` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
+- **`SSEKMSEncryptionContext` (string)**
+  - Sets request header: `x-amz-server-side-encryption-context`
+- **`SSEKMSKeyId` (string)**
+  - Sets request header: `x-amz-server-side-encryption-aws-kms-key-id`
+- **`StorageClass` (string)**
+  - Sets request header: `x-amz-storage-class`
+- **`Tagging` (string)**
+  - Sets request header: `x-amz-tagging`
+- **`WebsiteRedirectLocation` (string)**
+  - Sets request header: `x-amz-website-redirect-location`
+
+
 ### `UploadPart`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html)
@@ -712,7 +792,7 @@ Properties:
   - S3 key / file name
 - **`PartNumber` (number)**
   - Part number (between 1 - 10,000) of the object
-- **`Body` (object)**
+- **`Body` (buffer, stream, string)**
   - Stream of data to be uploaded
   - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody)
 - **`ContentLength` (string)**

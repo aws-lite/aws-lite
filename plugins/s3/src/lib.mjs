@@ -1,3 +1,16 @@
+
+function getHost ({ Bucket }, { region, config }) {
+  // Deprecated path-style URLs, still necessary for buckets with periods
+  if (/\./.test(Bucket)) {
+    return {
+      host: config.host || `s3.${region}.amazonaws.com`,
+      pathPrefix: `/${Bucket}`,
+    }
+  }
+  // Current virtual-hosted-style URls
+  return { host: `${Bucket}.` + (config.host || `s3.${region}.amazonaws.com`) }
+}
+
 // Generate validation for commonly used headers
 const getValidateHeaders = (...headers) => headers.reduce((acc, h) => {
   if (!headerMappings[h]) throw ReferenceError(`Header not found: ${h}`)
@@ -172,6 +185,7 @@ export default {
   moveObjectField,
   arrayifyAndMoveObject,
   arrayifyFilter,
+  getHost,
   getValidateHeaders,
   getHeadersFromParams,
   getQueryFromParams,
