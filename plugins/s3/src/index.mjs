@@ -35,19 +35,6 @@ const UploadId = { ...str, required, comment: 'ID of the multipart upload' }
 const valPaginate = { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
-function makeDeleteRequest (params, utils) {
-  const { query, queryParams, path } = params
-  const { host, pathPrefix } = getHost(params, utils)
-  const headers = getHeadersFromParams(params, queryParams)
-  return {
-    method: 'DELETE',
-    host,
-    pathPrefix,
-    path,
-    query,
-    headers,
-  }
-}
 const defaultResponse = ({ payload }) => payload || {}
 
 const AbortMultipartUpload = {
@@ -193,8 +180,15 @@ const DeleteBucketAnalyticsConfiguration = {
   request: (params, utils) => {
     const queryParams = [ 'Id' ]
     const query = { analytics: '', ...getQueryFromParams(params, queryParams) }
-    const parm = { query, queryParams, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params, queryParams)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      query,
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -206,9 +200,15 @@ const DeleteBucketCors = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const path = '/?cors'
-    const parm = { path, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: '/?cors',
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -220,8 +220,15 @@ const DeleteBucketEncryption = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const path = '/?encryption'
-    return makeDeleteRequest({ ...params, path }, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: '/?encryption',
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -235,8 +242,15 @@ const DeleteBucketIntelligentTieringConfiguration = {
   request: (params, utils) => {
     const queryParams = [ 'Id' ]
     const query = { 'intelligent-tiering': '', ...getQueryFromParams(params, queryParams) }
-    const parm = { query, queryParams, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      query,
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -251,8 +265,15 @@ const DeleteBucketInventoryConfiguration = {
   request: (params, utils) => {
     const queryParams = [ 'Id' ]
     const query = { inventory: '', ...getQueryFromParams(params, queryParams) }
-    const parm = { query, queryParams, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      query,
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -264,9 +285,15 @@ const DeleteBucketLifecycle = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const path = '/?lifecycle'
-    const parm = { path, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: '/?lifecycle',
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -281,8 +308,15 @@ const DeleteBucketMetricsConfiguration = {
   request: (params, utils) => {
     const queryParams = [ 'Id' ]
     const query = { metrics: '', ...getQueryFromParams(params, queryParams) }
-    const parm = { query, queryParams, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      query,
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -294,9 +328,15 @@ const DeleteBucketOwnershipControls = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const path = '/?ownershipControls'
-    const parm = { path, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: '/?ownershipControls',
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -308,9 +348,15 @@ const DeleteBucketPolicy = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const path = '/?policy'
-    const parm = { path, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: '/?policy',
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -322,9 +368,15 @@ const DeleteBucketReplication = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const path = '/?replication'
-    const parm = { path, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: '/?replication',
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -336,9 +388,15 @@ const DeleteBucketTagging = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const path = '/?tagging'
-    const parm = { path, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: '/?tagging',
+      headers,
+    }
   },
   response: defaultResponse,
 }
@@ -350,9 +408,15 @@ const DeleteBucketWebsite = {
     ...getValidateHeaders('ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const path = '/?website'
-    const parm = { path, ...params }
-    return makeDeleteRequest(parm, utils)
+    const { host, pathPrefix } = getHost(params, utils)
+    const headers = getHeadersFromParams(params)
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: '/?website',
+      headers,
+    }
   },
   response: defaultResponse,
 }
