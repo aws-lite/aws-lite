@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/dynamodb-types",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Type definitions for the `@aws-lite/dynamodb` plugin",
   "homepage": "https://aws-lite.org/services/dynamodb",
   "repository": {
