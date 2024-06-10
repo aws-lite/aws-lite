@@ -2,6 +2,14 @@
 
 ---
 
+## [0.21.8] 2024-06-10
+
+### Changed
+
+- Pass plugins the shared AWS JSON (un)marshall methods, which can accept `awsjsonMarshall` / `awsjsonUnmarshall` config options
+
+---
+
 ## [0.21.7] 2024-05-21
 
 ### Fixed
