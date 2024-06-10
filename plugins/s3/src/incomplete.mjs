@@ -23,11 +23,7 @@ export default {
   PutBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_PutBucketLifecycle.html' }, // Deprecated, use `PutBucketLifecycleConfiguration`
   PutBucketLogging:                            { disabled, awsDoc: docRoot + 'API_PutBucketLogging.html' }, // Requires nested XML attributes
   PutBucketNotification:                       { disabled, awsDoc: docRoot + 'API_PutBucketNotification.html' }, // Deprecated, use `PutBucketNotificationConfiguration`
-  PutObjectAcl:                                { disabled, awsDoc: docRoot + 'API_PutObjectAcl.html' },
-  PutObjectLegalHold:                          { disabled, awsDoc: docRoot + 'API_PutObjectLegalHold.html' },
-  PutObjectLockConfiguration:                  { disabled, awsDoc: docRoot + 'API_PutObjectLockConfiguration.html' },
-  PutObjectRetention:                          { disabled, awsDoc: docRoot + 'API_PutObjectRetention.html' },
-  PutObjectTagging:                            { disabled, awsDoc: docRoot + 'API_PutObjectTagging.html' },
+  PutObjectAcl:                                { disabled, awsDoc: docRoot + 'API_PutObjectAcl.html' }, // Requires nested XML attributes
   PutPublicAccessBlock:                        { disabled, awsDoc: docRoot + 'API_PutPublicAccessBlock.html' },
   RestoreObject:                               { disabled, awsDoc: docRoot + 'API_RestoreObject.html' },
   SelectObjectContent:                         { disabled, awsDoc: docRoot + 'API_SelectObjectContent.html' },

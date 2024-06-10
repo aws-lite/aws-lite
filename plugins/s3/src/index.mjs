@@ -1973,6 +1973,151 @@ const PutBucketWebsite = {
   response: defaultResponse,
 }
 
+const PutObjectLegalHold = {
+  awsDoc: docRoot + 'API_PutObjectLegalHold.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    LegalHold: { ...obj, required, comment: 'Object containing the field `Status` (string) which can be one of: `ON`, `OFF`' },
+    ...getValidateHeaders('RequestPayer', 'ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const queryParams = [ 'VersionId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const { LegalHold, Key } = params
+    const payload = { LegalHold }
+    const query = { 'legal-hold': '', ...getQueryFromParams(params, queryParams) }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
+    const headers = { ...xml, ...getHeadersFromParams(params, queryParams), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query,
+      headers,
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers }) => {
+    let result = {}
+    const { RequestCharged } = parseHeadersToResults({ headers })
+    if (RequestCharged) result.RequestCharged = RequestCharged
+    return result
+  },
+}
+
+const PutObjectLockConfiguration = {
+  awsDoc: docRoot + 'API_PutObjectLockConfiguration.html',
+  validate: {
+    Bucket,
+    ObjectLockConfiguration: { ...obj, required, comment: 'Object defining the object lock configuration', ref: docRoot + 'API_PutObjectLockConfiguration.html#AmazonS3-PutObjectLockConfiguration-request-ObjectLockConfiguration' },
+    ...getValidateHeaders('RequestPayer', 'Token', 'ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { ObjectLockConfiguration } = params
+    const payload = { ObjectLockConfiguration }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
+    const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/?object-lock`,
+      headers,
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers }) => {
+    let result = {}
+    const { RequestCharged } = parseHeadersToResults({ headers })
+    if (RequestCharged) result.RequestCharged = RequestCharged
+    return result
+  },
+}
+
+const PutObjectRetention = {
+  awsDoc: docRoot + 'API_PutObjectRetention.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    Retention: { ...obj, required, comment: 'Object specifying the object retention parameters', ref: docRoot + 'API_PutObjectRetention.html#AmazonS3-PutObjectRetention-request-Retention' },
+    ...getValidateHeaders('RequestPayer', 'BypassGovernanceRetention', 'ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const queryParams = [ 'VersionId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const { Retention, Key } = params
+    const payload = { Retention }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
+    const headers = { ...xml, ...getHeadersFromParams(params, queryParams), 'x-amz-checksum-sha256': checksum }
+    const query = { 'retention': '', ...getQueryFromParams(params, queryParams) }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query,
+      headers,
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers }) => {
+    let result = {}
+    const { RequestCharged } = parseHeadersToResults({ headers })
+    if (RequestCharged) result.RequestCharged = RequestCharged
+    return result
+  },
+
+}
+
+const PutObjectTagging = {
+  awsDoc: docRoot + 'API_PutObjectTagging.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    Tagging: { ...obj, required, comment: 'Object containing the tag set', ref: docRoot + 'API_PutObjectTagging.html#AmazonS3-PutObjectTagging-request-Tagging' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: async (params, utils) => {
+    const queryParams = [ 'VersionId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const { Tagging, Key } = params
+    const payload = { Tagging: { TagSet: { Tag: Tagging.TagSet } } }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
+    const headers = { ...xml, ...getHeadersFromParams(params, queryParams), 'x-amz-checksum-sha256': checksum }
+    const query = { 'tagging': '', ...getQueryFromParams(params, queryParams) }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query,
+      headers,
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers }) => {
+    let result = {}
+    const { VersionId } = parseHeadersToResults({ headers })
+    if (VersionId) {
+      result.VersionId = VersionId
+    }
+    else {
+      result.VersionId = 'null'
+    }
+    return result
+  },
+}
+
 const UploadPart = {
   awsDoc: docRoot + 'API_UploadPart.html',
   validate: {
@@ -2071,6 +2216,10 @@ const methods = {
   PutBucketVersioning,
   PutBucketWebsite,
   PutObject,
+  PutObjectLegalHold,
+  PutObjectLockConfiguration,
+  PutObjectRetention,
+  PutObjectTagging,
   Upload,
   UploadPart,
   ...incomplete,

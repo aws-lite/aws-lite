@@ -67,6 +67,10 @@ import {
   PutBucketVersioningCommandOutput as PutBucketVersioningResponse,
   PutBucketWebsiteCommandOutput as PutBucketWebsiteResponse,
   PutObjectCommandOutput as PutObjectResponse,
+  PutObjectLegalHoldCommandOutput as PutObjectLegalHoldResponse,
+  PutObjectLockConfigurationCommandOutput as PutObjectLockConfigurationResponse,
+  PutObjectRetentionCommandOutput as PutObjectRetentionResponse,
+  PutObjectTaggingCommandOutput as PutObjectTaggingResponse,
   UploadCommandOutput as UploadResponse,
   UploadPartCommandOutput as UploadPartResponse,
   // $IMPORTS_END
@@ -469,6 +473,30 @@ declare interface AwsLiteS3 {
   PutObject: (input: { Bucket: string, Key: string, Body?: Buffer | stream | string, File?: string, ApplyChecksum?: boolean, MinChunkSize?: number, ACL?: string, BucketKeyEnabled?: string, CacheControl?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, ContentDisposition?: string, ContentEncoding?: string, ContentLanguage?: string, ContentLength?: string, ContentMD5?: string, ContentType?: string, ExpectedBucketOwner?: string, Expires?: string, GrantFullControl?: string, GrantRead?: string, GrantReadACP?: string, GrantWriteACP?: string, ObjectLockLegalHoldStatus?: string, ObjectLockMode?: string, ObjectLockRetainUntilDate?: string, RequestPayer?: string, ServerSideEncryption?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, SSEKMSEncryptionContext?: string, SSEKMSKeyId?: string, StorageClass?: string, Tagging?: string, WebsiteRedirectLocation?: string }) => Promise<PutObjectResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLegalHold.html S3: PutObjectLegalHold}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObjectLegalHold S3: PutObjectLegalHold}
+   */
+  PutObjectLegalHold: (input: { Bucket: string, Key: string, VersionId?: string, LegalHold: Record<string, any>, RequestPayer?: string, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutObjectLegalHoldResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLockConfiguration.html S3: PutObjectLockConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObjectLockConfiguration S3: PutObjectLockConfiguration}
+   */
+  PutObjectLockConfiguration: (input: { Bucket: string, ObjectLockConfiguration: Record<string, any>, RequestPayer?: string, Token?: string, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutObjectLockConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectRetention.html S3: PutObjectRetention}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObjectRetention S3: PutObjectRetention}
+   */
+  PutObjectRetention: (input: { Bucket: string, Key: string, VersionId?: string, Retention: Record<string, any>, RequestPayer?: string, BypassGovernanceRetention?: string, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<PutObjectRetentionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectTagging.html S3: PutObjectTagging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObjectTagging S3: PutObjectTagging}
+   */
+  PutObjectTagging: (input: { Bucket: string, Key: string, VersionId?: string, Tagging: Record<string, any>, ContentMD5?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<PutObjectTaggingResponse>
+  /**
+   * @description
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#Upload S3: Upload}
    */
   Upload: (input: { Bucket: string, Key: string, Body?: Buffer | stream | string, File?: string, ChunkSize?: number, Concurrency?: number, ACL?: string, BucketKeyEnabled?: string, CacheControl?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, ContentDisposition?: string, ContentEncoding?: string, ContentLanguage?: string, ContentType?: string, ExpectedBucketOwner?: string, Expires?: string, GrantFullControl?: string, GrantRead?: string, GrantReadACP?: string, GrantWriteACP?: string, ObjectLockLegalHoldStatus?: string, ObjectLockMode?: string, ObjectLockRetainUntilDate?: string, RequestPayer?: string, ServerSideEncryption?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, SSEKMSEncryptionContext?: string, SSEKMSKeyId?: string, StorageClass?: string, Tagging?: string, WebsiteRedirectLocation?: string }) => Promise<UploadResponse>
@@ -557,6 +585,10 @@ export type {
   PutBucketVersioningResponse,
   PutBucketWebsiteResponse,
   PutObjectResponse,
+  PutObjectLegalHoldResponse,
+  PutObjectLockConfigurationResponse,
+  PutObjectRetentionResponse,
+  PutObjectTaggingResponse,
   UploadResponse,
   UploadPartResponse,
   // $EXPORT_END

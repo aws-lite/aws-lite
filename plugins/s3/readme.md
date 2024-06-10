@@ -1174,6 +1174,101 @@ Properties:
   - Sets request header: `x-amz-website-redirect-location`
 
 
+### `PutObjectLegalHold`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLegalHold.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`LegalHold` (object) [required]**
+  - Object containing the field `Status` (string) which can be one of: `ON`, `OFF`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutObjectLockConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLockConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ObjectLockConfiguration` (object) [required]**
+  - Object defining the object lock configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLockConfiguration.html#AmazonS3-PutObjectLockConfiguration-request-ObjectLockConfiguration)
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`Token` (string)**
+  - Sets request header: `x-amz-bucket-object-lock-token`
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutObjectRetention`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectRetention.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`Retention` (object) [required]**
+  - Object specifying the object retention parameters
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectRetention.html#AmazonS3-PutObjectRetention-request-Retention)
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`BypassGovernanceRetention` (string)**
+  - Sets request header: `x-amz-bypass-governance-retention`
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `PutObjectTagging`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectTagging.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`Tagging` (object) [required]**
+  - Object containing the tag set
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectTagging.html#AmazonS3-PutObjectTagging-request-Tagging)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+
+
 ### `Upload`
 
 
@@ -1321,10 +1416,6 @@ Properties:
 - [`PutBucketLogging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLogging.html)
 - [`PutBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotification.html)
 - [`PutObjectAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html)
-- [`PutObjectLegalHold`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLegalHold.html)
-- [`PutObjectLockConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLockConfiguration.html)
-- [`PutObjectRetention`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectRetention.html)
-- [`PutObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectTagging.html)
 - [`PutPublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutPublicAccessBlock.html)
 - [`RestoreObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html)
 - [`SelectObjectContent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_SelectObjectContent.html)
