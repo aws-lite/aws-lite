@@ -3,6 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
+import { default as qs } from 'node:querystring'
 import { querystringifyParams } from './lib.mjs'
 
 const service = 'cloudformation'
@@ -242,9 +243,28 @@ const UpdateStack = {
   response: ({ payload }) => ({ StackId: payload.UpdateStackResult.StackId }),
 }
 
+const UpdateTerminationProtection = {
+  awsDoc: docRoot + 'API_UpdateTerminationProtection.html',
+  validate: {
+    StackName,
+    EnableTerminationProtection: { ...bool, required, comment: 'Enable termination protection on the specified stack' },
+  },
+  request: (params) => {
+    return {
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: qs.stringify({
+        Action: 'UpdateTerminationProtection',
+        Version: '2010-05-15',
+        ...params,
+      }),
+    }
+  },
+  response: ({ payload }) => ({ StackId: payload.UpdateTerminationProtectionResult.StackId }),
+}
+
 export default {
   name: '@aws-lite/cloudformation',
   service,
   property,
-  methods: { CreateStack, DeleteStack, DescribeStackResources, DescribeStacks, ListStackResources, UpdateStack, ...incomplete },
+  methods: { CreateStack, DeleteStack, DescribeStackResources, DescribeStacks, ListStackResources, UpdateStack, UpdateTerminationProtection, ...incomplete },
 }

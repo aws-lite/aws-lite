@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/sts-types",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Type definitions for the `@aws-lite/sts` plugin",
   "homepage": "https://aws-lite.org/services/sts",
   "repository": {

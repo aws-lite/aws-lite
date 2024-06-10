@@ -177,6 +177,17 @@ Properties:
   - S3 location of CloudFormation template; can be up to 460,800 b
 
 
+### `UpdateTerminationProtection`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateTerminationProtection.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`EnableTerminationProtection` (boolean) [required]**
+  - Enable termination protection on the specified stack
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
@@ -243,7 +254,6 @@ Properties:
 - [`TestType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TestType.html)
 - [`UpdateStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackInstances.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
-- [`UpdateTerminationProtection`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateTerminationProtection.html)
 - [`ValidateTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ValidateTemplate.html)
 <!-- METHOD_DOCS_END -->
 

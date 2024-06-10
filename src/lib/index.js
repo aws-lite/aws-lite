@@ -1,11 +1,15 @@
 let aws, ini, xml
 
 // AWS-flavored JSON stuff
-function marshaller (method, obj, awsjsonSetting, config) {
+function marshaller (method, obj, options) {
   if (!aws) {
     // Only require the vendor if + when it's actually needed
     aws = require('../_vendor/aws')
   }
+  /* istanbul ignore next */
+  options = options || {}
+  /* istanbul ignore next */
+  let { awsjson: awsjsonSetting, config = {} } = options
 
   // Allow arbitrary AWS JSON marshalling options
   let { awsjsonMarshall, awsjsonUnmarshall } = config

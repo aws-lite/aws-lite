@@ -1,12 +1,12 @@
 {
-  "name": "@aws-lite/cloudformation",
-  "version": "0.1.0",
-  "description": "Official `aws-lite` plugin for CloudFormation",
+  "name": "@aws-lite/iam",
+  "version": "0.0.0",
+  "description": "Official `aws-lite` plugin for IAM",
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/architect/aws-lite.git",
-    "directory": "plugins/cloudformation"
+    "directory": "plugins/iam"
   },
   "bugs": "https://github.com/architect/aws-lite/issues",
   "main": "src/index.mjs",

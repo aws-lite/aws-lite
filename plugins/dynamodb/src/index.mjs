@@ -79,10 +79,10 @@ const BatchExecuteStatement = {
     Statements: { ...arr, required, comment: 'Array of PartiQL statements representing the batch being run' },
     ReturnConsumedCapacity,
   },
-  request: async (params, { awsjsonMarshall }) => {
+  request: async (params, { awsjsonMarshall, config }) => {
     // Huzzah, nested arrays with different kinds of serialization
     let Statements = params.Statements?.map(s => {
-      let Parameters = s?.Parameters?.map(awsjsonMarshall)
+      let Parameters = s?.Parameters?.map(p => awsjsonMarshall(p, { config }))
       return {  ...s, Parameters }
     })
     return {
@@ -91,11 +91,11 @@ const BatchExecuteStatement = {
       payload: { ...params, Statements },
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
     if (payload?.Responses?.length) {
       payload.Responses = payload.Responses.map(r => {
-        if (r?.Error?.Item) r.Error.Item = awsjsonUnmarshall(r.Error.Item)
-        if (r?.Item) r.Item = awsjsonUnmarshall(r.Item)
+        if (r?.Error?.Item) r.Error.Item = awsjsonUnmarshall(r.Error.Item, { config })
+        if (r?.Item) r.Item = awsjsonUnmarshall(r.Item, { config })
         return r
       })
     }
@@ -110,11 +110,11 @@ const BatchGetItem = {
     RequestItems: { ...obj, required, comment: 'An object containing >=1 table names and, for each table, an object describing >=1 items to get' },
     ReturnConsumedCapacity,
   },
-  request: async (params, { awsjsonMarshall }) => {
+  request: async (params, { awsjsonMarshall, config }) => {
     let RequestItems = {}
     Object.entries(params.RequestItems).forEach(([ table, item ]) => {
       RequestItems[table] = item
-      RequestItems[table].Keys = item?.Keys?.map(awsjsonMarshall)
+      RequestItems[table].Keys = item?.Keys?.map(k => awsjsonMarshall(k, { config }))
     })
     return {
       awsjson: false, // Don't re-serialize to AWS-flavored JSON
@@ -122,16 +122,16 @@ const BatchGetItem = {
       payload: { ...params, RequestItems },
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
     let Responses = Object.keys(payload.Responses)
     if (Responses.length) {
-      Responses.forEach(i => payload.Responses[i] = payload.Responses[i]?.map(awsjsonUnmarshall))
+      Responses.forEach(i => payload.Responses[i] = payload.Responses[i]?.map(r => awsjsonUnmarshall(r, { config })))
     }
     let UnprocessedKeys = Object.keys(payload.UnprocessedKeys)
     if (UnprocessedKeys.length) {
       UnprocessedKeys.forEach(i => payload.UnprocessedKeys[i] = {
         ...payload.UnprocessedKeys[i],
-        Keys: payload.UnprocessedKeys[i]?.Keys?.map(awsjsonUnmarshall),
+        Keys: payload.UnprocessedKeys[i]?.Keys?.map(k => awsjsonUnmarshall(k, { config })),
       })
     }
     return payload
@@ -146,17 +146,17 @@ const BatchWriteItem = {
     ReturnConsumedCapacity,
     ReturnItemCollectionMetrics,
   },
-  request: async (params, { awsjsonMarshall }) => {
+  request: async (params, { awsjsonMarshall, config }) => {
     let RequestItems = {}
     Object.entries(params.RequestItems).forEach(([ table, items ]) => {
       RequestItems[table] = items.map(i => {
         let request = {}
         Object.entries(i).forEach(([ op, data ]) => {
           if (op === 'DeleteRequest') {
-            request[op] = { Key: awsjsonMarshall(data.Key) }
+            request[op] = { Key: awsjsonMarshall(data.Key, { config }) }
           }
           if (op === 'PutRequest') {
-            request[op] = { Item: awsjsonMarshall(data.Item) }
+            request[op] = { Item: awsjsonMarshall(data.Item, { config }) }
           }
         })
         return request
@@ -168,17 +168,17 @@ const BatchWriteItem = {
       payload: { ...params, RequestItems },
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
     let UnprocessedItems = {}
     Object.entries(payload.UnprocessedItems).forEach(([ table, items ]) => {
       UnprocessedItems[table] = items.map(i => {
         let request = {}
         Object.entries(i).forEach(([ op, data ]) => {
           if (op === 'DeleteRequest') {
-            request[op] = { Key: awsjsonUnmarshall(data.Key) }
+            request[op] = { Key: awsjsonUnmarshall(data.Key, { config }) }
           }
           if (op === 'PutRequest') {
-            request[op] = { Item: awsjsonUnmarshall(data.Item) }
+            request[op] = { Item: awsjsonUnmarshall(data.Item, { config }) }
           }
         })
         return request
@@ -274,8 +274,8 @@ const DeleteItem = {
     headers: headers('DeleteItem'),
     payload: params,
   }),
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
-    if (payload?.Attributes) payload.Attributes = awsjsonUnmarshall(payload.Attributes)
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
+    if (payload?.Attributes) payload.Attributes = awsjsonUnmarshall(payload.Attributes, { config })
     return payload
   },
   error: defaultError,
@@ -498,16 +498,16 @@ const ExecuteStatement = {
     ReturnConsumedCapacity,
     ReturnValuesOnConditionCheckFailure,
   },
-  request: async (params, { awsjsonMarshall }) => {
-    if (params.Parameters) params.Parameters = params.Parameters.map(awsjsonMarshall)
+  request: async (params, { awsjsonMarshall, config }) => {
+    if (params.Parameters) params.Parameters = params.Parameters.map(p => awsjsonMarshall(p, { config }))
     return {
       headers: headers('ExecuteStatement'),
       payload: params,
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
     if (payload?.Items?.length) {
-      payload.Items = payload.Items.map(awsjsonUnmarshall)
+      payload.Items = payload.Items.map(i => awsjsonUnmarshall(i, { config }))
     }
     payload.awsjson = [ 'LastEvaluatedKey' ]
     return payload
@@ -523,10 +523,10 @@ const ExecuteTransaction = {
     ClientRequestToken: NextToken,
     ReturnConsumedCapacity,
   },
-  request: async (params, { awsjsonMarshall }) => {
+  request: async (params, { awsjsonMarshall, config }) => {
     if (params.TransactStatements) {
       params.TransactStatements = params.TransactStatements.map(i => {
-        if (i.Parameters) i.Parameters = i.Parameters.map(awsjsonMarshall)
+        if (i.Parameters) i.Parameters = i.Parameters.map(p => awsjsonMarshall(p, { config }))
         return i
       })
     }
@@ -535,10 +535,10 @@ const ExecuteTransaction = {
       payload: params,
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
     if (payload?.Responses?.length) {
       payload.Responses = payload.Responses.map(i => {
-        i.Item = awsjsonUnmarshall(i.Item)
+        i.Item = awsjsonUnmarshall(i.Item, { config })
         return i
       })
     }
@@ -774,8 +774,8 @@ const Query = {
       payload: params,
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
-    if (payload?.Items?.length) payload.Items = payload.Items.map(awsjsonUnmarshall)
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
+    if (payload?.Items?.length) payload.Items = payload.Items.map(i => awsjsonUnmarshall(i, { config }))
     return payload
   },
   error: defaultError,
@@ -859,8 +859,8 @@ const Scan = {
       paginator,
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
-    if (payload?.Items?.length) payload.Items = payload.Items.map(awsjsonUnmarshall)
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
+    if (payload?.Items?.length) payload.Items = payload.Items.map(i => awsjsonUnmarshall(i, { config }))
     return payload
   },
   error: defaultError,
@@ -886,10 +886,10 @@ const TransactGetItems = {
     TransactItems: { ...arr, required, comment: 'Ordered array of up to 100 `TransactGetItem` objects, each of which containing a `Get` object', ref: docRoot + 'API_TransactGetItems.html#DDB-TransactGetItems-request-TransactItems' },
     ReturnConsumedCapacity,
   },
-  request: async (params, { awsjsonMarshall }) => {
+  request: async (params, { awsjsonMarshall, config }) => {
     params.TransactItems = params.TransactItems.map(i => {
       // Required, but let Dynamo's validator blow up if not present
-      if (i.Get.Key) i.Get.Key = awsjsonMarshall(i.Get.Key)
+      if (i.Get.Key) i.Get.Key = awsjsonMarshall(i.Get.Key, { config })
       return i
     })
     return {
@@ -897,9 +897,9 @@ const TransactGetItems = {
       payload: params,
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
     if (payload?.Responses?.length) payload.Responses = payload.Responses.map(i => {
-      i.Item = awsjsonUnmarshall(i.Item)
+      i.Item = awsjsonUnmarshall(i.Item, { config })
       return i
     })
     return payload
@@ -915,40 +915,40 @@ const TransactWriteItems = {
     ReturnConsumedCapacity,
     ReturnItemCollectionMetrics,
   },
-  request: async (params, { awsjsonMarshall }) => {
+  request: async (params, { awsjsonMarshall, config }) => {
     params.TransactItems = params.TransactItems.map(i => {
 
       // One of the below four is required, but let Dynamo's validator blow up if not present
       /**/ if (i.ConditionCheck) {
         if (i.ConditionCheck.ExpressionAttributeValues) {
-          i.ConditionCheck.ExpressionAttributeValues = awsjsonMarshall(i.ConditionCheck.ExpressionAttributeValues)
+          i.ConditionCheck.ExpressionAttributeValues = awsjsonMarshall(i.ConditionCheck.ExpressionAttributeValues, { config })
         }
         if (i.ConditionCheck.Key) {
-          i.ConditionCheck.Key = awsjsonMarshall(i.ConditionCheck.Key)
+          i.ConditionCheck.Key = awsjsonMarshall(i.ConditionCheck.Key, { config })
         }
       }
       else if (i.Delete) {
         if (i.Delete.ExpressionAttributeValues) {
-          i.Delete.ExpressionAttributeValues = awsjsonMarshall(i.Delete.ExpressionAttributeValues)
+          i.Delete.ExpressionAttributeValues = awsjsonMarshall(i.Delete.ExpressionAttributeValues, { config })
         }
         if (i.Delete.Key) {
-          i.Delete.Key = awsjsonMarshall(i.Delete.Key)
+          i.Delete.Key = awsjsonMarshall(i.Delete.Key, { config })
         }
       }
       else if (i.Put) {
         if (i.Put.ExpressionAttributeValues) {
-          i.Put.ExpressionAttributeValues = awsjsonMarshall(i.Put.ExpressionAttributeValues)
+          i.Put.ExpressionAttributeValues = awsjsonMarshall(i.Put.ExpressionAttributeValues, { config })
         }
         if (i.Put.Item) {
-          i.Put.Item = awsjsonMarshall(i.Put.Item)
+          i.Put.Item = awsjsonMarshall(i.Put.Item, { config })
         }
       }
       else if (i.Update) {
         if (i.Update.ExpressionAttributeValues) {
-          i.Update.ExpressionAttributeValues = awsjsonMarshall(i.Update.ExpressionAttributeValues)
+          i.Update.ExpressionAttributeValues = awsjsonMarshall(i.Update.ExpressionAttributeValues, { config })
         }
         if (i.Update.Key) {
-          i.Update.Key = awsjsonMarshall(i.Update.Key)
+          i.Update.Key = awsjsonMarshall(i.Update.Key, { config })
         }
       }
       return i
@@ -958,11 +958,11 @@ const TransactWriteItems = {
       payload: params,
     }
   },
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
     if (Object.keys(payload?.ItemCollectionMetrics || {})?.length) {
       Object.entries(payload.ItemCollectionMetrics).forEach(([ table, items ]) => {
         payload.ItemCollectionMetrics[table] = items.map(i => {
-          i.ItemCollectionKey = awsjsonUnmarshall(i.ItemCollectionKey)
+          i.ItemCollectionKey = awsjsonUnmarshall(i.ItemCollectionKey, { config })
         })
       })
     }
@@ -1068,10 +1068,10 @@ const UpdateItem = {
     headers: headers('UpdateItem'),
     payload: params,
   }),
-  response: async ({ payload }, { awsjsonUnmarshall }) => {
+  response: async ({ payload }, { awsjsonUnmarshall, config }) => {
     if (Object.keys(payload?.ItemCollectionMetrics || {})?.length) {
       Object.entries(payload.ItemCollectionMetrics.ItemCollectionKey).forEach(([ key, props ]) => {
-        payload.ItemCollectionMetrics.ItemCollectionKey[key] = awsjsonUnmarshall(props)
+        payload.ItemCollectionMetrics.ItemCollectionKey[key] = awsjsonUnmarshall(props, { config })
       })
     }
     payload.awsjson = awsjsonRes
