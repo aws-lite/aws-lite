@@ -75,9 +75,10 @@ module.exports = async function clientFactory (config, creds, region) {
         let pluginUtils = {
           awsjsonMarshall: awsjson.marshall,
           awsjsonUnmarshall: awsjson.unmarshall,
+          buildXML,
+          client,
           config: configuration,
           credentials,
-          buildXML,
         }
         let clientMethods = {}
         Object.entries(methods).forEach(([ name, method ]) => {
@@ -109,7 +110,7 @@ module.exports = async function clientFactory (config, creds, region) {
             if (method.request) {
               try {
                 // TODO: probably deep-copy and/or make input immutable?
-                var req = await method.request(input, { ...pluginUtils, region: selectedRegion, client })
+                var req = await method.request(input, { ...pluginUtils, region: selectedRegion })
                 req = req || {}
               }
               catch (methodError) {

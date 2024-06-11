@@ -2,6 +2,14 @@
 
 ---
 
+## [0.21.9] 2024-06-11
+
+### Added
+
+- Pass instantiated client to plugin `utils` methods
+
+---
+
 ## [0.21.8] 2024-06-10
 
 ### Changed
