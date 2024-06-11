@@ -22,7 +22,7 @@ function typeFromValidateEntry (value) {
   }
 }
 
-function createTypesStr ({ methods, service, property, display, existingTypes }) {
+function createTypesStr ({ methods, service, awsSdkName, property, display, existingTypes }) {
   let existingMethods = []
   if (existingTypes) {
     const interfaceRegex = new RegExp(`declare interface AwsLite${property} {([^]*?)\n}\n`, 'g')
@@ -94,7 +94,7 @@ function createTypesStr ({ methods, service, property, display, existingTypes })
     : readFileSync(join(__dirname, 'tmpl', '_types-tmpl.d.ts')).toString()
   const trailingComma = outputTypes.length ? ',' : ''
   return typesTmpl
-    .replace(/\$SERVICE/g, service)
+    .replace(/\$SERVICE/g, awsSdkName || service)
     .replace(/\$PROPERTY/g, property)
     .replace(importsRegex, outputTypes.join(',\n') + `${trailingComma}\n  `)
     .replace(methodsRegex, methodTypes.join('\n') + '\n  ')
@@ -104,11 +104,12 @@ function createTypesStr ({ methods, service, property, display, existingTypes })
 /**
  * @param {Object} plugin
  * @param {string} plugin.service - the official service name; example: `cloudformation`
+ * @param {string} plugin.awsSdkName - the AWS SDK v3 package name; example: `route-53`
  * @param {string} plugin.property - service property name to be used in code
  * @param {string} plugin.display - the commonly recognized, more formal version (including casing); example: `CloudFormation`
  * @returns {Promise<void>}
  */
-export default async function main ({ service, property, display }) {
+export default async function main ({ service, awsSdkName, property, display }) {
   const typesName = `${service}-types`
   const typesPackageName = `@aws-lite/${typesName}`
   const packageName = `@aws-lite/${service}`
@@ -128,7 +129,7 @@ export default async function main ({ service, property, display }) {
     typesPkg.homepage = `https://aws-lite.org/services/${service}`
     typesPkg.repository.directory = `plugins/${service}/types`
 
-    typesPkg.dependencies[`@aws-sdk/client-${service}`] = '3'
+    typesPkg.dependencies[`@aws-sdk/client-${awsSdkName || service}`] = '3'
 
     writeFileSync(join(pluginTypesDir, 'package.json'), JSON.stringify(typesPkg, null, 2) + '\n')
 
@@ -142,6 +143,6 @@ export default async function main ({ service, property, display }) {
   const existingTypes = existsSync(join(pluginTypesDir, 'index.d.ts'))
     ? readFileSync(join(pluginTypesDir, 'index.d.ts')).toString()
     : null
-  const typesStr = createTypesStr({ methods, service, property, display, existingTypes })
+  const typesStr = createTypesStr({ methods, service, awsSdkName, property, display, existingTypes })
   writeFileSync(join(pluginTypesDir, 'index.d.ts'), typesStr)
 }
