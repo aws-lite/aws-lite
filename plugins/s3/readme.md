@@ -1172,6 +1172,9 @@ Properties:
   - Sets request header: `x-amz-tagging`
 - **`WebsiteRedirectLocation` (string)**
   - Sets request header: `x-amz-website-redirect-location`
+- **`Metadata` (object)**
+  - Key / value pairs of object metadata; must conform to S3 metadata guidelines
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMetadata.html)
 
 
 ### `PutObjectLegalHold`
@@ -1347,6 +1350,9 @@ Properties:
   - Sets request header: `x-amz-tagging`
 - **`WebsiteRedirectLocation` (string)**
   - Sets request header: `x-amz-website-redirect-location`
+- **`Metadata` (object)**
+  - Key / value pairs of object metadata; must conform to S3 metadata guidelines
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMetadata.html)
 
 
 ### `UploadPart`

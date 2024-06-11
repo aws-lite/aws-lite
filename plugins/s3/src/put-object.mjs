@@ -38,6 +38,7 @@ const PutObject = {
       'ObjectLockMode', 'ObjectLockRetainUntilDate', 'RequestPayer', 'ServerSideEncryption',
       'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5', 'SSEKMSEncryptionContext',
       'SSEKMSKeyId', 'StorageClass', 'Tagging', 'WebsiteRedirectLocation'),
+    Metadata: { type: 'object', comment: 'Key / value pairs of object metadata; must conform to S3 metadata guidelines', ref: 'https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMetadata.html' },
   },
   request: async (params, utils) => {
     let { Bucket, Key, File, Body, MinChunkSize, ApplyChecksum } = params

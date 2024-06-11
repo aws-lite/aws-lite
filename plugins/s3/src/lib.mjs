@@ -109,7 +109,8 @@ const parseHeadersToResults = ({ headers }, utils, ignore) => {
       if (normalized === 'last-modified') value = new Date(value)
       if (isNum.includes(normalized)) value = Number(value)
       acc[paramMappings[normalized]] = value
-    } else if (normalized.startsWith('x-amz-meta-')) {
+    }
+    else if (normalized.startsWith('x-amz-meta-')) {
       // Handle user-defined metadata
       const metaKey = normalized.substring('x-amz-meta-'.length)
       acc.Metadata = acc.Metadata || {}
@@ -122,7 +123,12 @@ const parseHeadersToResults = ({ headers }, utils, ignore) => {
 
 function getHeadersFromParams (params, ignore = []) {
   let headers = Object.keys(params).reduce((acc, param) => {
-    if (headerMappings[param] && !ignore.includes(param)) {
+    if (param === 'Metadata') {
+      Object.entries(params[param]).forEach(([ key, val ]) => {
+        acc[`x-amz-meta-${key.replace(/\s/g, '-')}`] = val
+      })
+    }
+    else if (headerMappings[param] && !ignore.includes(param)) {
       acc[headerMappings[param]] = params[param]
     }
     return acc
