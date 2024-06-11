@@ -473,6 +473,54 @@ const DeleteObjects = {
   },
 }
 
+const DeleteObjectTagging = {
+  awsDoc: docRoot + 'API_DeleteObjectTagging.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const queryParams = [ 'VersionId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const { Key } = params
+    const query = { 'tagging': '', ...getQueryFromParams(params, queryParams) }
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query,
+      headers: getHeadersFromParams(params, queryParams),
+    }
+  },
+  response: ({ headers }) => {
+    const { VersionId } = parseHeadersToResults({ headers })
+    const result = VersionId ? { VersionId } : { VersionId: 'null' }
+    return result
+  },
+}
+
+const DeletePublicAccessBlock = {
+  awsDoc: docRoot + 'API_DeletePublicAccessBlock.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      method: 'DELETE',
+      pathPrefix,
+      path: '/?publicAccessBlock',
+      headers: getHeadersFromParams(params),
+    }
+  },
+  response: defaultResponse,
+}
+
 const GetBucketAccelerateConfiguration = {
   awsDoc: docRoot + 'API_GetBucketAccelerateConfiguration.html',
   validate: {
@@ -1102,6 +1150,63 @@ const GetObject = {
     return {
       Body: payload,
       ...parseHeadersToResults({ headers }, null, []),
+    }
+  },
+}
+
+const GetObjectLegalHold = {
+  awsDoc: docRoot + 'API_GetObjectLegalHold.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { 'legal-hold': '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+    }
+  },
+  response: ({ payload }) => {
+    const { Status } = payload
+    return {
+      LegalHold: { Status },
+    }
+  },
+}
+
+const GetObjectLockConfiguration = {
+  awsDoc: docRoot + 'API_GetObjectLockConfiguration.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const headers = getHeadersFromParams(params)
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: '/?object-lock',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    const { ObjectLockEnabled, Rule } = payload
+    return {
+      ObjectLockConfiguration: {
+        ObjectLockEnabled,
+        Rule,
+      },
     }
   },
 }
@@ -1850,7 +1955,7 @@ const PutBucketPolicy = {
   validate: {
     Bucket,
     Policy: { ...obj, required, comment: 'Object defining the policy', ref: docRoot + 'API_PutBucketPolicy.html#API_PutBucketPolicy_RequestBody' },
-    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ConfirmRemoveSelfBucketAccess',  'ExpectedBucketOwner'),
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ConfirmRemoveSelfBucketAccess', 'ExpectedBucketOwner'),
   },
   request: async (params, utils) => {
     const { Policy: payload } = params
@@ -1942,7 +2047,7 @@ const PutBucketTagging = {
   awsDoc: docRoot + 'API_PutBucketTagging.html',
   validate: {
     Bucket,
-    Tagging: { ...obj, required, comment: 'Object defining the tag set', ref:  docRoot + 'API_PutBucketTagging.html#AmazonS3-PutBucketTagging-request-Tagging' },
+    Tagging: { ...obj, required, comment: 'Object defining the tag set', ref: docRoot + 'API_PutBucketTagging.html#AmazonS3-PutBucketTagging-request-Tagging' },
     ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
   },
   request: async (params, utils) => {
@@ -2182,7 +2287,7 @@ const UploadPart = {
     Key,
     PartNumber,
     Body: { type: [ 'buffer', 'stream', 'string' ], comment: 'Stream of data to be uploaded', ref: docRoot + 'AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody' },
-    ...getValidateHeaders( 'ContentLength', 'ContentMD5', 'ChecksumAlgorithm', 'ChecksumCRC32',
+    ...getValidateHeaders('ContentLength', 'ContentMD5', 'ChecksumAlgorithm', 'ChecksumCRC32',
       'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256', 'SSECustomerAlgorithm',
       'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner',
     ),
@@ -2226,6 +2331,8 @@ const methods = {
   DeleteBucketWebsite,
   DeleteObject,
   DeleteObjects,
+  DeleteObjectTagging,
+  DeletePublicAccessBlock,
   GetBucketAccelerateConfiguration,
   GetBucketAcl,
   GetBucketAnalyticsConfiguration,
@@ -2247,6 +2354,8 @@ const methods = {
   GetBucketVersioning,
   GetBucketWebsite,
   GetObject,
+  GetObjectLegalHold,
+  GetObjectLockConfiguration,
   HeadBucket,
   HeadObject,
   ListBucketAnalyticsConfigurations,

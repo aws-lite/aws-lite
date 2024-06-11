@@ -3,14 +3,10 @@ const docRoot = 'https://docs.aws.amazon.com/AmazonS3/latest/API/'
 export default {
   CopyObject:                                  { disabled, awsDoc: docRoot + 'API_CopyObject.html' },
   CreateSession:                               { disabled, awsDoc: docRoot + 'API_CreateSession.html' },
-  DeleteObjectTagging:                         { disabled, awsDoc: docRoot + 'API_DeleteObjectTagging.html' },
-  DeletePublicAccessBlock:                     { disabled, awsDoc: docRoot + 'API_DeletePublicAccessBlock.html' },
   GetBucketLifecycle:                          { disabled, awsDoc: docRoot + 'API_GetBucketLifecycle.html' }, // Deprecated, use `GetBucketLifecycleConfiguration`
   GetBucketNotification:                       { disabled, awsDoc: docRoot + 'API_GetBucketNotification.html' }, // Deprecated, use `GetBucketNotificationConfiguration`
-  GetObjectAcl:                                { disabled, awsDoc: docRoot + 'API_GetObjectAcl.html' },
-  GetObjectAttributes:                         { disabled, awsDoc: docRoot + 'API_GetObjectAttributes.html' },
-  GetObjectLegalHold:                          { disabled, awsDoc: docRoot + 'API_GetObjectLegalHold.html' },
-  GetObjectLockConfiguration:                  { disabled, awsDoc: docRoot + 'API_GetObjectLockConfiguration.html' },
+  GetObjectAcl:                                { disabled, awsDoc: docRoot + 'API_GetObjectAcl.html' }, // Requires nested XML attributes
+  GetObjectAttributes:                         { disabled, awsDoc: docRoot + 'API_GetObjectAttributes.html' }, // Requires the goofiest paginator possible
   GetObjectRetention:                          { disabled, awsDoc: docRoot + 'API_GetObjectRetention.html' },
   GetObjectTagging:                            { disabled, awsDoc: docRoot + 'API_GetObjectTagging.html' },
   GetObjectTorrent:                            { disabled, awsDoc: docRoot + 'API_GetObjectTorrent.html' },

@@ -361,6 +361,32 @@ Properties:
   - Sets request header: `content-md5`
 
 
+### `DeleteObjectTagging`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeletePublicAccessBlock`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `GetBucketAccelerateConfiguration`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html)
@@ -640,6 +666,34 @@ Properties:
   - Set to `true` to return payload as a buffer
 - **`streamResponsePayload` (boolean)**
   - Set to `true` to return payload as a Node.js stream
+
+
+### `GetObjectLegalHold`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+
+
+### `GetObjectLockConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLockConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
 
 
 ### `HeadBucket`
@@ -1401,14 +1455,10 @@ Properties:
 
 - [`CopyObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html)
 - [`CreateSession`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html)
-- [`DeleteObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html)
-- [`DeletePublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
 - [`GetBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html)
 - [`GetBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotification.html)
 - [`GetObjectAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAcl.html)
 - [`GetObjectAttributes`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html)
-- [`GetObjectLegalHold`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html)
-- [`GetObjectLockConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLockConfiguration.html)
 - [`GetObjectRetention`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectRetention.html)
 - [`GetObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html)
 - [`GetObjectTorrent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html)

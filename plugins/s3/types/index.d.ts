@@ -20,6 +20,8 @@ import {
   DeleteBucketWebsiteCommandOutput as DeleteBucketWebsiteResponse,
   DeleteObjectCommandOutput as DeleteObjectResponse,
   DeleteObjectsCommandOutput as DeleteObjectsResponse,
+  DeleteObjectTaggingCommandOutput as DeleteObjectTaggingResponse,
+  DeletePublicAccessBlockCommandOutput as DeletePublicAccessBlockResponse,
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
   GetBucketAclCommandOutput as GetBucketAclResponse,
   GetBucketAnalyticsConfigurationCommandOutput as GetBucketAnalyticsConfigurationResponse,
@@ -41,6 +43,8 @@ import {
   GetBucketVersioningCommandOutput as GetBucketVersioningResponse,
   GetBucketWebsiteCommandOutput as GetBucketWebsiteResponse,
   GetObjectCommandOutput as GetObjectResponse,
+  GetObjectLegalHoldCommandOutput as GetObjectLegalHoldResponse,
+  GetObjectLockConfigurationCommandOutput as GetObjectLockConfigurationResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
   ListBucketAnalyticsConfigurationsCommandOutput as ListBucketAnalyticsConfigurationsResponse,
@@ -195,6 +199,18 @@ declare interface AwsLiteS3 {
   DeleteObjects: (input: { Bucket: string, Delete: Record<string, any>, MFA?: string, RequestPayer?: string, BypassGovernanceRetention?: string, ExpectedBucketOwner?: string, ChecksumAlgorithm?: string, ContentMD5?: string }) => Promise<DeleteObjectsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html S3: DeleteObjectTagging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteObjectTagging S3: DeleteObjectTagging}
+   */
+  DeleteObjectTagging: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string }) => Promise<DeleteObjectTaggingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html S3: DeletePublicAccessBlock}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeletePublicAccessBlock S3: DeletePublicAccessBlock}
+   */
+  DeletePublicAccessBlock: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<DeletePublicAccessBlockResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html S3: GetBucketAccelerateConfiguration}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetBucketAccelerateConfiguration S3: GetBucketAccelerateConfiguration}
    */
@@ -319,6 +335,18 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObject S3: GetObject}
    */
   GetObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string, ResponseCacheControl?: string, ResponseContentDisposition?: string, ResponseContentEncoding?: string, ResponseContentLanguage?: string, ResponseContentType?: string, ResponseExpires?: string, rawResponsePayload?: boolean, streamResponsePayload?: boolean }) => Promise<GetObjectResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html S3: GetObjectLegalHold}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectLegalHold S3: GetObjectLegalHold}
+   */
+  GetObjectLegalHold: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectLegalHoldResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLockConfiguration.html S3: GetObjectLockConfiguration}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectLockConfiguration S3: GetObjectLockConfiguration}
+   */
+  GetObjectLockConfiguration: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetObjectLockConfigurationResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html S3: HeadBucket}
@@ -538,6 +566,8 @@ export type {
   DeleteBucketWebsiteResponse,
   DeleteObjectResponse,
   DeleteObjectsResponse,
+  DeleteObjectTaggingResponse,
+  DeletePublicAccessBlockResponse,
   GetBucketAccelerateConfigurationResponse,
   GetBucketAclResponse,
   GetBucketAnalyticsConfigurationResponse,
@@ -559,6 +589,8 @@ export type {
   GetBucketVersioningResponse,
   GetBucketWebsiteResponse,
   GetObjectResponse,
+  GetObjectLegalHoldResponse,
+  GetObjectLockConfigurationResponse,
   HeadBucketResponse,
   HeadObjectResponse,
   ListBucketAnalyticsConfigurationsResponse,
