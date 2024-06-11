@@ -93,7 +93,6 @@ function processUpload (params, utils, UploadId) {
       clearInterval(pubInterval)
       stream.destroy()
 
-      //
       if (running === 0) {
         clearInterval(errInterval)
         rej(error)

@@ -142,14 +142,7 @@ const CreateMultipartUpload = {
       headers: { ...getHeadersFromParams(params) },
     }
   },
-  response: ({ payload }) => {
-    const { Bucket, Key, UploadId } = payload
-    return {
-      Bucket,
-      Key,
-      UploadId,
-    }
-  },
+  response: ({ payload, headers }) => ({ ...payload || {}, ...parseHeadersToResults({ headers }) }),
 }
 
 const DeleteBucket = {
@@ -1387,7 +1380,7 @@ const ListMultipartUploads = {
       },
     }
   },
-  response: ({ payload }) => {
+  response: ({ payload, headers }) => {
     let { Upload: Uploads } = payload
     if (typeof Uploads === 'object' && !Array.isArray(Uploads)) {
       Uploads = [ Uploads ]
@@ -1395,7 +1388,7 @@ const ListMultipartUploads = {
     else if (!Uploads) {
       Uploads = []
     }
-    return { Uploads }
+    return { Uploads, ...parseHeadersToResults({ headers }) }
   },
 }
 
