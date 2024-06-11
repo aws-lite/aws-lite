@@ -91,8 +91,8 @@ async function main () {
           return
         }
         const { awsDoc, validate } = _plugin.methods[method]
-        if (!awsDoc) throw ReferenceError(`All methods must refer to an AWS service API doc: ${display} ${method}`)
-        header += `[Canonical AWS API doc](${awsDoc})\n`
+        if (!awsDoc && (awsDoc !== false)) throw ReferenceError(`All methods must refer to an AWS service API doc: ${display} ${method}`)
+        header += awsDoc ? `[Canonical AWS API doc](${awsDoc})\n` : ''
         if (validate) {
           header += `\nProperties:\n` + Object.entries(validate).map(([ param, values ]) => {
             const { type, required, comment, ref } = values

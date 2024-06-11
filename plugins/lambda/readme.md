@@ -119,6 +119,7 @@ Properties:
   - The name of the Lambda function, version, or alias
 - **`AmazonManagedKafkaEventSourceConfig` (object)**
   - Configuration settings for an Amazon Managed Streaming for Apache Kafka event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-AmazonManagedKafkaEventSourceConfig)
 - **`BatchSize` (number)**
   - Maximum number of records from 1 to 10000 in each batch that Lambda pulls from the stream or queue
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-BatchSize)
@@ -162,7 +163,6 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource)
 - **`SourceAccessConfigurations` (array)**
   - Array of at most 22 `SourceAccessConfiguration` objects to specifying authentication protocols or VPC components required to secure the event source
-  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SourceAccessConfigurations)
 - **`StartingPosition` (string)**
   - Position in a stream to begin reading, valid entries are `TRIM_HORIZON` (all available messages), `LATEST` (from now or after) or `AT_TIMESTAMP` (specify timestamp)
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition)
@@ -571,6 +571,38 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListEventSourceMappings`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html)
+
+Properties:
+- **`EventSourceArn` (string)**
+  - ARN of the event source
+- **`FunctionName` (string)**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFunctionEventInvokeConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListFunctions`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html)
@@ -583,6 +615,21 @@ Properties:
 - **`MasterRegion` (string)**
   - Display `LambdaEdge` functions replicated from a master function in a specified region
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html#API_ListFunctions_RequestSyntax)
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFunctionsByCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html)
+
+Properties:
+- **`CodeSigningConfigArn` (string) [required]**
+  - ARN of the code signing configuration
+- **`Marker` (string)**
+  - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
 - **`paginate` (boolean)**
@@ -642,6 +689,93 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListProvisionedConcurrencyConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListTags`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of the lambda function
+
+
+### `ListVersionsByFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`Marker` (string)**
+  - Pagination token
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned; maximum 10,000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `PublishLayerVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html)
+
+Properties:
+- **`Content` (object) [required]**
+  - Contents of the layer; object can contain: `S3Bucket`, `S3Key`, `S3ObjectVersion`, or `ZipFile` (base64-encoded zip)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-Content)
+- **`CompatibleArchitectures` (array)**
+  - Array with a maximum of 2 strings specifying instruction set architecture; array can contain: `x86_64`, `arm64`
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleArchitectures)
+- **`CompatibleRuntimes` (array)**
+  - Array with a maximum of 15 strings specifying compatible runtime environments
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleRuntimes)
+- **`Description` (string)**
+  - Description of the function
+- **`LiscenceInfo` (string)**
+  - The layer's software license
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-LicenseInfo)
+
+
+### `PublishVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`CodeSha256` (string)**
+  - Checksum to confirm the function has not changed since being updated
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html#lambda-PublishVersion-request-CodeSha256)
+- **`Description` (string)**
+  - Description of the function
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+
+
+### `PutFunctionCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`CodeSigningConfigArn` (string) [required]**
+  - ARN of the code signing configuration
+
+
 ### `PutFunctionConcurrency`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html)
@@ -651,6 +785,107 @@ Properties:
   - The name of the Lambda function, version, or alias
 - **`ReservedConcurrentExecutions` (number) [required]**
   - number of simultaneous executions to reserve
+
+
+### `PutFunctionEventInvokeConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`DestinationConfig` (object)**
+  - Specify the destination of an event after being processed by Lambda
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html#lambda-PutFunctionEventInvokeConfig-request-DestinationConfig)
+- **`MaximumEventAgeInSeconds` (number)**
+  - Set a maximum age in whole seconds between 60 and 21,600 (inclusive) for events to be processed
+- **`MaximumRetryAttempts` (number)**
+  - Set a maximum number of retries between 0 and 2 (inclusive) when the function returns an error
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `PutProvisionedConcurrencyConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`ProvisionedConcurrentExecutions` (number) [required]**
+  - Amount of provisioned concurrency of at least 1, to allocate for the version or alias
+- **`Qualifier` (string) [required]**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `PutRuntimeManagementConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`UpdateRuntimeOn` (string) [required]**
+  - Specify the runtime update mode; can be one of: `Auto` (default), `FunctionUpdate`, `Manual`
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html#lambda-PutRuntimeManagementConfig-request-UpdateRuntimeOn)
+- **`Qualifier` (string)**
+  - Specify a version of the function
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html#API_PutRuntimeManagementConfig_RequestSyntax#Qualifier)
+- **`RuntimeVersionArn` (string)**
+  - ARN of the runtime version the function will use
+
+
+### `RemoveLayerVersionPermission`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_RemoveLayerVersionPermission.html)
+
+Properties:
+- **`LayerName` (string) [required]**
+  - Name or ARN of the layer
+- **`StatementId` (string) [required]**
+  - Identifier specified when the statement was added
+- **`VersionNumber` (number) [required]**
+  - The version number of the layer
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+
+
+### `RemovePermission`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`StatementId` (string) [required]**
+  - Statement ID of the permission to remove
+- **`RevisionId` (string)**
+  - Update the function config only if the current revision ID matches the specified `RevisionId`; used to avoid modifying a function that has changed since you last read it
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### `TagResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of the lambda function
+- **`Tags` (object) [required]**
+  - Record of tags to be applied to the function
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html#lambda-TagResource-request-Tags)
+
+
+### `UntagResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UntagResource.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of the lambda function
+- **`TagKeys` (array) [required]**
+  - Array of tag keys (strings) to removed from the function
 
 
 ### `UpdateAlias`
@@ -671,6 +906,74 @@ Properties:
 - **`RoutingConfig` (object)**
   - Configure function version weights
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing)
+
+
+### `UpdateCodeSigningConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html)
+
+Properties:
+- **`CodeSigningConfigArn` (string) [required]**
+  - ARN of the code signing configuration
+- **`AllowedPublishers` (object)**
+  - Signing profiles for this code signing configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html#lambda-UpdateCodeSigningConfig-request-AllowedPublishers)
+- **`CodeSigningPolicies` (object)**
+  - Define actions to take if validation checks fail
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html#lambda-UpdateCodeSigningConfig-request-CodeSigningPolicies)
+- **`Description` (string)**
+  - Description of the function
+
+
+### `UpdateEventSourceMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html)
+
+Properties:
+- **`UUID` (string) [required]**
+  - UUID of the event source mapping
+- **`AmazonManagedKafkaEventSourceConfig` (object)**
+  - Configuration settings for an Amazon Managed Streaming for Apache Kafka event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-BatchSize)
+- **`BatchSize` (number)**
+  - Maximum number of records from 1 to 10000 in each batch that Lambda pulls from the stream or queue
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-BatchSize)
+- **`BisectBatchOnFunctionError` (boolean)**
+  - If the function returns an error, divide the batch and try again (only for Kinesis and DynamoDB streams)
+- **`DestinationConfig` (object)**
+  - Specify the destination of an event after being processed by Lambda
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-DestinationConfig)
+- **`DocumentDBEventSourceConfig` (object)**
+  - Configuration for a `DocumentDB` event source
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-DocumentDBEventSourceConfig)
+- **`Enabled` (boolean)**
+  - Set to `false` to disable event source upon creation
+- **`FilterCriteria` (object)**
+  - Define how incoming events will be filtered
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-FilterCriteria)
+- **`FunctionName` (string)**
+  - The name of the Lambda function, version, or alias
+- **`FunctionResponseTypes` (array)**
+  - A list of at most 1 string defining the current response type enum applied to the event source mapping; For Kinesis, DynamoDB Streams, and Amazon SQS
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-FunctionResponseTypes)
+- **`MaximumBatchingWindowInSeconds` (number)**
+  - Maximum time (in seconds) from 0 to 300 that Lambda may spend gathering records before invoking the function
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-MaximumBatchingWindowInSeconds)
+- **`MaximumRecordAgeInSeconds` (number)**
+  - Maximum age between -1 (infinite, default) to 604,800 of an event before it will be discarded; only for `Kinesis` and `DynamoDB` streams
+- **`MaximumRetryAttempts` (number)**
+  - Maximum number of tries between -1 (infinite, default) to 10,000 before a record is discarded; `Kinesis` and `DynamoDB` only 
+- **`ParallelizationFactor` (number)**
+  - Number of batches between 1 to 10 that can be processed from each shard concurrently
+- **`Queues` (array)**
+  - Array of exactly 1 string specifying the name of the `Amazon MQ` broker destination queue to consume
+- **`ScalingConfig` (object)**
+  - Configure scaling for the event source; Amazon SQS only
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-ScalingConfig)
+- **`SourceAccessConfigurations` (array)**
+  - Array of at most 22 `SourceAccessConfiguration` objects to specifying authentication protocols or VPC components required to secure the event source
+- **`TumblingWindowInSeconds` (number)**
+  - Time (in seconds) from 0 to 900 specifying the duration of a processing window for `DynamoDB` and `Kinesis` event stream sources
 
 
 ### `UpdateFunctionCode`
@@ -753,32 +1056,51 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_VpcConfig.html)
 
 
+### `UpdateFunctionEventInvokeConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`DestinationConfig` (object)**
+  - Specify the destination of an event after being processed by Lambda
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html#lambda-UpdateFunctionEventInvokeConfig-request-DestinationConfig)
+- **`MaximumEventAgeInSeconds` (number)**
+  - Set a maximum age in whole seconds between 60 and 21,600 (inclusive) for events to be processed
+- **`MaximumRetryAttempts` (number)**
+  - Maximum number of tries between -1 (infinite, default) to 10,000 before a record is discarded; `Kinesis` and `DynamoDB` only 
+
+
+### `UpdateFunctionUrlConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html)
+
+Properties:
+- **`FunctionName` (string) [required]**
+  - The name of the Lambda function, version, or alias
+- **`AuthType` (string)**
+  - Type of authentication that the function URL will use, either `AWS_IAM` or `NONE`
+- **`Cors` (object)**
+  - Cross-origin resource sharing settings
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html#lambda-UpdateFunctionUrlConfig-request-Cors)
+- **`InvokeMode` (string)**
+  - Specify how the function will be invoked, either `BUFFERED` (default, uses the `Invoke` API operation) or `RESPONSE_STREAM` (streams results as they become available, uses the `InvokeWithResponseStream` API operation)
+  - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html#lambda-UpdateFunctionUrlConfig-request-InvokeMode)
+- **`Qualifier` (string)**
+  - Specify a version or alias to invoke a published version of the function
+
+
+### Deprecated methods
+
+- [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`InvokeAsync`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html)
 - [`InvokeWithResponseStream`](https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeWithResponseStream.html)
-- [`ListEventSourceMappings`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html)
-- [`ListFunctionEventInvokeConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html)
-- [`ListFunctionsByCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html)
-- [`ListProvisionedConcurrencyConfigs`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html)
-- [`ListTags`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html)
-- [`ListVersionsByFunction`](https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html)
-- [`PublishLayerVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html)
-- [`PublishVersion`](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html)
-- [`PutFunctionCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html)
-- [`PutFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html)
-- [`PutProvisionedConcurrencyConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html)
-- [`PutRuntimeManagementConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html)
-- [`RemoveLayerVersionPermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_RemoveLayerVersionPermission.html)
-- [`RemovePermission`](https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html)
-- [`TagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html)
-- [`UntagResource`](https://docs.aws.amazon.com/lambda/latest/dg/API_UntagResource.html)
-- [`UpdateCodeSigningConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html)
-- [`UpdateEventSourceMapping`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html)
-- [`UpdateFunctionEventInvokeConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html)
-- [`UpdateFunctionUrlConfig`](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html)
 <!-- METHOD_DOCS_END -->
 
 

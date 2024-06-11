@@ -35,16 +35,37 @@ import {
   GetProvisionedConcurrencyConfigCommandOutput as GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigCommandOutput as GetRuntimeManagementConfigResponse,
   InvokeCommandOutput as InvokeResponse,
+  InvokeAsyncCommandOutput as InvokeAsyncResponse,
   ListAliasesCommandOutput as ListAliasesResponse,
   ListCodeSigningConfigsCommandOutput as ListCodeSigningConfigsResponse,
+  ListEventSourceMappingsCommandOutput as ListEventSourceMappingsResponse,
+  ListFunctionEventInvokeConfigsCommandOutput as ListFunctionEventInvokeConfigsResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
+  ListFunctionsByCodeSigningConfigCommandOutput as ListFunctionsByCodeSigningConfigResponse,
   ListFunctionUrlConfigsCommandOutput as ListFunctionUrlConfigsResponse,
   ListLayersCommandOutput as ListLayersResponse,
   ListLayerVersionsCommandOutput as ListLayerVersionsResponse,
+  ListProvisionedConcurrencyConfigsCommandOutput as ListProvisionedConcurrencyConfigsResponse,
+  ListTagsCommandOutput as ListTagsResponse,
+  ListVersionsByFunctionCommandOutput as ListVersionsByFunctionResponse,
+  PublishLayerVersionCommandOutput as PublishLayerVersionResponse,
+  PublishVersionCommandOutput as PublishVersionResponse,
+  PutFunctionCodeSigningConfigCommandOutput as PutFunctionCodeSigningConfigResponse,
   PutFunctionConcurrencyCommandOutput as PutFunctionConcurrencyResponse,
+  PutFunctionEventInvokeConfigCommandOutput as PutFunctionEventInvokeConfigResponse,
+  PutProvisionedConcurrencyConfigCommandOutput as PutProvisionedConcurrencyConfigResponse,
+  PutRuntimeManagementConfigCommandOutput as PutRuntimeManagementConfigResponse,
+  RemoveLayerVersionPermissionCommandOutput as RemoveLayerVersionPermissionResponse,
+  RemovePermissionCommandOutput as RemovePermissionResponse,
+  TagResourceCommandOutput as TagResourceResponse,
+  UntagResourceCommandOutput as UntagResourceResponse,
   UpdateAliasCommandOutput as UpdateAliasResponse,
+  UpdateCodeSigningConfigCommandOutput as UpdateCodeSigningConfigResponse,
+  UpdateEventSourceMappingCommandOutput as UpdateEventSourceMappingResponse,
   UpdateFunctionCodeCommandOutput as UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationCommandOutput as UpdateFunctionConfigurationResponse,
+  UpdateFunctionEventInvokeConfigCommandOutput as UpdateFunctionEventInvokeConfigResponse,
+  UpdateFunctionUrlConfigCommandOutput as UpdateFunctionUrlConfigResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-lambda";
 
@@ -253,6 +274,12 @@ declare interface AwsLiteLambda {
   Invoke: (input: { FunctionName: string, InvocationType?: string, Payload: any[] | Record<string, any>, LogType?: string, ClientContext?: string, Qualifier?: string }) => Promise<InvokeResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_InvokeAsync.html Lambda: InvokeAsync}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#InvokeAsync Lambda: InvokeAsync}
+   */
+  InvokeAsync: (input: { FunctionName: string, InvokeArgs: Record<string, any> }) => Promise<InvokeAsyncResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html Lambda: ListAliases}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListAliases Lambda: ListAliases}
    */
@@ -265,10 +292,28 @@ declare interface AwsLiteLambda {
   ListCodeSigningConfigs: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListCodeSigningConfigsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html Lambda: ListEventSourceMappings}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListEventSourceMappings Lambda: ListEventSourceMappings}
+   */
+  ListEventSourceMappings: (input: { EventSourceArn?: string, FunctionName?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListEventSourceMappingsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html Lambda: ListFunctionEventInvokeConfigs}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionEventInvokeConfigs Lambda: ListFunctionEventInvokeConfigs}
+   */
+  ListFunctionEventInvokeConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionEventInvokeConfigsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html Lambda: ListFunctions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctions Lambda: ListFunctions}
    */
   ListFunctions: (input: { FunctionVersion?: string, Marker?: string, MasterRegion?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html Lambda: ListFunctionsByCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionsByCodeSigningConfig Lambda: ListFunctionsByCodeSigningConfig}
+   */
+  ListFunctionsByCodeSigningConfig: (input: { CodeSigningConfigArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionsByCodeSigningConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html Lambda: ListFunctionUrlConfigs}
@@ -289,16 +334,106 @@ declare interface AwsLiteLambda {
   ListLayerVersions: (input: { LayerName: string, CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListLayerVersionsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html Lambda: ListProvisionedConcurrencyConfigs}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListProvisionedConcurrencyConfigs Lambda: ListProvisionedConcurrencyConfigs}
+   */
+  ListProvisionedConcurrencyConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListProvisionedConcurrencyConfigsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html Lambda: ListTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListTags Lambda: ListTags}
+   */
+  ListTags: (input: { Resource: string }) => Promise<ListTagsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html Lambda: ListVersionsByFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListVersionsByFunction Lambda: ListVersionsByFunction}
+   */
+  ListVersionsByFunction: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListVersionsByFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html Lambda: PublishLayerVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PublishLayerVersion Lambda: PublishLayerVersion}
+   */
+  PublishLayerVersion: (input: { Content: Record<string, any>, CompatibleArchitectures?: any[], CompatibleRuntimes?: any[], Description?: string, LiscenceInfo?: string }) => Promise<PublishLayerVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html Lambda: PublishVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PublishVersion Lambda: PublishVersion}
+   */
+  PublishVersion: (input: { FunctionName: string, CodeSha256?: string, Description?: string, RevisionId?: string }) => Promise<PublishVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionCodeSigningConfig.html Lambda: PutFunctionCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionCodeSigningConfig Lambda: PutFunctionCodeSigningConfig}
+   */
+  PutFunctionCodeSigningConfig: (input: { FunctionName: string, CodeSigningConfigArn: string }) => Promise<PutFunctionCodeSigningConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionConcurrency.html Lambda: PutFunctionConcurrency}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionConcurrency Lambda: PutFunctionConcurrency}
    */
   PutFunctionConcurrency: (input: { FunctionName: string, ReservedConcurrentExecutions: number }) => Promise<PutFunctionConcurrencyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutFunctionEventInvokeConfig.html Lambda: PutFunctionEventInvokeConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutFunctionEventInvokeConfig Lambda: PutFunctionEventInvokeConfig}
+   */
+  PutFunctionEventInvokeConfig: (input: { FunctionName: string, DestinationConfig?: Record<string, any>, MaximumEventAgeInSeconds?: number, MaximumRetryAttempts?: number, Qualifier?: string }) => Promise<PutFunctionEventInvokeConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutProvisionedConcurrencyConfig.html Lambda: PutProvisionedConcurrencyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutProvisionedConcurrencyConfig Lambda: PutProvisionedConcurrencyConfig}
+   */
+  PutProvisionedConcurrencyConfig: (input: { FunctionName: string, ProvisionedConcurrentExecutions: number, Qualifier: string }) => Promise<PutProvisionedConcurrencyConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PutRuntimeManagementConfig.html Lambda: PutRuntimeManagementConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#PutRuntimeManagementConfig Lambda: PutRuntimeManagementConfig}
+   */
+  PutRuntimeManagementConfig: (input: { FunctionName: string, UpdateRuntimeOn: string, Qualifier?: string, RuntimeVersionArn?: string }) => Promise<PutRuntimeManagementConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_RemoveLayerVersionPermission.html Lambda: RemoveLayerVersionPermission}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#RemoveLayerVersionPermission Lambda: RemoveLayerVersionPermission}
+   */
+  RemoveLayerVersionPermission: (input: { LayerName: string, StatementId: string, VersionNumber: number, RevisionId?: string }) => Promise<RemoveLayerVersionPermissionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_RemovePermission.html Lambda: RemovePermission}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#RemovePermission Lambda: RemovePermission}
+   */
+  RemovePermission: (input: { FunctionName: string, StatementId: string, RevisionId?: string, Qualifier?: string }) => Promise<RemovePermissionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_TagResource.html Lambda: TagResource}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#TagResource Lambda: TagResource}
+   */
+  TagResource: (input: { Resource: string, Tags: Record<string, any> }) => Promise<TagResourceResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UntagResource.html Lambda: UntagResource}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UntagResource Lambda: UntagResource}
+   */
+  UntagResource: (input: { Resource: string, TagKeys: any[] }) => Promise<UntagResourceResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateAlias.html Lambda: UpdateAlias}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateAlias Lambda: UpdateAlias}
    */
   UpdateAlias: (input: { FunctionName: string, Name: string, Description?: string, FunctionVersion?: string, RevisionId?: string, RoutingConfig?: Record<string, any> }) => Promise<UpdateAliasResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateCodeSigningConfig.html Lambda: UpdateCodeSigningConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateCodeSigningConfig Lambda: UpdateCodeSigningConfig}
+   */
+  UpdateCodeSigningConfig: (input: { CodeSigningConfigArn: string, AllowedPublishers?: Record<string, any>, CodeSigningPolicies?: Record<string, any>, Description?: string }) => Promise<UpdateCodeSigningConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateEventSourceMapping.html Lambda: UpdateEventSourceMapping}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateEventSourceMapping Lambda: UpdateEventSourceMapping}
+   */
+  UpdateEventSourceMapping: (input: { UUID: string, AmazonManagedKafkaEventSourceConfig?: Record<string, any>, BatchSize?: number, BisectBatchOnFunctionError?: boolean, DestinationConfig?: Record<string, any>, DocumentDBEventSourceConfig?: Record<string, any>, Enabled?: boolean, FilterCriteria?: Record<string, any>, FunctionName?: string, FunctionResponseTypes?: any[], MaximumBatchingWindowInSeconds?: number, MaximumRecordAgeInSeconds?: number, MaximumRetryAttempts?: number, ParallelizationFactor?: number, Queues?: any[], ScalingConfig?: Record<string, any>, SourceAccessConfigurations?: any[], TumblingWindowInSeconds?: number }) => Promise<UpdateEventSourceMappingResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionCode.html Lambda: UpdateFunctionCode}
@@ -311,6 +446,18 @@ declare interface AwsLiteLambda {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateFunctionConfiguration Lambda: UpdateFunctionConfiguration}
    */
   UpdateFunctionConfiguration: (input: { FunctionName: string, DeadLetterConfig?: Record<string, any>, Description?: string, Environment?: Record<string, any>, EphemeralStorage?: Record<string, any>, FileSystemConfigs?: any[], Handler?: string, ImageConfig?: Record<string, any>, KMSKeyArn?: string, Layers?: any[], MemorySize?: number, RevisionId?: string, Role?: string, Runtime?: string, SnapStart?: Record<string, any>, Timeout?: number, TracingConfig?: Record<string, any>, VpcConfig?: Record<string, any> }) => Promise<UpdateFunctionConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionEventInvokeConfig.html Lambda: UpdateFunctionEventInvokeConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateFunctionEventInvokeConfig Lambda: UpdateFunctionEventInvokeConfig}
+   */
+  UpdateFunctionEventInvokeConfig: (input: { FunctionName: string, DestinationConfig?: Record<string, any>, MaximumEventAgeInSeconds?: number, MaximumRetryAttempts?: number }) => Promise<UpdateFunctionEventInvokeConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionUrlConfig.html Lambda: UpdateFunctionUrlConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#UpdateFunctionUrlConfig Lambda: UpdateFunctionUrlConfig}
+   */
+  UpdateFunctionUrlConfig: (input: { FunctionName: string, AuthType?: string, Cors?: Record<string, any>, InvokeMode?: string, Qualifier?: string }) => Promise<UpdateFunctionUrlConfigResponse>
   // $METHODS_END
 }
 
@@ -358,15 +505,36 @@ export type {
   GetProvisionedConcurrencyConfigResponse,
   GetRuntimeManagementConfigResponse,
   InvokeResponse,
+  InvokeAsyncResponse,
   ListAliasesResponse,
   ListCodeSigningConfigsResponse,
+  ListEventSourceMappingsResponse,
+  ListFunctionEventInvokeConfigsResponse,
   ListFunctionsResponse,
+  ListFunctionsByCodeSigningConfigResponse,
   ListFunctionUrlConfigsResponse,
   ListLayersResponse,
   ListLayerVersionsResponse,
+  ListProvisionedConcurrencyConfigsResponse,
+  ListTagsResponse,
+  ListVersionsByFunctionResponse,
+  PublishLayerVersionResponse,
+  PublishVersionResponse,
+  PutFunctionCodeSigningConfigResponse,
   PutFunctionConcurrencyResponse,
+  PutFunctionEventInvokeConfigResponse,
+  PutProvisionedConcurrencyConfigResponse,
+  PutRuntimeManagementConfigResponse,
+  RemoveLayerVersionPermissionResponse,
+  RemovePermissionResponse,
+  TagResourceResponse,
+  UntagResourceResponse,
   UpdateAliasResponse,
+  UpdateCodeSigningConfigResponse,
+  UpdateEventSourceMappingResponse,
   UpdateFunctionCodeResponse,
   UpdateFunctionConfigurationResponse,
+  UpdateFunctionEventInvokeConfigResponse,
+  UpdateFunctionUrlConfigResponse,
   // $EXPORT_END
 }

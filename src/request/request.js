@@ -1,5 +1,6 @@
 let aws4 = require('aws4')
 let { awsjson, parseXML, useAWS, JSONContentType, AwsJSONContentType, XMLContentType } = require('../lib')
+let plausiblyXML = /^</
 
 // HTTP client agent cache to prevent generating new agents for every request
 let agentCache = {
@@ -135,7 +136,6 @@ function call (params, args) {
       let data = []
       /* istanbul ignore next: we can always expect headers, but jic */
       let { headers = {}, statusCode } = res
-      let ok = isOk(statusCode)
 
       if (streamResponsePayload) {
         /* istanbul ignore next */
@@ -187,14 +187,18 @@ function call (params, args) {
             /* istanbul ignore next */
             if (debug) rawString = body.toString()
           }
-          // Sometimes AWS reports JSON and XML errors without a content type (ahem, Lambda) so that's fun
+          // Sometimes AWS omits content type from responses (cough, S3) and errors (ahem, Lambda) so that's fun
+          // In performance testing JSON.parse fails fast and early
+          // However, fast-xml-parser does not – so make an initial effort to detect before we attempt a very slow parse
           /* istanbul ignore next */ // TODO remove + test
-          if (body.length && !ok && !contentType) {
+          if (body.length && !contentType) {
             try {
               payload = JSON.parse(body)
             }
             catch {
               try {
+                let start = body.subarray(0, 50).toString().trim()
+                if (!plausiblyXML.test(start)) throw Error()
                 payload = parseXML(body)
               }
               catch {

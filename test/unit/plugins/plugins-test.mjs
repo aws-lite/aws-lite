@@ -3,7 +3,7 @@ import process from 'node:process'
 import test from 'tape'
 
 let cwd = process.cwd()
-let validTypes = [ 'array', 'boolean', 'buffer', 'number', 'object', 'string' ]
+let validTypes = [ 'array', 'boolean', 'buffer', 'number', 'object', 'stream', 'string' ]
 let plugins
 
 test('Set up env', async t => {
@@ -43,7 +43,12 @@ test('Check plugins for docs + validation', async t => {
       else {
         activeMethods++
         totalMethods++
-        t.match(method.awsDoc, /^https:\/\/docs.aws.amazon.com/, `${name}: method has AWS doc`)
+        if (method.awsDoc === false) {
+          t.pass(`${name}: method does not have an AWS doc`)
+        }
+        else {
+          t.match(method.awsDoc, /^https:\/\/docs.aws.amazon.com/, `${name}: method has AWS doc`)
+        }
         t.ok(method.validate, `${name}: method has validate object`)
         let validations = Object.entries(method.validate)
         for (let [ param, { type, comment } ] of validations) {
