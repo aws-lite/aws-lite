@@ -4,7 +4,7 @@ import {
   ChangeResourceRecordSetsCommandOutput as ChangeResourceRecordSetsResponse,
   ListResourceRecordSetsCommandOutput as ListResourceRecordSetsResponse,
   // $IMPORTS_END
-} from "@aws-sdk/client-route53";
+} from "@aws-sdk/client-route-53";
 
 declare interface AwsLiteRoute53 {
   /* ! Do not remove METHODS_START / METHODS_END ! */
