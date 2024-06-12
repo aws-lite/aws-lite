@@ -7,10 +7,6 @@ export default {
   GetBucketNotification:                       { disabled, awsDoc: docRoot + 'API_GetBucketNotification.html' }, // Deprecated, use `GetBucketNotificationConfiguration`
   GetObjectAcl:                                { disabled, awsDoc: docRoot + 'API_GetObjectAcl.html' }, // Requires nested XML attributes
   GetObjectAttributes:                         { disabled, awsDoc: docRoot + 'API_GetObjectAttributes.html' }, // Requires the goofiest paginator possible
-  GetObjectRetention:                          { disabled, awsDoc: docRoot + 'API_GetObjectRetention.html' },
-  GetObjectTagging:                            { disabled, awsDoc: docRoot + 'API_GetObjectTagging.html' },
-  GetObjectTorrent:                            { disabled, awsDoc: docRoot + 'API_GetObjectTorrent.html' },
-  GetPublicAccessBlock:                        { disabled, awsDoc: docRoot + 'API_GetPublicAccessBlock.html' },
   ListDirectoryBuckets:                        { disabled, awsDoc: docRoot + 'API_ListDirectoryBuckets.html' },
   ListObjects:                                 { disabled, awsDoc: docRoot + 'API_ListObjects.html' },
   ListObjectVersions:                          { disabled, awsDoc: docRoot + 'API_ListObjectVersions.html' },

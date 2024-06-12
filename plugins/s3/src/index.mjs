@@ -1211,6 +1211,124 @@ const GetObjectLockConfiguration = {
   },
 }
 
+const GetObjectRetention = {
+  awsDoc: docRoot + 'API_GetObjectRetention.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { retention: '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+    }
+  },
+  response: ({ payload }) => {
+    const { Mode, RetainUntilDate } = payload
+    return {
+      Retention: {
+        Mode,
+        RetainUntilDate,
+      },
+    }
+  },
+}
+
+const GetObjectTagging = {
+  awsDoc: docRoot + 'API_GetObjectTagging.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { tagging: '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+    }
+  },
+  response: ({ payload, headers }) => {
+    const { VersionId } = parseHeadersToResults({ headers })
+    let { TagSet } = payload
+    const { Tag } = TagSet
+    TagSet = Array.isArray(Tag) ? Tag : [ Tag ]
+    return {
+      VersionId,
+      TagSet,
+    }
+  },
+}
+
+const GetObjectTorrent = {
+  awsDoc: docRoot + 'API_GetObjectTorrent.html',
+  validate: {
+    Bucket,
+    Key,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const headers = getHeadersFromParams(params)
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}?torrent`,
+      headers,
+    }
+  },
+  response: ({ payload, headers }) => {
+    const { Body } = payload
+    const { RequestCharged } = parseHeadersToResults({ headers })
+    return {
+      Body,
+      RequestCharged,
+    }
+  },
+}
+
+const GetPublicAccessBlock = {
+  awsDoc: docRoot + 'API_GetPublicAccessBlock.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const headers = getHeadersFromParams(params)
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/?publicAccessBlock`,
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    let PublicAccessBlockConfiguration = { ...payload }
+    delete PublicAccessBlockConfiguration.xmlns
+    return { PublicAccessBlockConfiguration }
+  },
+}
+
 const HeadBucket = {
   awsDoc: docRoot + 'API_HeadBucket.html',
   validate: {
@@ -2332,6 +2450,8 @@ const methods = {
   DeleteObject,
   DeleteObjects,
   DeleteObjectTagging,
+  GetObjectTorrent,
+  GetPublicAccessBlock,
   DeletePublicAccessBlock,
   GetBucketAccelerateConfiguration,
   GetBucketAcl,
@@ -2356,6 +2476,8 @@ const methods = {
   GetObject,
   GetObjectLegalHold,
   GetObjectLockConfiguration,
+  GetObjectRetention,
+  GetObjectTagging,
   HeadBucket,
   HeadObject,
   ListBucketAnalyticsConfigurations,

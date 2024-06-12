@@ -21,6 +21,8 @@ import {
   DeleteObjectCommandOutput as DeleteObjectResponse,
   DeleteObjectsCommandOutput as DeleteObjectsResponse,
   DeleteObjectTaggingCommandOutput as DeleteObjectTaggingResponse,
+  GetObjectTorrentCommandOutput as GetObjectTorrentResponse,
+  GetPublicAccessBlockCommandOutput as GetPublicAccessBlockResponse,
   DeletePublicAccessBlockCommandOutput as DeletePublicAccessBlockResponse,
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
   GetBucketAclCommandOutput as GetBucketAclResponse,
@@ -45,6 +47,8 @@ import {
   GetObjectCommandOutput as GetObjectResponse,
   GetObjectLegalHoldCommandOutput as GetObjectLegalHoldResponse,
   GetObjectLockConfigurationCommandOutput as GetObjectLockConfigurationResponse,
+  GetObjectRetentionCommandOutput as GetObjectRetentionResponse,
+  GetObjectTaggingCommandOutput as GetObjectTaggingResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
   ListBucketAnalyticsConfigurationsCommandOutput as ListBucketAnalyticsConfigurationsResponse,
@@ -205,6 +209,18 @@ declare interface AwsLiteS3 {
   DeleteObjectTagging: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string }) => Promise<DeleteObjectTaggingResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html S3: GetObjectTorrent}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectTorrent S3: GetObjectTorrent}
+   */
+  GetObjectTorrent: (input: { Bucket: string, Key: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectTorrentResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html S3: GetPublicAccessBlock}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetPublicAccessBlock S3: GetPublicAccessBlock}
+   */
+  GetPublicAccessBlock: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetPublicAccessBlockResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html S3: DeletePublicAccessBlock}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeletePublicAccessBlock S3: DeletePublicAccessBlock}
    */
@@ -347,6 +363,18 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectLockConfiguration S3: GetObjectLockConfiguration}
    */
   GetObjectLockConfiguration: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetObjectLockConfigurationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectRetention.html S3: GetObjectRetention}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectRetention S3: GetObjectRetention}
+   */
+  GetObjectRetention: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectRetentionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html S3: GetObjectTagging}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectTagging S3: GetObjectTagging}
+   */
+  GetObjectTagging: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectTaggingResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html S3: HeadBucket}
@@ -567,6 +595,8 @@ export type {
   DeleteObjectResponse,
   DeleteObjectsResponse,
   DeleteObjectTaggingResponse,
+  GetObjectTorrentResponse,
+  GetPublicAccessBlockResponse,
   DeletePublicAccessBlockResponse,
   GetBucketAccelerateConfigurationResponse,
   GetBucketAclResponse,
@@ -591,6 +621,8 @@ export type {
   GetObjectResponse,
   GetObjectLegalHoldResponse,
   GetObjectLockConfigurationResponse,
+  GetObjectRetentionResponse,
+  GetObjectTaggingResponse,
   HeadBucketResponse,
   HeadObjectResponse,
   ListBucketAnalyticsConfigurationsResponse,
