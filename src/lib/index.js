@@ -1,4 +1,4 @@
-let aws, ini, xml
+let aws, xml
 
 // AWS-flavored JSON stuff
 function marshaller (method, obj, options) {
@@ -115,12 +115,34 @@ async function readConfig (file) {
   if (!(await exists(file))) return
 
   let { readFile } = require('node:fs/promises')
-  if (!ini) ini = require('ini')
-
   let data = await readFile(file)
-  let result = ini.parse(data.toString())
-  cache[file] = result
-  return result
+  cache[file] = parseAwsIni(data.toString())
+  return cache[file]
+}
+
+// mhart's fairly strict INI parser – only deals with alpha keys, data must be within sections
+// Adapted from: https://github.com/mhart/awscred
+// Added inline and whole line comment support
+function parseAwsIni (ini) {
+  let section
+  let out = Object.create(null)
+  let re = /^\[([^\]]+)\]\s*(?:#.*)?$|^([a-z_]+)\s*=\s*(.+?)\s*(?:#.*)?$/
+  let lines = ini.split(/\r?\n/)
+
+  /* istanbul ignore next */
+  lines.forEach(line => {
+    let match = line.match(re)
+    if (!match) return
+    if (match[1]) {
+      section = match[1]
+      if (out[section] == null) out[section] = Object.create(null)
+    }
+    else if (section) {
+      out[section][match[2]] = match[3]
+    }
+  })
+
+  return out
 }
 
 function tidyQuery (obj) {
