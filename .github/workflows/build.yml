@@ -42,7 +42,7 @@ jobs:
 
     - name: Test (Node.js 16.x only)
       if: matrix.node-version == '16.x'
-      run: npm run test:nolint
+      run: npm run test:16.x
       env:
         CI: true
 
