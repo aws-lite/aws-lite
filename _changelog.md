@@ -2,6 +2,14 @@
 
 ---
 
+## [0.21.10] 2024-06-13
+
+### Added
+
+- Added comment support to config ini files, removed ~20KB dependency, improving initialization and installation times; fixes #142, big ups to @mhart!
+
+---
+
 ## [0.21.9] 2024-06-11
 
 ### Added
