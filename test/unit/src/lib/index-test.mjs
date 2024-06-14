@@ -1,7 +1,11 @@
 import { join } from 'node:path'
 import test from 'tape'
 
-let useAWS, tidyQuery
+let cwd = process.cwd()
+let mock = join(cwd, 'test', 'mock')
+let awsIniMock = join(mock, '.aws')
+
+let readConfig, useAWS, tidyQuery
 function reset () {
   delete process.env.ARC_ENV
   delete process.env.ARC_LOCAL
@@ -9,14 +13,52 @@ function reset () {
 }
 
 test('Set up env', async t => {
-  t.plan(2)
+  t.plan(3)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'lib', 'index.js')
   let lib = await import(sut)
+  readConfig = lib.readConfig
   useAWS = lib.useAWS
   tidyQuery = lib.tidyQuery
+  t.ok(readConfig, 'readConfig util is present')
   t.ok(useAWS, 'useAWS util is present')
   t.ok(tidyQuery, 'tidyQuery util is present')
+})
+
+test('readConfig', async t => {
+  t.plan(17)
+  let config
+
+  config = await readConfig(join(awsIniMock, 'credentials'))
+  // Default
+  t.equal(config.default.aws_access_key_id, 'default_aws_access_key_id', 'Loaded default access key')
+  t.equal(config.default.aws_secret_access_key, 'default_aws_secret_access_key', 'Loaded default secret key')
+  // Profile 1
+  t.equal(config.profile_1.aws_access_key_id, 'profile_1_aws_access_key_id', 'Loaded profile_1 access key')
+  t.equal(config.profile_1.aws_secret_access_key, 'profile_1_aws_secret_access_key', 'Loaded profile_1 secret key')
+  t.equal(config.profile_1.aws_session_token, 'profile_1_aws_session_token', 'Loaded profile_1 session token')
+  // Profile 2
+  t.equal(config.profile_2.credential_process, `node -e "console.log(JSON.stringify({ AccessKeyId: 'profile_2_aws_access_key_id', SecretAccessKey: 'profile_2_aws_secret_access_key' }))"`, 'Loaded profile_2 credential process string')
+
+  config = await readConfig(join(awsIniMock, 'config'))
+  // Default
+  t.equal(config.default.region, 'us-west-1', 'Loaded default region config')
+  t.equal(config.default.endpoint_url, 'https://amazonaws.com', 'Loaded default endpoint config')
+  // Profile 1
+  t.equal(config['profile profile_1'].region, 'us-west-2', 'Loaded profile 1 region config')
+  t.equal(config['profile profile_1'].endpoint_url, 'https://lolidk.net', 'Loaded profile 1 endpoint config')
+  // Profile 2
+  t.equal(config['profile profile_2'].region, 'us-east-1', 'Loaded profile 2 region config')
+
+  config = await readConfig(join(awsIniMock, 'credentials-comments'))
+  // Default
+  t.equal(config.default.aws_access_key_id, 'default_aws_access_key_id', 'Loaded default access key with inline comments')
+  t.equal(config.default.aws_secret_access_key, 'default_aws_secret_access_key', 'Loaded default secret key')
+  // Profile 1
+  t.equal(config.profile_1.aws_access_key_id, 'profile_1_aws_access_key_id', 'Loaded profile_1 access key with inline comments')
+  t.equal(config.profile_1.aws_secret_access_key, 'profile_1_aws_secret_access_key ; ok', 'Loaded profile_1 access key, including unsuccessful semicolon comment')
+  t.notOk(config.profile_1.ignore, 'Did not load commented line')
+  t.notOk(config.profile_1.ignore_this, 'Did not load commented line')
 })
 
 test('useAWS', t => {
