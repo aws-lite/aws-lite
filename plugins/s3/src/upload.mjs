@@ -13,8 +13,8 @@ const Upload = {
   validate: {
     Bucket:       { type: 'string', required, comment: 'S3 bucket name' },
     Key:          { type: 'string', required, comment: 'S3 key / file name' },
-    Body:         { type: [ 'buffer', 'stream', 'string' ], comment: 'String or buffer to be uploaded' },
-    File:         { type: 'string', comment: 'File path to be read and uploaded from the local filesystem' },
+    Body:         { type: [ 'buffer', 'stream', 'string' ], comment: 'String or buffer to be uploaded; per S3, size should be 5MB or greater' },
+    File:         { type: 'string', comment: 'File path to be read and uploaded from the local filesystem; per S3, size should be 5MB or greater' },
     ChunkSize:    { type: 'number', comment: 'Size of each chunk to upload in byes (also aliased to `partSize`); default is 10 MB' },
     Concurrency:  { type: 'number', comment: 'Maximum concurrent uploads (also aliased to `queueSize`); default is 5, setting to 1 synchronously, sequentially uploads chunks; memory consumption is (`ChunkSize` + 1) * `Concurrency`'  },
     ...getValidateHeaders(
@@ -206,8 +206,13 @@ function processUpload (params, utils, UploadId) {
 
       stream.on('end', () => {
         done = true
-        // Whatever remains in the latest part, send that
-        enqueue(counter)
+
+        // Small files/streams may be smaller than the chunk size, which may run afoul of AWS minimums
+        // This can result in partial uploads or hangs, depending on the file and the configured chunk size
+        // So try to figure out whatever remains in the latest part, and send that
+        if (parts[counter].length > ChunkSize) check()
+        else enqueue(counter)
+
         if (config.debug) {
           console.error(`[S3.Upload] readable stream ended after ${raw}b, clearing remaining upload queue`)
         }

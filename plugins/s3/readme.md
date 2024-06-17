@@ -1281,9 +1281,9 @@ Properties:
 - **`Key` (string) [required]**
   - S3 key / file name
 - **`Body` (buffer, stream, string)**
-  - String or buffer to be uploaded
+  - String or buffer to be uploaded; per S3, size should be 5MB or greater
 - **`File` (string)**
-  - File path to be read and uploaded from the local filesystem
+  - File path to be read and uploaded from the local filesystem; per S3, size should be 5MB or greater
 - **`ChunkSize` (number)**
   - Size of each chunk to upload in byes (also aliased to `partSize`); default is 10 MB
 - **`Concurrency` (number)**
