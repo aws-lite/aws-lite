@@ -3,6 +3,7 @@ import {
   // $IMPORTS_START
   AbortMultipartUploadCommandOutput as AbortMultipartUploadResponse,
   CompleteMultipartUploadCommandOutput as CompleteMultipartUploadResponse,
+  CopyObjectCommandOutput as CopyObjectResponse,
   CreateBucketCommandOutput as CreateBucketResponse,
   CreateMultipartUploadCommandOutput as CreateMultipartUploadResponse,
   DeleteBucketCommandOutput as DeleteBucketResponse,
@@ -21,8 +22,6 @@ import {
   DeleteObjectCommandOutput as DeleteObjectResponse,
   DeleteObjectsCommandOutput as DeleteObjectsResponse,
   DeleteObjectTaggingCommandOutput as DeleteObjectTaggingResponse,
-  GetObjectTorrentCommandOutput as GetObjectTorrentResponse,
-  GetPublicAccessBlockCommandOutput as GetPublicAccessBlockResponse,
   DeletePublicAccessBlockCommandOutput as DeletePublicAccessBlockResponse,
   GetBucketAccelerateConfigurationCommandOutput as GetBucketAccelerateConfigurationResponse,
   GetBucketAclCommandOutput as GetBucketAclResponse,
@@ -45,10 +44,13 @@ import {
   GetBucketVersioningCommandOutput as GetBucketVersioningResponse,
   GetBucketWebsiteCommandOutput as GetBucketWebsiteResponse,
   GetObjectCommandOutput as GetObjectResponse,
+  GetObjectAclCommandOutput as GetObjectAclResponse,
   GetObjectLegalHoldCommandOutput as GetObjectLegalHoldResponse,
   GetObjectLockConfigurationCommandOutput as GetObjectLockConfigurationResponse,
   GetObjectRetentionCommandOutput as GetObjectRetentionResponse,
   GetObjectTaggingCommandOutput as GetObjectTaggingResponse,
+  GetObjectTorrentCommandOutput as GetObjectTorrentResponse,
+  GetPublicAccessBlockCommandOutput as GetPublicAccessBlockResponse,
   HeadBucketCommandOutput as HeadBucketResponse,
   HeadObjectCommandOutput as HeadObjectResponse,
   ListBucketAnalyticsConfigurationsCommandOutput as ListBucketAnalyticsConfigurationsResponse,
@@ -99,6 +101,12 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#CompleteMultipartUpload S3: CompleteMultipartUpload}
    */
   CompleteMultipartUpload: (input: { Bucket: string, Key: string, UploadId: string, MultipartUpload?: Record<string, any>, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, RequestPayer?: string, ExpectedBucketOwner?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string }) => Promise<CompleteMultipartUploadResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html S3: CopyObject}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#CopyObject S3: CopyObject}
+   */
+  CopyObject: (input: { Bucket: string, Key: string, ACL?: string, CacheControl?: string, ChecksumAlgorithm?: string, ContentDisposition?: string, ContentEncoding?: string, ContentLanguage?: string, ContentType?: string, CopySource?: string, CopySourceIfMatch?: string, CopySourceIfModifiedSince?: string, CopySourceIfNoneMatch?: string, CopySourceIfUnmodifiedSince?: string, Expires?: string, GrantFullControl?: string, GrantRead?: string, GrantReadACP?: string, GrantWriteACP?: string, MetadataDirective?: string, TaggingDirective?: string, ServerSideEncryption?: string, StorageClass?: string, WebsiteRedirectLocation?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, SSEKMSKeyId?: string, SSEKMSEncryptionContext?: string, BucketKeyEnabled?: string, CopySourceSSECustomerAlgorithm?: string, CopySourceSSECustomerKey?: string, CopySourceSSECustomerKeyMD5?: string, RequestPayer?: string, Tagging?: string, ObjectLockMode?: string, ObjectLockRetainUntilDate?: string, ObjectLockLegalHoldStatus?: string, ExpectedBucketOwner?: string, ExpectedSourceBucketOwner?: string }) => Promise<CopyObjectResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html S3: CreateBucket}
@@ -207,18 +215,6 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#DeleteObjectTagging S3: DeleteObjectTagging}
    */
   DeleteObjectTagging: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string }) => Promise<DeleteObjectTaggingResponse>
-  /**
-   * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html S3: GetObjectTorrent}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectTorrent S3: GetObjectTorrent}
-   */
-  GetObjectTorrent: (input: { Bucket: string, Key: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectTorrentResponse>
-  /**
-   * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html S3: GetPublicAccessBlock}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetPublicAccessBlock S3: GetPublicAccessBlock}
-   */
-  GetPublicAccessBlock: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetPublicAccessBlockResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html S3: DeletePublicAccessBlock}
@@ -353,6 +349,12 @@ declare interface AwsLiteS3 {
   GetObject: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, IfMatch?: string, IfModifiedSince?: string, IfNoneMatch?: string, IfUnmodifiedSince?: string, Range?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string, ChecksumMode?: string, ResponseCacheControl?: string, ResponseContentDisposition?: string, ResponseContentEncoding?: string, ResponseContentLanguage?: string, ResponseContentType?: string, ResponseExpires?: string, rawResponsePayload?: boolean, streamResponsePayload?: boolean }) => Promise<GetObjectResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAcl.html S3: GetObjectAcl}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectAcl S3: GetObjectAcl}
+   */
+  GetObjectAcl: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectAclResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html S3: GetObjectLegalHold}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectLegalHold S3: GetObjectLegalHold}
    */
@@ -375,6 +377,18 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectTagging S3: GetObjectTagging}
    */
   GetObjectTagging: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectTaggingResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html S3: GetObjectTorrent}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectTorrent S3: GetObjectTorrent}
+   */
+  GetObjectTorrent: (input: { Bucket: string, Key: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectTorrentResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html S3: GetPublicAccessBlock}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetPublicAccessBlock S3: GetPublicAccessBlock}
+   */
+  GetPublicAccessBlock: (input: { Bucket: string, ExpectedBucketOwner?: string }) => Promise<GetPublicAccessBlockResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html S3: HeadBucket}
@@ -577,6 +591,7 @@ export type {
   // $EXPORT_START
   AbortMultipartUploadResponse,
   CompleteMultipartUploadResponse,
+  CopyObjectResponse,
   CreateBucketResponse,
   CreateMultipartUploadResponse,
   DeleteBucketResponse,
@@ -595,8 +610,6 @@ export type {
   DeleteObjectResponse,
   DeleteObjectsResponse,
   DeleteObjectTaggingResponse,
-  GetObjectTorrentResponse,
-  GetPublicAccessBlockResponse,
   DeletePublicAccessBlockResponse,
   GetBucketAccelerateConfigurationResponse,
   GetBucketAclResponse,
@@ -619,10 +632,13 @@ export type {
   GetBucketVersioningResponse,
   GetBucketWebsiteResponse,
   GetObjectResponse,
+  GetObjectAclResponse,
   GetObjectLegalHoldResponse,
   GetObjectLockConfigurationResponse,
   GetObjectRetentionResponse,
   GetObjectTaggingResponse,
+  GetObjectTorrentResponse,
+  GetPublicAccessBlockResponse,
   HeadBucketResponse,
   HeadObjectResponse,
   ListBucketAnalyticsConfigurationsResponse,

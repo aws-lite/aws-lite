@@ -80,7 +80,6 @@ const CompleteMultipartUpload = {
     const CompleteMultipartUpload = {
       Part: params.MultipartUpload?.Parts || [],
     }
-
     return {
       host,
       pathPrefix,
@@ -92,6 +91,39 @@ const CompleteMultipartUpload = {
     }
   },
   response: ({ payload, headers }) => ({ ...payload || {}, ...parseHeadersToResults({ headers }) }),
+}
+
+const CopyObject = {
+  awsDoc: docRoot + 'API_CopyObject.html',
+  validate: {
+    Bucket: { ...str, required, comment: 'Name of the S3 bucket destination' },
+    Key: { ...str, required, comment: 'S3 key / file name of the destination' },
+    ...getValidateHeaders('ACL', 'CacheControl', 'ChecksumAlgorithm', 'ContentDisposition', 'ContentEncoding',
+      'ContentLanguage', 'ContentType', 'CopySource', 'CopySourceIfMatch', 'CopySourceIfModifiedSince',
+      'CopySourceIfNoneMatch', 'CopySourceIfUnmodifiedSince', 'Expires', 'GrantFullControl', 'GrantRead',
+      'GrantReadACP', 'GrantWriteACP', 'MetadataDirective', 'TaggingDirective', 'ServerSideEncryption',
+      'StorageClass', 'WebsiteRedirectLocation', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5',
+      'SSEKMSKeyId', 'SSEKMSEncryptionContext', 'BucketKeyEnabled', 'CopySourceSSECustomerAlgorithm', 'CopySourceSSECustomerKey',
+      'CopySourceSSECustomerKeyMD5', 'RequestPayer', 'Tagging', 'ObjectLockMode', 'ObjectLockRetainUntilDate',
+      'ObjectLockLegalHoldStatus', 'ExpectedBucketOwner', 'ExpectedSourceBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers: { ...xml, ...getHeadersFromParams(params) },
+    }
+  },
+  response: ({ payload, headers }) => {
+    return { CopyObjectResult: {
+      ...payload,
+      ...parseHeadersToResults({ headers }) },
+    }
+  },
 }
 
 const CreateBucket = {
@@ -1154,6 +1186,90 @@ const GetObject = {
   },
 }
 
+const GetObjectAcl = {
+  awsDoc: docRoot + 'API_GetObjectAcl.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { 'acl': '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+    }
+  },
+  response: ({ payload, headers }) => {
+    const { AccessControlList, Owner } = payload
+    let { Grant: Grants } = AccessControlList
+    if (!Array.isArray(Grants)) {
+      Grants = [ Grants ]
+    }
+    Grants = Grants.map(i => {
+      let result = { ...i }
+      let { Grantee } = result
+      Grantee.Type = Grantee['xsi:type']
+      delete Grantee['xsi:type']
+      delete Grantee['xmlns:xsi']
+      result.Grantee = Grantee
+      return result
+    })
+    let { RequestCharged } = parseHeadersToResults({ headers })
+    let result = {
+      Owner,
+      Grants,
+    }
+    if (RequestCharged) result.RequestCharged = RequestCharged
+    return result
+  },
+}
+
+// TODO: allow paginator tokens in headers
+// const GetObjectAttributes = {
+//   awsDoc: docRoot + 'API_GetObjectAttributes.html',
+//   validate: {
+//     Bucket,
+//     Key,
+//     VersionId,
+//     paginate: valPaginate,
+//     ...getValidateHeaders('MaxParts', 'PartNumberMarker', 'SSECustomerAlgorithm',
+//       'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner',
+//       'ObjectAttributes'),
+//   },
+//   request: (params, utils) => {
+//     const { Key, paginate } = params
+//     const queryParams = [ 'VersionId' ]
+//     const headers = getHeadersFromParams(params, queryParams)
+//     const query = { 'attributes': '', ...getQueryFromParams(params, queryParams) }
+//     const { host, pathPrefix } = getHost(params, utils)
+//     return {
+//       host,
+//       pathPrefix,
+//       path: `/${Key}`,
+//       headers,
+//       query,
+//       paginate,
+//       paginator: { type: 'header', cursor: 'PartNumberMarker', token: 'ObjectParts.NextPartNumberMarker', accumulator: 'ObjectParts.Part' },
+//     }
+//   },
+//   response: ({ payload, headers }) => {
+//     let { result } = { ...payload, ...parseHeadersToResults({ headers }) }
+//     if (!Array.isArray(result.ObjectParts.Part)) result.ObjectParts.Part = [ result.ObjectParts.Part ]
+//     result.ObjectParts.Parts = result.ObjectParts.Part
+//     delete result.ObjectParts.Part
+//     return result
+//   },
+// }
+
 const GetObjectLegalHold = {
   awsDoc: docRoot + 'API_GetObjectLegalHold.html',
   validate: {
@@ -1660,6 +1776,102 @@ const ListObjectsV2 = {
     return res
   },
 }
+
+// TODO: allow multiple pagination accumulators
+// const ListObjectVersions = {
+//   awsDoc: docRoot + 'API_ListObjectVersions.html',
+//   validate: {
+//     Bucket,
+//     Delimiter,
+//     EncodingType,
+//     KeyMarker: { ...str, comment: 'Pagination cursor' },
+//     MaxKeys: { ...num, comment: 'Maximum number of keys (at most 1000) to be returned in the response' },
+//     Prefix,
+//     VersionIdMarker: { ...str, comment: 'Specify the version to begin listing from', ref: docRoot + 'API_ListObjectVersions.html#API_ListObjectVersions_RequestParameters' },
+//     paginate: valPaginate,
+//     ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer', 'OptionalObjectAttributes'),
+//   },
+//   request: (params, utils) => {
+//     const queryParams = [ 'Delimiter', 'EncodingType', 'KeyMarker', 'MaxKeys', 'Prefix', 'VersionIdMarker' ]
+//     const { paginate } = params
+//     const headers = getHeadersFromParams(params, queryParams)
+//     const query = { versions: '', ...getQueryFromParams(params, queryParams) }
+//     const { host, pathPrefix } = getHost(params, utils)
+//     return {
+//       host,
+//       pathPrefix,
+//       headers,
+//       query,
+//       paginate,
+//       paginator: {
+//         type: 'query',
+//         cursor: [ 'version-id-marker', 'key-marker' ],
+//         token: [  'NextVersionIdMarker', 'NextKeyMarker' ],
+//         accumulator: [ 'DeleteMarker', 'Version' ] },
+//     }
+//   },
+//   response: ({ headers, payload }) => {
+//     return payload
+//     let res = payload
+//     res.Versions = Array.isArray(res.Version) ? res.Version : [ res.Version ]
+//     delete res.Version
+//     res.Versions = res.Versions.map(i => {
+//       let result = { ...i }
+//       if (i.ChecksumAlgorithm && Array.isArray(i.ChecksumAlgorithm)) result.ChecksumAlgorithm = [ i.ChecksumAlgorithm ]
+//       return result
+//     })
+//     if (res.DeleteMarker) {
+//       res.DeleteMarkers = Array.isArray(res.DeleteMarker) ? res.DeleteMarker : [ res.DeleteMarker ]
+//       delete res.DeleteMarker
+//     }
+//     if (res.CommonPrefixes && !Array.isArray(res.CommonPrefixes)) res.CommonPrefixes = [ res.CommonPrefixes ]
+//     return {
+//       ...res,
+//       ...parseHeadersToResults({ headers }),
+//     }
+//   },
+// }
+
+// TODO: prevent deletion of certain fields such as `Initiator` during pagination
+// const ListParts = {
+//   awsDoc: docRoot + 'API_ListParts.html',
+//   validate: {
+//     Bucket,
+//     Key,
+//     UploadId,
+//     MaxParts: { ...num, comment: 'Maximum number of parts (at most 1000) to be returned in the response' },
+//     PartNumberMarker: { ...str, comment: 'Pagination cursor' },
+//     paginate: valPaginate,
+//     ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5'),
+//   },
+//   request: (params, utils) => {
+//     const queryParams = [ 'MaxParts', 'PartNumberMarker', 'UploadId' ]
+//     const { host, pathPrefix } = getHost(params, utils)
+//     const { Key, paginate } = params
+//     return {
+//       host,
+//       pathPrefix,
+//       path: `/${Key}`,
+//       query: getQueryFromParams(params, queryParams),
+//       headers: getHeadersFromParams(params, queryParams),
+//       paginate,
+//       paginator: {
+//         type: 'query',
+//         cursor: 'part-number-marker',
+//         token: 'NextPartNumberMarker',
+//         accumulator: 'Part',
+//       },
+//     }
+//   },
+//   response: ({ payload, headers }) => {
+//     let res = { ...payload, ...parseHeadersToResults({ headers }) }
+//     if (res.Part) {
+//       res.Parts = Array.isArray(res.Part) ? res.Part : [ res.Part ]
+//       delete res.Part
+//     }
+//     return res
+//   },
+// }
 
 const PutBucketAccelerateConfiguration = {
   awsDoc: docRoot + 'API_PutBucketAccelerateConfiguration.html',
@@ -2432,6 +2644,7 @@ const UploadPart = {
 const methods = {
   AbortMultipartUpload,
   CompleteMultipartUpload,
+  CopyObject,
   CreateBucket,
   CreateMultipartUpload,
   DeleteBucket,
@@ -2450,8 +2663,6 @@ const methods = {
   DeleteObject,
   DeleteObjects,
   DeleteObjectTagging,
-  GetObjectTorrent,
-  GetPublicAccessBlock,
   DeletePublicAccessBlock,
   GetBucketAccelerateConfiguration,
   GetBucketAcl,
@@ -2474,10 +2685,14 @@ const methods = {
   GetBucketVersioning,
   GetBucketWebsite,
   GetObject,
+  GetObjectAcl,
+  // GetObjectAttributes,
   GetObjectLegalHold,
   GetObjectLockConfiguration,
   GetObjectRetention,
   GetObjectTagging,
+  GetObjectTorrent,
+  GetPublicAccessBlock,
   HeadBucket,
   HeadObject,
   ListBucketAnalyticsConfigurations,
@@ -2487,6 +2702,8 @@ const methods = {
   ListBuckets,
   ListMultipartUploads,
   ListObjectsV2,
+  // ListObjectVersions,
+  // ListParts,
   PutBucketAccelerateConfiguration,
   PutBucketAnalyticsConfiguration,
   PutBucketCors,
