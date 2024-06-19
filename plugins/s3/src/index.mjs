@@ -2610,6 +2610,106 @@ const PutObjectTagging = {
   },
 }
 
+const PutPublicAccessBlock = {
+  awsDoc: docRoot + 'API_PutPublicAccessBlock.html',
+  validate: {
+    Bucket,
+    PublicAccessBlockConfiguration: { ...obj, required, comment: 'Object defining the public access block configuration', ref: docRoot + 'API_PutPublicAccessBlock.html#AmazonS3-PutPublicAccessBlock-request-PublicAccessBlockConfiguration' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { PublicAccessBlockConfiguration } = params
+    const payload = { PublicAccessBlockConfiguration }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
+    const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?publicAccessBlock',
+      headers,
+      xmlns,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+// TODO: probably needs more testing, this one is tricky to fully test
+const RestoreObject = {
+  awsDoc: docRoot + 'API_RestoreObject.html',
+  validate: {
+    Bucket,
+    Key,
+    RestoreRequest: { ...obj, required, comment: 'Object defining the restore request', ref: docRoot + 'API_RestoreObject.html#AmazonS3-RestoreObject-request-RestoreRequest' },
+    VersionId,
+    ...getValidateHeaders( 'RequestPayer', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const queryParams = [ 'VersionId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const query = { restore: '', ...getQueryFromParams(params, queryParams) }
+    let { RestoreRequest } = params
+
+    if (RestoreRequest.OutputLocation?.S3.AccessControlList) {
+      RestoreRequest.OutputLocation.S3.AccessControlList = { Grant: RestoreRequest.OutputLocation.S3.AccessControlList }
+    }
+
+    if (RestoreRequest.OutputLocation?.S3.Tagging) {
+      RestoreRequest.OutputLocation.S3.Tagging.TagSet = { Tag: RestoreRequest.OutputLocation.S3.Tagging.TagSet }
+    }
+
+    const headers = { ...xml, ...getHeadersFromParams(params, queryParams) }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query,
+      headers,
+      xmlns,
+      payload: { RestoreRequest },
+    }
+  },
+  response: parseHeadersToResults,
+}
+
+// The use of `RequestProgress` likely makes this more complex. I believe it will require async handling of multiple responses.
+// const SelectObjectContent = {
+//   awsDoc: docRoot + 'API_SelectObjectContent.html',
+//   validate: {
+//     Bucket,
+//     Key,
+//     Expression: { ...str, required, comment: 'Query expression' },
+//     ExpressionType: { ...str, required, comment: 'The type of the query; can be one of: `SQL`' },
+//     InputSerialization: { ...obj, required, comment: 'Specify the data format of the object being queried', ref: docRoot + 'API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-InputSerialization' },
+//     OutputSerialization: { ...obj, required, comment: 'Specify the data format of the response', ref: docRoot + 'API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-OutputSerialization' },
+//     RequestProgress: { ...obj, comment: 'Request periodic progress reports', ref: docRoot + 'API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-RequestProgress' },
+//     ScanRange: { ...obj, comment: 'Limit the search space to a range (in bytes) within the object', ref: docRoot + 'API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-ScanRange' },
+//   },
+//   request: async (params, utils) => {
+//     const { host, pathPrefix } = getHost(params, utils)
+//     const { Expression, ExpressionType, InputSerialization, OutputSerialization, RequestProgress, ScanRange } = params
+//     const SelectObjectContentRequest = { Expression, ExpressionType, InputSerialization, OutputSerialization, RequestProgress, ScanRange }
+//     const headers = { ...xml, ...getHeadersFromParams(params) }
+//     return {
+//       method: 'PUT',
+//       host,
+//       pathPrefix,
+//       path: `/${Key}`,
+//       query:  { select: '', 'select-type': 2 },
+//       headers,
+//       xmlns,
+//       payload: { SelectObjectContentRequest },
+//     }
+//   },
+//   response: ({ payload, headers }) => {
+//     // TODO: implement correct response
+//     return { payload, headers }
+//   },
+// }
+
 const UploadPart = {
   awsDoc: docRoot + 'API_UploadPart.html',
   validate: {
@@ -2725,6 +2825,9 @@ const methods = {
   PutObjectLockConfiguration,
   PutObjectRetention,
   PutObjectTagging,
+  PutPublicAccessBlock,
+  RestoreObject,
+  // SelectObjectContent,
   Upload,
   UploadPart,
   ...incomplete,
