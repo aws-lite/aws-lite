@@ -3,23 +3,28 @@ import {
   // $IMPORTS_START
   AddUserToGroupCommandOutput as AddUserToGroupResponse,
   AttachGroupPolicyCommandOutput as AttachGroupPolicyResponse,
+  CreateAccessKeyCommandOutput as CreateAccessKeyResponse,
   CreateGroupCommandOutput as CreateGroupResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateUserCommandOutput as CreateUserResponse,
+  DeleteAccessKeyCommandOutput as DeleteAccessKeyResponse,
   DeleteGroupCommandOutput as DeleteGroupResponse,
   DeleteGroupPolicyCommandOutput as DeleteGroupPolicyResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
+  GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
   GetGroupCommandOutput as GetGroupResponse,
   GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetRoleCommandOutput as GetRoleResponse,
   GetUserCommandOutput as GetUserResponse,
+  ListAccessKeysCommandOutput as ListAccessKeysResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
+  UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
@@ -39,6 +44,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AttachGroupPolicy IAM: AttachGroupPolicy}
    */
   AttachGroupPolicy: (input: { GroupName: string, PolicyArn: string }) => Promise<AttachGroupPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccessKey.html IAM: CreateAccessKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateAccessKey IAM: CreateAccessKey}
+   */
+  CreateAccessKey: (input: { UserName: string }) => Promise<CreateAccessKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html IAM: CreateGroup}
@@ -63,6 +74,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateUser IAM: CreateUser}
    */
   CreateUser: (input: { UserName: string, Path?: string, PermissionsBoundary?: string, Tags?: any[] }) => Promise<CreateUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccessKey.html IAM: DeleteAccessKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccessKey IAM: DeleteAccessKey}
+   */
+  DeleteAccessKey: (input: { AccessKeyId: string, UserName?: string }) => Promise<DeleteAccessKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html IAM: DeleteGroup}
@@ -101,6 +118,12 @@ declare interface AwsLiteIAM {
   DetachGroupPolicy: (input: { GroupName: string, PolicyArn: string }) => Promise<DetachGroupPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html IAM: GetAccessKeyLastUsed}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccessKeyLastUsed IAM: GetAccessKeyLastUsed}
+   */
+  GetAccessKeyLastUsed: (input: { AccessKeyId: string }) => Promise<GetAccessKeyLastUsedResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html IAM: GetGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroup IAM: GetGroup}
    */
@@ -131,6 +154,12 @@ declare interface AwsLiteIAM {
   GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccessKeys.html IAM: ListAccessKeys}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAccessKeys IAM: ListAccessKeys}
+   */
+  ListAccessKeys: (input: { Marker?: string, MaxItems?: number, UserName?: string, paginate?: boolean }) => Promise<ListAccessKeysResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
@@ -141,6 +170,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveUserFromGroup IAM: RemoveUserFromGroup}
    */
   RemoveUserFromGroup: (input: { GroupName: string, UserName: string }) => Promise<RemoveUserFromGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccessKey.html IAM: UpdateAccessKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccessKey IAM: UpdateAccessKey}
+   */
+  UpdateAccessKey: (input: { AccessKeyId: string, Status: string, UserName?: string }) => Promise<UpdateAccessKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html IAM: UpdateRole}
@@ -162,23 +197,28 @@ export type {
   // $EXPORT_START
   AddUserToGroupResponse,
   AttachGroupPolicyResponse,
+  CreateAccessKeyResponse,
   CreateGroupResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateUserResponse,
+  DeleteAccessKeyResponse,
   DeleteGroupResponse,
   DeleteGroupPolicyResponse,
   DeletePolicyResponse,
   DeleteRoleResponse,
   DeleteUserResponse,
   DetachGroupPolicyResponse,
+  GetAccessKeyLastUsedResponse,
   GetGroupResponse,
   GetGroupPolicyResponse,
   GetPolicyResponse,
   GetRoleResponse,
   GetUserResponse,
+  ListAccessKeysResponse,
   PutGroupPolicyResponse,
   RemoveUserFromGroupResponse,
+  UpdateAccessKeyResponse,
   UpdateRoleResponse,
   // $EXPORT_END
 }

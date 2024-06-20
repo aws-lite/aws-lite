@@ -18,18 +18,24 @@ const arr = { type: 'array' }
 const num = { type: 'number' }
 const str = { type: 'string' }
 
+const AccessKeyId = { ...str, required, comment: 'ID of the access key' }
 const Description = { ...str, comment: 'Description of the resource' }
 const GroupName = { ...str, required, comment: 'Name of the group; names are not distinguished by case' }
+const Marker = { ...str, comment: 'Pagination cursor' }
+const MaxItems = { ...num, comment: 'Maximum number of items to be returned in a response; at most 1000' }
 const MaxSessionDuration = { ...num, comment: 'Maximum session duration (in seconds) to set for the specified role' }
 const Path = { ...str, comment: 'Path for the identifier', ref: userGuide + 'reference_identifiers.html' }
 const PermissionsBoundary = { ...str, comment: `ARN of a managed policy to be used to set the resource's permissions boundary` }
+const PolicyArn = { ...str, required, comment: 'Arn of the policy' }
+const PolicyDocument = { type: [ 'string', 'object' ], required, comment: 'The policy document; can be an object, or JSON or YAML string' }
+const PolicyName = { ...str, required, comment: 'Name of the policy' }
 const RoleName = { ...str, required, comment: 'Name of the role' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-const PolicyArn = { ...str, required, comment: 'Arn of the policy' }
-const PolicyDocument = { type: [ 'string', 'object' ], required, comment: 'The policy document; can be an object, or JSON or YAML string' }
-const PolicyName = { ...str, required, comment: 'Name of the policy' }
+
+
+const paginator = { type: 'query', cursor: 'Marker' }
 
 const emptyResponse = () => { return {} }
 const defaultVersion = '2010-05-08'
@@ -69,6 +75,23 @@ const AttachGroupPolicy = {
     }
   },
   response: emptyResponse,
+}
+
+const CreateAccessKey = {
+  awsDoc: docRoot + 'API_CreateAccessKey.html',
+  validate: {
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'CreateAccessKey',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.CreateAccessKeyResult,
 }
 
 const CreateGroup = {
@@ -187,6 +210,23 @@ const CreateUser = {
   },
 }
 
+const DeleteAccessKey = {
+  awsDoc: docRoot + 'API_DeleteAccessKey.html',
+  validate: {
+    AccessKeyId,
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    const query = {
+      Action: 'DeleteAccessKey',
+      Version: defaultVersion,
+      ...params,
+    }
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const DeleteGroup = {
   awsDoc: docRoot + 'API_DeleteGroup.html',
   validate: {
@@ -290,14 +330,31 @@ const DetachGroupPolicy = {
   response: emptyResponse,
 }
 
+const GetAccessKeyLastUsed = {
+  awsDoc: docRoot + 'API_GetAccessKeyLastUsed.html',
+  validate: {
+    AccessKeyId,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetAccessKeyLastUsed',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetAccessKeyLastUsedResult,
+}
+
 // TODO: stop paginator from omitting `Group` field
 // TODO: figure out why `User.Tags` is mentioned in documentation, but is not returned in response
 const GetGroup = {
   awsDoc: docRoot + 'API_GetGroup.html',
   validate: {
     GroupName,
-    Marker: { ...str, comment: 'Pagination cursor' },
-    MaxItems: { ...num, comment: 'Maximum number of items to be returned in a response; at most 1000' },
+    Marker,
+    MaxItems,
     paginate: valPaginate,
   },
   request: params => {
@@ -312,9 +369,8 @@ const GetGroup = {
       query,
       paginate,
       paginator: {
-        type: 'query',
+        ...paginator,
         token: 'GetGroupResult.Marker',
-        cursor: 'Marker',
         accumulator: 'GetGroupResult.Users.member',
       },
     }
@@ -416,6 +472,47 @@ const GetUser = {
   },
 }
 
+// error occurs in paginator when no access keys exist
+const ListAccessKeys = {
+  awsDoc: docRoot + 'API_ListAccessKeys.html',
+  validate: {
+    Marker,
+    MaxItems,
+    UserName: { ...UserName, required: false },
+    paginate: valPaginate,
+
+  },
+  request: params => {
+    let query = {
+      Action: 'ListAccessKeys',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListAccessKeysResult.Marker',
+        accumulator: 'ListAccessKeysResult.AccessKeyMetadata.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    let { ListAccessKeysResult } = payload
+    const { member } = ListAccessKeysResult.AccessKeyMetadata
+    if (member) {
+      ListAccessKeysResult.AccessKeyMetadata = Array.isArray(member) ? member : [ member ]
+    }
+    else {
+      ListAccessKeysResult.AccessKeyMetadata = []
+    }
+    return ListAccessKeysResult
+  },
+}
+
 const PutGroupPolicy = {
   awsDoc: docRoot + 'API_PutGroupPolicy.html',
   validate: {
@@ -457,6 +554,24 @@ const RemoveUserFromGroup = {
   response: emptyResponse,
 }
 
+const UpdateAccessKey = {
+  awsDoc: docRoot + 'API_UpdateAccessKey.html',
+  validate: {
+    AccessKeyId,
+    Status: { ...str, required, comment: 'New status for the access key; can be one of: `Active`, `Inactive`' },
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    const query = {
+      Action: 'UpdateAccessKey',
+      Version: defaultVersion,
+      ...params,
+    }
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const UpdateRole = {
   awsDoc: docRoot + 'API_UpdateRole.html',
   validate: {
@@ -483,23 +598,28 @@ export default {
   methods: {
     AddUserToGroup,
     AttachGroupPolicy,
+    CreateAccessKey,
     CreateGroup,
     CreatePolicy,
     CreateRole,
     CreateUser,
+    DeleteAccessKey,
     DeleteGroup,
     DeleteGroupPolicy,
     DeletePolicy,
     DeleteRole,
     DeleteUser,
     DetachGroupPolicy,
+    GetAccessKeyLastUsed,
     GetGroup,
     GetGroupPolicy,
     GetPolicy,
     GetRole,
     GetUser,
+    ListAccessKeys,
     PutGroupPolicy,
     RemoveUserFromGroup,
+    UpdateAccessKey,
     UpdateRole,
     ...incomplete,
   },
