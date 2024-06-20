@@ -63,6 +63,15 @@ Properties:
   - User name
 
 
+### `CreateAccountAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccountAlias.html)
+
+Properties:
+- **`AccountAlias` (string) [required]**
+  - Account alias to create
+
+
 ### `CreateGroup`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html)
@@ -143,6 +152,15 @@ Properties:
   - ID of the access key
 - **`UserName` (string)**
   - User name
+
+
+### `DeleteAccountAlias`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountAlias.html)
+
+Properties:
+- **`AccountAlias` (string) [required]**
+  - The account alias
 
 
 ### `DeleteGroup`
@@ -280,6 +298,19 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListAccountAliases`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccountAliases.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `PutGroupPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html)
@@ -339,7 +370,6 @@ Properties:
 - [`AttachRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachRolePolicy.html)
 - [`AttachUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html)
 - [`ChangePassword`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html)
-- [`CreateAccountAlias`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccountAlias.html)
 - [`CreateInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateInstanceProfile.html)
 - [`CreateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html)
 - [`CreateOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
@@ -349,7 +379,6 @@ Properties:
 - [`CreateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html)
 - [`CreateVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
-- [`DeleteAccountAlias`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountAlias.html)
 - [`DeleteAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountPasswordPolicy.html)
 - [`DeleteInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteInstanceProfile.html)
 - [`DeleteLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html)
@@ -392,7 +421,6 @@ Properties:
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
 - [`GetSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html)
 - [`GetUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html)
-- [`ListAccountAliases`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccountAliases.html)
 - [`ListAttachedGroupPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedGroupPolicies.html)
 - [`ListAttachedRolePolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedRolePolicies.html)
 - [`ListAttachedUserPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedUserPolicies.html)

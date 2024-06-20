@@ -4,11 +4,13 @@ import {
   AddUserToGroupCommandOutput as AddUserToGroupResponse,
   AttachGroupPolicyCommandOutput as AttachGroupPolicyResponse,
   CreateAccessKeyCommandOutput as CreateAccessKeyResponse,
+  CreateAccountAliasCommandOutput as CreateAccountAliasResponse,
   CreateGroupCommandOutput as CreateGroupResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateUserCommandOutput as CreateUserResponse,
   DeleteAccessKeyCommandOutput as DeleteAccessKeyResponse,
+  DeleteAccountAliasCommandOutput as DeleteAccountAliasResponse,
   DeleteGroupCommandOutput as DeleteGroupResponse,
   DeleteGroupPolicyCommandOutput as DeleteGroupPolicyResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
@@ -22,6 +24,7 @@ import {
   GetRoleCommandOutput as GetRoleResponse,
   GetUserCommandOutput as GetUserResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
+  ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
@@ -52,6 +55,12 @@ declare interface AwsLiteIAM {
   CreateAccessKey: (input: { UserName: string }) => Promise<CreateAccessKeyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccountAlias.html IAM: CreateAccountAlias}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateAccountAlias IAM: CreateAccountAlias}
+   */
+  CreateAccountAlias: (input: { AccountAlias: string }) => Promise<CreateAccountAliasResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html IAM: CreateGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateGroup IAM: CreateGroup}
    */
@@ -80,6 +89,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccessKey IAM: DeleteAccessKey}
    */
   DeleteAccessKey: (input: { AccessKeyId: string, UserName?: string }) => Promise<DeleteAccessKeyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountAlias.html IAM: DeleteAccountAlias}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountAlias IAM: DeleteAccountAlias}
+   */
+  DeleteAccountAlias: (input: { AccountAlias: string }) => Promise<DeleteAccountAliasResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html IAM: DeleteGroup}
@@ -160,6 +175,12 @@ declare interface AwsLiteIAM {
   ListAccessKeys: (input: { Marker?: string, MaxItems?: number, UserName?: string, paginate?: boolean }) => Promise<ListAccessKeysResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccountAliases.html IAM: ListAccountAliases}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAccountAliases IAM: ListAccountAliases}
+   */
+  ListAccountAliases: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAccountAliasesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
@@ -198,11 +219,13 @@ export type {
   AddUserToGroupResponse,
   AttachGroupPolicyResponse,
   CreateAccessKeyResponse,
+  CreateAccountAliasResponse,
   CreateGroupResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateUserResponse,
   DeleteAccessKeyResponse,
+  DeleteAccountAliasResponse,
   DeleteGroupResponse,
   DeleteGroupPolicyResponse,
   DeletePolicyResponse,
@@ -216,6 +239,7 @@ export type {
   GetRoleResponse,
   GetUserResponse,
   ListAccessKeysResponse,
+  ListAccountAliasesResponse,
   PutGroupPolicyResponse,
   RemoveUserFromGroupResponse,
   UpdateAccessKeyResponse,

@@ -34,7 +34,6 @@ const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: u
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
-
 const paginator = { type: 'query', cursor: 'Marker' }
 
 const emptyResponse = () => { return {} }
@@ -92,6 +91,23 @@ const CreateAccessKey = {
     }
   },
   response: ({ payload }) => payload.CreateAccessKeyResult,
+}
+
+const CreateAccountAlias = {
+  awsDoc: docRoot + 'API_CreateAccountAlias.html',
+  validate: {
+    AccountAlias: { ...str, required, comment: 'Account alias to create' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'CreateAccountAlias',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
 }
 
 const CreateGroup = {
@@ -225,6 +241,23 @@ const DeleteAccessKey = {
     return { query }
   },
   response: emptyResponse,
+}
+
+const DeleteAccountAlias = {
+  awsDoc: docRoot + 'API_DeleteAccountAlias.html',
+  validate: {
+    AccountAlias: { ...str, required, comment: 'The account alias' },
+  },
+  request: params => {
+    const query = {
+      Action: 'DeleteAccountAlias',
+      Version: defaultVersion,
+      ...params,
+    }
+    return { query }
+  },
+  response: emptyResponse,
+
 }
 
 const DeleteGroup = {
@@ -513,6 +546,44 @@ const ListAccessKeys = {
   },
 }
 
+const ListAccountAliases = {
+  awsDoc: docRoot + 'API_ListAccountAliases.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListAccountAliases',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListAccountAliasesResult.Marker',
+        accumulator: 'ListAccountAliasesResult.AccountAliases.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    let { ListAccountAliasesResult } = payload
+    const { member } = ListAccountAliasesResult.AccountAliases
+    if (member) {
+      ListAccountAliasesResult.AccountAliases = Array.isArray(member) ? member : [ member ]
+    }
+    else {
+      ListAccountAliasesResult.AccountAliases = []
+    }
+    return ListAccountAliasesResult
+  },
+}
+
 const PutGroupPolicy = {
   awsDoc: docRoot + 'API_PutGroupPolicy.html',
   validate: {
@@ -599,11 +670,13 @@ export default {
     AddUserToGroup,
     AttachGroupPolicy,
     CreateAccessKey,
+    CreateAccountAlias,
     CreateGroup,
     CreatePolicy,
     CreateRole,
     CreateUser,
     DeleteAccessKey,
+    DeleteAccountAlias,
     DeleteGroup,
     DeleteGroupPolicy,
     DeletePolicy,
@@ -617,6 +690,7 @@ export default {
     GetRole,
     GetUser,
     ListAccessKeys,
+    ListAccountAliases,
     PutGroupPolicy,
     RemoveUserFromGroup,
     UpdateAccessKey,
