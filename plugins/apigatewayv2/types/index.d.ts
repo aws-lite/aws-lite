@@ -1,6 +1,7 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  CreateApiMappingCommandOutput as CreateApiMappingResponse,
   CreateDeploymentCommandOutput as CreateDeploymentResponse,
   CreateDomainNameCommandOutput as CreateDomainNameResponse,
   DeleteApiMappingCommandOutput as DeleteApiMappingResponse,
@@ -15,6 +16,12 @@ import {
 declare interface AwsLiteAPIGatewayV2 {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#CreateApiMapping API Gateway V2: CreateApiMapping}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#CreateApiMapping API Gateway V2: CreateApiMapping}
+   */
+  CreateApiMapping: (input: { DomainName: string, ApiId: string, ApiMappingKey?: string, Stage: string }) => Promise<CreateApiMappingResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#CreateDeployment API Gateway V2: CreateDeployment}
@@ -76,6 +83,7 @@ export type {
   AwsLiteAPIGatewayV2,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
+  CreateApiMappingResponse,
   CreateDeploymentResponse,
   CreateDomainNameResponse,
   DeleteApiMappingResponse,

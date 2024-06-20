@@ -32,6 +32,21 @@ npm i -D @aws-lite/apigatewayv2-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateApiMapping`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#CreateApiMapping)
+
+Properties:
+- **`DomainName` (string) [required]**
+  - The domain name
+- **`ApiId` (string) [required]**
+  - API ID
+- **`ApiMappingKey` (string)**
+  - The API mapping key
+- **`Stage` (string) [required]**
+  - The API stage
+
+
 ### `CreateDeployment`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#CreateDeployment)
@@ -161,7 +176,6 @@ Properties:
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
 - [`CreateApi`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis.html#CreateApi)
-- [`CreateApiMapping`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#CreateApiMapping)
 - [`CreateAuthorizer`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-authorizers.html#CreateAuthorizer)
 - [`CreateIntegration`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations.html#CreateIntegration)
 - [`CreateIntegrationResponse`](https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-integrations-integrationid-integrationresponses.html#CreateIntegrationResponse)
