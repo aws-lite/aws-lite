@@ -55,6 +55,25 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
 
 
+### `CreatePolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
+
+Properties:
+- **`PolicyDocument` (string, object) [required]**
+  - The policy document; can be an object, or JSON or YAML string
+- **`PolicyName` (string) [required]**
+  - Name of the policy
+- **`Description` (string)**
+  - Description of the resource
+- **`Path` (string)**
+  - Path for the identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
 ### `CreateRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
@@ -65,7 +84,7 @@ Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
 - **`Description` (string)**
-  - Description of the role
+  - Description of the resource
 - **`MaxSessionDuration` (number)**
   - Maximum session duration (in seconds) to set for the specified role
 - **`Path` (string)**
@@ -104,6 +123,15 @@ Properties:
   - Name of the group; names are not distinguished by case
 
 
+### `DeletePolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy to be deleted
+
+
 ### `DeleteRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRole.html)
@@ -135,6 +163,15 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `GetPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
 
 
 ### `GetRole`
@@ -174,7 +211,7 @@ Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
 - **`Description` (string)**
-  - Description of the role
+  - Description of the resource
 - **`MaxSessionDuration` (number)**
   - Maximum session duration (in seconds) to set for the specified role
 
@@ -194,7 +231,6 @@ Properties:
 - [`CreateInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateInstanceProfile.html)
 - [`CreateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html)
 - [`CreateOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
-- [`CreatePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
 - [`CreatePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
 - [`CreateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateSAMLProvider.html)
 - [`CreateServiceLinkedRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceLinkedRole.html)
@@ -208,7 +244,6 @@ Properties:
 - [`DeleteInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteInstanceProfile.html)
 - [`DeleteLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html)
 - [`DeleteOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
-- [`DeletePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html)
 - [`DeletePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
 - [`DeleteRolePermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html)
 - [`DeleteRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePolicy.html)
@@ -241,7 +276,6 @@ Properties:
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
 - [`GetOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html)
 - [`GetOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html)
-- [`GetPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html)
 - [`GetPolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html)
 - [`GetRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
 - [`GetSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSAMLProvider.html)

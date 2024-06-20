@@ -3,6 +3,8 @@
  */
 
 import incomplete from './incomplete.mjs'
+import lib from './lib.mjs'
+const { serializeTags } = lib
 
 const service = 'iam'
 const property = 'IAM'
@@ -16,7 +18,7 @@ const arr = { type: 'array' }
 const num = { type: 'number' }
 const str = { type: 'string' }
 
-const Description = { ...str, comment: 'Description of the role' }
+const Description = { ...str, comment: 'Description of the resource' }
 const GroupName = { ...str, required, comment: 'Name of the group; names are not distinguished by case' }
 const MaxSessionDuration = { ...num, comment: 'Maximum session duration (in seconds) to set for the specified role' }
 const Path = { ...str, comment: 'Path for the identifier', ref: userGuide + 'reference_identifiers.html' }
@@ -28,6 +30,7 @@ const valPaginate = { type: 'boolean', comment: 'Enable automatic result paginat
 
 const emptyResponse = () => { return {} }
 const defaultVersion = '2010-05-08'
+
 
 const AddUserToGroup = {
   awsDoc: docRoot + 'API_AddUserToGroup.html',
@@ -62,6 +65,42 @@ const CreateGroup = {
     return { query }
   },
   response: ({ payload }) => { return payload.CreateGroupResult },
+}
+
+const CreatePolicy = {
+  awsDoc: docRoot + 'API_CreatePolicy.html',
+  validate: {
+    PolicyDocument: { type: [ 'string', 'object' ], required, comment: 'The policy document; can be an object, or JSON or YAML string' },
+    PolicyName: { ...str, required, comment: 'Name of the policy' },
+    Description,
+    Path,
+    Tags,
+  },
+  request: params => {
+    let query = {
+      Action: 'CreatePolicy',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (typeof query.PolicyDocument !== 'string') {
+      query.PolicyDocument = JSON.stringify(query.PolicyDocument)
+    }
+    if (query.Tags) {
+      serializeTags(query)
+      delete query.Tags
+    }
+    return {
+      query,
+    }
+  },
+  response: ({ payload }) => {
+    let { CreatePolicyResult } = payload
+    if (CreatePolicyResult.Policy.Tags) {
+      const { member } = CreatePolicyResult.Policy.Tags
+      CreatePolicyResult.Policy.Tags = Array.isArray(member) ? member : [ member ]
+    }
+    return CreatePolicyResult
+  },
 }
 
 const CreateRole = {
@@ -103,7 +142,8 @@ const CreateUser = {
     let query = {
       Action: 'CreateUser',
       Version: defaultVersion,
-      ...params }
+      ...params,
+    }
     if (query.Tags) {
       query.Tags = query.Tags.forEach(({ Key, Value }, i) => {
         query[`Tags.member.${i + 1}.Key`] = Key
@@ -138,6 +178,23 @@ const DeleteGroup = {
       ...params,
     }
     return { query }
+  },
+  response: emptyResponse,
+}
+
+const DeletePolicy = {
+  awsDoc: docRoot + 'API_DeletePolicy.html',
+  validate: {
+    PolicyArn: { ...str, required, comment: 'Arn of the policy to be deleted' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeletePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
   },
   response: emptyResponse,
 }
@@ -214,6 +271,31 @@ const GetGroup = {
       Group,
       Users,
     }
+  },
+}
+
+const GetPolicy = {
+  awsDoc: docRoot + 'API_GetPolicy.html',
+  validate: {
+    PolicyArn: { ...str, required, comment: 'Arn of the policy' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    let { GetPolicyResult } = payload
+    const { Tags } = GetPolicyResult.Policy
+    if (Tags) {
+      const { member } = Tags
+      GetPolicyResult.Policy.Tags = Array.isArray(member) ? member : [ member ]
+    }
+    return GetPolicyResult
   },
 }
 
@@ -302,12 +384,15 @@ export default {
   methods: {
     AddUserToGroup,
     CreateGroup,
+    CreatePolicy,
     CreateRole,
     CreateUser,
     DeleteGroup,
+    DeletePolicy,
     DeleteRole,
     DeleteUser,
     GetGroup,
+    GetPolicy,
     GetRole,
     GetUser,
     RemoveUserFromGroup,
