@@ -32,6 +32,18 @@ npm i -D @aws-lite/iam-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `CreateGroup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`Path` (string)**
+  - Path to the group
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html#API_CreateGroup_RequestParameters)
+
+
 ### `CreateRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
@@ -55,6 +67,15 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
+### `DeleteGroup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+
+
 ### `DeleteRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRole.html)
@@ -62,6 +83,21 @@ Properties:
 Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
+
+
+### `GetGroup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `GetRole`
@@ -99,7 +135,6 @@ Properties:
 - [`ChangePassword`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html)
 - [`CreateAccessKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccessKey.html)
 - [`CreateAccountAlias`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccountAlias.html)
-- [`CreateGroup`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html)
 - [`CreateInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateInstanceProfile.html)
 - [`CreateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html)
 - [`CreateOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
@@ -114,7 +149,6 @@ Properties:
 - [`DeleteAccessKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccessKey.html)
 - [`DeleteAccountAlias`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountAlias.html)
 - [`DeleteAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountPasswordPolicy.html)
-- [`DeleteGroup`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html)
 - [`DeleteGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroupPolicy.html)
 - [`DeleteInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteInstanceProfile.html)
 - [`DeleteLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html)
@@ -147,7 +181,6 @@ Properties:
 - [`GetContextKeysForCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html)
 - [`GetContextKeysForPrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html)
 - [`GetCredentialReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetCredentialReport.html)
-- [`GetGroup`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html)
 - [`GetGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
 - [`GetInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html)
 - [`GetLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetLoginProfile.html)
