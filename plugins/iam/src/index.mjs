@@ -21,7 +21,10 @@ const MaxSessionDuration = { ...num, comment: 'Maximum session duration (in seco
 const RoleName = { ...str, required, comment: 'Name of the role' }
 const GroupName = { ...str, required, comment: 'Name of the group; names are not distinguished by case' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-
+const Path = { ...str, comment: 'Path for the identifier', ref: userGuide + 'reference_identifiers.html' }
+const UserName = { ...str, required, comment: 'User name' }
+const PermissionsBoundary = { ...str, comment: `ARN of a managed policy to be used to set the resource's permissions boundary` }
+const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 
 const emptyResponse = () => { return {} }
 const defaultVersion = '2010-05-08'
@@ -30,7 +33,7 @@ const CreateGroup = {
   awsDoc: docRoot + 'API_CreateGroup.html',
   validate: {
     GroupName,
-    Path: { ...str, comment: 'Path to the group', ref: docRoot + 'API_CreateGroup.html#API_CreateGroup_RequestParameters' },
+    Path,
   },
   request: params => {
     const query = {
@@ -70,6 +73,41 @@ const CreateRole = {
   response: ({ payload }) => payload.CreateRoleResult,
 }
 
+const CreateUser = {
+  awsDoc: docRoot + 'API_CreateUser.html',
+  validate: {
+    UserName,
+    Path,
+    PermissionsBoundary,
+    Tags,
+  },
+  request: params => {
+    let query = {
+      Action: 'CreateUser',
+      Version: defaultVersion,
+      ...params }
+    if (query.Tags) {
+      query.Tags = query.Tags.forEach(({ Key, Value }, i) => {
+        query[`Tags.member.${i + 1}.Key`] = Key
+        query[`Tags.member.${i + 1}.Value`] = Value
+      })
+      delete query.Tags
+    }
+    return {
+      query,
+    }
+  },
+  response: ({ payload }) => {
+    let { CreateUserResult } = payload
+    const { Tags } = CreateUserResult.User
+    if (Tags) {
+      const { member } = Tags
+      CreateUserResult.User.Tags = Array.isArray(member) ? member : [ member ]
+    }
+    return CreateUserResult
+  },
+}
+
 const DeleteGroup = {
   awsDoc: docRoot + 'API_DeleteGroup.html',
   validate: {
@@ -101,6 +139,23 @@ const DeleteRole = {
     }
   },
   response: () => ({}),
+}
+
+const DeleteUser = {
+  awsDoc: docRoot + 'API_DeleteUser.html',
+  validate: {
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteUser',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
 }
 
 // TODO: stop paginator from omitting `Group` field
@@ -161,6 +216,30 @@ const GetRole = {
   response: ({ payload }) => payload.GetRoleResult,
 }
 
+const GetUser = {
+  awsDoc: docRoot + 'API_GetUser.html',
+  validate: {
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetUser',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    let { GetUserResult } = payload
+    if (GetUserResult.User.Tags) {
+      const { member } = GetUserResult.User.Tags
+      GetUserResult.User.Tags = Array.isArray(member) ? member : [ member ]
+    }
+    return GetUserResult
+  },
+}
+
 const UpdateRole = {
   awsDoc: docRoot + 'API_UpdateRole.html',
   validate: {
@@ -187,10 +266,13 @@ export default {
   methods: {
     CreateGroup,
     CreateRole,
+    CreateUser,
     DeleteGroup,
     DeleteRole,
+    DeleteUser,
     GetGroup,
     GetRole,
+    GetUser,
     UpdateRole,
     ...incomplete,
   },

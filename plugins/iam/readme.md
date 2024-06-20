@@ -40,8 +40,8 @@ Properties:
 - **`GroupName` (string) [required]**
   - Name of the group; names are not distinguished by case
 - **`Path` (string)**
-  - Path to the group
-  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html#API_CreateGroup_RequestParameters)
+  - Path for the identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
 
 
 ### `CreateRole`
@@ -67,6 +67,23 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
+### `CreateUser`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
+- **`Path` (string)**
+  - Path for the identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
+- **`PermissionsBoundary` (string)**
+  - ARN of a managed policy to be used to set the resource's permissions boundary
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
 ### `DeleteGroup`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html)
@@ -83,6 +100,15 @@ Properties:
 Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
+
+
+### `DeleteUser`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
 
 
 ### `GetGroup`
@@ -107,6 +133,15 @@ Properties:
 Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
+
+
+### `GetUser`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
 
 
 ### `UpdateRole`
@@ -143,7 +178,6 @@ Properties:
 - [`CreateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateSAMLProvider.html)
 - [`CreateServiceLinkedRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceLinkedRole.html)
 - [`CreateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html)
-- [`CreateUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html)
 - [`CreateVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
 - [`DeleteAccessKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccessKey.html)
@@ -163,7 +197,6 @@ Properties:
 - [`DeleteServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceSpecificCredential.html)
 - [`DeleteSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html)
 - [`DeleteSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html)
-- [`DeleteUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html)
 - [`DeleteUserPermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html)
 - [`DeleteUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPolicy.html)
 - [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
@@ -196,7 +229,6 @@ Properties:
 - [`GetServiceLastAccessedDetailsWithEntities`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html)
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
 - [`GetSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html)
-- [`GetUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html)
 - [`GetUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html)
 - [`ListAccessKeys`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccessKeys.html)
 - [`ListAccountAliases`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccountAliases.html)

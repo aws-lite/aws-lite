@@ -3,10 +3,13 @@ import {
   // $IMPORTS_START
   CreateGroupCommandOutput as CreateGroupResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
+  CreateUserCommandOutput as CreateUserResponse,
   DeleteGroupCommandOutput as DeleteGroupResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
+  DeleteUserCommandOutput as DeleteUserResponse,
   GetGroupCommandOutput as GetGroupResponse,
   GetRoleCommandOutput as GetRoleResponse,
+  GetUserCommandOutput as GetUserResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
@@ -28,6 +31,12 @@ declare interface AwsLiteIAM {
   CreateRole: (input: { AssumeRolePolicyDocument: string | Record<string, any>, RoleName: string, Description?: string, MaxSessionDuration?: number, Path?: string, PermissionsBoundary?: string, Tags?: any[] }) => Promise<CreateRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html IAM: CreateUser}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateUser IAM: CreateUser}
+   */
+  CreateUser: (input: { UserName: string, Path?: string, PermissionsBoundary?: string, Tags?: any[] }) => Promise<CreateUserResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html IAM: DeleteGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteGroup IAM: DeleteGroup}
    */
@@ -40,6 +49,12 @@ declare interface AwsLiteIAM {
   DeleteRole: (input: { RoleName: string }) => Promise<DeleteRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html IAM: DeleteUser}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUser IAM: DeleteUser}
+   */
+  DeleteUser: (input: { UserName: string }) => Promise<DeleteUserResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html IAM: GetGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroup IAM: GetGroup}
    */
@@ -50,6 +65,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRole IAM: GetRole}
    */
   GetRole: (input: { RoleName: string }) => Promise<GetRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html IAM: GetUser}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUser IAM: GetUser}
+   */
+  GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html IAM: UpdateRole}
@@ -71,10 +92,13 @@ export type {
   // $EXPORT_START
   CreateGroupResponse,
   CreateRoleResponse,
+  CreateUserResponse,
   DeleteGroupResponse,
   DeleteRoleResponse,
+  DeleteUserResponse,
   GetGroupResponse,
   GetRoleResponse,
+  GetUserResponse,
   UpdateRoleResponse,
   // $EXPORT_END
 }
