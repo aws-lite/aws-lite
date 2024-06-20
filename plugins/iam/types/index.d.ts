@@ -2,18 +2,23 @@ import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
   AddUserToGroupCommandOutput as AddUserToGroupResponse,
+  AttachGroupPolicyCommandOutput as AttachGroupPolicyResponse,
   CreateGroupCommandOutput as CreateGroupResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateUserCommandOutput as CreateUserResponse,
   DeleteGroupCommandOutput as DeleteGroupResponse,
+  DeleteGroupPolicyCommandOutput as DeleteGroupPolicyResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
+  DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
   GetGroupCommandOutput as GetGroupResponse,
+  GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetRoleCommandOutput as GetRoleResponse,
   GetUserCommandOutput as GetUserResponse,
+  PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   // $IMPORTS_END
@@ -28,6 +33,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AddUserToGroup IAM: AddUserToGroup}
    */
   AddUserToGroup: (input: { GroupName: string, UserName: string }) => Promise<AddUserToGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachGroupPolicy.html IAM: AttachGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AttachGroupPolicy IAM: AttachGroupPolicy}
+   */
+  AttachGroupPolicy: (input: { GroupName: string, PolicyArn: string }) => Promise<AttachGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html IAM: CreateGroup}
@@ -60,6 +71,12 @@ declare interface AwsLiteIAM {
   DeleteGroup: (input: { GroupName: string }) => Promise<DeleteGroupResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroupPolicy.html IAM: DeleteGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteGroupPolicy IAM: DeleteGroupPolicy}
+   */
+  DeleteGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<DeleteGroupPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html IAM: DeletePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeletePolicy IAM: DeletePolicy}
    */
@@ -78,10 +95,22 @@ declare interface AwsLiteIAM {
   DeleteUser: (input: { UserName: string }) => Promise<DeleteUserResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachGroupPolicy.html IAM: DetachGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachGroupPolicy IAM: DetachGroupPolicy}
+   */
+  DetachGroupPolicy: (input: { GroupName: string, PolicyArn: string }) => Promise<DetachGroupPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html IAM: GetGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroup IAM: GetGroup}
    */
   GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html IAM: GetGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroupPolicy IAM: GetGroupPolicy}
+   */
+  GetGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<GetGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html IAM: GetPolicy}
@@ -100,6 +129,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUser IAM: GetUser}
    */
   GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
+   */
+  PutGroupPolicy: (input: { GroupName: string, PolicyDocument: string | Record<string, any>, PolicyName: string }) => Promise<PutGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html IAM: RemoveUserFromGroup}
@@ -126,18 +161,23 @@ export type {
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   AddUserToGroupResponse,
+  AttachGroupPolicyResponse,
   CreateGroupResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateUserResponse,
   DeleteGroupResponse,
+  DeleteGroupPolicyResponse,
   DeletePolicyResponse,
   DeleteRoleResponse,
   DeleteUserResponse,
+  DetachGroupPolicyResponse,
   GetGroupResponse,
+  GetGroupPolicyResponse,
   GetPolicyResponse,
   GetRoleResponse,
   GetUserResponse,
+  PutGroupPolicyResponse,
   RemoveUserFromGroupResponse,
   UpdateRoleResponse,
   // $EXPORT_END

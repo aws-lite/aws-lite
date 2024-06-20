@@ -43,6 +43,17 @@ Properties:
   - User name
 
 
+### `AttachGroupPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachGroupPolicy.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+
+
 ### `CreateGroup`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html)
@@ -123,13 +134,24 @@ Properties:
   - Name of the group; names are not distinguished by case
 
 
+### `DeleteGroupPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroupPolicy.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`PolicyName` (string) [required]**
+  - Name of the policy
+
+
 ### `DeletePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html)
 
 Properties:
 - **`PolicyArn` (string) [required]**
-  - Arn of the policy to be deleted
+  - Arn of the policy
 
 
 ### `DeleteRole`
@@ -150,6 +172,17 @@ Properties:
   - User name
 
 
+### `DetachGroupPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachGroupPolicy.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+
+
 ### `GetGroup`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html)
@@ -163,6 +196,17 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `GetGroupPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`PolicyName` (string) [required]**
+  - Name of the policy
 
 
 ### `GetPolicy`
@@ -190,6 +234,19 @@ Properties:
 Properties:
 - **`UserName` (string) [required]**
   - User name
+
+
+### `PutGroupPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`PolicyDocument` (string, object) [required]**
+  - The policy document; can be an object, or JSON or YAML string
+- **`PolicyName` (string) [required]**
+  - Name of the policy
 
 
 ### `RemoveUserFromGroup`
@@ -222,7 +279,6 @@ Properties:
 
 - [`AddClientIDToOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddClientIDToOpenIDConnectProvider.html)
 - [`AddRoleToInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddRoleToInstanceProfile.html)
-- [`AttachGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachGroupPolicy.html)
 - [`AttachRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachRolePolicy.html)
 - [`AttachUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html)
 - [`ChangePassword`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html)
@@ -240,7 +296,6 @@ Properties:
 - [`DeleteAccessKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccessKey.html)
 - [`DeleteAccountAlias`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountAlias.html)
 - [`DeleteAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountPasswordPolicy.html)
-- [`DeleteGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroupPolicy.html)
 - [`DeleteInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteInstanceProfile.html)
 - [`DeleteLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html)
 - [`DeleteOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
@@ -256,7 +311,6 @@ Properties:
 - [`DeleteUserPermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html)
 - [`DeleteUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPolicy.html)
 - [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
-- [`DetachGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachGroupPolicy.html)
 - [`DetachRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachRolePolicy.html)
 - [`DetachUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachUserPolicy.html)
 - [`EnableMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_EnableMFADevice.html)
@@ -270,7 +324,6 @@ Properties:
 - [`GetContextKeysForCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html)
 - [`GetContextKeysForPrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html)
 - [`GetCredentialReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetCredentialReport.html)
-- [`GetGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
 - [`GetInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html)
 - [`GetLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetLoginProfile.html)
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
@@ -319,7 +372,6 @@ Properties:
 - [`ListUsers`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUsers.html)
 - [`ListUserTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserTags.html)
 - [`ListVirtualMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html)
-- [`PutGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html)
 - [`PutRolePermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePermissionsBoundary.html)
 - [`PutRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePolicy.html)
 - [`PutUserPermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPermissionsBoundary.html)

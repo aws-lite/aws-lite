@@ -27,6 +27,9 @@ const RoleName = { ...str, required, comment: 'Name of the role' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const PolicyArn = { ...str, required, comment: 'Arn of the policy' }
+const PolicyDocument = { type: [ 'string', 'object' ], required, comment: 'The policy document; can be an object, or JSON or YAML string' }
+const PolicyName = { ...str, required, comment: 'Name of the policy' }
 
 const emptyResponse = () => { return {} }
 const defaultVersion = '2010-05-08'
@@ -42,6 +45,24 @@ const AddUserToGroup = {
     return {
       query: {
         Action: 'AddUserToGroup',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const AttachGroupPolicy = {
+  awsDoc: docRoot + 'API_AttachGroupPolicy.html',
+  validate: {
+    GroupName,
+    PolicyArn,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'AttachGroupPolicy',
         Version: defaultVersion,
         ...params,
       },
@@ -70,8 +91,8 @@ const CreateGroup = {
 const CreatePolicy = {
   awsDoc: docRoot + 'API_CreatePolicy.html',
   validate: {
-    PolicyDocument: { type: [ 'string', 'object' ], required, comment: 'The policy document; can be an object, or JSON or YAML string' },
-    PolicyName: { ...str, required, comment: 'Name of the policy' },
+    PolicyDocument,
+    PolicyName,
     Description,
     Path,
     Tags,
@@ -182,10 +203,28 @@ const DeleteGroup = {
   response: emptyResponse,
 }
 
+const DeleteGroupPolicy = {
+  awsDoc: docRoot + 'API_DeleteGroupPolicy.html',
+  validate: {
+    GroupName,
+    PolicyName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteGroupPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const DeletePolicy = {
   awsDoc: docRoot + 'API_DeletePolicy.html',
   validate: {
-    PolicyArn: { ...str, required, comment: 'Arn of the policy to be deleted' },
+    PolicyArn,
   },
   request: params => {
     return {
@@ -225,6 +264,24 @@ const DeleteUser = {
     return {
       query: {
         Action: 'DeleteUser',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DetachGroupPolicy = {
+  awsDoc: docRoot + 'API_DetachGroupPolicy.html',
+  validate: {
+    GroupName,
+    PolicyArn,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DetachGroupPolicy',
         Version: defaultVersion,
         ...params,
       },
@@ -274,10 +331,29 @@ const GetGroup = {
   },
 }
 
+// TODO: make sure response is not getting mangled
+const GetGroupPolicy = {
+  awsDoc: docRoot + 'API_GetGroupPolicy.html',
+  validate: {
+    GroupName,
+    PolicyName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetGroupPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetGroupPolicyResult,
+}
+
 const GetPolicy = {
   awsDoc: docRoot + 'API_GetPolicy.html',
   validate: {
-    PolicyArn: { ...str, required, comment: 'Arn of the policy' },
+    PolicyArn,
   },
   request: params => {
     return {
@@ -340,6 +416,29 @@ const GetUser = {
   },
 }
 
+const PutGroupPolicy = {
+  awsDoc: docRoot + 'API_PutGroupPolicy.html',
+  validate: {
+    GroupName,
+    PolicyDocument,
+    PolicyName,
+  },
+  request: params => {
+    let query = {
+      Action: 'PutGroupPolicy',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (typeof query.PolicyDocument !== 'string') {
+      query.PolicyDocument = JSON.stringify(query.PolicyDocument)
+    }
+    return {
+      query,
+    }
+  },
+  response: emptyResponse,
+}
+
 const RemoveUserFromGroup = {
   awsDoc: docRoot + 'API_RemoveUserFromGroup.html',
   validate: {
@@ -383,18 +482,23 @@ export default {
   property,
   methods: {
     AddUserToGroup,
+    AttachGroupPolicy,
     CreateGroup,
     CreatePolicy,
     CreateRole,
     CreateUser,
     DeleteGroup,
+    DeleteGroupPolicy,
     DeletePolicy,
     DeleteRole,
     DeleteUser,
+    DetachGroupPolicy,
     GetGroup,
+    GetGroupPolicy,
     GetPolicy,
     GetRole,
     GetUser,
+    PutGroupPolicy,
     RemoveUserFromGroup,
     UpdateRole,
     ...incomplete,
