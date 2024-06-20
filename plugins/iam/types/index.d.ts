@@ -1,6 +1,7 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  AddUserToGroupCommandOutput as AddUserToGroupResponse,
   CreateGroupCommandOutput as CreateGroupResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateUserCommandOutput as CreateUserResponse,
@@ -10,6 +11,7 @@ import {
   GetGroupCommandOutput as GetGroupResponse,
   GetRoleCommandOutput as GetRoleResponse,
   GetUserCommandOutput as GetUserResponse,
+  RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
@@ -17,6 +19,12 @@ import {
 declare interface AwsLiteIAM {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddUserToGroup.html IAM: AddUserToGroup}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AddUserToGroup IAM: AddUserToGroup}
+   */
+  AddUserToGroup: (input: { GroupName: string, UserName: string }) => Promise<AddUserToGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html IAM: CreateGroup}
@@ -73,6 +81,12 @@ declare interface AwsLiteIAM {
   GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html IAM: RemoveUserFromGroup}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveUserFromGroup IAM: RemoveUserFromGroup}
+   */
+  RemoveUserFromGroup: (input: { GroupName: string, UserName: string }) => Promise<RemoveUserFromGroupResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html IAM: UpdateRole}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRole IAM: UpdateRole}
    */
@@ -90,6 +104,7 @@ export type {
   AwsLiteIAM,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
+  AddUserToGroupResponse,
   CreateGroupResponse,
   CreateRoleResponse,
   CreateUserResponse,
@@ -99,6 +114,7 @@ export type {
   GetGroupResponse,
   GetRoleResponse,
   GetUserResponse,
+  RemoveUserFromGroupResponse,
   UpdateRoleResponse,
   // $EXPORT_END
 }

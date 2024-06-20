@@ -3,7 +3,6 @@ const docRoot = 'https://docs.aws.amazon.com/IAM/latest/APIReference/'
 export default {
   AddClientIDToOpenIDConnectProvider:        { disabled, awsDoc: docRoot + 'API_AddClientIDToOpenIDConnectProvider.html' },
   AddRoleToInstanceProfile:                  { disabled, awsDoc: docRoot + 'API_AddRoleToInstanceProfile.html' },
-  AddUserToGroup:                            { disabled, awsDoc: docRoot + 'API_AddUserToGroup.html' },
   AttachGroupPolicy:                         { disabled, awsDoc: docRoot + 'API_AttachGroupPolicy.html' },
   AttachRolePolicy:                          { disabled, awsDoc: docRoot + 'API_AttachRolePolicy.html' },
   AttachUserPolicy:                          { disabled, awsDoc: docRoot + 'API_AttachUserPolicy.html' },
@@ -111,7 +110,6 @@ export default {
   PutUserPolicy:                             { disabled, awsDoc: docRoot + 'API_PutUserPolicy.html' },
   RemoveClientIDFromOpenIDConnectProvider:   { disabled, awsDoc: docRoot + 'API_RemoveClientIDFromOpenIDConnectProvider.html' },
   RemoveRoleFromInstanceProfile:             { disabled, awsDoc: docRoot + 'API_RemoveRoleFromInstanceProfile.html' },
-  RemoveUserFromGroup:                       { disabled, awsDoc: docRoot + 'API_RemoveUserFromGroup.html' },
   ResetServiceSpecificCredential:            { disabled, awsDoc: docRoot + 'API_ResetServiceSpecificCredential.html' },
   ResyncMFADevice:                           { disabled, awsDoc: docRoot + 'API_ResyncMFADevice.html' },
   SetDefaultPolicyVersion:                   { disabled, awsDoc: docRoot + 'API_SetDefaultPolicyVersion.html' },

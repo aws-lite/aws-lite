@@ -17,17 +17,35 @@ const num = { type: 'number' }
 const str = { type: 'string' }
 
 const Description = { ...str, comment: 'Description of the role' }
-const MaxSessionDuration = { ...num, comment: 'Maximum session duration (in seconds) to set for the specified role' }
-const RoleName = { ...str, required, comment: 'Name of the role' }
 const GroupName = { ...str, required, comment: 'Name of the group; names are not distinguished by case' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const MaxSessionDuration = { ...num, comment: 'Maximum session duration (in seconds) to set for the specified role' }
 const Path = { ...str, comment: 'Path for the identifier', ref: userGuide + 'reference_identifiers.html' }
-const UserName = { ...str, required, comment: 'User name' }
 const PermissionsBoundary = { ...str, comment: `ARN of a managed policy to be used to set the resource's permissions boundary` }
+const RoleName = { ...str, required, comment: 'Name of the role' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
+const UserName = { ...str, required, comment: 'User name' }
+const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const emptyResponse = () => { return {} }
 const defaultVersion = '2010-05-08'
+
+const AddUserToGroup = {
+  awsDoc: docRoot + 'API_AddUserToGroup.html',
+  validate: {
+    GroupName,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'AddUserToGroup',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
 
 const CreateGroup = {
   awsDoc: docRoot + 'API_CreateGroup.html',
@@ -240,6 +258,24 @@ const GetUser = {
   },
 }
 
+const RemoveUserFromGroup = {
+  awsDoc: docRoot + 'API_RemoveUserFromGroup.html',
+  validate: {
+    GroupName,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'RemoveUserFromGroup',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const UpdateRole = {
   awsDoc: docRoot + 'API_UpdateRole.html',
   validate: {
@@ -264,6 +300,7 @@ export default {
   service,
   property,
   methods: {
+    AddUserToGroup,
     CreateGroup,
     CreateRole,
     CreateUser,
@@ -273,6 +310,7 @@ export default {
     GetGroup,
     GetRole,
     GetUser,
+    RemoveUserFromGroup,
     UpdateRole,
     ...incomplete,
   },
