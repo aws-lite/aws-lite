@@ -60,6 +60,24 @@ const CamelToPascalParams = obj => Object.fromEntries(
   ),
 )
 
+const CreateApiMapping = {
+  awsDoc: docRoot + 'domainnames-domainname-apimappings.html#CreateApiMapping',
+  validate: {
+    DomainName,
+    ApiId,
+    ApiMappingKey: { ...str, comment: 'The API mapping key' },
+    Stage: { ...str, required, comment: 'The API stage' },
+  },
+  request: ({ ApiId, ApiMappingKey, Stage, DomainName }) => {
+    return {
+      path: `/v2/domainnames/${DomainName}/apimappings`,
+      method: 'POST',
+      payload: { apiId: ApiId, apiMappingKey: ApiMappingKey, stage: Stage },
+    }
+  },
+  response: defaultResponse,
+}
+
 const CreateDeployment =  {
   awsDoc: docRoot + 'apis-apiid-deployments.html#CreateDeployment',
   validate: {
@@ -218,6 +236,7 @@ export default {
   service,
   property,
   methods: {
+    CreateApiMapping,
     CreateDeployment,
     CreateDomainName,
     DeleteApiMapping,

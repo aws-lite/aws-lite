@@ -2,7 +2,6 @@ const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/'
 export default {
   CreateApi:                   { disabled, awsDoc: docRoot + 'apis.html#CreateApi' },
-  CreateApiMapping:            { disabled, awsDoc: docRoot + 'domainnames-domainname-apimappings.html#CreateApiMapping' },
   CreateAuthorizer:            { disabled, awsDoc: docRoot + 'apis-apiid-authorizers.html#CreateAuthorizer' },
   CreateIntegration:           { disabled, awsDoc: docRoot + 'apis-apiid-integrations.html#CreateIntegration' },
   CreateIntegrationResponse:   { disabled, awsDoc: docRoot + 'apis-apiid-integrations-integrationid-integrationresponses.html#CreateIntegrationResponse' },
