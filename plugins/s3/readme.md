@@ -772,6 +772,38 @@ Properties:
   - Sets request header: `x-amz-request-payer`
 
 
+### `GetObjectAttributes`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`ObjectAttributes` (array) [required]**
+  - Specify the root level of the attributes to be returned
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html#API_GetObjectAttributes_RequestParameters)
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`MaxParts` (number)**
+  - Maximum number of parts returned in the response if the `ObjectParts` attribute is requested
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+- **`PartNumberMarker` (string)**
+  - Sets request header: `x-amz-part-number-marker`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKey` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `GetObjectLegalHold`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html)
@@ -1030,6 +1062,34 @@ Properties:
   - Sets request header: `x-amz-optional-object-attributes`
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListObjectVersions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Delimiter` (string)**
+  - Delimiter character used to group keys
+- **`EncodingType` (string)**
+  - Object key encoding type (must be `url`)
+- **`KeyMarker` (string)**
+  - Pagination cursor
+- **`MaxKeys` (number)**
+  - Maximum number of keys (at most 1000) to be returned in the response
+- **`Prefix` (string)**
+  - Limit response to keys that begin with the specified prefix
+- **`VersionIdMarker` (string)**
+  - Specify the version to begin listing from
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html#API_ListObjectVersions_RequestParameters)
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`OptionalObjectAttributes` (string)**
+  - Sets request header: `x-amz-optional-object-attributes`
 
 
 ### `PutBucketAccelerateConfiguration`
@@ -1657,14 +1717,12 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
+- [`ListParts`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html)
 - [`CreateSession`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html)
 - [`GetBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html)
 - [`GetBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotification.html)
-- [`GetObjectAttributes`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html)
 - [`ListDirectoryBuckets`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListDirectoryBuckets.html)
 - [`ListObjects`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html)
-- [`ListObjectVersions`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
-- [`ListParts`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html)
 - [`PutBucketAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAcl.html)
 - [`PutBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html)
 - [`PutBucketLogging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLogging.html)

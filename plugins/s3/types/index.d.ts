@@ -45,6 +45,7 @@ import {
   GetBucketWebsiteCommandOutput as GetBucketWebsiteResponse,
   GetObjectCommandOutput as GetObjectResponse,
   GetObjectAclCommandOutput as GetObjectAclResponse,
+  GetObjectAttributesCommandOutput as GetObjectAttributesResponse,
   GetObjectLegalHoldCommandOutput as GetObjectLegalHoldResponse,
   GetObjectLockConfigurationCommandOutput as GetObjectLockConfigurationResponse,
   GetObjectRetentionCommandOutput as GetObjectRetentionResponse,
@@ -60,6 +61,7 @@ import {
   ListBucketsCommandOutput as ListBucketsResponse,
   ListMultipartUploadsCommandOutput as ListMultipartUploadsResponse,
   ListObjectsV2CommandOutput as ListObjectsV2Response,
+  ListObjectVersionsCommandOutput as ListObjectVersionsResponse,
   PutBucketAccelerateConfigurationCommandOutput as PutBucketAccelerateConfigurationResponse,
   PutBucketAnalyticsConfigurationCommandOutput as PutBucketAnalyticsConfigurationResponse,
   PutBucketCorsCommandOutput as PutBucketCorsResponse,
@@ -357,6 +359,12 @@ declare interface AwsLiteS3 {
   GetObjectAcl: (input: { Bucket: string, Key: string, VersionId?: string, ExpectedBucketOwner?: string, RequestPayer?: string }) => Promise<GetObjectAclResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html S3: GetObjectAttributes}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectAttributes S3: GetObjectAttributes}
+   */
+  GetObjectAttributes: (input: { Bucket: string, Key: string, ObjectAttributes: any[], VersionId?: string, MaxParts?: number, paginate?: boolean, PartNumberMarker?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string }) => Promise<GetObjectAttributesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html S3: GetObjectLegalHold}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectLegalHold S3: GetObjectLegalHold}
    */
@@ -441,6 +449,12 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListObjectsV2 S3: ListObjectsV2}
    */
   ListObjectsV2: (input: { Bucket: string, ContinuationToken?: string, Delimiter?: string, EncodingType?: string, FetchOwner?: string, MaxKeys?: number, Prefix?: string, StartAfter?: string, RequestPayer?: string, ExpectedBucketOwner?: string, OptionalObjectAttributes?: string, paginate?: boolean }) => Promise<ListObjectsV2Response>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html S3: ListObjectVersions}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListObjectVersions S3: ListObjectVersions}
+   */
+  ListObjectVersions: (input: { Bucket: string, Delimiter?: string, EncodingType?: string, KeyMarker?: string, MaxKeys?: number, Prefix?: string, VersionIdMarker?: string, ExpectedBucketOwner?: string, RequestPayer?: string, OptionalObjectAttributes?: string }) => Promise<ListObjectVersionsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html S3: PutBucketAccelerateConfiguration}
@@ -647,6 +661,7 @@ export type {
   GetBucketWebsiteResponse,
   GetObjectResponse,
   GetObjectAclResponse,
+  GetObjectAttributesResponse,
   GetObjectLegalHoldResponse,
   GetObjectLockConfigurationResponse,
   GetObjectRetentionResponse,
@@ -662,6 +677,7 @@ export type {
   ListBucketsResponse,
   ListMultipartUploadsResponse,
   ListObjectsV2Response,
+  ListObjectVersionsResponse,
   PutBucketAccelerateConfigurationResponse,
   PutBucketAnalyticsConfigurationResponse,
   PutBucketCorsResponse,
