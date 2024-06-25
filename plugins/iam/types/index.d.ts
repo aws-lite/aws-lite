@@ -27,14 +27,19 @@ import {
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
   GetGroupCommandOutput as GetGroupResponse,
   GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
+  GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetRoleCommandOutput as GetRoleResponse,
   GetUserCommandOutput as GetUserResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
   ListInstanceProfilesCommandOutput as ListInstanceProfilesResponse,
+  ListInstanceProfilesForRoleCommandOutput as ListInstanceProfilesForRoleResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
+  RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
+  TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
+  UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   // $IMPORTS_END
@@ -201,6 +206,12 @@ declare interface AwsLiteIAM {
   GetGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<GetGroupPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html IAM: GetInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetInstanceProfile IAM: GetInstanceProfile}
+   */
+  GetInstanceProfile: (input: { InstanceProfileName: string }) => Promise<GetInstanceProfileResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html IAM: GetPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetPolicy IAM: GetPolicy}
    */
@@ -237,6 +248,12 @@ declare interface AwsLiteIAM {
   ListInstanceProfiles: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListInstanceProfilesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfilesForRole.html IAM: ListInstanceProfilesForRole}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfilesForRole IAM: ListInstanceProfilesForRole}
+   */
+  ListInstanceProfilesForRole: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfilesForRoleResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
@@ -247,6 +264,24 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveUserFromGroup IAM: RemoveUserFromGroup}
    */
   RemoveUserFromGroup: (input: { GroupName: string, UserName: string }) => Promise<RemoveUserFromGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html IAM: RemoveRoleFromInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveRoleFromInstanceProfile IAM: RemoveRoleFromInstanceProfile}
+   */
+  RemoveRoleFromInstanceProfile: (input: { InstanceProfileName: string, RoleName: string }) => Promise<RemoveRoleFromInstanceProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html IAM: TagInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagInstanceProfile IAM: TagInstanceProfile}
+   */
+  TagInstanceProfile: (input: { InstanceProfileName: string, Tags: any[] }) => Promise<TagInstanceProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html IAM: UntagInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagInstanceProfile IAM: UntagInstanceProfile}
+   */
+  UntagInstanceProfile: (input: { InstanceProfileName: string, TagKeys: any[] }) => Promise<UntagInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccessKey.html IAM: UpdateAccessKey}
@@ -298,14 +333,19 @@ export type {
   GetAccessKeyLastUsedResponse,
   GetGroupResponse,
   GetGroupPolicyResponse,
+  GetInstanceProfileResponse,
   GetPolicyResponse,
   GetRoleResponse,
   GetUserResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
   ListInstanceProfilesResponse,
+  ListInstanceProfilesForRoleResponse,
   PutGroupPolicyResponse,
   RemoveUserFromGroupResponse,
+  RemoveRoleFromInstanceProfileResponse,
+  TagInstanceProfileResponse,
+  UntagInstanceProfileResponse,
   UpdateAccessKeyResponse,
   UpdateRoleResponse,
   // $EXPORT_END

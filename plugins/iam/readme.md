@@ -335,6 +335,15 @@ Properties:
   - Name of the policy
 
 
+### `GetInstanceProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
+
+
 ### `GetPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html)
@@ -405,6 +414,21 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListInstanceProfilesForRole`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfilesForRole.html)
+
+Properties:
+- **`RoleName` (string) [required]**
+  - Name of the role
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `PutGroupPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html)
@@ -427,6 +451,40 @@ Properties:
   - Name of the group; names are not distinguished by case
 - **`UserName` (string) [required]**
   - User name
+
+
+### `RemoveRoleFromInstanceProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
+### `TagInstanceProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
+- **`Tags` (array) [required]**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
+### `UntagInstanceProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
+- **`TagKeys` (array) [required]**
+  - Array of tag keys
 
 
 ### `UpdateAccessKey`
@@ -494,7 +552,6 @@ Properties:
 - [`GetContextKeysForCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html)
 - [`GetContextKeysForPrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html)
 - [`GetCredentialReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetCredentialReport.html)
-- [`GetInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html)
 - [`GetLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetLoginProfile.html)
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
 - [`GetOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html)
@@ -515,7 +572,6 @@ Properties:
 - [`ListGroupPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html)
 - [`ListGroups`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroups.html)
 - [`ListGroupsForUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupsForUser.html)
-- [`ListInstanceProfilesForRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfilesForRole.html)
 - [`ListInstanceProfileTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfileTags.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)
@@ -544,14 +600,12 @@ Properties:
 - [`PutUserPermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPermissionsBoundary.html)
 - [`PutUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPolicy.html)
 - [`RemoveClientIDFromOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html)
-- [`RemoveRoleFromInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html)
 - [`ResetServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResetServiceSpecificCredential.html)
 - [`ResyncMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResyncMFADevice.html)
 - [`SetDefaultPolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetDefaultPolicyVersion.html)
 - [`SetSecurityTokenServicePreferences`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html)
 - [`SimulateCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html)
 - [`SimulatePrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html)
-- [`TagInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html)
 - [`TagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagMFADevice.html)
 - [`TagOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagOpenIDConnectProvider.html)
 - [`TagPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagPolicy.html)
@@ -559,7 +613,6 @@ Properties:
 - [`TagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagSAMLProvider.html)
 - [`TagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagServerCertificate.html)
 - [`TagUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagUser.html)
-- [`UntagInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html)
 - [`UntagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagMFADevice.html)
 - [`UntagOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagOpenIDConnectProvider.html)
 - [`UntagPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagPolicy.html)

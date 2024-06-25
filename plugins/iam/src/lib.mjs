@@ -7,14 +7,12 @@ function serializeTags (query) {
 }
 
 function normalizeObjectArrays (object, arrayKeys) {
-
   if (typeof object !== 'object') return
 
   if (Array.isArray(object)) {
     object.forEach(i => { normalizeObjectArrays(i, arrayKeys) })
   }
   else {
-    // console.log(object)
     Object.entries(object).forEach(([ key, value ]) => {
       normalizeObjectArrays(value, arrayKeys)
       if (arrayKeys.has(key)) {

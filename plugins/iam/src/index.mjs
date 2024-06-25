@@ -581,6 +581,28 @@ const GetGroupPolicy = {
   response: ({ payload }) => payload.GetGroupPolicyResult,
 }
 
+const GetInstanceProfile = {
+  awsDoc: docRoot + 'API_GetInstanceProfile.html',
+  validate: {
+    InstanceProfileName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetInstanceProfile',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Roles', 'Tags' ])
+    let { GetInstanceProfileResult } = payload
+    normalizeObjectArrays(GetInstanceProfileResult, arrayKeys)
+    return GetInstanceProfileResult
+  },
+}
+
 const GetPolicy = {
   awsDoc: docRoot + 'API_GetPolicy.html',
   validate: {
@@ -760,6 +782,40 @@ const ListInstanceProfiles = {
   },
 }
 
+const ListInstanceProfilesForRole = {
+  awsDoc: docRoot + 'API_ListInstanceProfilesForRole.html',
+  validate: {
+    RoleName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListInstanceProfilesForRole',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListInstanceProfilesForRoleResult.Marker',
+        accumulator: 'ListInstanceProfilesForRoleResult.InstanceProfiles.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags', 'InstanceProfiles', 'Roles' ])
+    let { ListInstanceProfilesForRoleResult } = payload
+    normalizeObjectArrays(ListInstanceProfilesForRoleResult, arrayKeys)
+    return ListInstanceProfilesForRoleResult
+  },
+}
+
 const PutGroupPolicy = {
   awsDoc: docRoot + 'API_PutGroupPolicy.html',
   validate: {
@@ -783,6 +839,24 @@ const PutGroupPolicy = {
   response: emptyResponse,
 }
 
+const RemoveRoleFromInstanceProfile = {
+  awsDoc: docRoot + 'API_RemoveRoleFromInstanceProfile.html',
+  validate: {
+    InstanceProfileName,
+    RoleName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'RemoveRoleFromInstanceProfile',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const RemoveUserFromGroup = {
   awsDoc: docRoot + 'API_RemoveUserFromGroup.html',
   validate: {
@@ -797,6 +871,45 @@ const RemoveUserFromGroup = {
         ...params,
       },
     }
+  },
+  response: emptyResponse,
+}
+
+const TagInstanceProfile = {
+  awsDoc: docRoot + 'API_TagInstanceProfile.html',
+  validate: {
+    InstanceProfileName,
+    Tags: { ...Tags, required },
+  },
+  request: params => {
+    const query = {
+      Action: 'TagInstanceProfile',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (query.Tags) serializeTags(query)
+    return { query }
+  },
+  response: emptyResponse,
+}
+
+const UntagInstanceProfile = {
+  awsDoc: docRoot + 'API_UntagInstanceProfile.html',
+  validate: {
+    InstanceProfileName,
+    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+  },
+  request: params => {
+    const { InstanceProfileName, TagKeys } = params
+    let query = {
+      Action: 'UntagInstanceProfile',
+      Version: defaultVersion,
+      InstanceProfileName,
+    }
+    TagKeys.forEach((value, i) => {
+      query[`TagKeys.member.${i + 1}`] = value
+    })
+    return { query }
   },
   response: emptyResponse,
 }
@@ -869,14 +982,19 @@ export default {
     GetAccessKeyLastUsed,
     GetGroup,
     GetGroupPolicy,
+    GetInstanceProfile,
     GetPolicy,
     GetRole,
     GetUser,
     ListAccessKeys,
     ListAccountAliases,
     ListInstanceProfiles,
+    ListInstanceProfilesForRole,
     PutGroupPolicy,
     RemoveUserFromGroup,
+    RemoveRoleFromInstanceProfile,
+    TagInstanceProfile,
+    UntagInstanceProfile,
     UpdateAccessKey,
     UpdateRole,
     ...incomplete,
