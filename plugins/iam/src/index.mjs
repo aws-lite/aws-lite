@@ -39,6 +39,41 @@ const paginator = { type: 'query', cursor: 'Marker' }
 const emptyResponse = () => { return {} }
 const defaultVersion = '2010-05-08'
 
+const AddClientIDToOpenIDConnectProvider = {
+  awsDoc: docRoot + 'API_AddClientIDToOpenIDConnectProvider.html',
+  validate: {
+    ClientID: { ...str, required, comment: 'The client ID (aka the audience) to add to the IAM OpenId Connect provider resource' },
+    OpenIDConnectProviderArn: { ...str, required, comment: 'ARN of the OpenID Connect resource' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'AddClientIDToOpenIDConnectProvider',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const AddRoleToInstanceProfile = {
+  awsDoc: docRoot + 'API_AddRoleToInstanceProfile.html',
+  validate: {
+    InstanceProfileName: { ...str, required, comment: 'Name of the instance profile' },
+    RoleName: { ...str, required, comment: 'Name of the role' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'AddRoleToInstanceProfile',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
 
 const AddUserToGroup = {
   awsDoc: docRoot + 'API_AddUserToGroup.html',
@@ -68,6 +103,42 @@ const AttachGroupPolicy = {
     return {
       query: {
         Action: 'AttachGroupPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const AttachRolePolicy = {
+  awsDoc: docRoot + 'API_AttachRolePolicy.html',
+  validate: {
+    PolicyArn,
+    RoleName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'AttachRolePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const AttachUserPolicy = {
+  awsDoc: docRoot + 'API_AttachUserPolicy.html',
+  validate: {
+    PolicyArn,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'AttachUserPolicy',
         Version: defaultVersion,
         ...params,
       },
@@ -667,8 +738,12 @@ export default {
   service,
   property,
   methods: {
+    AddClientIDToOpenIDConnectProvider,
+    AddRoleToInstanceProfile,
     AddUserToGroup,
     AttachGroupPolicy,
+    AttachRolePolicy,
+    AttachUserPolicy,
     CreateAccessKey,
     CreateAccountAlias,
     CreateGroup,

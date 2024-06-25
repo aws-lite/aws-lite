@@ -1,8 +1,12 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  AddClientIDToOpenIDConnectProviderCommandOutput as AddClientIDToOpenIDConnectProviderResponse,
+  AddRoleToInstanceProfileCommandOutput as AddRoleToInstanceProfileResponse,
   AddUserToGroupCommandOutput as AddUserToGroupResponse,
   AttachGroupPolicyCommandOutput as AttachGroupPolicyResponse,
+  AttachRolePolicyCommandOutput as AttachRolePolicyResponse,
+  AttachUserPolicyCommandOutput as AttachUserPolicyResponse,
   CreateAccessKeyCommandOutput as CreateAccessKeyResponse,
   CreateAccountAliasCommandOutput as CreateAccountAliasResponse,
   CreateGroupCommandOutput as CreateGroupResponse,
@@ -37,6 +41,18 @@ declare interface AwsLiteIAM {
   // $METHODS_START
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddClientIDToOpenIDConnectProvider.html IAM: AddClientIDToOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AddClientIDToOpenIDConnectProvider IAM: AddClientIDToOpenIDConnectProvider}
+   */
+  AddClientIDToOpenIDConnectProvider: (input: { ClientID: string, OpenIDConnectProviderArn: string }) => Promise<AddClientIDToOpenIDConnectProviderResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddRoleToInstanceProfile.html IAM: AddRoleToInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AddRoleToInstanceProfile IAM: AddRoleToInstanceProfile}
+   */
+  AddRoleToInstanceProfile: (input: { InstanceProfileName: string, RoleName: string }) => Promise<AddRoleToInstanceProfileResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddUserToGroup.html IAM: AddUserToGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AddUserToGroup IAM: AddUserToGroup}
    */
@@ -47,6 +63,18 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AttachGroupPolicy IAM: AttachGroupPolicy}
    */
   AttachGroupPolicy: (input: { GroupName: string, PolicyArn: string }) => Promise<AttachGroupPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachRolePolicy.html IAM: AttachRolePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AttachRolePolicy IAM: AttachRolePolicy}
+   */
+  AttachRolePolicy: (input: { PolicyArn: string, RoleName: string }) => Promise<AttachRolePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html IAM: AttachUserPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AttachUserPolicy IAM: AttachUserPolicy}
+   */
+  AttachUserPolicy: (input: { PolicyArn: string, UserName: string }) => Promise<AttachUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccessKey.html IAM: CreateAccessKey}
@@ -216,8 +244,12 @@ export type {
   AwsLiteIAM,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
+  AddClientIDToOpenIDConnectProviderResponse,
+  AddRoleToInstanceProfileResponse,
   AddUserToGroupResponse,
   AttachGroupPolicyResponse,
+  AttachRolePolicyResponse,
+  AttachUserPolicyResponse,
   CreateAccessKeyResponse,
   CreateAccountAliasResponse,
   CreateGroupResponse,

@@ -1,10 +1,6 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/IAM/latest/APIReference/'
 export default {
-  AddClientIDToOpenIDConnectProvider:        { disabled, awsDoc: docRoot + 'API_AddClientIDToOpenIDConnectProvider.html' },
-  AddRoleToInstanceProfile:                  { disabled, awsDoc: docRoot + 'API_AddRoleToInstanceProfile.html' },
-  AttachRolePolicy:                          { disabled, awsDoc: docRoot + 'API_AttachRolePolicy.html' },
-  AttachUserPolicy:                          { disabled, awsDoc: docRoot + 'API_AttachUserPolicy.html' },
   ChangePassword:                            { disabled, awsDoc: docRoot + 'API_ChangePassword.html' },
   CreateInstanceProfile:                     { disabled, awsDoc: docRoot + 'API_CreateInstanceProfile.html' },
   CreateLoginProfile:                        { disabled, awsDoc: docRoot + 'API_CreateLoginProfile.html' },

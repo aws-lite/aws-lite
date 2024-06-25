@@ -32,6 +32,28 @@ npm i -D @aws-lite/iam-types
 
 <!-- ! Do not remove METHOD_DOCS_START / METHOD_DOCS_END ! -->
 <!-- METHOD_DOCS_START -->
+### `AddClientIDToOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddClientIDToOpenIDConnectProvider.html)
+
+Properties:
+- **`ClientID` (string) [required]**
+  - The client ID (aka the audience) to add to the IAM OpenId Connect provider resource
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
+
+
+### `AddRoleToInstanceProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddRoleToInstanceProfile.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
 ### `AddUserToGroup`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddUserToGroup.html)
@@ -52,6 +74,28 @@ Properties:
   - Name of the group; names are not distinguished by case
 - **`PolicyArn` (string) [required]**
   - Arn of the policy
+
+
+### `AttachRolePolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachRolePolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
+### `AttachUserPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`UserName` (string) [required]**
+  - User name
 
 
 ### `CreateAccessKey`
@@ -365,10 +409,6 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`AddClientIDToOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddClientIDToOpenIDConnectProvider.html)
-- [`AddRoleToInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddRoleToInstanceProfile.html)
-- [`AttachRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachRolePolicy.html)
-- [`AttachUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html)
 - [`ChangePassword`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html)
 - [`CreateInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateInstanceProfile.html)
 - [`CreateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html)
