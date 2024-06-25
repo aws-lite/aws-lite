@@ -34,6 +34,7 @@ const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: u
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const InstanceProfileName = { ...str, required, comment: 'Name of the instance profile' }
+const PathPrefix = { ...str, comment: 'Filter results by path prefix' }
 
 const paginator = { type: 'query', cursor: 'Marker' }
 
@@ -748,6 +749,145 @@ const ListAccountAliases = {
   },
 }
 
+const ListAttachedGroupPolicies = {
+  awsDoc: docRoot + 'API_ListAttachedGroupPolicies.html',
+  validate: {
+    GroupName,
+    Marker,
+    PathPrefix,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListAttachedGroupPolicies',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListAttachedGroupPoliciesResult.Marker',
+        accumulator: 'ListAttachedGroupPoliciesResult.AttachedPolicies.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'AttachedPolicies' ])
+    let { ListAttachedGroupPoliciesResult } = payload
+    normalizeObjectArrays(ListAttachedGroupPoliciesResult, arrayKeys)
+    return ListAttachedGroupPoliciesResult
+  },
+}
+
+const ListGroupPolicies = {
+  awsDoc: docRoot + 'API_ListGroupPolicies.html',
+  validate: {
+    GroupName,
+    Marker,
+    PathPrefix,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListGroupPolicies',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListGroupPoliciesResult.Marker',
+        accumulator: 'ListGroupPoliciesResult.PolicyNames.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'PolicyNames' ])
+    let { ListGroupPoliciesResult } = payload
+    normalizeObjectArrays(ListGroupPoliciesResult, arrayKeys)
+    return ListGroupPoliciesResult
+  },
+}
+
+
+const ListGroups = {
+  awsDoc: docRoot + 'API_ListGroups.html',
+  validate: {
+    Marker,
+    PathPrefix,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListGroups',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListGroupsResult.Marker',
+        accumulator: 'ListGroupsResult.Groups.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Groups' ])
+    let { ListGroupsResult } = payload
+    normalizeObjectArrays(ListGroupsResult, arrayKeys)
+    return ListGroupsResult
+  },
+}
+
+const ListGroupsForUser = {
+  awsDoc: docRoot + 'API_ListGroupsForUser.html',
+  validate: {
+    UserName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListGroupsForUser',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListGroupsForUserResult.Marker',
+        accumulator: 'ListGroupsForUserResult.Groups.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Groups' ])
+    let { ListGroupsForUserResult } = payload
+    normalizeObjectArrays(ListGroupsForUserResult, arrayKeys)
+    return ListGroupsForUserResult
+  },
+}
+
 const ListInstanceProfiles = {
   awsDoc: docRoot + 'API_ListInstanceProfiles.html',
   validate: {
@@ -813,6 +953,40 @@ const ListInstanceProfilesForRole = {
     let { ListInstanceProfilesForRoleResult } = payload
     normalizeObjectArrays(ListInstanceProfilesForRoleResult, arrayKeys)
     return ListInstanceProfilesForRoleResult
+  },
+}
+
+const ListInstanceProfileTags = {
+  awsDoc: docRoot + 'API_ListInstanceProfileTags.html',
+  validate: {
+    InstanceProfileName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListInstanceProfileTags',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListInstanceProfileTagsResult.Marker',
+        accumulator: 'ListInstanceProfileTagsResult.Tags.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    let { ListInstanceProfileTagsResult } = payload
+    normalizeObjectArrays(ListInstanceProfileTagsResult, arrayKeys)
+    return ListInstanceProfileTagsResult
   },
 }
 
@@ -932,6 +1106,24 @@ const UpdateAccessKey = {
   response: emptyResponse,
 }
 
+const UpdateGroup = {
+  awsDoc: docRoot + 'API_UpdateGroup.html',
+  validate: {
+    GroupName,
+    NewGroupName: { ...str, comment: 'New name for the group' },
+    NewPath: { ...str, comment: 'New path for the group' },
+  },
+  request: params => {
+    const query = {
+      Action: 'UpdateGroup',
+      Version: defaultVersion,
+      ...params,
+    }
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const UpdateRole = {
   awsDoc: docRoot + 'API_UpdateRole.html',
   validate: {
@@ -988,14 +1180,20 @@ export default {
     GetUser,
     ListAccessKeys,
     ListAccountAliases,
+    ListAttachedGroupPolicies,
+    ListGroupPolicies,
+    ListGroups,
+    ListGroupsForUser,
     ListInstanceProfiles,
     ListInstanceProfilesForRole,
+    ListInstanceProfileTags,
     PutGroupPolicy,
     RemoveUserFromGroup,
     RemoveRoleFromInstanceProfile,
     TagInstanceProfile,
     UntagInstanceProfile,
     UpdateAccessKey,
+    UpdateGroup,
     UpdateRole,
     ...incomplete,
   },

@@ -33,14 +33,20 @@ import {
   GetUserCommandOutput as GetUserResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
+  ListAttachedGroupPoliciesCommandOutput as ListAttachedGroupPoliciesResponse,
+  ListGroupPoliciesCommandOutput as ListGroupPoliciesResponse,
+  ListGroupsCommandOutput as ListGroupsResponse,
+  ListGroupsForUserCommandOutput as ListGroupsForUserResponse,
   ListInstanceProfilesCommandOutput as ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleCommandOutput as ListInstanceProfilesForRoleResponse,
+  ListInstanceProfileTagsCommandOutput as ListInstanceProfileTagsResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
   UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
+  UpdateGroupCommandOutput as UpdateGroupResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
@@ -242,6 +248,30 @@ declare interface AwsLiteIAM {
   ListAccountAliases: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAccountAliasesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedGroupPolicies.html IAM: ListAttachedGroupPolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedGroupPolicies IAM: ListAttachedGroupPolicies}
+   */
+  ListAttachedGroupPolicies: (input: { GroupName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedGroupPoliciesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html IAM: ListGroupPolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroupPolicies IAM: ListGroupPolicies}
+   */
+  ListGroupPolicies: (input: { GroupName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListGroupPoliciesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroups.html IAM: ListGroups}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroups IAM: ListGroups}
+   */
+  ListGroups: (input: { Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListGroupsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupsForUser.html IAM: ListGroupsForUser}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroupsForUser IAM: ListGroupsForUser}
+   */
+  ListGroupsForUser: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListGroupsForUserResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfiles.html IAM: ListInstanceProfiles}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfiles IAM: ListInstanceProfiles}
    */
@@ -252,6 +282,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfilesForRole IAM: ListInstanceProfilesForRole}
    */
   ListInstanceProfilesForRole: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfilesForRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfileTags.html IAM: ListInstanceProfileTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfileTags IAM: ListInstanceProfileTags}
+   */
+  ListInstanceProfileTags: (input: { InstanceProfileName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfileTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
@@ -288,6 +324,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccessKey IAM: UpdateAccessKey}
    */
   UpdateAccessKey: (input: { AccessKeyId: string, Status: string, UserName?: string }) => Promise<UpdateAccessKeyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateGroup.html IAM: UpdateGroup}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateGroup IAM: UpdateGroup}
+   */
+  UpdateGroup: (input: { GroupName: string, NewGroupName?: string, NewPath?: string }) => Promise<UpdateGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html IAM: UpdateRole}
@@ -339,14 +381,20 @@ export type {
   GetUserResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
+  ListAttachedGroupPoliciesResponse,
+  ListGroupPoliciesResponse,
+  ListGroupsResponse,
+  ListGroupsForUserResponse,
   ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleResponse,
+  ListInstanceProfileTagsResponse,
   PutGroupPolicyResponse,
   RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileResponse,
   UntagInstanceProfileResponse,
   UpdateAccessKeyResponse,
+  UpdateGroupResponse,
   UpdateRoleResponse,
   // $EXPORT_END
 }

@@ -399,6 +399,70 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListAttachedGroupPolicies`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedGroupPolicies.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`Marker` (string)**
+  - Pagination cursor
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListGroupPolicies`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`Marker` (string)**
+  - Pagination cursor
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListGroups`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroups.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListGroupsForUser`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupsForUser.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListInstanceProfiles`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfiles.html)
@@ -421,6 +485,21 @@ Properties:
 Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListInstanceProfileTags`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfileTags.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
 - **`Marker` (string)**
   - Pagination cursor
 - **`MaxItems` (number)**
@@ -500,6 +579,19 @@ Properties:
   - User name
 
 
+### `UpdateGroup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateGroup.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`NewGroupName` (string)**
+  - New name for the group
+- **`NewPath` (string)**
+  - New path for the group
+
+
 ### `UpdateRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html)
@@ -565,14 +657,9 @@ Properties:
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
 - [`GetSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html)
 - [`GetUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html)
-- [`ListAttachedGroupPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedGroupPolicies.html)
 - [`ListAttachedRolePolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedRolePolicies.html)
 - [`ListAttachedUserPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedUserPolicies.html)
 - [`ListEntitiesForPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html)
-- [`ListGroupPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html)
-- [`ListGroups`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroups.html)
-- [`ListGroupsForUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupsForUser.html)
-- [`ListInstanceProfileTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfileTags.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)
 - [`ListOpenIDConnectProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviders.html)
@@ -622,7 +709,6 @@ Properties:
 - [`UntagUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagUser.html)
 - [`UpdateAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html)
 - [`UpdateAssumeRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAssumeRolePolicy.html)
-- [`UpdateGroup`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateGroup.html)
 - [`UpdateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateLoginProfile.html)
 - [`UpdateOpenIDConnectProviderThumbprint`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
 - [`UpdateRoleDescription`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRoleDescription.html)
