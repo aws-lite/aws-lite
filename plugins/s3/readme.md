@@ -788,8 +788,6 @@ Properties:
   - Reference a specific version of the object
 - **`MaxParts` (number)**
   - Maximum number of parts returned in the response if the `ObjectParts` attribute is requested
-- **`paginate` (boolean)**
-  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`PartNumberMarker` (string)**
   - Sets request header: `x-amz-part-number-marker`
 - **`SSECustomerAlgorithm` (string)**

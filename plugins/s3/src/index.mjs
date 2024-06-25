@@ -1207,7 +1207,7 @@ const GetObjectAcl = {
   },
 }
 
-// TODO: Enable pagination support
+// TODO: Enable header pagination support
 const GetObjectAttributes = {
   awsDoc: docRoot + 'API_GetObjectAttributes.html',
   validate: {
@@ -1216,7 +1216,6 @@ const GetObjectAttributes = {
     ObjectAttributes: { ...arr, required, comment: 'Specify the root level of the attributes to be returned', ref: docRoot + 'API_GetObjectAttributes.html#API_GetObjectAttributes_RequestParameters' },
     VersionId,
     MaxParts: { ...num, comment: 'Maximum number of parts returned in the response if the `ObjectParts` attribute is requested' },
-    paginate: valPaginate,
     ...getValidateHeaders('PartNumberMarker', 'SSECustomerAlgorithm',
       'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner'),
   },
@@ -1233,8 +1232,6 @@ const GetObjectAttributes = {
       path: `/${Key}`,
       headers,
       query,
-      // paginate: true,
-      // paginator: { type: 'headers', cursor: 'x-amz-part-number-marker', token: 'ObjectParts.NextPartNumberMarker', accumulator: 'ObjectParts.Part' },
     }
   },
   response: ({ payload, headers }) => {

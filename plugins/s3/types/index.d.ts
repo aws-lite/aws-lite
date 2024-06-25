@@ -362,7 +362,7 @@ declare interface AwsLiteS3 {
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html S3: GetObjectAttributes}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetObjectAttributes S3: GetObjectAttributes}
    */
-  GetObjectAttributes: (input: { Bucket: string, Key: string, ObjectAttributes: any[], VersionId?: string, MaxParts?: number, paginate?: boolean, PartNumberMarker?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string }) => Promise<GetObjectAttributesResponse>
+  GetObjectAttributes: (input: { Bucket: string, Key: string, ObjectAttributes: any[], VersionId?: string, MaxParts?: number, PartNumberMarker?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string }) => Promise<GetObjectAttributesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html S3: GetObjectLegalHold}
