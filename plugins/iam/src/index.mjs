@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { serializeTags } = lib
+const { serializeTags, normalizeObjectArrays } = lib
 
 const service = 'iam'
 const property = 'IAM'
@@ -33,6 +33,7 @@ const RoleName = { ...str, required, comment: 'Name of the role' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const InstanceProfileName = { ...str, required, comment: 'Name of the instance profile' }
 
 const paginator = { type: 'query', cursor: 'Marker' }
 
@@ -60,7 +61,7 @@ const AddClientIDToOpenIDConnectProvider = {
 const AddRoleToInstanceProfile = {
   awsDoc: docRoot + 'API_AddRoleToInstanceProfile.html',
   validate: {
-    InstanceProfileName: { ...str, required, comment: 'Name of the instance profile' },
+    InstanceProfileName,
     RoleName: { ...str, required, comment: 'Name of the role' },
   },
   request: params => {
@@ -147,6 +148,24 @@ const AttachUserPolicy = {
   response: emptyResponse,
 }
 
+const ChangePassword = {
+  awsDoc: docRoot + 'API_ChangePassword.html',
+  validate: {
+    NewPassword: { ...str, required, comment: 'New password; must conform to the accounts password policy' },
+    OldPassword: { ...str, required, comment: 'Current password' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'ChangePassword',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const CreateAccessKey = {
   awsDoc: docRoot + 'API_CreateAccessKey.html',
   validate: {
@@ -198,6 +217,44 @@ const CreateGroup = {
   response: ({ payload }) => { return payload.CreateGroupResult },
 }
 
+const CreateInstanceProfile = {
+  awsDoc: docRoot + 'API_CreateInstanceProfile.html',
+  validate: {
+    InstanceProfileName,
+    Path,
+    Tags,
+  },
+  request: params => {
+    let query = {
+      Action: 'CreateInstanceProfile',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (query.Tags) serializeTags(query)
+    return {
+      query,
+    }
+  },
+  response: ({ payload }) => {
+    let { CreateInstanceProfileResult } = payload
+    let { InstanceProfile } = CreateInstanceProfileResult
+    let { Tags, Roles } = InstanceProfile
+    if (Tags) InstanceProfile.Tags = Array.isArray(Tags.member) ? Tags.member : [ Tags.member ]
+    if (Roles && !Array.isArray(Roles)) {
+      Roles = [ Roles ]
+    }
+    else {
+      Roles = []
+    }
+    InstanceProfile.Roles = Roles.map(i => {
+      const { Tags } = i
+      if (Tags) i.Tags = Array.isArray(Tags.member) ? Tags.member : [ Tags.member ]
+      return i
+    })
+    return CreateInstanceProfileResult
+  },
+}
+
 const CreatePolicy = {
   awsDoc: docRoot + 'API_CreatePolicy.html',
   validate: {
@@ -216,10 +273,7 @@ const CreatePolicy = {
     if (typeof query.PolicyDocument !== 'string') {
       query.PolicyDocument = JSON.stringify(query.PolicyDocument)
     }
-    if (query.Tags) {
-      serializeTags(query)
-      delete query.Tags
-    }
+    if (query.Tags) serializeTags(query)
     return {
       query,
     }
@@ -357,6 +411,23 @@ const DeleteGroupPolicy = {
     return {
       query: {
         Action: 'DeleteGroupPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteInstanceProfile = {
+  awsDoc: docRoot + 'API_DeleteInstanceProfile.html',
+  validate: {
+    InstanceProfileName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteInstanceProfile',
         Version: defaultVersion,
         ...params,
       },
@@ -655,6 +726,40 @@ const ListAccountAliases = {
   },
 }
 
+const ListInstanceProfiles = {
+  awsDoc: docRoot + 'API_ListInstanceProfiles.html',
+  validate: {
+    Marker,
+    MaxItems,
+    PathPrefix: { ...str, comment: 'Filter results by path prefix' },
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListInstanceProfiles',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListInstanceProfilesResult.Marker',
+        accumulator: 'ListInstanceProfilesResult.InstanceProfiles.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags', 'InstanceProfiles', 'Roles' ])
+    let { ListInstanceProfilesResult } = payload
+    normalizeObjectArrays(ListInstanceProfilesResult, arrayKeys)
+    return ListInstanceProfilesResult
+  },
+}
+
 const PutGroupPolicy = {
   awsDoc: docRoot + 'API_PutGroupPolicy.html',
   validate: {
@@ -744,9 +849,11 @@ export default {
     AttachGroupPolicy,
     AttachRolePolicy,
     AttachUserPolicy,
+    ChangePassword,
     CreateAccessKey,
     CreateAccountAlias,
     CreateGroup,
+    CreateInstanceProfile,
     CreatePolicy,
     CreateRole,
     CreateUser,
@@ -754,6 +861,7 @@ export default {
     DeleteAccountAlias,
     DeleteGroup,
     DeleteGroupPolicy,
+    DeleteInstanceProfile,
     DeletePolicy,
     DeleteRole,
     DeleteUser,
@@ -766,6 +874,7 @@ export default {
     GetUser,
     ListAccessKeys,
     ListAccountAliases,
+    ListInstanceProfiles,
     PutGroupPolicy,
     RemoveUserFromGroup,
     UpdateAccessKey,

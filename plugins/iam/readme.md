@@ -98,6 +98,17 @@ Properties:
   - User name
 
 
+### `ChangePassword`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html)
+
+Properties:
+- **`NewPassword` (string) [required]**
+  - New password; must conform to the accounts password policy
+- **`OldPassword` (string) [required]**
+  - Current password
+
+
 ### `CreateAccessKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccessKey.html)
@@ -126,6 +137,21 @@ Properties:
 - **`Path` (string)**
   - Path for the identifier
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
+
+
+### `CreateInstanceProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateInstanceProfile.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
+- **`Path` (string)**
+  - Path for the identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
 ### `CreatePolicy`
@@ -225,6 +251,15 @@ Properties:
   - Name of the group; names are not distinguished by case
 - **`PolicyName` (string) [required]**
   - Name of the policy
+
+
+### `DeleteInstanceProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteInstanceProfile.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
 
 
 ### `DeletePolicy`
@@ -355,6 +390,21 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListInstanceProfiles`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfiles.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `PutGroupPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html)
@@ -409,8 +459,6 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`ChangePassword`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html)
-- [`CreateInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateInstanceProfile.html)
 - [`CreateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html)
 - [`CreateOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
 - [`CreatePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
@@ -420,7 +468,6 @@ Properties:
 - [`CreateVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
 - [`DeleteAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountPasswordPolicy.html)
-- [`DeleteInstanceProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteInstanceProfile.html)
 - [`DeleteLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html)
 - [`DeleteOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
 - [`DeletePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
@@ -468,7 +515,6 @@ Properties:
 - [`ListGroupPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html)
 - [`ListGroups`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroups.html)
 - [`ListGroupsForUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupsForUser.html)
-- [`ListInstanceProfiles`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfiles.html)
 - [`ListInstanceProfilesForRole`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfilesForRole.html)
 - [`ListInstanceProfileTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfileTags.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)

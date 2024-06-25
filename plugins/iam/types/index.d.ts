@@ -7,9 +7,11 @@ import {
   AttachGroupPolicyCommandOutput as AttachGroupPolicyResponse,
   AttachRolePolicyCommandOutput as AttachRolePolicyResponse,
   AttachUserPolicyCommandOutput as AttachUserPolicyResponse,
+  ChangePasswordCommandOutput as ChangePasswordResponse,
   CreateAccessKeyCommandOutput as CreateAccessKeyResponse,
   CreateAccountAliasCommandOutput as CreateAccountAliasResponse,
   CreateGroupCommandOutput as CreateGroupResponse,
+  CreateInstanceProfileCommandOutput as CreateInstanceProfileResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateUserCommandOutput as CreateUserResponse,
@@ -17,6 +19,7 @@ import {
   DeleteAccountAliasCommandOutput as DeleteAccountAliasResponse,
   DeleteGroupCommandOutput as DeleteGroupResponse,
   DeleteGroupPolicyCommandOutput as DeleteGroupPolicyResponse,
+  DeleteInstanceProfileCommandOutput as DeleteInstanceProfileResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
@@ -29,6 +32,7 @@ import {
   GetUserCommandOutput as GetUserResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
+  ListInstanceProfilesCommandOutput as ListInstanceProfilesResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
@@ -77,6 +81,12 @@ declare interface AwsLiteIAM {
   AttachUserPolicy: (input: { PolicyArn: string, UserName: string }) => Promise<AttachUserPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html IAM: ChangePassword}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ChangePassword IAM: ChangePassword}
+   */
+  ChangePassword: (input: { NewPassword: string, OldPassword: string }) => Promise<ChangePasswordResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccessKey.html IAM: CreateAccessKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateAccessKey IAM: CreateAccessKey}
    */
@@ -93,6 +103,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateGroup IAM: CreateGroup}
    */
   CreateGroup: (input: { GroupName: string, Path?: string }) => Promise<CreateGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateInstanceProfile.html IAM: CreateInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateInstanceProfile IAM: CreateInstanceProfile}
+   */
+  CreateInstanceProfile: (input: { InstanceProfileName: string, Path?: string, Tags?: any[] }) => Promise<CreateInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html IAM: CreatePolicy}
@@ -135,6 +151,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteGroupPolicy IAM: DeleteGroupPolicy}
    */
   DeleteGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<DeleteGroupPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteInstanceProfile.html IAM: DeleteInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteInstanceProfile IAM: DeleteInstanceProfile}
+   */
+  DeleteInstanceProfile: (input: { InstanceProfileName: string }) => Promise<DeleteInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html IAM: DeletePolicy}
@@ -209,6 +231,12 @@ declare interface AwsLiteIAM {
   ListAccountAliases: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAccountAliasesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfiles.html IAM: ListInstanceProfiles}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfiles IAM: ListInstanceProfiles}
+   */
+  ListInstanceProfiles: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListInstanceProfilesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
@@ -250,9 +278,11 @@ export type {
   AttachGroupPolicyResponse,
   AttachRolePolicyResponse,
   AttachUserPolicyResponse,
+  ChangePasswordResponse,
   CreateAccessKeyResponse,
   CreateAccountAliasResponse,
   CreateGroupResponse,
+  CreateInstanceProfileResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateUserResponse,
@@ -260,6 +290,7 @@ export type {
   DeleteAccountAliasResponse,
   DeleteGroupResponse,
   DeleteGroupPolicyResponse,
+  DeleteInstanceProfileResponse,
   DeletePolicyResponse,
   DeleteRoleResponse,
   DeleteUserResponse,
@@ -272,6 +303,7 @@ export type {
   GetUserResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
+  ListInstanceProfilesResponse,
   PutGroupPolicyResponse,
   RemoveUserFromGroupResponse,
   UpdateAccessKeyResponse,

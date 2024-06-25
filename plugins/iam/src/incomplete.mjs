@@ -1,8 +1,8 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/IAM/latest/APIReference/'
 export default {
-  ChangePassword:                            { disabled, awsDoc: docRoot + 'API_ChangePassword.html' },
-  CreateInstanceProfile:                     { disabled, awsDoc: docRoot + 'API_CreateInstanceProfile.html' },
+  // ChangePassword:                            { disabled, awsDoc: docRoot + 'API_ChangePassword.html' },
+  // CreateInstanceProfile:                     { disabled, awsDoc: docRoot + 'API_CreateInstanceProfile.html' },
   CreateLoginProfile:                        { disabled, awsDoc: docRoot + 'API_CreateLoginProfile.html' },
   CreateOpenIDConnectProvider:               { disabled, awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html' },
   CreatePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_CreatePolicyVersion.html' },
@@ -12,7 +12,7 @@ export default {
   CreateVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_CreateVirtualMFADevice.html' },
   DeactivateMFADevice:                       { disabled, awsDoc: docRoot + 'API_DeactivateMFADevice.html' },
   DeleteAccountPasswordPolicy:               { disabled, awsDoc: docRoot + 'API_DeleteAccountPasswordPolicy.html' },
-  DeleteInstanceProfile:                     { disabled, awsDoc: docRoot + 'API_DeleteInstanceProfile.html' },
+  // DeleteInstanceProfile:                     { disabled, awsDoc: docRoot + 'API_DeleteInstanceProfile.html' },
   DeleteLoginProfile:                        { disabled, awsDoc: docRoot + 'API_DeleteLoginProfile.html' },
   DeleteOpenIDConnectProvider:               { disabled, awsDoc: docRoot + 'API_DeleteOpenIDConnectProvider.html' },
   DeletePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_DeletePolicyVersion.html' },
@@ -60,7 +60,7 @@ export default {
   ListGroupPolicies:                         { disabled, awsDoc: docRoot + 'API_ListGroupPolicies.html' },
   ListGroups:                                { disabled, awsDoc: docRoot + 'API_ListGroups.html' },
   ListGroupsForUser:                         { disabled, awsDoc: docRoot + 'API_ListGroupsForUser.html' },
-  ListInstanceProfiles:                      { disabled, awsDoc: docRoot + 'API_ListInstanceProfiles.html' },
+  // ListInstanceProfiles:                      { disabled, awsDoc: docRoot + 'API_ListInstanceProfiles.html' },
   ListInstanceProfilesForRole:               { disabled, awsDoc: docRoot + 'API_ListInstanceProfilesForRole.html' },
   ListInstanceProfileTags:                   { disabled, awsDoc: docRoot + 'API_ListInstanceProfileTags.html' },
   ListMFADevices:                            { disabled, awsDoc: docRoot + 'API_ListMFADevices.html' },
