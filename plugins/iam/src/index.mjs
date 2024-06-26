@@ -1135,6 +1135,72 @@ const ListRolePolicies = {
   },
 }
 
+const ListRoles = {
+  awsDoc: docRoot + 'API_ListRoles.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListRoles',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListRolesResult.Marker',
+        accumulator: 'ListRolesResult.Roles.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Roles', 'Tags' ])
+    let { ListRolesResult } = payload
+    normalizeObjectArrays(ListRolesResult, arrayKeys)
+    return ListRolesResult
+  },
+}
+
+const ListRoleTags = {
+  awsDoc: docRoot + 'API_ListRoleTags.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListRoleTags',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListRoleTagsResult.Marker',
+        accumulator: 'ListRoleTagsResult.Tags.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    let { ListRoleTagsResult } = payload
+    normalizeObjectArrays(ListRoleTagsResult, arrayKeys)
+    return ListRoleTagsResult
+  },
+}
+
 const PutGroupPolicy = {
   awsDoc: docRoot + 'API_PutGroupPolicy.html',
   validate: {
@@ -1233,6 +1299,24 @@ const TagInstanceProfile = {
   response: emptyResponse,
 }
 
+const TagRole = {
+  awsDoc: docRoot + 'API_TagRole.html',
+  validate: {
+    RoleName,
+    Tags: { ...Tags, required },
+  },
+  request: params => {
+    const query = {
+      Action: 'TagRole',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (query.Tags) serializeTags(query)
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const UntagInstanceProfile = {
   awsDoc: docRoot + 'API_UntagInstanceProfile.html',
   validate: {
@@ -1245,6 +1329,27 @@ const UntagInstanceProfile = {
       Action: 'UntagInstanceProfile',
       Version: defaultVersion,
       InstanceProfileName,
+    }
+    TagKeys.forEach((value, i) => {
+      query[`TagKeys.member.${i + 1}`] = value
+    })
+    return { query }
+  },
+  response: emptyResponse,
+}
+
+const UntagRole = {
+  awsDoc: docRoot + 'API_UntagRole.html',
+  validate: {
+    RoleName,
+    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+  },
+  request: params => {
+    const { RoleName, TagKeys } = params
+    let query = {
+      Action: 'UntagRole',
+      Version: defaultVersion,
+      RoleName,
     }
     TagKeys.forEach((value, i) => {
       query[`TagKeys.member.${i + 1}`] = value
@@ -1268,6 +1373,26 @@ const UpdateAccessKey = {
       ...params,
     }
     return { query }
+  },
+  response: emptyResponse,
+}
+
+const UpdateAssumeRolePolicy = {
+  awsDoc: docRoot + 'API_UpdateAssumeRolePolicy.html',
+  validate: {
+    PolicyDocument,
+    RoleName,
+  },
+  request: params => {
+    let query = {
+      Action: 'UpdateAssumeRolePolicy',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (typeof query.PolicyDocument !== 'string') query.PolicyDocument = JSON.stringify(query.PolicyDocument)
+    return {
+      query,
+    }
   },
   response: emptyResponse,
 }
@@ -1359,13 +1484,18 @@ export default {
     ListInstanceProfilesForRole,
     ListInstanceProfileTags,
     ListRolePolicies,
+    ListRoles,
+    ListRoleTags,
     PutGroupPolicy,
     PutRolePolicy,
     RemoveUserFromGroup,
     RemoveRoleFromInstanceProfile,
     TagInstanceProfile,
+    TagRole,
     UntagInstanceProfile,
+    UntagRole,
     UpdateAccessKey,
+    UpdateAssumeRolePolicy,
     UpdateGroup,
     UpdateRole,
     ...incomplete,
