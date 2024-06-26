@@ -14,6 +14,7 @@ import {
   CreateInstanceProfileCommandOutput as CreateInstanceProfileResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
+  CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
   CreateUserCommandOutput as CreateUserResponse,
   DeleteAccessKeyCommandOutput as DeleteAccessKeyResponse,
   DeleteAccountAliasCommandOutput as DeleteAccountAliasResponse,
@@ -23,9 +24,11 @@ import {
   DeletePolicyCommandOutput as DeletePolicyResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
+  DeleteServiceLinkedRoleCommandOutput as DeleteServiceLinkedRoleResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
   DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
+  DetachUserPolicyCommandOutput as DetachUserPolicyResponse,
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
   GetGroupCommandOutput as GetGroupResponse,
   GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
@@ -38,6 +41,7 @@ import {
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
   ListAttachedGroupPoliciesCommandOutput as ListAttachedGroupPoliciesResponse,
   ListAttachedRolePoliciesCommandOutput as ListAttachedRolePoliciesResponse,
+  ListAttachedUserPoliciesCommandOutput as ListAttachedUserPoliciesResponse,
   ListGroupPoliciesCommandOutput as ListGroupPoliciesResponse,
   ListGroupsCommandOutput as ListGroupsResponse,
   ListGroupsForUserCommandOutput as ListGroupsForUserResponse,
@@ -59,6 +63,7 @@ import {
   UpdateAssumeRolePolicyCommandOutput as UpdateAssumeRolePolicyResponse,
   UpdateGroupCommandOutput as UpdateGroupResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
+  UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
 
@@ -145,6 +150,12 @@ declare interface AwsLiteIAM {
   CreateRole: (input: { AssumeRolePolicyDocument: string | Record<string, any>, RoleName: string, Description?: string, MaxSessionDuration?: number, Path?: string, PermissionsBoundary?: string, Tags?: any[] }) => Promise<CreateRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceLinkedRole.html IAM: CreateServiceLinkedRole}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateServiceLinkedRole IAM: CreateServiceLinkedRole}
+   */
+  CreateServiceLinkedRole: (input: { AWSServiceName: string, CustomSuffix?: string, Description?: string }) => Promise<CreateServiceLinkedRoleResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html IAM: CreateUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateUser IAM: CreateUser}
    */
@@ -199,6 +210,12 @@ declare interface AwsLiteIAM {
   DeleteRolePolicy: (input: { RoleName: string, PolicyName: string }) => Promise<DeleteRolePolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceLinkedRole.html IAM: DeleteServiceLinkedRole}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceLinkedRole IAM: DeleteServiceLinkedRole}
+   */
+  DeleteServiceLinkedRole: (input: { RoleName: string }) => Promise<DeleteServiceLinkedRoleResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html IAM: DeleteUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUser IAM: DeleteUser}
    */
@@ -215,6 +232,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachRolePolicy IAM: DetachRolePolicy}
    */
   DetachRolePolicy: (input: { PolicyArn: string, RoleName: string }) => Promise<DetachRolePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachUserPolicy.html IAM: DetachUserPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachUserPolicy IAM: DetachUserPolicy}
+   */
+  DetachUserPolicy: (input: { PolicyArn: string, UserName: string }) => Promise<DetachUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html IAM: GetAccessKeyLastUsed}
@@ -287,6 +310,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedRolePolicies IAM: ListAttachedRolePolicies}
    */
   ListAttachedRolePolicies: (input: { RoleName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedRolePoliciesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedUserPolicies.html IAM: ListAttachedUserPolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedUserPolicies IAM: ListAttachedUserPolicies}
+   */
+  ListAttachedUserPolicies: (input: { UserName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedUserPoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html IAM: ListGroupPolicies}
@@ -413,6 +442,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRole IAM: UpdateRole}
    */
   UpdateRole: (input: { RoleName: string, Description?: string, MaxSessionDuration?: number }) => Promise<UpdateRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRoleDescription.html IAM: UpdateRoleDescription}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRoleDescription IAM: UpdateRoleDescription}
+   */
+  UpdateRoleDescription: (input: { RoleName: string, Description?: string }) => Promise<UpdateRoleDescriptionResponse>
   // $METHODS_END
 }
 
@@ -439,6 +474,7 @@ export type {
   CreateInstanceProfileResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
+  CreateServiceLinkedRoleResponse,
   CreateUserResponse,
   DeleteAccessKeyResponse,
   DeleteAccountAliasResponse,
@@ -448,9 +484,11 @@ export type {
   DeletePolicyResponse,
   DeleteRoleResponse,
   DeleteRolePolicyResponse,
+  DeleteServiceLinkedRoleResponse,
   DeleteUserResponse,
   DetachGroupPolicyResponse,
   DetachRolePolicyResponse,
+  DetachUserPolicyResponse,
   GetAccessKeyLastUsedResponse,
   GetGroupResponse,
   GetGroupPolicyResponse,
@@ -463,6 +501,7 @@ export type {
   ListAccountAliasesResponse,
   ListAttachedGroupPoliciesResponse,
   ListAttachedRolePoliciesResponse,
+  ListAttachedUserPoliciesResponse,
   ListGroupPoliciesResponse,
   ListGroupsResponse,
   ListGroupsForUserResponse,
@@ -484,5 +523,6 @@ export type {
   UpdateAssumeRolePolicyResponse,
   UpdateGroupResponse,
   UpdateRoleResponse,
+  UpdateRoleDescriptionResponse,
   // $EXPORT_END
 }

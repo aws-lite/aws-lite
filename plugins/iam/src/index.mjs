@@ -35,6 +35,7 @@ const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const InstanceProfileName = { ...str, required, comment: 'Name of the instance profile' }
 const PathPrefix = { ...str, comment: 'Filter results by path prefix' }
+const AWSServiceName = { ...str, required, comment: 'The service principal to which this role is attached; use `CustomSuffix` to prevent duplication errors during multiple requests for the same service' }
 
 const paginator = { type: 'query', cursor: 'Marker' }
 
@@ -339,6 +340,25 @@ const CreateRole = {
   response: ({ payload }) => payload.CreateRoleResult,
 }
 
+const CreateServiceLinkedRole = {
+  awsDoc: docRoot + 'API_CreateServiceLinkedRole.html',
+  validate: {
+    AWSServiceName,
+    CustomSuffix: { ...str, comment: 'Identifier for the role; not supported by all services' },
+    Description,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'CreateServiceLinkedRole',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.CreateServiceLinkedRoleResult,
+}
+
 const CreateUser = {
   awsDoc: docRoot + 'API_CreateUser.html',
   validate: {
@@ -512,6 +532,23 @@ const DeleteRolePolicy = {
   response: emptyResponse,
 }
 
+const DeleteServiceLinkedRole = {
+  awsDoc: docRoot + 'API_DeleteServiceLinkedRole.html',
+  validate: {
+    RoleName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteServiceLinkedRole',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DeleteServiceLinkedRoleResult,
+}
+
 const DeleteUser = {
   awsDoc: docRoot + 'API_DeleteUser.html',
   validate: {
@@ -557,6 +594,24 @@ const DetachRolePolicy = {
     return {
       query: {
         Action: 'DetachRolePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DetachUserPolicy = {
+  awsDoc: docRoot + 'API_DetachUserPolicy.html',
+  validate: {
+    PolicyArn,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DetachUserPolicy',
         Version: defaultVersion,
         ...params,
       },
@@ -658,7 +713,7 @@ const GetInstanceProfile = {
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Roles', 'Tags' ])
     let { GetInstanceProfileResult } = payload
-    normalizeObjectArrays(GetInstanceProfileResult, arrayKeys)
+    normalizeObjectArrays(GetInstanceProfileResult, arrayKeys, true)
     return GetInstanceProfileResult
   },
 }
@@ -722,6 +777,42 @@ const GetRolePolicy = {
   },
   response: ({ payload }) => payload.GetRolePolicyResult,
 }
+
+// TODO: Not sure how to test this. Deletion completes before this can be called and the status becomes unavailable
+// const GetServiceLinkedRoleDeletionStatus = {
+//   awsDoc: docRoot + 'API_GetServiceLinkedRoleDeletionStatus.html',
+//   validate: {
+//     DeletionTaskId: { ...str, required, comment: 'Deletion task identifier returned by `DeleteServiceLinkedRole`' },
+//   },
+//   request: params => {
+//     return {
+//       query: {
+//         Action: 'GetServiceLinkedRoleDeletionStatus',
+//         Version: defaultVersion,
+//         ...params,
+//       },
+//     }
+//   },
+//   response: ({ payload }) => {
+//     const { GetServiceLinkedRoleDeletionStatusResult: Status } = payload
+//     let result = { Status }
+//     let { DeletionTaskFailureReasonType: Reason } = payload
+//     if (Reason) {
+//       let { RoleUsageList } = Reason
+//       if (RoleUsageList) {
+//         if (!Array.isArray(RoleUsageList)) RoleUsageList = [ RoleUsageList ]
+//         Reason.RoleUsageList = RoleUsageList.map(i => {
+//           if (i.Resources) {
+//             const { Resource } = i.Resources
+//             i.Resources = Array.isArray(Resource) ? Resource : [ Resource ]
+//           }
+//           return i
+//         })
+//       }
+//       result.Reason = Reason
+//     }
+//   },
+// }
 
 const GetUser = {
   awsDoc: docRoot + 'API_GetUser.html',
@@ -896,6 +987,41 @@ const ListAttachedRolePolicies = {
   },
 }
 
+const ListAttachedUserPolicies = {
+  awsDoc: docRoot + 'API_ListAttachedUserPolicies.html',
+  validate: {
+    UserName,
+    Marker,
+    PathPrefix,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListAttachedUserPolicies',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListAttachedUserPoliciesResult.Marker',
+        accumulator: 'ListAttachedUserPoliciesResult.AttachedPolicies.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'AttachedPolicies' ])
+    let { ListAttachedUserPoliciesResult } = payload
+    normalizeObjectArrays(ListAttachedUserPoliciesResult, arrayKeys)
+    return ListAttachedUserPoliciesResult
+  },
+}
+
 const ListGroupPolicies = {
   awsDoc: docRoot + 'API_ListGroupPolicies.html',
   validate: {
@@ -1028,7 +1154,7 @@ const ListInstanceProfiles = {
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags', 'InstanceProfiles', 'Roles' ])
     let { ListInstanceProfilesResult } = payload
-    normalizeObjectArrays(ListInstanceProfilesResult, arrayKeys)
+    normalizeObjectArrays(ListInstanceProfilesResult, arrayKeys, true)
     return ListInstanceProfilesResult
   },
 }
@@ -1062,7 +1188,7 @@ const ListInstanceProfilesForRole = {
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags', 'InstanceProfiles', 'Roles' ])
     let { ListInstanceProfilesForRoleResult } = payload
-    normalizeObjectArrays(ListInstanceProfilesForRoleResult, arrayKeys)
+    normalizeObjectArrays(ListInstanceProfilesForRoleResult, arrayKeys, true)
     return ListInstanceProfilesForRoleResult
   },
 }
@@ -1163,7 +1289,7 @@ const ListRoles = {
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Roles', 'Tags' ])
     let { ListRolesResult } = payload
-    normalizeObjectArrays(ListRolesResult, arrayKeys)
+    normalizeObjectArrays(ListRolesResult, arrayKeys, true)
     return ListRolesResult
   },
 }
@@ -1434,6 +1560,29 @@ const UpdateRole = {
   response: () => ({}),
 }
 
+const UpdateRoleDescription = {
+  awsDoc: docRoot + 'API_UpdateRoleDescription.html',
+  validate: {
+    RoleName,
+    Description,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UpdateRoleDescription',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    let { UpdateRoleDescriptionResult } = payload
+    normalizeObjectArrays(UpdateRoleDescriptionResult, arrayKeys)
+    return UpdateRoleDescriptionResult
+  },
+}
+
 export default {
   name: '@aws-lite/iam',
   service,
@@ -1453,6 +1602,7 @@ export default {
     CreatePolicy,
     // CreatePolicyVersion,
     CreateRole,
+    CreateServiceLinkedRole,
     CreateUser,
     DeleteAccessKey,
     DeleteAccountAlias,
@@ -1462,9 +1612,11 @@ export default {
     DeletePolicy,
     DeleteRole,
     DeleteRolePolicy,
+    DeleteServiceLinkedRole,
     DeleteUser,
     DetachGroupPolicy,
     DetachRolePolicy,
+    DetachUserPolicy,
     GetAccessKeyLastUsed,
     GetGroup,
     GetGroupPolicy,
@@ -1472,11 +1624,13 @@ export default {
     GetPolicy,
     GetRole,
     GetRolePolicy,
+    // GetServiceLinkedRoleDeletionStatus,
     GetUser,
     ListAccessKeys,
     ListAccountAliases,
     ListAttachedGroupPolicies,
     ListAttachedRolePolicies,
+    ListAttachedUserPolicies,
     ListGroupPolicies,
     ListGroups,
     ListGroupsForUser,
@@ -1498,6 +1652,7 @@ export default {
     UpdateAssumeRolePolicy,
     UpdateGroup,
     UpdateRole,
+    UpdateRoleDescription,
     ...incomplete,
   },
 }
