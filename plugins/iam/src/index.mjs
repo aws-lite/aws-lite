@@ -566,6 +566,24 @@ const DeleteUser = {
   response: emptyResponse,
 }
 
+const DeleteUserPolicy = {
+  awsDoc: docRoot + 'API_DeleteUserPolicy.html',
+  validate: {
+    PolicyName,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteUserPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const DetachGroupPolicy = {
   awsDoc: docRoot + 'API_DetachGroupPolicy.html',
   validate: {
@@ -836,6 +854,24 @@ const GetUser = {
     }
     return GetUserResult
   },
+}
+
+const GetUserPolicy = {
+  awsDoc: docRoot + 'API_GetUserPolicy.html',
+  validate: {
+    PolicyName,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetUserPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetUserPolicyResult,
 }
 
 // error occurs in paginator when no access keys exist
@@ -1327,6 +1363,74 @@ const ListRoleTags = {
   },
 }
 
+const ListUserPolicies = {
+  awsDoc: docRoot + 'API_ListUserPolicies.html',
+  validate: {
+    UserName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListUserPolicies',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListUserPoliciesResult.Marker',
+        accumulator: 'ListUserPoliciesResult.PolicyNames.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'PolicyNames' ])
+    let { ListUserPoliciesResult } = payload
+    normalizeObjectArrays(ListUserPoliciesResult, arrayKeys)
+    return ListUserPoliciesResult
+  },
+}
+
+const ListUsers = {
+  awsDoc: docRoot + 'API_ListUsers.html',
+  validate: {
+    Marker,
+    MaxItems,
+    PathPrefix,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListUsers',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListUsersResult.Marker',
+        accumulator: 'ListUsersResult.Users.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Users', 'Tags' ])
+    let { ListUsersResult } = payload
+    normalizeObjectArrays(ListUsersResult, arrayKeys, true)
+    return ListUsersResult
+  },
+}
+
 const PutGroupPolicy = {
   awsDoc: docRoot + 'API_PutGroupPolicy.html',
   validate: {
@@ -1360,6 +1464,27 @@ const PutRolePolicy = {
   request: params => {
     let query = {
       Action: 'PutRolePolicy',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (typeof query.PolicyDocument !== 'string') query.PolicyDocument = JSON.stringify(query.PolicyDocument)
+    return {
+      query,
+    }
+  },
+  response: emptyResponse,
+}
+
+const PutUserPolicy = {
+  awsDoc: docRoot + 'API_PutUserPolicy.html',
+  validate: {
+    PolicyDocument,
+    PolicyName,
+    UserName,
+  },
+  request: params => {
+    let query = {
+      Action: 'PutUserPolicy',
       Version: defaultVersion,
       ...params,
     }
@@ -1614,6 +1739,7 @@ export default {
     DeleteRolePolicy,
     DeleteServiceLinkedRole,
     DeleteUser,
+    DeleteUserPolicy,
     DetachGroupPolicy,
     DetachRolePolicy,
     DetachUserPolicy,
@@ -1626,6 +1752,7 @@ export default {
     GetRolePolicy,
     // GetServiceLinkedRoleDeletionStatus,
     GetUser,
+    GetUserPolicy,
     ListAccessKeys,
     ListAccountAliases,
     ListAttachedGroupPolicies,
@@ -1640,8 +1767,11 @@ export default {
     ListRolePolicies,
     ListRoles,
     ListRoleTags,
+    ListUserPolicies,
+    ListUsers,
     PutGroupPolicy,
     PutRolePolicy,
+    PutUserPolicy,
     RemoveUserFromGroup,
     RemoveRoleFromInstanceProfile,
     TagInstanceProfile,

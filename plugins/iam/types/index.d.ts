@@ -26,6 +26,7 @@ import {
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleCommandOutput as DeleteServiceLinkedRoleResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
+  DeleteUserPolicyCommandOutput as DeleteUserPolicyResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
   DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
   DetachUserPolicyCommandOutput as DetachUserPolicyResponse,
@@ -37,6 +38,7 @@ import {
   GetRoleCommandOutput as GetRoleResponse,
   GetRolePolicyCommandOutput as GetRolePolicyResponse,
   GetUserCommandOutput as GetUserResponse,
+  GetUserPolicyCommandOutput as GetUserPolicyResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
   ListAttachedGroupPoliciesCommandOutput as ListAttachedGroupPoliciesResponse,
@@ -51,8 +53,11 @@ import {
   ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
+  ListUserPoliciesCommandOutput as ListUserPoliciesResponse,
+  ListUsersCommandOutput as ListUsersResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   PutRolePolicyCommandOutput as PutRolePolicyResponse,
+  PutUserPolicyCommandOutput as PutUserPolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
@@ -222,6 +227,12 @@ declare interface AwsLiteIAM {
   DeleteUser: (input: { UserName: string }) => Promise<DeleteUserResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPolicy.html IAM: DeleteUserPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPolicy IAM: DeleteUserPolicy}
+   */
+  DeleteUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<DeleteUserPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachGroupPolicy.html IAM: DetachGroupPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachGroupPolicy IAM: DetachGroupPolicy}
    */
@@ -286,6 +297,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUser IAM: GetUser}
    */
   GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html IAM: GetUserPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUserPolicy IAM: GetUserPolicy}
+   */
+  GetUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<GetUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccessKeys.html IAM: ListAccessKeys}
@@ -372,6 +389,18 @@ declare interface AwsLiteIAM {
   ListRoleTags: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRoleTagsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserPolicies.html IAM: ListUserPolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListUserPolicies IAM: ListUserPolicies}
+   */
+  ListUserPolicies: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListUserPoliciesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUsers.html IAM: ListUsers}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListUsers IAM: ListUsers}
+   */
+  ListUsers: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListUsersResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
@@ -382,6 +411,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutRolePolicy IAM: PutRolePolicy}
    */
   PutRolePolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, RoleName: string }) => Promise<PutRolePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPolicy.html IAM: PutUserPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutUserPolicy IAM: PutUserPolicy}
+   */
+  PutUserPolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, UserName: string }) => Promise<PutUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html IAM: RemoveUserFromGroup}
@@ -486,6 +521,7 @@ export type {
   DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleResponse,
   DeleteUserResponse,
+  DeleteUserPolicyResponse,
   DetachGroupPolicyResponse,
   DetachRolePolicyResponse,
   DetachUserPolicyResponse,
@@ -497,6 +533,7 @@ export type {
   GetRoleResponse,
   GetRolePolicyResponse,
   GetUserResponse,
+  GetUserPolicyResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
   ListAttachedGroupPoliciesResponse,
@@ -511,8 +548,11 @@ export type {
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
+  ListUserPoliciesResponse,
+  ListUsersResponse,
   PutGroupPolicyResponse,
   PutRolePolicyResponse,
+  PutUserPolicyResponse,
   RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileResponse,
