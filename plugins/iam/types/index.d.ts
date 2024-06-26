@@ -22,6 +22,7 @@ import {
   DeleteInstanceProfileCommandOutput as DeleteInstanceProfileResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
+  DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
@@ -30,6 +31,7 @@ import {
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetRoleCommandOutput as GetRoleResponse,
+  GetRolePolicyCommandOutput as GetRolePolicyResponse,
   GetUserCommandOutput as GetUserResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
@@ -41,6 +43,7 @@ import {
   ListInstanceProfilesForRoleCommandOutput as ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsCommandOutput as ListInstanceProfileTagsResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
+  PutRolePolicyCommandOutput as PutRolePolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
@@ -182,6 +185,12 @@ declare interface AwsLiteIAM {
   DeleteRole: (input: { RoleName: string }) => Promise<DeleteRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePolicy.html IAM: DeleteRolePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePolicy IAM: DeleteRolePolicy}
+   */
+  DeleteRolePolicy: (input: { RoleName: string, PolicyName: string }) => Promise<DeleteRolePolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html IAM: DeleteUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUser IAM: DeleteUser}
    */
@@ -228,6 +237,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRole IAM: GetRole}
    */
   GetRole: (input: { RoleName: string }) => Promise<GetRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html IAM: GetRolePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRolePolicy IAM: GetRolePolicy}
+   */
+  GetRolePolicy: (input: { PolicyName: string, RoleName: string }) => Promise<GetRolePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html IAM: GetUser}
@@ -294,6 +309,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
   PutGroupPolicy: (input: { GroupName: string, PolicyDocument: string | Record<string, any>, PolicyName: string }) => Promise<PutGroupPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePolicy.html IAM: PutRolePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutRolePolicy IAM: PutRolePolicy}
+   */
+  PutRolePolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, RoleName: string }) => Promise<PutRolePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html IAM: RemoveUserFromGroup}
@@ -370,6 +391,7 @@ export type {
   DeleteInstanceProfileResponse,
   DeletePolicyResponse,
   DeleteRoleResponse,
+  DeleteRolePolicyResponse,
   DeleteUserResponse,
   DetachGroupPolicyResponse,
   GetAccessKeyLastUsedResponse,
@@ -378,6 +400,7 @@ export type {
   GetInstanceProfileResponse,
   GetPolicyResponse,
   GetRoleResponse,
+  GetRolePolicyResponse,
   GetUserResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
@@ -389,6 +412,7 @@ export type {
   ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsResponse,
   PutGroupPolicyResponse,
+  PutRolePolicyResponse,
   RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileResponse,

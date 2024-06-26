@@ -289,6 +289,29 @@ const CreatePolicy = {
   },
 }
 
+// TODO: figure out why this returns status code 302
+// const CreatePolicyVersion = {
+//   awsDoc: docRoot + 'API_CreatePolicyVersion.html',
+//   validate: {
+//     PolicyArn,
+//     PolicyDocument,
+//     SetAsDefault: { ...bool, comment: 'Set to true to make this the default version used by all IAM resources' },
+//   },
+//   request: params => {
+//     let query = {
+//       Action: 'CreatePolicyVersion',
+//       Version: defaultVersion,
+//       ...params,
+//     }
+//     if (typeof query.PolicyDocument !== 'string') {
+//       query.PolicyDocument = JSON.stringify(query.PolicyDocument)
+//     }
+//   },
+//   response: ( payload ) => {
+//     return payload
+//   },
+// }
+
 const CreateRole = {
   awsDoc: docRoot + 'API_CreateRole.html',
   validate: {
@@ -468,7 +491,25 @@ const DeleteRole = {
       },
     }
   },
-  response: () => ({}),
+  response: emptyResponse,
+}
+
+const DeleteRolePolicy = {
+  awsDoc: docRoot + 'API_DeleteRolePolicy.html',
+  validate: {
+    RoleName,
+    PolicyName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteRolePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
 }
 
 const DeleteUser = {
@@ -646,6 +687,24 @@ const GetRole = {
   response: ({ payload }) => payload.GetRoleResult,
 }
 
+const GetRolePolicy = {
+  awsDoc: docRoot + 'API_GetRolePolicy.html',
+  validate: {
+    PolicyName,
+    RoleName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetRolePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetRolePolicyResult,
+}
+
 const GetUser = {
   awsDoc: docRoot + 'API_GetUser.html',
   validate: {
@@ -818,7 +877,6 @@ const ListGroupPolicies = {
     return ListGroupPoliciesResult
   },
 }
-
 
 const ListGroups = {
   awsDoc: docRoot + 'API_ListGroups.html',
@@ -1013,6 +1071,27 @@ const PutGroupPolicy = {
   response: emptyResponse,
 }
 
+const PutRolePolicy = {
+  awsDoc: docRoot + 'API_PutRolePolicy.html',
+  validate: {
+    PolicyDocument,
+    PolicyName,
+    RoleName,
+  },
+  request: params => {
+    let query = {
+      Action: 'PutRolePolicy',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (typeof query.PolicyDocument !== 'string') query.PolicyDocument = JSON.stringify(query.PolicyDocument)
+    return {
+      query,
+    }
+  },
+  response: emptyResponse,
+}
+
 const RemoveRoleFromInstanceProfile = {
   awsDoc: docRoot + 'API_RemoveRoleFromInstanceProfile.html',
   validate: {
@@ -1160,6 +1239,7 @@ export default {
     CreateGroup,
     CreateInstanceProfile,
     CreatePolicy,
+    // CreatePolicyVersion,
     CreateRole,
     CreateUser,
     DeleteAccessKey,
@@ -1169,6 +1249,7 @@ export default {
     DeleteInstanceProfile,
     DeletePolicy,
     DeleteRole,
+    DeleteRolePolicy,
     DeleteUser,
     DetachGroupPolicy,
     GetAccessKeyLastUsed,
@@ -1177,6 +1258,7 @@ export default {
     GetInstanceProfile,
     GetPolicy,
     GetRole,
+    GetRolePolicy,
     GetUser,
     ListAccessKeys,
     ListAccountAliases,
@@ -1188,6 +1270,7 @@ export default {
     ListInstanceProfilesForRole,
     ListInstanceProfileTags,
     PutGroupPolicy,
+    PutRolePolicy,
     RemoveUserFromGroup,
     RemoveRoleFromInstanceProfile,
     TagInstanceProfile,
