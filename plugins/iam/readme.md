@@ -311,6 +311,17 @@ Properties:
   - Arn of the policy
 
 
+### `DetachRolePolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachRolePolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
 ### `GetAccessKeyLastUsed`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html)
@@ -438,6 +449,23 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListAttachedRolePolicies`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedRolePolicies.html)
+
+Properties:
+- **`RoleName` (string) [required]**
+  - Name of the role
+- **`Marker` (string)**
+  - Pagination cursor
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListGroupPolicies`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html)
@@ -522,6 +550,21 @@ Properties:
 Properties:
 - **`InstanceProfileName` (string) [required]**
   - Name of the instance profile
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListRolePolicies`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html)
+
+Properties:
+- **`RoleName` (string) [required]**
+  - Name of the role
 - **`Marker` (string)**
   - Pagination cursor
 - **`MaxItems` (number)**
@@ -666,7 +709,6 @@ Properties:
 - [`DeleteUserPermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html)
 - [`DeleteUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPolicy.html)
 - [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
-- [`DetachRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachRolePolicy.html)
 - [`DetachUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachUserPolicy.html)
 - [`EnableMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_EnableMFADevice.html)
 - [`GenerateCredentialReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateCredentialReport.html)
@@ -690,7 +732,6 @@ Properties:
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
 - [`GetSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html)
 - [`GetUserPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html)
-- [`ListAttachedRolePolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedRolePolicies.html)
 - [`ListAttachedUserPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedUserPolicies.html)
 - [`ListEntitiesForPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)
@@ -701,7 +742,6 @@ Properties:
 - [`ListPoliciesGrantingServiceAccess`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html)
 - [`ListPolicyTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html)
 - [`ListPolicyVersions`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyVersions.html)
-- [`ListRolePolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html)
 - [`ListRoles`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoles.html)
 - [`ListRoleTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoleTags.html)
 - [`ListSAMLProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviders.html)

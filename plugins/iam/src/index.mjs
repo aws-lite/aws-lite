@@ -547,6 +547,24 @@ const DetachGroupPolicy = {
   response: emptyResponse,
 }
 
+const DetachRolePolicy = {
+  awsDoc: docRoot + 'API_DetachRolePolicy.html',
+  validate: {
+    PolicyArn,
+    RoleName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DetachRolePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const GetAccessKeyLastUsed = {
   awsDoc: docRoot + 'API_GetAccessKeyLastUsed.html',
   validate: {
@@ -843,6 +861,41 @@ const ListAttachedGroupPolicies = {
   },
 }
 
+const ListAttachedRolePolicies = {
+  awsDoc: docRoot + 'API_ListAttachedRolePolicies.html',
+  validate: {
+    RoleName,
+    Marker,
+    PathPrefix,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListAttachedRolePolicies',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListAttachedRolePoliciesResult.Marker',
+        accumulator: 'ListAttachedRolePoliciesResult.AttachedPolicies.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'AttachedPolicies' ])
+    let { ListAttachedRolePoliciesResult } = payload
+    normalizeObjectArrays(ListAttachedRolePoliciesResult, arrayKeys)
+    return ListAttachedRolePoliciesResult
+  },
+}
+
 const ListGroupPolicies = {
   awsDoc: docRoot + 'API_ListGroupPolicies.html',
   validate: {
@@ -1045,6 +1098,40 @@ const ListInstanceProfileTags = {
     let { ListInstanceProfileTagsResult } = payload
     normalizeObjectArrays(ListInstanceProfileTagsResult, arrayKeys)
     return ListInstanceProfileTagsResult
+  },
+}
+
+const ListRolePolicies = {
+  awsDoc: docRoot + 'API_ListRolePolicies.html',
+  validate: {
+    RoleName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListRolePolicies',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListRolePoliciesResult.Marker',
+        accumulator: 'ListRolePoliciesResult.PolicyNames.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'PolicyNames' ])
+    let { ListRolePoliciesResult } = payload
+    normalizeObjectArrays(ListRolePoliciesResult, arrayKeys)
+    return ListRolePoliciesResult
   },
 }
 
@@ -1252,6 +1339,7 @@ export default {
     DeleteRolePolicy,
     DeleteUser,
     DetachGroupPolicy,
+    DetachRolePolicy,
     GetAccessKeyLastUsed,
     GetGroup,
     GetGroupPolicy,
@@ -1263,12 +1351,14 @@ export default {
     ListAccessKeys,
     ListAccountAliases,
     ListAttachedGroupPolicies,
+    ListAttachedRolePolicies,
     ListGroupPolicies,
     ListGroups,
     ListGroupsForUser,
     ListInstanceProfiles,
     ListInstanceProfilesForRole,
     ListInstanceProfileTags,
+    ListRolePolicies,
     PutGroupPolicy,
     PutRolePolicy,
     RemoveUserFromGroup,

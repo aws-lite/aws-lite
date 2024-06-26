@@ -25,6 +25,7 @@ import {
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
+  DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
   GetGroupCommandOutput as GetGroupResponse,
   GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
@@ -36,12 +37,14 @@ import {
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
   ListAttachedGroupPoliciesCommandOutput as ListAttachedGroupPoliciesResponse,
+  ListAttachedRolePoliciesCommandOutput as ListAttachedRolePoliciesResponse,
   ListGroupPoliciesCommandOutput as ListGroupPoliciesResponse,
   ListGroupsCommandOutput as ListGroupsResponse,
   ListGroupsForUserCommandOutput as ListGroupsForUserResponse,
   ListInstanceProfilesCommandOutput as ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleCommandOutput as ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsCommandOutput as ListInstanceProfileTagsResponse,
+  ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   PutRolePolicyCommandOutput as PutRolePolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
@@ -203,6 +206,12 @@ declare interface AwsLiteIAM {
   DetachGroupPolicy: (input: { GroupName: string, PolicyArn: string }) => Promise<DetachGroupPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachRolePolicy.html IAM: DetachRolePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachRolePolicy IAM: DetachRolePolicy}
+   */
+  DetachRolePolicy: (input: { PolicyArn: string, RoleName: string }) => Promise<DetachRolePolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html IAM: GetAccessKeyLastUsed}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccessKeyLastUsed IAM: GetAccessKeyLastUsed}
    */
@@ -269,6 +278,12 @@ declare interface AwsLiteIAM {
   ListAttachedGroupPolicies: (input: { GroupName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedGroupPoliciesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedRolePolicies.html IAM: ListAttachedRolePolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedRolePolicies IAM: ListAttachedRolePolicies}
+   */
+  ListAttachedRolePolicies: (input: { RoleName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedRolePoliciesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html IAM: ListGroupPolicies}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroupPolicies IAM: ListGroupPolicies}
    */
@@ -303,6 +318,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfileTags IAM: ListInstanceProfileTags}
    */
   ListInstanceProfileTags: (input: { InstanceProfileName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfileTagsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html IAM: ListRolePolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRolePolicies IAM: ListRolePolicies}
+   */
+  ListRolePolicies: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRolePoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
@@ -394,6 +415,7 @@ export type {
   DeleteRolePolicyResponse,
   DeleteUserResponse,
   DetachGroupPolicyResponse,
+  DetachRolePolicyResponse,
   GetAccessKeyLastUsedResponse,
   GetGroupResponse,
   GetGroupPolicyResponse,
@@ -405,12 +427,14 @@ export type {
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
   ListAttachedGroupPoliciesResponse,
+  ListAttachedRolePoliciesResponse,
   ListGroupPoliciesResponse,
   ListGroupsResponse,
   ListGroupsForUserResponse,
   ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsResponse,
+  ListRolePoliciesResponse,
   PutGroupPolicyResponse,
   PutRolePolicyResponse,
   RemoveUserFromGroupResponse,
