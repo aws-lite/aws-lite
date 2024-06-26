@@ -36,6 +36,8 @@ const valPaginate = { type: 'boolean', comment: 'Enable automatic result paginat
 const InstanceProfileName = { ...str, required, comment: 'Name of the instance profile' }
 const PathPrefix = { ...str, comment: 'Filter results by path prefix' }
 const AWSServiceName = { ...str, required, comment: 'The service principal to which this role is attached; use `CustomSuffix` to prevent duplication errors during multiple requests for the same service' }
+const NewPath = { ...str, comment: 'New path for the service' }
+
 
 const paginator = { type: 'query', cursor: 'Marker' }
 
@@ -1333,6 +1335,7 @@ const ListRoles = {
 const ListRoleTags = {
   awsDoc: docRoot + 'API_ListRoleTags.html',
   validate: {
+    RoleName,
     Marker,
     MaxItems,
     paginate: valPaginate,
@@ -1428,6 +1431,40 @@ const ListUsers = {
     let { ListUsersResult } = payload
     normalizeObjectArrays(ListUsersResult, arrayKeys, true)
     return ListUsersResult
+  },
+}
+
+const ListUserTags = {
+  awsDoc: docRoot + 'API_ListUserTags.html',
+  validate: {
+    UserName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListUserTags',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListUserTagsResult.Marker',
+        accumulator: 'ListUserTagsResult.Tags.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    let { ListUserTagsResult } = payload
+    normalizeObjectArrays(ListUserTagsResult, arrayKeys)
+    return ListUserTagsResult
   },
 }
 
@@ -1568,6 +1605,24 @@ const TagRole = {
   response: emptyResponse,
 }
 
+const TagUser = {
+  awsDoc: docRoot + 'API_TagUser.html',
+  validate: {
+    UserName,
+    Tags: { ...Tags, required },
+  },
+  request: params => {
+    const query = {
+      Action: 'TagUser',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (query.Tags) serializeTags(query)
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const UntagInstanceProfile = {
   awsDoc: docRoot + 'API_UntagInstanceProfile.html',
   validate: {
@@ -1601,6 +1656,27 @@ const UntagRole = {
       Action: 'UntagRole',
       Version: defaultVersion,
       RoleName,
+    }
+    TagKeys.forEach((value, i) => {
+      query[`TagKeys.member.${i + 1}`] = value
+    })
+    return { query }
+  },
+  response: emptyResponse,
+}
+
+const UntagUser = {
+  awsDoc: docRoot + 'API_UntagUser.html',
+  validate: {
+    UserName,
+    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+  },
+  request: params => {
+    const { UserName, TagKeys } = params
+    let query = {
+      Action: 'UntagUser',
+      Version: defaultVersion,
+      UserName,
     }
     TagKeys.forEach((value, i) => {
       query[`TagKeys.member.${i + 1}`] = value
@@ -1653,7 +1729,7 @@ const UpdateGroup = {
   validate: {
     GroupName,
     NewGroupName: { ...str, comment: 'New name for the group' },
-    NewPath: { ...str, comment: 'New path for the group' },
+    NewPath,
   },
   request: params => {
     const query = {
@@ -1683,6 +1759,24 @@ const UpdateRole = {
     }
   },
   response: () => ({}),
+}
+
+const UpdateUser = {
+  awsDoc: docRoot + 'API_UpdateUser.html',
+  validate: {
+    UserName,
+    NewPath,
+    NewUserName: { ...str, comment: 'New user name' },
+  },
+  request: params => {
+    const query = {
+      Action: 'UpdateUser',
+      Version: defaultVersion,
+      ...params,
+    }
+    return { query }
+  },
+  response: emptyResponse,
 }
 
 const UpdateRoleDescription = {
@@ -1769,6 +1863,7 @@ export default {
     ListRoleTags,
     ListUserPolicies,
     ListUsers,
+    ListUserTags,
     PutGroupPolicy,
     PutRolePolicy,
     PutUserPolicy,
@@ -1776,13 +1871,16 @@ export default {
     RemoveRoleFromInstanceProfile,
     TagInstanceProfile,
     TagRole,
+    TagUser,
     UntagInstanceProfile,
     UntagRole,
+    UntagUser,
     UpdateAccessKey,
     UpdateAssumeRolePolicy,
     UpdateGroup,
     UpdateRole,
     UpdateRoleDescription,
+    UpdateUser,
     ...incomplete,
   },
 }

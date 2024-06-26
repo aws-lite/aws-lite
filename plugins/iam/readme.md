@@ -663,6 +663,8 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoleTags.html)
 
 Properties:
+- **`RoleName` (string) [required]**
+  - Name of the role
 - **`Marker` (string)**
   - Pagination cursor
 - **`MaxItems` (number)**
@@ -697,6 +699,21 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListUserTags`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserTags.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -786,6 +803,18 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
+### `TagUser`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagUser.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
+- **`Tags` (array) [required]**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
 ### `UntagInstanceProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html)
@@ -804,6 +833,17 @@ Properties:
 Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
+- **`TagKeys` (array) [required]**
+  - Array of tag keys
+
+
+### `UntagUser`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagUser.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
 - **`TagKeys` (array) [required]**
   - Array of tag keys
 
@@ -842,7 +882,7 @@ Properties:
 - **`NewGroupName` (string)**
   - New name for the group
 - **`NewPath` (string)**
-  - New path for the group
+  - New path for the service
 
 
 ### `UpdateRole`
@@ -867,6 +907,19 @@ Properties:
   - Name of the role
 - **`Description` (string)**
   - Description of the resource
+
+
+### `UpdateUser`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateUser.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
+- **`NewPath` (string)**
+  - New path for the service
+- **`NewUserName` (string)**
+  - New user name
 
 
 ### Methods yet to be implemented
@@ -929,7 +982,6 @@ Properties:
 - [`ListServiceSpecificCredentials`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html)
 - [`ListSigningCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html)
 - [`ListSSHPublicKeys`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html)
-- [`ListUserTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserTags.html)
 - [`ListVirtualMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html)
 - [`PutRolePermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePermissionsBoundary.html)
 - [`PutUserPermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPermissionsBoundary.html)
@@ -945,13 +997,11 @@ Properties:
 - [`TagPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagPolicy.html)
 - [`TagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagSAMLProvider.html)
 - [`TagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagServerCertificate.html)
-- [`TagUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagUser.html)
 - [`UntagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagMFADevice.html)
 - [`UntagOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagOpenIDConnectProvider.html)
 - [`UntagPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagPolicy.html)
 - [`UntagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagSAMLProvider.html)
 - [`UntagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html)
-- [`UntagUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagUser.html)
 - [`UpdateAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html)
 - [`UpdateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateLoginProfile.html)
 - [`UpdateOpenIDConnectProviderThumbprint`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
@@ -960,7 +1010,6 @@ Properties:
 - [`UpdateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html)
 - [`UpdateSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html)
 - [`UpdateSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html)
-- [`UpdateUser`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateUser.html)
 - [`UploadServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
 - [`UploadSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html)
 - [`UploadSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html)

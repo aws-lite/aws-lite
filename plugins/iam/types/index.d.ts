@@ -55,6 +55,7 @@ import {
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
   ListUserPoliciesCommandOutput as ListUserPoliciesResponse,
   ListUsersCommandOutput as ListUsersResponse,
+  ListUserTagsCommandOutput as ListUserTagsResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   PutRolePolicyCommandOutput as PutRolePolicyResponse,
   PutUserPolicyCommandOutput as PutUserPolicyResponse,
@@ -62,13 +63,16 @@ import {
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
   TagRoleCommandOutput as TagRoleResponse,
+  TagUserCommandOutput as TagUserResponse,
   UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
   UntagRoleCommandOutput as UntagRoleResponse,
+  UntagUserCommandOutput as UntagUserResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
   UpdateAssumeRolePolicyCommandOutput as UpdateAssumeRolePolicyResponse,
   UpdateGroupCommandOutput as UpdateGroupResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
+  UpdateUserCommandOutput as UpdateUserResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
 
@@ -386,7 +390,7 @@ declare interface AwsLiteIAM {
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoleTags.html IAM: ListRoleTags}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRoleTags IAM: ListRoleTags}
    */
-  ListRoleTags: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRoleTagsResponse>
+  ListRoleTags: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRoleTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserPolicies.html IAM: ListUserPolicies}
@@ -399,6 +403,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListUsers IAM: ListUsers}
    */
   ListUsers: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListUsersResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserTags.html IAM: ListUserTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListUserTags IAM: ListUserTags}
+   */
+  ListUserTags: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListUserTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
@@ -443,6 +453,12 @@ declare interface AwsLiteIAM {
   TagRole: (input: { RoleName: string, Tags: any[] }) => Promise<TagRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagUser.html IAM: TagUser}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagUser IAM: TagUser}
+   */
+  TagUser: (input: { UserName: string, Tags: any[] }) => Promise<TagUserResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html IAM: UntagInstanceProfile}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagInstanceProfile IAM: UntagInstanceProfile}
    */
@@ -453,6 +469,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagRole IAM: UntagRole}
    */
   UntagRole: (input: { RoleName: string, TagKeys: any[] }) => Promise<UntagRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagUser.html IAM: UntagUser}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagUser IAM: UntagUser}
+   */
+  UntagUser: (input: { UserName: string, TagKeys: any[] }) => Promise<UntagUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccessKey.html IAM: UpdateAccessKey}
@@ -483,6 +505,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRoleDescription IAM: UpdateRoleDescription}
    */
   UpdateRoleDescription: (input: { RoleName: string, Description?: string }) => Promise<UpdateRoleDescriptionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateUser.html IAM: UpdateUser}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateUser IAM: UpdateUser}
+   */
+  UpdateUser: (input: { UserName: string, NewPath?: string, NewUserName?: string }) => Promise<UpdateUserResponse>
   // $METHODS_END
 }
 
@@ -550,6 +578,7 @@ export type {
   ListRoleTagsResponse,
   ListUserPoliciesResponse,
   ListUsersResponse,
+  ListUserTagsResponse,
   PutGroupPolicyResponse,
   PutRolePolicyResponse,
   PutUserPolicyResponse,
@@ -557,12 +586,15 @@ export type {
   RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileResponse,
   TagRoleResponse,
+  TagUserResponse,
   UntagInstanceProfileResponse,
   UntagRoleResponse,
+  UntagUserResponse,
   UpdateAccessKeyResponse,
   UpdateAssumeRolePolicyResponse,
   UpdateGroupResponse,
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
+  UpdateUserResponse,
   // $EXPORT_END
 }
