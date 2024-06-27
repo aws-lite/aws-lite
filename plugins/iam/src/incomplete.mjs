@@ -1,7 +1,7 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/IAM/latest/APIReference/'
 export default {
-  CreateLoginProfile:                        { disabled, awsDoc: docRoot + 'API_CreateLoginProfile.html' },
+  // CreateLoginProfile:                        { disabled, awsDoc: docRoot + 'API_CreateLoginProfile.html' },
   CreateOpenIDConnectProvider:               { disabled, awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html' },
   CreatePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_CreatePolicyVersion.html' },
   CreateSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_CreateSAMLProvider.html' },
@@ -9,7 +9,7 @@ export default {
   CreateVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_CreateVirtualMFADevice.html' },
   DeactivateMFADevice:                       { disabled, awsDoc: docRoot + 'API_DeactivateMFADevice.html' },
   DeleteAccountPasswordPolicy:               { disabled, awsDoc: docRoot + 'API_DeleteAccountPasswordPolicy.html' },
-  DeleteLoginProfile:                        { disabled, awsDoc: docRoot + 'API_DeleteLoginProfile.html' },
+  // DeleteLoginProfile:                        { disabled, awsDoc: docRoot + 'API_DeleteLoginProfile.html' },
   DeleteOpenIDConnectProvider:               { disabled, awsDoc: docRoot + 'API_DeleteOpenIDConnectProvider.html' },
   DeletePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_DeletePolicyVersion.html' },
   DeleteRolePermissionsBoundary:             { disabled, awsDoc: docRoot + 'API_DeleteRolePermissionsBoundary.html' },
@@ -30,7 +30,7 @@ export default {
   GetContextKeysForCustomPolicy:             { disabled, awsDoc: docRoot + 'API_GetContextKeysForCustomPolicy.html' },
   GetContextKeysForPrincipalPolicy:          { disabled, awsDoc: docRoot + 'API_GetContextKeysForPrincipalPolicy.html' },
   GetCredentialReport:                       { disabled, awsDoc: docRoot + 'API_GetCredentialReport.html' },
-  GetLoginProfile:                           { disabled, awsDoc: docRoot + 'API_GetLoginProfile.html' },
+  // GetLoginProfile:                           { disabled, awsDoc: docRoot + 'API_GetLoginProfile.html' },
   GetMFADevice:                              { disabled, awsDoc: docRoot + 'API_GetMFADevice.html' },
   GetOpenIDConnectProvider:                  { disabled, awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html' },
   GetOrganizationsAccessReport:              { disabled, awsDoc: docRoot + 'API_GetOrganizationsAccessReport.html' },
@@ -74,7 +74,7 @@ export default {
   UntagSAMLProvider:                         { disabled, awsDoc: docRoot + 'API_UntagSAMLProvider.html' },
   UntagServerCertificate:                    { disabled, awsDoc: docRoot + 'API_UntagServerCertificate.html' },
   UpdateAccountPasswordPolicy:               { disabled, awsDoc: docRoot + 'API_UpdateAccountPasswordPolicy.html' },
-  UpdateLoginProfile:                        { disabled, awsDoc: docRoot + 'API_UpdateLoginProfile.html' },
+  // UpdateLoginProfile:                        { disabled, awsDoc: docRoot + 'API_UpdateLoginProfile.html' },
   UpdateOpenIDConnectProviderThumbprint:     { disabled, awsDoc: docRoot + 'API_UpdateOpenIDConnectProviderThumbprint.html' },
   UpdateSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_UpdateSAMLProvider.html' },
   UpdateServerCertificate:                   { disabled, awsDoc: docRoot + 'API_UpdateServerCertificate.html' },

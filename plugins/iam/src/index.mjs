@@ -259,6 +259,25 @@ const CreateInstanceProfile = {
   },
 }
 
+const CreateLoginProfile = {
+  awsDoc: docRoot + 'API_CreateLoginProfile.html',
+  validate: {
+    Password: { ...str, required, comment: 'New password for the user' },
+    UserName,
+    PasswordResetRequired: { ...bool, comment: 'Set to true to specify the user must make a new password on next sign-in' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'CreateLoginProfile',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.CreateLoginProfileResult,
+}
+
 const CreatePolicy = {
   awsDoc: docRoot + 'API_CreatePolicy.html',
   validate: {
@@ -474,6 +493,23 @@ const DeleteInstanceProfile = {
     return {
       query: {
         Action: 'DeleteInstanceProfile',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteLoginProfile = {
+  awsDoc: docRoot + 'API_DeleteLoginProfile.html',
+  validate: {
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteLoginProfile',
         Version: defaultVersion,
         ...params,
       },
@@ -736,6 +772,23 @@ const GetInstanceProfile = {
     normalizeObjectArrays(GetInstanceProfileResult, arrayKeys, true)
     return GetInstanceProfileResult
   },
+}
+
+const GetLoginProfile = {
+  awsDoc: docRoot + 'API_GetLoginProfile.html',
+  validate: {
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetLoginProfile',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetLoginProfileResult,
 }
 
 const GetPolicy = {
@@ -1853,6 +1906,25 @@ const UpdateGroup = {
   response: emptyResponse,
 }
 
+const UpdateLoginProfile = {
+  awsDoc: docRoot + 'API_UpdateLoginProfile.html',
+  validate: {
+    UserName,
+    Password: { ...str, comment: 'New password for the user' },
+    PasswordResetRequired: { ...bool, comment: 'Set to true to specify the user must make a new password on next sign-in' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UpdateLoginProfile',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const UpdateRole = {
   awsDoc: docRoot + 'API_UpdateRole.html',
   validate: {
@@ -1929,6 +2001,7 @@ export default {
     CreateAccountAlias,
     CreateGroup,
     CreateInstanceProfile,
+    CreateLoginProfile,
     CreatePolicy,
     // CreatePolicyVersion,
     CreateRole,
@@ -1939,6 +2012,7 @@ export default {
     DeleteGroup,
     DeleteGroupPolicy,
     DeleteInstanceProfile,
+    DeleteLoginProfile,
     DeletePolicy,
     DeleteRole,
     DeleteRolePolicy,
@@ -1952,6 +2026,7 @@ export default {
     GetGroup,
     GetGroupPolicy,
     GetInstanceProfile,
+    GetLoginProfile,
     GetPolicy,
     GetRole,
     GetRolePolicy,
@@ -1993,6 +2068,7 @@ export default {
     UpdateAccessKey,
     UpdateAssumeRolePolicy,
     UpdateGroup,
+    UpdateLoginProfile,
     UpdateRole,
     UpdateRoleDescription,
     UpdateUser,

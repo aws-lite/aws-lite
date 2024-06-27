@@ -12,6 +12,7 @@ import {
   CreateAccountAliasCommandOutput as CreateAccountAliasResponse,
   CreateGroupCommandOutput as CreateGroupResponse,
   CreateInstanceProfileCommandOutput as CreateInstanceProfileResponse,
+  CreateLoginProfileCommandOutput as CreateLoginProfileResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
@@ -21,6 +22,7 @@ import {
   DeleteGroupCommandOutput as DeleteGroupResponse,
   DeleteGroupPolicyCommandOutput as DeleteGroupPolicyResponse,
   DeleteInstanceProfileCommandOutput as DeleteInstanceProfileResponse,
+  DeleteLoginProfileCommandOutput as DeleteLoginProfileResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
@@ -34,6 +36,7 @@ import {
   GetGroupCommandOutput as GetGroupResponse,
   GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
+  GetLoginProfileCommandOutput as GetLoginProfileResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetRoleCommandOutput as GetRoleResponse,
   GetRolePolicyCommandOutput as GetRolePolicyResponse,
@@ -74,6 +77,7 @@ import {
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
   UpdateAssumeRolePolicyCommandOutput as UpdateAssumeRolePolicyResponse,
   UpdateGroupCommandOutput as UpdateGroupResponse,
+  UpdateLoginProfileCommandOutput as UpdateLoginProfileResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
   UpdateUserCommandOutput as UpdateUserResponse,
@@ -151,6 +155,12 @@ declare interface AwsLiteIAM {
   CreateInstanceProfile: (input: { InstanceProfileName: string, Path?: string, Tags?: any[] }) => Promise<CreateInstanceProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html IAM: CreateLoginProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateLoginProfile IAM: CreateLoginProfile}
+   */
+  CreateLoginProfile: (input: { Password: string, UserName: string, PasswordResetRequired?: boolean }) => Promise<CreateLoginProfileResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html IAM: CreatePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicy IAM: CreatePolicy}
    */
@@ -203,6 +213,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteInstanceProfile IAM: DeleteInstanceProfile}
    */
   DeleteInstanceProfile: (input: { InstanceProfileName: string }) => Promise<DeleteInstanceProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html IAM: DeleteLoginProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteLoginProfile IAM: DeleteLoginProfile}
+   */
+  DeleteLoginProfile: (input: { UserName: string }) => Promise<DeleteLoginProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html IAM: DeletePolicy}
@@ -281,6 +297,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetInstanceProfile IAM: GetInstanceProfile}
    */
   GetInstanceProfile: (input: { InstanceProfileName: string }) => Promise<GetInstanceProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetLoginProfile.html IAM: GetLoginProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetLoginProfile IAM: GetLoginProfile}
+   */
+  GetLoginProfile: (input: { UserName: string }) => Promise<GetLoginProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html IAM: GetPolicy}
@@ -523,6 +545,12 @@ declare interface AwsLiteIAM {
   UpdateGroup: (input: { GroupName: string, NewGroupName?: string, NewPath?: string }) => Promise<UpdateGroupResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateLoginProfile.html IAM: UpdateLoginProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateLoginProfile IAM: UpdateLoginProfile}
+   */
+  UpdateLoginProfile: (input: { UserName: string, Password?: string, PasswordResetRequired?: boolean }) => Promise<UpdateLoginProfileResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html IAM: UpdateRole}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRole IAM: UpdateRole}
    */
@@ -563,6 +591,7 @@ export type {
   CreateAccountAliasResponse,
   CreateGroupResponse,
   CreateInstanceProfileResponse,
+  CreateLoginProfileResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateServiceLinkedRoleResponse,
@@ -572,6 +601,7 @@ export type {
   DeleteGroupResponse,
   DeleteGroupPolicyResponse,
   DeleteInstanceProfileResponse,
+  DeleteLoginProfileResponse,
   DeletePolicyResponse,
   DeleteRoleResponse,
   DeleteRolePolicyResponse,
@@ -585,6 +615,7 @@ export type {
   GetGroupResponse,
   GetGroupPolicyResponse,
   GetInstanceProfileResponse,
+  GetLoginProfileResponse,
   GetPolicyResponse,
   GetRoleResponse,
   GetRolePolicyResponse,
@@ -625,6 +656,7 @@ export type {
   UpdateAccessKeyResponse,
   UpdateAssumeRolePolicyResponse,
   UpdateGroupResponse,
+  UpdateLoginProfileResponse,
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
   UpdateUserResponse,

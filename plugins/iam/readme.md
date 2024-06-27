@@ -154,6 +154,19 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
+### `CreateLoginProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html)
+
+Properties:
+- **`Password` (string) [required]**
+  - New password for the user
+- **`UserName` (string) [required]**
+  - User name
+- **`PasswordResetRequired` (boolean)**
+  - Set to true to specify the user must make a new password on next sign-in
+
+
 ### `CreatePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
@@ -273,6 +286,15 @@ Properties:
 Properties:
 - **`InstanceProfileName` (string) [required]**
   - Name of the instance profile
+
+
+### `DeleteLoginProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
 
 
 ### `DeletePolicy`
@@ -408,6 +430,15 @@ Properties:
 Properties:
 - **`InstanceProfileName` (string) [required]**
   - Name of the instance profile
+
+
+### `GetLoginProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetLoginProfile.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
 
 
 ### `GetPolicy`
@@ -944,6 +975,19 @@ Properties:
   - New path for the service
 
 
+### `UpdateLoginProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateLoginProfile.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
+- **`Password` (string)**
+  - New password for the user
+- **`PasswordResetRequired` (boolean)**
+  - Set to true to specify the user must make a new password on next sign-in
+
+
 ### `UpdateRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html)
@@ -985,7 +1029,6 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html)
 - [`CreateOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
 - [`CreatePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
 - [`CreateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateSAMLProvider.html)
@@ -993,7 +1036,6 @@ Properties:
 - [`CreateVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
 - [`DeleteAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountPasswordPolicy.html)
-- [`DeleteLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html)
 - [`DeleteOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
 - [`DeletePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
 - [`DeleteRolePermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html)
@@ -1014,7 +1056,6 @@ Properties:
 - [`GetContextKeysForCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html)
 - [`GetContextKeysForPrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html)
 - [`GetCredentialReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetCredentialReport.html)
-- [`GetLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetLoginProfile.html)
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
 - [`GetOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html)
 - [`GetOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html)
@@ -1058,7 +1099,6 @@ Properties:
 - [`UntagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagSAMLProvider.html)
 - [`UntagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html)
 - [`UpdateAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html)
-- [`UpdateLoginProfile`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateLoginProfile.html)
 - [`UpdateOpenIDConnectProviderThumbprint`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
 - [`UpdateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSAMLProvider.html)
 - [`UpdateServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html)
