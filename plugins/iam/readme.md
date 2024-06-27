@@ -547,8 +547,6 @@ Properties:
   - Name of the group; names are not distinguished by case
 - **`Marker` (string)**
   - Pagination cursor
-- **`PathPrefix` (string)**
-  - Filter results by path prefix
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
 - **`paginate` (boolean)**
@@ -562,10 +560,10 @@ Properties:
 Properties:
 - **`Marker` (string)**
   - Pagination cursor
-- **`PathPrefix` (string)**
-  - Filter results by path prefix
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -630,6 +628,42 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListPolicies`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicies.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`OnlyAttached` (boolean)**
+  - Set to true to only see attached policies
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`PolicyUsageFilter` (string)**
+  - Filter results by how they are used; can be one of: `PermissionsPolicy`, `PermissionsBoundary`
+- **`Scope` (string)**
+  - Filter results by how they are managed; can be one of: `All`, `AWS`, `Local` (customer managed)
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListPolicyTags`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListRolePolicies`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html)
@@ -654,6 +688,8 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -791,6 +827,18 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
+### `TagPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagPolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`Tags` (array) [required]**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
 ### `TagRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagRole.html)
@@ -822,6 +870,17 @@ Properties:
 Properties:
 - **`InstanceProfileName` (string) [required]**
   - Name of the instance profile
+- **`TagKeys` (array) [required]**
+  - Array of tag keys
+
+
+### `UntagPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagPolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
 - **`TagKeys` (array) [required]**
   - Array of tag keys
 
@@ -971,9 +1030,7 @@ Properties:
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)
 - [`ListOpenIDConnectProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviders.html)
 - [`ListOpenIDConnectProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviderTags.html)
-- [`ListPolicies`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicies.html)
 - [`ListPoliciesGrantingServiceAccess`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html)
-- [`ListPolicyTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html)
 - [`ListPolicyVersions`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyVersions.html)
 - [`ListSAMLProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviders.html)
 - [`ListSAMLProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviderTags.html)
@@ -994,12 +1051,10 @@ Properties:
 - [`SimulatePrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html)
 - [`TagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagMFADevice.html)
 - [`TagOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagOpenIDConnectProvider.html)
-- [`TagPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagPolicy.html)
 - [`TagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagSAMLProvider.html)
 - [`TagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagServerCertificate.html)
 - [`UntagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagMFADevice.html)
 - [`UntagOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagOpenIDConnectProvider.html)
-- [`UntagPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagPolicy.html)
 - [`UntagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagSAMLProvider.html)
 - [`UntagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html)
 - [`UpdateAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html)

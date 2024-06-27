@@ -13,7 +13,7 @@ const docRoot = 'https://docs.aws.amazon.com/IAM/latest/APIReference/'
 const userGuide = 'https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/'
 
 const arr = { type: 'array' }
-// const bool = { type: 'boolean' }
+const bool = { type: 'boolean' }
 // const obj = { type: 'object' }
 const num = { type: 'number' }
 const str = { type: 'string' }
@@ -1065,7 +1065,6 @@ const ListGroupPolicies = {
   validate: {
     GroupName,
     Marker,
-    PathPrefix,
     MaxItems,
     paginate: valPaginate,
   },
@@ -1099,8 +1098,8 @@ const ListGroups = {
   awsDoc: docRoot + 'API_ListGroups.html',
   validate: {
     Marker,
-    PathPrefix,
     MaxItems,
+    PathPrefix,
     paginate: valPaginate,
   },
   request: params => {
@@ -1168,7 +1167,7 @@ const ListInstanceProfiles = {
   validate: {
     Marker,
     MaxItems,
-    PathPrefix: { ...str, comment: 'Filter results by path prefix' },
+    PathPrefix,
     paginate: valPaginate,
   },
   request: params => {
@@ -1265,6 +1264,77 @@ const ListInstanceProfileTags = {
   },
 }
 
+const ListPolicies = {
+  awsDoc: docRoot + 'API_ListPolicies.html',
+  validate: {
+    Marker,
+    MaxItems,
+    OnlyAttached: { ...bool, comment: 'Set to true to only see attached policies' },
+    PathPrefix,
+    PolicyUsageFilter: { ...str, comment: 'Filter results by how they are used; can be one of: `PermissionsPolicy`, `PermissionsBoundary`' },
+    Scope: { ...str, comment: 'Filter results by how they are managed; can be one of: `All`, `AWS`, `Local` (customer managed)' },
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListPolicies',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListPoliciesResult.Marker',
+        accumulator: 'ListPoliciesResult.Policies.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Policies' ])
+    let { ListPoliciesResult } = payload
+    normalizeObjectArrays(ListPoliciesResult, arrayKeys)
+    return ListPoliciesResult
+  },
+}
+
+const ListPolicyTags = {
+  awsDoc: docRoot + 'API_ListPolicyTags.html',
+  validate: {
+    PolicyArn,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListPolicyTags',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListPolicyTagsResult.Marker',
+        accumulator: 'ListPolicyTagsResult.Tags.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    let { ListPolicyTagsResult } = payload
+    normalizeObjectArrays(ListPolicyTagsResult, arrayKeys)
+    return ListPolicyTagsResult
+  },
+}
+
 const ListRolePolicies = {
   awsDoc: docRoot + 'API_ListRolePolicies.html',
   validate: {
@@ -1304,6 +1374,7 @@ const ListRoles = {
   validate: {
     Marker,
     MaxItems,
+    PathPrefix,
     paginate: valPaginate,
   },
   request: params => {
@@ -1331,6 +1402,7 @@ const ListRoles = {
     return ListRolesResult
   },
 }
+
 
 const ListRoleTags = {
   awsDoc: docRoot + 'API_ListRoleTags.html',
@@ -1587,6 +1659,24 @@ const TagInstanceProfile = {
   response: emptyResponse,
 }
 
+const TagPolicy = {
+  awsDoc: docRoot + 'API_TagPolicy.html',
+  validate: {
+    PolicyArn,
+    Tags: { ...Tags, required },
+  },
+  request: params => {
+    const query = {
+      Action: 'TagPolicy',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (query.Tags) serializeTags(query)
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const TagRole = {
   awsDoc: docRoot + 'API_TagRole.html',
   validate: {
@@ -1635,6 +1725,27 @@ const UntagInstanceProfile = {
       Action: 'UntagInstanceProfile',
       Version: defaultVersion,
       InstanceProfileName,
+    }
+    TagKeys.forEach((value, i) => {
+      query[`TagKeys.member.${i + 1}`] = value
+    })
+    return { query }
+  },
+  response: emptyResponse,
+}
+
+const UntagPolicy = {
+  awsDoc: docRoot + 'API_UntagPolicy.html',
+  validate: {
+    PolicyArn,
+    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+  },
+  request: params => {
+    const { PolicyArn, TagKeys } = params
+    let query = {
+      Action: 'UntagPolicy',
+      Version: defaultVersion,
+      PolicyArn,
     }
     TagKeys.forEach((value, i) => {
       query[`TagKeys.member.${i + 1}`] = value
@@ -1858,6 +1969,8 @@ export default {
     ListInstanceProfiles,
     ListInstanceProfilesForRole,
     ListInstanceProfileTags,
+    ListPolicies,
+    ListPolicyTags,
     ListRolePolicies,
     ListRoles,
     ListRoleTags,
@@ -1870,9 +1983,11 @@ export default {
     RemoveUserFromGroup,
     RemoveRoleFromInstanceProfile,
     TagInstanceProfile,
+    TagPolicy,
     TagRole,
     TagUser,
     UntagInstanceProfile,
+    UntagPolicy,
     UntagRole,
     UntagUser,
     UpdateAccessKey,

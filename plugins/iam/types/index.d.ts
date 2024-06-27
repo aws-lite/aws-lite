@@ -50,6 +50,8 @@ import {
   ListInstanceProfilesCommandOutput as ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleCommandOutput as ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsCommandOutput as ListInstanceProfileTagsResponse,
+  ListPoliciesCommandOutput as ListPoliciesResponse,
+  ListPolicyTagsCommandOutput as ListPolicyTagsResponse,
   ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
@@ -62,9 +64,11 @@ import {
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
+  TagPolicyCommandOutput as TagPolicyResponse,
   TagRoleCommandOutput as TagRoleResponse,
   TagUserCommandOutput as TagUserResponse,
   UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
+  UntagPolicyCommandOutput as UntagPolicyResponse,
   UntagRoleCommandOutput as UntagRoleResponse,
   UntagUserCommandOutput as UntagUserResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
@@ -342,13 +346,13 @@ declare interface AwsLiteIAM {
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html IAM: ListGroupPolicies}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroupPolicies IAM: ListGroupPolicies}
    */
-  ListGroupPolicies: (input: { GroupName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListGroupPoliciesResponse>
+  ListGroupPolicies: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListGroupPoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroups.html IAM: ListGroups}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroups IAM: ListGroups}
    */
-  ListGroups: (input: { Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListGroupsResponse>
+  ListGroups: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListGroupsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupsForUser.html IAM: ListGroupsForUser}
@@ -375,6 +379,18 @@ declare interface AwsLiteIAM {
   ListInstanceProfileTags: (input: { InstanceProfileName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfileTagsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicies.html IAM: ListPolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicies IAM: ListPolicies}
+   */
+  ListPolicies: (input: { Marker?: string, MaxItems?: number, OnlyAttached?: boolean, PathPrefix?: string, PolicyUsageFilter?: string, Scope?: string, paginate?: boolean }) => Promise<ListPoliciesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html IAM: ListPolicyTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyTags IAM: ListPolicyTags}
+   */
+  ListPolicyTags: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListPolicyTagsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html IAM: ListRolePolicies}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRolePolicies IAM: ListRolePolicies}
    */
@@ -384,7 +400,7 @@ declare interface AwsLiteIAM {
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoles.html IAM: ListRoles}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRoles IAM: ListRoles}
    */
-  ListRoles: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRolesResponse>
+  ListRoles: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListRolesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoleTags.html IAM: ListRoleTags}
@@ -447,6 +463,12 @@ declare interface AwsLiteIAM {
   TagInstanceProfile: (input: { InstanceProfileName: string, Tags: any[] }) => Promise<TagInstanceProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagPolicy.html IAM: TagPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagPolicy IAM: TagPolicy}
+   */
+  TagPolicy: (input: { PolicyArn: string, Tags: any[] }) => Promise<TagPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagRole.html IAM: TagRole}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagRole IAM: TagRole}
    */
@@ -463,6 +485,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagInstanceProfile IAM: UntagInstanceProfile}
    */
   UntagInstanceProfile: (input: { InstanceProfileName: string, TagKeys: any[] }) => Promise<UntagInstanceProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagPolicy.html IAM: UntagPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagPolicy IAM: UntagPolicy}
+   */
+  UntagPolicy: (input: { PolicyArn: string, TagKeys: any[] }) => Promise<UntagPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagRole.html IAM: UntagRole}
@@ -573,6 +601,8 @@ export type {
   ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsResponse,
+  ListPoliciesResponse,
+  ListPolicyTagsResponse,
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
@@ -585,9 +615,11 @@ export type {
   RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileResponse,
   TagInstanceProfileResponse,
+  TagPolicyResponse,
   TagRoleResponse,
   TagUserResponse,
   UntagInstanceProfileResponse,
+  UntagPolicyResponse,
   UntagRoleResponse,
   UntagUserResponse,
   UpdateAccessKeyResponse,
