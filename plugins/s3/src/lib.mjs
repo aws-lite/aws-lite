@@ -143,7 +143,9 @@ function getHeadersFromParams (params, ignore = []) {
       })
     }
     else if (headerMappings[param] && !ignore.includes(param)) {
-      acc[headerMappings[param]] = params[param]
+      acc[headerMappings[param]] = Array.isArray(params[param])
+        ? params[param].join(',')
+        : params[param]
     }
     return acc
   }, {})

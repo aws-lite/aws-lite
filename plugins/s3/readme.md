@@ -782,12 +782,12 @@ Properties:
 - **`Key` (string) [required]**
   - S3 key / file name
 - **`ObjectAttributes` (array) [required]**
-  - Specify the root level of the attributes to be returned
+  - Specify attributes to be returned, can be one or more of: `ETag`, `Checksum`, `ObjectParts`, `StorageClass`, `ObjectSize`
   - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html#API_GetObjectAttributes_RequestParameters)
 - **`VersionId` (string)**
   - Reference a specific version of the object
 - **`MaxParts` (number)**
-  - Maximum number of parts returned in the response if the `ObjectParts` attribute is requested
+  - Maximum number of parts to be returned in the response
 - **`PartNumberMarker` (string)**
   - Sets request header: `x-amz-part-number-marker`
 - **`SSECustomerAlgorithm` (string)**

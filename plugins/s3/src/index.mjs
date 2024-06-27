@@ -1213,17 +1213,16 @@ const GetObjectAttributes = {
   validate: {
     Bucket,
     Key,
-    ObjectAttributes: { ...arr, required, comment: 'Specify the root level of the attributes to be returned', ref: docRoot + 'API_GetObjectAttributes.html#API_GetObjectAttributes_RequestParameters' },
+    ObjectAttributes: { ...arr, required, comment: 'Specify attributes to be returned, can be one or more of: `ETag`, `Checksum`, `ObjectParts`, `StorageClass`, `ObjectSize`', ref: docRoot + 'API_GetObjectAttributes.html#API_GetObjectAttributes_RequestParameters' },
     VersionId,
-    MaxParts: { ...num, comment: 'Maximum number of parts returned in the response if the `ObjectParts` attribute is requested' },
+    MaxParts: { ...num, comment: 'Maximum number of parts to be returned in the response' },
     ...getValidateHeaders('PartNumberMarker', 'SSECustomerAlgorithm',
       'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner'),
   },
   request: (params, utils) => {
-    const { Key, ObjectAttributes, MaxParts } = params
+    const { Key } = params
     const queryParams = [ 'VersionId' ]
-    const headers = { 'x-amz-object-attributes': ObjectAttributes, ...getHeadersFromParams(params, queryParams) }
-    if (MaxParts) headers['x-amz-max-parts'] = MaxParts
+    const headers = getHeadersFromParams(params, queryParams)
     const query = { 'attributes': '', ...getQueryFromParams(params, queryParams) }
     const { host, pathPrefix } = getHost(params, utils)
     return {
@@ -1232,6 +1231,7 @@ const GetObjectAttributes = {
       path: `/${Key}`,
       headers,
       query,
+      // TODO: could not get the part paginator working to validate functionality; additionally, our current means of pagination would potentially remove other metadata from responses, so paginating this method may be better accomplished with an iterating paginator
     }
   },
   response: ({ payload, headers }) => {
