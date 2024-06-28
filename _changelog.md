@@ -8,8 +8,12 @@
 
 - Added support for accepting pagination cursors via headers
 
----
 
+### Fixed
+
+- Improved reliability and performance of debug output of response body
+
+---
 
 ## [0.21.10] 2024-06-13
 

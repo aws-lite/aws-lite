@@ -154,22 +154,17 @@ function call (params, args) {
 
       res.on('data', chunk => data.push(chunk))
       res.on('end', () => {
-        let body = Buffer.concat(data), payload, rawString
+        let body = Buffer.concat(data), payload
         let contentType = config.responseContentType ||
-                        headers['content-type'] ||
-                        headers['Content-Type'] || ''
+        headers['content-type'] ||
+        headers['Content-Type'] || ''
+
         if (rawResponsePayload) {
           payload = body
-
-          /* istanbul ignore next */
-          if (debug) rawString = body.toString()
         }
         else {
           if (body.length && (JSONContentType(contentType) || AwsJSONContentType(contentType))) {
             payload = JSON.parse(body)
-
-            /* istanbul ignore next */
-            if (debug) rawString = body.toString()
 
             // Some services may attempt to respond with regular JSON, but an AWS JSON content-type. Sure. Ok. Anyway, try to guard against that.
             if (AwsJSONContentType(contentType)) {
@@ -183,9 +178,6 @@ function call (params, args) {
             payload = parseXML(body)
             /* istanbul ignore next */
             if (payload.xmlns) delete payload.xmlns
-
-            /* istanbul ignore next */
-            if (debug) rawString = body.toString()
           }
           // Sometimes AWS omits content type from responses (cough, S3) and errors (ahem, Lambda) so that's fun
           // In performance testing JSON.parse fails fast and early
@@ -214,7 +206,8 @@ function call (params, args) {
         if (debug) {
           let bodyOutput
           if (payload instanceof Buffer) bodyOutput = body.length ? `<body buffer of ${body.length}b>` : ''
-          else bodyOutput = rawString
+          else bodyOutput = body.toString()
+
           console.error('[aws-lite] Response:', {
             time: new Date().toISOString(),
             statusCode,
