@@ -14,7 +14,7 @@ const required = true
 const docRoot = 'https://docs.aws.amazon.com/AmazonS3/latest/API/'
 
 // Validation types
-// const arr = { type: 'array' }
+const arr = { type: 'array' }
 const bool = { type: 'boolean' }
 const obj = { type: 'object' }
 const str = { type: 'string' }
@@ -59,7 +59,7 @@ const AbortMultipartUpload = {
       headers,
     }
   },
-  response: ({ headers }) => parseHeadersToResults({ headers }),
+  response: parseHeadersToResults,
 }
 
 const CompleteMultipartUpload = {
@@ -80,7 +80,6 @@ const CompleteMultipartUpload = {
     const CompleteMultipartUpload = {
       Part: params.MultipartUpload?.Parts || [],
     }
-
     return {
       host,
       pathPrefix,
@@ -92,6 +91,39 @@ const CompleteMultipartUpload = {
     }
   },
   response: ({ payload, headers }) => ({ ...payload || {}, ...parseHeadersToResults({ headers }) }),
+}
+
+const CopyObject = {
+  awsDoc: docRoot + 'API_CopyObject.html',
+  validate: {
+    Bucket: { ...str, required, comment: 'Name of the S3 bucket destination' },
+    Key: { ...str, required, comment: 'S3 key / file name of the destination' },
+    ...getValidateHeaders('ACL', 'CacheControl', 'ChecksumAlgorithm', 'ContentDisposition', 'ContentEncoding',
+      'ContentLanguage', 'ContentType', 'CopySource', 'CopySourceIfMatch', 'CopySourceIfModifiedSince',
+      'CopySourceIfNoneMatch', 'CopySourceIfUnmodifiedSince', 'Expires', 'GrantFullControl', 'GrantRead',
+      'GrantReadACP', 'GrantWriteACP', 'MetadataDirective', 'TaggingDirective', 'ServerSideEncryption',
+      'StorageClass', 'WebsiteRedirectLocation', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5',
+      'SSEKMSKeyId', 'SSEKMSEncryptionContext', 'BucketKeyEnabled', 'CopySourceSSECustomerAlgorithm', 'CopySourceSSECustomerKey',
+      'CopySourceSSECustomerKeyMD5', 'RequestPayer', 'Tagging', 'ObjectLockMode', 'ObjectLockRetainUntilDate',
+      'ObjectLockLegalHoldStatus', 'ExpectedBucketOwner', 'ExpectedSourceBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers: { ...xml, ...getHeadersFromParams(params) },
+    }
+  },
+  response: ({ payload, headers }) => {
+    return { CopyObjectResult: {
+      ...payload,
+      ...parseHeadersToResults({ headers }) },
+    }
+  },
 }
 
 const CreateBucket = {
@@ -473,6 +505,50 @@ const DeleteObjects = {
   },
 }
 
+const DeleteObjectTagging = {
+  awsDoc: docRoot + 'API_DeleteObjectTagging.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const queryParams = [ 'VersionId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const { Key } = params
+    const query = { 'tagging': '', ...getQueryFromParams(params, queryParams) }
+    return {
+      method: 'DELETE',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query,
+      headers: getHeadersFromParams(params, queryParams),
+    }
+  },
+  response: parseHeadersToResults,
+}
+
+const DeletePublicAccessBlock = {
+  awsDoc: docRoot + 'API_DeletePublicAccessBlock.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      method: 'DELETE',
+      pathPrefix,
+      path: '/?publicAccessBlock',
+      headers: getHeadersFromParams(params),
+    }
+  },
+  response: defaultResponse,
+}
+
 const GetBucketAccelerateConfiguration = {
   awsDoc: docRoot + 'API_GetBucketAccelerateConfiguration.html',
   validate: {
@@ -514,14 +590,12 @@ const GetBucketAcl = {
   response: ({ payload }) => {
     let { Owner } = payload
     let Grants = payload.AccessControlList.Grant
-
     if (!Grants) {
       Grants = []
     }
     else if (!Array.isArray(Grants)) {
       Grants = [ Grants ]
     }
-
     return {
       Owner,
       Grants,
@@ -550,11 +624,9 @@ const GetBucketAnalyticsConfiguration = {
   },
   response: ({ payload }) => {
     if (payload.Filter) normalizeResponseFilter(payload.Filter)
-
     if (!payload.StorageClassAnalysis) {
       payload.StorageClassAnalysis = {}
     }
-
     delete payload.xmlns
     return { AnalyticsConfiguration: payload }
   },
@@ -578,30 +650,23 @@ const GetBucketCors = {
   },
   response: ({ payload }) => {
     let { CORSRule: CORSRules } = payload
-
     if (!Array.isArray(CORSRules)) {
       CORSRules = [ CORSRules ]
     }
-
     CORSRules.forEach(i => {
       if (i.AllowedHeader) {
         arrayifyAndMoveObject(i, 'AllowedHeader', 'AllowedHeaders')
       }
-
       if (i.AllowedMethod) {
         arrayifyAndMoveObject(i, 'AllowedMethod', 'AllowedMethods')
       }
-
       if (i.AllowedOrigin) {
         arrayifyAndMoveObject(i, 'AllowedOrigin', 'AllowedOrigins')
       }
-
       if (i.ExposeHeader) {
         arrayifyAndMoveObject(i, 'ExposeHeader', 'ExposeHeaders')
       }
     })
-
-
     return { CORSRules }
   },
 }
@@ -703,9 +768,7 @@ const GetBucketLifecycleConfiguration = {
     arrayifyAndMoveObject(payload, 'Rule', 'Rules')
     payload.Rules.forEach(i => {
       if (i.Transition) arrayifyAndMoveObject(i, 'Transition', 'Transitions')
-
       if (i.NonCurrentVersionTransition) arrayifyAndMoveObject(i, 'NoncurrentVersionTransition', 'NoncurrentVersionTransitions')
-
       if (i.Filter) {
         normalizeResponseFilter(i.Filter)
       }
@@ -763,7 +826,6 @@ const GetBucketLogging = {
     else {
       LoggingEnabled.TargetGrants = LoggingEnabled.TargetGrants.Grant
     }
-
     return payload
   },
 }
@@ -815,7 +877,6 @@ const GetBucketNotificationConfiguration = {
       const { S3Key } = Filter
       let { FilterRule } = S3Key
       if (!Array.isArray(FilterRule)) FilterRule = [ FilterRule ]
-
       return {
         Key: {
           FilterRules: FilterRule,
@@ -823,26 +884,21 @@ const GetBucketNotificationConfiguration = {
       }
     }
     const normalizeConfig = (config, oldArnKey, newArnKey) => {
-      if (!Array.isArray(config))
-        config = [ config ]
-
+      if (!Array.isArray(config)) config = [ config ]
       return config.map(i => {
         const { Filter, Event, Id } = i
         let result = { Id }
         result[newArnKey] = i[oldArnKey]
-
         if (!Array.isArray(Event)) {
           result.Events = [ Event ]
         }
         else {
           result.Events = Event
         }
-
         if (Filter) result.Filter = normalizeFilter(Filter)
         return result
       })
     }
-
     const { TopicConfiguration, QueueConfiguration, CloudFunctionConfiguration, EventBridgeConfiguration } = payload
     let result = {}
     result.EventBridgeConfiguration = EventBridgeConfiguration ? EventBridgeConfiguration : {}
@@ -1003,7 +1059,6 @@ const GetBucketTagging = {
   },
   response: ({ payload }) => {
     let TagSet = payload.TagSet.Tag
-
     if (!Array.isArray(TagSet)) TagSet = [ TagSet ]
     return { TagSet }
   },
@@ -1106,6 +1161,266 @@ const GetObject = {
   },
 }
 
+const GetObjectAcl = {
+  awsDoc: docRoot + 'API_GetObjectAcl.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { 'acl': '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+    }
+  },
+  response: ({ payload, headers }) => {
+    const { AccessControlList, Owner } = payload
+    let { Grant: Grants } = AccessControlList
+    let { RequestCharged } = parseHeadersToResults({ headers })
+    if (!Array.isArray(Grants)) {
+      Grants = [ Grants ]
+    }
+    Grants = Grants.map(i => {
+      let { Grantee } = i
+      Grantee.Type = Grantee['xsi:type']
+      delete Grantee['xsi:type']
+      delete Grantee['xmlns:xsi']
+      i.Grantee = Grantee
+      return i
+    })
+    let result = {
+      Owner,
+      Grants,
+    }
+    if (RequestCharged) result.RequestCharged = RequestCharged
+    return result
+  },
+}
+
+// TODO: Enable header pagination support
+const GetObjectAttributes = {
+  awsDoc: docRoot + 'API_GetObjectAttributes.html',
+  validate: {
+    Bucket,
+    Key,
+    ObjectAttributes: { ...arr, required, comment: 'Specify attributes to be returned, can be one or more of: `ETag`, `Checksum`, `ObjectParts`, `StorageClass`, `ObjectSize`', ref: docRoot + 'API_GetObjectAttributes.html#API_GetObjectAttributes_RequestParameters' },
+    VersionId,
+    MaxParts: { ...num, comment: 'Maximum number of parts to be returned in the response' },
+    ...getValidateHeaders('PartNumberMarker', 'SSECustomerAlgorithm',
+      'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { 'attributes': '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+      // TODO: could not get the part paginator working to validate functionality; additionally, our current means of pagination would potentially remove other metadata from responses, so paginating this method may be better accomplished with an iterating paginator
+    }
+  },
+  response: ({ payload, headers }) => {
+    let result = { ...payload, ...parseHeadersToResults({ headers }) }
+    let { ObjectParts } = result
+    if (ObjectParts?.Part) {
+      ObjectParts.Parts = Array.isArray(ObjectParts.Part) ? ObjectParts.Part : [ ObjectParts.Parts ]
+      delete ObjectParts.Part
+    }
+    delete result.xmlns
+    return result
+  },
+}
+
+const GetObjectLegalHold = {
+  awsDoc: docRoot + 'API_GetObjectLegalHold.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { 'legal-hold': '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+    }
+  },
+  response: ({ payload }) => {
+    const { Status } = payload
+    return {
+      LegalHold: { Status },
+    }
+  },
+}
+
+const GetObjectLockConfiguration = {
+  awsDoc: docRoot + 'API_GetObjectLockConfiguration.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const headers = getHeadersFromParams(params)
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: '/?object-lock',
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    const { ObjectLockEnabled, Rule } = payload
+    return {
+      ObjectLockConfiguration: {
+        ObjectLockEnabled,
+        Rule,
+      },
+    }
+  },
+}
+
+const GetObjectRetention = {
+  awsDoc: docRoot + 'API_GetObjectRetention.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { retention: '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+    }
+  },
+  response: ({ payload }) => {
+    const { Mode, RetainUntilDate } = payload
+    return {
+      Retention: {
+        Mode,
+        RetainUntilDate,
+      },
+    }
+  },
+}
+
+const GetObjectTagging = {
+  awsDoc: docRoot + 'API_GetObjectTagging.html',
+  validate: {
+    Bucket,
+    Key,
+    VersionId,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const queryParams = [ 'VersionId' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { tagging: '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      headers,
+      query,
+    }
+  },
+  response: ({ payload, headers }) => {
+    const { VersionId } = parseHeadersToResults({ headers })
+    let { TagSet } = payload
+    const { Tag } = TagSet
+    TagSet = Array.isArray(Tag) ? Tag : [ Tag ]
+    return {
+      VersionId,
+      TagSet,
+    }
+  },
+}
+
+const GetObjectTorrent = {
+  awsDoc: docRoot + 'API_GetObjectTorrent.html',
+  validate: {
+    Bucket,
+    Key,
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer'),
+  },
+  request: (params, utils) => {
+    const { Key } = params
+    const headers = getHeadersFromParams(params)
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}?torrent`,
+      headers,
+    }
+  },
+  response: ({ payload, headers }) => {
+    const { Body } = payload
+    const { RequestCharged } = parseHeadersToResults({ headers })
+    return {
+      Body,
+      RequestCharged,
+    }
+  },
+}
+
+const GetPublicAccessBlock = {
+  awsDoc: docRoot + 'API_GetPublicAccessBlock.html',
+  validate: {
+    Bucket,
+    ...getValidateHeaders('ExpectedBucketOwner'),
+  },
+  request: (params, utils) => {
+    const headers = getHeadersFromParams(params)
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      path: `/?publicAccessBlock`,
+      headers,
+    }
+  },
+  response: ({ payload }) => {
+    let PublicAccessBlockConfiguration = { ...payload }
+    delete PublicAccessBlockConfiguration.xmlns
+    return { PublicAccessBlockConfiguration }
+  },
+}
+
 const HeadBucket = {
   awsDoc: docRoot + 'API_HeadBucket.html',
   validate: {
@@ -1189,9 +1504,9 @@ const ListBucketAnalyticsConfigurations = {
     let { AnalyticsConfiguration: resultList } = payload
     if (resultList) {
       resultList = resultList.map(i => {
-        let result = { ...i }
-        if (result.Filter) normalizeResponseFilter(result.Filter)
-        return result
+        if (i.Filter) normalizeResponseFilter(i.Filter)
+        i.StorageClassAnalysis = i.StorageClassAnalysis || {}
+        return i
       })
     }
     else {
@@ -1229,12 +1544,11 @@ const ListBucketIntelligentTieringConfigurations = {
     let { IntelligentTieringConfiguration: resultList } = payload
     if (resultList) {
       resultList = resultList.map(i => {
-        let result = { ...i }
-        if (result.Filter) normalizeResponseFilter(result.Filter)
-        if (!Array.isArray(result.Tiering)) result.Tiering = [ result.Tiering ]
-        result.Tierings = result.Tiering
-        delete result.Tiering
-        return result
+        if (i.Filter) normalizeResponseFilter(i.Filter)
+        if (!Array.isArray(i.Tiering)) i.Tiering = [ i.Tiering ]
+        i.Tierings = i.Tiering
+        delete i.Tiering
+        return i
       })
     }
     else {
@@ -1269,22 +1583,21 @@ const ListBucketInventoryConfigurations = {
     }
   },
   response: ({ payload }) => {
-    let { InventoryConfiguration: resultList } = payload
-    if (resultList) {
-      resultList = resultList.map(i => {
+    let { InventoryConfiguration } = payload
+    if (InventoryConfiguration) {
+      InventoryConfiguration = InventoryConfiguration.map(i => {
         const { OptionalFields } = i
-        let result = { ...i }
         if (OptionalFields) {
           const { Field } = OptionalFields
-          result.OptionalFields = Array.isArray(Field) ? Field : [ Field ]
+          i.OptionalFields = Array.isArray(Field) ? Field : [ Field ]
         }
-        return result
+        return i
       })
     }
     else {
-      resultList = []
+      InventoryConfiguration = []
     }
-    return resultList
+    return InventoryConfiguration
   },
 }
 
@@ -1313,18 +1626,17 @@ const ListBucketMetricsConfigurations = {
     }
   },
   response: ({ payload }) => {
-    let { MetricsConfiguration: resultList } = payload
-    if (resultList) {
-      resultList = resultList.map(i => {
-        let result = { ...i }
-        if (result.Filter) normalizeResponseFilter(result.Filter)
-        return result
+    let { MetricsConfiguration } = payload
+    if (MetricsConfiguration) {
+      MetricsConfiguration = MetricsConfiguration.map(i => {
+        if (i.Filter) normalizeResponseFilter(i.Filter)
+        return i
       })
     }
     else {
-      resultList = []
+      MetricsConfiguration = []
     }
-    return resultList
+    return MetricsConfiguration
   },
 }
 
@@ -1433,6 +1745,92 @@ const ListObjectsV2 = {
     }
     if (payload.Contents) {
       res.Contents = Array.isArray(payload.Contents) ? payload.Contents : [ payload.Contents ]
+    }
+    return res
+  },
+}
+
+// TODO: allow multiple pagination accumulators before providing pagination support
+const ListObjectVersions = {
+  awsDoc: docRoot + 'API_ListObjectVersions.html',
+  validate: {
+    Bucket,
+    Delimiter,
+    EncodingType,
+    KeyMarker: { ...str, comment: 'Pagination cursor' },
+    MaxKeys: { ...num, comment: 'Maximum number of keys (at most 1000) to be returned in the response' },
+    Prefix,
+    VersionIdMarker: { ...str, comment: 'Specify the version to begin listing from', ref: docRoot + 'API_ListObjectVersions.html#API_ListObjectVersions_RequestParameters' },
+    ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer', 'OptionalObjectAttributes'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'Delimiter', 'EncodingType', 'KeyMarker', 'MaxKeys', 'Prefix', 'VersionIdMarker' ]
+    const headers = getHeadersFromParams(params, queryParams)
+    const query = { versions: '', ...getQueryFromParams(params, queryParams) }
+    const { host, pathPrefix } = getHost(params, utils)
+    return {
+      host,
+      pathPrefix,
+      headers,
+      query,
+    }
+  },
+  response: ({ headers, payload }) => {
+    let res = payload
+    res.Versions = Array.isArray(res.Version) ? res.Version : [ res.Version ]
+    delete res.Version
+    res.Versions = res.Versions.map(i => {
+      if (i.ChecksumAlgorithm && Array.isArray(i.ChecksumAlgorithm)) i.ChecksumAlgorithm = [ i.ChecksumAlgorithm ]
+      return i
+    })
+    if (res.DeleteMarker) {
+      res.DeleteMarkers = Array.isArray(res.DeleteMarker) ? res.DeleteMarker : [ res.DeleteMarker ]
+      delete res.DeleteMarker
+    }
+    if (res.CommonPrefixes && !Array.isArray(res.CommonPrefixes)) res.CommonPrefixes = [ res.CommonPrefixes ]
+    return {
+      ...res,
+      ...parseHeadersToResults({ headers }),
+    }
+  },
+}
+
+// TODO: prevent paginator from excluding fields that are not the accumulator
+const ListParts = {
+  awsDoc: docRoot + 'API_ListParts.html',
+  validate: {
+    Bucket,
+    Key,
+    UploadId,
+    MaxParts: { ...num, comment: 'Maximum number of parts (at most 1000) to be returned in the response' },
+    PartNumberMarker: { ...str, comment: 'Pagination cursor' },
+    // paginate: valPaginate,
+    ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5'),
+  },
+  request: (params, utils) => {
+    const queryParams = [ 'MaxParts', 'PartNumberMarker', 'UploadId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const { Key /* paginate*/ } = params
+    return {
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query: getQueryFromParams(params, queryParams),
+      headers: getHeadersFromParams(params, queryParams),
+      // paginate,
+      // paginator: {
+      //   type: 'query',
+      //   cursor: 'part-number-marker',
+      //   token: 'NextPartNumberMarker',
+      //   accumulator: 'Part',
+      // },
+    }
+  },
+  response: ({ payload, headers }) => {
+    let res = { ...payload, ...parseHeadersToResults({ headers }) }
+    if (res.Part) {
+      res.Parts = Array.isArray(res.Part) ? res.Part : [ res.Part ]
+      delete res.Part
     }
     return res
   },
@@ -1774,7 +2172,6 @@ const PutBucketNotificationConfiguration = {
     const { NotificationConfiguration } = params
     const { TopicConfigurations, QueueConfigurations, LambdaFunctionConfigurations, EventBridgeConfiguration } = NotificationConfiguration
     let payload = { EventBridgeConfiguration }
-
     const serializeFilter = Filter => {
       return {
         S3Key: {
@@ -1850,7 +2247,7 @@ const PutBucketPolicy = {
   validate: {
     Bucket,
     Policy: { ...obj, required, comment: 'Object defining the policy', ref: docRoot + 'API_PutBucketPolicy.html#API_PutBucketPolicy_RequestBody' },
-    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ConfirmRemoveSelfBucketAccess',  'ExpectedBucketOwner'),
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ConfirmRemoveSelfBucketAccess', 'ExpectedBucketOwner'),
   },
   request: async (params, utils) => {
     const { Policy: payload } = params
@@ -1942,7 +2339,7 @@ const PutBucketTagging = {
   awsDoc: docRoot + 'API_PutBucketTagging.html',
   validate: {
     Bucket,
-    Tagging: { ...obj, required, comment: 'Object defining the tag set', ref:  docRoot + 'API_PutBucketTagging.html#AmazonS3-PutBucketTagging-request-Tagging' },
+    Tagging: { ...obj, required, comment: 'Object defining the tag set', ref: docRoot + 'API_PutBucketTagging.html#AmazonS3-PutBucketTagging-request-Tagging' },
     ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
   },
   request: async (params, utils) => {
@@ -2162,18 +2559,105 @@ const PutObjectTagging = {
       payload,
     }
   },
-  response: ({ headers }) => {
-    let result = {}
-    const { VersionId } = parseHeadersToResults({ headers })
-    if (VersionId) {
-      result.VersionId = VersionId
-    }
-    else {
-      result.VersionId = 'null'
-    }
-    return result
-  },
+  response: parseHeadersToResults,
 }
+
+const PutPublicAccessBlock = {
+  awsDoc: docRoot + 'API_PutPublicAccessBlock.html',
+  validate: {
+    Bucket,
+    PublicAccessBlockConfiguration: { ...obj, required, comment: 'Object defining the public access block configuration', ref: docRoot + 'API_PutPublicAccessBlock.html#AmazonS3-PutPublicAccessBlock-request-PublicAccessBlockConfiguration' },
+    ...getValidateHeaders('ContentMD5', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const { host, pathPrefix } = getHost(params, utils)
+    const { PublicAccessBlockConfiguration } = params
+    const payload = { PublicAccessBlockConfiguration }
+    const checksum = await makeChecksumSHA256(utils, payload, { xmlns })
+    const headers = { ...xml, ...getHeadersFromParams(params), 'x-amz-checksum-sha256': checksum }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: '/?publicAccessBlock',
+      headers,
+      xmlns,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+
+const RestoreObject = {
+  awsDoc: docRoot + 'API_RestoreObject.html',
+  validate: {
+    Bucket,
+    Key,
+    RestoreRequest: { ...obj, required, comment: 'Object defining the restore request', ref: docRoot + 'API_RestoreObject.html#AmazonS3-RestoreObject-request-RestoreRequest' },
+    VersionId,
+    ...getValidateHeaders( 'RequestPayer', 'ChecksumAlgorithm', 'ExpectedBucketOwner'),
+  },
+  request: async (params, utils) => {
+    const queryParams = [ 'VersionId' ]
+    const { host, pathPrefix } = getHost(params, utils)
+    const query = { restore: '', ...getQueryFromParams(params, queryParams) }
+    let { RestoreRequest } = params
+
+    if (RestoreRequest.OutputLocation?.S3.AccessControlList)
+      RestoreRequest.OutputLocation.S3.AccessControlList = { Grant: RestoreRequest.OutputLocation.S3.AccessControlList }
+
+    if (RestoreRequest.OutputLocation?.S3.Tagging)
+      RestoreRequest.OutputLocation.S3.Tagging.TagSet = { Tag: RestoreRequest.OutputLocation.S3.Tagging.TagSet }
+
+    const headers = { ...xml, ...getHeadersFromParams(params, queryParams) }
+    return {
+      method: 'PUT',
+      host,
+      pathPrefix,
+      path: `/${Key}`,
+      query,
+      headers,
+      xmlns,
+      payload: { RestoreRequest },
+    }
+  },
+  response: parseHeadersToResults,
+}
+
+// The response will take some more time to figure out
+// TODO: RequestProgress will require some extra work
+// const SelectObjectContent = {
+//   awsDoc: docRoot + 'API_SelectObjectContent.html',
+//   validate: {
+//     Bucket,
+//     Key,
+//     Expression: { ...str, required, comment: 'Query expression' },
+//     ExpressionType: { ...str, required, comment: 'The type of the query; can be one of: `SQL`' },
+//     InputSerialization: { ...obj, required, comment: 'Specify the data format of the object being queried', ref: docRoot + 'API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-InputSerialization' },
+//     OutputSerialization: { ...obj, required, comment: 'Specify the data format of the response', ref: docRoot + 'API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-OutputSerialization' },
+//     RequestProgress: { ...obj, comment: 'Request periodic progress reports', ref: docRoot + 'API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-RequestProgress' },
+//     ScanRange: { ...obj, comment: 'Limit the search space to a range (in bytes) within the object', ref: docRoot + 'API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-ScanRange' },
+//   },
+//   request: async (params, utils) => {
+//     const { host, pathPrefix } = getHost(params, utils)
+//     const { Key } = params
+//     const headers = { ...xml, ...getHeadersFromParams(params) }
+//     let SelectObjectContentRequest = { ...params }
+//     delete SelectObjectContentRequest.Key
+//     return {
+//       method: 'POST',
+//       // streamResponsePayload: true,
+//       host,
+//       pathPrefix,
+//       path: `/${Key}`,
+//       query:  { select: '', 'select-type': 2 },
+//       headers,
+//       xmlns,
+//       payload: { SelectObjectContentRequest },
+//     }
+//   },
+//   response: ({ payload }) => payload,
+// }
 
 const UploadPart = {
   awsDoc: docRoot + 'API_UploadPart.html',
@@ -2182,7 +2666,7 @@ const UploadPart = {
     Key,
     PartNumber,
     Body: { type: [ 'buffer', 'stream', 'string' ], comment: 'Stream of data to be uploaded', ref: docRoot + 'AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestBody' },
-    ...getValidateHeaders( 'ContentLength', 'ContentMD5', 'ChecksumAlgorithm', 'ChecksumCRC32',
+    ...getValidateHeaders('ContentLength', 'ContentMD5', 'ChecksumAlgorithm', 'ChecksumCRC32',
       'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256', 'SSECustomerAlgorithm',
       'SSECustomerKey', 'SSECustomerKeyMD5', 'RequestPayer', 'ExpectedBucketOwner',
     ),
@@ -2209,6 +2693,7 @@ const UploadPart = {
 const methods = {
   AbortMultipartUpload,
   CompleteMultipartUpload,
+  CopyObject,
   CreateBucket,
   CreateMultipartUpload,
   DeleteBucket,
@@ -2226,6 +2711,8 @@ const methods = {
   DeleteBucketWebsite,
   DeleteObject,
   DeleteObjects,
+  DeleteObjectTagging,
+  DeletePublicAccessBlock,
   GetBucketAccelerateConfiguration,
   GetBucketAcl,
   GetBucketAnalyticsConfiguration,
@@ -2247,6 +2734,14 @@ const methods = {
   GetBucketVersioning,
   GetBucketWebsite,
   GetObject,
+  GetObjectAcl,
+  GetObjectAttributes,
+  GetObjectLegalHold,
+  GetObjectLockConfiguration,
+  GetObjectRetention,
+  GetObjectTagging,
+  GetObjectTorrent,
+  GetPublicAccessBlock,
   HeadBucket,
   HeadObject,
   ListBucketAnalyticsConfigurations,
@@ -2256,6 +2751,8 @@ const methods = {
   ListBuckets,
   ListMultipartUploads,
   ListObjectsV2,
+  ListObjectVersions,
+  ListParts,
   PutBucketAccelerateConfiguration,
   PutBucketAnalyticsConfiguration,
   PutBucketCors,
@@ -2277,6 +2774,9 @@ const methods = {
   PutObjectLockConfiguration,
   PutObjectRetention,
   PutObjectTagging,
+  PutPublicAccessBlock,
+  RestoreObject,
+  // SelectObjectContent,
   Upload,
   UploadPart,
   ...incomplete,

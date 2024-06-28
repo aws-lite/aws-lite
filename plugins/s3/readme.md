@@ -77,6 +77,93 @@ Properties:
   - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
 
 
+### `CopyObject`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - Name of the S3 bucket destination
+- **`Key` (string) [required]**
+  - S3 key / file name of the destination
+- **`ACL` (string)**
+  - Sets request header: `x-amz-acl`
+- **`CacheControl` (string)**
+  - Sets request header: `cache-control`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ContentDisposition` (string)**
+  - Sets request header: `content-disposition`
+- **`ContentEncoding` (string)**
+  - Sets request header: `content-encoding`
+- **`ContentLanguage` (string)**
+  - Sets request header: `content-language`
+- **`ContentType` (string)**
+  - Sets request header: `content-type`
+- **`CopySource` (string)**
+  - Sets request header: `x-amz-copy-source`
+- **`CopySourceIfMatch` (string)**
+  - Sets request header: `x-amz-copy-source-if-match`
+- **`CopySourceIfModifiedSince` (string)**
+  - Sets request header: `x-amz-copy-source-if-modified-since`
+- **`CopySourceIfNoneMatch` (string)**
+  - Sets request header: `x-amz-copy-source-if-none-match`
+- **`CopySourceIfUnmodifiedSince` (string)**
+  - Sets request header: `x-amz-copy-source-if-unmodified-since`
+- **`Expires` (string)**
+  - Sets request header: `expires`
+- **`GrantFullControl` (string)**
+  - Sets request header: `x-amz-grant-full-control`
+- **`GrantRead` (string)**
+  - Sets request header: `x-amz-grant-read`
+- **`GrantReadACP` (string)**
+  - Sets request header: `x-amz-grant-read-acp`
+- **`GrantWriteACP` (string)**
+  - Sets request header: `x-amz-grant-write-acp`
+- **`MetadataDirective` (string)**
+  - Sets request header: `x-amz-metadata-directive`
+- **`TaggingDirective` (string)**
+  - Sets request header: `x-amz-tagging-directive`
+- **`ServerSideEncryption` (string)**
+  - Sets request header: `x-amz-server-side-encryption`
+- **`StorageClass` (string)**
+  - Sets request header: `x-amz-storage-class`
+- **`WebsiteRedirectLocation` (string)**
+  - Sets request header: `x-amz-website-redirect-location`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKey` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
+- **`SSEKMSKeyId` (string)**
+  - Sets request header: `x-amz-server-side-encryption-aws-kms-key-id`
+- **`SSEKMSEncryptionContext` (string)**
+  - Sets request header: `x-amz-server-side-encryption-context`
+- **`BucketKeyEnabled` (string)**
+  - Sets request header: `x-amz-server-side-encryption-bucket-key-enabled`
+- **`CopySourceSSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-copy-source-server-side-encryption-customer-algorithm`
+- **`CopySourceSSECustomerKey` (string)**
+  - Sets request header: `x-amz-copy-source-server-side-encryption-customer-key`
+- **`CopySourceSSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-copy-source-server-side-encryption-customer-key-MD5`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`Tagging` (string)**
+  - Sets request header: `x-amz-tagging`
+- **`ObjectLockMode` (string)**
+  - Sets request header: `x-amz-object-lock-mode`
+- **`ObjectLockRetainUntilDate` (string)**
+  - Sets request header: `x-amz-object-lock-retain-until-date`
+- **`ObjectLockLegalHoldStatus` (string)**
+  - Sets request header: `x-amz-object-lock-legal-hold`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`ExpectedSourceBucketOwner` (string)**
+  - Sets request header: `x-amz-source-expected-bucket-owner`
+
+
 ### `CreateBucket`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html)
@@ -361,6 +448,32 @@ Properties:
   - Sets request header: `content-md5`
 
 
+### `DeleteObjectTagging`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `DeletePublicAccessBlock`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `GetBucketAccelerateConfiguration`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html)
@@ -642,6 +755,141 @@ Properties:
   - Set to `true` to return payload as a Node.js stream
 
 
+### `GetObjectAcl`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAcl.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+
+
+### `GetObjectAttributes`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`ObjectAttributes` (array) [required]**
+  - Specify attributes to be returned, can be one or more of: `ETag`, `Checksum`, `ObjectParts`, `StorageClass`, `ObjectSize`
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html#API_GetObjectAttributes_RequestParameters)
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`MaxParts` (number)**
+  - Maximum number of parts to be returned in the response
+- **`PartNumberMarker` (string)**
+  - Sets request header: `x-amz-part-number-marker`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKey` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `GetObjectLegalHold`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+
+
+### `GetObjectLockConfiguration`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLockConfiguration.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `GetObjectRetention`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectRetention.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+
+
+### `GetObjectTagging`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+
+
+### `GetObjectTorrent`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+
+
+### `GetPublicAccessBlock`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `HeadBucket`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html)
@@ -812,6 +1060,61 @@ Properties:
   - Sets request header: `x-amz-optional-object-attributes`
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListObjectVersions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Delimiter` (string)**
+  - Delimiter character used to group keys
+- **`EncodingType` (string)**
+  - Object key encoding type (must be `url`)
+- **`KeyMarker` (string)**
+  - Pagination cursor
+- **`MaxKeys` (number)**
+  - Maximum number of keys (at most 1000) to be returned in the response
+- **`Prefix` (string)**
+  - Limit response to keys that begin with the specified prefix
+- **`VersionIdMarker` (string)**
+  - Specify the version to begin listing from
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html#API_ListObjectVersions_RequestParameters)
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`OptionalObjectAttributes` (string)**
+  - Sets request header: `x-amz-optional-object-attributes`
+
+
+### `ListParts`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`UploadId` (string) [required]**
+  - ID of the multipart upload
+- **`MaxParts` (number)**
+  - Maximum number of parts (at most 1000) to be returned in the response
+- **`PartNumberMarker` (string)**
+  - Pagination cursor
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+- **`SSECustomerAlgorithm` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-algorithm`
+- **`SSECustomerKey` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key`
+- **`SSECustomerKeyMD5` (string)**
+  - Sets request header: `x-amz-server-side-encryption-customer-key-md5`
 
 
 ### `PutBucketAccelerateConfiguration`
@@ -1272,6 +1575,46 @@ Properties:
   - Sets request header: `x-amz-request-payer`
 
 
+### `PutPublicAccessBlock`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutPublicAccessBlock.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`PublicAccessBlockConfiguration` (object) [required]**
+  - Object defining the public access block configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutPublicAccessBlock.html#AmazonS3-PutPublicAccessBlock-request-PublicAccessBlockConfiguration)
+- **`ContentMD5` (string)**
+  - Sets request header: `content-md5`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
+### `RestoreObject`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`RestoreRequest` (object) [required]**
+  - Object defining the restore request
+  - [More details (AWS)](https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html#AmazonS3-RestoreObject-request-RestoreRequest)
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`RequestPayer` (string)**
+  - Sets request header: `x-amz-request-payer`
+- **`ChecksumAlgorithm` (string)**
+  - Sets request header: `x-amz-sdk-checksum-algorithm`
+- **`ExpectedBucketOwner` (string)**
+  - Sets request header: `x-amz-expected-bucket-owner`
+
+
 ### `Upload`
 
 
@@ -1399,32 +1742,16 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CopyObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html)
 - [`CreateSession`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html)
-- [`DeleteObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjectTagging.html)
-- [`DeletePublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html)
 - [`GetBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html)
 - [`GetBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotification.html)
-- [`GetObjectAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAcl.html)
-- [`GetObjectAttributes`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAttributes.html)
-- [`GetObjectLegalHold`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLegalHold.html)
-- [`GetObjectLockConfiguration`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectLockConfiguration.html)
-- [`GetObjectRetention`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectRetention.html)
-- [`GetObjectTagging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html)
-- [`GetObjectTorrent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTorrent.html)
-- [`GetPublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html)
 - [`ListDirectoryBuckets`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListDirectoryBuckets.html)
 - [`ListObjects`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html)
-- [`ListObjectVersions`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html)
-- [`ListParts`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html)
 - [`PutBucketAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAcl.html)
 - [`PutBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html)
 - [`PutBucketLogging`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLogging.html)
 - [`PutBucketNotification`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketNotification.html)
 - [`PutObjectAcl`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html)
-- [`PutPublicAccessBlock`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutPublicAccessBlock.html)
-- [`RestoreObject`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html)
-- [`SelectObjectContent`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_SelectObjectContent.html)
 - [`UploadPartCopy`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html)
 - [`WriteGetObjectResponse`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_WriteGetObjectResponse.html)
 <!-- METHOD_DOCS_END -->
