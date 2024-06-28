@@ -34,14 +34,11 @@ import {
   DetachUserPolicyCommandOutput as DetachUserPolicyResponse,
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
   GetGroupCommandOutput as GetGroupResponse,
-  GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetRoleCommandOutput as GetRoleResponse,
-  GetRolePolicyCommandOutput as GetRolePolicyResponse,
   GetUserCommandOutput as GetUserResponse,
-  GetUserPolicyCommandOutput as GetUserPolicyResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
   ListAttachedGroupPoliciesCommandOutput as ListAttachedGroupPoliciesResponse,
@@ -287,12 +284,6 @@ declare interface AwsLiteIAM {
   GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetGroupResponse>
   /**
    * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html IAM: GetGroupPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroupPolicy IAM: GetGroupPolicy}
-   */
-  GetGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<GetGroupPolicyResponse>
-  /**
-   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html IAM: GetInstanceProfile}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetInstanceProfile IAM: GetInstanceProfile}
    */
@@ -317,22 +308,10 @@ declare interface AwsLiteIAM {
   GetRole: (input: { RoleName: string }) => Promise<GetRoleResponse>
   /**
    * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html IAM: GetRolePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRolePolicy IAM: GetRolePolicy}
-   */
-  GetRolePolicy: (input: { PolicyName: string, RoleName: string }) => Promise<GetRolePolicyResponse>
-  /**
-   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html IAM: GetUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUser IAM: GetUser}
    */
   GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
-  /**
-   * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html IAM: GetUserPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUserPolicy IAM: GetUserPolicy}
-   */
-  GetUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<GetUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccessKeys.html IAM: ListAccessKeys}
@@ -613,14 +592,11 @@ export type {
   DetachUserPolicyResponse,
   GetAccessKeyLastUsedResponse,
   GetGroupResponse,
-  GetGroupPolicyResponse,
   GetInstanceProfileResponse,
   GetLoginProfileResponse,
   GetPolicyResponse,
   GetRoleResponse,
-  GetRolePolicyResponse,
   GetUserResponse,
-  GetUserPolicyResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
   ListAttachedGroupPoliciesResponse,

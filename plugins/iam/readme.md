@@ -412,17 +412,6 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
-### `GetGroupPolicy`
-
-[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
-
-Properties:
-- **`GroupName` (string) [required]**
-  - Name of the group; names are not distinguished by case
-- **`PolicyName` (string) [required]**
-  - Name of the policy
-
-
 ### `GetInstanceProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html)
@@ -459,33 +448,11 @@ Properties:
   - Name of the role
 
 
-### `GetRolePolicy`
-
-[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
-
-Properties:
-- **`PolicyName` (string) [required]**
-  - Name of the policy
-- **`RoleName` (string) [required]**
-  - Name of the role
-
-
 ### `GetUser`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html)
 
 Properties:
-- **`UserName` (string) [required]**
-  - User name
-
-
-### `GetUserPolicy`
-
-[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html)
-
-Properties:
-- **`PolicyName` (string) [required]**
-  - Name of the policy
 - **`UserName` (string) [required]**
   - User name
 
@@ -1056,10 +1023,12 @@ Properties:
 - [`GetContextKeysForCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html)
 - [`GetContextKeysForPrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html)
 - [`GetCredentialReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetCredentialReport.html)
+- [`GetGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
 - [`GetOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html)
 - [`GetOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html)
 - [`GetPolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html)
+- [`GetRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
 - [`GetSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSAMLProvider.html)
 - [`GetServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html)
 - [`GetServiceLastAccessedDetails`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html)

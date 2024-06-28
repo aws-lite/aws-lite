@@ -218,7 +218,7 @@ const CreateGroup = {
     }
     return { query }
   },
-  response: ({ payload }) => { return payload.CreateGroupResult },
+  response: ({ payload }) => payload.CreateGroupResult,
 }
 
 const CreateInstanceProfile = {
@@ -733,24 +733,24 @@ const GetGroup = {
   },
 }
 
-// TODO: make sure response is not getting mangled
-const GetGroupPolicy = {
-  awsDoc: docRoot + 'API_GetGroupPolicy.html',
-  validate: {
-    GroupName,
-    PolicyName,
-  },
-  request: params => {
-    return {
-      query: {
-        Action: 'GetGroupPolicy',
-        Version: defaultVersion,
-        ...params,
-      },
-    }
-  },
-  response: ({ payload }) => payload.GetGroupPolicyResult,
-}
+// TODO: figure out why response is mangled
+// const GetGroupPolicy = {
+//   awsDoc: docRoot + 'API_GetGroupPolicy.html',
+//   validate: {
+//     GroupName,
+//     PolicyName,
+//   },
+//   request: params => {
+//     return {
+//       query: {
+//         Action: 'GetGroupPolicy',
+//         Version: defaultVersion,
+//         ...params,
+//       },
+//     }
+//   },
+//   response: ({ payload }) => payload.GetGroupPolicyResult,
+// }
 
 const GetInstanceProfile = {
   awsDoc: docRoot + 'API_GetInstanceProfile.html',
@@ -833,23 +833,24 @@ const GetRole = {
   response: ({ payload }) => payload.GetRoleResult,
 }
 
-const GetRolePolicy = {
-  awsDoc: docRoot + 'API_GetRolePolicy.html',
-  validate: {
-    PolicyName,
-    RoleName,
-  },
-  request: params => {
-    return {
-      query: {
-        Action: 'GetRolePolicy',
-        Version: defaultVersion,
-        ...params,
-      },
-    }
-  },
-  response: ({ payload }) => payload.GetRolePolicyResult,
-}
+// TODO: figure out why response is mangled
+// const GetRolePolicy = {
+//   awsDoc: docRoot + 'API_GetRolePolicy.html',
+//   validate: {
+//     PolicyName,
+//     RoleName,
+//   },
+//   request: params => {
+//     return {
+//       query: {
+//         Action: 'GetRolePolicy',
+//         Version: defaultVersion,
+//         ...params,
+//       },
+//     }
+//   },
+//   response: ({ payload }) => payload.GetRolePolicyResult,
+// }
 
 // TODO: Not sure how to test this. Deletion completes before this can be called and the status becomes unavailable
 // const GetServiceLinkedRoleDeletionStatus = {
@@ -911,25 +912,25 @@ const GetUser = {
   },
 }
 
-const GetUserPolicy = {
-  awsDoc: docRoot + 'API_GetUserPolicy.html',
-  validate: {
-    PolicyName,
-    UserName,
-  },
-  request: params => {
-    return {
-      query: {
-        Action: 'GetUserPolicy',
-        Version: defaultVersion,
-        ...params,
-      },
-    }
-  },
-  response: ({ payload }) => payload.GetUserPolicyResult,
-}
+// TODO: figure out why response is mangled
+// const GetUserPolicy = {
+//   awsDoc: docRoot + 'API_GetUserPolicy.html',
+//   validate: {
+//     PolicyName,
+//     UserName,
+//   },
+//   request: params => {
+//     return {
+//       query: {
+//         Action: 'GetUserPolicy',
+//         Version: defaultVersion,
+//         ...params,
+//       },
+//     }
+//   },
+//   response: ({ payload }) => payload.GetUserPolicyResult,
+// }
 
-// error occurs in paginator when no access keys exist
 const ListAccessKeys = {
   awsDoc: docRoot + 'API_ListAccessKeys.html',
   validate: {
@@ -1455,7 +1456,6 @@ const ListRoles = {
     return ListRolesResult
   },
 }
-
 
 const ListRoleTags = {
   awsDoc: docRoot + 'API_ListRoleTags.html',
@@ -2024,15 +2024,15 @@ export default {
     DetachUserPolicy,
     GetAccessKeyLastUsed,
     GetGroup,
-    GetGroupPolicy,
+    // GetGroupPolicy,
     GetInstanceProfile,
     GetLoginProfile,
     GetPolicy,
     GetRole,
-    GetRolePolicy,
+    // GetRolePolicy,
     // GetServiceLinkedRoleDeletionStatus,
     GetUser,
-    GetUserPolicy,
+    // GetUserPolicy,
     ListAccessKeys,
     ListAccountAliases,
     ListAttachedGroupPolicies,
