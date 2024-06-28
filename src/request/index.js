@@ -182,6 +182,12 @@ async function paginator (params, creds, region, config, metadata) {
     statusCode = result.statusCode
     headers = result.headers
 
+    // Exit if it's XML that parses as a falsy value
+    let contentType = result.headers['content-type'] || result.headers['Content-Type'] || ''
+    if (XMLContentType(contentType) && !accumulated) {
+      return
+    }
+
     // Exit if we're out of results
     if (!accumulated.length) {
       return
