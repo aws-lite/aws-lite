@@ -1795,7 +1795,7 @@ const ListObjectVersions = {
   },
 }
 
-// WARNING: the current paginator will omit some fields in the response
+// TODO: prevent paginator from excluding fields that are not the accumulator
 const ListParts = {
   awsDoc: docRoot + 'API_ListParts.html',
   validate: {
@@ -1804,26 +1804,26 @@ const ListParts = {
     UploadId,
     MaxParts: { ...num, comment: 'Maximum number of parts (at most 1000) to be returned in the response' },
     PartNumberMarker: { ...str, comment: 'Pagination cursor' },
-    paginate: valPaginate,
+    // paginate: valPaginate,
     ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5'),
   },
   request: (params, utils) => {
     const queryParams = [ 'MaxParts', 'PartNumberMarker', 'UploadId' ]
     const { host, pathPrefix } = getHost(params, utils)
-    const { Key, paginate } = params
+    const { Key /* paginate*/ } = params
     return {
       host,
       pathPrefix,
       path: `/${Key}`,
       query: getQueryFromParams(params, queryParams),
       headers: getHeadersFromParams(params, queryParams),
-      paginate,
-      paginator: {
-        type: 'query',
-        cursor: 'part-number-marker',
-        token: 'NextPartNumberMarker',
-        accumulator: 'Part',
-      },
+      // paginate,
+      // paginator: {
+      //   type: 'query',
+      //   cursor: 'part-number-marker',
+      //   token: 'NextPartNumberMarker',
+      //   accumulator: 'Part',
+      // },
     }
   },
   response: ({ payload, headers }) => {
@@ -2625,6 +2625,7 @@ const RestoreObject = {
 }
 
 // The response will take some more time to figure out
+// TODO: RequestProgress will require some extra work
 // const SelectObjectContent = {
 //   awsDoc: docRoot + 'API_SelectObjectContent.html',
 //   validate: {
@@ -2645,7 +2646,7 @@ const RestoreObject = {
 //     delete SelectObjectContentRequest.Key
 //     return {
 //       method: 'POST',
-//       streamResponsePayload: true,
+//       // streamResponsePayload: true,
 //       host,
 //       pathPrefix,
 //       path: `/${Key}`,
@@ -2655,12 +2656,7 @@ const RestoreObject = {
 //       payload: { SelectObjectContentRequest },
 //     }
 //   },
-//   response: ({ payload, headers }) => {
-//     // TODO: implement correct response
-//     return {
-//       payload,
-//       ...parseHeadersToResults({ headers }) }
-//   },
+//   response: ({ payload }) => payload,
 // }
 
 const UploadPart = {

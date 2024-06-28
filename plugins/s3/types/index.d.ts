@@ -62,6 +62,7 @@ import {
   ListMultipartUploadsCommandOutput as ListMultipartUploadsResponse,
   ListObjectsV2CommandOutput as ListObjectsV2Response,
   ListObjectVersionsCommandOutput as ListObjectVersionsResponse,
+  ListPartsCommandOutput as ListPartsResponse,
   PutBucketAccelerateConfigurationCommandOutput as PutBucketAccelerateConfigurationResponse,
   PutBucketAnalyticsConfigurationCommandOutput as PutBucketAnalyticsConfigurationResponse,
   PutBucketCorsCommandOutput as PutBucketCorsResponse,
@@ -457,6 +458,12 @@ declare interface AwsLiteS3 {
   ListObjectVersions: (input: { Bucket: string, Delimiter?: string, EncodingType?: string, KeyMarker?: string, MaxKeys?: number, Prefix?: string, VersionIdMarker?: string, ExpectedBucketOwner?: string, RequestPayer?: string, OptionalObjectAttributes?: string }) => Promise<ListObjectVersionsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html S3: ListParts}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#ListParts S3: ListParts}
+   */
+  ListParts: (input: { Bucket: string, Key: string, UploadId: string, MaxParts?: number, PartNumberMarker?: string, RequestPayer?: string, ExpectedBucketOwner?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string }) => Promise<ListPartsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html S3: PutBucketAccelerateConfiguration}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutBucketAccelerateConfiguration S3: PutBucketAccelerateConfiguration}
    */
@@ -678,6 +685,7 @@ export type {
   ListMultipartUploadsResponse,
   ListObjectsV2Response,
   ListObjectVersionsResponse,
+  ListPartsResponse,
   PutBucketAccelerateConfigurationResponse,
   PutBucketAnalyticsConfigurationResponse,
   PutBucketCorsResponse,
