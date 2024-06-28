@@ -117,7 +117,7 @@ async function makeRequest (params, creds, region, config, metadata) {
   return await request(params, { creds, config, metadata, signing, streamReq })
 }
 
-let validPaginationTypes = [ 'payload', 'query' ]
+let validPaginationTypes = [ 'headers', 'payload', 'query' ]
 /* istanbul ignore next */
 async function paginator (params, creds, region, config, metadata) {
   let { debug } = config
@@ -210,9 +210,11 @@ async function paginator (params, creds, region, config, metadata) {
     }).filter(Boolean)
 
     if (foundTokens.length) {
-
       if (type === 'payload' || !type) {
         foundTokens.forEach(([ cur, val ]) => params.payload[cur] = val)
+      }
+      if (type === 'headers') {
+        foundTokens.forEach(([ cur, val ]) => params.headers[cur] = val)
       }
       if (type === 'query') {
         params.query = params.query || {}

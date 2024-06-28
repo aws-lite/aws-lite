@@ -2,6 +2,15 @@
 
 ---
 
+## [0.21.11] 2024-06-28
+
+### Added
+
+- Added support for accepting pagination cursors via headers
+
+---
+
+
 ## [0.21.10] 2024-06-13
 
 ### Added
