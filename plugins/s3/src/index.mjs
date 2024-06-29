@@ -32,7 +32,7 @@ const Key = { ...str, required, comment: 'S3 key / file name' }
 const PartNumber = { ...num, comment: 'Part number (between 1 - 10,000) of the object' }
 const Prefix = { ...str, comment: 'Limit response to keys that begin with the specified prefix' }
 const UploadId = { ...str, required, comment: 'ID of the multipart upload' }
-const valPaginate = { ...bool, comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionId = { ...str, comment: 'Reference a specific version of the object' }
 
 const defaultResponse = ({ payload }) => payload || {}
@@ -1677,7 +1677,7 @@ const ListMultipartUploads = {
     const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
     let query = { uploads: '', ...getQueryFromParams(params, queryParams) }
     let paginate
-    if (params.paginate) paginate = true
+    if (params.paginate) paginate = params.paginate
     return {
       host,
       pathPrefix,
