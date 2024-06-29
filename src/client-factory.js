@@ -142,6 +142,12 @@ module.exports = async function clientFactory (config, creds, region) {
 
               // Run plugin.method.response()
               if (method.response) {
+
+                // User requested pagination as an async iterator
+                if (response.asyncIterator) {
+                  return iterativeRequestGenerator(response.asyncIterator, method.response)
+                }
+
                 try {
                   var pluginRes = await method.response(response, { ...pluginUtils, region: selectedRegion })
                 }
@@ -261,5 +267,11 @@ async function getMock (property, name, params, metadata) {
       metadata: { ...metadata, mock: true },
     }
     return response
+  }
+}
+
+async function* iterativeRequestGenerator (asyncIterator, response) {
+  for await (let page of asyncIterator) {
+    yield response(page)
   }
 }

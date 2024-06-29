@@ -947,7 +947,7 @@ Properties:
   - S3 bucket name
 - **`ContinuationToken` (string)**
   - Pagination cursor token (returned as `NextContinuationToken`
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`ExpectedBucketOwner` (string)**
   - Sets request header: `x-amz-expected-bucket-owner`
@@ -962,7 +962,7 @@ Properties:
   - S3 bucket name
 - **`ContinuationToken` (string)**
   - Pagination cursor token (returned as `NextContinuationToken`
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`ExpectedBucketOwner` (string)**
   - Sets request header: `x-amz-expected-bucket-owner`
@@ -977,7 +977,7 @@ Properties:
   - S3 bucket name
 - **`ContinuationToken` (string)**
   - Pagination cursor token (returned as `NextContinuationToken`
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`ExpectedBucketOwner` (string)**
   - Sets request header: `x-amz-expected-bucket-owner`
@@ -992,7 +992,7 @@ Properties:
   - S3 bucket name
 - **`ContinuationToken` (string)**
   - Pagination cursor token (returned as `NextContinuationToken`
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`ExpectedBucketOwner` (string)**
   - Sets request header: `x-amz-expected-bucket-owner`
@@ -1027,7 +1027,7 @@ Properties:
   - Sets request header: `x-amz-expected-bucket-owner`
 - **`RequestPayer` (string)**
   - Sets request header: `x-amz-request-payer`
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1058,7 +1058,7 @@ Properties:
   - Sets request header: `x-amz-expected-bucket-owner`
 - **`OptionalObjectAttributes` (string)**
   - Sets request header: `x-amz-optional-object-attributes`
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
