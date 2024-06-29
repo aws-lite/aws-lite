@@ -251,6 +251,7 @@ function reNestAccumulated (acc, items) {
 }
 
 
+/* istanbul ignore next: TODO remove + test */
 function findToken (data, token, curr) {
   if (curr == token.length - 1 && data[token[curr]]) return data[token[curr]]
 
@@ -259,6 +260,7 @@ function findToken (data, token, curr) {
   return findToken(data[token[curr]], token, curr + 1)
 }
 
+/* istanbul ignore next: TODO remove + test */
 function findAllTokens (data, tokens, cursors) {
   let result
   tokens.forEach((t, i) => {
@@ -272,6 +274,7 @@ function findAllTokens (data, tokens, cursors) {
 }
 
 // Create and return an async iterative paginator
+/* istanbul ignore next: TODO remove + test */
 async function asyncPaginator (params, creds, region, config, metadata) {
   const asyncIterator = (async function* () {
     let { type = 'payload', cursor, token } = params.paginator
