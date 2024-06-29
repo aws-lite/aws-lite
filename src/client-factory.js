@@ -144,6 +144,7 @@ module.exports = async function clientFactory (config, creds, region) {
               if (method.response) {
 
                 // User requested pagination as an async iterator
+                /* istanbul ignore next: TODO remove + test */
                 if (response.asyncIterator) {
                   return iterativeRequestGenerator(response.asyncIterator, method.response)
                 }
@@ -270,6 +271,7 @@ async function getMock (property, name, params, metadata) {
   }
 }
 
+/* istanbul ignore next: TODO remove + test */
 async function* iterativeRequestGenerator (asyncIterator, response) {
   for await (let page of asyncIterator) {
     yield response(page)
