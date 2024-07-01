@@ -250,49 +250,27 @@ function reNestAccumulated (acc, items) {
   return { [acc.shift()]: reNestAccumulated(acc, items) }
 }
 
-
-/* istanbul ignore next: TODO remove + test */
-function findToken (data, token, curr) {
-  if (curr == token.length - 1 && data[token[curr]]) return data[token[curr]]
-
-  if (!data[token[curr]]) return
-
-  return findToken(data[token[curr]], token, curr + 1)
-}
-
-/* istanbul ignore next: TODO remove + test */
-function findAllTokens (data, tokens, cursors) {
-  let result
-  tokens.forEach((t, i) => {
-    const value = findToken(data, t, 0)
-    if (value) {
-      result = result || {}
-      result[cursors[i]]  = value
-    }
-  })
-  return result
-}
-
-// Create and return an async iterative paginator
 /* istanbul ignore next: TODO remove + test */
 async function asyncPaginator (params, creds, region, config, metadata) {
+  let { type = 'payload', cursor, token } = params.paginator
+  // Normalize tokens and cursors into arrays
+  if (!Array.isArray(cursor)) cursor = [ cursor ]
+  if (!Array.isArray(token)) token = [ token ]
+  if (cursor.length !== token.length) throw ReferenceError(`aws-lite paginator requires an equal number of cursor and token properties`)
+  // Split nested tokens
+  token = token.map(c => c.split('.'))
+  let originalHeaders = copy(params.headers || {})
+
   const asyncIterator = (async function* () {
-    let { type = 'payload', cursor, token } = params.paginator
-
-    if (!Array.isArray(cursor)) cursor = [ cursor ]
-    if (!Array.isArray(token)) token = [ token ]
-
-    token = token.map(c => c.split('.'))
-    let originalHeaders = copy(params.headers || {})
-
     // Request first page
     let currPage = await makeRequest(
       { ...params, headers: copy(originalHeaders) },
       creds, region, config, metadata,
     )
-
-    yield currPage
+    if (!currPage.payload) throw ReferenceError('Pagination error: missing API response')
+    if (typeof currPage.payload !== 'object') throw ReferenceError('Pagination error: response must be valid JSON or XML')
     let cursorValues = findAllTokens(currPage.payload, token, cursor)
+    yield currPage
     // Continue requesting pages until no more tokens are found
     while (currPage && cursorValues) {
       if (type === 'payload' || !type) {
@@ -308,10 +286,35 @@ async function asyncPaginator (params, creds, region, config, metadata) {
         { ...params, headers: copy(originalHeaders) },
         creds, region, config, metadata,
       )
-      yield currPage
+      if (!currPage.payload) throw ReferenceError('Pagination error: missing API response')
+      if (typeof currPage.payload !== 'object') throw ReferenceError('Pagination error: response must be valid JSON or XML')
       cursorValues = findAllTokens(currPage.payload, token, cursor)
+      yield currPage
     }
   })()
-
+  // Wrap asyncIterator in an object for easy detection within the client-factory
   return { asyncIterator }
+}
+
+// Construct an object in the form of {cursorKey: cursorValue}
+/* istanbul ignore next: TODO remove + test */
+function findAllTokens (data, tokens, cursors) {
+  let result
+  tokens.forEach((t, i) => {
+    const value = findToken(data, t, 0)
+    if (value) {
+      result = result || {}
+      result[cursors[i]]  = value
+    }
+  })
+  return result
+}
+
+// Recursive search for tokens
+// Nested tokens such as `a.b.c` are passed as ['a', 'b', 'c']
+/* istanbul ignore next: TODO remove + test */
+function findToken (data, token, i) {
+  if (i == token.length - 1 && data[token[i]]) return data[token[i]] // Value found
+  if (!data[token[i]]) return // No value found
+  return findToken(data[token[i]], token, i + 1) // Recurse
 }

@@ -1761,6 +1761,7 @@ const ListObjectVersions = {
     MaxKeys: { ...num, comment: 'Maximum number of keys (at most 1000) to be returned in the response' },
     Prefix,
     VersionIdMarker: { ...str, comment: 'Specify the version to begin listing from', ref: docRoot + 'API_ListObjectVersions.html#API_ListObjectVersions_RequestParameters' },
+    paginate: valPaginate,
     ...getValidateHeaders('ExpectedBucketOwner', 'RequestPayer', 'OptionalObjectAttributes'),
   },
   request: (params, utils) => {
@@ -1768,28 +1769,37 @@ const ListObjectVersions = {
     const headers = getHeadersFromParams(params, queryParams)
     const query = { versions: '', ...getQueryFromParams(params, queryParams) }
     const { host, pathPrefix } = getHost(params, utils)
+    const { paginate } = params
     return {
       host,
       pathPrefix,
       headers,
       query,
+      paginate,
+      paginator: {
+        type: 'query',
+        cursor: [ 'key-marker', 'version-id-marker' ],
+        token: [ 'NextKeyMarker', 'NextVersionIdMarker' ],
+      },
     }
   },
   response: ({ headers, payload }) => {
-    let res = payload
-    res.Versions = Array.isArray(res.Version) ? res.Version : [ res.Version ]
-    delete res.Version
-    res.Versions = res.Versions.map(i => {
-      if (i.ChecksumAlgorithm && Array.isArray(i.ChecksumAlgorithm)) i.ChecksumAlgorithm = [ i.ChecksumAlgorithm ]
-      return i
-    })
-    if (res.DeleteMarker) {
-      res.DeleteMarkers = Array.isArray(res.DeleteMarker) ? res.DeleteMarker : [ res.DeleteMarker ]
-      delete res.DeleteMarker
+    let { Version, DeleteMarker, CommonPrefixes } = payload
+    if (Version) {
+      Version = Array.isArray(Version) ? Version : [ Version ]
+      payload.Versions = Version.map(i => {
+        if (i.ChecksumAlgorithm && Array.isArray(i.ChecksumAlgorithm)) i.ChecksumAlgorithm = [ i.ChecksumAlgorithm ]
+        return i
+      })
+      delete payload.Version
     }
-    if (res.CommonPrefixes && !Array.isArray(res.CommonPrefixes)) res.CommonPrefixes = [ res.CommonPrefixes ]
+    if (DeleteMarker) {
+      payload.DeleteMarkers = Array.isArray(DeleteMarker) ? DeleteMarker : [ DeleteMarker ]
+      delete payload.DeleteMarker
+    }
+    if (CommonPrefixes && !Array.isArray(CommonPrefixes)) payload.CommonPrefixes = [ payload.CommonPrefixes ]
     return {
-      ...res,
+      ...payload,
       ...parseHeadersToResults({ headers }),
     }
   },
