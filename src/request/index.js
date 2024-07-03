@@ -7,23 +7,18 @@ module.exports = async function _request (params, creds, region, config, metadat
   /* istanbul ignore next: TODO remove + test */
   if ((params.paginator?.default === 'enabled' && params.paginate !== false) ||
     (params.paginator && params.paginate)) {
-    if (params.paginate === 'async') {
-      return await asyncPaginator(params, creds, region, config, metadata)
-    }
-    else {
-      return await paginator(params, creds, region, config, metadata)
-    }
+    return await paginator(params, creds, region, config, metadata)
   }
   return await makeRequest(params, creds, region, config, metadata)
 }
 
 async function makeRequest (params, creds, region, config, metadata) {
   let overrides = getEndpointParams(params)
-  let protocol = overrides.protocol || config.protocol
-  let host = overrides.host || config.host
-  let port = overrides.port || config.port
-  let pathPrefix = overrides.pathPrefix || config.pathPrefix
-  let path = params.path || ''
+  let protocol =    overrides.protocol || config.protocol
+  let host =        overrides.host || config.host
+  let port =        overrides.port || config.port
+  let pathPrefix =  overrides.pathPrefix || config.pathPrefix
+  let path =        params.path || ''
 
   // Final validation, remove aliases, etc.
   validateProtocol(protocol)
@@ -127,7 +122,7 @@ let validPaginationTypes = [ 'headers', 'payload', 'query' ]
 async function paginator (params, creds, region, config, metadata) {
   let { debug } = config
   let { type = 'payload', cursor, token, accumulator } = params.paginator
-  let nestedAccumulator = accumulator.split('.').length > 1
+  let isIterator = params.paginate === 'iterator'
 
   if (!cursor || (!is.string(cursor) && !is.array(cursor))) {
     throw ReferenceError(`aws-lite paginator requires a cursor property name (string) or cursor property array`)
@@ -138,7 +133,7 @@ async function paginator (params, creds, region, config, metadata) {
   if (typeof cursor !== typeof token) {
     throw ReferenceError(`aws-lite paginator requires a token and cursor properties to both be a string or array`)
   }
-  if (!accumulator || typeof accumulator !== 'string') {
+  if (!isIterator && (!accumulator || typeof accumulator !== 'string')) {
     throw ReferenceError(`aws-lite paginator requires an accumulator property name (string)`)
   }
   if (type && !validPaginationTypes.includes(type)) {
@@ -158,6 +153,41 @@ async function paginator (params, creds, region, config, metadata) {
   // That's normally fine! But we need to start from a fresh copy of the original headers each time, or content-length, auth, etc. will be passed by reference, and may get borked across multiple sequential requests
   let originalHeaders = copy(params.headers || {})
   let page = 1
+
+  if (isIterator) {
+    return async function* () {
+      async function get () {
+        let result = await makeRequest(
+          { ...params, headers: copy(originalHeaders) },
+          creds, region, config, metadata,
+        )
+        if (!result.payload) {
+          throw ReferenceError('Pagination error: missing API response')
+        }
+        if (typeof result.payload !== 'object') {
+          throw ReferenceError('Pagination error: response must be valid JSON or XML')
+        }
+        return result
+      }
+
+      // Request first page
+      let result = await get()
+
+      let foundTokens = findTokens({ cursor, params, result, token, type })
+      yield result
+      // Continue requesting pages until no more tokens are found
+      while (foundTokens.length) {
+        params = updateCursors(params, { foundTokens, type })
+        page++
+        if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
+        result = await get()
+        foundTokens = findTokens({ cursor, params, result, token, type })
+        yield result
+      }
+    }
+  }
+
+  let nestedAccumulator = accumulator.split('.').length > 1
   let items = []
   let statusCode, headers
   async function get () {
@@ -201,36 +231,10 @@ async function paginator (params, creds, region, config, metadata) {
     // Yay, results!
     items.push(...accumulated)
 
-    // Determine whether we have tokens, which would necessitate making the next pagination call
-    // Some APIs (e.g. CloudFormation) nest their tokens, so we need to account for those
-    // Other APIs (e.g. Route 53) use some, but not all, of the specified cursors and tokens
-    // Moreover, some services will just keep re-sending the final page with the final token, so also prevent infinite loops if cursors match
-    let foundTokens = token.map((t, i) => {
-      let nestedToken = t.split('.').length > 1
-      if (nestedToken) {
-        let foundNestedToken = t.split('.').reduce((parent, child) => parent?.[child], result.payload)
-        // Final page was not re-sent with final token
-        if (foundNestedToken && (foundNestedToken !== params[type][cursor[i]])) {
-          return [ cursor[i], foundNestedToken ]
-        }
-      }
-      // Final page was not re-sent with final token
-      else if (result.payload[t] && (result.payload[t] !== params[type][cursor[i]])) {
-        return [ cursor[i], result.payload[t] ]
-      }
-    }).filter(Boolean)
+    let foundTokens = findTokens({ cursor, params, result, token, type })
 
     if (foundTokens.length) {
-      if (type === 'payload' || !type) {
-        foundTokens.forEach(([ cur, val ]) => params.payload[cur] = val)
-      }
-      if (type === 'headers') {
-        foundTokens.forEach(([ cur, val ]) => params.headers[cur] = val)
-      }
-      if (type === 'query') {
-        params.query = params.query || {}
-        foundTokens.forEach(([ cur, val ]) => params.query[cur] = val)
-      }
+      params = updateCursors(params, { foundTokens, type })
       page++
       if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
       await get()
@@ -250,71 +254,39 @@ function reNestAccumulated (acc, items) {
   return { [acc.shift()]: reNestAccumulated(acc, items) }
 }
 
-/* istanbul ignore next: TODO remove + test */
-async function asyncPaginator (params, creds, region, config, metadata) {
-  let { type = 'payload', cursor, token } = params.paginator
-  // Normalize tokens and cursors into arrays
-  if (!Array.isArray(cursor)) cursor = [ cursor ]
-  if (!Array.isArray(token)) token = [ token ]
-  if (cursor.length !== token.length) throw ReferenceError(`aws-lite paginator requires an equal number of cursor and token properties`)
-  // Split nested tokens
-  token = token.map(c => c.split('.'))
-  let originalHeaders = copy(params.headers || {})
-
-  const asyncIterator = (async function* () {
-    // Request first page
-    let currPage = await makeRequest(
-      { ...params, headers: copy(originalHeaders) },
-      creds, region, config, metadata,
-    )
-    if (!currPage.payload) throw ReferenceError('Pagination error: missing API response')
-    if (typeof currPage.payload !== 'object') throw ReferenceError('Pagination error: response must be valid JSON or XML')
-    let cursorValues = findAllTokens(currPage.payload, token, cursor)
-    yield currPage
-    // Continue requesting pages until no more tokens are found
-    while (currPage && cursorValues) {
-      if (type === 'payload' || !type) {
-        params.payload = { ...params.payload, ...cursorValues }
+// Determine whether we have tokens, which would necessitate making the next pagination call
+// Some APIs (e.g. CloudFormation) nest their tokens, so we need to account for those
+// Other APIs (e.g. Route 53) use some, but not all, of the specified cursors and tokens
+// Moreover, some services will just keep re-sending the final page with the final token, so also prevent infinite loops if cursors match
+/* istanbul ignore next */
+function findTokens ({ cursor, params, result, token, type }) {
+  return token.map((t, i) => {
+    let nestedToken = t.split('.').length > 1
+    if (nestedToken) {
+      let foundNestedToken = t.split('.').reduce((parent, child) => parent?.[child], result.payload)
+      // Final page was not re-sent with final token
+      if (foundNestedToken && (foundNestedToken !== params[type][cursor[i]])) {
+        return [ cursor[i], foundNestedToken ]
       }
-      if (type === 'headers') {
-        params.headers = { ...params.headers, ...cursorValues }
-      }
-      if (type === 'query') {
-        params.query = { ...params.query, ...cursorValues }
-      }
-      currPage = await makeRequest(
-        { ...params, headers: copy(originalHeaders) },
-        creds, region, config, metadata,
-      )
-      if (!currPage.payload) throw ReferenceError('Pagination error: missing API response')
-      if (typeof currPage.payload !== 'object') throw ReferenceError('Pagination error: response must be valid JSON or XML')
-      cursorValues = findAllTokens(currPage.payload, token, cursor)
-      yield currPage
     }
-  })()
-  // Wrap asyncIterator in an object for easy detection within the client-factory
-  return { asyncIterator }
+    // Final page was not re-sent with final token
+    else if (result.payload[t] && (result.payload[t] !== params[type][cursor[i]])) {
+      return [ cursor[i], result.payload[t] ]
+    }
+  }).filter(Boolean)
 }
 
-// Construct an object in the form of {cursorKey: cursorValue}
-/* istanbul ignore next: TODO remove + test */
-function findAllTokens (data, tokens, cursors) {
-  let result
-  tokens.forEach((t, i) => {
-    const value = findToken(data, t, 0)
-    if (value) {
-      result = result || {}
-      result[cursors[i]]  = value
-    }
-  })
-  return result
-}
-
-// Recursive search for tokens
-// Nested tokens such as `a.b.c` are passed as ['a', 'b', 'c']
-/* istanbul ignore next: TODO remove + test */
-function findToken (data, token, i) {
-  if (i == token.length - 1 && data[token[i]]) return data[token[i]] // Value found
-  if (!data[token[i]]) return // No value found
-  return findToken(data[token[i]], token, i + 1) // Recurse
+/* istanbul ignore next */
+function updateCursors (params, { foundTokens, type }) {
+  if (type === 'payload' || !type) {
+    foundTokens.forEach(([ cur, val ]) => params.payload[cur] = val)
+  }
+  if (type === 'headers') {
+    foundTokens.forEach(([ cur, val ]) => params.headers[cur] = val)
+  }
+  if (type === 'query') {
+    params.query = params.query || {}
+    foundTokens.forEach(([ cur, val ]) => params.query[cur] = val)
+  }
+  return params
 }

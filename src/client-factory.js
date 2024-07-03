@@ -21,6 +21,7 @@ module.exports = async function clientFactory (config, creds, region) {
   async function client (params = {}) {
     let selectedRegion = params.region || region
     let verifyService = params.verifyService ?? config.verifyService ?? true
+    let isIterator = params.paginate === 'iterator'
     validateService(params.service, verifyService)
     let metadata = { service: params.service }
     try {
@@ -28,7 +29,12 @@ module.exports = async function clientFactory (config, creds, region) {
       let mock = await getMock('aws-lite', 'client', params, metadata)
       if (mock) return mock
 
-      return await request(params, creds, selectedRegion, config, metadata)
+      let response = await request(params, creds, selectedRegion, config, metadata)
+
+      /* istanbul ignore next */
+      return isIterator
+        ? iteratorHandler({ config, iterator: response, metadata, region })
+        : response
     }
     catch (err) {
       errorHandler(err)
@@ -123,6 +129,7 @@ module.exports = async function clientFactory (config, creds, region) {
             if (method.validate) {
               validateInput(method.validate, params, metadata)
             }
+            let isIterator = params.paginate === 'iterator'
 
             // Make the request
             try {
@@ -143,15 +150,13 @@ module.exports = async function clientFactory (config, creds, region) {
               // Run plugin.method.response()
               if (method.response) {
 
-                // Async pagination enabled, found async iterator
                 /* istanbul ignore next: TODO remove + test */
-                if (response.asyncIterator) {
-                  return iterativeRequestGenerator({
-                    asyncIterator: response.asyncIterator,
-                    response: method.response,
-                    method,
-                    metadata,
+                if (isIterator) {
+                  return iteratorHandler({
                     config,
+                    iterator: response,
+                    metadata,
+                    method,
                     pluginUtils,
                     region: selectedRegion,
                   })
@@ -159,21 +164,11 @@ module.exports = async function clientFactory (config, creds, region) {
 
                 try {
                   var pluginRes = await method.response(response, { ...pluginUtils, region: selectedRegion })
+                  pluginRes = maybeUnmarshall(pluginRes, config)
+                  if (pluginRes !== undefined) response = pluginRes
                 }
                 catch (methodError) {
                   errorHandler({ error: methodError, metadata })
-                }
-                if (pluginRes !== undefined) {
-                  let unmarshalling = pluginRes?.awsjson
-                  if (unmarshalling) {
-                    delete pluginRes.awsjson
-                    // If a payload property isn't included, it _is_ the payload
-                    let unmarshalled = awsjson.unmarshall(pluginRes.payload || pluginRes, { awsjson: unmarshalling, config })
-                    response = pluginRes.payload
-                      ? { ...pluginRes, payload: unmarshalled }
-                      : unmarshalled
-                  }
-                  else response = pluginRes
                 }
               }
               return response
@@ -280,38 +275,41 @@ async function getMock (property, name, params, metadata) {
 }
 
 /* istanbul ignore next: TODO remove + test */
-async function* iterativeRequestGenerator (params) {
-  const { asyncIterator, response, region, pluginUtils, metadata, config } = params
-  let pluginResponse
-  for await (let page of asyncIterator) {
+async function* iteratorHandler (params) {
+  const { config, iterator, metadata, method, pluginUtils, region } = params
+  let response
+  for await (let page of iterator()) {
     try {
-      pluginResponse = response(page,  { ...pluginUtils, region })
+      if (method?.response) {
+        response = await method.response(page, { ...pluginUtils, region })
+      }
+      else {
+        response = page
+      }
+      response = maybeUnmarshall(response, config)
+      yield response
     }
     catch (methodError) {
       errorHandler({ error: methodError, metadata })
-      break
-    }
-    if (pluginResponse) {
-      yield pluginResponse
-    }
-    else {
-      yield maybeUnmarshall(pluginResponse, config)
     }
   }
 }
 
 /* istanbul ignore next: TODO remove + test */
-function maybeUnmarshall (pluginResponse, config) {
-  let unmarshalling = pluginResponse?.awsjson
+function maybeUnmarshall (pluginRes, config) {
   let response
-  if (unmarshalling) {
-    delete pluginResponse.awsjson
-    // If a payload property isn't included, it _is_ the payload
-    let unmarshalled = awsjson.unmarshall(pluginResponse.payload || pluginResponse, { awsjson: unmarshalling, config })
-    response = pluginResponse.payload
-      ? { ...pluginResponse, payload: unmarshalled }
-      : unmarshalled
+  if (pluginRes !== undefined) {
+    let unmarshalling = pluginRes?.awsjson
+    if (unmarshalling) {
+      delete pluginRes.awsjson
+      // If a payload property isn't included, it _is_ the payload
+      let unmarshalled = awsjson.unmarshall(pluginRes.payload || pluginRes, { awsjson: unmarshalling, config })
+      response = pluginRes.payload
+        ? { ...pluginRes, payload: unmarshalled }
+        : unmarshalled
+    }
+    else response = pluginRes
+    return response
   }
-  else response = pluginResponse
-  return response
+  return pluginRes
 }
