@@ -18,13 +18,8 @@ export default {
   DeleteUserPermissionsBoundary:             { disabled, awsDoc: docRoot + 'API_DeleteUserPermissionsBoundary.html' },
   DeleteVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_DeleteVirtualMFADevice.html' },
   EnableMFADevice:                           { disabled, awsDoc: docRoot + 'API_EnableMFADevice.html' },
-  GenerateCredentialReport:                  { disabled, awsDoc: docRoot + 'API_GenerateCredentialReport.html' },
   GenerateOrganizationsAccessReport:         { disabled, awsDoc: docRoot + 'API_GenerateOrganizationsAccessReport.html' },
   GenerateServiceLastAccessedDetails:        { disabled, awsDoc: docRoot + 'API_GenerateServiceLastAccessedDetails.html' },
-  GetAccountSummary:                         { disabled, awsDoc: docRoot + 'API_GetAccountSummary.html' },
-  GetContextKeysForCustomPolicy:             { disabled, awsDoc: docRoot + 'API_GetContextKeysForCustomPolicy.html' },
-  GetContextKeysForPrincipalPolicy:          { disabled, awsDoc: docRoot + 'API_GetContextKeysForPrincipalPolicy.html' },
-  GetCredentialReport:                       { disabled, awsDoc: docRoot + 'API_GetCredentialReport.html' },
   GetGroupPolicy:                            { disabled, awsDoc: docRoot + 'API_GetGroupPolicy.html' }, // TODO: find out why response is mangled
   GetMFADevice:                              { disabled, awsDoc: docRoot + 'API_GetMFADevice.html' },
   GetOpenIDConnectProvider:                  { disabled, awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html' },

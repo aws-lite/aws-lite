@@ -33,9 +33,14 @@ import {
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
   DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
   DetachUserPolicyCommandOutput as DetachUserPolicyResponse,
+  GenerateCredentialReportCommandOutput as GenerateCredentialReportResponse,
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
   GetAccountAuthorizationDetailsCommandOutput as GetAccountAuthorizationDetailsResponse,
   GetAccountPasswordPolicyCommandOutput as GetAccountPasswordPolicyResponse,
+  GetAccountSummaryCommandOutput as GetAccountSummaryResponse,
+  GetContextKeysForCustomPolicyCommandOutput as GetContextKeysForCustomPolicyResponse,
+  GetContextKeysForPrincipalPolicyCommandOutput as GetContextKeysForPrincipalPolicyResponse,
+  GetCredentialReportCommandOutput as GetCredentialReportResponse,
   GetGroupCommandOutput as GetGroupResponse,
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
@@ -276,6 +281,8 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachUserPolicy IAM: DetachUserPolicy}
    */
   DetachUserPolicy: (input: { PolicyArn: string, UserName: string }) => Promise<DetachUserPolicyResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateCredentialReport IAM: GenerateCredentialReport} */
+  GenerateCredentialReport: () => Promise<GenerateCredentialReportResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html IAM: GetAccessKeyLastUsed}
@@ -290,6 +297,22 @@ declare interface AwsLiteIAM {
   GetAccountAuthorizationDetails: (input: { Filter?: any[], Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetAccountAuthorizationDetailsResponse>
   /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountPasswordPolicy IAM: GetAccountPasswordPolicy} */
   GetAccountPasswordPolicy: () => Promise<GetAccountPasswordPolicyResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountSummary IAM: GetAccountSummary} */
+  GetAccountSummary: () => Promise<GetAccountSummaryResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html IAM: GetContextKeysForCustomPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetContextKeysForCustomPolicy IAM: GetContextKeysForCustomPolicy}
+   */
+  GetContextKeysForCustomPolicy: (input: { PolicyInputList: any[] }) => Promise<GetContextKeysForCustomPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html IAM: GetContextKeysForPrincipalPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetContextKeysForPrincipalPolicy IAM: GetContextKeysForPrincipalPolicy}
+   */
+  GetContextKeysForPrincipalPolicy: (input: { PolicySourceArn: string, PolicyInputList?: any[] }) => Promise<GetContextKeysForPrincipalPolicyResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetCredentialReport IAM: GetCredentialReport} */
+  GetCredentialReport: () => Promise<GetCredentialReportResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html IAM: GetGroup}
@@ -611,9 +634,14 @@ export type {
   DetachGroupPolicyResponse,
   DetachRolePolicyResponse,
   DetachUserPolicyResponse,
+  GenerateCredentialReportResponse,
   GetAccessKeyLastUsedResponse,
   GetAccountAuthorizationDetailsResponse,
   GetAccountPasswordPolicyResponse,
+  GetAccountSummaryResponse,
+  GetContextKeysForCustomPolicyResponse,
+  GetContextKeysForPrincipalPolicyResponse,
+  GetCredentialReportResponse,
   GetGroupResponse,
   GetInstanceProfileResponse,
   GetLoginProfileResponse,

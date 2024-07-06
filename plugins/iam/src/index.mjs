@@ -37,7 +37,8 @@ const InstanceProfileName = { ...str, required, comment: 'Name of the instance p
 const PathPrefix = { ...str, comment: 'Filter results by path prefix' }
 const AWSServiceName = { ...str, required, comment: 'The service principal to which this role is attached; use `CustomSuffix` to prevent duplication errors during multiple requests for the same service' }
 const NewPath = { ...str, comment: 'New path for the service' }
-
+const PolicySourceArn = { ...str, required, comment: 'ARN of the user, group or role for which the resources context keys will be listed', ref: docRoot +  'API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters' }
+const PolicyInputList = { ...arr, comment: 'Array of policies to get context keys, each item must be a complete policy object' }
 
 const paginator = { type: 'query', cursor: 'Marker' }
 
@@ -689,6 +690,22 @@ const DetachUserPolicy = {
   response: emptyResponse,
 }
 
+// TODO: determine if response is mangled
+const GenerateCredentialReport = {
+  awsDoc: docRoot + 'API_GenerateCredentialReport.html',
+  validate: {},
+  request: () => {
+    return {
+      query: {
+        Action: 'GenerateCredentialReport',
+        Version: defaultVersion,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GenerateCredentialReportResult,
+
+}
+
 const GetAccessKeyLastUsed = {
   awsDoc: docRoot + 'API_GetAccessKeyLastUsed.html',
   validate: {
@@ -763,6 +780,96 @@ const GetAccountPasswordPolicy = {
     }
   },
   response: ({ payload }) => payload.GetAccountPasswordPolicyResult,
+}
+
+const GetAccountSummary = {
+  awsDoc: docRoot + 'API_GetAccountSummary.html',
+  validate: {},
+  request: () => {
+    return {
+      query: {
+        Action: 'GetAccountSummary',
+        Version: defaultVersion,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { GetAccountSummaryResult } = payload
+    let { SummaryMap } = GetAccountSummaryResult
+    SummaryMap.entry.forEach(({ key, value }) => {
+      SummaryMap[key] = value
+    })
+    delete SummaryMap.entry
+    return { SummaryMap }
+  },
+}
+
+const GetContextKeysForCustomPolicy = {
+  awsDoc: docRoot + 'API_GetContextKeysForCustomPolicy.html',
+  validate: {
+    PolicyInputList: { ...PolicyInputList, required },
+  },
+  request: params => {
+    const { PolicyInputList } = params
+    let query = {
+      Action: 'GetContextKeysForCustomPolicy',
+      Version: defaultVersion,
+    }
+    PolicyInputList.forEach((value, i) => {
+      let json = JSON.stringify(value)
+      query[`PolicyInputList.member.${i + 1}`] = `${json}`
+    })
+    return { query }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'ContextKeyNames' ])
+    let { GetContextKeysForCustomPolicyResult } = payload
+    normalizeObjectArrays(GetContextKeysForCustomPolicyResult, arrayKeys)
+    return GetContextKeysForCustomPolicyResult
+  },
+}
+
+const GetContextKeysForPrincipalPolicy = {
+  awsDoc: docRoot + 'API_GetContextKeysForPrincipalPolicy.html',
+  validate: {
+    PolicySourceArn,
+    PolicyInputList,
+  },
+  request: params => {
+    const { PolicySourceArn, PolicyInputList } = params
+    let query = {
+      Action: 'GetContextKeysForPrincipalPolicy',
+      Version: defaultVersion,
+      PolicySourceArn,
+    }
+    if (PolicyInputList) {
+      PolicyInputList.forEach((value, i) => {
+        let json = JSON.stringify(value)
+        query[`PolicyInputList.member.${i + 1}`] = `${json}`
+      })
+    }
+    return { query }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'ContextKeyNames' ])
+    let { GetContextKeysForPrincipalPolicyResult } = payload
+    normalizeObjectArrays(GetContextKeysForPrincipalPolicyResult, arrayKeys)
+    return GetContextKeysForPrincipalPolicyResult
+  },
+}
+
+const GetCredentialReport = {
+  awsDoc: docRoot + 'API_GetCredentialReport.html',
+  validate: {},
+  request: () => {
+    return {
+      query: {
+        Action: 'GetCredentialReport',
+        Version: defaultVersion,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetCredentialReportResult,
 }
 
 // TODO: stop paginator from omitting `Group` field
@@ -2122,9 +2229,14 @@ export default {
     DetachGroupPolicy,
     DetachRolePolicy,
     DetachUserPolicy,
+    GenerateCredentialReport,
     GetAccessKeyLastUsed,
     GetAccountAuthorizationDetails,
     GetAccountPasswordPolicy,
+    GetAccountSummary,
+    GetContextKeysForCustomPolicy,
+    GetContextKeysForPrincipalPolicy,
+    GetCredentialReport,
     GetGroup,
     // GetGroupPolicy,
     GetInstanceProfile,
