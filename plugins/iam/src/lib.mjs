@@ -14,7 +14,7 @@ function normalizeObjectArrays (object, arrayKeys, recurse) {
   }
   else {
     Object.entries(object).forEach(([ key, value ]) => {
-      if (recurse) normalizeObjectArrays(value, arrayKeys)
+      if (recurse) normalizeObjectArrays(value, arrayKeys, recurse)
       if (arrayKeys.has(key)) {
         if (value) {
           object[key] = Array.isArray(value.member) ? value.member : [ value.member ]

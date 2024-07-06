@@ -447,7 +447,20 @@ const DeleteAccountAlias = {
     return { query }
   },
   response: emptyResponse,
+}
 
+const DeleteAccountPasswordPolicy = {
+  awsDoc: docRoot + 'API_DeleteAccountPasswordPolicy.html',
+  validate: {},
+  request: () => {
+    return {
+      query: {
+        Action: 'DeleteAccountPasswordPolicy',
+        Version: defaultVersion,
+      },
+    }
+  },
+  response: emptyResponse,
 }
 
 const DeleteGroup = {
@@ -691,6 +704,65 @@ const GetAccessKeyLastUsed = {
     }
   },
   response: ({ payload }) => payload.GetAccessKeyLastUsedResult,
+}
+
+// TODO: do when force async pagination when paginating?
+// Requires multiple accumulators, use async iterator paginator when paginating
+const GetAccountAuthorizationDetails = {
+  awsDoc: docRoot + 'API_GetAccountAuthorizationDetails.html',
+  validate: {
+    Filter: { ...arr, comment: 'Filter results by entity type', ref: docRoot + 'API_GetAccountAuthorizationDetails.html#API_GetAccountAuthorizationDetails_RequestParameters' },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    const { Filter, paginate } = params
+    let query = { ...params, Version: defaultVersion, Action: 'GetAccountAuthorizationDetails' }
+    if (paginate) delete query.paginate
+    if (Filter) {
+      let n = 1
+      query.Filter.forEach(i => {
+        query[`Filter.member.${n}`] = i
+      })
+      delete query.Filter
+    }
+    return {
+      query,
+      paginate,
+      paginator: {
+        type: 'query',
+        cursor: 'GetAccountAuthorizationDetailsResult.Marker',
+        token: 'Marker',
+        // accumulator: 'GetAccountAuthorizationDetailsResult.UserDetailList.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    // Arrays nested in arrays nested in arrays
+    const arrayKeys = new Set(
+      [ 'UserDetailList', 'UserPolicyList', 'GroupList', 'AttachedManagedPolicies', 'Tags',
+        'GroupDetailList', 'GroupPolicyList', 'AttachedManagedPolicies',
+        'RoleDetailList', 'InstanceProfileList', 'Roles', 'RolePolicyList', 'AttachedManagedPolicies',
+        'Policies', 'PolicyVersionList' ])
+    let { GetAccountAuthorizationDetailsResult } = payload
+    normalizeObjectArrays(GetAccountAuthorizationDetailsResult, arrayKeys, true)
+    return GetAccountAuthorizationDetailsResult
+  },
+}
+
+const GetAccountPasswordPolicy = {
+  awsDoc: docRoot + 'API_GetAccountPasswordPolicy.html',
+  validate: {},
+  request: () => {
+    return {
+      query: {
+        Action: 'GetAccountPasswordPolicy',
+        Version: defaultVersion,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetAccountPasswordPolicyResult,
 }
 
 // TODO: stop paginator from omitting `Group` field
@@ -1868,6 +1940,31 @@ const UpdateAccessKey = {
   response: emptyResponse,
 }
 
+const UpdateAccountPasswordPolicy = {
+  awsDoc: docRoot + 'API_UpdateAccountPasswordPolicy.html',
+  validate: {
+    AllowUsersToChangePassword: { ...bool, comment: 'Set to true to allow users to change their own passwords' },
+    HardExpiry: { ...bool, comment: 'Set to true to prevent users their password after it expires' },
+    MaxPasswordAge: { ...num, comment: 'Number of days between 1 and 1095 before passwords expire' },
+    MinimumPasswordLength: { ...num, comment: 'Minimum number of characters between 6 and 128 allowed in a password' },
+    PasswordReusePrevention: { ...num, comment: 'Specify how many new passwords from 1 to 24 before a password may be reused' },
+    RequireLowercaseCharacters: { ...bool, comment: 'Set to true to require at least one lowercase character' },
+    RequireNumbers: { ...bool, comment: 'Set to true to require at least one numeric character' },
+    RequireSymbols: { ...bool, comment: 'Set to true to require at least one non-alphanumeric character' },
+    RequireUppercaseCharacters: { ...bool, comment: 'Set to true to require at least one uppercase character' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UpdateAccountPasswordPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const UpdateAssumeRolePolicy = {
   awsDoc: docRoot + 'API_UpdateAssumeRolePolicy.html',
   validate: {
@@ -1924,6 +2021,8 @@ const UpdateLoginProfile = {
   },
   response: emptyResponse,
 }
+
+
 
 const UpdateRole = {
   awsDoc: docRoot + 'API_UpdateRole.html',
@@ -2009,6 +2108,7 @@ export default {
     CreateUser,
     DeleteAccessKey,
     DeleteAccountAlias,
+    DeleteAccountPasswordPolicy,
     DeleteGroup,
     DeleteGroupPolicy,
     DeleteInstanceProfile,
@@ -2023,6 +2123,8 @@ export default {
     DetachRolePolicy,
     DetachUserPolicy,
     GetAccessKeyLastUsed,
+    GetAccountAuthorizationDetails,
+    GetAccountPasswordPolicy,
     GetGroup,
     // GetGroupPolicy,
     GetInstanceProfile,
@@ -2066,6 +2168,7 @@ export default {
     UntagRole,
     UntagUser,
     UpdateAccessKey,
+    UpdateAccountPasswordPolicy,
     UpdateAssumeRolePolicy,
     UpdateGroup,
     UpdateLoginProfile,

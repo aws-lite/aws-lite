@@ -19,6 +19,7 @@ import {
   CreateUserCommandOutput as CreateUserResponse,
   DeleteAccessKeyCommandOutput as DeleteAccessKeyResponse,
   DeleteAccountAliasCommandOutput as DeleteAccountAliasResponse,
+  DeleteAccountPasswordPolicyCommandOutput as DeleteAccountPasswordPolicyResponse,
   DeleteGroupCommandOutput as DeleteGroupResponse,
   DeleteGroupPolicyCommandOutput as DeleteGroupPolicyResponse,
   DeleteInstanceProfileCommandOutput as DeleteInstanceProfileResponse,
@@ -33,6 +34,8 @@ import {
   DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
   DetachUserPolicyCommandOutput as DetachUserPolicyResponse,
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
+  GetAccountAuthorizationDetailsCommandOutput as GetAccountAuthorizationDetailsResponse,
+  GetAccountPasswordPolicyCommandOutput as GetAccountPasswordPolicyResponse,
   GetGroupCommandOutput as GetGroupResponse,
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
@@ -72,6 +75,7 @@ import {
   UntagRoleCommandOutput as UntagRoleResponse,
   UntagUserCommandOutput as UntagUserResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
+  UpdateAccountPasswordPolicyCommandOutput as UpdateAccountPasswordPolicyResponse,
   UpdateAssumeRolePolicyCommandOutput as UpdateAssumeRolePolicyResponse,
   UpdateGroupCommandOutput as UpdateGroupResponse,
   UpdateLoginProfileCommandOutput as UpdateLoginProfileResponse,
@@ -192,6 +196,8 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountAlias IAM: DeleteAccountAlias}
    */
   DeleteAccountAlias: (input: { AccountAlias: string }) => Promise<DeleteAccountAliasResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountPasswordPolicy IAM: DeleteAccountPasswordPolicy} */
+  DeleteAccountPasswordPolicy: () => Promise<DeleteAccountPasswordPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html IAM: DeleteGroup}
@@ -276,6 +282,14 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccessKeyLastUsed IAM: GetAccessKeyLastUsed}
    */
   GetAccessKeyLastUsed: (input: { AccessKeyId: string }) => Promise<GetAccessKeyLastUsedResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountAuthorizationDetails.html IAM: GetAccountAuthorizationDetails}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountAuthorizationDetails IAM: GetAccountAuthorizationDetails}
+   */
+  GetAccountAuthorizationDetails: (input: { Filter?: any[], Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetAccountAuthorizationDetailsResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountPasswordPolicy IAM: GetAccountPasswordPolicy} */
+  GetAccountPasswordPolicy: () => Promise<GetAccountPasswordPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html IAM: GetGroup}
@@ -512,6 +526,12 @@ declare interface AwsLiteIAM {
   UpdateAccessKey: (input: { AccessKeyId: string, Status: string, UserName?: string }) => Promise<UpdateAccessKeyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html IAM: UpdateAccountPasswordPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccountPasswordPolicy IAM: UpdateAccountPasswordPolicy}
+   */
+  UpdateAccountPasswordPolicy: (input: { AllowUsersToChangePassword?: boolean, HardExpiry?: boolean, MaxPasswordAge?: number, MinimumPasswordLength?: number, PasswordReusePrevention?: number, RequireLowercaseCharacters?: boolean, RequireNumbers?: boolean, RequireSymbols?: boolean, RequireUppercaseCharacters?: boolean }) => Promise<UpdateAccountPasswordPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAssumeRolePolicy.html IAM: UpdateAssumeRolePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAssumeRolePolicy IAM: UpdateAssumeRolePolicy}
    */
@@ -577,6 +597,7 @@ export type {
   CreateUserResponse,
   DeleteAccessKeyResponse,
   DeleteAccountAliasResponse,
+  DeleteAccountPasswordPolicyResponse,
   DeleteGroupResponse,
   DeleteGroupPolicyResponse,
   DeleteInstanceProfileResponse,
@@ -591,6 +612,8 @@ export type {
   DetachRolePolicyResponse,
   DetachUserPolicyResponse,
   GetAccessKeyLastUsedResponse,
+  GetAccountAuthorizationDetailsResponse,
+  GetAccountPasswordPolicyResponse,
   GetGroupResponse,
   GetInstanceProfileResponse,
   GetLoginProfileResponse,
@@ -630,6 +653,7 @@ export type {
   UntagRoleResponse,
   UntagUserResponse,
   UpdateAccessKeyResponse,
+  UpdateAccountPasswordPolicyResponse,
   UpdateAssumeRolePolicyResponse,
   UpdateGroupResponse,
   UpdateLoginProfileResponse,
