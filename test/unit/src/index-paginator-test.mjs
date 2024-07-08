@@ -1,18 +1,12 @@
 import { join } from 'node:path'
 import process from 'node:process'
-// import qs from 'node:querystring'
 import test from 'tape'
 import { copy, defaults, resetServer as reset, server } from '../../lib/index.mjs'
-
-// import url from 'node:url'
 
 let client
 let { config, service } = defaults
 let jsonHeaders = { 'content-type': 'application/json' }
 let xmlHeaders = { 'content-type': 'application/xml' }
-
-// let xmlHeaders = { 'content-type': 'application/xml' }
-
 
 const simpleResponseBodies = [
   {
@@ -60,12 +54,12 @@ const iamResponse = [
        </member>
     </Users>
     <IsTruncated>true</IsTruncated>
-    <Marker>m1</Marker>
+    <Marker>${simpleResponseBodies[0].Token}</Marker>
  </ListUsersResult>
  <ResponseMetadata>
     <RequestId>7a62c49f-347e-4fc4-9331-6e8eEXAMPLE</RequestId>
  </ResponseMetadata>
- 
+
 </ListUsersResponse>`,
   `<ListUsersResponse xmlns="https://iam.amazonaws.com/doc/2010-05-08/">
 <ListUsersResult>
@@ -80,7 +74,7 @@ const iamResponse = [
       </member>
    </Users>
    <IsTruncated>true</IsTruncated>
-   <Marker>m2</Marker>
+   <Marker>${simpleResponseBodies[1].Token}</Marker>
 </ListUsersResult>
 <ResponseMetadata>
    <RequestId>7a62c49f-347e-4fc4-9331-6e8eEXAMPLE</RequestId>
@@ -117,7 +111,7 @@ test('Set up env', async t => {
   t.ok(started, 'Started server')
 })
 
-test('Async Iterator - raw client, no nesting', async t => {
+test('Async iterator - raw client', async t => {
   // t.plan(7)
   let aws = await client(config)
   let headers = copy(jsonHeaders)
@@ -125,17 +119,23 @@ test('Async Iterator - raw client, no nesting', async t => {
   let response
   let request
 
-  t.test('Query cursor', async q => {
-    q.plan(7)
+  t.test('Query cursor', async t => {
+    t.plan(7)
     let expectedUrl
 
     // Returns async iterator
-    response = await aws({ service, headers, paginate: 'iterator', paginator: { cursor: 'Cursor', token: 'Token', type: 'query' }, query: { } })
+    response = await aws({
+      service,
+      headers,
+      paginate: 'iterator',
+      paginator: { cursor: 'Cursor', token: 'Token', type: 'query' },
+      query: {},
+    })
 
     // First page
     server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    q.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
+    t.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
@@ -143,8 +143,8 @@ test('Async Iterator - raw client, no nesting', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedUrl = '/?Cursor=t1'
-    q.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
-    q.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+    t.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
+    t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
 
     // Third page
@@ -152,117 +152,35 @@ test('Async Iterator - raw client, no nesting', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedUrl = '/?Cursor=t2'
-    q.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
-    q.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+    t.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
+    t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    q.true(page.done, 'Iterator stops when expected')
-    q.equal(request, undefined, 'Server does not send extra request')
+    t.ok(page.done, 'Iterator stops when expected')
+    t.equal(request, undefined, 'Server does not send extra request')
     reset()
   })
 
-  t.test('Query cursor', async q => {
-    q.plan(7)
-    let expectedPayload
-
-    // Returns async iterator
-    response = await aws({ service, headers, paginate: 'iterator', paginator: { cursor: 'Cursor', token: 'Token', type: 'payload' }, payload: { } })
-
-    // First page
-    server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
-    page = await response.next()
-    q.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
-    reset()
-
-    // Second page
-    server.use({ responseBody: simpleResponseBodies[1], responseHeaders: jsonHeaders })
-    page = await response.next()
-    request = server.getCurrentRequest()
-    expectedPayload = { Cursor: 't1' }
-    q.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
-    q.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
-    reset()
-
-    // Third page
-    server.use({ responseBody: simpleResponseBodies[2], responseHeaders: jsonHeaders })
-    page = await response.next()
-    request = server.getCurrentRequest()
-    expectedPayload = { Cursor: 't2' }
-    q.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
-    q.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
-    reset()
-
-    // No more pages
-    page = await response.next()
-    request = server.getCurrentRequest()
-    q.true(page.done, 'Iterator stops when expected')
-    q.equal(request, undefined, 'Server does not send extra request')
-    reset()
-  })
-
-  // t.test('Header cursor', async q => {
-  //   q.plan(7)
-  //   let expectedCursor
-
-  //   // Returns async iterator
-  //   response = await aws({ service, headers, paginate: 'iterator', paginator: { cursor: 'Cursor', token: 'Token', type: 'headers' } })
-
-  //   // First page
-  //   server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
-  //   page = await response.next()
-  //   q.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
-  //   reset()
-
-  //   // Second page
-  //   server.use({ responseBody: simpleResponseBodies[1], responseHeaders: jsonHeaders })
-  //   page = await response.next()
-  //   request = server.getCurrentRequest()
-  //   expectedCursor = 't1'
-  //   q.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
-  //   q.equal(request.headers, expectedCursor, 'Request cursor matches previous response token')
-  //   reset()
-
-  //   // Third page
-  //   server.use({ responseBody: simpleResponseBodies[2], responseHeaders: jsonHeaders })
-  //   page = await response.next()
-  //   request = server.getCurrentRequest()
-  //   expectedCursor = 't2'
-  //   q.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
-  //   q.equal(request.headers.Cursor, expectedCursor, 'Request cursor matches previous response token')
-  //   reset()
-
-  //   // No more pages
-  //   page = await response.next()
-  //   request = server.getCurrentRequest()
-  //   q.true(page.done, 'Iterator stops when expected')
-  //   q.equal(request, undefined, 'Server does not send extra request')
-  //   reset()
-  // })
-
-})
-
-
-test('Async Iterator - raw client, nested tokens', async t => {
-  let aws = await client(config)
-  let headers = copy(jsonHeaders)
-  let page
-  let response
-  let request
-
-  t.test('Query cursor', async q => {
-    q.plan(7)
+  t.test('Query cursor - nested', async t => {
+    t.plan(7)
     let expectedUrl
 
     // Returns async iterator
-    response = await aws({ service, headers, paginate: 'iterator', paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'query' }, query: { } })
+    response = await aws({
+      service,
+      headers,
+      paginate: 'iterator',
+      paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'query' },
+      query: {},
+    })
 
     // First page
     server.use({ responseBody: nestedResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    q.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
+    t.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
@@ -270,8 +188,8 @@ test('Async Iterator - raw client, nested tokens', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedUrl = '/?Cursor=t1'
-    q.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
-    q.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+    t.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
+    t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
 
     // Third page
@@ -279,106 +197,203 @@ test('Async Iterator - raw client, nested tokens', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedUrl = '/?Cursor=t2'
-    q.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
-    q.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+    t.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
+    t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    q.true(page.done, 'Iterator stops when expected')
-    q.equal(request, undefined, 'Server does not send extra request')
+    t.ok(page.done, 'Iterator stops when expected')
+    t.equal(request, undefined, 'Server does not send extra request')
     reset()
   })
 
-  t.test('Query cursor', async q => {
-    q.plan(7)
+  t.test('Payload cursor', async t => {
+    t.plan(7)
     let expectedPayload
 
     // Returns async iterator
-    response = await aws({ service, headers, paginate: 'iterator', paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'payload' }, payload: { } })
+    response = await aws({
+      service,
+      headers,
+      paginate: 'iterator',
+      paginator: { cursor: 'Cursor', token: 'Token', type: 'payload' },
+      payload: {},
+    })
+
+    // First page
+    server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
+    page = await response.next()
+    t.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
+    reset()
+
+    // Second page
+    server.use({ responseBody: simpleResponseBodies[1], responseHeaders: jsonHeaders })
+    page = await response.next()
+    request = server.getCurrentRequest()
+    expectedPayload = { Cursor: simpleResponseBodies[0].Token }
+    t.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
+    t.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
+    reset()
+
+    // Third page
+    server.use({ responseBody: simpleResponseBodies[2], responseHeaders: jsonHeaders })
+    page = await response.next()
+    request = server.getCurrentRequest()
+    expectedPayload = { Cursor: simpleResponseBodies[1].Token }
+    t.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
+    t.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
+    reset()
+
+    // No more pages
+    page = await response.next()
+    request = server.getCurrentRequest()
+    t.ok(page.done, 'Iterator stops when expected')
+    t.equal(request, undefined, 'Server does not send extra request')
+    reset()
+  })
+
+  t.test('Payload cursor - nested', async t => {
+    t.plan(7)
+    let expectedPayload
+
+    // Returns async iterator
+    response = await aws({
+      service,
+      headers,
+      paginate: 'iterator',
+      paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'payload' },
+      payload: {},
+    })
 
     // First page
     server.use({ responseBody: nestedResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    q.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
+    t.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
     server.use({ responseBody: nestedResponseBodies[1], responseHeaders: jsonHeaders })
     page = await response.next()
     request = server.getCurrentRequest()
-    expectedPayload = { Cursor: 't1' }
-    q.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
-    q.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
+    expectedPayload = { Cursor: nestedResponseBodies[0].Nest.Token }
+    t.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
+    t.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
     reset()
 
     // Third page
     server.use({ responseBody: nestedResponseBodies[2], responseHeaders: jsonHeaders })
     page = await response.next()
     request = server.getCurrentRequest()
-    expectedPayload = { Cursor: 't2' }
-    q.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
-    q.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
+    expectedPayload = { Cursor: nestedResponseBodies[1].Nest.Token }
+    t.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
+    t.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    q.true(page.done, 'Iterator stops when expected')
-    q.equal(request, undefined, 'Server does not send extra request')
+    t.ok(page.done, 'Iterator stops when expected')
+    t.equal(request, undefined, 'Server does not send extra request')
     reset()
   })
 
-  // t.test('Header cursor', async q => {
-  //   q.plan(7)
-  //   let expectedCursor
+  t.test('Headers cursor', async t => {
+    t.plan(7)
+    let expectedCursor
 
-  //   // Returns async iterator
-  //   response = await aws({ service, headers, paginate: 'iterator', paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'headers' } })
+    // Returns async iterator
+    response = await aws({
+      service,
+      headers,
+      paginate: 'iterator',
+      paginator: { cursor: 'Cursor', token: 'Token', type: 'headers' },
+    })
 
-  //   // First page
-  //   server.use({ responseBody: nestedResponseBodies[0], responseHeaders: jsonHeaders })
-  //   page = await response.next()
-  //   q.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
-  //   reset()
+    // First page
+    server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
+    page = await response.next()
+    t.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
+    reset()
 
-  //   // Second page
-  //   server.use({ responseBody: nestedResponseBodies[1], responseHeaders: jsonHeaders })
-  //   page = await response.next()
-  //   request = server.getCurrentRequest()
-  //   expectedCursor = 't1'
-  //   q.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
-  //   q.equal(request.headers, expectedCursor, 'Request cursor matches previous response token')
-  //   reset()
+    // Second page
+    server.use({ responseBody: simpleResponseBodies[1], responseHeaders: jsonHeaders })
+    page = await response.next()
+    request = server.getCurrentRequest()
+    expectedCursor = simpleResponseBodies[0].Token
+    t.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
+    t.equal(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    reset()
 
-  //   // Third page
-  //   server.use({ responseBody: nestedResponseBodies[2], responseHeaders: jsonHeaders })
-  //   page = await response.next()
-  //   request = server.getCurrentRequest()
-  //   expectedCursor = 't2'
-  //   q.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
-  //   q.equal(request.headers.Cursor, expectedCursor, 'Request cursor matches previous response token')
-  //   reset()
+    // Third page
+    server.use({ responseBody: simpleResponseBodies[2], responseHeaders: jsonHeaders })
+    page = await response.next()
+    request = server.getCurrentRequest()
+    expectedCursor = simpleResponseBodies[1].Token
+    t.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
+    t.equal(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    reset()
 
-  //   // No more pages
-  //   page = await response.next()
-  //   request = server.getCurrentRequest()
-  //   q.true(page.done, 'Iterator stops when expected')
-  //   q.equal(request, undefined, 'Server does not send extra request')
-  //   reset()
-  // })
+    // No more pages
+    page = await response.next()
+    request = server.getCurrentRequest()
+    t.ok(page.done, 'Iterator stops when expected')
+    t.equal(request, undefined, 'Server does not send extra request')
+    reset()
+  })
+
+  t.test('Headers cursor - nested', async t => {
+    t.plan(7)
+    let expectedCursor
+
+    // Returns async iterator
+    response = await aws({
+      service,
+      headers,
+      paginate: 'iterator',
+      paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'headers' },
+    })
+
+    // First page
+    server.use({ responseBody: nestedResponseBodies[0], responseHeaders: jsonHeaders })
+    page = await response.next()
+    t.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
+    reset()
+
+    // Second page
+    server.use({ responseBody: nestedResponseBodies[1], responseHeaders: jsonHeaders })
+    page = await response.next()
+    request = server.getCurrentRequest()
+    expectedCursor = nestedResponseBodies[0].Nest.Token
+    t.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
+    t.equal(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    reset()
+
+    // Third page
+    server.use({ responseBody: nestedResponseBodies[2], responseHeaders: jsonHeaders })
+    page = await response.next()
+    request = server.getCurrentRequest()
+    expectedCursor = nestedResponseBodies[1].Nest.Token
+    t.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
+    t.equal(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    reset()
+
+    // No more pages
+    page = await response.next()
+    request = server.getCurrentRequest()
+    t.ok(page.done, 'Iterator stops when expected')
+    t.equal(request, undefined, 'Server does not send extra request')
+    reset()
+  })
 })
 
-test('Async Iterator - with plugin', async t => {
+test('Async iterator - plugin', async t => {
   t.plan(7)
   const MaxItems = 1
   const paginate = 'iterator'
   let aws = await client({ ...config, plugins: [ import('@aws-lite/iam') ] })
-  let page
-  let response
-  let request
-  let expectedToken, expectedUrl
+  let expectedToken, expectedUrl, page, response, request
 
   // Returns async iterator
   response = await aws.iam.ListUsers({ MaxItems, paginate })
@@ -386,7 +401,7 @@ test('Async Iterator - with plugin', async t => {
   // First page
   server.use({ responseBody: iamResponse[0], responseHeaders: xmlHeaders })
   page = await response.next()
-  expectedToken = 'm1'
+  expectedToken = simpleResponseBodies[0].Token
   t.equal(page.value.Marker, expectedToken, 'Response is correct')
   reset()
 
@@ -394,8 +409,8 @@ test('Async Iterator - with plugin', async t => {
   server.use({ responseBody: iamResponse[1], responseHeaders: xmlHeaders })
   page = await response.next()
   request = server.getCurrentRequest()
-  expectedToken = 'm2'
-  expectedUrl = '/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=m1'
+  expectedToken = simpleResponseBodies[1].Token
+  expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=${simpleResponseBodies[0].Token}`
   t.equal(page.value.Marker, expectedToken, 'Response is correct')
   t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
   reset()
@@ -404,8 +419,8 @@ test('Async Iterator - with plugin', async t => {
   server.use({ responseBody: iamResponse[2], responseHeaders: xmlHeaders })
   page = await response.next()
   request = server.getCurrentRequest()
-  expectedUrl = '/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=m2'
-  t.false(page.value.Marker, 'Incorrect token in response')
+  expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=${simpleResponseBodies[1].Token}`
+  t.false(page.value.Marker, 'Response is correct')
   t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
   reset()
 

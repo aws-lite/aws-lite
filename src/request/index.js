@@ -12,8 +12,8 @@ module.exports = async function _request (params, creds, region, config, metadat
   return await makeRequest(params, creds, region, config, metadata)
 }
 
-async function makeRequest (params, creds, region, config, metadata) {
-  let overrides = getEndpointParams(params)
+async function makeRequest (params, creds, region, config, metadata, cursors = {}) {
+  let overrides =   getEndpointParams(params)
   let protocol =    overrides.protocol || config.protocol
   let host =        overrides.host || config.host
   let port =        overrides.port || config.port
@@ -42,7 +42,7 @@ async function makeRequest (params, creds, region, config, metadata) {
     if (!is.object(params.query)) {
       throw ReferenceError('Query property must be an object')
     }
-    let query = tidyQuery(params.query)
+    let query = tidyQuery(Object.assign(params.query, cursors.query || {}))
     if (query) {
       // Expect aws4 to handle RFC 3986 encoding when appending the query string to the passed path
       path += '?' + query
@@ -50,7 +50,7 @@ async function makeRequest (params, creds, region, config, metadata) {
   }
 
   // Headers, content-type
-  let headers = params.headers || {}
+  let headers = Object.assign(params.headers || {}, cursors.headers || {})
   let contentType = headers['content-type'] || headers['Content-Type'] || ''
   /* istanbul ignore next */
   if (headers['Content-Type']) delete headers['Content-Type']
@@ -64,6 +64,8 @@ async function makeRequest (params, creds, region, config, metadata) {
   if (typeof body === 'object' && !isBuffer && !isReqStream) {
     // Backfill content-type if it's just an object
     if (!contentType) contentType = 'application/json'
+
+    if (cursors.payload) body = Object.assign(body, cursors.payload)
 
     if (XMLContentType(contentType)) {
       params.body = buildXML(body, params)
@@ -156,10 +158,10 @@ async function paginator (params, creds, region, config, metadata) {
 
   if (isIterator) {
     return async function* () {
-      async function get () {
+      async function get (cursors = {}) {
         let result = await makeRequest(
-          { ...params, headers: copy(originalHeaders) },
-          creds, region, config, metadata,
+          { ...params, headers: Object.assign(params.headers || {}, copy(originalHeaders)) },
+          creds, region, config, metadata, cursors,
         )
         if (!result.payload) {
           throw ReferenceError('Pagination error: missing API response')
@@ -177,10 +179,10 @@ async function paginator (params, creds, region, config, metadata) {
       yield result
       // Continue requesting pages until no more tokens are found
       while (foundTokens.length) {
-        params = updateCursors(params, { foundTokens, type })
         page++
         if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
-        result = await get()
+        let newCursors = getCursors(foundTokens, type)
+        result = await get(newCursors)
         foundTokens = findTokens({ cursor, params, result, token, type })
         yield result
       }
@@ -190,10 +192,10 @@ async function paginator (params, creds, region, config, metadata) {
   let nestedAccumulator = accumulator.split('.').length > 1
   let items = []
   let statusCode, headers
-  async function get () {
+  async function get (cursors = {}) {
     let result = await makeRequest(
       { ...params, headers: copy(originalHeaders) },
-      creds, region, config, metadata,
+      creds, region, config, metadata, cursors,
     )
     if (!result.payload) {
       throw ReferenceError('Pagination error: missing API response')
@@ -232,12 +234,11 @@ async function paginator (params, creds, region, config, metadata) {
     items.push(...accumulated)
 
     let foundTokens = findTokens({ cursor, params, result, token, type })
-
     if (foundTokens.length) {
-      params = updateCursors(params, { foundTokens, type })
       page++
       if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
-      await get()
+      let newCursors = getCursors(foundTokens, type)
+      await get(newCursors)
     }
   }
   await get()
@@ -277,16 +278,19 @@ function findTokens ({ cursor, params, result, token, type }) {
 }
 
 /* istanbul ignore next */
-function updateCursors (params, { foundTokens, type }) {
+function getCursors (foundTokens, type) {
+  let cursors = {}
   if (type === 'payload' || !type) {
-    foundTokens.forEach(([ cur, val ]) => params.payload[cur] = val)
+    cursors.payload = {}
+    foundTokens.forEach(([ cur, val ]) => cursors.payload[cur] = val)
   }
   if (type === 'headers') {
-    foundTokens.forEach(([ cur, val ]) => params.headers[cur] = val)
+    cursors.headers = {}
+    foundTokens.forEach(([ cur, val ]) => cursors.headers[cur] = val)
   }
   if (type === 'query') {
-    params.query = params.query || {}
-    foundTokens.forEach(([ cur, val ]) => params.query[cur] = val)
+    cursors.query = {}
+    foundTokens.forEach(([ cur, val ]) => cursors.query[cur] = val)
   }
-  return params
+  return cursors
 }
