@@ -167,6 +167,24 @@ Properties:
   - Set to true to specify the user must make a new password on next sign-in
 
 
+### `CreateOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
+
+Properties:
+- **`Url` (string) [required]**
+  - URL of the identity provider; must begin with `https://`
+- **`ClientIDList` (array)**
+  - Array of at most 255 client IDs
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters)
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+- **`ThumbprintList` (array)**
+  - Array of server certificate thumbprints for the OIDC identity providers server certificates
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters)
+
+
 ### `CreatePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
@@ -303,6 +321,15 @@ Properties:
 Properties:
 - **`UserName` (string) [required]**
   - User name
+
+
+### `DeleteOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
+
+Properties:
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
 
 
 ### `DeletePolicy`
@@ -611,6 +638,27 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListEntitiesForPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`EntityFilter` (string)**
+  - Filter results by entity type
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters)
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`PolicyUsageFilter` (string)**
+  - Filter results by policy usage
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters)
 
 
 ### `ListGroupPolicies`
@@ -1094,17 +1142,27 @@ Properties:
   - New user name
 
 
+### `UploadSSHPublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html)
+
+Properties:
+- **`SSHPublicKeyBody` (string) [required]**
+  - SSH public key encoded in SSH-RSA or PEM format; minimum length is 2048 bits
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html#API_UploadSSHPublicKey_RequestParameters)
+- **`UserName` (string) [required]**
+  - User name
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreateOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
 - [`CreatePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
 - [`CreateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateSAMLProvider.html)
 - [`CreateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html)
 - [`CreateVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
-- [`DeleteOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
 - [`DeletePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
 - [`DeleteRolePermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html)
 - [`DeleteSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSAMLProvider.html)
@@ -1129,7 +1187,6 @@ Properties:
 - [`GetServiceLastAccessedDetailsWithEntities`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html)
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
 - [`GetSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html)
-- [`ListEntitiesForPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)
 - [`ListOpenIDConnectProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviders.html)
@@ -1169,7 +1226,6 @@ Properties:
 - [`UpdateSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html)
 - [`UploadServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
 - [`UploadSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html)
-- [`UploadSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html)
 <!-- METHOD_DOCS_END -->
 
 

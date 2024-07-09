@@ -13,6 +13,7 @@ import {
   CreateGroupCommandOutput as CreateGroupResponse,
   CreateInstanceProfileCommandOutput as CreateInstanceProfileResponse,
   CreateLoginProfileCommandOutput as CreateLoginProfileResponse,
+  CreateOpenIDConnectProviderCommandOutput as CreateOpenIDConnectProviderResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
@@ -24,6 +25,7 @@ import {
   DeleteGroupPolicyCommandOutput as DeleteGroupPolicyResponse,
   DeleteInstanceProfileCommandOutput as DeleteInstanceProfileResponse,
   DeleteLoginProfileCommandOutput as DeleteLoginProfileResponse,
+  DeleteOpenIDConnectProviderCommandOutput as DeleteOpenIDConnectProviderResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
@@ -52,6 +54,7 @@ import {
   ListAttachedGroupPoliciesCommandOutput as ListAttachedGroupPoliciesResponse,
   ListAttachedRolePoliciesCommandOutput as ListAttachedRolePoliciesResponse,
   ListAttachedUserPoliciesCommandOutput as ListAttachedUserPoliciesResponse,
+  ListEntitiesForPolicyCommandOutput as ListEntitiesForPolicyResponse,
   ListGroupPoliciesCommandOutput as ListGroupPoliciesResponse,
   ListGroupsCommandOutput as ListGroupsResponse,
   ListGroupsForUserCommandOutput as ListGroupsForUserResponse,
@@ -87,6 +90,7 @@ import {
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
   UpdateUserCommandOutput as UpdateUserResponse,
+  UploadSSHPublicKeyCommandOutput as UploadSSHPublicKeyResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
 
@@ -167,6 +171,12 @@ declare interface AwsLiteIAM {
   CreateLoginProfile: (input: { Password: string, UserName: string, PasswordResetRequired?: boolean }) => Promise<CreateLoginProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html IAM: CreateOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateOpenIDConnectProvider IAM: CreateOpenIDConnectProvider}
+   */
+  CreateOpenIDConnectProvider: (input: { Url: string, ClientIDList?: any[], Tags?: any[], ThumbprintList?: any[] }) => Promise<CreateOpenIDConnectProviderResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html IAM: CreatePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicy IAM: CreatePolicy}
    */
@@ -227,6 +237,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteLoginProfile IAM: DeleteLoginProfile}
    */
   DeleteLoginProfile: (input: { UserName: string }) => Promise<DeleteLoginProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html IAM: DeleteOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteOpenIDConnectProvider IAM: DeleteOpenIDConnectProvider}
+   */
+  DeleteOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string }) => Promise<DeleteOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html IAM: DeletePolicy}
@@ -379,6 +395,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedUserPolicies IAM: ListAttachedUserPolicies}
    */
   ListAttachedUserPolicies: (input: { UserName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedUserPoliciesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html IAM: ListEntitiesForPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListEntitiesForPolicy IAM: ListEntitiesForPolicy}
+   */
+  ListEntitiesForPolicy: (input: { PolicyArn: string, EntityFilter?: string, Marker?: string, MaxItems?: number, PathPrefix?: string, PolicyUsageFilter?: string }) => Promise<ListEntitiesForPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html IAM: ListGroupPolicies}
@@ -589,6 +611,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateUser IAM: UpdateUser}
    */
   UpdateUser: (input: { UserName: string, NewPath?: string, NewUserName?: string }) => Promise<UpdateUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html IAM: UploadSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadSSHPublicKey IAM: UploadSSHPublicKey}
+   */
+  UploadSSHPublicKey: (input: { SSHPublicKeyBody: string, UserName: string }) => Promise<UploadSSHPublicKeyResponse>
   // $METHODS_END
 }
 
@@ -614,6 +642,7 @@ export type {
   CreateGroupResponse,
   CreateInstanceProfileResponse,
   CreateLoginProfileResponse,
+  CreateOpenIDConnectProviderResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateServiceLinkedRoleResponse,
@@ -625,6 +654,7 @@ export type {
   DeleteGroupPolicyResponse,
   DeleteInstanceProfileResponse,
   DeleteLoginProfileResponse,
+  DeleteOpenIDConnectProviderResponse,
   DeletePolicyResponse,
   DeleteRoleResponse,
   DeleteRolePolicyResponse,
@@ -653,6 +683,7 @@ export type {
   ListAttachedGroupPoliciesResponse,
   ListAttachedRolePoliciesResponse,
   ListAttachedUserPoliciesResponse,
+  ListEntitiesForPolicyResponse,
   ListGroupPoliciesResponse,
   ListGroupsResponse,
   ListGroupsForUserResponse,
@@ -688,5 +719,6 @@ export type {
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
   UpdateUserResponse,
+  UploadSSHPublicKeyResponse,
   // $EXPORT_END
 }

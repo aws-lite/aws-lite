@@ -1,13 +1,11 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/IAM/latest/APIReference/'
 export default {
-  CreateOpenIDConnectProvider:               { disabled, awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html' },
-  CreatePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_CreatePolicyVersion.html' },
+  CreatePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_CreatePolicyVersion.html' }, // TODO: figure out why this returns status code 302
   CreateSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_CreateSAMLProvider.html' },
   CreateServiceSpecificCredential:           { disabled, awsDoc: docRoot + 'API_CreateServiceSpecificCredential.html' },
   CreateVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_CreateVirtualMFADevice.html' },
   DeactivateMFADevice:                       { disabled, awsDoc: docRoot + 'API_DeactivateMFADevice.html' },
-  DeleteOpenIDConnectProvider:               { disabled, awsDoc: docRoot + 'API_DeleteOpenIDConnectProvider.html' },
   DeletePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_DeletePolicyVersion.html' },
   DeleteRolePermissionsBoundary:             { disabled, awsDoc: docRoot + 'API_DeleteRolePermissionsBoundary.html' },
   DeleteSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_DeleteSAMLProvider.html' },
@@ -21,18 +19,17 @@ export default {
   GenerateOrganizationsAccessReport:         { disabled, awsDoc: docRoot + 'API_GenerateOrganizationsAccessReport.html' },
   GenerateServiceLastAccessedDetails:        { disabled, awsDoc: docRoot + 'API_GenerateServiceLastAccessedDetails.html' },
   GetGroupPolicy:                            { disabled, awsDoc: docRoot + 'API_GetGroupPolicy.html' }, // TODO: find out why response is mangled
-  GetMFADevice:                              { disabled, awsDoc: docRoot + 'API_GetMFADevice.html' },
-  GetOpenIDConnectProvider:                  { disabled, awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html' },
+  GetMFADevice:                              { disabled, awsDoc: docRoot + 'API_GetMFADevice.html' }, // TODO: test
+  GetOpenIDConnectProvider:                  { disabled, awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html' }, // TODO: test
   GetOrganizationsAccessReport:              { disabled, awsDoc: docRoot + 'API_GetOrganizationsAccessReport.html' },
   GetPolicyVersion:                          { disabled, awsDoc: docRoot + 'API_GetPolicyVersion.html' },
-  GetRolePolicy:                             { disabled, awsDoc: docRoot + 'API_GetRolePolicy.html' },
+  GetRolePolicy:                             { disabled, awsDoc: docRoot + 'API_GetRolePolicy.html' }, // TODO: figure out why response is mangled
   GetSAMLProvider:                           { disabled, awsDoc: docRoot + 'API_GetSAMLProvider.html' },
   GetServerCertificate:                      { disabled, awsDoc: docRoot + 'API_GetServerCertificate.html' },
   GetServiceLastAccessedDetails:             { disabled, awsDoc: docRoot + 'API_GetServiceLastAccessedDetails.html' },
   GetServiceLastAccessedDetailsWithEntities: { disabled, awsDoc: docRoot + 'API_GetServiceLastAccessedDetailsWithEntities.html' },
   GetServiceLinkedRoleDeletionStatus:        { disabled, awsDoc: docRoot + 'API_GetServiceLinkedRoleDeletionStatus.html' },
   GetSSHPublicKey:                           { disabled, awsDoc: docRoot + 'API_GetSSHPublicKey.html' },
-  ListEntitiesForPolicy:                     { disabled, awsDoc: docRoot + 'API_ListEntitiesForPolicy.html' },
   ListMFADevices:                            { disabled, awsDoc: docRoot + 'API_ListMFADevices.html' },
   ListMFADeviceTags:                         { disabled, awsDoc: docRoot + 'API_ListMFADeviceTags.html' },
   ListOpenIDConnectProviders:                { disabled, awsDoc: docRoot + 'API_ListOpenIDConnectProviders.html' },
@@ -72,5 +69,4 @@ export default {
   UpdateSSHPublicKey:                        { disabled, awsDoc: docRoot + 'API_UpdateSSHPublicKey.html' },
   UploadServerCertificate:                   { disabled, awsDoc: docRoot + 'API_UploadServerCertificate.html' },
   UploadSigningCertificate:                  { disabled, awsDoc: docRoot + 'API_UploadSigningCertificate.html' },
-  UploadSSHPublicKey:                        { disabled, awsDoc: docRoot + 'API_UploadSSHPublicKey.html' },
 }

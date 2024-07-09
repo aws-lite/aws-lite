@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { serializeTags, normalizeObjectArrays } = lib
+const { serializeTags, serializeArray, normalizeObjectArrays } = lib
 
 const service = 'iam'
 const property = 'IAM'
@@ -19,26 +19,28 @@ const num = { type: 'number' }
 const str = { type: 'string' }
 
 const AccessKeyId = { ...str, required, comment: 'ID of the access key' }
+const AWSServiceName = { ...str, required, comment: 'The service principal to which this role is attached; use `CustomSuffix` to prevent duplication errors during multiple requests for the same service' }
 const Description = { ...str, comment: 'Description of the resource' }
 const GroupName = { ...str, required, comment: 'Name of the group; names are not distinguished by case' }
+const InstanceProfileName = { ...str, required, comment: 'Name of the instance profile' }
 const Marker = { ...str, comment: 'Pagination cursor' }
 const MaxItems = { ...num, comment: 'Maximum number of items to be returned in a response; at most 1000' }
 const MaxSessionDuration = { ...num, comment: 'Maximum session duration (in seconds) to set for the specified role' }
+const NewPath = { ...str, comment: 'New path for the service' }
+const OpenIDConnectProviderArn = { ...str, required, comment: 'ARN of the OpenID Connect resource' }
 const Path = { ...str, comment: 'Path for the identifier', ref: userGuide + 'reference_identifiers.html' }
+const PathPrefix = { ...str, comment: 'Filter results by path prefix' }
 const PermissionsBoundary = { ...str, comment: `ARN of a managed policy to be used to set the resource's permissions boundary` }
 const PolicyArn = { ...str, required, comment: 'Arn of the policy' }
 const PolicyDocument = { type: [ 'string', 'object' ], required, comment: 'The policy document; can be an object, or JSON or YAML string' }
+const PolicyInputList = { ...arr, comment: 'Array of policies to get context keys, each item must be a complete policy object' }
 const PolicyName = { ...str, required, comment: 'Name of the policy' }
+const PolicySourceArn = { ...str, required, comment: 'ARN of the user, group or role for which the resources context keys will be listed', ref: docRoot +  'API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters' }
 const RoleName = { ...str, required, comment: 'Name of the role' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-const InstanceProfileName = { ...str, required, comment: 'Name of the instance profile' }
-const PathPrefix = { ...str, comment: 'Filter results by path prefix' }
-const AWSServiceName = { ...str, required, comment: 'The service principal to which this role is attached; use `CustomSuffix` to prevent duplication errors during multiple requests for the same service' }
-const NewPath = { ...str, comment: 'New path for the service' }
-const PolicySourceArn = { ...str, required, comment: 'ARN of the user, group or role for which the resources context keys will be listed', ref: docRoot +  'API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters' }
-const PolicyInputList = { ...arr, comment: 'Array of policies to get context keys, each item must be a complete policy object' }
+
 
 const paginator = { type: 'query', cursor: 'Marker' }
 
@@ -49,7 +51,7 @@ const AddClientIDToOpenIDConnectProvider = {
   awsDoc: docRoot + 'API_AddClientIDToOpenIDConnectProvider.html',
   validate: {
     ClientID: { ...str, required, comment: 'The client ID (aka the audience) to add to the IAM OpenId Connect provider resource' },
-    OpenIDConnectProviderArn: { ...str, required, comment: 'ARN of the OpenID Connect resource' },
+    OpenIDConnectProviderArn,
   },
   request: params => {
     return {
@@ -230,15 +232,17 @@ const CreateInstanceProfile = {
     Tags,
   },
   request: params => {
+    const { Tags } = params
     let query = {
       Action: 'CreateInstanceProfile',
       Version: defaultVersion,
       ...params,
     }
-    if (query.Tags) serializeTags(query)
-    return {
-      query,
+    if (Tags) {
+      delete query.Tags
+      Object.assign(query, serializeTags(Tags))
     }
+    return { query }
   },
   response: ({ payload }) => {
     let { CreateInstanceProfileResult } = payload
@@ -279,6 +283,34 @@ const CreateLoginProfile = {
   response: ({ payload }) => payload.CreateLoginProfileResult,
 }
 
+const CreateOpenIDConnectProvider = {
+  awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html',
+  validate: {
+    Url: { ...str, required, comment: 'URL of the identity provider; must begin with `https://`' },
+    ClientIDList: { ...arr, comment: 'Array of at most 255 client IDs', ref: docRoot +  'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
+    Tags,
+    ThumbprintList: { ...arr, comment: 'Array of server certificate thumbprints for the OIDC identity providers server certificates', ref: docRoot +  'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
+  },
+  request: params => {
+    const { Url, ClientIDList, Tags, ThumbprintList } = params
+    let query = {
+      Action: 'CreateOpenIDConnectProvider',
+      Version: defaultVersion,
+      Url,
+    }
+    if (ClientIDList) Object.assign(query, serializeArray('ClientIDList', ClientIDList))
+    if (Tags) query = Object.assign(query, serializeTags(Tags))
+    if (ThumbprintList) Object.assign(query, serializeArray('ThumbprintList', ThumbprintList))
+    return { query }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    let { CreateOpenIDConnectProviderResult } = payload
+    normalizeObjectArrays(CreateOpenIDConnectProviderResult, arrayKeys)
+    return CreateOpenIDConnectProviderResult
+  },
+}
+
 const CreatePolicy = {
   awsDoc: docRoot + 'API_CreatePolicy.html',
   validate: {
@@ -289,6 +321,7 @@ const CreatePolicy = {
     Tags,
   },
   request: params => {
+    const { Tags } = params
     let query = {
       Action: 'CreatePolicy',
       Version: defaultVersion,
@@ -297,10 +330,11 @@ const CreatePolicy = {
     if (typeof query.PolicyDocument !== 'string') {
       query.PolicyDocument = JSON.stringify(query.PolicyDocument)
     }
-    if (query.Tags) serializeTags(query)
-    return {
-      query,
+    if (Tags) {
+      delete query.Tags
+      Object.assign(query, serializeTags(Tags))
     }
+    return { query }
   },
   response: ({ payload }) => {
     let { CreatePolicyResult } = payload
@@ -524,6 +558,23 @@ const DeleteLoginProfile = {
     return {
       query: {
         Action: 'DeleteLoginProfile',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteOpenIDConnectProvider = {
+  awsDoc: docRoot + 'API_DeleteOpenIDConnectProvider.html',
+  validate: {
+    OpenIDConnectProviderArn,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteOpenIDConnectProvider',
         Version: defaultVersion,
         ...params,
       },
@@ -970,6 +1021,63 @@ const GetLoginProfile = {
   response: ({ payload }) => payload.GetLoginProfileResult,
 }
 
+// TODO: test
+// const GetMFADevice = {
+//   awsDoc: docRoot + 'API_GetMFADevice.html',
+//   validate: {
+//     SerialNumber: { ...str, required, comment: 'Serial number of the MFA; only accepts FIDO security key ARNs' },
+//     UserName: { ...UserName, required: false },
+//   },
+//   request: params => {
+//     return {
+//       query: {
+//         Action: 'GetMFADevice',
+//         Version: defaultVersion,
+//         ...params,
+//       },
+//     }
+//   },
+//   response: ({ payload }) => {
+//     let { GetMFADeviceResult } = payload
+//     let { Certifications } = GetMFADeviceResult
+//     if (Certifications) {
+//       let { entry } = Certifications
+//       entry = Array.isArray(entry) ? entry : [ entry ]
+//       entry.forEach(({ key, value }) => {
+//         Certifications[key] = value
+//       })
+//       delete Certifications.entry
+//     }
+//     else {
+//       GetMFADevice.Certifications = []
+//     }
+//     return GetMFADeviceResult
+//   },
+// }
+
+// TODO: test
+// const GetOpenIDConnectProvider = {
+//   awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html',
+//   validate: {
+//     OpenIDConnectProviderArn,
+//   },
+//   request: params => {
+//     return {
+//       query: {
+//         Action: 'GetOpenIDConnectProvider',
+//         Version: defaultVersion,
+//         ...params,
+//       },
+//     }
+//   },
+//   response: ({ payload }) => {
+//     const arrayKeys = new Set([ 'ThumbprintList', 'ClientIDList', 'Tags' ])
+//     let { GetOpenIDConnectProviderResult } = payload
+//     normalizeObjectArrays(GetOpenIDConnectProviderResult, arrayKeys)
+//     return GetOpenIDConnectProviderResult
+//   },
+// }
+
 const GetPolicy = {
   awsDoc: docRoot + 'API_GetPolicy.html',
   validate: {
@@ -1031,7 +1139,7 @@ const GetRole = {
 //   response: ({ payload }) => payload.GetRolePolicyResult,
 // }
 
-// TODO: Not sure how to test this. Deletion completes before this can be called and the status becomes unavailable
+// TODO: test
 // const GetServiceLinkedRoleDeletionStatus = {
 //   awsDoc: docRoot + 'API_GetServiceLinkedRoleDeletionStatus.html',
 //   validate: {
@@ -1290,6 +1398,33 @@ const ListAttachedUserPolicies = {
     let { ListAttachedUserPoliciesResult } = payload
     normalizeObjectArrays(ListAttachedUserPoliciesResult, arrayKeys)
     return ListAttachedUserPoliciesResult
+  },
+}
+
+const ListEntitiesForPolicy = {
+  awsDoc: docRoot + 'API_ListEntitiesForPolicy.html',
+  validate: {
+    PolicyArn,
+    EntityFilter: { ...str, comment: 'Filter results by entity type', ref: docRoot + 'API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters' },
+    Marker,
+    MaxItems,
+    PathPrefix,
+    PolicyUsageFilter: { ...str, comment: 'Filter results by policy usage', ref: docRoot + 'API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'ListEntitiesForPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'PolicyRoles', 'PolicyGroups', 'PolicyUsers' ])
+    const { ListEntitiesForPolicyResult } = payload
+    normalizeObjectArrays(ListEntitiesForPolicyResult, arrayKeys)
+    return ListEntitiesForPolicyResult
   },
 }
 
@@ -1880,12 +2015,13 @@ const TagInstanceProfile = {
     Tags: { ...Tags, required },
   },
   request: params => {
+    const { InstanceProfile, Tags } = params
     const query = {
       Action: 'TagInstanceProfile',
       Version: defaultVersion,
-      ...params,
+      InstanceProfile,
     }
-    if (query.Tags) serializeTags(query)
+    Object.assign(query, serializeTags(Tags))
     return { query }
   },
   response: emptyResponse,
@@ -1898,12 +2034,13 @@ const TagPolicy = {
     Tags: { ...Tags, required },
   },
   request: params => {
+    const { PolicyArn, Tags } = params
     const query = {
       Action: 'TagPolicy',
       Version: defaultVersion,
-      ...params,
+      PolicyArn,
     }
-    if (query.Tags) serializeTags(query)
+    Object.assign(query, serializeTags(Tags))
     return { query }
   },
   response: emptyResponse,
@@ -1916,12 +2053,13 @@ const TagRole = {
     Tags: { ...Tags, required },
   },
   request: params => {
+    const { RoleName, Tags } = params
     const query = {
       Action: 'TagRole',
       Version: defaultVersion,
-      ...params,
+      RoleName,
     }
-    if (query.Tags) serializeTags(query)
+    Object.assign(query, serializeTags(Tags))
     return { query }
   },
   response: emptyResponse,
@@ -1934,12 +2072,13 @@ const TagUser = {
     Tags: { ...Tags, required },
   },
   request: params => {
+    const { UserName, Tags } = params
     const query = {
       Action: 'TagUser',
       Version: defaultVersion,
-      ...params,
+      UserName,
     }
-    if (query.Tags) serializeTags(query)
+    Object.assign(query, serializeTags(Tags))
     return { query }
   },
   response: emptyResponse,
@@ -2191,6 +2330,24 @@ const UpdateRoleDescription = {
   },
 }
 
+const UploadSSHPublicKey = {
+  awsDoc: docRoot + 'API_UploadSSHPublicKey.html',
+  validate: {
+    SSHPublicKeyBody: { ...str, required, comment: 'SSH public key encoded in SSH-RSA or PEM format; minimum length is 2048 bits', ref: docRoot + 'API_UploadSSHPublicKey.html#API_UploadSSHPublicKey_RequestParameters' },
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UploadSSHPublicKey',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.UploadSSHPublicKeyResult,
+}
+
 export default {
   name: '@aws-lite/iam',
   service,
@@ -2208,6 +2365,7 @@ export default {
     CreateGroup,
     CreateInstanceProfile,
     CreateLoginProfile,
+    CreateOpenIDConnectProvider,
     CreatePolicy,
     // CreatePolicyVersion,
     CreateRole,
@@ -2220,6 +2378,7 @@ export default {
     DeleteGroupPolicy,
     DeleteInstanceProfile,
     DeleteLoginProfile,
+    DeleteOpenIDConnectProvider,
     DeletePolicy,
     DeleteRole,
     DeleteRolePolicy,
@@ -2241,6 +2400,8 @@ export default {
     // GetGroupPolicy,
     GetInstanceProfile,
     GetLoginProfile,
+    // GetMFADevice,
+    // GetOpenIDConnectProvider,
     GetPolicy,
     GetRole,
     // GetRolePolicy,
@@ -2252,6 +2413,7 @@ export default {
     ListAttachedGroupPolicies,
     ListAttachedRolePolicies,
     ListAttachedUserPolicies,
+    ListEntitiesForPolicy,
     ListGroupPolicies,
     ListGroups,
     ListGroupsForUser,
@@ -2287,6 +2449,7 @@ export default {
     UpdateRole,
     UpdateRoleDescription,
     UpdateUser,
+    UploadSSHPublicKey,
     ...incomplete,
   },
 }

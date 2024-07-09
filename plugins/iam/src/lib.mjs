@@ -1,11 +1,3 @@
-function serializeTags (query) {
-  query.Tags.forEach(({ Key, Value }, i) => {
-    query[`Tags.member.${i + 1}.Key`] = Key
-    query[`Tags.member.${i + 1}.Value`] = Value
-  })
-  delete query.Tags
-}
-
 function normalizeObjectArrays (object, arrayKeys, recurse) {
   if (typeof object !== 'object') return
 
@@ -27,7 +19,25 @@ function normalizeObjectArrays (object, arrayKeys, recurse) {
   }
 }
 
+function serializeArray (key, array) {
+  let result = {}
+  array.forEach((value, i) => {
+    result[`${key}.member.${i + 1}`] = value
+  })
+  return result
+}
+
+function serializeTags (tags) {
+  let result = {}
+  tags.forEach(({ Key, Value }, i) => {
+    result[`Tags.member.${i + 1}.Key`] = Key
+    result[`Tags.member.${i + 1}.Value`] = Value
+  })
+  return result
+}
+
 export default {
-  serializeTags,
   normalizeObjectArrays,
+  serializeArray,
+  serializeTags,
 }
