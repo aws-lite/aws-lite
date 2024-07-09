@@ -38,13 +38,23 @@ let server = {
           else if (reqType?.includes('xml')) body = data.toString()
           else body = data.join('')
         }
-        serverData.request = {
+        const request = {
           url: req.url,
           headers: req.headers,
           method: req.method,
           body,
         }
-
+        if (serverData.accumulateRequests) {
+          serverData.request = serverData.request || []
+          serverData.request.push(request)
+        }
+        else {
+          serverData.request = request
+        }
+        if (serverData.responseGenerator) {
+          const { value } = serverData.responseGenerator.next()
+          serverData = Object.assign(serverData, value)
+        }
         let response
         const resType = serverData.responseHeaders?.['content-type']
         /**/ if (resType?.includes('json')) response = JSON.stringify(serverData.responseBody)
