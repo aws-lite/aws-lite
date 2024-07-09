@@ -37,6 +37,7 @@ const PolicyInputList = { ...arr, comment: 'Array of policies to get context key
 const PolicyName = { ...str, required, comment: 'Name of the policy' }
 const PolicySourceArn = { ...str, required, comment: 'ARN of the user, group or role for which the resources context keys will be listed', ref: docRoot +  'API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters' }
 const RoleName = { ...str, required, comment: 'Name of the role' }
+const SSHPublicKeyId = { ...str, required, comment: 'ID of the SSH public key' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
@@ -652,6 +653,24 @@ const DeleteServiceLinkedRole = {
   response: ({ payload }) => payload.DeleteServiceLinkedRoleResult,
 }
 
+const DeleteSSHPublicKey = {
+  awsDoc: docRoot + 'API_DeleteSSHPublicKey.html',
+  validate: {
+    SSHPublicKeyId,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteSSHPublicKey',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const DeleteUser = {
   awsDoc: docRoot + 'API_DeleteUser.html',
   validate: {
@@ -1175,6 +1194,25 @@ const GetRole = {
 //   },
 // }
 
+const GetSSHPublicKey = {
+  awsDoc: docRoot + 'API_GetSSHPublicKey.html',
+  validate: {
+    Encoding: { ...str, required, comment: 'Specify the encoding format used in the response; can be one of: `SSH`, `PEM`' },
+    SSHPublicKeyId,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetSSHPublicKey',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetSSHPublicKeyResult,
+}
+
 const GetUser = {
   awsDoc: docRoot + 'API_GetUser.html',
   validate: {
@@ -1401,6 +1439,7 @@ const ListAttachedUserPolicies = {
   },
 }
 
+// TODO: enable pagination when iterator pagination is available
 const ListEntitiesForPolicy = {
   awsDoc: docRoot + 'API_ListEntitiesForPolicy.html',
   validate: {
@@ -1410,13 +1449,23 @@ const ListEntitiesForPolicy = {
     MaxItems,
     PathPrefix,
     PolicyUsageFilter: { ...str, comment: 'Filter results by policy usage', ref: docRoot + 'API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters' },
+    // paginate: valPaginate,
   },
   request: params => {
+    const { paginate } = params
+    const query = {
+      Action: 'ListEntitiesForPolicy',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (paginate) delete query.paginate
     return {
-      query: {
-        Action: 'ListEntitiesForPolicy',
-        Version: defaultVersion,
-        ...params,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListEntitiesForPolicyResult.Marker',
+        // accumulator: 'ListEntitiesForPolicyResult.AttachedPolicies.member',
       },
     }
   },
@@ -1802,6 +1851,39 @@ const ListRoleTags = {
     let { ListRoleTagsResult } = payload
     normalizeObjectArrays(ListRoleTagsResult, arrayKeys)
     return ListRoleTagsResult
+  },
+}
+
+const ListSSHPublicKeys = {
+  awsDoc: docRoot + 'API_ListSSHPublicKeys.html',
+  validate: {
+    Marker,
+    MaxItems,
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    let query = {
+      Action: 'ListSSHPublicKeys',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListSSHPublicKeysResult.Marker',
+        accumulator: 'ListSSHPublicKeysResult.SSHPublicKeys.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'SSHPublicKeys' ])
+    const { ListSSHPublicKeysResult } = payload
+    normalizeObjectArrays(ListSSHPublicKeysResult, arrayKeys)
+    return ListSSHPublicKeysResult
   },
 }
 
@@ -2281,12 +2363,31 @@ const UpdateRole = {
     return {
       query: {
         Action: 'UpdateRole',
-        Version: '2010-05-08',
+        Version: defaultVersion,
         ...params,
       },
     }
   },
-  response: () => ({}),
+  response: emptyResponse,
+}
+
+const UpdateSSHPublicKey = {
+  awsDoc: docRoot + 'API_UpdateSSHPublicKey.html',
+  validate: {
+    SSHPublicKeyId,
+    Status: { ...str, required, comment: 'New status for the SSH key; can be one of : `Active`, `Inactive`' },
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UpdateSSHPublicKey',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
 }
 
 const UpdateUser = {
@@ -2383,6 +2484,7 @@ export default {
     DeleteRole,
     DeleteRolePolicy,
     DeleteServiceLinkedRole,
+    DeleteSSHPublicKey,
     DeleteUser,
     DeleteUserPolicy,
     DetachGroupPolicy,
@@ -2406,6 +2508,7 @@ export default {
     GetRole,
     // GetRolePolicy,
     // GetServiceLinkedRoleDeletionStatus,
+    GetSSHPublicKey,
     GetUser,
     // GetUserPolicy,
     ListAccessKeys,
@@ -2425,6 +2528,7 @@ export default {
     ListRolePolicies,
     ListRoles,
     ListRoleTags,
+    ListSSHPublicKeys,
     ListUserPolicies,
     ListUsers,
     ListUserTags,
@@ -2448,6 +2552,7 @@ export default {
     UpdateLoginProfile,
     UpdateRole,
     UpdateRoleDescription,
+    UpdateSSHPublicKey,
     UpdateUser,
     UploadSSHPublicKey,
     ...incomplete,

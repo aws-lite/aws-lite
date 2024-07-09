@@ -30,6 +30,7 @@ import {
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleCommandOutput as DeleteServiceLinkedRoleResponse,
+  DeleteSSHPublicKeyCommandOutput as DeleteSSHPublicKeyResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
   DeleteUserPolicyCommandOutput as DeleteUserPolicyResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
@@ -48,6 +49,7 @@ import {
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetRoleCommandOutput as GetRoleResponse,
+  GetSSHPublicKeyCommandOutput as GetSSHPublicKeyResponse,
   GetUserCommandOutput as GetUserResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
@@ -66,6 +68,7 @@ import {
   ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
+  ListSSHPublicKeysCommandOutput as ListSSHPublicKeysResponse,
   ListUserPoliciesCommandOutput as ListUserPoliciesResponse,
   ListUsersCommandOutput as ListUsersResponse,
   ListUserTagsCommandOutput as ListUserTagsResponse,
@@ -89,6 +92,7 @@ import {
   UpdateLoginProfileCommandOutput as UpdateLoginProfileResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
+  UpdateSSHPublicKeyCommandOutput as UpdateSSHPublicKeyResponse,
   UpdateUserCommandOutput as UpdateUserResponse,
   UploadSSHPublicKeyCommandOutput as UploadSSHPublicKeyResponse,
   // $IMPORTS_END
@@ -269,6 +273,12 @@ declare interface AwsLiteIAM {
   DeleteServiceLinkedRole: (input: { RoleName: string }) => Promise<DeleteServiceLinkedRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html IAM: DeleteSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteSSHPublicKey IAM: DeleteSSHPublicKey}
+   */
+  DeleteSSHPublicKey: (input: { SSHPublicKeyId: string, UserName: string }) => Promise<DeleteSSHPublicKeyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html IAM: DeleteUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUser IAM: DeleteUser}
    */
@@ -359,6 +369,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRole IAM: GetRole}
    */
   GetRole: (input: { RoleName: string }) => Promise<GetRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html IAM: GetSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetSSHPublicKey IAM: GetSSHPublicKey}
+   */
+  GetSSHPublicKey: (input: { Encoding: string, SSHPublicKeyId: string, UserName: string }) => Promise<GetSSHPublicKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html IAM: GetUser}
@@ -467,6 +483,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRoleTags IAM: ListRoleTags}
    */
   ListRoleTags: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRoleTagsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html IAM: ListSSHPublicKeys}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListSSHPublicKeys IAM: ListSSHPublicKeys}
+   */
+  ListSSHPublicKeys: (input: { Marker?: string, MaxItems?: number, UserName?: string }) => Promise<ListSSHPublicKeysResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserPolicies.html IAM: ListUserPolicies}
@@ -607,6 +629,12 @@ declare interface AwsLiteIAM {
   UpdateRoleDescription: (input: { RoleName: string, Description?: string }) => Promise<UpdateRoleDescriptionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html IAM: UpdateSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateSSHPublicKey IAM: UpdateSSHPublicKey}
+   */
+  UpdateSSHPublicKey: (input: { SSHPublicKeyId: string, Status: string, UserName: string }) => Promise<UpdateSSHPublicKeyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateUser.html IAM: UpdateUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateUser IAM: UpdateUser}
    */
@@ -659,6 +687,7 @@ export type {
   DeleteRoleResponse,
   DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleResponse,
+  DeleteSSHPublicKeyResponse,
   DeleteUserResponse,
   DeleteUserPolicyResponse,
   DetachGroupPolicyResponse,
@@ -677,6 +706,7 @@ export type {
   GetLoginProfileResponse,
   GetPolicyResponse,
   GetRoleResponse,
+  GetSSHPublicKeyResponse,
   GetUserResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
@@ -695,6 +725,7 @@ export type {
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
+  ListSSHPublicKeysResponse,
   ListUserPoliciesResponse,
   ListUsersResponse,
   ListUserTagsResponse,
@@ -718,6 +749,7 @@ export type {
   UpdateLoginProfileResponse,
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
+  UpdateSSHPublicKeyResponse,
   UpdateUserResponse,
   UploadSSHPublicKeyResponse,
   // $EXPORT_END
