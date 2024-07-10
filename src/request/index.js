@@ -263,6 +263,7 @@ function reNestAccumulated (acc, items) {
 function findTokens ({ cursor, params, result, token, type }) {
   return token.map((t, i) => {
     let nestedToken = t.split('.').length > 1
+    params[type] = params[type] || {}
     if (nestedToken) {
       let foundNestedToken = t.split('.').reduce((parent, child) => parent?.[child], result.payload)
       // Final page was not re-sent with final token
