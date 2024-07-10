@@ -101,7 +101,7 @@ const iamResponse = [
 </ListUsersResponse>`,
 ]
 
-function* makeResponses (responses) {
+function* generateResponses (responses) {
   for (let i in responses) {
     yield responses[i]
   }
@@ -478,7 +478,7 @@ test('Default paginator - raw client', async t => {
 
   t.test('Query cursor', async t => {
     t.plan(4)
-    const responseGenerator = makeResponses(simpleResponses)
+    const responseGenerator = generateResponses(simpleResponses)
     let expectedUrl
     expectedResponsePayload = { Accumulator: [ 'a1', 'a2', 'a3' ] }
 
@@ -517,7 +517,7 @@ test('Default paginator - raw client', async t => {
 
   t.test('Query cursor - nested', async t => {
     t.plan(4)
-    const responseGenerator = makeResponses(nestedResponses)
+    const responseGenerator = generateResponses(nestedResponses)
     let expectedUrl
     expectedResponsePayload = { Nest: { Accumulator: [ 'a1', 'a2', 'a3' ] } }
 
@@ -556,7 +556,7 @@ test('Default paginator - raw client', async t => {
 
   t.test('Payload cursor', async t => {
     t.plan(4)
-    const responseGenerator = makeResponses(simpleResponses)
+    const responseGenerator = generateResponses(simpleResponses)
     let expectedCursor
     expectedResponsePayload = { Accumulator: [ 'a1', 'a2', 'a3' ] }
 
@@ -595,7 +595,7 @@ test('Default paginator - raw client', async t => {
 
   t.test('Payload cursor - nested', async t => {
     t.plan(4)
-    const responseGenerator = makeResponses(nestedResponses)
+    const responseGenerator = generateResponses(nestedResponses)
     let expectedCursor
     expectedResponsePayload = { Nest: { Accumulator: [ 'a1', 'a2', 'a3' ] } }
 
@@ -634,7 +634,7 @@ test('Default paginator - raw client', async t => {
 
   t.test('Headers cursor', async t => {
     t.plan(4)
-    const responseGenerator = makeResponses(simpleResponses)
+    const responseGenerator = generateResponses(simpleResponses)
     let expectedCursor
     expectedResponsePayload = { Accumulator: [ 'a1', 'a2', 'a3' ] }
 
@@ -673,7 +673,7 @@ test('Default paginator - raw client', async t => {
 
   t.test('Headers cursor - nested', async t => {
     t.plan(4)
-    const responseGenerator = makeResponses(nestedResponses)
+    const responseGenerator = generateResponses(nestedResponses)
     let expectedCursor
     expectedResponsePayload = { Nest: { Accumulator: [ 'a1', 'a2', 'a3' ] } }
 
@@ -760,7 +760,7 @@ test('Default paginator - plugin', async t => {
       responseHeaders: xmlHeaders,
     },
   ]
-  const responseGenerator = makeResponses(pluginResponses)
+  const responseGenerator = generateResponses(pluginResponses)
 
   server.use({ accumulateRequests: true })
   server.use({ responseGenerator })
