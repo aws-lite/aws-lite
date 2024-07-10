@@ -51,9 +51,9 @@ let server = {
         else {
           serverData.request = request
         }
-        if (serverData.responseGenerator) {
-          const { value } = serverData.responseGenerator.next()
-          serverData = Object.assign(serverData, value)
+        if (serverData.responseIterator) {
+          const { value } = serverData.responseIterator.next()
+          serverData = Object.assign(serverData, value[1])
         }
         let response
         const resType = serverData.responseHeaders?.['content-type']

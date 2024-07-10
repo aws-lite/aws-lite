@@ -4,9 +4,13 @@ import test from 'tape'
 import { copy, defaults, resetServer as reset, server } from '../../lib/index.mjs'
 
 let client
+let cwd = process.cwd()
+let mock = join(cwd, 'test', 'mock')
+let pluginDir = join(mock, 'plugins')
+let p = path => process.platform.startsWith('win') ? 'file://' + path : path
+
 const { config, service } = defaults
 const jsonHeaders = { 'content-type': 'application/json' }
-const xmlHeaders = { 'content-type': 'application/xml' }
 
 const simplePaginator = {
   cursor: 'Cursor',
@@ -51,73 +55,6 @@ const nestedResponseBodies = [
     Nest: { Accumulator: 'a3' },
   },
 ]
-
-const iamResponse = [
-  `<ListUsersResponse xmlns="https://iam.amazonaws.com/doc/2010-05-08/">
- <ListUsersResult>
-    <Users>
-       <member>
-          <UserId>AID2MAB8DPLSRHEXAMPLE</UserId>
-          <Path>/division_abc/subdivision_xyz/engineering/</Path>
-          <UserName>Andrew</UserName>
-          <Arn>arn:aws:iam::123456789012:user/division_abc/subdivision_xyz/engineering/Andrew</Arn>
-          <CreateDate>2012-09-05T19:38:48Z</CreateDate>
-          <PasswordLastUsed>2014-09-08T21:47:36Z</PasswordLastUsed>
-       </member>
-    </Users>
-    <IsTruncated>true</IsTruncated>
-    <Marker>${simpleResponseBodies[0].Token}</Marker>
- </ListUsersResult>
- <ResponseMetadata>
-    <RequestId>7a62c49f-347e-4fc4-9331-6e8eEXAMPLE</RequestId>
- </ResponseMetadata>
-
-</ListUsersResponse>`,
-  `<ListUsersResponse xmlns="https://iam.amazonaws.com/doc/2010-05-08/">
-<ListUsersResult>
-   <Users>
-      <member>
-         <UserId>AID2MAB8DPLSRHEXAMPLE</UserId>
-         <Path>/division_abc/subdivision_xyz/engineering/</Path>
-         <UserName>Andrew</UserName>
-         <Arn>arn:aws:iam::123456789012:user/division_abc/subdivision_xyz/engineering/Andrew</Arn>
-         <CreateDate>2012-09-05T19:38:48Z</CreateDate>
-         <PasswordLastUsed>2014-09-08T21:47:36Z</PasswordLastUsed>
-      </member>
-   </Users>
-   <IsTruncated>true</IsTruncated>
-   <Marker>${simpleResponseBodies[1].Token}</Marker>
-</ListUsersResult>
-<ResponseMetadata>
-   <RequestId>7a62c49f-347e-4fc4-9331-6e8eEXAMPLE</RequestId>
-</ResponseMetadata>
-</ListUsersResponse>`,
-
-  `<ListUsersResponse xmlns="https://iam.amazonaws.com/doc/2010-05-08/">
-<ListUsersResult>
-   <Users>
-      <member>
-         <UserId>AID2MAB8DPLSRHEXAMPLE</UserId>
-         <Path>/division_abc/subdivision_xyz/engineering/</Path>
-         <UserName>Andrew</UserName>
-         <Arn>arn:aws:iam::123456789012:user/division_abc/subdivision_xyz/engineering/Andrew</Arn>
-         <CreateDate>2012-09-05T19:38:48Z</CreateDate>
-         <PasswordLastUsed>2014-09-08T21:47:36Z</PasswordLastUsed>
-      </member>
-   </Users>
-   <IsTruncated>false</IsTruncated>
-</ListUsersResult>
-<ResponseMetadata>
-   <RequestId>7a62c49f-347e-4fc4-9331-6e8eEXAMPLE</RequestId>
-</ResponseMetadata>
-</ListUsersResponse>`,
-]
-
-function* generateResponses (responses) {
-  for (let i in responses) {
-    yield responses[i]
-  }
-}
 
 test('Set up env', async t => {
   t.plan(2)
@@ -385,37 +322,39 @@ test('Async iterator - raw client', async t => {
 
 test('Async iterator - plugin', async t => {
   t.plan(7)
-  const MaxItems = 1
   const paginate = 'iterator'
-  let aws = await client({ ...config, plugins: [ import('@aws-lite/iam') ] })
+  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
   let expectedToken, expectedUrl, page, response, request
 
   // Returns async iterator
-  response = await aws.iam.ListUsers({ MaxItems, paginate })
+  response = await aws.lambda.PaginatedMethod({
+    paginate,
+    paginator: { ...simplePaginator, type: 'query' },
+  })
 
   // First page
-  server.use({ responseBody: iamResponse[0], responseHeaders: xmlHeaders })
+  server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
   page = await response.next()
   expectedToken = simpleResponseBodies[0].Token
-  t.equal(page.value.Marker, expectedToken, 'Response is correct')
+  t.equal(page.value.Token, expectedToken, 'Response is correct')
   reset()
 
   // Second page
-  server.use({ responseBody: iamResponse[1], responseHeaders: xmlHeaders })
+  server.use({ responseBody: simpleResponseBodies[1], responseHeaders: jsonHeaders })
   page = await response.next()
   request = server.getCurrentRequest()
   expectedToken = simpleResponseBodies[1].Token
-  expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=${simpleResponseBodies[0].Token}`
-  t.equal(page.value.Marker, expectedToken, 'Response is correct')
+  expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
+  t.equal(page.value.Token, expectedToken, 'Response is correct')
   t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
   reset()
 
   // Third page
-  server.use({ responseBody: iamResponse[2], responseHeaders: xmlHeaders })
+  server.use({ responseBody: simpleResponseBodies[2], responseHeaders: jsonHeaders })
   page = await response.next()
   request = server.getCurrentRequest()
-  expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=${simpleResponseBodies[1].Token}`
-  t.false(page.value.Marker, 'Response is correct')
+  expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
+  t.false(page.value.Token, 'Response is correct')
   t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
   reset()
 
@@ -431,7 +370,8 @@ test('Default paginator - raw client', async t => {
   const aws = await client(config)
   const headers = copy(jsonHeaders)
   const paginate = true
-  let response, requests, responseGenerator, expectedCursor, expectedUrl
+  const accumulateRequests = true
+  let response, requests, responseIterator, expectedCursor, expectedUrl
   const rawRequest = { service, headers, paginate }
 
   const simpleExpectedPayload = {
@@ -484,8 +424,8 @@ test('Default paginator - raw client', async t => {
 
   t.test('Query cursor', async t => {
     t.plan(4)
-    responseGenerator = generateResponses(simpleResponses)
-    server.use({ accumulateRequests: true, responseGenerator })
+    responseIterator = simpleResponses.entries()
+    server.use({ accumulateRequests, responseIterator })
     response = await aws({
       ...rawRequest,
       paginator: { ...simplePaginator, type: 'query' },
@@ -510,8 +450,8 @@ test('Default paginator - raw client', async t => {
 
   t.test('Query cursor - nested', async t => {
     t.plan(4)
-    responseGenerator = generateResponses(nestedResponses)
-    server.use({ accumulateRequests: true, responseGenerator })
+    responseIterator = nestedResponses.entries()
+    server.use({ accumulateRequests, responseIterator })
     response = await aws({
       ...rawRequest,
       paginator: { ...nestedPaginator, type: 'query' },
@@ -536,8 +476,8 @@ test('Default paginator - raw client', async t => {
 
   t.test('Payload cursor', async t => {
     t.plan(4)
-    responseGenerator = generateResponses(simpleResponses)
-    server.use({ accumulateRequests: true, responseGenerator })
+    responseIterator = simpleResponses.entries()
+    server.use({ accumulateRequests, responseIterator })
     response = await aws({
       ...rawRequest,
       paginator: { ...simplePaginator, type: 'payload' },
@@ -562,8 +502,8 @@ test('Default paginator - raw client', async t => {
 
   t.test('Payload cursor - nested', async t => {
     t.plan(4)
-    responseGenerator = generateResponses(nestedResponses)
-    server.use({ accumulateRequests: true, responseGenerator })
+    responseIterator = nestedResponses.entries()
+    server.use({ accumulateRequests, responseIterator })
     response = await aws({
       ...rawRequest,
       paginator: { ...nestedPaginator, type: 'payload' },
@@ -588,8 +528,8 @@ test('Default paginator - raw client', async t => {
 
   t.test('Headers cursor', async t => {
     t.plan(4)
-    responseGenerator = generateResponses(simpleResponses)
-    server.use({ accumulateRequests: true, responseGenerator })
+    responseIterator = simpleResponses.entries()
+    server.use({ accumulateRequests, responseIterator })
     response = await aws({
       ...rawRequest,
       paginator: { ...simplePaginator, type: 'headers' },
@@ -614,8 +554,8 @@ test('Default paginator - raw client', async t => {
 
   t.test('Headers cursor - nested', async t => {
     t.plan(4)
-    responseGenerator = generateResponses(nestedResponses)
-    server.use({ accumulateRequests: true, responseGenerator })
+    responseIterator = nestedResponses.entries()
+    server.use({ accumulateRequests, responseIterator })
     response = await aws({
       ...rawRequest,
       paginator: { ...nestedPaginator, type: 'headers' },
@@ -641,73 +581,54 @@ test('Default paginator - raw client', async t => {
 
 test('Default paginator - plugin', async t => {
   t.plan(5)
-  const MaxItems = 1
   const paginate = true
-  let aws = await client({ ...config, plugins: [ import('@aws-lite/iam') ] })
+  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
   let  expectedUrl, response, requests
 
-  let expectedResponse = {
-    Users: [
-      {
-        UserId: 'AID2MAB8DPLSRHEXAMPLE',
-        Path: `/division_abc/subdivision_xyz/engineering/`,
-        UserName: 'Andrew',
-        Arn: `arn:aws:iam::123456789012:user/division_abc/subdivision_xyz/engineering/Andrew`,
-        CreateDate: `2012-09-05T19:38:48Z`,
-        PasswordLastUsed: `2014-09-08T21:47:36Z`,
-      },
-      {
-        UserId: 'AID2MAB8DPLSRHEXAMPLE',
-        Path: `/division_abc/subdivision_xyz/engineering/`,
-        UserName: 'Andrew',
-        Arn: `arn:aws:iam::123456789012:user/division_abc/subdivision_xyz/engineering/Andrew`,
-        CreateDate: `2012-09-05T19:38:48Z`,
-        PasswordLastUsed: `2014-09-08T21:47:36Z`,
-      },
-      {
-        UserId: 'AID2MAB8DPLSRHEXAMPLE',
-        Path: `/division_abc/subdivision_xyz/engineering/`,
-        UserName: 'Andrew',
-        Arn: `arn:aws:iam::123456789012:user/division_abc/subdivision_xyz/engineering/Andrew`,
-        CreateDate: `2012-09-05T19:38:48Z`,
-        PasswordLastUsed: `2014-09-08T21:47:36Z`,
-      },
+  const expectedResponse = {
+    Accumulator: [
+      simpleResponseBodies[0].Accumulator,
+      simpleResponseBodies[1].Accumulator,
+      simpleResponseBodies[2].Accumulator,
     ],
   }
 
   const pluginResponses = [
     {
-      responseBody: iamResponse[0],
-      responseHeaders: xmlHeaders,
+      responseBody: simpleResponseBodies[0],
+      responseHeaders: jsonHeaders,
     },
     {
-      responseBody: iamResponse[1],
-      responseHeaders: xmlHeaders,
+      responseBody: simpleResponseBodies[1],
+      responseHeaders: jsonHeaders,
     },
     {
-      responseBody: iamResponse[2],
-      responseHeaders: xmlHeaders,
+      responseBody: simpleResponseBodies[2],
+      responseHeaders: jsonHeaders,
     },
   ]
-  const responseGenerator = generateResponses(pluginResponses)
-  server.use({ accumulateRequests: true, responseGenerator })
 
-  response = await aws.iam.ListUsers({ MaxItems, paginate })
+  const responseIterator = pluginResponses.entries()
+  server.use({ accumulateRequests: true, responseIterator })
+  response = await aws.lambda.PaginatedMethod({
+    paginate,
+    paginator: { ...simplePaginator, type: 'query' },
+  })
   requests = server.getCurrentRequest()
 
   // Response payload
   t.deepEqual(response, expectedResponse, 'Response is correct')
 
   // First page
-  expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1`
+  expectedUrl = `/`
   t.equal(requests[0].url, expectedUrl, 'Request cursor matches previous response token')
 
   // Second page
-  expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=${simpleResponseBodies[0].Token}`
+  expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
   t.equal(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
 
   // Third page
-  expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=${simpleResponseBodies[1].Token}`
+  expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
   t.equal(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
 
   // Correct number of requests
