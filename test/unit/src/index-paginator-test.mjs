@@ -4,9 +4,21 @@ import test from 'tape'
 import { copy, defaults, resetServer as reset, server } from '../../lib/index.mjs'
 
 let client
-let { config, service } = defaults
-let jsonHeaders = { 'content-type': 'application/json' }
-let xmlHeaders = { 'content-type': 'application/xml' }
+const { config, service } = defaults
+const jsonHeaders = { 'content-type': 'application/json' }
+const xmlHeaders = { 'content-type': 'application/xml' }
+
+const simplePaginator = {
+  cursor: 'Cursor',
+  token: 'Token',
+  accumulator: 'Accumulator',
+}
+
+const nestedPaginator = {
+  cursor: 'Cursor',
+  token: 'Nest.Token',
+  accumulator: 'Nest.Accumulator',
+}
 
 const simpleResponseBodies = [
   {
@@ -107,7 +119,6 @@ function* generateResponses (responses) {
   }
 }
 
-
 test('Set up env', async t => {
   t.plan(2)
   let cwd = process.cwd()
@@ -119,23 +130,20 @@ test('Set up env', async t => {
 })
 
 test('Async iterator - raw client', async t => {
-  // t.plan(7)
-  let aws = await client(config)
-  let headers = copy(jsonHeaders)
-  let page
-  let response
-  let request
+  const aws = await client(config)
+  const headers = copy(jsonHeaders)
+  const paginate = 'iterator'
+  let page, response, request, expectedCursor, expectedPayload, expectedUrl
 
   t.test('Query cursor', async t => {
     t.plan(7)
-    let expectedUrl
 
     // Returns async iterator
     response = await aws({
       service,
       headers,
-      paginate: 'iterator',
-      paginator: { cursor: 'Cursor', token: 'Token', type: 'query' },
+      paginate,
+      paginator: { ...simplePaginator, type: 'query' },
       query: {},
     })
 
@@ -149,7 +157,7 @@ test('Async iterator - raw client', async t => {
     server.use({ responseBody: simpleResponseBodies[1], responseHeaders: jsonHeaders })
     page = await response.next()
     request = server.getCurrentRequest()
-    expectedUrl = '/?Cursor=t1'
+    expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
     t.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
     t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
@@ -158,7 +166,7 @@ test('Async iterator - raw client', async t => {
     server.use({ responseBody: simpleResponseBodies[2], responseHeaders: jsonHeaders })
     page = await response.next()
     request = server.getCurrentRequest()
-    expectedUrl = '/?Cursor=t2'
+    expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
     t.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
     t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
@@ -167,20 +175,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Server does not send extra request')
+    t.equal(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Query cursor - nested', async t => {
     t.plan(7)
-    let expectedUrl
 
     // Returns async iterator
     response = await aws({
       service,
       headers,
-      paginate: 'iterator',
-      paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'query' },
+      paginate,
+      paginator: { ...nestedPaginator, type: 'query' },
       query: {},
     })
 
@@ -194,7 +201,7 @@ test('Async iterator - raw client', async t => {
     server.use({ responseBody: nestedResponseBodies[1], responseHeaders: jsonHeaders })
     page = await response.next()
     request = server.getCurrentRequest()
-    expectedUrl = '/?Cursor=t1'
+    expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
     t.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
     t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
@@ -203,7 +210,7 @@ test('Async iterator - raw client', async t => {
     server.use({ responseBody: nestedResponseBodies[2], responseHeaders: jsonHeaders })
     page = await response.next()
     request = server.getCurrentRequest()
-    expectedUrl = '/?Cursor=t2'
+    expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
     t.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
     t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
@@ -212,20 +219,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Server does not send extra request')
+    t.equal(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Payload cursor', async t => {
     t.plan(7)
-    let expectedPayload
 
     // Returns async iterator
     response = await aws({
       service,
       headers,
-      paginate: 'iterator',
-      paginator: { cursor: 'Cursor', token: 'Token', type: 'payload' },
+      paginate,
+      paginator: { ...simplePaginator, type: 'payload' },
       payload: {},
     })
 
@@ -257,20 +263,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Server does not send extra request')
+    t.equal(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Payload cursor - nested', async t => {
     t.plan(7)
-    let expectedPayload
 
     // Returns async iterator
     response = await aws({
       service,
       headers,
-      paginate: 'iterator',
-      paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'payload' },
+      paginate,
+      paginator: { ...nestedPaginator, type: 'payload' },
       payload: {},
     })
 
@@ -302,20 +307,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Server does not send extra request')
+    t.equal(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Headers cursor', async t => {
     t.plan(7)
-    let expectedCursor
 
     // Returns async iterator
     response = await aws({
       service,
       headers,
-      paginate: 'iterator',
-      paginator: { cursor: 'Cursor', token: 'Token', type: 'headers' },
+      paginate,
+      paginator: { ...simplePaginator, type: 'headers' },
     })
 
     // First page
@@ -346,20 +350,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Server does not send extra request')
+    t.equal(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Headers cursor - nested', async t => {
     t.plan(7)
-    let expectedCursor
 
     // Returns async iterator
     response = await aws({
       service,
       headers,
-      paginate: 'iterator',
-      paginator: { cursor: 'Cursor', token: 'Nest.Token', type: 'headers' },
+      paginate,
+      paginator: { ...nestedPaginator, type: 'headers' },
     })
 
     // First page
@@ -390,7 +393,7 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Server does not send extra request')
+    t.equal(request, undefined, 'Client does not send extra request')
     reset()
   })
 })
@@ -434,17 +437,34 @@ test('Async iterator - plugin', async t => {
   // No more pages
   page = await response.next()
   request = server.getCurrentRequest()
-  t.true(page.done, 'Iterator stops when expected')
-  t.equal(request, undefined, 'Server does not send extra request')
+  t.ok(page.done, 'Iterator stops when expected')
+  t.equal(request, undefined, 'Client does not send extra request')
   reset()
 })
 
 test('Default paginator - raw client', async t => {
-  let aws = await client(config)
-  let headers = copy(jsonHeaders)
-  let response
-  let expectedResponsePayload
-  let requests
+  const aws = await client(config)
+  const headers = copy(jsonHeaders)
+  const paginate = true
+  let response, requests, responseGenerator, expectedCursor, expectedUrl
+
+  const simpleExpectedPayload = {
+    Accumulator: [
+      simpleResponseBodies[0].Accumulator,
+      simpleResponseBodies[1].Accumulator,
+      simpleResponseBodies[2].Accumulator,
+    ],
+  }
+
+  const nestedExpectedPayload = {
+    Nest: {
+      Accumulator: [
+        simpleResponseBodies[0].Accumulator,
+        simpleResponseBodies[1].Accumulator,
+        simpleResponseBodies[2].Accumulator,
+      ],
+    },
+  }
 
   const simpleResponses = [
     {
@@ -478,107 +498,77 @@ test('Default paginator - raw client', async t => {
 
   t.test('Query cursor', async t => {
     t.plan(4)
-    const responseGenerator = generateResponses(simpleResponses)
-    let expectedUrl
-    expectedResponsePayload = { Accumulator: [ 'a1', 'a2', 'a3' ] }
-
-    server.use({ accumulateRequests: true })
-    server.use({ responseGenerator })
-
+    responseGenerator = generateResponses(simpleResponses)
+    server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
       service,
       headers,
       query: {},
-      paginate: true,
-      paginator: {
-        cursor: 'Cursor',
-        token: 'Token',
-        accumulator: 'Accumulator',
-        type: 'query',
-      },
+      paginate,
+      paginator: { ...simplePaginator, type: 'query' },
     })
+    requests = server.getCurrentRequest()
 
     // Response payload
-    requests = server.getCurrentRequest()
-    t.deepEqual(response.payload, expectedResponsePayload, 'Response is correct')
+    t.deepEqual(response.payload, simpleExpectedPayload, 'Response is correct')
 
     // Second page
-    expectedUrl = '/?Cursor=t1'
+    expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
     t.equal(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
 
     // Third page
-    expectedUrl = '/?Cursor=t2'
+    expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
     t.equal(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Server does not send extra request')
+    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Query cursor - nested', async t => {
     t.plan(4)
-    const responseGenerator = generateResponses(nestedResponses)
-    let expectedUrl
-    expectedResponsePayload = { Nest: { Accumulator: [ 'a1', 'a2', 'a3' ] } }
-
-    server.use({ accumulateRequests: true })
-    server.use({ responseGenerator })
-
+    responseGenerator = generateResponses(nestedResponses)
+    server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
       service,
       headers,
       query: {},
-      paginate: true,
-      paginator: {
-        cursor: 'Cursor',
-        token: 'Nest.Token',
-        accumulator: 'Nest.Accumulator',
-        type: 'query',
-      },
+      paginate,
+      paginator: { ...nestedPaginator, type: 'query' },
     })
+    requests = server.getCurrentRequest()
 
     // Response payload
-    requests = server.getCurrentRequest()
-    t.deepEqual(response.payload, expectedResponsePayload, 'Response is correct')
+    t.deepEqual(response.payload, nestedExpectedPayload, 'Response is correct')
 
     // Second page
-    expectedUrl = '/?Cursor=t1'
+    expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
     t.equal(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
 
     // Third page
-    expectedUrl = '/?Cursor=t2'
+    expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
     t.equal(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Server does not send extra request')
+    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Payload cursor', async t => {
     t.plan(4)
-    const responseGenerator = generateResponses(simpleResponses)
-    let expectedCursor
-    expectedResponsePayload = { Accumulator: [ 'a1', 'a2', 'a3' ] }
-
-    server.use({ accumulateRequests: true })
-    server.use({ responseGenerator })
-
+    responseGenerator = generateResponses(simpleResponses)
+    server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
       service,
       headers,
       payload: {},
-      paginate: true,
-      paginator: {
-        cursor: 'Cursor',
-        token: 'Token',
-        accumulator: 'Accumulator',
-        type: 'payload',
-      },
+      paginate,
+      paginator: { ...simplePaginator, type: 'payload' },
     })
+    requests = server.getCurrentRequest()
 
     // Response payload
-    requests = server.getCurrentRequest()
-    t.deepEqual(response.payload, expectedResponsePayload, 'Response is correct')
+    t.deepEqual(response.payload, simpleExpectedPayload, 'Response is correct')
 
     // Second page
     expectedCursor = simpleResponseBodies[0].Token
@@ -589,35 +579,25 @@ test('Default paginator - raw client', async t => {
     t.equal(requests[2].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Server does not send extra request')
+    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Payload cursor - nested', async t => {
     t.plan(4)
-    const responseGenerator = generateResponses(nestedResponses)
-    let expectedCursor
-    expectedResponsePayload = { Nest: { Accumulator: [ 'a1', 'a2', 'a3' ] } }
-
-    server.use({ accumulateRequests: true })
-    server.use({ responseGenerator })
-
+    responseGenerator = generateResponses(nestedResponses)
+    server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
       service,
       headers,
       payload: {},
-      paginate: true,
-      paginator: {
-        cursor: 'Cursor',
-        token: 'Nest.Token',
-        accumulator: 'Nest.Accumulator',
-        type: 'payload',
-      },
+      paginate,
+      paginator: { ...nestedPaginator, type: 'payload' },
     })
+    requests = server.getCurrentRequest()
 
     // Response payload
-    requests = server.getCurrentRequest()
-    t.deepEqual(response.payload, expectedResponsePayload, 'Response is correct')
+    t.deepEqual(response.payload, nestedExpectedPayload, 'Response is correct')
 
     // Second page
     expectedCursor = nestedResponseBodies[0].Nest.Token
@@ -628,35 +608,25 @@ test('Default paginator - raw client', async t => {
     t.equal(requests[2].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Server does not send extra request')
+    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Headers cursor', async t => {
     t.plan(4)
-    const responseGenerator = generateResponses(simpleResponses)
-    let expectedCursor
-    expectedResponsePayload = { Accumulator: [ 'a1', 'a2', 'a3' ] }
-
-    server.use({ accumulateRequests: true })
-    server.use({ responseGenerator })
-
+    responseGenerator = generateResponses(simpleResponses)
+    server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
       service,
       headers,
       payload: {},
-      paginate: true,
-      paginator: {
-        cursor: 'Cursor',
-        token: 'Token',
-        accumulator: 'Accumulator',
-        type: 'headers',
-      },
+      paginate,
+      paginator: { ...simplePaginator, type: 'headers' },
     })
+    requests = server.getCurrentRequest()
 
     // Response payload
-    requests = server.getCurrentRequest()
-    t.deepEqual(response.payload, expectedResponsePayload, 'Response is correct')
+    t.deepEqual(response.payload, simpleExpectedPayload, 'Response is correct')
 
     // Second page
     expectedCursor = simpleResponseBodies[0].Token
@@ -667,34 +637,24 @@ test('Default paginator - raw client', async t => {
     t.equal(requests[2].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Server does not send extra request')
+    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Headers cursor - nested', async t => {
     t.plan(4)
-    const responseGenerator = generateResponses(nestedResponses)
-    let expectedCursor
-    expectedResponsePayload = { Nest: { Accumulator: [ 'a1', 'a2', 'a3' ] } }
-
-    server.use({ accumulateRequests: true })
-    server.use({ responseGenerator })
-
+    responseGenerator = generateResponses(nestedResponses)
+    server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
       service,
       headers,
-      paginate: true,
-      paginator: {
-        cursor: 'Cursor',
-        token: 'Nest.Token',
-        accumulator: 'Nest.Accumulator',
-        type: 'headers',
-      },
+      paginate,
+      paginator: { ...nestedPaginator, type: 'headers' },
     })
     requests = server.getCurrentRequest()
 
     // Response payload
-    t.deepEqual(response.payload, expectedResponsePayload, 'Response is correct')
+    t.deepEqual(response.payload, nestedExpectedPayload, 'Response is correct')
 
     // Second page
     expectedCursor = nestedResponseBodies[0].Nest.Token
@@ -705,7 +665,7 @@ test('Default paginator - raw client', async t => {
     t.equal(requests[2].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, nestedResponseBodies.length, 'Server does not send extra request')
+    t.equal(requests.length, nestedResponseBodies.length, 'Client does not send extra request')
     reset()
   })
 })
@@ -761,12 +721,9 @@ test('Default paginator - plugin', async t => {
     },
   ]
   const responseGenerator = generateResponses(pluginResponses)
-
-  server.use({ accumulateRequests: true })
-  server.use({ responseGenerator })
+  server.use({ accumulateRequests: true, responseGenerator })
 
   response = await aws.iam.ListUsers({ MaxItems, paginate })
-  // console.log(response)
   requests = server.getCurrentRequest()
 
   // Response payload
@@ -776,16 +733,16 @@ test('Default paginator - plugin', async t => {
   expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1`
   t.equal(requests[0].url, expectedUrl, 'Request cursor matches previous response token')
 
-  // // Second page
+  // Second page
   expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=${simpleResponseBodies[0].Token}`
   t.equal(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
 
-  // // Third page
+  // Third page
   expectedUrl = `/?Action=ListUsers&Version=2010-05-08&MaxItems=1&Marker=${simpleResponseBodies[1].Token}`
   t.equal(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
 
-  // // Correct number of requests
-  t.equal(requests.length, pluginResponses.length, 'Server does not send extra request')
+  // Correct number of requests
+  t.equal(requests.length, pluginResponses.length, 'Client does not send extra request')
   reset()
 })
 
