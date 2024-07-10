@@ -133,6 +133,7 @@ test('Async iterator - raw client', async t => {
   const aws = await client(config)
   const headers = copy(jsonHeaders)
   const paginate = 'iterator'
+  const rawRequest = { service, headers, paginate }
   let page, response, request, expectedCursor, expectedPayload, expectedUrl
 
   t.test('Query cursor', async t => {
@@ -140,11 +141,8 @@ test('Async iterator - raw client', async t => {
 
     // Returns async iterator
     response = await aws({
-      service,
-      headers,
-      paginate,
+      ...rawRequest,
       paginator: { ...simplePaginator, type: 'query' },
-      query: {},
     })
 
     // First page
@@ -184,11 +182,8 @@ test('Async iterator - raw client', async t => {
 
     // Returns async iterator
     response = await aws({
-      service,
-      headers,
-      paginate,
+      ...rawRequest,
       paginator: { ...nestedPaginator, type: 'query' },
-      query: {},
     })
 
     // First page
@@ -228,11 +223,8 @@ test('Async iterator - raw client', async t => {
 
     // Returns async iterator
     response = await aws({
-      service,
-      headers,
-      paginate,
+      ...rawRequest,
       paginator: { ...simplePaginator, type: 'payload' },
-      payload: {},
     })
 
     // First page
@@ -272,11 +264,8 @@ test('Async iterator - raw client', async t => {
 
     // Returns async iterator
     response = await aws({
-      service,
-      headers,
-      paginate,
+      ...rawRequest,
       paginator: { ...nestedPaginator, type: 'payload' },
-      payload: {},
     })
 
     // First page
@@ -316,9 +305,7 @@ test('Async iterator - raw client', async t => {
 
     // Returns async iterator
     response = await aws({
-      service,
-      headers,
-      paginate,
+      ...rawRequest,
       paginator: { ...simplePaginator, type: 'headers' },
     })
 
@@ -359,9 +346,7 @@ test('Async iterator - raw client', async t => {
 
     // Returns async iterator
     response = await aws({
-      service,
-      headers,
-      paginate,
+      ...rawRequest,
       paginator: { ...nestedPaginator, type: 'headers' },
     })
 
@@ -447,6 +432,7 @@ test('Default paginator - raw client', async t => {
   const headers = copy(jsonHeaders)
   const paginate = true
   let response, requests, responseGenerator, expectedCursor, expectedUrl
+  const rawRequest = { service, headers, paginate }
 
   const simpleExpectedPayload = {
     Accumulator: [
@@ -501,10 +487,7 @@ test('Default paginator - raw client', async t => {
     responseGenerator = generateResponses(simpleResponses)
     server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
-      service,
-      headers,
-      query: {},
-      paginate,
+      ...rawRequest,
       paginator: { ...simplePaginator, type: 'query' },
     })
     requests = server.getCurrentRequest()
@@ -530,10 +513,7 @@ test('Default paginator - raw client', async t => {
     responseGenerator = generateResponses(nestedResponses)
     server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
-      service,
-      headers,
-      query: {},
-      paginate,
+      ...rawRequest,
       paginator: { ...nestedPaginator, type: 'query' },
     })
     requests = server.getCurrentRequest()
@@ -559,10 +539,7 @@ test('Default paginator - raw client', async t => {
     responseGenerator = generateResponses(simpleResponses)
     server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
-      service,
-      headers,
-      payload: {},
-      paginate,
+      ...rawRequest,
       paginator: { ...simplePaginator, type: 'payload' },
     })
     requests = server.getCurrentRequest()
@@ -588,10 +565,7 @@ test('Default paginator - raw client', async t => {
     responseGenerator = generateResponses(nestedResponses)
     server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
-      service,
-      headers,
-      payload: {},
-      paginate,
+      ...rawRequest,
       paginator: { ...nestedPaginator, type: 'payload' },
     })
     requests = server.getCurrentRequest()
@@ -617,10 +591,7 @@ test('Default paginator - raw client', async t => {
     responseGenerator = generateResponses(simpleResponses)
     server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
-      service,
-      headers,
-      payload: {},
-      paginate,
+      ...rawRequest,
       paginator: { ...simplePaginator, type: 'headers' },
     })
     requests = server.getCurrentRequest()
@@ -646,9 +617,7 @@ test('Default paginator - raw client', async t => {
     responseGenerator = generateResponses(nestedResponses)
     server.use({ accumulateRequests: true, responseGenerator })
     response = await aws({
-      service,
-      headers,
-      paginate,
+      ...rawRequest,
       paginator: { ...nestedPaginator, type: 'headers' },
     })
     requests = server.getCurrentRequest()
