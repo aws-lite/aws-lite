@@ -95,43 +95,97 @@ function getEndpointParams (input) {
   return params
 }
 
+const profileName = /^profile\s/
 async function loadAwsConfig (params) {
-  let { awsConfigFile } = params
-  let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE } = process.env
-  if (!AWS_SDK_LOAD_CONFIG && !awsConfigFile) return
+  // Don't attempt to load credentials from the filesystem when in Lambda
+  let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
+  if (isInLambda) return
+
+  let { awsConfigFile, profile } = params
+  let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE, AWS_SHARED_CREDENTIALS_FILE } = process.env
 
   let { join } = require('node:path')
-  let os = require('node:os')
-  let home = os.homedir()
+  let home = getHomedir()
 
-  let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
-  if (typeof awsConfigFile === 'string') configFile = awsConfigFile
-  return await readConfig(configFile)
+  let awsConfig
+
+  // Optionally attempt to load the `config` file (default: ~/.aws/config)
+  if (AWS_SDK_LOAD_CONFIG || awsConfigFile) {
+    let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
+    if (typeof awsConfigFile === 'string') configFile = awsConfigFile
+    let config = await readIni(configFile)
+    /* istanbul ignore next: TODO remove + test */
+    if (config) {
+      awsConfig = {}
+      awsConfig.config = config
+      let profiles = {}
+      Object.entries(config).forEach(([ name, data ]) => {
+        if (name === 'default' || profileName.test(name)) {
+          profiles[name.replace(profileName, '')] = data
+        }
+      })
+      if (Object.keys(profiles).length) awsConfig.profiles = profiles
+    }
+  }
+
+  // Always attempt to load the `credentials` file (default: ~/.aws/credentials)
+  let credsFile = AWS_SHARED_CREDENTIALS_FILE || join(home, '.aws', 'credentials')
+  let creds = await readIni(credsFile)
+  /* istanbul ignore next: TODO remove + test */
+  if (creds) {
+    awsConfig = awsConfig || {}
+    awsConfig.creds = creds
+    if (!awsConfig.profiles) awsConfig.profiles = {}
+    // This is AWS SDK behavior: when profiles are found in both places, the creds file wins
+    Object.entries(creds).forEach(([ name, data ]) => awsConfig.profiles[name] = data)
+  }
+
+  if (awsConfig) {
+    if (awsConfig?.profiles?.[profile]) awsConfig.currentProfile = awsConfig.profiles[profile]
+    else throw ReferenceError(`Profile not found: ${profile}`)
+  }
+
+  return awsConfig
 }
 
 let cache = {}
-async function readConfig (file) {
+/* istanbul ignore next */
+async function readFile (file) {
   if (cache[file]) return cache[file]
   if (!(await exists(file))) return
 
   let { readFile } = require('node:fs/promises')
+  cache[file] = await readFile(file)
+  return cache[file]
+}
+async function readIni (file) {
+  if (cache[file]) return cache[file]
+  if (!(await exists(file))) return
+
   let data = await readFile(file)
+  /* istanbul ignore next */
+  if (!data) return
   cache[file] = parseAwsIni(data.toString())
   return cache[file]
 }
 
+function getHomedir () {
+  let os = require('node:os')
+  return os.homedir()
+}
+
 // mhart's fairly strict INI parser – only deals with alpha keys, data must be within sections
 // Adapted from: https://github.com/mhart/awscred
-// Added inline and whole line comment support
+// Added support for inline + whole line comments
+let iniRegex = /^\[([^\]]+)\]\s*(?:#.*)?$|^([a-z_]+)\s*=\s*(.+?)\s*(?:#.*)?$/
 function parseAwsIni (ini) {
   let section
   let out = Object.create(null)
-  let re = /^\[([^\]]+)\]\s*(?:#.*)?$|^([a-z_]+)\s*=\s*(.+?)\s*(?:#.*)?$/
   let lines = ini.split(/\r?\n/)
 
   /* istanbul ignore next */
   lines.forEach(line => {
-    let match = line.match(re)
+    let match = line.match(iniRegex)
     if (!match) return
     if (match[1]) {
       section = match[1]
@@ -281,8 +335,9 @@ module.exports = {
   copy,
   exists,
   getEndpointParams,
+  getHomedir,
   loadAwsConfig,
-  readConfig,
+  readIni,
   tidyQuery,
   useAWS,
   buildXML,

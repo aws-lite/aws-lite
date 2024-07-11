@@ -5,7 +5,7 @@ let cwd = process.cwd()
 let mock = join(cwd, 'test', 'mock')
 let awsIniMock = join(mock, '.aws')
 
-let readConfig, useAWS, tidyQuery
+let readIni, useAWS, tidyQuery
 function reset () {
   delete process.env.ARC_ENV
   delete process.env.ARC_LOCAL
@@ -17,19 +17,19 @@ test('Set up env', async t => {
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'lib', 'index.js')
   let lib = await import(sut)
-  readConfig = lib.readConfig
+  readIni = lib.readIni
   useAWS = lib.useAWS
   tidyQuery = lib.tidyQuery
-  t.ok(readConfig, 'readConfig util is present')
+  t.ok(readIni, 'readIni util is present')
   t.ok(useAWS, 'useAWS util is present')
   t.ok(tidyQuery, 'tidyQuery util is present')
 })
 
-test('readConfig', async t => {
+test('readIni', async t => {
   t.plan(17)
   let config
 
-  config = await readConfig(join(awsIniMock, 'credentials'))
+  config = await readIni(join(awsIniMock, 'credentials'))
   // Default
   t.equal(config.default.aws_access_key_id, 'default_aws_access_key_id', 'Loaded default access key')
   t.equal(config.default.aws_secret_access_key, 'default_aws_secret_access_key', 'Loaded default secret key')
@@ -40,7 +40,7 @@ test('readConfig', async t => {
   // Profile 2
   t.equal(config.profile_2.credential_process, `node -e "console.log(JSON.stringify({ AccessKeyId: 'profile_2_aws_access_key_id', SecretAccessKey: 'profile_2_aws_secret_access_key' }))"`, 'Loaded profile_2 credential process string')
 
-  config = await readConfig(join(awsIniMock, 'config'))
+  config = await readIni(join(awsIniMock, 'config'))
   // Default
   t.equal(config.default.region, 'us-west-1', 'Loaded default region config')
   t.equal(config.default.endpoint_url, 'https://amazonaws.com', 'Loaded default endpoint config')
@@ -50,7 +50,7 @@ test('readConfig', async t => {
   // Profile 2
   t.equal(config['profile profile_2'].region, 'us-east-1', 'Loaded profile 2 region config')
 
-  config = await readConfig(join(awsIniMock, 'credentials-comments'))
+  config = await readIni(join(awsIniMock, 'credentials-comments'))
   // Default
   t.equal(config.default.aws_access_key_id, 'default_aws_access_key_id', 'Loaded default access key with inline comments')
   t.equal(config.default.aws_secret_access_key, 'default_aws_secret_access_key', 'Loaded default secret key')

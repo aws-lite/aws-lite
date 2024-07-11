@@ -27,26 +27,26 @@ test('Get credentials from passed params', async t => {
   let passed, result
 
   // Key + secret only
-  passed = { accessKeyId: ok, secretAccessKey: ok }
+  passed = { config: { accessKeyId: ok, secretAccessKey: ok } }
   result = await getCreds(passed)
-  t.deepEqual(result, { ...passed, sessionToken: undefined }, 'Returned correct credentials from passed params')
+  t.deepEqual(result, passed.config, 'Returned correct credentials from passed params')
 
   // Key + secret + sessionToken
-  passed = { accessKeyId: ok, secretAccessKey: ok, sessionToken: ok }
+  passed = { config: { accessKeyId: ok, secretAccessKey: ok, sessionToken: ok } }
   result = await getCreds(passed)
-  t.deepEqual(result, passed, 'Returned correct credentials from passed params')
+  t.deepEqual(result, passed.config, 'Returned correct credentials from passed params')
 
   // Prioritize passed params before env or creds file
   process.env.AWS_ACCESS_KEY_ID = nope
   process.env.AWS_SECRET_ACCESS_KEY = nope
   process.env.AWS_SESSION_TOKEN = nope
   result = await getCreds(passed)
-  t.deepEqual(result, passed, 'Returned correct credentials from passed params')
+  t.deepEqual(result, passed.config, 'Returned correct credentials from passed params')
   resetAWSEnvVars()
 
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
   result = await getCreds(passed)
-  t.deepEqual(result, passed, 'Returned correct credentials from passed params')
+  t.deepEqual(result, passed.config, 'Returned correct credentials from passed params')
   resetAWSEnvVars()
 })
 
@@ -60,18 +60,18 @@ test('Get credentials from env vars', async t => {
 
   // Key + secret only
   passed = { accessKeyId: ok, secretAccessKey: ok }
-  result = await getCreds({})
+  result = await getCreds({ config: {} })
   t.deepEqual(result, { ...passed, sessionToken: undefined }, 'Returned correct credentials from env vars')
 
   // Key + secret + sessionToken
   process.env.AWS_SESSION_TOKEN = ok
   passed = { accessKeyId: ok, secretAccessKey: ok, sessionToken: ok }
-  result = await getCreds({})
+  result = await getCreds({ config: {} })
   t.deepEqual(result, passed, 'Returned correct credentials from env vars')
 
   // Prioritize passed params before creds file
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
-  result = await getCreds({})
+  result = await getCreds({ config: {} })
   t.deepEqual(result, passed, 'Returned correct credentials from env vars')
   resetAWSEnvVars()
 })
@@ -103,25 +103,25 @@ test('Get credentials from credentials file', async t => {
   let credsFile = join('.aws', 'credentials')
   let homedir = mockTmp({ [credsFile]: readFileSync(credentialsMock) })
   overrideHomedir(homedir)
-  result = await getCreds({ profile })
+  result = await getCreds({ config: { profile } })
   t.deepEqual(result, defaultProfile, 'Returned correct credentials from credentials file (~/.aws file location)')
   mockTmp.reset()
   resetAWSEnvVars()
 
   // Configured file locations
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
-  result = await getCreds({ profile })
+  result = await getCreds({ config: { profile } })
   t.deepEqual(result, defaultProfile, 'Returned correct credentials from credentials file (default profile)')
   resetAWSEnvVars()
 
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
-  result = await getCreds({ profile: profile1 })
+  result = await getCreds({ config: { profile: profile1 } })
   t.deepEqual(result, nonDefaultProfile, 'Returned correct credentials from credentials file (!default profile)')
   resetAWSEnvVars()
 
   // Credentials from a process
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
-  result = await getCreds({ profile: processProfile })
+  result = await getCreds({ config: { profile: processProfile } })
   t.deepEqual(result, processProfileCreds, 'Returned correct credentials from credentials file (credentials process)')
   resetAWSEnvVars()
 
@@ -129,10 +129,10 @@ test('Get credentials from credentials file', async t => {
   process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
   process.env.AWS_LAMBDA_FUNCTION_NAME = 'true'
   try {
-    await getCreds({ profile })
+    await getCreds({ config: { profile } })
   }
   catch (err) {
-    t.match(err.message, /You must supply AWS credentials via/, 'Did not look for credentials file on disk in Lambda')
+    t.match(err.message, /Unable to find AWS credentials/, 'Did not look for credentials file on disk in Lambda')
   }
   resetAWSEnvVars()
 })
@@ -142,35 +142,35 @@ test('Validate credentials', async t => {
   resetAWSEnvVars()
 
   try {
-    await getCreds({ accessKeyId: num })
+    await getCreds({ config: { accessKeyId: num } })
   }
   catch (err) {
     t.match(err.message, /Access key must be a string/, 'Threw on invalid access key')
   }
 
   try {
-    await getCreds({ secretAccessKey: num })
+    await getCreds({ config: { secretAccessKey: num } })
   }
   catch (err) {
     t.match(err.message, /Secret access key must be a string/, 'Threw on invalid secret key')
   }
 
   try {
-    await getCreds({ sessionToken: num })
+    await getCreds({ config: { sessionToken: num } })
   }
   catch (err) {
     t.match(err.message, /Session token must be a string/, 'Threw on invalid session token')
   }
 
   try {
-    await getCreds({ accessKeyId: ok })
+    await getCreds({ config: { accessKeyId: ok } })
   }
   catch (err) {
     t.match(err.message, /You must supply both an access key ID & secret access key/, 'Threw on invalid credentials combo')
   }
 
   try {
-    await getCreds({ secretAccessKey: ok })
+    await getCreds({ config: { secretAccessKey: ok } })
   }
   catch (err) {
     t.match(err.message, /You must supply both an access key ID & secret access key/, 'Threw on invalid credentials combo')
@@ -178,16 +178,16 @@ test('Validate credentials', async t => {
 
   try {
     process.env.AWS_SHARED_CREDENTIALS_FILE = 'meh' // jic dev has actual creds file
-    await getCreds({ sessionToken: ok })
+    await getCreds({ config: { sessionToken: ok } })
   }
   catch (err) {
-    t.match(err.message, /You must supply AWS credentials via/, 'Threw on invalid credentials combo')
+    t.match(err.message, /Unable to find AWS credentials/, 'Threw on invalid credentials combo')
   }
 
   try {
     process.env.AWS_SHARED_CREDENTIALS_FILE = credentialsMock
     process.env.AWS_PROFILE = 'idk'
-    await getCreds({})
+    await getCreds({ config: {} })
   }
   catch (err) {
     t.match(err.message, /Profile not found/, 'Threw on missing profile')
@@ -196,10 +196,10 @@ test('Validate credentials', async t => {
 
   try {
     process.env.AWS_SHARED_CREDENTIALS_FILE = 'meh' // jic dev has actual creds file
-    await getCreds({})
+    await getCreds({ config: {} })
   }
   catch (err) {
-    t.match(err.message, /You must supply AWS credentials via params, environment variables, or credentials file/, 'Threw on no available credentials')
+    t.match(err.message, /Unable to find AWS credentials/, 'Threw on no available credentials')
   }
   resetAWSEnvVars()
 })

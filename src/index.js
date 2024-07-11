@@ -33,11 +33,16 @@ async function awsLite (config = {}) {
   config.profile = config.profile || process.env.AWS_PROFILE || 'default'
   config.debug = config.debug || process.env.AWS_LITE_DEBUG
   config.plugins = await getPlugins(config)
-  config = { ...config, ...(await getEndpoint(config)) }
+
+  let params = { config, awsConfig: undefined }
+
+  // Endpoint configuration
+  let endpoint = await getEndpoint(params)
+  if (endpoint) config = params.config = { ...config, ...endpoint }
 
   // Creds + region
-  let creds = await getCreds(config)
-  let region = await getRegion(config)
+  let creds = await getCreds(params)
+  let region = await getRegion(params)
 
   return await clientFactory(config, creds, region)
 }

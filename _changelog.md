@@ -2,6 +2,21 @@
 
 ---
 
+## [0.22.0] 2024-07-10
+
+### Added
+
+- Added initial support for acquiring AWS credentials via SSO (AWS IAM Identity Center)
+- Increased support for creds and other various kinds of configuration via AWS config files (`~/.aws/config`)
+
+
+### Changed
+
+- Minor performance improvement: only ever load AWS credentials / config once per client instantiation
+- Minor performance improvement: additional read caching of files / data loaded during instantiation
+
+---
+
 ## [0.21.11] 2024-06-28
 
 ### Added
