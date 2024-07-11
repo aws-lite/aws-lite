@@ -127,6 +127,13 @@ async function getCredsFromSSO (params) {
       console.error(`[aws-lite] Loading credentials from AWS SSO at ${ssoFilename}`)
     }
     let ssoData = JSON.parse(await readFile(ssoFilename))
+
+    let expires = new Date(ssoData.expiresAt).getTime()
+    let isExpired = expires - Date.now() <= 0
+    if (isExpired) {
+      throw Error('SSO token is expired, please refresh by running: aws sso login [options]')
+    }
+
     let { accessToken } = ssoData
     if (!accessToken) {
       throw ReferenceError('SSO token file must have `accessToken` property')
@@ -167,6 +174,9 @@ async function getCredsFromSSO (params) {
   }
   catch (err) {
     console.error('Failed to load credentials via AWS IAM Identity Center')
+    if (err?.error?.message) {
+      throw new Error('SSO error: ' + err.error.message)
+    }
     throw err
   }
 }
