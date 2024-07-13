@@ -28,10 +28,12 @@ import {
   DeleteOpenIDConnectProviderCommandOutput as DeleteOpenIDConnectProviderResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
+  DeleteRolePermissionsBoundaryCommandOutput as DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleCommandOutput as DeleteServiceLinkedRoleResponse,
   DeleteSSHPublicKeyCommandOutput as DeleteSSHPublicKeyResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
+  DeleteUserPermissionsBoundaryCommandOutput as DeleteUserPermissionsBoundaryResponse,
   DeleteUserPolicyCommandOutput as DeleteUserPolicyResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
   DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
@@ -73,7 +75,9 @@ import {
   ListUsersCommandOutput as ListUsersResponse,
   ListUserTagsCommandOutput as ListUserTagsResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
+  PutRolePermissionsBoundaryCommandOutput as PutRolePermissionsBoundaryResponse,
   PutRolePolicyCommandOutput as PutRolePolicyResponse,
+  PutUserPermissionsBoundaryCommandOutput as PutUserPermissionsBoundaryResponse,
   PutUserPolicyCommandOutput as PutUserPolicyResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
@@ -261,6 +265,12 @@ declare interface AwsLiteIAM {
   DeleteRole: (input: { RoleName: string }) => Promise<DeleteRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html IAM: DeleteRolePermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePermissionsBoundary IAM: DeleteRolePermissionsBoundary}
+   */
+  DeleteRolePermissionsBoundary: (input: { RoleName: string }) => Promise<DeleteRolePermissionsBoundaryResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePolicy.html IAM: DeleteRolePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePolicy IAM: DeleteRolePolicy}
    */
@@ -283,6 +293,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUser IAM: DeleteUser}
    */
   DeleteUser: (input: { UserName: string }) => Promise<DeleteUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html IAM: DeleteUserPermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPermissionsBoundary IAM: DeleteUserPermissionsBoundary}
+   */
+  DeleteUserPermissionsBoundary: (input: { UserName: string }) => Promise<DeleteUserPermissionsBoundaryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPolicy.html IAM: DeleteUserPolicy}
@@ -515,10 +531,22 @@ declare interface AwsLiteIAM {
   PutGroupPolicy: (input: { GroupName: string, PolicyDocument: string | Record<string, any>, PolicyName: string }) => Promise<PutGroupPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePermissionsBoundary.html IAM: PutRolePermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutRolePermissionsBoundary IAM: PutRolePermissionsBoundary}
+   */
+  PutRolePermissionsBoundary: (input: { PermissionsBoundary: string, RoleName: string }) => Promise<PutRolePermissionsBoundaryResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePolicy.html IAM: PutRolePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutRolePolicy IAM: PutRolePolicy}
    */
   PutRolePolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, RoleName: string }) => Promise<PutRolePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPermissionsBoundary.html IAM: PutUserPermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutUserPermissionsBoundary IAM: PutUserPermissionsBoundary}
+   */
+  PutUserPermissionsBoundary: (input: { PermissionsBoundary: string, UserName: string }) => Promise<PutUserPermissionsBoundaryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPolicy.html IAM: PutUserPolicy}
@@ -685,10 +713,12 @@ export type {
   DeleteOpenIDConnectProviderResponse,
   DeletePolicyResponse,
   DeleteRoleResponse,
+  DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleResponse,
   DeleteSSHPublicKeyResponse,
   DeleteUserResponse,
+  DeleteUserPermissionsBoundaryResponse,
   DeleteUserPolicyResponse,
   DetachGroupPolicyResponse,
   DetachRolePolicyResponse,
@@ -730,7 +760,9 @@ export type {
   ListUsersResponse,
   ListUserTagsResponse,
   PutGroupPolicyResponse,
+  PutRolePermissionsBoundaryResponse,
   PutRolePolicyResponse,
+  PutUserPermissionsBoundaryResponse,
   PutUserPolicyResponse,
   RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileResponse,

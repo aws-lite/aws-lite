@@ -618,6 +618,23 @@ const DeleteRole = {
   response: emptyResponse,
 }
 
+const DeleteRolePermissionsBoundary = {
+  awsDoc: docRoot + 'API_DeleteRolePermissionsBoundary.html',
+  validate: {
+    RoleName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteRolePermissionsBoundary',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const DeleteRolePolicy = {
   awsDoc: docRoot + 'API_DeleteRolePolicy.html',
   validate: {
@@ -680,6 +697,23 @@ const DeleteUser = {
     return {
       query: {
         Action: 'DeleteUser',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteUserPermissionsBoundary = {
+  awsDoc: docRoot + 'API_DeleteUserPermissionsBoundary.html',
+  validate: {
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteUserPermissionsBoundary',
         Version: defaultVersion,
         ...params,
       },
@@ -2012,6 +2046,24 @@ const PutGroupPolicy = {
   response: emptyResponse,
 }
 
+const PutRolePermissionsBoundary = {
+  awsDoc: docRoot + 'API_PutRolePermissionsBoundary.html',
+  validate: {
+    PermissionsBoundary: { ...PermissionsBoundary, required },
+    RoleName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'PutRolePermissionsBoundary',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const PutRolePolicy = {
   awsDoc: docRoot + 'API_PutRolePolicy.html',
   validate: {
@@ -2028,6 +2080,24 @@ const PutRolePolicy = {
     if (typeof query.PolicyDocument !== 'string') query.PolicyDocument = JSON.stringify(query.PolicyDocument)
     return {
       query,
+    }
+  },
+  response: emptyResponse,
+}
+
+const PutUserPermissionsBoundary = {
+  awsDoc: docRoot + 'API_PutUserPermissionsBoundary.html',
+  validate: {
+    PermissionsBoundary: { ...PermissionsBoundary, required },
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'PutUserPermissionsBoundary',
+        Version: defaultVersion,
+        ...params,
+      },
     }
   },
   response: emptyResponse,
@@ -2482,10 +2552,12 @@ export default {
     DeleteOpenIDConnectProvider,
     DeletePolicy,
     DeleteRole,
+    DeleteRolePermissionsBoundary,
     DeleteRolePolicy,
     DeleteServiceLinkedRole,
     DeleteSSHPublicKey,
     DeleteUser,
+    DeleteUserPermissionsBoundary,
     DeleteUserPolicy,
     DetachGroupPolicy,
     DetachRolePolicy,
@@ -2533,7 +2605,9 @@ export default {
     ListUsers,
     ListUserTags,
     PutGroupPolicy,
+    PutRolePermissionsBoundary,
     PutRolePolicy,
+    PutUserPermissionsBoundary,
     PutUserPolicy,
     RemoveUserFromGroup,
     RemoveRoleFromInstanceProfile,
