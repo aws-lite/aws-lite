@@ -43,6 +43,7 @@ const SSHPublicKeyId = { ...str, required, comment: 'ID of the SSH public key' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const CertificateId = { ...str, required, comment: 'ID of the signing certificate' }
 
 
 
@@ -709,6 +710,23 @@ const DeleteServiceSpecificCredential = {
   response: emptyResponse,
 }
 
+const DeleteSigningCertificate = {
+  awsDoc: docRoot + 'API_DeleteSigningCertificate.html',
+  validate: {
+    CertificateId,
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteSigningCertificate',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
 
 const DeleteSSHPublicKey = {
   awsDoc: docRoot + 'API_DeleteSSHPublicKey.html',
@@ -1951,6 +1969,39 @@ const ListServiceSpecificCredentials = {
   },
 }
 
+const ListSigningCertificates = {
+  awsDoc: docRoot + 'API_ListSigningCertificates.html',
+  validate: {
+    Marker,
+    MaxItems,
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    let query = {
+      Action: 'ListSigningCertificates',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListSigningCertificatesResult.Marker',
+        accumulator: 'ListSigningCertificatesResult.Certificates.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Certificates' ])
+    const { ListSigningCertificatesResult } = payload
+    normalizeObjectArrays(ListSigningCertificatesResult, arrayKeys)
+    return ListSigningCertificatesResult
+  },
+}
+
 const ListSSHPublicKeys = {
   awsDoc: docRoot + 'API_ListSSHPublicKeys.html',
   validate: {
@@ -2564,6 +2615,25 @@ const UpdateServiceSpecificCredential = {
   response: emptyResponse,
 }
 
+const UpdateSigningCertificate = {
+  awsDoc: docRoot + 'API_UpdateSigningCertificate.html',
+  validate: {
+    CertificateId,
+    Status: { ...str, required, comment: 'Status to be assigned to the signing certificate; can be one of: `Active`, `Inactive`' },
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UpdateSigningCertificate',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const UpdateSSHPublicKey = {
   awsDoc: docRoot + 'API_UpdateSSHPublicKey.html',
   validate: {
@@ -2599,6 +2669,24 @@ const UpdateUser = {
     return { query }
   },
   response: emptyResponse,
+}
+
+const UploadSigningCertificate = {
+  awsDoc: docRoot + 'API_UploadSigningCertificate.html',
+  validate: {
+    CertificateBody: { ...str, required, comment: 'Contents of the signing certificate', ref: docRoot + 'API_UploadSigningCertificate.html#API_UploadSigningCertificate_RequestParameters' },
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UploadSigningCertificate',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.UploadSigningCertificateResult,
 }
 
 const UploadSSHPublicKey = {
@@ -2656,6 +2744,7 @@ export default {
     DeleteRolePolicy,
     DeleteServiceLinkedRole,
     DeleteServiceSpecificCredential,
+    DeleteSigningCertificate,
     DeleteSSHPublicKey,
     DeleteUser,
     DeleteUserPermissionsBoundary,
@@ -2702,6 +2791,7 @@ export default {
     ListRoles,
     ListRoleTags,
     ListServiceSpecificCredentials,
+    ListSigningCertificates,
     ListSSHPublicKeys,
     ListUserPolicies,
     ListUsers,
@@ -2730,8 +2820,10 @@ export default {
     UpdateRole,
     UpdateRoleDescription,
     UpdateServiceSpecificCredential,
+    UpdateSigningCertificate,
     UpdateSSHPublicKey,
     UpdateUser,
+    UploadSigningCertificate,
     UploadSSHPublicKey,
     ...incomplete,
   },

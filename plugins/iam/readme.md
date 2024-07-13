@@ -401,6 +401,17 @@ Properties:
   - User name
 
 
+### `DeleteSigningCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html)
+
+Properties:
+- **`CertificateId` (string) [required]**
+  - ID of the signing certificate
+- **`UserName` (string)**
+  - User name
+
+
 ### `DeleteSSHPublicKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html)
@@ -907,6 +918,19 @@ Properties:
   - User name
 
 
+### `ListSigningCertificates`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`UserName` (string)**
+  - User name
+
+
 ### `ListSSHPublicKeys`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html)
@@ -1263,6 +1287,19 @@ Properties:
   - User name
 
 
+### `UpdateSigningCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html)
+
+Properties:
+- **`CertificateId` (string) [required]**
+  - ID of the signing certificate
+- **`Status` (string) [required]**
+  - Status to be assigned to the signing certificate; can be one of: `Active`, `Inactive`
+- **`UserName` (string)**
+  - User name
+
+
 ### `UpdateSSHPublicKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html)
@@ -1289,6 +1326,18 @@ Properties:
   - New user name
 
 
+### `UploadSigningCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html)
+
+Properties:
+- **`CertificateBody` (string) [required]**
+  - Contents of the signing certificate
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html#API_UploadSigningCertificate_RequestParameters)
+- **`UserName` (string)**
+  - User name
+
+
 ### `UploadSSHPublicKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html)
@@ -1312,7 +1361,6 @@ Properties:
 - [`DeletePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
 - [`DeleteSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSAMLProvider.html)
 - [`DeleteServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html)
-- [`DeleteSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html)
 - [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
 - [`EnableMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_EnableMFADevice.html)
 - [`GenerateOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html)
@@ -1338,7 +1386,6 @@ Properties:
 - [`ListSAMLProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviderTags.html)
 - [`ListServerCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html)
 - [`ListServerCertificateTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html)
-- [`ListSigningCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html)
 - [`ListVirtualMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html)
 - [`RemoveClientIDFromOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html)
 - [`ResyncMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResyncMFADevice.html)
@@ -1357,9 +1404,7 @@ Properties:
 - [`UpdateOpenIDConnectProviderThumbprint`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
 - [`UpdateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSAMLProvider.html)
 - [`UpdateServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html)
-- [`UpdateSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html)
 - [`UploadServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
-- [`UploadSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html)
 <!-- METHOD_DOCS_END -->
 
 

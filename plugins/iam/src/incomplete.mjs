@@ -8,7 +8,6 @@ export default {
   DeletePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_DeletePolicyVersion.html' },
   DeleteSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_DeleteSAMLProvider.html' },
   DeleteServerCertificate:                   { disabled, awsDoc: docRoot + 'API_DeleteServerCertificate.html' },
-  DeleteSigningCertificate:                  { disabled, awsDoc: docRoot + 'API_DeleteSigningCertificate.html' },
   DeleteVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_DeleteVirtualMFADevice.html' },
   EnableMFADevice:                           { disabled, awsDoc: docRoot + 'API_EnableMFADevice.html' },
   GenerateOrganizationsAccessReport:         { disabled, awsDoc: docRoot + 'API_GenerateOrganizationsAccessReport.html' },
@@ -34,7 +33,6 @@ export default {
   ListSAMLProviderTags:                      { disabled, awsDoc: docRoot + 'API_ListSAMLProviderTags.html' },
   ListServerCertificates:                    { disabled, awsDoc: docRoot + 'API_ListServerCertificates.html' },
   ListServerCertificateTags:                 { disabled, awsDoc: docRoot + 'API_ListServerCertificateTags.html' },
-  ListSigningCertificates:                   { disabled, awsDoc: docRoot + 'API_ListSigningCertificates.html' },
   ListVirtualMFADevices:                     { disabled, awsDoc: docRoot + 'API_ListVirtualMFADevices.html' },
   RemoveClientIDFromOpenIDConnectProvider:   { disabled, awsDoc: docRoot + 'API_RemoveClientIDFromOpenIDConnectProvider.html' },
   ResyncMFADevice:                           { disabled, awsDoc: docRoot + 'API_ResyncMFADevice.html' },
@@ -53,7 +51,5 @@ export default {
   UpdateOpenIDConnectProviderThumbprint:     { disabled, awsDoc: docRoot + 'API_UpdateOpenIDConnectProviderThumbprint.html' },
   UpdateSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_UpdateSAMLProvider.html' },
   UpdateServerCertificate:                   { disabled, awsDoc: docRoot + 'API_UpdateServerCertificate.html' },
-  UpdateSigningCertificate:                  { disabled, awsDoc: docRoot + 'API_UpdateSigningCertificate.html' },
   UploadServerCertificate:                   { disabled, awsDoc: docRoot + 'API_UploadServerCertificate.html' },
-  UploadSigningCertificate:                  { disabled, awsDoc: docRoot + 'API_UploadSigningCertificate.html' },
 }

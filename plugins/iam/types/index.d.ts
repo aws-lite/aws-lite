@@ -33,6 +33,7 @@ import {
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleCommandOutput as DeleteServiceLinkedRoleResponse,
   DeleteServiceSpecificCredentialCommandOutput as DeleteServiceSpecificCredentialResponse,
+  DeleteSigningCertificateCommandOutput as DeleteSigningCertificateResponse,
   DeleteSSHPublicKeyCommandOutput as DeleteSSHPublicKeyResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
   DeleteUserPermissionsBoundaryCommandOutput as DeleteUserPermissionsBoundaryResponse,
@@ -73,6 +74,7 @@ import {
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
   ListServiceSpecificCredentialsCommandOutput as ListServiceSpecificCredentialsResponse,
+  ListSigningCertificatesCommandOutput as ListSigningCertificatesResponse,
   ListSSHPublicKeysCommandOutput as ListSSHPublicKeysResponse,
   ListUserPoliciesCommandOutput as ListUserPoliciesResponse,
   ListUsersCommandOutput as ListUsersResponse,
@@ -101,8 +103,10 @@ import {
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
   UpdateServiceSpecificCredentialCommandOutput as UpdateServiceSpecificCredentialResponse,
+  UpdateSigningCertificateCommandOutput as UpdateSigningCertificateResponse,
   UpdateSSHPublicKeyCommandOutput as UpdateSSHPublicKeyResponse,
   UpdateUserCommandOutput as UpdateUserResponse,
+  UploadSigningCertificateCommandOutput as UploadSigningCertificateResponse,
   UploadSSHPublicKeyCommandOutput as UploadSSHPublicKeyResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
@@ -298,6 +302,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceSpecificCredential IAM: DeleteServiceSpecificCredential}
    */
   DeleteServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, UserName: string }) => Promise<DeleteServiceSpecificCredentialResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html IAM: DeleteSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteSigningCertificate IAM: DeleteSigningCertificate}
+   */
+  DeleteSigningCertificate: (input: { CertificateId: string, UserName?: string }) => Promise<DeleteSigningCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html IAM: DeleteSSHPublicKey}
@@ -524,6 +534,12 @@ declare interface AwsLiteIAM {
   ListServiceSpecificCredentials: (input: { ServiceName?: string, UserName?: string }) => Promise<ListServiceSpecificCredentialsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html IAM: ListSigningCertificates}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListSigningCertificates IAM: ListSigningCertificates}
+   */
+  ListSigningCertificates: (input: { Marker?: string, MaxItems?: number, UserName?: string }) => Promise<ListSigningCertificatesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html IAM: ListSSHPublicKeys}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListSSHPublicKeys IAM: ListSSHPublicKeys}
    */
@@ -692,6 +708,12 @@ declare interface AwsLiteIAM {
   UpdateServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, Status: string, UserName?: string }) => Promise<UpdateServiceSpecificCredentialResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html IAM: UpdateSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateSigningCertificate IAM: UpdateSigningCertificate}
+   */
+  UpdateSigningCertificate: (input: { CertificateId: string, Status: string, UserName?: string }) => Promise<UpdateSigningCertificateResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html IAM: UpdateSSHPublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateSSHPublicKey IAM: UpdateSSHPublicKey}
    */
@@ -702,6 +724,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateUser IAM: UpdateUser}
    */
   UpdateUser: (input: { UserName: string, NewPath?: string, NewUserName?: string }) => Promise<UpdateUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html IAM: UploadSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadSigningCertificate IAM: UploadSigningCertificate}
+   */
+  UploadSigningCertificate: (input: { CertificateBody: string, UserName?: string }) => Promise<UploadSigningCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html IAM: UploadSSHPublicKey}
@@ -753,6 +781,7 @@ export type {
   DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleResponse,
   DeleteServiceSpecificCredentialResponse,
+  DeleteSigningCertificateResponse,
   DeleteSSHPublicKeyResponse,
   DeleteUserResponse,
   DeleteUserPermissionsBoundaryResponse,
@@ -793,6 +822,7 @@ export type {
   ListRolesResponse,
   ListRoleTagsResponse,
   ListServiceSpecificCredentialsResponse,
+  ListSigningCertificatesResponse,
   ListSSHPublicKeysResponse,
   ListUserPoliciesResponse,
   ListUsersResponse,
@@ -821,8 +851,10 @@ export type {
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
   UpdateServiceSpecificCredentialResponse,
+  UpdateSigningCertificateResponse,
   UpdateSSHPublicKeyResponse,
   UpdateUserResponse,
+  UploadSigningCertificateResponse,
   UploadSSHPublicKeyResponse,
   // $EXPORT_END
 }
