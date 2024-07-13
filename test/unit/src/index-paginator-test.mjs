@@ -11,6 +11,8 @@ let p = path => process.platform.startsWith('win') ? 'file://' + path : path
 
 const { config, service } = defaults
 const jsonHeaders = { 'content-type': 'application/json' }
+const xmlHeaders = { 'content-type': 'application/xml' }
+
 
 const simplePaginator = {
   cursor: 'Cursor',
@@ -634,6 +636,216 @@ test('Default paginator - plugin', async t => {
   // Correct number of requests
   t.equal(requests.length, pluginResponses.length, 'Client does not send extra request')
   reset()
+})
+
+test('Error handling', async t => {
+  t.plan(11)
+  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
+  let response
+
+  // Response error
+  response = await aws.lambda.ResponseErrorMethod({
+    paginate: 'iterator',
+    paginator: { ...simplePaginator, type: 'query' },
+  })
+  server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
+  try {
+    await response.next()
+    t.fail('Did not catch response error')
+  }
+  catch {
+    t.pass('Caught response error')
+  }
+  reset()
+
+  // Invalid cursor
+  try {
+    response = await aws.lambda.PaginatedMethod({
+      paginate: true,
+      paginator: {
+        ...simplePaginator,
+        cursor: undefined,
+        type: 'query',
+      },
+    })
+    t.fail('Did not catch invalid cursor')
+  }
+  catch {
+    t.pass('Caught invalid cursor')
+  }
+  reset()
+
+  // Invalid token
+  try {
+    response = await aws.lambda.PaginatedMethod({
+      paginate: true,
+      paginator: {
+        ...simplePaginator,
+        token: undefined,
+        type: 'query',
+      },
+    })
+    t.fail('Did not catch invalid token')
+  }
+  catch {
+    t.pass('Caught invalid token')
+  }
+  reset()
+
+  // Mismatched token/cursor
+  try {
+    response = await aws.lambda.PaginatedMethod({
+      paginate: true,
+      paginator: {
+        ...simplePaginator,
+        token: 'Token',
+        cursor: [ 'Cursor' ],
+        type: 'query',
+      },
+    })
+    t.fail('Did not catch mismatched token/cursor')
+  }
+  catch {
+    t.pass('Caught mismatched token/cursor')
+  }
+  reset()
+
+  // Invalid accumulator
+  try {
+    response = await aws.lambda.PaginatedMethod({
+      paginate: true,
+      paginator: {
+        ...simplePaginator,
+        accumulator: undefined,
+        type: 'query',
+      },
+    })
+    t.fail('Did not catch invalid accumulator')
+  }
+  catch {
+    t.pass('Caught invalid accumulator')
+  }
+  reset()
+
+  // Invalid type
+  try {
+    response = await aws.lambda.PaginatedMethod({
+      paginate: true,
+      paginator: {
+        ...simplePaginator,
+        type: 'bananarama',
+      },
+    })
+    t.fail('Did not catch invalid type')
+  }
+  catch {
+    t.pass('Caught invalid type')
+  }
+  reset()
+
+  // Mismatched token/cursor array lengths
+  try {
+    response = await aws.lambda.PaginatedMethod({
+      paginate: true,
+      paginator: {
+        ...simplePaginator,
+        token: [ 'Token', 'spooooooon' ],
+        cursor: [ 'Cursor' ],
+        type: 'query',
+      },
+    })
+    t.fail('Did not catch mismatched token/cursor')
+  }
+  catch {
+    t.pass('Caught mismatched token/cursor')
+  }
+  reset()
+
+  // Missing API response
+  response = await aws.lambda.PaginatedMethod({
+    paginate: 'iterator',
+    paginator: { ...simplePaginator, type: 'query' },
+  })
+  server.use({ responseHeaders: jsonHeaders })
+  try {
+    await response.next()
+    t.fail('Did not catch missing API response')
+  }
+  catch {
+    t.pass('Caught missing API response')
+  }
+  reset()
+
+  // Invalid response payload
+  response = await aws.lambda.PaginatedMethod({
+    paginate: 'iterator',
+    paginator: { ...simplePaginator, type: 'query' },
+  })
+  server.use({ responseBody: 72, responseHeaders: jsonHeaders })
+  try {
+    await response.next()
+    t.fail('Did not catch invalid response payload')
+  }
+  catch {
+    t.pass('Caught invalid response payload')
+  }
+  reset()
+
+  // Missing API response
+  try {
+    server.use({ responseHeaders: jsonHeaders })
+    response = await aws.lambda.PaginatedMethod({
+      paginate: true,
+      paginator: { ...simplePaginator, type: 'query' },
+    })
+    t.fail('Did not catch missing API response')
+  }
+  catch {
+    t.pass('Caught missing API response')
+  }
+  reset()
+
+  // Invalid response payload
+  try {
+    server.use({ responseBody: 72, responseHeaders: jsonHeaders })
+    response = await aws.lambda.PaginatedMethod({
+      paginate: true,
+      paginator: { ...simplePaginator, type: 'query' },
+    })
+    t.fail('Did not catch invalid response payload')
+  }
+  catch {
+    t.pass('Caught invalid response payload')
+  }
+  reset()
+})
+
+test('Misc', async t => {
+  // t.plan(0)
+  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
+  let response
+
+  const responses = [
+    {
+      responseBody: `<result><Accumulator>a1</Accumulator><Token>t1</Token></result>`,
+      responseHeaders: xmlHeaders,
+    },
+    {
+      responseBody: `<result><Token>t2</Token></result>`,
+      responseHeaders: xmlHeaders,
+    },
+    {
+      responseBody: `<result><Accumulator>a1</Accumulator></result>`,
+      responseHeaders: xmlHeaders,
+    },
+  ]
+
+  server.use({ responseIterator: responses.entries() })
+  response = await aws.lambda.PaginatedMethod({
+    paginate: true,
+    paginator: { ...simplePaginator, type: 'query' },
+  })
+  t.equal(response.Accumulator.length, 1, 'Terminate accumulation when accumulator is falsy')
 })
 
 test('Tear down env', async t => {

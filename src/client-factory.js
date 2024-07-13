@@ -31,7 +31,6 @@ module.exports = async function clientFactory (config, creds, region) {
 
       let response = await request(params, creds, selectedRegion, config, metadata)
 
-      /* istanbul ignore next */
       return isIterator
         ? iteratorHandler({ config, iterator: response, metadata, region })
         : response
@@ -150,7 +149,6 @@ module.exports = async function clientFactory (config, creds, region) {
               // Run plugin.method.response()
               if (method.response) {
 
-                /* istanbul ignore next: TODO remove + test */
                 if (isIterator) {
                   return iteratorHandler({
                     config,
@@ -274,7 +272,6 @@ async function getMock (property, name, params, metadata) {
   }
 }
 
-/* istanbul ignore next: TODO remove + test */
 async function* iteratorHandler (params) {
   const { config, iterator, metadata, method, pluginUtils, region } = params
   let response
@@ -295,7 +292,6 @@ async function* iteratorHandler (params) {
   }
 }
 
-/* istanbul ignore next: TODO remove + test */
 function maybeUnmarshall (pluginRes, config) {
   let response
   if (pluginRes !== undefined) {
