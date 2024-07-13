@@ -17,6 +17,7 @@ import {
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
+  CreateServiceSpecificCredentialCommandOutput as CreateServiceSpecificCredentialResponse,
   CreateUserCommandOutput as CreateUserResponse,
   DeleteAccessKeyCommandOutput as DeleteAccessKeyResponse,
   DeleteAccountAliasCommandOutput as DeleteAccountAliasResponse,
@@ -31,6 +32,7 @@ import {
   DeleteRolePermissionsBoundaryCommandOutput as DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleCommandOutput as DeleteServiceLinkedRoleResponse,
+  DeleteServiceSpecificCredentialCommandOutput as DeleteServiceSpecificCredentialResponse,
   DeleteSSHPublicKeyCommandOutput as DeleteSSHPublicKeyResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
   DeleteUserPermissionsBoundaryCommandOutput as DeleteUserPermissionsBoundaryResponse,
@@ -70,6 +72,7 @@ import {
   ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
+  ListServiceSpecificCredentialsCommandOutput as ListServiceSpecificCredentialsResponse,
   ListSSHPublicKeysCommandOutput as ListSSHPublicKeysResponse,
   ListUserPoliciesCommandOutput as ListUserPoliciesResponse,
   ListUsersCommandOutput as ListUsersResponse,
@@ -79,8 +82,9 @@ import {
   PutRolePolicyCommandOutput as PutRolePolicyResponse,
   PutUserPermissionsBoundaryCommandOutput as PutUserPermissionsBoundaryResponse,
   PutUserPolicyCommandOutput as PutUserPolicyResponse,
-  RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
+  RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
+  ResetServiceSpecificCredentialCommandOutput as ResetServiceSpecificCredentialResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
   TagPolicyCommandOutput as TagPolicyResponse,
   TagRoleCommandOutput as TagRoleResponse,
@@ -96,6 +100,7 @@ import {
   UpdateLoginProfileCommandOutput as UpdateLoginProfileResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
+  UpdateServiceSpecificCredentialCommandOutput as UpdateServiceSpecificCredentialResponse,
   UpdateSSHPublicKeyCommandOutput as UpdateSSHPublicKeyResponse,
   UpdateUserCommandOutput as UpdateUserResponse,
   UploadSSHPublicKeyCommandOutput as UploadSSHPublicKeyResponse,
@@ -203,6 +208,12 @@ declare interface AwsLiteIAM {
   CreateServiceLinkedRole: (input: { AWSServiceName: string, CustomSuffix?: string, Description?: string }) => Promise<CreateServiceLinkedRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html IAM: CreateServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateServiceSpecificCredential IAM: CreateServiceSpecificCredential}
+   */
+  CreateServiceSpecificCredential: (input: { ServiceName: string, UserName: string }) => Promise<CreateServiceSpecificCredentialResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html IAM: CreateUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateUser IAM: CreateUser}
    */
@@ -281,6 +292,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceLinkedRole IAM: DeleteServiceLinkedRole}
    */
   DeleteServiceLinkedRole: (input: { RoleName: string }) => Promise<DeleteServiceLinkedRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceSpecificCredential.html IAM: DeleteServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceSpecificCredential IAM: DeleteServiceSpecificCredential}
+   */
+  DeleteServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, UserName: string }) => Promise<DeleteServiceSpecificCredentialResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html IAM: DeleteSSHPublicKey}
@@ -501,6 +518,12 @@ declare interface AwsLiteIAM {
   ListRoleTags: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRoleTagsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html IAM: ListServiceSpecificCredentials}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServiceSpecificCredentials IAM: ListServiceSpecificCredentials}
+   */
+  ListServiceSpecificCredentials: (input: { ServiceName?: string, UserName?: string }) => Promise<ListServiceSpecificCredentialsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html IAM: ListSSHPublicKeys}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListSSHPublicKeys IAM: ListSSHPublicKeys}
    */
@@ -555,16 +578,22 @@ declare interface AwsLiteIAM {
   PutUserPolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, UserName: string }) => Promise<PutUserPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html IAM: RemoveRoleFromInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveRoleFromInstanceProfile IAM: RemoveRoleFromInstanceProfile}
+   */
+  RemoveRoleFromInstanceProfile: (input: { InstanceProfileName: string, RoleName: string }) => Promise<RemoveRoleFromInstanceProfileResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html IAM: RemoveUserFromGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveUserFromGroup IAM: RemoveUserFromGroup}
    */
   RemoveUserFromGroup: (input: { GroupName: string, UserName: string }) => Promise<RemoveUserFromGroupResponse>
   /**
    * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html IAM: RemoveRoleFromInstanceProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveRoleFromInstanceProfile IAM: RemoveRoleFromInstanceProfile}
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResetServiceSpecificCredential.html IAM: ResetServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ResetServiceSpecificCredential IAM: ResetServiceSpecificCredential}
    */
-  RemoveRoleFromInstanceProfile: (input: { InstanceProfileName: string, RoleName: string }) => Promise<RemoveRoleFromInstanceProfileResponse>
+  ResetServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, UserName?: string }) => Promise<ResetServiceSpecificCredentialResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html IAM: TagInstanceProfile}
@@ -657,6 +686,12 @@ declare interface AwsLiteIAM {
   UpdateRoleDescription: (input: { RoleName: string, Description?: string }) => Promise<UpdateRoleDescriptionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html IAM: UpdateServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateServiceSpecificCredential IAM: UpdateServiceSpecificCredential}
+   */
+  UpdateServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, Status: string, UserName?: string }) => Promise<UpdateServiceSpecificCredentialResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html IAM: UpdateSSHPublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateSSHPublicKey IAM: UpdateSSHPublicKey}
    */
@@ -702,6 +737,7 @@ export type {
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateServiceLinkedRoleResponse,
+  CreateServiceSpecificCredentialResponse,
   CreateUserResponse,
   DeleteAccessKeyResponse,
   DeleteAccountAliasResponse,
@@ -716,6 +752,7 @@ export type {
   DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyResponse,
   DeleteServiceLinkedRoleResponse,
+  DeleteServiceSpecificCredentialResponse,
   DeleteSSHPublicKeyResponse,
   DeleteUserResponse,
   DeleteUserPermissionsBoundaryResponse,
@@ -755,6 +792,7 @@ export type {
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
+  ListServiceSpecificCredentialsResponse,
   ListSSHPublicKeysResponse,
   ListUserPoliciesResponse,
   ListUsersResponse,
@@ -764,8 +802,9 @@ export type {
   PutRolePolicyResponse,
   PutUserPermissionsBoundaryResponse,
   PutUserPolicyResponse,
-  RemoveUserFromGroupResponse,
   RemoveRoleFromInstanceProfileResponse,
+  RemoveUserFromGroupResponse,
+  ResetServiceSpecificCredentialResponse,
   TagInstanceProfileResponse,
   TagPolicyResponse,
   TagRoleResponse,
@@ -781,6 +820,7 @@ export type {
   UpdateLoginProfileResponse,
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
+  UpdateServiceSpecificCredentialResponse,
   UpdateSSHPublicKeyResponse,
   UpdateUserResponse,
   UploadSSHPublicKeyResponse,

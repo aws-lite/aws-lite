@@ -37,10 +37,13 @@ const PolicyInputList = { ...arr, comment: 'Array of policies to get context key
 const PolicyName = { ...str, required, comment: 'Name of the policy' }
 const PolicySourceArn = { ...str, required, comment: 'ARN of the user, group or role for which the resources context keys will be listed', ref: docRoot +  'API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters' }
 const RoleName = { ...str, required, comment: 'Name of the role' }
+const ServiceName = { ...str, required, comment: 'Name of the AWS service' }
+const ServiceSpecificCredentialId = { ...str, required, comment: 'ID of the service specific credential' }
 const SSHPublicKeyId = { ...str, required, comment: 'ID of the SSH public key' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+
 
 
 const paginator = { type: 'query', cursor: 'Marker' }
@@ -416,6 +419,24 @@ const CreateServiceLinkedRole = {
   response: ({ payload }) => payload.CreateServiceLinkedRoleResult,
 }
 
+const CreateServiceSpecificCredential = {
+  awsDoc: docRoot + 'API_CreateServiceSpecificCredential.html',
+  validate: {
+    ServiceName,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'CreateServiceSpecificCredential',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.CreateServiceSpecificCredentialResult,
+}
+
 const CreateUser = {
   awsDoc: docRoot + 'API_CreateUser.html',
   validate: {
@@ -669,6 +690,25 @@ const DeleteServiceLinkedRole = {
   },
   response: ({ payload }) => payload.DeleteServiceLinkedRoleResult,
 }
+
+const DeleteServiceSpecificCredential = {
+  awsDoc: docRoot + 'API_DeleteServiceSpecificCredential.html',
+  validate: {
+    ServiceSpecificCredentialId: { ...str, required, comment: 'ID of the service specific credential' },
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteServiceSpecificCredential',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 
 const DeleteSSHPublicKey = {
   awsDoc: docRoot + 'API_DeleteSSHPublicKey.html',
@@ -1888,6 +1928,29 @@ const ListRoleTags = {
   },
 }
 
+const ListServiceSpecificCredentials = {
+  awsDoc: docRoot + 'API_ListServiceSpecificCredentials.html',
+  validate: {
+    ServiceName: { ...str, comment: 'Filter results to a specific service' },
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'ListServiceSpecificCredentials',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'ServiceSpecificCredentials' ])
+    const { ListServiceSpecificCredentialsResult } = payload
+    normalizeObjectArrays(ListServiceSpecificCredentialsResult, arrayKeys)
+    return ListServiceSpecificCredentialsResult
+  },
+}
+
 const ListSSHPublicKeys = {
   awsDoc: docRoot + 'API_ListSSHPublicKeys.html',
   validate: {
@@ -2158,6 +2221,24 @@ const RemoveUserFromGroup = {
     }
   },
   response: emptyResponse,
+}
+
+const ResetServiceSpecificCredential = {
+  awsDoc: docRoot + 'API_ResetServiceSpecificCredential.html',
+  validate: {
+    ServiceSpecificCredentialId,
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'ResetServiceSpecificCredential',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.ResetServiceSpecificCredentialResult,
 }
 
 const TagInstanceProfile = {
@@ -2441,6 +2522,48 @@ const UpdateRole = {
   response: emptyResponse,
 }
 
+const UpdateRoleDescription = {
+  awsDoc: docRoot + 'API_UpdateRoleDescription.html',
+  validate: {
+    RoleName,
+    Description,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UpdateRoleDescription',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    let { UpdateRoleDescriptionResult } = payload
+    normalizeObjectArrays(UpdateRoleDescriptionResult, arrayKeys)
+    return UpdateRoleDescriptionResult
+  },
+}
+
+const UpdateServiceSpecificCredential = {
+  awsDoc: docRoot + 'API_UpdateServiceSpecificCredential.html',
+  validate: {
+    ServiceSpecificCredentialId,
+    Status: { ...str, required, comment: 'Status to be assigned to the credential; can be one of: `Active`, `Inactive`' },
+    UserName: { ...UserName, required: false },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UpdateServiceSpecificCredential',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const UpdateSSHPublicKey = {
   awsDoc: docRoot + 'API_UpdateSSHPublicKey.html',
   validate: {
@@ -2478,29 +2601,6 @@ const UpdateUser = {
   response: emptyResponse,
 }
 
-const UpdateRoleDescription = {
-  awsDoc: docRoot + 'API_UpdateRoleDescription.html',
-  validate: {
-    RoleName,
-    Description,
-  },
-  request: params => {
-    return {
-      query: {
-        Action: 'UpdateRoleDescription',
-        Version: defaultVersion,
-        ...params,
-      },
-    }
-  },
-  response: ({ payload }) => {
-    const arrayKeys = new Set([ 'Tags' ])
-    let { UpdateRoleDescriptionResult } = payload
-    normalizeObjectArrays(UpdateRoleDescriptionResult, arrayKeys)
-    return UpdateRoleDescriptionResult
-  },
-}
-
 const UploadSSHPublicKey = {
   awsDoc: docRoot + 'API_UploadSSHPublicKey.html',
   validate: {
@@ -2518,7 +2618,6 @@ const UploadSSHPublicKey = {
   },
   response: ({ payload }) => payload.UploadSSHPublicKeyResult,
 }
-
 export default {
   name: '@aws-lite/iam',
   service,
@@ -2541,6 +2640,7 @@ export default {
     // CreatePolicyVersion,
     CreateRole,
     CreateServiceLinkedRole,
+    CreateServiceSpecificCredential,
     CreateUser,
     DeleteAccessKey,
     DeleteAccountAlias,
@@ -2555,6 +2655,7 @@ export default {
     DeleteRolePermissionsBoundary,
     DeleteRolePolicy,
     DeleteServiceLinkedRole,
+    DeleteServiceSpecificCredential,
     DeleteSSHPublicKey,
     DeleteUser,
     DeleteUserPermissionsBoundary,
@@ -2600,6 +2701,7 @@ export default {
     ListRolePolicies,
     ListRoles,
     ListRoleTags,
+    ListServiceSpecificCredentials,
     ListSSHPublicKeys,
     ListUserPolicies,
     ListUsers,
@@ -2609,8 +2711,9 @@ export default {
     PutRolePolicy,
     PutUserPermissionsBoundary,
     PutUserPolicy,
-    RemoveUserFromGroup,
     RemoveRoleFromInstanceProfile,
+    RemoveUserFromGroup,
+    ResetServiceSpecificCredential,
     TagInstanceProfile,
     TagPolicy,
     TagRole,
@@ -2626,6 +2729,7 @@ export default {
     UpdateLoginProfile,
     UpdateRole,
     UpdateRoleDescription,
+    UpdateServiceSpecificCredential,
     UpdateSSHPublicKey,
     UpdateUser,
     UploadSSHPublicKey,

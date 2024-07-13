@@ -240,6 +240,17 @@ Properties:
   - Description of the resource
 
 
+### `CreateServiceSpecificCredential`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html)
+
+Properties:
+- **`ServiceName` (string) [required]**
+  - Name of the AWS service
+- **`UserName` (string) [required]**
+  - User name
+
+
 ### `CreateUser`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html)
@@ -377,6 +388,17 @@ Properties:
 Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
+
+
+### `DeleteServiceSpecificCredential`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceSpecificCredential.html)
+
+Properties:
+- **`ServiceSpecificCredentialId` (string) [required]**
+  - ID of the service specific credential
+- **`UserName` (string) [required]**
+  - User name
 
 
 ### `DeleteSSHPublicKey`
@@ -874,6 +896,17 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListServiceSpecificCredentials`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html)
+
+Properties:
+- **`ServiceName` (string)**
+  - Filter results to a specific service
+- **`UserName` (string)**
+  - User name
+
+
 ### `ListSSHPublicKeys`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html)
@@ -993,6 +1026,17 @@ Properties:
   - User name
 
 
+### `RemoveRoleFromInstanceProfile`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html)
+
+Properties:
+- **`InstanceProfileName` (string) [required]**
+  - Name of the instance profile
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
 ### `RemoveUserFromGroup`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html)
@@ -1004,15 +1048,15 @@ Properties:
   - User name
 
 
-### `RemoveRoleFromInstanceProfile`
+### `ResetServiceSpecificCredential`
 
-[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html)
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResetServiceSpecificCredential.html)
 
 Properties:
-- **`InstanceProfileName` (string) [required]**
-  - Name of the instance profile
-- **`RoleName` (string) [required]**
-  - Name of the role
+- **`ServiceSpecificCredentialId` (string) [required]**
+  - ID of the service specific credential
+- **`UserName` (string)**
+  - User name
 
 
 ### `TagInstanceProfile`
@@ -1206,6 +1250,19 @@ Properties:
   - Description of the resource
 
 
+### `UpdateServiceSpecificCredential`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html)
+
+Properties:
+- **`ServiceSpecificCredentialId` (string) [required]**
+  - ID of the service specific credential
+- **`Status` (string) [required]**
+  - Status to be assigned to the credential; can be one of: `Active`, `Inactive`
+- **`UserName` (string)**
+  - User name
+
+
 ### `UpdateSSHPublicKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html)
@@ -1250,13 +1307,11 @@ Properties:
 
 - [`CreatePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
 - [`CreateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateSAMLProvider.html)
-- [`CreateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html)
 - [`CreateVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
 - [`DeletePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
 - [`DeleteSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSAMLProvider.html)
 - [`DeleteServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html)
-- [`DeleteServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceSpecificCredential.html)
 - [`DeleteSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html)
 - [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
 - [`EnableMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_EnableMFADevice.html)
@@ -1283,11 +1338,9 @@ Properties:
 - [`ListSAMLProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviderTags.html)
 - [`ListServerCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html)
 - [`ListServerCertificateTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html)
-- [`ListServiceSpecificCredentials`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html)
 - [`ListSigningCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html)
 - [`ListVirtualMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html)
 - [`RemoveClientIDFromOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html)
-- [`ResetServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResetServiceSpecificCredential.html)
 - [`ResyncMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResyncMFADevice.html)
 - [`SetDefaultPolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetDefaultPolicyVersion.html)
 - [`SetSecurityTokenServicePreferences`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html)
@@ -1304,7 +1357,6 @@ Properties:
 - [`UpdateOpenIDConnectProviderThumbprint`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
 - [`UpdateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSAMLProvider.html)
 - [`UpdateServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html)
-- [`UpdateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html)
 - [`UpdateSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html)
 - [`UploadServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
 - [`UploadSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html)
