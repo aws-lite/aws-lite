@@ -20,6 +20,7 @@ const str = { type: 'string' }
 
 const AccessKeyId = { ...str, required, comment: 'ID of the access key' }
 const AWSServiceName = { ...str, required, comment: 'The service principal to which this role is attached; use `CustomSuffix` to prevent duplication errors during multiple requests for the same service' }
+const CertificateId = { ...str, required, comment: 'ID of the signing certificate' }
 const Description = { ...str, comment: 'Description of the resource' }
 const GroupName = { ...str, required, comment: 'Name of the group; names are not distinguished by case' }
 const InstanceProfileName = { ...str, required, comment: 'Name of the instance profile' }
@@ -43,7 +44,7 @@ const SSHPublicKeyId = { ...str, required, comment: 'ID of the SSH public key' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-const CertificateId = { ...str, required, comment: 'ID of the signing certificate' }
+const VersionId = { ...str, required, comment: 'ID of the policy version; typically `v<n>`' }
 
 
 
@@ -615,6 +616,24 @@ const DeletePolicy = {
     return {
       query: {
         Action: 'DeletePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeletePolicyVersion = {
+  awsDoc: docRoot + 'API_DeletePolicyVersion.html',
+  validate: {
+    PolicyArn,
+    VersionId,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeletePolicyVersion',
         Version: defaultVersion,
         ...params,
       },
@@ -1212,6 +1231,24 @@ const GetPolicy = {
     }
     return GetPolicyResult
   },
+}
+
+const GetPolicyVersion = {
+  awsDoc: docRoot + 'API_GetPolicyVersion.html',
+  validate: {
+    PolicyArn,
+    VersionId,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetPolicyVersion',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetPolicyVersionResult,
 }
 
 const GetRole = {
@@ -1844,6 +1881,40 @@ const ListPolicyTags = {
   },
 }
 
+const ListPolicyVersions = {
+  awsDoc: docRoot + 'API_ListPolicyVersions.html',
+  validate: {
+    PolicyArn,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListPolicyVersions',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListPolicyVersionsResult.Marker',
+        accumulator: 'ListPolicyVersionsResult.Versions.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Versions' ])
+    let { ListPolicyVersionsResult } = payload
+    normalizeObjectArrays(ListPolicyVersionsResult, arrayKeys)
+    return ListPolicyVersionsResult
+  },
+}
+
 const ListRolePolicies = {
   awsDoc: docRoot + 'API_ListRolePolicies.html',
   validate: {
@@ -2290,6 +2361,24 @@ const ResetServiceSpecificCredential = {
     }
   },
   response: ({ payload }) => payload.ResetServiceSpecificCredentialResult,
+}
+
+const SetDefaultPolicyVersion = {
+  awsDoc: docRoot + 'API_SetDefaultPolicyVersion.html',
+  validate: {
+    PolicyArn,
+    VersionId,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'SetDefaultPolicyVersion',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
 }
 
 const TagInstanceProfile = {
@@ -2739,6 +2828,7 @@ export default {
     DeleteLoginProfile,
     DeleteOpenIDConnectProvider,
     DeletePolicy,
+    DeletePolicyVersion,
     DeleteRole,
     DeleteRolePermissionsBoundary,
     DeleteRolePolicy,
@@ -2767,6 +2857,7 @@ export default {
     // GetMFADevice,
     // GetOpenIDConnectProvider,
     GetPolicy,
+    GetPolicyVersion,
     GetRole,
     // GetRolePolicy,
     // GetServiceLinkedRoleDeletionStatus,
@@ -2787,6 +2878,7 @@ export default {
     ListInstanceProfileTags,
     ListPolicies,
     ListPolicyTags,
+    ListPolicyVersions,
     ListRolePolicies,
     ListRoles,
     ListRoleTags,
@@ -2804,6 +2896,7 @@ export default {
     RemoveRoleFromInstanceProfile,
     RemoveUserFromGroup,
     ResetServiceSpecificCredential,
+    SetDefaultPolicyVersion,
     TagInstanceProfile,
     TagPolicy,
     TagRole,

@@ -28,6 +28,7 @@ import {
   DeleteLoginProfileCommandOutput as DeleteLoginProfileResponse,
   DeleteOpenIDConnectProviderCommandOutput as DeleteOpenIDConnectProviderResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
+  DeletePolicyVersionCommandOutput as DeletePolicyVersionResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteRolePermissionsBoundaryCommandOutput as DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
@@ -53,6 +54,7 @@ import {
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
+  GetPolicyVersionCommandOutput as GetPolicyVersionResponse,
   GetRoleCommandOutput as GetRoleResponse,
   GetSSHPublicKeyCommandOutput as GetSSHPublicKeyResponse,
   GetUserCommandOutput as GetUserResponse,
@@ -70,6 +72,7 @@ import {
   ListInstanceProfileTagsCommandOutput as ListInstanceProfileTagsResponse,
   ListPoliciesCommandOutput as ListPoliciesResponse,
   ListPolicyTagsCommandOutput as ListPolicyTagsResponse,
+  ListPolicyVersionsCommandOutput as ListPolicyVersionsResponse,
   ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
@@ -87,6 +90,7 @@ import {
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   ResetServiceSpecificCredentialCommandOutput as ResetServiceSpecificCredentialResponse,
+  SetDefaultPolicyVersionCommandOutput as SetDefaultPolicyVersionResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
   TagPolicyCommandOutput as TagPolicyResponse,
   TagRoleCommandOutput as TagRoleResponse,
@@ -274,6 +278,12 @@ declare interface AwsLiteIAM {
   DeletePolicy: (input: { PolicyArn: string }) => Promise<DeletePolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html IAM: DeletePolicyVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeletePolicyVersion IAM: DeletePolicyVersion}
+   */
+  DeletePolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<DeletePolicyVersionResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRole.html IAM: DeleteRole}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRole IAM: DeleteRole}
    */
@@ -408,6 +418,12 @@ declare interface AwsLiteIAM {
   GetPolicy: (input: { PolicyArn: string }) => Promise<GetPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html IAM: GetPolicyVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetPolicyVersion IAM: GetPolicyVersion}
+   */
+  GetPolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<GetPolicyVersionResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html IAM: GetRole}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRole IAM: GetRole}
    */
@@ -510,6 +526,12 @@ declare interface AwsLiteIAM {
   ListPolicyTags: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListPolicyTagsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyVersions.html IAM: ListPolicyVersions}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyVersions IAM: ListPolicyVersions}
+   */
+  ListPolicyVersions: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListPolicyVersionsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html IAM: ListRolePolicies}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRolePolicies IAM: ListRolePolicies}
    */
@@ -610,6 +632,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ResetServiceSpecificCredential IAM: ResetServiceSpecificCredential}
    */
   ResetServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, UserName?: string }) => Promise<ResetServiceSpecificCredentialResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetDefaultPolicyVersion.html IAM: SetDefaultPolicyVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SetDefaultPolicyVersion IAM: SetDefaultPolicyVersion}
+   */
+  SetDefaultPolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<SetDefaultPolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html IAM: TagInstanceProfile}
@@ -776,6 +804,7 @@ export type {
   DeleteLoginProfileResponse,
   DeleteOpenIDConnectProviderResponse,
   DeletePolicyResponse,
+  DeletePolicyVersionResponse,
   DeleteRoleResponse,
   DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyResponse,
@@ -801,6 +830,7 @@ export type {
   GetInstanceProfileResponse,
   GetLoginProfileResponse,
   GetPolicyResponse,
+  GetPolicyVersionResponse,
   GetRoleResponse,
   GetSSHPublicKeyResponse,
   GetUserResponse,
@@ -818,6 +848,7 @@ export type {
   ListInstanceProfileTagsResponse,
   ListPoliciesResponse,
   ListPolicyTagsResponse,
+  ListPolicyVersionsResponse,
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
@@ -835,6 +866,7 @@ export type {
   RemoveRoleFromInstanceProfileResponse,
   RemoveUserFromGroupResponse,
   ResetServiceSpecificCredentialResponse,
+  SetDefaultPolicyVersionResponse,
   TagInstanceProfileResponse,
   TagPolicyResponse,
   TagRoleResponse,

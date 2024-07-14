@@ -5,7 +5,7 @@ export default {
   CreateSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_CreateSAMLProvider.html' },
   CreateVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_CreateVirtualMFADevice.html' },
   DeactivateMFADevice:                       { disabled, awsDoc: docRoot + 'API_DeactivateMFADevice.html' },
-  DeletePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_DeletePolicyVersion.html' },
+  // DeletePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_DeletePolicyVersion.html' },
   DeleteSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_DeleteSAMLProvider.html' },
   DeleteServerCertificate:                   { disabled, awsDoc: docRoot + 'API_DeleteServerCertificate.html' },
   DeleteVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_DeleteVirtualMFADevice.html' },
@@ -16,7 +16,7 @@ export default {
   GetMFADevice:                              { disabled, awsDoc: docRoot + 'API_GetMFADevice.html' }, // TODO: test
   GetOpenIDConnectProvider:                  { disabled, awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html' }, // TODO: test
   GetOrganizationsAccessReport:              { disabled, awsDoc: docRoot + 'API_GetOrganizationsAccessReport.html' },
-  GetPolicyVersion:                          { disabled, awsDoc: docRoot + 'API_GetPolicyVersion.html' },
+  // GetPolicyVersion:                          { disabled, awsDoc: docRoot + 'API_GetPolicyVersion.html' },
   GetRolePolicy:                             { disabled, awsDoc: docRoot + 'API_GetRolePolicy.html' }, // TODO: figure out why response is mangled
   GetSAMLProvider:                           { disabled, awsDoc: docRoot + 'API_GetSAMLProvider.html' },
   GetServerCertificate:                      { disabled, awsDoc: docRoot + 'API_GetServerCertificate.html' },
@@ -28,7 +28,7 @@ export default {
   ListOpenIDConnectProviders:                { disabled, awsDoc: docRoot + 'API_ListOpenIDConnectProviders.html' },
   ListOpenIDConnectProviderTags:             { disabled, awsDoc: docRoot + 'API_ListOpenIDConnectProviderTags.html' },
   ListPoliciesGrantingServiceAccess:         { disabled, awsDoc: docRoot + 'API_ListPoliciesGrantingServiceAccess.html' },
-  ListPolicyVersions:                        { disabled, awsDoc: docRoot + 'API_ListPolicyVersions.html' },
+  // ListPolicyVersions:                        { disabled, awsDoc: docRoot + 'API_ListPolicyVersions.html' },
   ListSAMLProviders:                         { disabled, awsDoc: docRoot + 'API_ListSAMLProviders.html' },
   ListSAMLProviderTags:                      { disabled, awsDoc: docRoot + 'API_ListSAMLProviderTags.html' },
   ListServerCertificates:                    { disabled, awsDoc: docRoot + 'API_ListServerCertificates.html' },
@@ -36,7 +36,7 @@ export default {
   ListVirtualMFADevices:                     { disabled, awsDoc: docRoot + 'API_ListVirtualMFADevices.html' },
   RemoveClientIDFromOpenIDConnectProvider:   { disabled, awsDoc: docRoot + 'API_RemoveClientIDFromOpenIDConnectProvider.html' },
   ResyncMFADevice:                           { disabled, awsDoc: docRoot + 'API_ResyncMFADevice.html' },
-  SetDefaultPolicyVersion:                   { disabled, awsDoc: docRoot + 'API_SetDefaultPolicyVersion.html' },
+  // SetDefaultPolicyVersion:                   { disabled, awsDoc: docRoot + 'API_SetDefaultPolicyVersion.html' },
   SetSecurityTokenServicePreferences:        { disabled, awsDoc: docRoot + 'API_SetSecurityTokenServicePreferences.html' },
   SimulateCustomPolicy:                      { disabled, awsDoc: docRoot + 'API_SimulateCustomPolicy.html' },
   SimulatePrincipalPolicy:                   { disabled, awsDoc: docRoot + 'API_SimulatePrincipalPolicy.html' },
