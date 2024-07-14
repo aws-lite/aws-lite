@@ -887,6 +887,42 @@ const GenerateCredentialReport = {
 
 }
 
+const GenerateOrganizationsAccessReport = {
+  awsDoc: docRoot + 'API_GenerateOrganizationsAccessReport.html',
+  validate: {
+    EntityPath: { ...str, required, comment: 'Path of the AWS Organizations entity', ref: docRoot + 'API_GenerateOrganizationsAccessReport.html#API_GenerateOrganizationsAccessReport_RequestParameters' },
+    OrganizationsPolicyId: { ...str, comment: 'ID of the AWS Organizations service control policy' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GenerateOrganizationsAccessReport',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GenerateOrganizationsAccessReportResult,
+}
+
+const GenerateServiceLastAccessedDetails = {
+  awsDoc: docRoot + 'API_GenerateServiceLastAccessedDetails.html',
+  validate: {
+    Arn: { ...str, required, comment: 'ARN of the IAM resource used to generate the report' },
+    Granularity: { ...str, comment: 'Specify the type of access information; can be one of: `SERVICE_LEVEL` (default), `ACTION_LEVEL`', ref: docRoot + 'API_GenerateServiceLastAccessedDetails.html#API_GenerateServiceLastAccessedDetails_RequestParameters' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GenerateServiceLastAccessedDetails',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GenerateServiceLastAccessedDetailsResult,
+}
+
 const GetAccessKeyLastUsed = {
   awsDoc: docRoot + 'API_GetAccessKeyLastUsed.html',
   validate: {
@@ -1208,6 +1244,41 @@ const GetLoginProfile = {
 //   },
 // }
 
+const GetOrganizationsAccessReport = {
+  awsDoc: docRoot + 'API_GetOrganizationsAccessReport.html',
+  validate: {
+    JobId: { ...str, required, comment: 'ID of the report provided in the `GenerateOrganizationsAccessReport` response' },
+    Marker,
+    MaxItems,
+    SortKey: { ...str, comment: 'Sort results by key', ref: docRoot + 'API_GetOrganizationsAccessReport.html#API_GetOrganizationsAccessReport_RequestParameters' },
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'GetOrganizationsAccessReport',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'GetOrganizationsAccessReportResult.Marker',
+        accumulator: 'GetOrganizationsAccessReportResult.AccessDetails.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'AccessDetails' ])
+    let { GetOrganizationsAccessReportResult } = payload
+    normalizeObjectArrays(GetOrganizationsAccessReportResult, arrayKeys)
+    return GetOrganizationsAccessReportResult
+  },
+}
+
 const GetPolicy = {
   awsDoc: docRoot + 'API_GetPolicy.html',
   validate: {
@@ -1286,6 +1357,75 @@ const GetRole = {
 //   },
 //   response: ({ payload }) => payload.GetRolePolicyResult,
 // }
+
+const GetServiceLastAccessedDetails = {
+  awsDoc: docRoot + 'API_GetServiceLastAccessedDetails.html',
+  validate: {
+    JobId: { ...str, required, comment: 'ID of the report provided in the `GenerateServiceLastAccessedDetails` response' },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'GetServiceLastAccessedDetails',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'GetServiceLastAccessedDetailsResult.Marker',
+        accumulator: 'GetServiceLastAccessedDetailsResult.ServicesLastAccessed.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'ServicesLastAccessed' ])
+    let { GetServiceLastAccessedDetailsResult } = payload
+    normalizeObjectArrays(GetServiceLastAccessedDetailsResult, arrayKeys)
+    return GetServiceLastAccessedDetailsResult
+  },
+}
+
+const GetServiceLastAccessedDetailsWithEntities = {
+  awsDoc: docRoot + 'API_GetServiceLastAccessedDetailsWithEntities.html',
+  validate: {
+    JobId: { ...str, required, comment: 'ID of the report provided in the `GenerateServiceLastAccessedDetails` response' },
+    ServiceNamespace: { ...str, required, comment: 'The service namespace for an AWS service', ref: docRoot + 'API_GetServiceLastAccessedDetailsWithEntities.html#API_GetServiceLastAccessedDetailsWithEntities_RequestParameters' },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'GetServiceLastAccessedDetailsWithEntities',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'GetServiceLastAccessedDetailsWithEntitiesResult.Marker',
+        accumulator: 'GetServiceLastAccessedDetailsWithEntitiesResult.EntityDetailsList.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'EntityDetailsList' ])
+    let { GetServiceLastAccessedDetailsWithEntitiesResult } = payload
+    normalizeObjectArrays(GetServiceLastAccessedDetailsWithEntitiesResult, arrayKeys)
+    return GetServiceLastAccessedDetailsWithEntitiesResult
+  },
+}
 
 // TODO: test
 // const GetServiceLinkedRoleDeletionStatus = {
@@ -2843,6 +2983,8 @@ export default {
     DetachRolePolicy,
     DetachUserPolicy,
     GenerateCredentialReport,
+    GenerateOrganizationsAccessReport,
+    GenerateServiceLastAccessedDetails,
     GetAccessKeyLastUsed,
     GetAccountAuthorizationDetails,
     GetAccountPasswordPolicy,
@@ -2856,10 +2998,13 @@ export default {
     GetLoginProfile,
     // GetMFADevice,
     // GetOpenIDConnectProvider,
+    GetOrganizationsAccessReport,
     GetPolicy,
     GetPolicyVersion,
     GetRole,
     // GetRolePolicy,
+    GetServiceLastAccessedDetails,
+    GetServiceLastAccessedDetailsWithEntities,
     // GetServiceLinkedRoleDeletionStatus,
     GetSSHPublicKey,
     GetUser,

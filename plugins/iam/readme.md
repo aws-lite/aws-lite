@@ -504,6 +504,30 @@ Properties:
 
 
 
+### `GenerateOrganizationsAccessReport`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html)
+
+Properties:
+- **`EntityPath` (string) [required]**
+  - Path of the AWS Organizations entity
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html#API_GenerateOrganizationsAccessReport_RequestParameters)
+- **`OrganizationsPolicyId` (string)**
+  - ID of the AWS Organizations service control policy
+
+
+### `GenerateServiceLastAccessedDetails`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html)
+
+Properties:
+- **`Arn` (string) [required]**
+  - ARN of the IAM resource used to generate the report
+- **`Granularity` (string)**
+  - Specify the type of access information; can be one of: `SERVICE_LEVEL` (default), `ACTION_LEVEL`
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html#API_GenerateServiceLastAccessedDetails_RequestParameters)
+
+
 ### `GetAccessKeyLastUsed`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html)
@@ -607,6 +631,24 @@ Properties:
   - User name
 
 
+### `GetOrganizationsAccessReport`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html)
+
+Properties:
+- **`JobId` (string) [required]**
+  - ID of the report provided in the `GenerateOrganizationsAccessReport` response
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`SortKey` (string)**
+  - Sort results by key
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html#API_GetOrganizationsAccessReport_RequestParameters)
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `GetPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html)
@@ -634,6 +676,39 @@ Properties:
 Properties:
 - **`RoleName` (string) [required]**
   - Name of the role
+
+
+### `GetServiceLastAccessedDetails`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html)
+
+Properties:
+- **`JobId` (string) [required]**
+  - ID of the report provided in the `GenerateServiceLastAccessedDetails` response
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `GetServiceLastAccessedDetailsWithEntities`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html)
+
+Properties:
+- **`JobId` (string) [required]**
+  - ID of the report provided in the `GenerateServiceLastAccessedDetails` response
+- **`ServiceNamespace` (string) [required]**
+  - The service namespace for an AWS service
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html#API_GetServiceLastAccessedDetailsWithEntities_RequestParameters)
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `GetSSHPublicKey`
@@ -1410,17 +1485,12 @@ Properties:
 - [`DeleteServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html)
 - [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
 - [`EnableMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_EnableMFADevice.html)
-- [`GenerateOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html)
-- [`GenerateServiceLastAccessedDetails`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html)
 - [`GetGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
 - [`GetOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html)
-- [`GetOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html)
 - [`GetRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
 - [`GetSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSAMLProvider.html)
 - [`GetServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html)
-- [`GetServiceLastAccessedDetails`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html)
-- [`GetServiceLastAccessedDetailsWithEntities`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html)
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)

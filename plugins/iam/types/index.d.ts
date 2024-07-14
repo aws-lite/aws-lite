@@ -43,6 +43,8 @@ import {
   DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
   DetachUserPolicyCommandOutput as DetachUserPolicyResponse,
   GenerateCredentialReportCommandOutput as GenerateCredentialReportResponse,
+  GenerateOrganizationsAccessReportCommandOutput as GenerateOrganizationsAccessReportResponse,
+  GenerateServiceLastAccessedDetailsCommandOutput as GenerateServiceLastAccessedDetailsResponse,
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
   GetAccountAuthorizationDetailsCommandOutput as GetAccountAuthorizationDetailsResponse,
   GetAccountPasswordPolicyCommandOutput as GetAccountPasswordPolicyResponse,
@@ -53,9 +55,12 @@ import {
   GetGroupCommandOutput as GetGroupResponse,
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
+  GetOrganizationsAccessReportCommandOutput as GetOrganizationsAccessReportResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetPolicyVersionCommandOutput as GetPolicyVersionResponse,
   GetRoleCommandOutput as GetRoleResponse,
+  GetServiceLastAccessedDetailsCommandOutput as GetServiceLastAccessedDetailsResponse,
+  GetServiceLastAccessedDetailsWithEntitiesCommandOutput as GetServiceLastAccessedDetailsWithEntitiesResponse,
   GetSSHPublicKeyCommandOutput as GetSSHPublicKeyResponse,
   GetUserCommandOutput as GetUserResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
@@ -364,6 +369,18 @@ declare interface AwsLiteIAM {
   GenerateCredentialReport: () => Promise<GenerateCredentialReportResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html IAM: GenerateOrganizationsAccessReport}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateOrganizationsAccessReport IAM: GenerateOrganizationsAccessReport}
+   */
+  GenerateOrganizationsAccessReport: (input: { EntityPath: string, OrganizationsPolicyId?: string }) => Promise<GenerateOrganizationsAccessReportResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html IAM: GenerateServiceLastAccessedDetails}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateServiceLastAccessedDetails IAM: GenerateServiceLastAccessedDetails}
+   */
+  GenerateServiceLastAccessedDetails: (input: { Arn: string, Granularity?: string }) => Promise<GenerateServiceLastAccessedDetailsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html IAM: GetAccessKeyLastUsed}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccessKeyLastUsed IAM: GetAccessKeyLastUsed}
    */
@@ -412,6 +429,12 @@ declare interface AwsLiteIAM {
   GetLoginProfile: (input: { UserName: string }) => Promise<GetLoginProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html IAM: GetOrganizationsAccessReport}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetOrganizationsAccessReport IAM: GetOrganizationsAccessReport}
+   */
+  GetOrganizationsAccessReport: (input: { JobId: string, Marker?: string, MaxItems?: number, SortKey?: string, paginate?: boolean }) => Promise<GetOrganizationsAccessReportResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html IAM: GetPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetPolicy IAM: GetPolicy}
    */
@@ -428,6 +451,18 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRole IAM: GetRole}
    */
   GetRole: (input: { RoleName: string }) => Promise<GetRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html IAM: GetServiceLastAccessedDetails}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetails IAM: GetServiceLastAccessedDetails}
+   */
+  GetServiceLastAccessedDetails: (input: { JobId: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetServiceLastAccessedDetailsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html IAM: GetServiceLastAccessedDetailsWithEntities}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetailsWithEntities IAM: GetServiceLastAccessedDetailsWithEntities}
+   */
+  GetServiceLastAccessedDetailsWithEntities: (input: { JobId: string, ServiceNamespace: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetServiceLastAccessedDetailsWithEntitiesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html IAM: GetSSHPublicKey}
@@ -819,6 +854,8 @@ export type {
   DetachRolePolicyResponse,
   DetachUserPolicyResponse,
   GenerateCredentialReportResponse,
+  GenerateOrganizationsAccessReportResponse,
+  GenerateServiceLastAccessedDetailsResponse,
   GetAccessKeyLastUsedResponse,
   GetAccountAuthorizationDetailsResponse,
   GetAccountPasswordPolicyResponse,
@@ -829,9 +866,12 @@ export type {
   GetGroupResponse,
   GetInstanceProfileResponse,
   GetLoginProfileResponse,
+  GetOrganizationsAccessReportResponse,
   GetPolicyResponse,
   GetPolicyVersionResponse,
   GetRoleResponse,
+  GetServiceLastAccessedDetailsResponse,
+  GetServiceLastAccessedDetailsWithEntitiesResponse,
   GetSSHPublicKeyResponse,
   GetUserResponse,
   ListAccessKeysResponse,
