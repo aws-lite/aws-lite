@@ -19,8 +19,11 @@ const num = { type: 'number' }
 const str = { type: 'string' }
 
 const AccessKeyId = { ...str, required, comment: 'ID of the access key' }
+const ActionNames = { ...arr, required, comment: 'Array of between 3 to 128 API operation names' }
 const AWSServiceName = { ...str, required, comment: 'The service principal to which this role is attached; use `CustomSuffix` to prevent duplication errors during multiple requests for the same service' }
+const CallerArn = { ...str, comment: 'ARN of the IAM user to use as the simulated caller of the API operations' }
 const CertificateId = { ...str, required, comment: 'ID of the signing certificate' }
+const ContextEntries = { ...arr, comment: 'Array of context keys and values' }
 const Description = { ...str, comment: 'Description of the resource' }
 const GroupName = { ...str, required, comment: 'Name of the group; names are not distinguished by case' }
 const InstanceProfileName = { ...str, required, comment: 'Name of the instance profile' }
@@ -32,11 +35,16 @@ const OpenIDConnectProviderArn = { ...str, required, comment: 'ARN of the OpenID
 const Path = { ...str, comment: 'Path for the identifier', ref: userGuide + 'reference_identifiers.html' }
 const PathPrefix = { ...str, comment: 'Filter results by path prefix' }
 const PermissionsBoundary = { ...str, comment: `ARN of a managed policy to be used to set the resource's permissions boundary` }
+const PermissionsBoundaryPolicyInputList = { ...arr, comment: 'IAM permissions boundary policy to simulate' }
 const PolicyArn = { ...str, required, comment: 'Arn of the policy' }
 const PolicyDocument = { type: [ 'string', 'object' ], required, comment: 'The policy document; can be an object, or JSON or YAML string' }
 const PolicyInputList = { ...arr, comment: 'Array of policies to get context keys, each item must be a complete policy object' }
 const PolicyName = { ...str, required, comment: 'Name of the policy' }
 const PolicySourceArn = { ...str, required, comment: 'ARN of the user, group or role for which the resources context keys will be listed', ref: docRoot + 'API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters' }
+const ResourceArns = { ...arr, comment: 'Array of AWS resource ARNs; default `*`' }
+const ResourceHandlingOption = { ...str, comment: 'Specify the type of simulation to run' }
+const ResourceOwner = { ...str, comment: 'ARN representing the AWS account ID that owns any simulated resources' }
+const ResourcePolicy = { type: [ 'string', 'object' ], comment: 'A resource based policy' }
 const RoleName = { ...str, required, comment: 'Name of the role' }
 const ServiceName = { ...str, required, comment: 'Name of the AWS service' }
 const ServiceSpecificCredentialId = { ...str, required, comment: 'ID of the service specific credential' }
@@ -45,7 +53,6 @@ const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: u
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionId = { ...str, required, comment: 'ID of the policy version; typically `v<n>`' }
-
 
 
 const paginator = { type: 'query', cursor: 'Marker' }
@@ -2561,17 +2568,17 @@ const SetDefaultPolicyVersion = {
 const SimulateCustomPolicy = {
   awsDoc: docRoot + 'API_SimulateCustomPolicy.html',
   validate: {
-    ActionNames: { ...arr, required, comment: 'Array of between 3 to 128 API operation names' },
+    ActionNames,
     PolicyInputList: { ...arr, required, comment: 'Array of policy document objects' },
-    CallerArn: { ...str, comment: 'ARN of the IAM user to use as the simulated caller of the API operations' },
-    ContextEntries: { ...arr, comment: 'Array of context keys and values' },
+    CallerArn,
+    ContextEntries,
     Marker,
     MaxItems,
-    PermissionsBoundaryPolicyInputList: { ...arr, comment: 'IAM permissions boundary policy to simulate' },
-    ResourceArns: { ...arr, comment: 'Array of AWS resource ARNs; default `*`' },
-    ResourceHandlingOption: { ...str, comment: 'Specify the type of simulation to run' },
-    ResourceOwner: { ...str, comment: 'ARN representing the AWS account ID that owns any simulated resources' },
-    ResourcePolicy: { ...str, comment: 'A resource based policy' },
+    PermissionsBoundaryPolicyInputList,
+    ResourceArns,
+    ResourceHandlingOption,
+    ResourceOwner,
+    ResourcePolicy,
   },
   request: params => {
     const query = {
@@ -2579,41 +2586,105 @@ const SimulateCustomPolicy = {
       Version: defaultVersion,
       ...params,
     }
+
     Object.assign(query, serializeArray(params.ActionNames, 'ActionNames'))
     delete query.ActionNames
 
-    let { PolicyInputList } = params
-    PolicyInputList = serializeArray(PolicyInputList, 'PolicyInputList')
-    Object.entries(PolicyInputList).forEach(([ key, value ]) => {
-      query[key] = JSON.stringify(value)
+    let PolicyInputList = params.PolicyInputList.map(i => {
+      if (typeof i === 'string') return i
+      return JSON.stringify(i)
     })
+    PolicyInputList = serializeArray(PolicyInputList, 'PolicyInputList')
+    Object.assign(query, PolicyInputList)
     delete query.PolicyInputList
 
-    if (params.ContextEntries) {
-      Object.assign(query, serializeArray(params.ContextEntries, 'ContextEntries', true))
+    let { ContextEntries } = params
+    if (ContextEntries) {
+      ContextEntries =  serializeArray(ContextEntries, 'ContextEntries', true)
+      Object.assign(query, ContextEntries)
       delete query.ContextEntries
     }
 
     let { PermissionsBoundaryPolicyInputList } = params
     if (PermissionsBoundaryPolicyInputList) {
-      PermissionsBoundaryPolicyInputList = serializeArray(PermissionsBoundaryPolicyInputList, 'PermissionsBoundaryPolicyInputList')
-      Object.entries(PermissionsBoundaryPolicyInputList).forEach(([ key, value ]) => {
-        query[key] = JSON.stringify(value)
+      PermissionsBoundaryPolicyInputList = PermissionsBoundaryPolicyInputList.map(i => {
+        if (typeof i === 'string') return i
+        return JSON.stringify(i)
       })
+      PermissionsBoundaryPolicyInputList = serializeArray(PermissionsBoundaryPolicyInputList, 'PermissionsBoundaryPolicyInputList')
+      Object.assign(query, PermissionsBoundaryPolicyInputList)
       delete query.PermissionsBoundaryPolicyInputList
     }
 
-    if (params.ResourceArns) {
-      Object.assign(query, serializeArray(params.ResourceArns, 'ResourceArns'))
+    let { ResourceArns } = params
+    if (ResourceArns) {
+      ResourceArns = serializeArray(ResourceArns, 'ResourceArns')
+      Object.assign(query, ResourceArns)
       delete query.ResourceArns
     }
 
+    console.log(query)
     return { query }
   },
   response: ({ payload }) => {
-    return payload
+    const arrayKeys = new Set([ 'EvaluationResults', 'MatchedStatements',
+      'MissingContextValues', 'ResourceSpecificResults',
+      'MatchedStatements', 'MissingContextValues' ])
+    const { SimulateCustomPolicyResult } = payload
+    normalizeObjectArrays(SimulateCustomPolicyResult, arrayKeys)
+    return SimulateCustomPolicyResult
   },
 }
+
+// const SimulatePrincipalPolicy = {
+//   awsDoc: docRoot + 'API_SimulatePrincipalPolicy.html',
+//   validate: {
+//     ActionNames,
+//     PolicySourceArn: { ...str, required, comment: 'ARN of the user, group or role whose policies will be included in the simulation' },
+//     CallerArn,
+//     ContextEntries,
+//     Marker,
+//     MaxItems,
+//     PermissionsBoundaryPolicyInputList,
+//     PolicyInputList: { ...arr, comment: 'Array of policy document objects' },
+//     ResourceArns,
+//     ResourceHandlingOption,
+//     ResourceOwner,
+//     ResourcePolicy,
+//   },
+//   request: params => {
+//     const query = {
+//       Action: 'SimulatePrincipalPolicy',
+//       Version: defaultVersion,
+//       ...params,
+//     }
+//     Object.assign(query, serializeArray(params.ActionNames, 'ActionNames'))
+//     delete query.ActionNames
+//     let { PolicyInputList } = params
+//     PolicyInputList = serializeArray(PolicyInputList, 'PolicyInputList')
+//     Object.entries(PolicyInputList).forEach(([ key, value ]) => {
+//       query[key] = JSON.stringify(value)
+//     })
+//     delete query.PolicyInputList
+//     if (params.ContextEntries) {
+//       Object.assign(query, serializeArray(params.ContextEntries, 'ContextEntries', true))
+//       delete query.ContextEntries
+//     }
+//     let { PermissionsBoundaryPolicyInputList } = params
+//     if (PermissionsBoundaryPolicyInputList) {
+//       PermissionsBoundaryPolicyInputList = serializeArray(PermissionsBoundaryPolicyInputList, 'PermissionsBoundaryPolicyInputList')
+//       Object.entries(PermissionsBoundaryPolicyInputList).forEach(([ key, value ]) => {
+//         query[key] = JSON.stringify(value)
+//       })
+//       delete query.PermissionsBoundaryPolicyInputList
+//     }
+//     if (params.ResourceArns) {
+//       Object.assign(query, serializeArray(params.ResourceArns, 'ResourceArns'))
+//       delete query.ResourceArns
+//     }
+//     return { query }
+//   },
+// }
 
 const TagInstanceProfile = {
   awsDoc: docRoot + 'API_TagInstanceProfile.html',

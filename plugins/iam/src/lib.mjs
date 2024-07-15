@@ -57,5 +57,4 @@ function serializeObject (obj, parentKey = '') {
 export default {
   normalizeObjectArrays,
   serializeArray,
-  serializeObject,
 }

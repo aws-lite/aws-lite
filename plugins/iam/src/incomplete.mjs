@@ -30,7 +30,7 @@ export default {
   ResyncMFADevice:                           { disabled, awsDoc: docRoot + 'API_ResyncMFADevice.html' },
   SetSecurityTokenServicePreferences:        { disabled, awsDoc: docRoot + 'API_SetSecurityTokenServicePreferences.html' },
   // SimulateCustomPolicy:                      { disabled, awsDoc: docRoot + 'API_SimulateCustomPolicy.html' },
-  SimulatePrincipalPolicy:                   { disabled, awsDoc: docRoot + 'API_SimulatePrincipalPolicy.html' },
+  // SimulatePrincipalPolicy:                   { disabled, awsDoc: docRoot + 'API_SimulatePrincipalPolicy.html' },
   TagMFADevice:                              { disabled, awsDoc: docRoot + 'API_TagMFADevice.html' },
   TagOpenIDConnectProvider:                  { disabled, awsDoc: docRoot + 'API_TagOpenIDConnectProvider.html' },
   TagSAMLProvider:                           { disabled, awsDoc: docRoot + 'API_TagSAMLProvider.html' },
