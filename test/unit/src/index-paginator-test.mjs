@@ -820,8 +820,9 @@ test('Error handling', async t => {
   reset()
 })
 
+// TODO: maybe add more for code coverage?
 test('Misc', async t => {
-  // t.plan(0)
+  t.plan(1)
   let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
   let response
 
@@ -845,7 +846,7 @@ test('Misc', async t => {
     paginate: true,
     paginator: { ...simplePaginator, type: 'query' },
   })
-  t.equal(response.Accumulator.length, 1, 'Terminate accumulation when accumulator is falsy')
+  t.equal(response.Accumulator.length, 1, 'Terminate when accumulator is falsy')
 })
 
 test('Tear down env', async t => {
