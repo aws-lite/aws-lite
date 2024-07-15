@@ -36,6 +36,33 @@ function serializeTags (tags) {
   return result
 }
 
+// function serializeSimulationData (params) {
+//   function helper (parentKey, arr) {
+//     if (!Array.isArray(arr)) return
+//     let result = serializeArray(parentKey, arr)
+//     arr.forEach(([ key, value ]) => {
+//       Object.assign(result, helper(`${parentKey}.${key}`, value))
+//     })
+//     return result
+//   }
+
+
+//   let result = { ...params }
+//   let { ActionNames, PolicyInputList } = params
+//   Object.assign(result, serializeArray('ActionNames', ActionNames))
+//   delete result.ActionNames
+//   PolicyInputList = PolicyInputList.map(i => JSON.stringify(i))
+//   Object.assign(result, serializeArray('PolicyInputList', PolicyInputList))
+//   delete result.PolicyInputList
+
+//   if (params.ContextEntries) {
+//     let { ContextEntries } = params
+//     ContextEntries = ContextEntries.map(i => JSON.stringify(i))
+//     Object.assign(query, serializeArray('ContextEntries', ContextEntries))
+//     delete query.ContextEntries
+//   }
+// }
+
 export default {
   normalizeObjectArrays,
   serializeArray,

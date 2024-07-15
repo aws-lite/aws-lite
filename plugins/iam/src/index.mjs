@@ -1987,6 +1987,42 @@ const ListPolicies = {
   },
 }
 
+const ListPoliciesGrantingServiceAccess = {
+  awsDoc: docRoot + 'API_ListPoliciesGrantingServiceAccess.html',
+  validate: {
+    Arn: { ...str, required, comment: 'ARN of the IAM identity whose policies you want to list' },
+    ServiceNamespaces: { ...arr, required, comment: 'Array of namespaces for the AWS services to be listed' },
+    Marker,
+    paginate: valPaginate,
+  },
+  request: params => {
+    const { ServiceNamespaces, paginate } = params
+    const query = {
+      Action: 'ListPoliciesGrantingServiceAccess',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (paginate) delete params.paginate
+    Object.assign(query, serializeArray('ServiceNamespaces', ServiceNamespaces))
+    delete query.ServiceNamespaces
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListPoliciesGrantingServiceAccessResult.Marker',
+        accumulator: 'ListPoliciesGrantingServiceAccessResult.PoliciesGrantingServiceAccess.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'PoliciesGrantingServiceAccess', 'Policies' ])
+    let { ListPoliciesGrantingServiceAccessResult } = payload
+    normalizeObjectArrays(ListPoliciesGrantingServiceAccessResult, arrayKeys, true)
+    return ListPoliciesGrantingServiceAccessResult
+  },
+}
+
 const ListPolicyTags = {
   awsDoc: docRoot + 'API_ListPolicyTags.html',
   validate: {
@@ -2521,6 +2557,59 @@ const SetDefaultPolicyVersion = {
   response: emptyResponse,
 }
 
+// TODO: improve documentation
+const SimulateCustomPolicy = {
+  awsDoc: docRoot + 'API_SimulateCustomPolicy.html',
+  validate: {
+    ActionNames: { ...arr, required, comment: 'Array of between 3 to 128 API operation names' },
+    PolicyInputList: { ...arr, required, comment: 'Array of policy document objects' },
+    CallerArn: { ...str, comment: 'ARN of the IAM user to use as the simulated caller of the API operations' },
+    ContextEntries: { ...arr, comment: 'Array of context keys and values' },
+    Marker,
+    MaxItems,
+    PermissionsBoundaryPolicyInputList: { ...arr, comment: 'IAM permissions boundary policy to simulate' },
+    ResourceArns: { ...arr, comment: 'Array of AWS resource ARNs; default `*`' },
+    ResourceHandlingOption: { ...str, comment: 'Specify the type of simulation to run' },
+    ResourceOwner: { ...str, comment: 'ARN representing the AWS account ID that owns any simulated resources' },
+    ResourcePolicy: { ...str, comment: 'A resource based policy' },
+  },
+  request: params => {
+    let { ActionNames, PolicyInputList } = params
+    const query = {
+      Action: 'SimulateCustomPolicy',
+      Version: defaultVersion,
+      ...params,
+    }
+    Object.assign(query, serializeArray('ActionNames', ActionNames))
+    delete query.ActionNames
+    PolicyInputList = PolicyInputList.map(i => JSON.stringify(i))
+    Object.assign(query, serializeArray('PolicyInputList', PolicyInputList))
+    delete query.PolicyInputList
+    if (params.ContextEntries) {
+      let { ContextEntries } = params
+      ContextEntries = ContextEntries.map(i => JSON.stringify(i))
+      Object.assign(query, serializeArray('ContextEntries', ContextEntries))
+      delete query.ContextEntries
+    }
+    if (params.PermissionsBoundaryPolicyInputList) {
+      let { PermissionsBoundaryPolicyInputList } = params
+      PermissionsBoundaryPolicyInputList = PermissionsBoundaryPolicyInputList.map(i => JSON.stringify(i))
+      Object.assign(params, serializeArray('PermissionsBoundaryPolicyInputList', PermissionsBoundaryPolicyInputList))
+      delete query.PermissionsBoundaryPolicyInputList
+    }
+    if (params.ResourceArns) {
+      const { ResourceArns } = params
+      Object.assign(params, serializeArray('ResourceArns', ResourceArns))
+      delete query.ResourceArns
+    }
+    console.log(query)
+    return { query }
+  },
+  response: ({ payload }) => {
+    return payload
+  },
+}
+
 const TagInstanceProfile = {
   awsDoc: docRoot + 'API_TagInstanceProfile.html',
   validate: {
@@ -3022,6 +3111,7 @@ export default {
     ListInstanceProfilesForRole,
     ListInstanceProfileTags,
     ListPolicies,
+    ListPoliciesGrantingServiceAccess,
     ListPolicyTags,
     ListPolicyVersions,
     ListRolePolicies,
@@ -3046,6 +3136,7 @@ export default {
     TagPolicy,
     TagRole,
     TagUser,
+    SimulateCustomPolicy,
     UntagInstanceProfile,
     UntagPolicy,
     UntagRole,

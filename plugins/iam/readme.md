@@ -944,6 +944,21 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListPoliciesGrantingServiceAccess`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html)
+
+Properties:
+- **`Arn` (string) [required]**
+  - ARN of the IAM identity whose policies you want to list
+- **`ServiceNamespaces` (array) [required]**
+  - Array of namespaces for the AWS services to be listed
+- **`Marker` (string)**
+  - Pagination cursor
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListPolicyTags`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html)
@@ -1254,6 +1269,35 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
+### `SimulateCustomPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html)
+
+Properties:
+- **`ActionNames` (array) [required]**
+  - Array of between 3 to 128 API operation names
+- **`PolicyInputList` (array) [required]**
+  - Array of policy document objects
+- **`CallerArn` (string)**
+  - ARN of the IAM user to use as the simulated caller of the API operations
+- **`ContextEntries` (array)**
+  - Array of context keys and values
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PermissionsBoundaryPolicyInputList` (array)**
+  - IAM permissions boundary policy to simulate
+- **`ResourceArns` (array)**
+  - Array of AWS resource ARNs; default `*`
+- **`ResourceHandlingOption` (string)**
+  - Specify the type of simulation to run
+- **`ResourceOwner` (string)**
+  - ARN representing the AWS account ID that owns any simulated resources
+- **`ResourcePolicy` (string)**
+  - A resource based policy
+
+
 ### `UntagInstanceProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html)
@@ -1496,7 +1540,6 @@ Properties:
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)
 - [`ListOpenIDConnectProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviders.html)
 - [`ListOpenIDConnectProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviderTags.html)
-- [`ListPoliciesGrantingServiceAccess`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html)
 - [`ListSAMLProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviders.html)
 - [`ListSAMLProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviderTags.html)
 - [`ListServerCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html)
@@ -1505,7 +1548,6 @@ Properties:
 - [`RemoveClientIDFromOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html)
 - [`ResyncMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResyncMFADevice.html)
 - [`SetSecurityTokenServicePreferences`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html)
-- [`SimulateCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html)
 - [`SimulatePrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html)
 - [`TagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagMFADevice.html)
 - [`TagOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagOpenIDConnectProvider.html)

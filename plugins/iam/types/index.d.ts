@@ -76,6 +76,7 @@ import {
   ListInstanceProfilesForRoleCommandOutput as ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsCommandOutput as ListInstanceProfileTagsResponse,
   ListPoliciesCommandOutput as ListPoliciesResponse,
+  ListPoliciesGrantingServiceAccessCommandOutput as ListPoliciesGrantingServiceAccessResponse,
   ListPolicyTagsCommandOutput as ListPolicyTagsResponse,
   ListPolicyVersionsCommandOutput as ListPolicyVersionsResponse,
   ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
@@ -100,6 +101,7 @@ import {
   TagPolicyCommandOutput as TagPolicyResponse,
   TagRoleCommandOutput as TagRoleResponse,
   TagUserCommandOutput as TagUserResponse,
+  SimulateCustomPolicyCommandOutput as SimulateCustomPolicyResponse,
   UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
   UntagPolicyCommandOutput as UntagPolicyResponse,
   UntagRoleCommandOutput as UntagRoleResponse,
@@ -555,6 +557,12 @@ declare interface AwsLiteIAM {
   ListPolicies: (input: { Marker?: string, MaxItems?: number, OnlyAttached?: boolean, PathPrefix?: string, PolicyUsageFilter?: string, Scope?: string, paginate?: boolean }) => Promise<ListPoliciesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html IAM: ListPoliciesGrantingServiceAccess}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPoliciesGrantingServiceAccess IAM: ListPoliciesGrantingServiceAccess}
+   */
+  ListPoliciesGrantingServiceAccess: (input: { Arn: string, ServiceNamespaces: any[], Marker?: string, paginate?: boolean }) => Promise<ListPoliciesGrantingServiceAccessResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html IAM: ListPolicyTags}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyTags IAM: ListPolicyTags}
    */
@@ -697,6 +705,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagUser IAM: TagUser}
    */
   TagUser: (input: { UserName: string, Tags: any[] }) => Promise<TagUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html IAM: SimulateCustomPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulateCustomPolicy IAM: SimulateCustomPolicy}
+   */
+  SimulateCustomPolicy: (input: { ActionNames: any[], PolicyInputList: any[], CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string }) => Promise<SimulateCustomPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html IAM: UntagInstanceProfile}
@@ -887,6 +901,7 @@ export type {
   ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsResponse,
   ListPoliciesResponse,
+  ListPoliciesGrantingServiceAccessResponse,
   ListPolicyTagsResponse,
   ListPolicyVersionsResponse,
   ListRolePoliciesResponse,
@@ -911,6 +926,7 @@ export type {
   TagPolicyResponse,
   TagRoleResponse,
   TagUserResponse,
+  SimulateCustomPolicyResponse,
   UntagInstanceProfileResponse,
   UntagPolicyResponse,
   UntagRoleResponse,
