@@ -19,52 +19,43 @@ function normalizeObjectArrays (object, arrayKeys, recurse) {
   }
 }
 
-function serializeArray (key, array) {
+function serializeArray (arr, key, recurse) {
   let result = {}
-  array.forEach((value, i) => {
-    result[`${key}.member.${i + 1}`] = value
+  arr.forEach((value, i) => {
+    if (Array.isArray(value) && recurse) {
+      Object.assign(result, serializeArray(value, `${key}.member.${i + 1}`))
+    }
+    else if (typeof value === 'object' && recurse) {
+      Object.assign(result, serializeObject(value, `${key}.member.${i + 1}`))
+    }
+    else {
+      result[`${key}.member.${i + 1}`] = value
+    }
   })
   return result
 }
 
-function serializeTags (tags) {
+function serializeObject (obj, parentKey = '') {
   let result = {}
-  tags.forEach(({ Key, Value }, i) => {
-    result[`Tags.member.${i + 1}.Key`] = Key
-    result[`Tags.member.${i + 1}.Value`] = Value
+  Object.entries(obj).forEach(([ key, value ]) => {
+    if (Array.isArray(value)) {
+      Object.assign(result, serializeArray(value, `${parentKey}.${key}`))
+    }
+    else if (typeof value === 'object') {
+      Object.assign(result, serializeObject(value, `${parentKey}`))
+    }
+    else if (parentKey) {
+      result[`${parentKey}.${key}`] =  value
+    }
+    else {
+      result[key] =  value
+    }
   })
   return result
 }
-
-// function serializeSimulationData (params) {
-//   function helper (parentKey, arr) {
-//     if (!Array.isArray(arr)) return
-//     let result = serializeArray(parentKey, arr)
-//     arr.forEach(([ key, value ]) => {
-//       Object.assign(result, helper(`${parentKey}.${key}`, value))
-//     })
-//     return result
-//   }
-
-
-//   let result = { ...params }
-//   let { ActionNames, PolicyInputList } = params
-//   Object.assign(result, serializeArray('ActionNames', ActionNames))
-//   delete result.ActionNames
-//   PolicyInputList = PolicyInputList.map(i => JSON.stringify(i))
-//   Object.assign(result, serializeArray('PolicyInputList', PolicyInputList))
-//   delete result.PolicyInputList
-
-//   if (params.ContextEntries) {
-//     let { ContextEntries } = params
-//     ContextEntries = ContextEntries.map(i => JSON.stringify(i))
-//     Object.assign(query, serializeArray('ContextEntries', ContextEntries))
-//     delete query.ContextEntries
-//   }
-// }
 
 export default {
   normalizeObjectArrays,
   serializeArray,
-  serializeTags,
+  serializeObject,
 }

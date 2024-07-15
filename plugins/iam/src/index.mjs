@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
-const { serializeTags, serializeArray, normalizeObjectArrays } = lib
+const { serializeArray, normalizeObjectArrays } = lib
 
 const service = 'iam'
 const property = 'IAM'
@@ -36,7 +36,7 @@ const PolicyArn = { ...str, required, comment: 'Arn of the policy' }
 const PolicyDocument = { type: [ 'string', 'object' ], required, comment: 'The policy document; can be an object, or JSON or YAML string' }
 const PolicyInputList = { ...arr, comment: 'Array of policies to get context keys, each item must be a complete policy object' }
 const PolicyName = { ...str, required, comment: 'Name of the policy' }
-const PolicySourceArn = { ...str, required, comment: 'ARN of the user, group or role for which the resources context keys will be listed', ref: docRoot +  'API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters' }
+const PolicySourceArn = { ...str, required, comment: 'ARN of the user, group or role for which the resources context keys will be listed', ref: docRoot + 'API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters' }
 const RoleName = { ...str, required, comment: 'Name of the role' }
 const ServiceName = { ...str, required, comment: 'Name of the AWS service' }
 const ServiceSpecificCredentialId = { ...str, required, comment: 'ID of the service specific credential' }
@@ -246,7 +246,7 @@ const CreateInstanceProfile = {
     }
     if (Tags) {
       delete query.Tags
-      Object.assign(query, serializeTags(Tags))
+      Object.assign(query, serializeArray(Tags, 'Tags'))
     }
     return { query }
   },
@@ -293,9 +293,9 @@ const CreateOpenIDConnectProvider = {
   awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html',
   validate: {
     Url: { ...str, required, comment: 'URL of the identity provider; must begin with `https://`' },
-    ClientIDList: { ...arr, comment: 'Array of at most 255 client IDs', ref: docRoot +  'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
+    ClientIDList: { ...arr, comment: 'Array of at most 255 client IDs', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
     Tags,
-    ThumbprintList: { ...arr, comment: 'Array of server certificate thumbprints for the OIDC identity providers server certificates', ref: docRoot +  'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
+    ThumbprintList: { ...arr, comment: 'Array of server certificate thumbprints for the OIDC identity providers server certificates', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
   },
   request: params => {
     const { Url, ClientIDList, Tags, ThumbprintList } = params
@@ -305,7 +305,7 @@ const CreateOpenIDConnectProvider = {
       Url,
     }
     if (ClientIDList) Object.assign(query, serializeArray('ClientIDList', ClientIDList))
-    if (Tags) query = Object.assign(query, serializeTags(Tags))
+    if (Tags) query = Object.assign(query, serializeArray(Tags, 'Tags'))
     if (ThumbprintList) Object.assign(query, serializeArray('ThumbprintList', ThumbprintList))
     return { query }
   },
@@ -338,7 +338,7 @@ const CreatePolicy = {
     }
     if (Tags) {
       delete query.Tags
-      Object.assign(query, serializeTags(Tags))
+      Object.assign(query, serializeArray(Tags, 'Tags'))
     }
     return { query }
   },
@@ -2574,35 +2574,40 @@ const SimulateCustomPolicy = {
     ResourcePolicy: { ...str, comment: 'A resource based policy' },
   },
   request: params => {
-    let { ActionNames, PolicyInputList } = params
     const query = {
       Action: 'SimulateCustomPolicy',
       Version: defaultVersion,
       ...params,
     }
-    Object.assign(query, serializeArray('ActionNames', ActionNames))
+    Object.assign(query, serializeArray(params.ActionNames, 'ActionNames'))
     delete query.ActionNames
-    PolicyInputList = PolicyInputList.map(i => JSON.stringify(i))
-    Object.assign(query, serializeArray('PolicyInputList', PolicyInputList))
+
+    let { PolicyInputList } = params
+    PolicyInputList = serializeArray(PolicyInputList, 'PolicyInputList')
+    Object.entries(PolicyInputList).forEach(([ key, value ]) => {
+      query[key] = JSON.stringify(value)
+    })
     delete query.PolicyInputList
+
     if (params.ContextEntries) {
-      let { ContextEntries } = params
-      ContextEntries = ContextEntries.map(i => JSON.stringify(i))
-      Object.assign(query, serializeArray('ContextEntries', ContextEntries))
+      Object.assign(query, serializeArray(params.ContextEntries, 'ContextEntries', true))
       delete query.ContextEntries
     }
-    if (params.PermissionsBoundaryPolicyInputList) {
-      let { PermissionsBoundaryPolicyInputList } = params
-      PermissionsBoundaryPolicyInputList = PermissionsBoundaryPolicyInputList.map(i => JSON.stringify(i))
-      Object.assign(params, serializeArray('PermissionsBoundaryPolicyInputList', PermissionsBoundaryPolicyInputList))
+
+    let { PermissionsBoundaryPolicyInputList } = params
+    if (PermissionsBoundaryPolicyInputList) {
+      PermissionsBoundaryPolicyInputList = serializeArray(PermissionsBoundaryPolicyInputList, 'PermissionsBoundaryPolicyInputList')
+      Object.entries(PermissionsBoundaryPolicyInputList).forEach(([ key, value ]) => {
+        query[key] = JSON.stringify(value)
+      })
       delete query.PermissionsBoundaryPolicyInputList
     }
+
     if (params.ResourceArns) {
-      const { ResourceArns } = params
-      Object.assign(params, serializeArray('ResourceArns', ResourceArns))
+      Object.assign(query, serializeArray(params.ResourceArns, 'ResourceArns'))
       delete query.ResourceArns
     }
-    console.log(query)
+
     return { query }
   },
   response: ({ payload }) => {
@@ -2623,7 +2628,7 @@ const TagInstanceProfile = {
       Version: defaultVersion,
       InstanceProfile,
     }
-    Object.assign(query, serializeTags(Tags))
+    Object.assign(query, serializeArray(Tags, 'Tags'))
     return { query }
   },
   response: emptyResponse,
@@ -2642,7 +2647,7 @@ const TagPolicy = {
       Version: defaultVersion,
       PolicyArn,
     }
-    Object.assign(query, serializeTags(Tags))
+    Object.assign(query, serializeArray(Tags, 'Tags'))
     return { query }
   },
   response: emptyResponse,
@@ -2661,7 +2666,7 @@ const TagRole = {
       Version: defaultVersion,
       RoleName,
     }
-    Object.assign(query, serializeTags(Tags))
+    Object.assign(query, serializeArray(Tags, 'Tags'))
     return { query }
   },
   response: emptyResponse,
@@ -2680,7 +2685,7 @@ const TagUser = {
       Version: defaultVersion,
       UserName,
     }
-    Object.assign(query, serializeTags(Tags))
+    Object.assign(query, serializeArray(Tags, 'Tags'))
     return { query }
   },
   response: emptyResponse,
