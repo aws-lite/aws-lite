@@ -1,28 +1,94 @@
 import { join } from 'node:path'
 import test from 'tape'
+import mockTmp from 'mock-tmp'
+import { overrideHomedir } from '../../../lib/index.mjs'
 
 let cwd = process.cwd()
 let mock = join(cwd, 'test', 'mock')
 let awsIniMock = join(mock, '.aws')
 
-let readIni, useAWS, tidyQuery
+let loadAwsConfig, readIni, useAWS, tidyQuery
 function reset () {
   delete process.env.ARC_ENV
   delete process.env.ARC_LOCAL
   delete process.env.ARC_SANDBOX
+  delete process.env.AWS_CONFIG_FILE
+  delete process.env.AWS_LAMBDA_FUNCTION_NAME
+  delete process.env.AWS_SDK_LOAD_CONFIG
+  delete process.env.AWS_SHARED_CREDENTIALS_FILE
 }
 
 test('Set up env', async t => {
-  t.plan(3)
+  t.plan(4)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'lib', 'index.js')
   let lib = await import(sut)
+  loadAwsConfig = lib.loadAwsConfig
   readIni = lib.readIni
   useAWS = lib.useAWS
   tidyQuery = lib.tidyQuery
+  t.ok(loadAwsConfig, 'loadAwsConfig util is present')
   t.ok(readIni, 'readIni util is present')
   t.ok(useAWS, 'useAWS util is present')
   t.ok(tidyQuery, 'tidyQuery util is present')
+})
+
+test('loadAwsConfig', async t => {
+  t.plan(15)
+  let result
+  let homedir = mockTmp({ '.aws': mockTmp.copy(awsIniMock) })
+  overrideHomedir(homedir)
+
+  // Exit early on lambda
+  process.env.AWS_LAMBDA_FUNCTION_NAME = 'lambda'
+  result = await loadAwsConfig({ profile: 'default' })
+  t.notOk(result, 'Returned early')
+  reset()
+
+  // Loading configuration does not use the `config` file by default (per AWS SDK behavior)
+  result = await loadAwsConfig({ profile: 'default' })
+  t.ok(result.creds, 'Loaded creds')
+  t.ok(result.profiles, 'Loaded profiles')
+  t.ok(result.currentProfile, 'Loaded current profile')
+  t.notOk(result.config, 'Did not load config')
+
+  // Load `config` file via env var
+  process.env.AWS_SDK_LOAD_CONFIG = true
+  result = await loadAwsConfig({ profile: 'default' })
+  t.ok(result.creds, 'Loaded creds')
+  t.ok(result.profiles, 'Loaded profiles')
+  t.ok(result.currentProfile, 'Loaded current profile')
+  t.ok(result.config, 'Loaded config via env var')
+
+  // Load `config` file via custom path
+  process.env.AWS_CONFIG_FILE = join(awsIniMock, 'config')
+  result = await loadAwsConfig({ profile: 'default' })
+  t.ok(result.config, 'Loaded config via env var path')
+  reset()
+
+  // Load `config` file via custom path
+  process.env.AWS_SHARED_CREDENTIALS_FILE = join(awsIniMock, 'credentials')
+  result = await loadAwsConfig({ profile: 'default' })
+  t.ok(result.creds, 'Loaded credentials via env var path')
+  reset()
+
+  // Load `config` file via input param
+  result = await loadAwsConfig({ awsConfigFile: join(awsIniMock, 'config'), profile: 'default' })
+  t.ok(result.config, 'Loaded config via input param')
+  reset()
+
+  // Ensure profile data prefers the credentials file over the config file, when both are present
+  t.deepEqual(result.currentProfile, result.creds.default, 'Current loaded profile is via credentials file')
+  t.notDeepEqual(result.currentProfile, result.config.default, 'Current loaded profile is not via config file')
+
+  // Blow up when no profile is found
+  try {
+    await loadAwsConfig({ profile: 'not_found' })
+    t.fail('Expected an error')
+  }
+  catch (err) {
+    t.match(err.message, /Profile not found: not_found/, 'Errored on missing profile')
+  }
 })
 
 test('readIni', async t => {
@@ -109,4 +175,9 @@ test('tidyQuery', t => {
 
   result = tidyQuery({ ok: 'hi', hello: 0 })
   t.equal(result, 'ok=hi&hello=0', 'Got back correct number 0 query string parameter')
+})
+
+test('Tear down', t => {
+  overrideHomedir.reset()
+  t.end()
 })
