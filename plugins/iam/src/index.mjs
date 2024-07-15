@@ -2579,6 +2579,7 @@ const SimulateCustomPolicy = {
     ResourceHandlingOption,
     ResourceOwner,
     ResourcePolicy,
+    paginate: valPaginate,
   },
   request: params => {
     const query = {
@@ -2586,10 +2587,10 @@ const SimulateCustomPolicy = {
       Version: defaultVersion,
       ...params,
     }
-
+    const { paginate } = params
+    if (paginate) delete query.paginate
     Object.assign(query, serializeArray(params.ActionNames, 'ActionNames'))
     delete query.ActionNames
-
     let PolicyInputList = params.PolicyInputList.map(i => {
       if (typeof i === 'string') return i
       return JSON.stringify(i)
@@ -2597,14 +2598,12 @@ const SimulateCustomPolicy = {
     PolicyInputList = serializeArray(PolicyInputList, 'PolicyInputList')
     Object.assign(query, PolicyInputList)
     delete query.PolicyInputList
-
     let { ContextEntries } = params
     if (ContextEntries) {
       ContextEntries =  serializeArray(ContextEntries, 'ContextEntries', true)
       Object.assign(query, ContextEntries)
       delete query.ContextEntries
     }
-
     let { PermissionsBoundaryPolicyInputList } = params
     if (PermissionsBoundaryPolicyInputList) {
       PermissionsBoundaryPolicyInputList = PermissionsBoundaryPolicyInputList.map(i => {
@@ -2615,23 +2614,28 @@ const SimulateCustomPolicy = {
       Object.assign(query, PermissionsBoundaryPolicyInputList)
       delete query.PermissionsBoundaryPolicyInputList
     }
-
     let { ResourceArns } = params
     if (ResourceArns) {
       ResourceArns = serializeArray(ResourceArns, 'ResourceArns')
       Object.assign(query, ResourceArns)
       delete query.ResourceArns
     }
-
-    console.log(query)
-    return { query }
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'SimulateCustomPolicyResult.Marker',
+        accumulator: 'SimulateCustomPolicyResult.EvaluationResults.member',
+      },
+    }
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'EvaluationResults', 'MatchedStatements',
       'MissingContextValues', 'ResourceSpecificResults',
       'MatchedStatements', 'MissingContextValues' ])
     const { SimulateCustomPolicyResult } = payload
-    normalizeObjectArrays(SimulateCustomPolicyResult, arrayKeys)
+    normalizeObjectArrays(SimulateCustomPolicyResult, arrayKeys, true)
     return SimulateCustomPolicyResult
   },
 }

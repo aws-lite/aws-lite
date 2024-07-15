@@ -1296,6 +1296,8 @@ Properties:
   - ARN representing the AWS account ID that owns any simulated resources
 - **`ResourcePolicy` (string, object)**
   - A resource based policy
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `UntagInstanceProfile`
