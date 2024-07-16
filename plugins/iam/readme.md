@@ -1300,6 +1300,39 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `SimulatePrincipalPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html)
+
+Properties:
+- **`ActionNames` (array) [required]**
+  - Array of between 3 to 128 API operation names
+- **`PolicySourceArn` (string) [required]**
+  - ARN of the user, group or role whose policies will be included in the simulation
+- **`CallerArn` (string)**
+  - ARN of the IAM user to use as the simulated caller of the API operations
+- **`ContextEntries` (array)**
+  - Array of context keys and values
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PermissionsBoundaryPolicyInputList` (array)**
+  - IAM permissions boundary policy to simulate
+- **`PolicyInputList` (array)**
+  - Array of policy document objects
+- **`ResourceArns` (array)**
+  - Array of AWS resource ARNs; default `*`
+- **`ResourceHandlingOption` (string)**
+  - Specify the type of simulation to run
+- **`ResourceOwner` (string)**
+  - ARN representing the AWS account ID that owns any simulated resources
+- **`ResourcePolicy` (string, object)**
+  - A resource based policy
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `UntagInstanceProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html)

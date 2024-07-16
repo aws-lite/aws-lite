@@ -28,7 +28,6 @@ export default {
   RemoveClientIDFromOpenIDConnectProvider:   { disabled, awsDoc: docRoot + 'API_RemoveClientIDFromOpenIDConnectProvider.html' },
   ResyncMFADevice:                           { disabled, awsDoc: docRoot + 'API_ResyncMFADevice.html' },
   SetSecurityTokenServicePreferences:        { disabled, awsDoc: docRoot + 'API_SetSecurityTokenServicePreferences.html' },
-  // SimulatePrincipalPolicy:                   { disabled, awsDoc: docRoot + 'API_SimulatePrincipalPolicy.html' },
   TagMFADevice:                              { disabled, awsDoc: docRoot + 'API_TagMFADevice.html' },
   TagOpenIDConnectProvider:                  { disabled, awsDoc: docRoot + 'API_TagOpenIDConnectProvider.html' },
   TagSAMLProvider:                           { disabled, awsDoc: docRoot + 'API_TagSAMLProvider.html' },

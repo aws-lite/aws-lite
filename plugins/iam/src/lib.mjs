@@ -1,12 +1,11 @@
-function normalizeObjectArrays (object, arrayKeys, recurse) {
+function normalizeResponse (object, arrayKeys, recurse) {
   if (typeof object !== 'object') return
-
   if (Array.isArray(object) && recurse) {
-    object.forEach(i => { normalizeObjectArrays(i, arrayKeys, recurse) })
+    object.forEach(i => { normalizeResponse(i, arrayKeys, recurse) })
   }
   else {
     Object.entries(object).forEach(([ key, value ]) => {
-      if (recurse) normalizeObjectArrays(value, arrayKeys, recurse)
+      if (recurse) normalizeResponse(value, arrayKeys, recurse)
       if (arrayKeys.has(key)) {
         if (value) {
           object[key] = Array.isArray(value.member) ? value.member : [ value.member ]
@@ -42,19 +41,19 @@ function serializeObject (obj, parentKey = '') {
       Object.assign(result, serializeArray(value, `${parentKey}.${key}`))
     }
     else if (typeof value === 'object') {
-      Object.assign(result, serializeObject(value, `${parentKey}`))
+      Object.assign(result, serializeObject(value, parentKey))
     }
     else if (parentKey) {
-      result[`${parentKey}.${key}`] =  value
+      result[`${parentKey}.${key}`] = value
     }
     else {
-      result[key] =  value
+      result[key] = value
     }
   })
   return result
 }
 
 export default {
-  normalizeObjectArrays,
+  normalizeResponse,
   serializeArray,
 }

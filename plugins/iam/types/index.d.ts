@@ -102,6 +102,7 @@ import {
   TagRoleCommandOutput as TagRoleResponse,
   TagUserCommandOutput as TagUserResponse,
   SimulateCustomPolicyCommandOutput as SimulateCustomPolicyResponse,
+  SimulatePrincipalPolicyCommandOutput as SimulatePrincipalPolicyResponse,
   UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
   UntagPolicyCommandOutput as UntagPolicyResponse,
   UntagRoleCommandOutput as UntagRoleResponse,
@@ -713,6 +714,12 @@ declare interface AwsLiteIAM {
   SimulateCustomPolicy: (input: { ActionNames: any[], PolicyInputList: any[], CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulateCustomPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html IAM: SimulatePrincipalPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulatePrincipalPolicy IAM: SimulatePrincipalPolicy}
+   */
+  SimulatePrincipalPolicy: (input: { ActionNames: any[], PolicySourceArn: string, CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], PolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulatePrincipalPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html IAM: UntagInstanceProfile}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagInstanceProfile IAM: UntagInstanceProfile}
    */
@@ -927,6 +934,7 @@ export type {
   TagRoleResponse,
   TagUserResponse,
   SimulateCustomPolicyResponse,
+  SimulatePrincipalPolicyResponse,
   UntagInstanceProfileResponse,
   UntagPolicyResponse,
   UntagRoleResponse,
