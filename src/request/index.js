@@ -4,8 +4,7 @@ let { is } = require('../lib/validate')
 let request = require('./request')
 
 module.exports = async function _request (params, creds, region, config, metadata) {
-  /* istanbul ignore next: TODO remove + test */
-  if ((params.paginator?.default === 'enabled' && params.paginate !== false) ||
+  if ((params.paginator?.default === 'enabled' && /* istanbul ignore next */ params.paginate !== false) ||
     (params.paginator && params.paginate)) {
     return await paginator(params, creds, region, config, metadata)
   }
@@ -123,7 +122,7 @@ let validPaginationTypes = [ 'headers', 'payload', 'query' ]
 
 async function paginator (params, creds, region, config, metadata) {
   let { debug } = config
-  /* istanbul ignore next: TODO remove + test */
+  /* istanbul ignore next */
   let { type = 'payload', cursor, token, accumulator } = params.paginator
   let isIterator = params.paginate === 'iterator'
 
@@ -181,7 +180,7 @@ async function paginator (params, creds, region, config, metadata) {
       // Continue requesting pages until no more tokens are found
       while (foundTokens.length) {
         page++
-        /* istanbul ignore next: TODO remove + test */
+        /* istanbul ignore next */
         if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
         let newCursors = getCursors(foundTokens, type)
         result = await get(newCursors)
@@ -222,14 +221,13 @@ async function paginator (params, creds, region, config, metadata) {
     headers = result.headers
 
     // Exit if it's XML that parses as a falsy value
-    /* istanbul ignore next: TODO remove + test */
+    /* istanbul ignore next */
     let contentType = result.headers['content-type'] || result.headers['Content-Type'] || ''
-    /* istanbul ignore next: TODO remove + test */
+    /* istanbul ignore next */
     if (XMLContentType(contentType) && !accumulated) {
       return
     }
 
-    /* istanbul ignore next: TODO remove + test */
     // Exit if we're out of results
     if (!accumulated.length) {
       return
@@ -240,9 +238,8 @@ async function paginator (params, creds, region, config, metadata) {
 
     let foundTokens = findTokens({ cursor, params, result, token, type })
     if (foundTokens.length) {
-      /* istanbul ignore next: TODO remove + test */
       page++
-      /* istanbul ignore next: TODO remove + test */
+      /* istanbul ignore next */
       if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
       let newCursors = getCursors(foundTokens, type)
       await get(newCursors)
