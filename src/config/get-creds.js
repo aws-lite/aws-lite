@@ -64,7 +64,8 @@ module.exports = async function getCreds (params) {
         aws_session_token: sessionToken,
       } = profile)
     }
-    return validate({ accessKeyId, secretAccessKey, sessionToken })
+    let profileCreds = validate({ accessKeyId, secretAccessKey, sessionToken })
+    if (profileCreds) return profileCreds
   }
 
   throw ReferenceError('Unable to find AWS credentials via params, environment variables, SSO, or credential / config files')
@@ -79,7 +80,6 @@ function getCredsFromEnv () {
   return validate({ accessKeyId, secretAccessKey, sessionToken })
 }
 
-/* istanbul ignore next */
 async function getCredsFromSSO (params) {
   // Don't attempt to load credentials from the filesystem when in Lambda
   let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
@@ -88,15 +88,18 @@ async function getCredsFromSSO (params) {
   let { config, awsConfig } = params
   if (!awsConfig) return
 
-  let ssoConfig = awsConfig?.currentProfile
-  if (!ssoConfig) return
-
-  if (ssoConfig?.sso_session) {
-    let sessionName = `sso-session ${ssoConfig.sso_session}`
-    let sessionConfig = awsConfig?.profiles?.[sessionName] ||
-                        awsConfig?.config?.[sessionName]
-    if (sessionConfig) ssoConfig = { ...ssoConfig, ...sessionConfig }
+  let profile = awsConfig.currentProfile
+  let sessionConfig = {}
+  if (profile?.sso_session) {
+    let sessionName = `sso-session ${profile.sso_session}`
+    let foundSessionConfig = awsConfig?.profiles?.[sessionName] ||
+                             awsConfig?.config?.[sessionName]
+    if (foundSessionConfig) sessionConfig = foundSessionConfig
+    else {
+      throw ReferenceError(`Unable to load specified SSO session configuration: ${profile.sso_session}`)
+    }
   }
+  let ssoConfig = { ...profile, ...sessionConfig }
   let { sso_account_id, sso_region, sso_role_name, sso_start_url } = ssoConfig
 
   // This isn't an SSO profile; possible this may provide to be a brittle test predicate
@@ -120,33 +123,46 @@ async function getCredsFromSSO (params) {
   let home = getHomedir()
   let ssoFilename = join(home, '.aws', 'sso', 'cache', ssoFile)
   let { readFile } = require('node:fs/promises')
-  if (!(await exists(ssoFilename))) return
+  if (!(await exists(ssoFilename))) {
+    /* istanbul ignore next */
+    if (config.debug) {
+      console.error(`[aws-lite] Could not find AWS SSO token file at ${ssoFilename}`)
+    }
+    return
+  }
 
   try {
+    /* istanbul ignore next */
     if (config.debug) {
-      console.error(`[aws-lite] Loading credentials from AWS SSO at ${ssoFilename}`)
+      console.error(`[aws-lite] Loading credentials from AWS SSO token file at ${ssoFilename}`)
     }
-    let ssoData = JSON.parse(await readFile(ssoFilename))
 
-    let expires = new Date(ssoData.expiresAt).getTime()
-    let isExpired = expires - Date.now() <= 0
+    let ssoData = JSON.parse(await readFile(ssoFilename))
+    let { accessToken, expiresAt } = ssoData
+    if (!accessToken) {
+      throw ReferenceError('SSO token file must have `accessToken` property')
+    }
+    if (!expiresAt) {
+      throw ReferenceError('SSO token file must have `expiresAt` property')
+    }
+    let isExpired = new Date(expiresAt).getTime() - Date.now() <= 0
     if (isExpired) {
       throw Error('SSO token is expired, please refresh by running: aws sso login [options]')
     }
 
-    let { accessToken } = ssoData
-    if (!accessToken) {
-      throw ReferenceError('SSO token file must have `accessToken` property')
-    }
-
+    /* istanbul ignore next */
     if (config.debug) {
       console.error(`[aws-lite] Requesting credentials from AWS IAM Identity Center`)
     }
+    /* istanbul ignore next */
+    let endpoint = params._custom_sso_endpoint
+      ? config.endpoint
+      : `https://portal.sso.${sso_region}.amazonaws.com`
     let result = await request(
       // Request params
       {
         service: 'sso',
-        endpoint: `https://portal.sso.${sso_region}.amazonaws.com`,
+        endpoint,
         path: '/federation/credentials',
         query: {
           account_id: sso_account_id,

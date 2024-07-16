@@ -93,7 +93,8 @@ function call (params, args) {
     let http = isHTTPS ? require('node:https') : require('node:http')
 
     // Port configuration
-    options.port = params.port || config.port
+    /* istanbul ignore next */
+    options.port = options.port || params.port || config.port
 
     // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
     options.agent = getAgent(http, isHTTPS, config)

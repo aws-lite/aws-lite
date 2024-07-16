@@ -3,16 +3,20 @@ import { join } from 'node:path'
 import process from 'node:process'
 import test from 'tape'
 import mockTmp from 'mock-tmp'
-import { defaults, overrideHomedir, resetAWSEnvVars } from '../../../lib/index.mjs'
+import { defaults, overrideHomedir, resetAWSEnvVars, server } from '../../../lib/index.mjs'
 
 let getCreds
 let cwd = process.cwd()
-let { profile } = defaults
+let { host, port, profile } = defaults
+let profile3 = 'profile_3'
+let profile4 = 'profile_4'
 let mock = join(cwd, 'test', 'mock')
 let ok = 'foo'
 let nope = 'bar'
 let num = 1
-let credentialsMock = join(mock, '.aws', 'credentials')
+let awsIniMock = join(mock, '.aws')
+let awsSSOMock = join(mock, 'sso')
+let credentialsMock = join(awsIniMock, 'credentials')
 
 test('Set up env', async t => {
   t.plan(1)
@@ -76,7 +80,175 @@ test('Get credentials from env vars', async t => {
   resetAWSEnvVars()
 })
 
-test('Get credentials from credentials file', async t => {
+test('Get credentials from SSO', async t => {
+  t.plan(18)
+  let homedir, result, request
+  let ssoPath = '.aws/sso/cache/1d4488e85b2549abce77758ec396e9e37332312b.json'
+
+  let started = await server.start()
+  t.ok(started, 'Started server')
+
+  let roleCredentials = {
+    accessKeyId: 'sso_access_key_id',
+    secretAccessKey: 'sso_secret_access_key',
+    sessionToken: 'sso_session_token',
+  }
+  let validSSORequest = {
+    _custom_sso_endpoint: true,
+    config: {
+      endpoint: `http://${host}:${port}`,
+      profile: profile3,
+    },
+  }
+
+  server.use({
+    responseHeaders: { 'content-type': 'application/json' },
+    responseBody: { roleCredentials },
+  })
+
+  homedir = mockTmp({
+    '.aws': mockTmp.copy(awsIniMock),
+    [ssoPath]: mockTmp.copy(join(awsSSOMock, 'valid.json')),
+  })
+  overrideHomedir(homedir)
+
+  // Basic, all in one SSO configuration
+  result = await getCreds({
+    _custom_sso_endpoint: true,
+    config: {
+      profile: profile3,
+      endpoint: `http://${host}:${port}`,
+    },
+  })
+  request = server.getCurrentRequest()
+  t.equal(request.url, '/federation/credentials?account_id=012345678901&role_name=lolidk', 'Fetched correct URL')
+  t.equal(request.headers['x-amz-sso_bearer_token'], 'an-access-token', 'Used correct authorization header')
+  t.deepEqual(result, roleCredentials, 'Fetched creds from SSO portal')
+
+  // SSO configuration using `sso-session` config
+  result = await getCreds({
+    _custom_sso_endpoint: true,
+    config: {
+      awsConfigFile: true,
+      endpoint: `http://${host}:${port}`,
+      profile: profile4,
+    },
+  })
+  request = server.getCurrentRequest()
+  t.equal(request.url, '/federation/credentials?account_id=123456789012&role_name=eh', 'Fetched correct URL')
+  t.equal(request.headers['x-amz-sso_bearer_token'], 'an-access-token', 'Used correct authorization header')
+  t.deepEqual(result, roleCredentials, 'Fetched creds from SSO portal')
+
+  mockTmp.reset()
+
+  // Error states
+  // The next two tests need a valid local config
+  homedir = mockTmp({
+    '.aws': mockTmp.copy(awsIniMock),
+    [ssoPath]: mockTmp.copy(join(awsSSOMock, 'valid.json')),
+  })
+  overrideHomedir(homedir)
+  process.env.AWS_LAMBDA_FUNCTION_NAME = true
+  try {
+    // Not an error, per se, but in Lambda this won't find creds, which will lead to an error
+    await getCreds(validSSORequest)
+  }
+  catch (err) {
+    t.match(err.message, /Unable to find AWS credentials/, 'Valid config will not load in Lambda')
+  }
+  delete process.env.AWS_LAMBDA_FUNCTION_NAME
+
+  // SSO API failure
+  server.use({
+    responseStatusCode: 400,
+    responseHeaders: { 'content-type': 'application/json' },
+    responseBody: { message: 'oh noes' },
+  })
+  try {
+    await getCreds(validSSORequest)
+  }
+  catch (err) {
+    t.match(err.message, /SSO error: oh noes/, 'SSO API error bubbles')
+  }
+  mockTmp.reset()
+
+  // Missing SSO token file
+  homedir = mockTmp({ '.aws': mockTmp.copy(awsIniMock) })
+  overrideHomedir(homedir)
+  try {
+    await getCreds({ config: { profile: profile3 } })
+  }
+  catch (err) {
+    t.match(err.message, /Unable to find AWS credentials/, 'Valid config without an SSO token file errored')
+  }
+
+  // Missing SSO session config
+  try {
+    await getCreds({ config: { profile: 'invalid_missing_sso_session' } })
+  }
+  catch (err) {
+    t.match(err.message, /Unable to load specified SSO session configuration: fourohfour/, 'Valid config with a missing SSO session errored')
+  }
+
+  // Missing required SSO data
+  let missingProperties = [ 'sso_account_id', 'sso_region', 'sso_role_name' ]
+  for (let prop of missingProperties) {
+    try {
+      await getCreds({ config: { profile: `invalid_missing_${prop}` } })
+      t.fail('Expected an error')
+    }
+    catch (err) {
+      let propText = `\`${prop}\` property`
+      t.equal(err.message, `SSO configuration must have ${propText}`, `SSO config errored on missing ${propText}`)
+    }
+  }
+  mockTmp.reset()
+
+  // SSO token file validation
+  homedir = mockTmp({
+    '.aws': mockTmp.copy(awsIniMock),
+    [ssoPath]: mockTmp.copy(join(awsSSOMock, 'missing-expiry.json')),
+  })
+  overrideHomedir(homedir)
+  try {
+    await getCreds({ config: { profile: profile3 } })
+  }
+  catch (err) {
+    t.equal(err.message, 'SSO token file must have `expiresAt` property', 'SSO config errored on missing \`expiresAt\` property')
+  }
+  mockTmp.reset()
+
+  homedir = mockTmp({
+    '.aws': mockTmp.copy(awsIniMock),
+    [ssoPath]: mockTmp.copy(join(awsSSOMock, 'missing-token.json')),
+  })
+  overrideHomedir(homedir)
+  try {
+    await getCreds({ config: { profile: profile3 } })
+  }
+  catch (err) {
+    t.equal(err.message, 'SSO token file must have `accessToken` property', 'SSO config errored on missing \`accessToken\` property')
+  }
+  mockTmp.reset()
+
+  homedir = mockTmp({
+    '.aws': mockTmp.copy(awsIniMock),
+    [ssoPath]: mockTmp.copy(join(awsSSOMock, 'expired-token.json')),
+  })
+  overrideHomedir(homedir)
+  try {
+    await getCreds({ config: { profile: profile3 } })
+  }
+  catch (err) {
+    t.match(err.message, /SSO token is expired/, 'SSO config errored on expired token')
+  }
+  mockTmp.reset()
+
+  await server.end()
+  t.pass('Server ended')
+})
+
+test('Get credentials from config / credentials file', async t => {
   t.plan(5)
   resetAWSEnvVars()
   let result
