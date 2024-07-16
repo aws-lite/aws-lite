@@ -1,4 +1,4 @@
-let { exists, getHomedir, loadAwsConfig } = require('../lib')
+let { exists, getHomedir, isInLambda, loadAwsConfig } = require('../lib')
 
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
 module.exports = async function getCreds (params) {
@@ -82,8 +82,7 @@ function getCredsFromEnv () {
 
 async function getCredsFromSSO (params) {
   // Don't attempt to load credentials from the filesystem when in Lambda
-  let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
-  if (isInLambda) return
+  if (isInLambda()) return
 
   let { config, awsConfig } = params
   if (!awsConfig) return

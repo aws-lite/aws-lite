@@ -98,8 +98,7 @@ function getEndpointParams (input) {
 const profileName = /^profile\s/
 async function loadAwsConfig (params) {
   // Don't attempt to load credentials from the filesystem when in Lambda
-  let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
-  if (isInLambda) return
+  if (isInLambda()) return
 
   let { awsConfigFile, profile } = params
   let { AWS_SDK_LOAD_CONFIG, AWS_CONFIG_FILE, AWS_SHARED_CREDENTIALS_FILE } = process.env
@@ -172,6 +171,10 @@ async function readIni (file) {
 function getHomedir () {
   let os = require('node:os')
   return os.homedir()
+}
+
+function isInLambda () {
+  return !!(process.env.AWS_LAMBDA_FUNCTION_NAME)
 }
 
 // mhart's fairly strict INI parser – only deals with alpha keys, data must be within sections
@@ -336,6 +339,7 @@ module.exports = {
   exists,
   getEndpointParams,
   getHomedir,
+  isInLambda,
   loadAwsConfig,
   readIni,
   tidyQuery,
