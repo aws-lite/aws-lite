@@ -1,20 +1,19 @@
-const required = true
 const passthrough = params => params
 
 module.exports = {
   service: 'lambda',
   methods: {
     NoResponseMethod: {
-      request: passthrough
+      request: passthrough,
     },
     Passthrough: {
-      response: passthrough
+      response: passthrough,
     },
     MutateProperty: {
       response: params => {
         params.statusCode = 234
         return params
-      }
+      },
     },
     MutateAllProperties: {
       response: params => {
@@ -22,25 +21,25 @@ module.exports = {
         params.headers.foo = 'bar'
         params.payload = { hi: 'there' }
         return params
-      }
+      },
     },
     OnlyPassThroughPayload: {
-      response: params => params.payload
+      response: params => params.payload,
     },
     ReturnWhatever: {
-      response: params => 'yooo'
+      response: () => 'yooo',
     },
     ReturnAwsJsonAll: {
-      response: params => ({ ...params, awsjson: true })
+      response: params => ({ ...params, awsjson: true }),
     },
     ReturnAwsJsonPayload: {
-      response: params => ({ ...params.payload, awsjson: true })
+      response: params => ({ ...params.payload, awsjson: true }),
     },
     ReturnAwsJsonKey: {
-      response: params => ({ ...params, awsjson: [ 'Item' ] })
+      response: params => ({ ...params, awsjson: [ 'Item' ] }),
     },
     ReturnNothing: {
-      response: () => {}
+      response: () => {},
     },
-  }
+  },
 }

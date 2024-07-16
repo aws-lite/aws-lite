@@ -1,29 +1,28 @@
 const validate = {
-    paginate: { type: ['boolean', 'string'] },
-    paginator: { type: 'object' },
+  paginate: { type: [ 'boolean', 'string' ] },
+  paginator: { type: 'object' },
 }
 
-const request = params => {
-    return {
-        ...params
-    }
-}
+const request = params => params
 
 const PaginatedMethod = {
-    validate,
-    request,
-    response: ({ payload }) => payload
+  validate,
+  request,
+  response: ({ payload }) => payload,
 }
 
 const ResponseErrorMethod = {
-    validate,
-    request,
-    response: () => {throw new Error('Expected throw')}}
+  validate,
+  request,
+  response: () => {
+    throw new Error('Expected throw')
+  },
+}
 
 module.exports = {
-    service: 'lambda',
-    methods: {
-        PaginatedMethod,
-        ResponseErrorMethod,
-    }
+  service: 'lambda',
+  methods: {
+    PaginatedMethod,
+    ResponseErrorMethod,
+  },
 }
