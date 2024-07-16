@@ -13,7 +13,6 @@ const { config, service } = defaults
 const jsonHeaders = { 'content-type': 'application/json' }
 const xmlHeaders = { 'content-type': 'application/xml' }
 
-
 const simplePaginator = {
   cursor: 'Cursor',
   token: 'Token',
@@ -325,7 +324,10 @@ test('Async iterator - raw client', async t => {
 test('Async iterator - plugin', async t => {
   t.plan(7)
   const paginate = 'iterator'
-  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
+  let aws = await client({
+    ...config,
+    plugins: [ import(p(join(pluginDir, 'paginated.js'))) ],
+  })
   let expectedToken, expectedUrl, page, response, request
 
   // Returns async iterator
@@ -584,7 +586,10 @@ test('Default paginator - raw client', async t => {
 test('Default paginator - plugin', async t => {
   t.plan(5)
   const paginate = true
-  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
+  let aws = await client({
+    ...config,
+    plugins: [ import(p(join(pluginDir, 'paginated.js'))) ],
+  })
   let  expectedUrl, response, requests
 
   const expectedResponse = {
@@ -640,7 +645,10 @@ test('Default paginator - plugin', async t => {
 
 test('Error handling', async t => {
   t.plan(11)
-  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
+  let aws = await client({
+    ...config,
+    plugins: [ import(p(join(pluginDir, 'paginated.js'))) ],
+  })
   let response
 
   // Response error
@@ -823,7 +831,10 @@ test('Error handling', async t => {
 // TODO: maybe add more for code coverage?
 test('Misc', async t => {
   t.plan(1)
-  let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'paginated.js'))) ] })
+  let aws = await client({
+    ...config,
+    plugins: [ import(p(join(pluginDir, 'paginated.js'))) ],
+  })
   let response
 
   const responses = [

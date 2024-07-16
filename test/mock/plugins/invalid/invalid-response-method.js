@@ -3,6 +3,6 @@ module.exports = {
   methods: {
     foo: {
       response: true,
-    }
-  }
+    },
+  },
 }

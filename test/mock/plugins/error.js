@@ -9,14 +9,14 @@ module.exports = {
       request: async (input) => {
         input.foo.bar = 'idk'
         return input
-      }
+      },
     },
     responseMethodBlowsUp: {
       awsDoc: 'https://responseMethodBlowsUp.lol',
       response: async (input) => {
         input.foo.bar = 'idk'
         return input
-      }
+      },
     },
     noErrorMethod: {
       request: passthrough,
@@ -31,7 +31,7 @@ module.exports = {
           error.metadata.type = message
         }
         return error
-      }
+      },
     },
     errorMethodNoop: {
       awsDoc: 'https://errorMethodNoop.lol',
@@ -45,7 +45,7 @@ module.exports = {
         err.metadata.type = message
         err.foo.bar = 'idk'
         return err
-      }
-    }
-  }
+      },
+    },
+  },
 }

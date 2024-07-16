@@ -7,7 +7,8 @@ module.exports = [
       '**/_vendor/*',
       'bench/tmp/',
       'scratch',
-      'test/mock/',
+      'test/mock/plugins/esm-pkg/index.js',
+      'test/mock/plugins/invalid/invalid-plugin.js',
     ],
   },
 ]
