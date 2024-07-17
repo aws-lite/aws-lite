@@ -3,6 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
+import qs from 'node:querystring'
 import lib from './lib.mjs'
 const { serializeArray, normalizeResponse } = lib
 
@@ -245,35 +246,24 @@ const CreateInstanceProfile = {
     Tags,
   },
   request: params => {
-    const { Tags } = params
-    let query = {
+    const query = {
       Action: 'CreateInstanceProfile',
       Version: defaultVersion,
       ...params,
     }
+    let { Tags } = params
     if (Tags) {
+      Tags = serializeArray(Tags, 'Tags', true)
+      Object.assign(query, Tags)
       delete query.Tags
-      Object.assign(query, serializeArray(Tags, 'Tags'))
     }
     return { query }
   },
   response: ({ payload }) => {
-    let { CreateInstanceProfileResult } = payload
-    let { InstanceProfile } = CreateInstanceProfileResult
-    let { Tags, Roles } = InstanceProfile
-    if (Tags) InstanceProfile.Tags = Array.isArray(Tags.member) ? Tags.member : [ Tags.member ]
-    if (Roles && !Array.isArray(Roles)) {
-      Roles = [ Roles ]
-    }
-    else {
-      Roles = []
-    }
-    InstanceProfile.Roles = Roles.map(i => {
-      const { Tags } = i
-      if (Tags) i.Tags = Array.isArray(Tags.member) ? Tags.member : [ Tags.member ]
-      return i
-    })
-    return CreateInstanceProfileResult
+    const arrayKeys = new Set([ 'Roles', 'Tags' ])
+    const result = payload.CreateInstanceProfileResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -296,33 +286,34 @@ const CreateLoginProfile = {
   response: ({ payload }) => payload.CreateLoginProfileResult,
 }
 
-const CreateOpenIDConnectProvider = {
-  awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html',
-  validate: {
-    Url: { ...str, required, comment: 'URL of the identity provider; must begin with `https://`' },
-    ClientIDList: { ...arr, comment: 'Array of at most 255 client IDs', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
-    Tags,
-    ThumbprintList: { ...arr, comment: 'Array of server certificate thumbprints for the OIDC identity providers server certificates', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
-  },
-  request: params => {
-    const { Url, ClientIDList, Tags, ThumbprintList } = params
-    let query = {
-      Action: 'CreateOpenIDConnectProvider',
-      Version: defaultVersion,
-      Url,
-    }
-    if (ClientIDList) Object.assign(query, serializeArray('ClientIDList', ClientIDList))
-    if (Tags) query = Object.assign(query, serializeArray(Tags, 'Tags'))
-    if (ThumbprintList) Object.assign(query, serializeArray('ThumbprintList', ThumbprintList))
-    return { query }
-  },
-  response: ({ payload }) => {
-    const arrayKeys = new Set([ 'Tags' ])
-    let { CreateOpenIDConnectProviderResult } = payload
-    normalizeResponse(CreateOpenIDConnectProviderResult, arrayKeys)
-    return CreateOpenIDConnectProviderResult
-  },
-}
+// TODO: complete
+// const CreateOpenIDConnectProvider = {
+//   awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html',
+//   validate: {
+//     Url: { ...str, required, comment: 'URL of the identity provider; must begin with `https://`' },
+//     ClientIDList: { ...arr, comment: 'Array of at most 255 client IDs', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
+//     Tags,
+//     ThumbprintList: { ...arr, comment: 'Array of server certificate thumbprints for the OIDC identity providers server certificates', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
+//   },
+//   request: params => {
+//     const { Url, ClientIDList, Tags, ThumbprintList } = params
+//     let query = {
+//       Action: 'CreateOpenIDConnectProvider',
+//       Version: defaultVersion,
+//       Url,
+//     }
+//     if (ClientIDList) Object.assign(query, serializeArray(ClientIDList, 'ClientIDList'))
+//     if (Tags) query = Object.assign(query, serializeArray(Tags, 'Tags', true))
+//     if (ThumbprintList) Object.assign(query, serializeArray(ThumbprintList, 'ThumbprintList'))
+//     return { query }
+//   },
+//   response: ({ payload }) => {
+//     const arrayKeys = new Set([ 'Tags' ])
+//     const result = payload.CreateOpenIDConnectProviderResult
+//     normalizeResponse(result, arrayKeys)
+//     return result
+//   },
+// }
 
 const CreatePolicy = {
   awsDoc: docRoot + 'API_CreatePolicy.html',
@@ -334,7 +325,6 @@ const CreatePolicy = {
     Tags,
   },
   request: params => {
-    const { Tags } = params
     let query = {
       Action: 'CreatePolicy',
       Version: defaultVersion,
@@ -343,19 +333,19 @@ const CreatePolicy = {
     if (typeof query.PolicyDocument !== 'string') {
       query.PolicyDocument = JSON.stringify(query.PolicyDocument)
     }
+    let { Tags } = params
     if (Tags) {
+      Tags = serializeArray(Tags, 'Tags', true)
+      Object.assign(query, Tags)
       delete query.Tags
-      Object.assign(query, serializeArray(Tags, 'Tags'))
     }
     return { query }
   },
   response: ({ payload }) => {
-    let { CreatePolicyResult } = payload
-    if (CreatePolicyResult.Policy.Tags) {
-      const { member } = CreatePolicyResult.Policy.Tags
-      CreatePolicyResult.Policy.Tags = Array.isArray(member) ? member : [ member ]
-    }
-    return CreatePolicyResult
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.CreatePolicyResult
+    normalizeResponse(result.Policy, arrayKeys)
+    return result
   },
 }
 
@@ -878,7 +868,6 @@ const DetachUserPolicy = {
   response: emptyResponse,
 }
 
-// TODO: determine if response is mangled
 const GenerateCredentialReport = {
   awsDoc: docRoot + 'API_GenerateCredentialReport.html',
   validate: {},
@@ -891,7 +880,6 @@ const GenerateCredentialReport = {
     }
   },
   response: ({ payload }) => payload.GenerateCredentialReportResult,
-
 }
 
 const GenerateOrganizationsAccessReport = {
@@ -986,9 +974,9 @@ const GetAccountAuthorizationDetails = {
         'GroupDetailList', 'GroupPolicyList', 'AttachedManagedPolicies',
         'RoleDetailList', 'InstanceProfileList', 'Roles', 'RolePolicyList', 'AttachedManagedPolicies',
         'Policies', 'PolicyVersionList' ])
-    let { GetAccountAuthorizationDetailsResult } = payload
-    normalizeResponse(GetAccountAuthorizationDetailsResult, arrayKeys, true)
-    return GetAccountAuthorizationDetailsResult
+    let result = payload.GetAccountAuthorizationDetailsResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -1047,9 +1035,9 @@ const GetContextKeysForCustomPolicy = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'ContextKeyNames' ])
-    let { GetContextKeysForCustomPolicyResult } = payload
-    normalizeResponse(GetContextKeysForCustomPolicyResult, arrayKeys)
-    return GetContextKeysForCustomPolicyResult
+    let result = payload.GetContextKeysForCustomPolicyResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1076,9 +1064,9 @@ const GetContextKeysForPrincipalPolicy = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'ContextKeyNames' ])
-    let { GetContextKeysForPrincipalPolicyResult } = payload
-    normalizeResponse(GetContextKeysForPrincipalPolicyResult, arrayKeys)
-    return GetContextKeysForPrincipalPolicyResult
+    let result = payload.GetContextKeysForPrincipalPolicyResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1093,7 +1081,11 @@ const GetCredentialReport = {
       },
     }
   },
-  response: ({ payload }) => payload.GetCredentialReportResult,
+  response: ({ payload }) => {
+    const result = payload.GetCredentialReportResult
+    result.Content = atob(result.Content)
+    return result
+  },
 }
 
 // TODO: stop paginator from omitting `Group` field
@@ -1125,8 +1117,8 @@ const GetGroup = {
     }
   },
   response: ({ payload }) => {
-    let { GetGroupResult } = payload
-    let { Group, Users } = GetGroupResult
+    let result = payload.GetGroupResult
+    let { Group, Users } = result
     Users = Users.member || []
     if (!Array.isArray(Users)) Users = [ Users ]
     return {
@@ -1136,24 +1128,27 @@ const GetGroup = {
   },
 }
 
-// TODO: figure out why response is mangled
-// const GetGroupPolicy = {
-//   awsDoc: docRoot + 'API_GetGroupPolicy.html',
-//   validate: {
-//     GroupName,
-//     PolicyName,
-//   },
-//   request: params => {
-//     return {
-//       query: {
-//         Action: 'GetGroupPolicy',
-//         Version: defaultVersion,
-//         ...params,
-//       },
-//     }
-//   },
-//   response: ({ payload }) => payload.GetGroupPolicyResult,
-// }
+const GetGroupPolicy = {
+  awsDoc: docRoot + 'API_GetGroupPolicy.html',
+  validate: {
+    GroupName,
+    PolicyName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetGroupPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const result = payload.GetGroupPolicyResult
+    result.PolicyDocument = JSON.parse(qs.unescape(result.PolicyDocument))
+    return result
+  },
+}
 
 const GetInstanceProfile = {
   awsDoc: docRoot + 'API_GetInstanceProfile.html',
@@ -1171,9 +1166,9 @@ const GetInstanceProfile = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Roles', 'Tags' ])
-    let { GetInstanceProfileResult } = payload
-    normalizeResponse(GetInstanceProfileResult, arrayKeys, true)
-    return GetInstanceProfileResult
+    let result = payload.GetInstanceProfileResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -1280,9 +1275,9 @@ const GetOrganizationsAccessReport = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'AccessDetails' ])
-    let { GetOrganizationsAccessReportResult } = payload
-    normalizeResponse(GetOrganizationsAccessReportResult, arrayKeys)
-    return GetOrganizationsAccessReportResult
+    let result = payload.GetOrganizationsAccessReportResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1301,13 +1296,10 @@ const GetPolicy = {
     }
   },
   response: ({ payload }) => {
-    let { GetPolicyResult } = payload
-    const { Tags } = GetPolicyResult.Policy
-    if (Tags) {
-      const { member } = Tags
-      GetPolicyResult.Policy.Tags = Array.isArray(member) ? member : [ member ]
-    }
-    return GetPolicyResult
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.GetPolicyResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -1346,24 +1338,27 @@ const GetRole = {
   response: ({ payload }) => payload.GetRoleResult,
 }
 
-// TODO: figure out why response is mangled
-// const GetRolePolicy = {
-//   awsDoc: docRoot + 'API_GetRolePolicy.html',
-//   validate: {
-//     PolicyName,
-//     RoleName,
-//   },
-//   request: params => {
-//     return {
-//       query: {
-//         Action: 'GetRolePolicy',
-//         Version: defaultVersion,
-//         ...params,
-//       },
-//     }
-//   },
-//   response: ({ payload }) => payload.GetRolePolicyResult,
-// }
+const GetRolePolicy = {
+  awsDoc: docRoot + 'API_GetRolePolicy.html',
+  validate: {
+    PolicyName,
+    RoleName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetRolePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const result = payload.GetRolePolicyResult
+    result.PolicyDocument = JSON.parse(qs.unescape(result.PolicyDocument))
+    return result
+  },
+}
 
 const GetServiceLastAccessedDetails = {
   awsDoc: docRoot + 'API_GetServiceLastAccessedDetails.html',
@@ -1393,9 +1388,9 @@ const GetServiceLastAccessedDetails = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'ServicesLastAccessed' ])
-    let { GetServiceLastAccessedDetailsResult } = payload
-    normalizeResponse(GetServiceLastAccessedDetailsResult, arrayKeys)
-    return GetServiceLastAccessedDetailsResult
+    const result = payload.GetServiceLastAccessedDetailsResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1428,9 +1423,9 @@ const GetServiceLastAccessedDetailsWithEntities = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'EntityDetailsList' ])
-    let { GetServiceLastAccessedDetailsWithEntitiesResult } = payload
-    normalizeResponse(GetServiceLastAccessedDetailsWithEntitiesResult, arrayKeys)
-    return GetServiceLastAccessedDetailsWithEntitiesResult
+    const result = payload.GetServiceLastAccessedDetailsWithEntitiesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1504,33 +1499,34 @@ const GetUser = {
     }
   },
   response: ({ payload }) => {
-    let { GetUserResult } = payload
-    if (GetUserResult.User.Tags) {
-      const { member } = GetUserResult.User.Tags
-      GetUserResult.User.Tags = Array.isArray(member) ? member : [ member ]
-    }
-    return GetUserResult
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.GetUserResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
-// TODO: figure out why response is mangled
-// const GetUserPolicy = {
-//   awsDoc: docRoot + 'API_GetUserPolicy.html',
-//   validate: {
-//     PolicyName,
-//     UserName,
-//   },
-//   request: params => {
-//     return {
-//       query: {
-//         Action: 'GetUserPolicy',
-//         Version: defaultVersion,
-//         ...params,
-//       },
-//     }
-//   },
-//   response: ({ payload }) => payload.GetUserPolicyResult,
-// }
+const GetUserPolicy = {
+  awsDoc: docRoot + 'API_GetUserPolicy.html',
+  validate: {
+    PolicyName,
+    UserName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetUserPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const result = payload.GetUserPolicyResult
+    result.PolicyDocument = JSON.parse(qs.unescape(result.PolicyDocument))
+    return result
+  },
+}
 
 const ListAccessKeys = {
   awsDoc: docRoot + 'API_ListAccessKeys.html',
@@ -1539,7 +1535,6 @@ const ListAccessKeys = {
     MaxItems,
     UserName: { ...UserName, required: false },
     paginate: valPaginate,
-
   },
   request: params => {
     let query = {
@@ -1560,15 +1555,10 @@ const ListAccessKeys = {
     }
   },
   response: ({ payload }) => {
-    let { ListAccessKeysResult } = payload
-    const { member } = ListAccessKeysResult.AccessKeyMetadata
-    if (member) {
-      ListAccessKeysResult.AccessKeyMetadata = Array.isArray(member) ? member : [ member ]
-    }
-    else {
-      ListAccessKeysResult.AccessKeyMetadata = []
-    }
-    return ListAccessKeysResult
+    const arrayKeys = new Set([ 'AccessKeyMetadata' ])
+    const result = payload.ListAccessKeysResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1598,15 +1588,10 @@ const ListAccountAliases = {
     }
   },
   response: ({ payload }) => {
-    let { ListAccountAliasesResult } = payload
-    const { member } = ListAccountAliasesResult.AccountAliases
-    if (member) {
-      ListAccountAliasesResult.AccountAliases = Array.isArray(member) ? member : [ member ]
-    }
-    else {
-      ListAccountAliasesResult.AccountAliases = []
-    }
-    return ListAccountAliasesResult
+    const arrayKeys = new Set([ 'AccountAliases' ])
+    const result = payload.ListAccountAliasesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1639,9 +1624,9 @@ const ListAttachedGroupPolicies = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'AttachedPolicies' ])
-    let { ListAttachedGroupPoliciesResult } = payload
-    normalizeResponse(ListAttachedGroupPoliciesResult, arrayKeys)
-    return ListAttachedGroupPoliciesResult
+    const result = payload.ListAttachedGroupPoliciesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1674,9 +1659,9 @@ const ListAttachedRolePolicies = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'AttachedPolicies' ])
-    let { ListAttachedRolePoliciesResult } = payload
-    normalizeResponse(ListAttachedRolePoliciesResult, arrayKeys)
-    return ListAttachedRolePoliciesResult
+    const result = payload.ListAttachedRolePoliciesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1709,9 +1694,9 @@ const ListAttachedUserPolicies = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'AttachedPolicies' ])
-    let { ListAttachedUserPoliciesResult } = payload
-    normalizeResponse(ListAttachedUserPoliciesResult, arrayKeys)
-    return ListAttachedUserPoliciesResult
+    const result = payload.ListAttachedUserPoliciesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1747,9 +1732,9 @@ const ListEntitiesForPolicy = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'PolicyRoles', 'PolicyGroups', 'PolicyUsers' ])
-    const { ListEntitiesForPolicyResult } = payload
-    normalizeResponse(ListEntitiesForPolicyResult, arrayKeys)
-    return ListEntitiesForPolicyResult
+    const result = payload.ListEntitiesForPolicyResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1781,9 +1766,9 @@ const ListGroupPolicies = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'PolicyNames' ])
-    let { ListGroupPoliciesResult } = payload
-    normalizeResponse(ListGroupPoliciesResult, arrayKeys)
-    return ListGroupPoliciesResult
+    const result = payload.ListGroupPoliciesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1815,9 +1800,9 @@ const ListGroups = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Groups' ])
-    let { ListGroupsResult } = payload
-    normalizeResponse(ListGroupsResult, arrayKeys)
-    return ListGroupsResult
+    const result = payload.ListGroupsResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1849,9 +1834,9 @@ const ListGroupsForUser = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Groups' ])
-    let { ListGroupsForUserResult } = payload
-    normalizeResponse(ListGroupsForUserResult, arrayKeys)
-    return ListGroupsForUserResult
+    const result = payload.ListGroupsForUserResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1883,9 +1868,9 @@ const ListInstanceProfiles = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags', 'InstanceProfiles', 'Roles' ])
-    let { ListInstanceProfilesResult } = payload
-    normalizeResponse(ListInstanceProfilesResult, arrayKeys, true)
-    return ListInstanceProfilesResult
+    const result = payload.ListInstanceProfilesResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -1917,9 +1902,9 @@ const ListInstanceProfilesForRole = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags', 'InstanceProfiles', 'Roles' ])
-    let { ListInstanceProfilesForRoleResult } = payload
-    normalizeResponse(ListInstanceProfilesForRoleResult, arrayKeys, true)
-    return ListInstanceProfilesForRoleResult
+    const result = payload.ListInstanceProfilesForRoleResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -1951,9 +1936,9 @@ const ListInstanceProfileTags = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags' ])
-    let { ListInstanceProfileTagsResult } = payload
-    normalizeResponse(ListInstanceProfileTagsResult, arrayKeys)
-    return ListInstanceProfileTagsResult
+    const result = payload.ListInstanceProfileTagsResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1988,9 +1973,9 @@ const ListPolicies = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Policies' ])
-    let { ListPoliciesResult } = payload
-    normalizeResponse(ListPoliciesResult, arrayKeys)
-    return ListPoliciesResult
+    const result = payload.ListPoliciesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2010,7 +1995,7 @@ const ListPoliciesGrantingServiceAccess = {
       ...params,
     }
     if (paginate) delete params.paginate
-    Object.assign(query, serializeArray('ServiceNamespaces', ServiceNamespaces))
+    Object.assign(query, serializeArray(ServiceNamespaces, 'ServiceNamespaces'))
     delete query.ServiceNamespaces
     return {
       query,
@@ -2024,9 +2009,9 @@ const ListPoliciesGrantingServiceAccess = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'PoliciesGrantingServiceAccess', 'Policies' ])
-    let { ListPoliciesGrantingServiceAccessResult } = payload
-    normalizeResponse(ListPoliciesGrantingServiceAccessResult, arrayKeys, true)
-    return ListPoliciesGrantingServiceAccessResult
+    const result = payload.ListPoliciesGrantingServiceAccessResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -2058,9 +2043,9 @@ const ListPolicyTags = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags' ])
-    let { ListPolicyTagsResult } = payload
-    normalizeResponse(ListPolicyTagsResult, arrayKeys)
-    return ListPolicyTagsResult
+    const result = payload.ListPolicyTagsResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2092,9 +2077,9 @@ const ListPolicyVersions = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Versions' ])
-    let { ListPolicyVersionsResult } = payload
-    normalizeResponse(ListPolicyVersionsResult, arrayKeys)
-    return ListPolicyVersionsResult
+    const result = payload.ListPolicyVersionsResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2126,9 +2111,9 @@ const ListRolePolicies = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'PolicyNames' ])
-    let { ListRolePoliciesResult } = payload
-    normalizeResponse(ListRolePoliciesResult, arrayKeys)
-    return ListRolePoliciesResult
+    const result = payload.ListRolePoliciesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2160,9 +2145,9 @@ const ListRoles = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Roles', 'Tags' ])
-    let { ListRolesResult } = payload
-    normalizeResponse(ListRolesResult, arrayKeys, true)
-    return ListRolesResult
+    const result = payload.ListRolesResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -2194,9 +2179,9 @@ const ListRoleTags = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags' ])
-    let { ListRoleTagsResult } = payload
-    normalizeResponse(ListRoleTagsResult, arrayKeys)
-    return ListRoleTagsResult
+    const result = payload.ListRoleTagsResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2217,9 +2202,9 @@ const ListServiceSpecificCredentials = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'ServiceSpecificCredentials' ])
-    const { ListServiceSpecificCredentialsResult } = payload
-    normalizeResponse(ListServiceSpecificCredentialsResult, arrayKeys)
-    return ListServiceSpecificCredentialsResult
+    const result = payload.ListServiceSpecificCredentialsResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2250,9 +2235,9 @@ const ListSigningCertificates = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Certificates' ])
-    const { ListSigningCertificatesResult } = payload
-    normalizeResponse(ListSigningCertificatesResult, arrayKeys)
-    return ListSigningCertificatesResult
+    const result = payload.ListSigningCertificatesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2283,9 +2268,9 @@ const ListSSHPublicKeys = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'SSHPublicKeys' ])
-    const { ListSSHPublicKeysResult } = payload
-    normalizeResponse(ListSSHPublicKeysResult, arrayKeys)
-    return ListSSHPublicKeysResult
+    const result = payload.ListSSHPublicKeysResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2317,9 +2302,9 @@ const ListUserPolicies = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'PolicyNames' ])
-    let { ListUserPoliciesResult } = payload
-    normalizeResponse(ListUserPoliciesResult, arrayKeys)
-    return ListUserPoliciesResult
+    const result = payload.ListUserPoliciesResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2351,9 +2336,9 @@ const ListUsers = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Users', 'Tags' ])
-    let { ListUsersResult } = payload
-    normalizeResponse(ListUsersResult, arrayKeys, true)
-    return ListUsersResult
+    const result = payload.ListUsersResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -2385,9 +2370,9 @@ const ListUserTags = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags' ])
-    let { ListUserTagsResult } = payload
-    normalizeResponse(ListUserTagsResult, arrayKeys)
-    return ListUserTagsResult
+    const result = payload.ListUserTagsResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -2635,9 +2620,9 @@ const SimulateCustomPolicy = {
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'EvaluationResults', 'MatchedStatements',
       'MissingContextValues', 'ResourceSpecificResults', 'MatchedStatements' ])
-    const { SimulateCustomPolicyResult } = payload
-    normalizeResponse(SimulateCustomPolicyResult, arrayKeys, true)
-    return SimulateCustomPolicyResult
+    const result = payload.SimulateCustomPolicyResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -2716,9 +2701,9 @@ const SimulatePrincipalPolicy = {
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'EvaluationResults', 'MatchedStatements',
       'MissingContextValues', 'ResourceSpecificResults', 'MatchedStatements' ])
-    const { SimulatePrincipalPolicyResult } = payload
-    normalizeResponse(SimulatePrincipalPolicyResult, arrayKeys, true)
-    return SimulatePrincipalPolicyResult
+    const result = payload.SimulatePrincipalPolicyResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -2729,13 +2714,13 @@ const TagInstanceProfile = {
     Tags: { ...Tags, required },
   },
   request: params => {
-    const { InstanceProfile, Tags } = params
+    const { InstanceProfileName, Tags } = params
     const query = {
       Action: 'TagInstanceProfile',
       Version: defaultVersion,
-      InstanceProfile,
+      InstanceProfileName,
     }
-    Object.assign(query, serializeArray(Tags, 'Tags'))
+    Object.assign(query, serializeArray(Tags, 'Tags', true))
     return { query }
   },
   response: emptyResponse,
@@ -2754,7 +2739,7 @@ const TagPolicy = {
       Version: defaultVersion,
       PolicyArn,
     }
-    Object.assign(query, serializeArray(Tags, 'Tags'))
+    Object.assign(query, serializeArray(Tags, 'Tags', true))
     return { query }
   },
   response: emptyResponse,
@@ -2773,7 +2758,7 @@ const TagRole = {
       Version: defaultVersion,
       RoleName,
     }
-    Object.assign(query, serializeArray(Tags, 'Tags'))
+    Object.assign(query, serializeArray(Tags, 'Tags', true))
     return { query }
   },
   response: emptyResponse,
@@ -2792,7 +2777,7 @@ const TagUser = {
       Version: defaultVersion,
       UserName,
     }
-    Object.assign(query, serializeArray(Tags, 'Tags'))
+    Object.assign(query, serializeArray(Tags, 'Tags', true))
     return { query }
   },
   response: emptyResponse,
@@ -3018,9 +3003,9 @@ const UpdateRoleDescription = {
   },
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags' ])
-    let { UpdateRoleDescriptionResult } = payload
-    normalizeResponse(UpdateRoleDescriptionResult, arrayKeys)
-    return UpdateRoleDescriptionResult
+    const result = payload.UpdateRoleDescriptionResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -3152,7 +3137,7 @@ export default {
     CreateGroup,
     CreateInstanceProfile,
     CreateLoginProfile,
-    CreateOpenIDConnectProvider,
+    // CreateOpenIDConnectProvider,
     CreatePolicy,
     // CreatePolicyVersion,
     CreateRole,
@@ -3193,7 +3178,7 @@ export default {
     GetContextKeysForPrincipalPolicy,
     GetCredentialReport,
     GetGroup,
-    // GetGroupPolicy,
+    GetGroupPolicy,
     GetInstanceProfile,
     GetLoginProfile,
     // GetMFADevice,
@@ -3202,13 +3187,13 @@ export default {
     GetPolicy,
     GetPolicyVersion,
     GetRole,
-    // GetRolePolicy,
+    GetRolePolicy,
     GetServiceLastAccessedDetails,
     GetServiceLastAccessedDetailsWithEntities,
     // GetServiceLinkedRoleDeletionStatus,
     GetSSHPublicKey,
     GetUser,
-    // GetUserPolicy,
+    GetUserPolicy,
     ListAccessKeys,
     ListAccountAliases,
     ListAttachedGroupPolicies,

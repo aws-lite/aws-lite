@@ -13,7 +13,6 @@ import {
   CreateGroupCommandOutput as CreateGroupResponse,
   CreateInstanceProfileCommandOutput as CreateInstanceProfileResponse,
   CreateLoginProfileCommandOutput as CreateLoginProfileResponse,
-  CreateOpenIDConnectProviderCommandOutput as CreateOpenIDConnectProviderResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
@@ -53,16 +52,19 @@ import {
   GetContextKeysForPrincipalPolicyCommandOutput as GetContextKeysForPrincipalPolicyResponse,
   GetCredentialReportCommandOutput as GetCredentialReportResponse,
   GetGroupCommandOutput as GetGroupResponse,
+  GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
   GetOrganizationsAccessReportCommandOutput as GetOrganizationsAccessReportResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetPolicyVersionCommandOutput as GetPolicyVersionResponse,
   GetRoleCommandOutput as GetRoleResponse,
+  GetRolePolicyCommandOutput as GetRolePolicyResponse,
   GetServiceLastAccessedDetailsCommandOutput as GetServiceLastAccessedDetailsResponse,
   GetServiceLastAccessedDetailsWithEntitiesCommandOutput as GetServiceLastAccessedDetailsWithEntitiesResponse,
   GetSSHPublicKeyCommandOutput as GetSSHPublicKeyResponse,
   GetUserCommandOutput as GetUserResponse,
+  GetUserPolicyCommandOutput as GetUserPolicyResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
   ListAttachedGroupPoliciesCommandOutput as ListAttachedGroupPoliciesResponse,
@@ -198,12 +200,6 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateLoginProfile IAM: CreateLoginProfile}
    */
   CreateLoginProfile: (input: { Password: string, UserName: string, PasswordResetRequired?: boolean }) => Promise<CreateLoginProfileResponse>
-  /**
-   * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html IAM: CreateOpenIDConnectProvider}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateOpenIDConnectProvider IAM: CreateOpenIDConnectProvider}
-   */
-  CreateOpenIDConnectProvider: (input: { Url: string, ClientIDList?: any[], Tags?: any[], ThumbprintList?: any[] }) => Promise<CreateOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html IAM: CreatePolicy}
@@ -420,6 +416,12 @@ declare interface AwsLiteIAM {
   GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetGroupResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html IAM: GetGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroupPolicy IAM: GetGroupPolicy}
+   */
+  GetGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<GetGroupPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html IAM: GetInstanceProfile}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetInstanceProfile IAM: GetInstanceProfile}
    */
@@ -456,6 +458,12 @@ declare interface AwsLiteIAM {
   GetRole: (input: { RoleName: string }) => Promise<GetRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html IAM: GetRolePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRolePolicy IAM: GetRolePolicy}
+   */
+  GetRolePolicy: (input: { PolicyName: string, RoleName: string }) => Promise<GetRolePolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html IAM: GetServiceLastAccessedDetails}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetails IAM: GetServiceLastAccessedDetails}
    */
@@ -478,6 +486,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUser IAM: GetUser}
    */
   GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html IAM: GetUserPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUserPolicy IAM: GetUserPolicy}
+   */
+  GetUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<GetUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccessKeys.html IAM: ListAccessKeys}
@@ -845,7 +859,6 @@ export type {
   CreateGroupResponse,
   CreateInstanceProfileResponse,
   CreateLoginProfileResponse,
-  CreateOpenIDConnectProviderResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateServiceLinkedRoleResponse,
@@ -885,16 +898,19 @@ export type {
   GetContextKeysForPrincipalPolicyResponse,
   GetCredentialReportResponse,
   GetGroupResponse,
+  GetGroupPolicyResponse,
   GetInstanceProfileResponse,
   GetLoginProfileResponse,
   GetOrganizationsAccessReportResponse,
   GetPolicyResponse,
   GetPolicyVersionResponse,
   GetRoleResponse,
+  GetRolePolicyResponse,
   GetServiceLastAccessedDetailsResponse,
   GetServiceLastAccessedDetailsWithEntitiesResponse,
   GetSSHPublicKeyResponse,
   GetUserResponse,
+  GetUserPolicyResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
   ListAttachedGroupPoliciesResponse,

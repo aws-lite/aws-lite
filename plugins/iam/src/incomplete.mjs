@@ -9,16 +9,14 @@ export default {
   DeleteServerCertificate:                   { disabled, awsDoc: docRoot + 'API_DeleteServerCertificate.html' },
   DeleteVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_DeleteVirtualMFADevice.html' },
   EnableMFADevice:                           { disabled, awsDoc: docRoot + 'API_EnableMFADevice.html' },
-  GetGroupPolicy:                            { disabled, awsDoc: docRoot + 'API_GetGroupPolicy.html' }, // TODO: find out why response is mangled
   GetMFADevice:                              { disabled, awsDoc: docRoot + 'API_GetMFADevice.html' }, // TODO: test
   GetOpenIDConnectProvider:                  { disabled, awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html' }, // TODO: test
-  GetRolePolicy:                             { disabled, awsDoc: docRoot + 'API_GetRolePolicy.html' }, // TODO: figure out why response is mangled
   GetSAMLProvider:                           { disabled, awsDoc: docRoot + 'API_GetSAMLProvider.html' },
   GetServerCertificate:                      { disabled, awsDoc: docRoot + 'API_GetServerCertificate.html' },
   GetServiceLinkedRoleDeletionStatus:        { disabled, awsDoc: docRoot + 'API_GetServiceLinkedRoleDeletionStatus.html' },
   ListMFADevices:                            { disabled, awsDoc: docRoot + 'API_ListMFADevices.html' },
   ListMFADeviceTags:                         { disabled, awsDoc: docRoot + 'API_ListMFADeviceTags.html' },
-  ListOpenIDConnectProviders:                { disabled, awsDoc: docRoot + 'API_ListOpenIDConnectProviders.html' },
+  // ListOpenIDConnectProviders:                { disabled, awsDoc: docRoot + 'API_ListOpenIDConnectProviders.html' },
   ListOpenIDConnectProviderTags:             { disabled, awsDoc: docRoot + 'API_ListOpenIDConnectProviderTags.html' },
   ListSAMLProviders:                         { disabled, awsDoc: docRoot + 'API_ListSAMLProviders.html' },
   ListSAMLProviderTags:                      { disabled, awsDoc: docRoot + 'API_ListSAMLProviderTags.html' },

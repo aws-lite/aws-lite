@@ -167,24 +167,6 @@ Properties:
   - Set to true to specify the user must make a new password on next sign-in
 
 
-### `CreateOpenIDConnectProvider`
-
-[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
-
-Properties:
-- **`Url` (string) [required]**
-  - URL of the identity provider; must begin with `https://`
-- **`ClientIDList` (array)**
-  - Array of at most 255 client IDs
-  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters)
-- **`Tags` (array)**
-  - List of tags to attach to the resource
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
-- **`ThumbprintList` (array)**
-  - Array of server certificate thumbprints for the OIDC identity providers server certificates
-  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters)
-
-
 ### `CreatePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
@@ -613,6 +595,17 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `GetGroupPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`PolicyName` (string) [required]**
+  - Name of the policy
+
+
 ### `GetInstanceProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html)
@@ -678,6 +671,17 @@ Properties:
   - Name of the role
 
 
+### `GetRolePolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
+
+Properties:
+- **`PolicyName` (string) [required]**
+  - Name of the policy
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
 ### `GetServiceLastAccessedDetails`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html)
@@ -729,6 +733,17 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html)
 
 Properties:
+- **`UserName` (string) [required]**
+  - User name
+
+
+### `GetUserPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html)
+
+Properties:
+- **`PolicyName` (string) [required]**
+  - Name of the policy
 - **`UserName` (string) [required]**
   - User name
 
@@ -1564,16 +1579,13 @@ Properties:
 - [`DeleteServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html)
 - [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
 - [`EnableMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_EnableMFADevice.html)
-- [`GetGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
 - [`GetOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html)
-- [`GetRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
 - [`GetSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSAMLProvider.html)
 - [`GetServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html)
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)
-- [`ListOpenIDConnectProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviders.html)
 - [`ListOpenIDConnectProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviderTags.html)
 - [`ListSAMLProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviders.html)
 - [`ListSAMLProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviderTags.html)
