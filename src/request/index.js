@@ -4,7 +4,7 @@ let { is } = require('../lib/validate')
 let request = require('./request')
 
 module.exports = async function _request (params, creds, region, config, metadata) {
-  if ((params.paginator?.default === 'enabled' && /* istanbul ignore next */ params.paginate !== false) ||
+  if ((params.paginator?.default === 'enabled' && params.paginate !== false) ||
     (params.paginator && params.paginate)) {
     return await paginator(params, creds, region, config, metadata)
   }
