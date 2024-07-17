@@ -828,7 +828,6 @@ test('Error handling', async t => {
   reset()
 })
 
-// TODO: maybe add more for code coverage?
 test('Misc', async t => {
   t.plan(1)
   let aws = await client({
@@ -855,7 +854,7 @@ test('Misc', async t => {
   server.use({ responseIterator: responses.entries() })
   response = await aws.lambda.PaginatedMethod({
     paginate: true,
-    paginator: { ...simplePaginator, type: 'query' },
+    paginator: { ...simplePaginator, type: 'query', default: 'enabled' },
   })
   t.equal(response.Accumulator.length, 1, 'Terminate when accumulator is falsy')
 })
