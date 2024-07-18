@@ -7,7 +7,7 @@ let { exists, getHomedir, isInLambda, loadAwsConfig, readFile } = require('../li
  * - SSO
  * - Configuration files (~/.aws/[credentials|config], etc.)
  * - Process
- * - Token file
+ * - Token file (TODO)
  * - IMDS (aka "remote provider"): container (ECS) then instance (EC2) metadata
  * See also: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
  */
@@ -77,6 +77,15 @@ module.exports = async function getCreds (params) {
     let profileCreds = validate({ accessKeyId, secretAccessKey, sessionToken })
     if (profileCreds) return profileCreds
   }
+
+  // let tokenFileCreds = await getCredsFromTokenFileCreds(params)
+  // if (tokenFileCreds) {
+  //   /* istanbul ignore next */
+  //   if (config.debug) {
+  //     console.error(`[aws-lite] Loaded credentials from token file credentials`)
+  //   }
+  //   return tokenFileCreds
+  // }
 
   let IMDSStart = Date.now()
   let IMDSCreds = await getCredsFromIMDS(params)
