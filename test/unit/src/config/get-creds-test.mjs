@@ -94,9 +94,8 @@ test('Get credentials from SSO', async t => {
     sessionToken: 'sso_session_token',
   }
   let validSSORequest = {
-    _custom_sso_endpoint: true,
     config: {
-      endpoint: `http://${host}:${port}`,
+      sso: { endpoint: `http://${host}:${port}` },
       profile: profile3,
     },
   }
@@ -114,10 +113,9 @@ test('Get credentials from SSO', async t => {
 
   // Basic, all in one SSO configuration
   result = await getCreds({
-    _custom_sso_endpoint: true,
     config: {
+      sso: { endpoint: `http://${host}:${port}` },
       profile: profile3,
-      endpoint: `http://${host}:${port}`,
     },
   })
   request = server.getCurrentRequest()
@@ -127,10 +125,9 @@ test('Get credentials from SSO', async t => {
 
   // SSO configuration using `sso-session` config
   result = await getCreds({
-    _custom_sso_endpoint: true,
     config: {
+      sso: { endpoint: `http://${host}:${port}` },
       awsConfigFile: true,
-      endpoint: `http://${host}:${port}`,
       profile: profile4,
     },
   })

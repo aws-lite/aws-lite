@@ -1,6 +1,16 @@
 let { exists, getHomedir, isInLambda, loadAwsConfig } = require('../lib')
 
-// https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
+/**
+ * Credential provider chain order
+ * - Params
+ * - Env
+ * - SSO
+ * - Configuration files (~/.aws/[credentials|config], etc.)
+ * - Process
+ * - Token file
+ * - IMDS (aka "remote provider")
+ * See also: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
+ */
 module.exports = async function getCreds (params) {
   let { config, awsConfig } = params
 
@@ -154,8 +164,8 @@ async function getCredsFromSSO (params) {
       console.error(`[aws-lite] Requesting credentials from AWS IAM Identity Center`)
     }
     /* istanbul ignore next */
-    let endpoint = params._custom_sso_endpoint
-      ? config.endpoint
+    let endpoint = config?.sso?.endpoint
+      ? config.sso.endpoint
       : `https://portal.sso.${sso_region}.amazonaws.com`
     let result = await request(
       // Request params
