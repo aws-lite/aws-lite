@@ -55,6 +55,7 @@ import {
   GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
+  GetOpenIDConnectProviderCommandOutput as GetOpenIDConnectProviderResponse,
   GetOrganizationsAccessReportCommandOutput as GetOrganizationsAccessReportResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
   GetPolicyVersionCommandOutput as GetPolicyVersionResponse,
@@ -77,6 +78,8 @@ import {
   ListInstanceProfilesCommandOutput as ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleCommandOutput as ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsCommandOutput as ListInstanceProfileTagsResponse,
+  ListOpenIDConnectProvidersCommandOutput as ListOpenIDConnectProvidersResponse,
+  ListOpenIDConnectProviderTagsCommandOutput as ListOpenIDConnectProviderTagsResponse,
   ListPoliciesCommandOutput as ListPoliciesResponse,
   ListPoliciesGrantingServiceAccessCommandOutput as ListPoliciesGrantingServiceAccessResponse,
   ListPolicyTagsCommandOutput as ListPolicyTagsResponse,
@@ -100,12 +103,14 @@ import {
   ResetServiceSpecificCredentialCommandOutput as ResetServiceSpecificCredentialResponse,
   SetDefaultPolicyVersionCommandOutput as SetDefaultPolicyVersionResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
+  TagOpenIDConnectProviderCommandOutput as TagOpenIDConnectProviderResponse,
   TagPolicyCommandOutput as TagPolicyResponse,
   TagRoleCommandOutput as TagRoleResponse,
   TagUserCommandOutput as TagUserResponse,
   SimulateCustomPolicyCommandOutput as SimulateCustomPolicyResponse,
   SimulatePrincipalPolicyCommandOutput as SimulatePrincipalPolicyResponse,
   UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
+  UntagOpenIDConnectProviderCommandOutput as UntagOpenIDConnectProviderResponse,
   UntagPolicyCommandOutput as UntagPolicyResponse,
   UntagRoleCommandOutput as UntagRoleResponse,
   UntagUserCommandOutput as UntagUserResponse,
@@ -434,6 +439,12 @@ declare interface AwsLiteIAM {
   GetLoginProfile: (input: { UserName: string }) => Promise<GetLoginProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html IAM: GetOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetOpenIDConnectProvider IAM: GetOpenIDConnectProvider}
+   */
+  GetOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string }) => Promise<GetOpenIDConnectProviderResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html IAM: GetOrganizationsAccessReport}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetOrganizationsAccessReport IAM: GetOrganizationsAccessReport}
    */
@@ -564,6 +575,14 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfileTags IAM: ListInstanceProfileTags}
    */
   ListInstanceProfileTags: (input: { InstanceProfileName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfileTagsResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListOpenIDConnectProviders IAM: ListOpenIDConnectProviders} */
+  ListOpenIDConnectProviders: () => Promise<ListOpenIDConnectProvidersResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviderTags.html IAM: ListOpenIDConnectProviderTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListOpenIDConnectProviderTags IAM: ListOpenIDConnectProviderTags}
+   */
+  ListOpenIDConnectProviderTags: (input: { OpenIDConnectProviderArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListOpenIDConnectProviderTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicies.html IAM: ListPolicies}
@@ -704,6 +723,12 @@ declare interface AwsLiteIAM {
   TagInstanceProfile: (input: { InstanceProfileName: string, Tags: any[] }) => Promise<TagInstanceProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagOpenIDConnectProvider.html IAM: TagOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagOpenIDConnectProvider IAM: TagOpenIDConnectProvider}
+   */
+  TagOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string, Tags: any[] }) => Promise<TagOpenIDConnectProviderResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagPolicy.html IAM: TagPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagPolicy IAM: TagPolicy}
    */
@@ -738,6 +763,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagInstanceProfile IAM: UntagInstanceProfile}
    */
   UntagInstanceProfile: (input: { InstanceProfileName: string, TagKeys: any[] }) => Promise<UntagInstanceProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagOpenIDConnectProvider.html IAM: UntagOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagOpenIDConnectProvider IAM: UntagOpenIDConnectProvider}
+   */
+  UntagOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string, TagKeys: any[] }) => Promise<UntagOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagPolicy.html IAM: UntagPolicy}
@@ -901,6 +932,7 @@ export type {
   GetGroupPolicyResponse,
   GetInstanceProfileResponse,
   GetLoginProfileResponse,
+  GetOpenIDConnectProviderResponse,
   GetOrganizationsAccessReportResponse,
   GetPolicyResponse,
   GetPolicyVersionResponse,
@@ -923,6 +955,8 @@ export type {
   ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsResponse,
+  ListOpenIDConnectProvidersResponse,
+  ListOpenIDConnectProviderTagsResponse,
   ListPoliciesResponse,
   ListPoliciesGrantingServiceAccessResponse,
   ListPolicyTagsResponse,
@@ -946,12 +980,14 @@ export type {
   ResetServiceSpecificCredentialResponse,
   SetDefaultPolicyVersionResponse,
   TagInstanceProfileResponse,
+  TagOpenIDConnectProviderResponse,
   TagPolicyResponse,
   TagRoleResponse,
   TagUserResponse,
   SimulateCustomPolicyResponse,
   SimulatePrincipalPolicyResponse,
   UntagInstanceProfileResponse,
+  UntagOpenIDConnectProviderResponse,
   UntagPolicyResponse,
   UntagRoleResponse,
   UntagUserResponse,

@@ -50,6 +50,7 @@ const RoleName = { ...str, required, comment: 'Name of the role' }
 const ServiceName = { ...str, required, comment: 'Name of the AWS service' }
 const ServiceSpecificCredentialId = { ...str, required, comment: 'ID of the service specific credential' }
 const SSHPublicKeyId = { ...str, required, comment: 'ID of the SSH public key' }
+const TagKeys = { ...arr, required, comment: 'Array of tag keys' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
@@ -1223,28 +1224,27 @@ const GetLoginProfile = {
 //   },
 // }
 
-// TODO: test
-// const GetOpenIDConnectProvider = {
-//   awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html',
-//   validate: {
-//     OpenIDConnectProviderArn,
-//   },
-//   request: params => {
-//     return {
-//       query: {
-//         Action: 'GetOpenIDConnectProvider',
-//         Version: defaultVersion,
-//         ...params,
-//       },
-//     }
-//   },
-//   response: ({ payload }) => {
-//     const arrayKeys = new Set([ 'ThumbprintList', 'ClientIDList', 'Tags' ])
-//     let { GetOpenIDConnectProviderResult } = payload
-//     normalizeResponse(GetOpenIDConnectProviderResult, arrayKeys)
-//     return GetOpenIDConnectProviderResult
-//   },
-// }
+const GetOpenIDConnectProvider = {
+  awsDoc: docRoot + 'API_GetOpenIDConnectProvider.html',
+  validate: {
+    OpenIDConnectProviderArn,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetOpenIDConnectProvider',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'ClientIDList', 'ThumbprintList', 'Tags' ])
+    const result = payload.GetOpenIDConnectProviderResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
+  },
+}
 
 const GetOrganizationsAccessReport = {
   awsDoc: docRoot + 'API_GetOrganizationsAccessReport.html',
@@ -1938,6 +1938,59 @@ const ListInstanceProfileTags = {
     const arrayKeys = new Set([ 'Tags' ])
     const result = payload.ListInstanceProfileTagsResult
     normalizeResponse(result, arrayKeys)
+    return result
+  },
+}
+
+const ListOpenIDConnectProviders = {
+  awsDoc: docRoot + 'API_ListOpenIDConnectProviders.html',
+  validate: {},
+  request: () => {
+    return {
+      query: {
+        Action: 'ListOpenIDConnectProviders',
+        Version: defaultVersion,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'OpenIDConnectProviderList' ])
+    const result = payload.ListOpenIDConnectProvidersResult
+    normalizeResponse(result, arrayKeys)
+    return result
+  },
+}
+
+const ListOpenIDConnectProviderTags = {
+  awsDoc: docRoot + 'API_ListOpenIDConnectProviderTags.html',
+  validate: {
+    OpenIDConnectProviderArn,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListOpenIDConnectProviderTags',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListOpenIDConnectProviderTagsResult.Marker',
+        accumulator: 'ListOpenIDConnectProviderTagsResult.Tags.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.ListOpenIDConnectProviderTagsResult
+    normalizeResponse(result, arrayKeys, true)
     return result
   },
 }
@@ -2726,6 +2779,25 @@ const TagInstanceProfile = {
   response: emptyResponse,
 }
 
+const TagOpenIDConnectProvider = {
+  awsDoc: docRoot + 'API_TagOpenIDConnectProvider.html',
+  validate: {
+    OpenIDConnectProviderArn,
+    Tags: { ...Tags, required },
+  },
+  request: params => {
+    const { OpenIDConnectProviderArn, Tags } = params
+    const query = {
+      Action: 'TagOpenIDConnectProvider',
+      Version: defaultVersion,
+      OpenIDConnectProviderArn,
+    }
+    Object.assign(query, serializeArray(Tags, 'Tags', true))
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const TagPolicy = {
   awsDoc: docRoot + 'API_TagPolicy.html',
   validate: {
@@ -2787,7 +2859,7 @@ const UntagInstanceProfile = {
   awsDoc: docRoot + 'API_UntagInstanceProfile.html',
   validate: {
     InstanceProfileName,
-    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+    TagKeys,
   },
   request: params => {
     const { InstanceProfileName, TagKeys } = params
@@ -2804,11 +2876,30 @@ const UntagInstanceProfile = {
   response: emptyResponse,
 }
 
+const UntagOpenIDConnectProvider = {
+  awsDoc: docRoot + 'API_UntagOpenIDConnectProvider.html',
+  validate: {
+    OpenIDConnectProviderArn,
+    TagKeys,
+  },
+  request: params => {
+    const { OpenIDConnectProviderArn, TagKeys } = params
+    let query = {
+      Action: 'UntagOpenIDConnectProvider',
+      Version: defaultVersion,
+      OpenIDConnectProviderArn,
+    }
+    Object.assign(query, serializeArray(TagKeys, 'TagKeys'))
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const UntagPolicy = {
   awsDoc: docRoot + 'API_UntagPolicy.html',
   validate: {
     PolicyArn,
-    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+    TagKeys,
   },
   request: params => {
     const { PolicyArn, TagKeys } = params
@@ -2817,9 +2908,7 @@ const UntagPolicy = {
       Version: defaultVersion,
       PolicyArn,
     }
-    TagKeys.forEach((value, i) => {
-      query[`TagKeys.member.${i + 1}`] = value
-    })
+    Object.assign(query, serializeArray(TagKeys, 'TagKeys'))
     return { query }
   },
   response: emptyResponse,
@@ -2829,7 +2918,7 @@ const UntagRole = {
   awsDoc: docRoot + 'API_UntagRole.html',
   validate: {
     RoleName,
-    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+    TagKeys,
   },
   request: params => {
     const { RoleName, TagKeys } = params
@@ -2838,9 +2927,7 @@ const UntagRole = {
       Version: defaultVersion,
       RoleName,
     }
-    TagKeys.forEach((value, i) => {
-      query[`TagKeys.member.${i + 1}`] = value
-    })
+    Object.assign(query, serializeArray(TagKeys, 'TagKeys'))
     return { query }
   },
   response: emptyResponse,
@@ -2850,7 +2937,7 @@ const UntagUser = {
   awsDoc: docRoot + 'API_UntagUser.html',
   validate: {
     UserName,
-    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+    TagKeys,
   },
   request: params => {
     const { UserName, TagKeys } = params
@@ -2859,9 +2946,7 @@ const UntagUser = {
       Version: defaultVersion,
       UserName,
     }
-    TagKeys.forEach((value, i) => {
-      query[`TagKeys.member.${i + 1}`] = value
-    })
+    Object.assign(query, serializeArray(TagKeys, 'TagKeys'))
     return { query }
   },
   response: emptyResponse,
@@ -3182,7 +3267,7 @@ export default {
     GetInstanceProfile,
     GetLoginProfile,
     // GetMFADevice,
-    // GetOpenIDConnectProvider,
+    GetOpenIDConnectProvider,
     GetOrganizationsAccessReport,
     GetPolicy,
     GetPolicyVersion,
@@ -3206,6 +3291,8 @@ export default {
     ListInstanceProfiles,
     ListInstanceProfilesForRole,
     ListInstanceProfileTags,
+    ListOpenIDConnectProviders,
+    ListOpenIDConnectProviderTags,
     ListPolicies,
     ListPoliciesGrantingServiceAccess,
     ListPolicyTags,
@@ -3229,12 +3316,14 @@ export default {
     ResetServiceSpecificCredential,
     SetDefaultPolicyVersion,
     TagInstanceProfile,
+    TagOpenIDConnectProvider,
     TagPolicy,
     TagRole,
     TagUser,
     SimulateCustomPolicy,
     SimulatePrincipalPolicy,
     UntagInstanceProfile,
+    UntagOpenIDConnectProvider,
     UntagPolicy,
     UntagRole,
     UntagUser,
