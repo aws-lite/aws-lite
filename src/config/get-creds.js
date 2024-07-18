@@ -1,4 +1,4 @@
-let { exists, getHomedir, isInLambda, loadAwsConfig } = require('../lib')
+let { exists, getHomedir, isInLambda, loadAwsConfig, readFile } = require('../lib')
 
 /**
  * Credential provider chain order
@@ -8,7 +8,7 @@ let { exists, getHomedir, isInLambda, loadAwsConfig } = require('../lib')
  * - Configuration files (~/.aws/[credentials|config], etc.)
  * - Process
  * - Token file
- * - IMDS (aka "remote provider")
+ * - IMDS (aka "remote provider"): container (ECS) then instance (EC2) metadata
  * See also: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
  */
 module.exports = async function getCreds (params) {
@@ -37,8 +37,8 @@ module.exports = async function getCreds (params) {
 
   let SSOStart = Date.now()
   let SSOCreds = await getCredsFromSSO(params)
-  /* istanbul ignore next: TODO remove + test */
   if (SSOCreds) {
+    /* istanbul ignore next */
     if (config.debug) {
       console.error(`[aws-lite] Loaded credentials from AWS SSO in ${Date.now() - SSOStart}ms`)
     }
@@ -76,6 +76,17 @@ module.exports = async function getCreds (params) {
     }
     let profileCreds = validate({ accessKeyId, secretAccessKey, sessionToken })
     if (profileCreds) return profileCreds
+  }
+
+  let IMDSStart = Date.now()
+  let IMDSCreds = await getCredsFromIMDS(params)
+  /* istanbul ignore next: TODO remove + test */
+  if (IMDSCreds) {
+    /* istanbul ignore next */
+    if (config.debug) {
+      console.error(`[aws-lite] Loaded credentials from IMDS in ${Date.now() - IMDSStart}ms`)
+    }
+    return IMDSCreds
   }
 
   throw ReferenceError('Unable to find AWS credentials via params, environment variables, SSO, or credential / config files')
@@ -126,7 +137,6 @@ async function getCredsFromSSO (params) {
 
   let { join } = require('node:path')
   let { createHash } = require('node:crypto')
-  let request = require('../request')
   let ssoFile = createHash('sha1').update(sso_start_url).digest('hex') + '.json'
 
   let home = getHomedir()
@@ -167,9 +177,8 @@ async function getCredsFromSSO (params) {
     let endpoint = config?.sso?.endpoint
       ? config.sso.endpoint
       : `https://portal.sso.${sso_region}.amazonaws.com`
-    let result = await request(
-      // Request params
-      {
+    let result = await request({
+      params: {
         service: 'sso',
         endpoint,
         path: '/federation/credentials',
@@ -177,23 +186,11 @@ async function getCredsFromSSO (params) {
           account_id: sso_account_id,
           role_name: sso_role_name,
         },
-        headers: {
-          'x-amz-sso_bearer_token': accessToken,
-        },
+        headers: { 'x-amz-sso_bearer_token': accessToken },
       },
-
-      // Dummy creds
-      { accessKeyId: '', secretAccessKey: '' },
-
-      // Region
-      sso_region,
-
-      // Config, force debug off so as to not print raw creds
-      { ...config, debug: false },
-
-      // Metadata
-      { service: 'SSO' },
-    )
+      region: sso_region,
+      service: 'SSO',
+    })
     let { roleCredentials } = result.payload
     return validate(roleCredentials)
   }
@@ -201,6 +198,132 @@ async function getCredsFromSSO (params) {
     console.error('Failed to load credentials via AWS IAM Identity Center')
     if (err?.error?.message) {
       throw new Error('SSO error: ' + err.error.message)
+    }
+    throw err
+  }
+}
+
+/* istanbul ignore next: TODO remove + test */
+async function getCredsFromIMDS (params) {
+  // Don't attempt to load credentials from IMDS when in Lambda
+  if (isInLambda()) return
+
+  let { config, awsConfig } = params
+  let {
+    // ECS
+    AWS_CONTAINER_AUTHORIZATION_TOKEN: token,
+    AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE,
+    AWS_CONTAINER_CREDENTIALS_RELATIVE_URI,
+    AWS_CONTAINER_CREDENTIALS_FULL_URI,
+    // EC2
+    AWS_EC2_METADATA_DISABLED,
+    AWS_EC2_METADATA_SERVICE_ENDPOINT,
+    AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE,
+  } = process.env
+  let service = 'imds' // Not an actual service
+
+  // ECS first
+  if (AWS_CONTAINER_CREDENTIALS_RELATIVE_URI || AWS_CONTAINER_CREDENTIALS_FULL_URI) {
+    let ECSIP = '169.254.170.2'
+    let endpoint = AWS_CONTAINER_CREDENTIALS_FULL_URI
+      ? AWS_CONTAINER_CREDENTIALS_FULL_URI
+      // Rel URI is assumed to be prepended with `/`
+      : `http://${ECSIP}${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}`
+
+    if (!token && AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE) {
+      /* istanbul ignore next */
+      if (config.debug) {
+        console.error(`[aws-lite] Loading token from auth token file at: ${AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE}`)
+      }
+      token = (await readFile(AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE)).toString().trim()
+    }
+    if (!token) {
+      throw ReferenceError('ECS IMDSv2 token not found')
+    }
+
+    try {
+      let result = await request({
+        params: {
+          service,
+          endpoint,
+          headers: { Authorization: token },
+        },
+        service: 'ECS IMDSv2',
+      })
+      return validate(result.payload)
+    }
+    catch (err) {
+      console.error('Failed to load credentials via ECS IMDSv2')
+      if (err?.error?.message) {
+        throw new Error('ECS IMDSv2 error: ' + err.error.message)
+      }
+      throw err
+    }
+  }
+
+  // EC2 next
+  if (AWS_EC2_METADATA_DISABLED) return
+
+  let profile = awsConfig?.currentProfile
+  let defaultEndpoints = {
+    IPv4: 'http://169.254.169.254',
+    IPv6: 'http://[fd00:ec2::254]',
+  }
+
+  let endpoint =  config?.imds?.endpoint ||
+                  AWS_EC2_METADATA_SERVICE_ENDPOINT ||
+                  profile?.ec2_metadata_service_endpoint
+  let mode =      config?.imds?.endpointMode ||
+                  AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE ||
+                  profile?.ec2_metadata_service_endpoint_mode
+  if (defaultEndpoints[mode]) {
+    endpoint = defaultEndpoints[mode]
+  }
+  if (!endpoint) return
+
+  try {
+    let path = '/latest/meta-data/iam/security-credentials/'
+
+    // Get the IMDS token first
+    let token = (await request({
+      params: {
+        method: 'PUT',
+        endpoint,
+        path: '/latest/api/token',
+        headers: {
+          'x-aws-ec2-metadata-token-ttl-seconds': '21600',
+        },
+      },
+      service: 'IMDSv2 token API',
+    })).payload.toString()
+
+    // Now load the profile
+    let profile = (await request({
+      params: {
+        endpoint,
+        path,
+        service,
+        headers: { 'x-aws-ec2-metadata-token': token },
+      },
+      service: 'IMDSv2 profile',
+    })).payload.toString()
+
+    // Finally, get the credentials
+    let credResponse = await request({
+      params: {
+        endpoint,
+        path: path + profile,
+        service,
+        headers: { 'x-aws-ec2-metadata-token': token },
+      },
+      service: 'IMDSv2 credentials',
+    })
+    return validate(credResponse.payload)
+  }
+  catch (err) {
+    console.error('Failed to load credentials via ECS IMDSv2')
+    if (err?.error?.message) {
+      throw new Error('ECS IMDSv2 error: ' + err.error.message)
     }
     throw err
   }
@@ -228,4 +351,26 @@ function validate (creds) {
     return false
   }
   return creds
+}
+
+let req
+async function request ({ params, region, config, service }) {
+  /* istanbul ignore next */
+  region = region || ''
+  if (!req) req = require('../request')
+  return await req(
+    // Request input
+    params,
+
+    // Dummy creds to satisfy signing
+    { accessKeyId: '', secretAccessKey: '' },
+
+    region,
+
+    // Force debug off so as to not print raw creds
+    { ...config, debug: false },
+
+    // Metadata
+    { service },
+  )
 }
