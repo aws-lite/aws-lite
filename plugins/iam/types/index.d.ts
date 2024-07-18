@@ -98,6 +98,7 @@ import {
   PutRolePolicyCommandOutput as PutRolePolicyResponse,
   PutUserPermissionsBoundaryCommandOutput as PutUserPermissionsBoundaryResponse,
   PutUserPolicyCommandOutput as PutUserPolicyResponse,
+  RemoveClientIDFromOpenIDConnectProviderCommandOutput as RemoveClientIDFromOpenIDConnectProviderResponse,
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   ResetServiceSpecificCredentialCommandOutput as ResetServiceSpecificCredentialResponse,
@@ -119,6 +120,7 @@ import {
   UpdateAssumeRolePolicyCommandOutput as UpdateAssumeRolePolicyResponse,
   UpdateGroupCommandOutput as UpdateGroupResponse,
   UpdateLoginProfileCommandOutput as UpdateLoginProfileResponse,
+  UpdateOpenIDConnectProviderThumbprintCommandOutput as UpdateOpenIDConnectProviderThumbprintResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
   UpdateServiceSpecificCredentialCommandOutput as UpdateServiceSpecificCredentialResponse,
@@ -693,6 +695,12 @@ declare interface AwsLiteIAM {
   PutUserPolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, UserName: string }) => Promise<PutUserPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html IAM: RemoveClientIDFromOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveClientIDFromOpenIDConnectProvider IAM: RemoveClientIDFromOpenIDConnectProvider}
+   */
+  RemoveClientIDFromOpenIDConnectProvider: (input: { ClientID: string, OpenIDConnectProviderArn: string }) => Promise<RemoveClientIDFromOpenIDConnectProviderResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html IAM: RemoveRoleFromInstanceProfile}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveRoleFromInstanceProfile IAM: RemoveRoleFromInstanceProfile}
    */
@@ -817,6 +825,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateLoginProfile IAM: UpdateLoginProfile}
    */
   UpdateLoginProfile: (input: { UserName: string, Password?: string, PasswordResetRequired?: boolean }) => Promise<UpdateLoginProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html IAM: UpdateOpenIDConnectProviderThumbprint}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateOpenIDConnectProviderThumbprint IAM: UpdateOpenIDConnectProviderThumbprint}
+   */
+  UpdateOpenIDConnectProviderThumbprint: (input: { OpenIDConnectProviderArn: string, ThumbprintList: any[] }) => Promise<UpdateOpenIDConnectProviderThumbprintResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html IAM: UpdateRole}
@@ -975,6 +989,7 @@ export type {
   PutRolePolicyResponse,
   PutUserPermissionsBoundaryResponse,
   PutUserPolicyResponse,
+  RemoveClientIDFromOpenIDConnectProviderResponse,
   RemoveRoleFromInstanceProfileResponse,
   RemoveUserFromGroupResponse,
   ResetServiceSpecificCredentialResponse,
@@ -996,6 +1011,7 @@ export type {
   UpdateAssumeRolePolicyResponse,
   UpdateGroupResponse,
   UpdateLoginProfileResponse,
+  UpdateOpenIDConnectProviderThumbprintResponse,
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
   UpdateServiceSpecificCredentialResponse,

@@ -2530,6 +2530,24 @@ const PutUserPolicy = {
   response: emptyResponse,
 }
 
+const RemoveClientIDFromOpenIDConnectProvider = {
+  awsDoc: docRoot + 'API_RemoveClientIDFromOpenIDConnectProvider.html',
+  validate: {
+    ClientID: { ...str, required, comment: 'The client ID' },
+    OpenIDConnectProviderArn,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'RemoveClientIDFromOpenIDConnectProvider',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const RemoveRoleFromInstanceProfile = {
   awsDoc: docRoot + 'API_RemoveRoleFromInstanceProfile.html',
   validate: {
@@ -3052,6 +3070,25 @@ const UpdateLoginProfile = {
   response: emptyResponse,
 }
 
+const UpdateOpenIDConnectProviderThumbprint = {
+  awsDoc: docRoot + 'API_UpdateOpenIDConnectProviderThumbprint.html',
+  validate: {
+    OpenIDConnectProviderArn,
+    ThumbprintList: { ...arr, required, comment: 'List of certificate thumbprints', ref: docRoot + 'API_UpdateOpenIDConnectProviderThumbprint.html#API_UpdateOpenIDConnectProviderThumbprint_RequestParameters' },
+  },
+  request: params => {
+    const { OpenIDConnectProviderArn, ThumbprintList } = params
+    const query = {
+      Action: 'UpdateOpenIDConnectProviderThumbprint',
+      Version: defaultVersion,
+      OpenIDConnectProviderArn,
+    }
+    Object.assign(query, serializeArray(ThumbprintList, 'ThumbprintList'))
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const UpdateRole = {
   awsDoc: docRoot + 'API_UpdateRole.html',
   validate: {
@@ -3311,6 +3348,7 @@ export default {
     PutRolePolicy,
     PutUserPermissionsBoundary,
     PutUserPolicy,
+    RemoveClientIDFromOpenIDConnectProvider,
     RemoveRoleFromInstanceProfile,
     RemoveUserFromGroup,
     ResetServiceSpecificCredential,
@@ -3332,6 +3370,7 @@ export default {
     UpdateAssumeRolePolicy,
     UpdateGroup,
     UpdateLoginProfile,
+    UpdateOpenIDConnectProviderThumbprint,
     UpdateRole,
     UpdateRoleDescription,
     UpdateServiceSpecificCredential,

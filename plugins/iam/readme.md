@@ -1224,6 +1224,17 @@ Properties:
   - User name
 
 
+### `RemoveClientIDFromOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html)
+
+Properties:
+- **`ClientID` (string) [required]**
+  - The client ID
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
+
+
 ### `RemoveRoleFromInstanceProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html)
@@ -1522,6 +1533,18 @@ Properties:
   - Set to true to specify the user must make a new password on next sign-in
 
 
+### `UpdateOpenIDConnectProviderThumbprint`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
+
+Properties:
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
+- **`ThumbprintList` (array) [required]**
+  - List of certificate thumbprints
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html#API_UpdateOpenIDConnectProviderThumbprint_RequestParameters)
+
+
 ### `UpdateRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html)
@@ -1645,7 +1668,6 @@ Properties:
 - [`ListServerCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html)
 - [`ListServerCertificateTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html)
 - [`ListVirtualMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html)
-- [`RemoveClientIDFromOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html)
 - [`ResyncMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResyncMFADevice.html)
 - [`SetSecurityTokenServicePreferences`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html)
 - [`TagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagMFADevice.html)
@@ -1654,7 +1676,6 @@ Properties:
 - [`UntagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagMFADevice.html)
 - [`UntagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagSAMLProvider.html)
 - [`UntagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html)
-- [`UpdateOpenIDConnectProviderThumbprint`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
 - [`UpdateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSAMLProvider.html)
 - [`UpdateServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html)
 - [`UploadServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
