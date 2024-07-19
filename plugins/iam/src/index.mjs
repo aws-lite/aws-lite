@@ -56,7 +56,7 @@ const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: u
 const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionId = { ...str, required, comment: 'ID of the policy version; typically `v<n>`' }
-
+const VirtualMFADeviceName = { ...str, required, comment: 'Name of the virtual MFA device' }
 
 const paginator = { type: 'query', cursor: 'Marker' }
 
@@ -451,25 +451,46 @@ const CreateUser = {
       Version: defaultVersion,
       ...params,
     }
-    if (query.Tags) {
-      query.Tags = query.Tags.forEach(({ Key, Value }, i) => {
-        query[`Tags.member.${i + 1}.Key`] = Key
-        query[`Tags.member.${i + 1}.Value`] = Value
-      })
+    let { Tags } = params
+    if (Tags) {
+      Object.assign(query, serializeArray(Tags, 'Tags', true))
       delete query.Tags
     }
-    return {
-      query,
-    }
+    return { query }
   },
   response: ({ payload }) => {
-    let { CreateUserResult } = payload
-    const { Tags } = CreateUserResult.User
-    if (Tags) {
-      const { member } = Tags
-      CreateUserResult.User.Tags = Array.isArray(member) ? member : [ member ]
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.CreateUserResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
+  },
+}
+
+const CreateVirtualMFADevice = {
+  awsDoc: docRoot + 'API_CreateVirtualMFADevice.html',
+  validate: {
+    VirtualMFADeviceName,
+    Path,
+    Tags,
+  },
+  request: params => {
+    let query = {
+      Action: 'CreateVirtualMFADevice',
+      Version: defaultVersion,
+      ...params,
     }
-    return CreateUserResult
+    const { Tags } = params
+    if (Tags) {
+      Object.assign(query, serializeArray(Tags, 'Tags', true))
+      delete query.Tags
+    }
+    return { query }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.CreateVirtualMFADeviceResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
   },
 }
 
@@ -824,6 +845,23 @@ const DeleteUserPolicy = {
     return {
       query: {
         Action: 'DeleteUserPolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteVirtualMFADevice = {
+  awsDoc: docRoot + 'API_DeleteVirtualMFADevice.html',
+  validate: {
+    SerialNumber: { ...str, required, comment: 'Serial number or ARN of the virtual MFA device' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteVirtualMFADevice',
         Version: defaultVersion,
         ...params,
       },
@@ -2537,6 +2575,40 @@ const ListUserTags = {
   },
 }
 
+const ListVirtualMFADevices = {
+  awsDoc: docRoot + 'API_ListVirtualMFADevices.html',
+  validate: {
+    AssignmentStatus: { ...str, comment: 'Filter results by assignment status; can be one of: `Assigned`, `Unassigned`, `Any`' },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListVirtualMFADevices',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListVirtualMFADevicesResult.Marker',
+        accumulator: 'ListVirtualMFADevicesResult.VirtualMFADevices.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'VirtualMFADevices' ])
+    const result = payload.ListVirtualMFADevicesResult
+    normalizeResponse(result, arrayKeys)
+    return result
+  },
+}
+
 const PutGroupPolicy = {
   awsDoc: docRoot + 'API_PutGroupPolicy.html',
   validate: {
@@ -3464,6 +3536,7 @@ export default {
     CreateServiceLinkedRole,
     CreateServiceSpecificCredential,
     CreateUser,
+    CreateVirtualMFADevice,
     DeleteAccessKey,
     DeleteAccountAlias,
     DeleteAccountPasswordPolicy,
@@ -3485,6 +3558,7 @@ export default {
     DeleteUser,
     DeleteUserPermissionsBoundary,
     DeleteUserPolicy,
+    DeleteVirtualMFADevice,
     DetachGroupPolicy,
     DetachRolePolicy,
     DetachUserPolicy,
@@ -3545,6 +3619,7 @@ export default {
     ListUserPolicies,
     ListUsers,
     ListUserTags,
+    ListVirtualMFADevices,
     PutGroupPolicy,
     PutRolePermissionsBoundary,
     PutRolePolicy,

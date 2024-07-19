@@ -3,10 +3,8 @@ const docRoot = 'https://docs.aws.amazon.com/IAM/latest/APIReference/'
 export default {
   CreatePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_CreatePolicyVersion.html' }, // TODO: figure out why this returns status code 302
   CreateSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_CreateSAMLProvider.html' },
-  CreateVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_CreateVirtualMFADevice.html' },
   DeactivateMFADevice:                       { disabled, awsDoc: docRoot + 'API_DeactivateMFADevice.html' },
   DeleteSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_DeleteSAMLProvider.html' },
-  DeleteVirtualMFADevice:                    { disabled, awsDoc: docRoot + 'API_DeleteVirtualMFADevice.html' },
   EnableMFADevice:                           { disabled, awsDoc: docRoot + 'API_EnableMFADevice.html' },
   GetMFADevice:                              { disabled, awsDoc: docRoot + 'API_GetMFADevice.html' }, // TODO: test
   GetSAMLProvider:                           { disabled, awsDoc: docRoot + 'API_GetSAMLProvider.html' },
@@ -15,7 +13,6 @@ export default {
   ListMFADeviceTags:                         { disabled, awsDoc: docRoot + 'API_ListMFADeviceTags.html' },
   ListSAMLProviders:                         { disabled, awsDoc: docRoot + 'API_ListSAMLProviders.html' },
   ListSAMLProviderTags:                      { disabled, awsDoc: docRoot + 'API_ListSAMLProviderTags.html' },
-  ListVirtualMFADevices:                     { disabled, awsDoc: docRoot + 'API_ListVirtualMFADevices.html' },
   ResyncMFADevice:                           { disabled, awsDoc: docRoot + 'API_ResyncMFADevice.html' },
   SetSecurityTokenServicePreferences:        { disabled, awsDoc: docRoot + 'API_SetSecurityTokenServicePreferences.html' },
   TagMFADevice:                              { disabled, awsDoc: docRoot + 'API_TagMFADevice.html' },

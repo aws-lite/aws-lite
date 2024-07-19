@@ -19,6 +19,7 @@ import {
   CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
   CreateServiceSpecificCredentialCommandOutput as CreateServiceSpecificCredentialResponse,
   CreateUserCommandOutput as CreateUserResponse,
+  CreateVirtualMFADeviceCommandOutput as CreateVirtualMFADeviceResponse,
   DeleteAccessKeyCommandOutput as DeleteAccessKeyResponse,
   DeleteAccountAliasCommandOutput as DeleteAccountAliasResponse,
   DeleteAccountPasswordPolicyCommandOutput as DeleteAccountPasswordPolicyResponse,
@@ -40,6 +41,7 @@ import {
   DeleteUserCommandOutput as DeleteUserResponse,
   DeleteUserPermissionsBoundaryCommandOutput as DeleteUserPermissionsBoundaryResponse,
   DeleteUserPolicyCommandOutput as DeleteUserPolicyResponse,
+  DeleteVirtualMFADeviceCommandOutput as DeleteVirtualMFADeviceResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
   DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
   DetachUserPolicyCommandOutput as DetachUserPolicyResponse,
@@ -98,6 +100,7 @@ import {
   ListUserPoliciesCommandOutput as ListUserPoliciesResponse,
   ListUsersCommandOutput as ListUsersResponse,
   ListUserTagsCommandOutput as ListUserTagsResponse,
+  ListVirtualMFADevicesCommandOutput as ListVirtualMFADevicesResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
   PutRolePermissionsBoundaryCommandOutput as PutRolePermissionsBoundaryResponse,
   PutRolePolicyCommandOutput as PutRolePolicyResponse,
@@ -254,6 +257,12 @@ declare interface AwsLiteIAM {
   CreateUser: (input: { UserName: string, Path?: string, PermissionsBoundary?: string, Tags?: any[] }) => Promise<CreateUserResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html IAM: CreateVirtualMFADevice}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateVirtualMFADevice IAM: CreateVirtualMFADevice}
+   */
+  CreateVirtualMFADevice: (input: { VirtualMFADeviceName: string, Path?: string, Tags?: any[] }) => Promise<CreateVirtualMFADeviceResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccessKey.html IAM: DeleteAccessKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccessKey IAM: DeleteAccessKey}
    */
@@ -374,6 +383,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPolicy IAM: DeleteUserPolicy}
    */
   DeleteUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<DeleteUserPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html IAM: DeleteVirtualMFADevice}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteVirtualMFADevice IAM: DeleteVirtualMFADevice}
+   */
+  DeleteVirtualMFADevice: (input: { SerialNumber: string }) => Promise<DeleteVirtualMFADeviceResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachGroupPolicy.html IAM: DetachGroupPolicy}
@@ -704,6 +719,12 @@ declare interface AwsLiteIAM {
   ListUserTags: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListUserTagsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html IAM: ListVirtualMFADevices}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListVirtualMFADevices IAM: ListVirtualMFADevices}
+   */
+  ListVirtualMFADevices: (input: { AssignmentStatus?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListVirtualMFADevicesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
@@ -973,6 +994,7 @@ export type {
   CreateServiceLinkedRoleResponse,
   CreateServiceSpecificCredentialResponse,
   CreateUserResponse,
+  CreateVirtualMFADeviceResponse,
   DeleteAccessKeyResponse,
   DeleteAccountAliasResponse,
   DeleteAccountPasswordPolicyResponse,
@@ -994,6 +1016,7 @@ export type {
   DeleteUserResponse,
   DeleteUserPermissionsBoundaryResponse,
   DeleteUserPolicyResponse,
+  DeleteVirtualMFADeviceResponse,
   DetachGroupPolicyResponse,
   DetachRolePolicyResponse,
   DetachUserPolicyResponse,
@@ -1052,6 +1075,7 @@ export type {
   ListUserPoliciesResponse,
   ListUsersResponse,
   ListUserTagsResponse,
+  ListVirtualMFADevicesResponse,
   PutGroupPolicyResponse,
   PutRolePermissionsBoundaryResponse,
   PutRolePolicyResponse,
