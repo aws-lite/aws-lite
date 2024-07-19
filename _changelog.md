@@ -10,6 +10,7 @@
 - Added initial support for acquiring AWS credentials in ECS, EC2, and other environments that use IMDSv2
   - IMDSv1 is not currently supported
 - Increased support for creds and other various kinds of configuration via AWS config files (`~/.aws/config`)
+- Added support for async iterator pagination by specifying `iterator` as the pagination type
 
 
 ### Changed
