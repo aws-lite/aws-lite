@@ -29,7 +29,7 @@ module.exports = {
     },
     pluginBreaksValidation: {
       validate: { arr: { type: 'array' } },
-      request: async () => ({ arr: 12345 })
-    }
-  }
+      request: async () => ({ arr: 12345 }),
+    },
+  },
 }
