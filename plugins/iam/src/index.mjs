@@ -47,6 +47,7 @@ const ResourceHandlingOption = { ...str, comment: 'Specify the type of simulatio
 const ResourceOwner = { ...str, comment: 'ARN representing the AWS account ID that owns any simulated resources' }
 const ResourcePolicy = { type: [ 'string', 'object' ], comment: 'A resource based policy' }
 const RoleName = { ...str, required, comment: 'Name of the role' }
+const ServerCertificateName = { ...str, required, comment: 'Name of the server certificate; do not include path, cannot contain spaces' }
 const ServiceName = { ...str, required, comment: 'Name of the AWS service' }
 const ServiceSpecificCredentialId = { ...str, required, comment: 'ID of the service specific credential' }
 const SSHPublicKeyId = { ...str, required, comment: 'ID of the SSH public key' }
@@ -287,34 +288,33 @@ const CreateLoginProfile = {
   response: ({ payload }) => payload.CreateLoginProfileResult,
 }
 
-// TODO: complete
-// const CreateOpenIDConnectProvider = {
-//   awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html',
-//   validate: {
-//     Url: { ...str, required, comment: 'URL of the identity provider; must begin with `https://`' },
-//     ClientIDList: { ...arr, comment: 'Array of at most 255 client IDs', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
-//     Tags,
-//     ThumbprintList: { ...arr, comment: 'Array of server certificate thumbprints for the OIDC identity providers server certificates', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
-//   },
-//   request: params => {
-//     const { Url, ClientIDList, Tags, ThumbprintList } = params
-//     let query = {
-//       Action: 'CreateOpenIDConnectProvider',
-//       Version: defaultVersion,
-//       Url,
-//     }
-//     if (ClientIDList) Object.assign(query, serializeArray(ClientIDList, 'ClientIDList'))
-//     if (Tags) query = Object.assign(query, serializeArray(Tags, 'Tags', true))
-//     if (ThumbprintList) Object.assign(query, serializeArray(ThumbprintList, 'ThumbprintList'))
-//     return { query }
-//   },
-//   response: ({ payload }) => {
-//     const arrayKeys = new Set([ 'Tags' ])
-//     const result = payload.CreateOpenIDConnectProviderResult
-//     normalizeResponse(result, arrayKeys)
-//     return result
-//   },
-// }
+const CreateOpenIDConnectProvider = {
+  awsDoc: docRoot + 'API_CreateOpenIDConnectProvider.html',
+  validate: {
+    Url: { ...str, required, comment: 'URL of the identity provider; must begin with `https://`' },
+    ClientIDList: { ...arr, comment: 'Array of at most 255 client IDs', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
+    Tags,
+    ThumbprintList: { ...arr, comment: 'Array of server certificate thumbprints for the OIDC identity providers server certificates', ref: docRoot + 'API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters' },
+  },
+  request: params => {
+    const { Url, ClientIDList, Tags, ThumbprintList } = params
+    let query = {
+      Action: 'CreateOpenIDConnectProvider',
+      Version: defaultVersion,
+      Url,
+    }
+    if (ClientIDList) Object.assign(query, serializeArray(ClientIDList, 'ClientIDList'))
+    if (Tags) query = Object.assign(query, serializeArray(Tags, 'Tags', true))
+    if (ThumbprintList) Object.assign(query, serializeArray(ThumbprintList, 'ThumbprintList'))
+    return { query }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.CreateOpenIDConnectProviderResult
+    normalizeResponse(result, arrayKeys)
+    return result
+  },
+}
 
 const CreatePolicy = {
   awsDoc: docRoot + 'API_CreatePolicy.html',
@@ -684,6 +684,23 @@ const DeleteRolePolicy = {
     return {
       query: {
         Action: 'DeleteRolePolicy',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteServerCertificate = {
+  awsDoc: docRoot + 'API_DeleteServerCertificate.html',
+  validate: {
+    ServerCertificateName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'DeleteServerCertificate',
         Version: defaultVersion,
         ...params,
       },
@@ -1358,6 +1375,29 @@ const GetRolePolicy = {
     result.PolicyDocument = JSON.parse(qs.unescape(result.PolicyDocument))
     return result
   },
+}
+
+const GetServerCertificate = {
+  awsDoc: docRoot + 'API_GetServerCertificate.html',
+  validate: {
+    ServerCertificateName,
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'GetServerCertificate',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.GetServerCertificateResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
+  },
+
 }
 
 const GetServiceLastAccessedDetails = {
@@ -2233,6 +2273,40 @@ const ListRoleTags = {
   response: ({ payload }) => {
     const arrayKeys = new Set([ 'Tags' ])
     const result = payload.ListRoleTagsResult
+    normalizeResponse(result, arrayKeys)
+    return result
+  },
+}
+
+const ListServerCertificates = {
+  awsDoc: docRoot + 'API_ListServerCertificates.html',
+  validate: {
+    Marker,
+    MaxItems,
+    PathPrefix,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListServerCertificates',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListServerCertificatesResult.Marker',
+        accumulator: 'ListServerCertificatesResult.ServerCertificateMetadataList.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'ServerCertificateMetadataList' ])
+    const result = payload.ListServerCertificatesResult
     normalizeResponse(result, arrayKeys)
     return result
   },
@@ -3206,6 +3280,34 @@ const UpdateUser = {
   response: emptyResponse,
 }
 
+const UploadServerCertificate = {
+  awsDoc: docRoot + 'API_UploadServerCertificate.html',
+  validate: {
+    CertificateBody: { ...str, required, comment: 'PEM encoded public key', ref: docRoot + 'API_UploadServerCertificate.html#API_UploadServerCertificate_RequestParameters' },
+    PrivateKey: { ...str, required, comment: 'PEM encoded private key' },
+    ServerCertificateName,
+    CertificateChain: { ...str, comment: 'Contents of the certificate chain' },
+    Path,
+    Tags,
+  },
+  request: params => {
+    const { CertificateBody, PrivateKey, ServerCertificateName } = params
+    const query = {
+      Action: 'UploadServerCertificate',
+      Version: defaultVersion,
+      CertificateBody,
+      PrivateKey,
+      ServerCertificateName,
+    }
+    let { CertificateChain, Path, Tags } = params
+    if (CertificateChain) query.CertificateChain = CertificateChain
+    if (Path) query.Path = Path
+    if (Tags) Object.assign(query, serializeArray(Tags, 'Tags', true))
+    return { query }
+  },
+  response: ({ payload }) => payload.UploadServerCertificateResult,
+}
+
 const UploadSigningCertificate = {
   awsDoc: docRoot + 'API_UploadSigningCertificate.html',
   validate: {
@@ -3259,7 +3361,7 @@ export default {
     CreateGroup,
     CreateInstanceProfile,
     CreateLoginProfile,
-    // CreateOpenIDConnectProvider,
+    CreateOpenIDConnectProvider,
     CreatePolicy,
     // CreatePolicyVersion,
     CreateRole,
@@ -3279,6 +3381,7 @@ export default {
     DeleteRole,
     DeleteRolePermissionsBoundary,
     DeleteRolePolicy,
+    DeleteServerCertificate,
     DeleteServiceLinkedRole,
     DeleteServiceSpecificCredential,
     DeleteSigningCertificate,
@@ -3310,6 +3413,7 @@ export default {
     GetPolicyVersion,
     GetRole,
     GetRolePolicy,
+    GetServerCertificate,
     GetServiceLastAccessedDetails,
     GetServiceLastAccessedDetailsWithEntities,
     // GetServiceLinkedRoleDeletionStatus,
@@ -3337,6 +3441,7 @@ export default {
     ListRolePolicies,
     ListRoles,
     ListRoleTags,
+    ListServerCertificates,
     ListServiceSpecificCredentials,
     ListSigningCertificates,
     ListSSHPublicKeys,
@@ -3377,6 +3482,7 @@ export default {
     UpdateSigningCertificate,
     UpdateSSHPublicKey,
     UpdateUser,
+    UploadServerCertificate,
     UploadSigningCertificate,
     UploadSSHPublicKey,
     ...incomplete,

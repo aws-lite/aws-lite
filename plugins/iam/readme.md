@@ -167,6 +167,24 @@ Properties:
   - Set to true to specify the user must make a new password on next sign-in
 
 
+### `CreateOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
+
+Properties:
+- **`Url` (string) [required]**
+  - URL of the identity provider; must begin with `https://`
+- **`ClientIDList` (array)**
+  - Array of at most 255 client IDs
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters)
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+- **`ThumbprintList` (array)**
+  - Array of server certificate thumbprints for the OIDC identity providers server certificates
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters)
+
+
 ### `CreatePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
@@ -372,6 +390,15 @@ Properties:
   - Name of the role
 - **`PolicyName` (string) [required]**
   - Name of the policy
+
+
+### `DeleteServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html)
+
+Properties:
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
 
 
 ### `DeleteServiceLinkedRole`
@@ -689,6 +716,15 @@ Properties:
   - Name of the policy
 - **`RoleName` (string) [required]**
   - Name of the role
+
+
+### `GetServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html)
+
+Properties:
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
 
 
 ### `GetServiceLastAccessedDetails`
@@ -1077,6 +1113,21 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListServerCertificates`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
 - **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -1621,6 +1672,28 @@ Properties:
   - New user name
 
 
+### `UploadServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
+
+Properties:
+- **`CertificateBody` (string) [required]**
+  - PEM encoded public key
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html#API_UploadServerCertificate_RequestParameters)
+- **`PrivateKey` (string) [required]**
+  - PEM encoded private key
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
+- **`CertificateChain` (string)**
+  - Contents of the certificate chain
+- **`Path` (string)**
+  - Path for the identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
 ### `UploadSigningCertificate`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html)
@@ -1654,18 +1727,15 @@ Properties:
 - [`CreateVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
 - [`DeleteSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSAMLProvider.html)
-- [`DeleteServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html)
 - [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
 - [`EnableMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_EnableMFADevice.html)
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
 - [`GetSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSAMLProvider.html)
-- [`GetServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html)
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)
 - [`ListSAMLProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviders.html)
 - [`ListSAMLProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviderTags.html)
-- [`ListServerCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html)
 - [`ListServerCertificateTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html)
 - [`ListVirtualMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html)
 - [`ResyncMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResyncMFADevice.html)
@@ -1678,7 +1748,6 @@ Properties:
 - [`UntagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html)
 - [`UpdateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSAMLProvider.html)
 - [`UpdateServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html)
-- [`UploadServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
 <!-- METHOD_DOCS_END -->
 
 

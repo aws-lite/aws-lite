@@ -13,6 +13,7 @@ import {
   CreateGroupCommandOutput as CreateGroupResponse,
   CreateInstanceProfileCommandOutput as CreateInstanceProfileResponse,
   CreateLoginProfileCommandOutput as CreateLoginProfileResponse,
+  CreateOpenIDConnectProviderCommandOutput as CreateOpenIDConnectProviderResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
@@ -31,6 +32,7 @@ import {
   DeleteRoleCommandOutput as DeleteRoleResponse,
   DeleteRolePermissionsBoundaryCommandOutput as DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
+  DeleteServerCertificateCommandOutput as DeleteServerCertificateResponse,
   DeleteServiceLinkedRoleCommandOutput as DeleteServiceLinkedRoleResponse,
   DeleteServiceSpecificCredentialCommandOutput as DeleteServiceSpecificCredentialResponse,
   DeleteSigningCertificateCommandOutput as DeleteSigningCertificateResponse,
@@ -61,6 +63,7 @@ import {
   GetPolicyVersionCommandOutput as GetPolicyVersionResponse,
   GetRoleCommandOutput as GetRoleResponse,
   GetRolePolicyCommandOutput as GetRolePolicyResponse,
+  GetServerCertificateCommandOutput as GetServerCertificateResponse,
   GetServiceLastAccessedDetailsCommandOutput as GetServiceLastAccessedDetailsResponse,
   GetServiceLastAccessedDetailsWithEntitiesCommandOutput as GetServiceLastAccessedDetailsWithEntitiesResponse,
   GetSSHPublicKeyCommandOutput as GetSSHPublicKeyResponse,
@@ -87,6 +90,7 @@ import {
   ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
+  ListServerCertificatesCommandOutput as ListServerCertificatesResponse,
   ListServiceSpecificCredentialsCommandOutput as ListServiceSpecificCredentialsResponse,
   ListSigningCertificatesCommandOutput as ListSigningCertificatesResponse,
   ListSSHPublicKeysCommandOutput as ListSSHPublicKeysResponse,
@@ -127,6 +131,7 @@ import {
   UpdateSigningCertificateCommandOutput as UpdateSigningCertificateResponse,
   UpdateSSHPublicKeyCommandOutput as UpdateSSHPublicKeyResponse,
   UpdateUserCommandOutput as UpdateUserResponse,
+  UploadServerCertificateCommandOutput as UploadServerCertificateResponse,
   UploadSigningCertificateCommandOutput as UploadSigningCertificateResponse,
   UploadSSHPublicKeyCommandOutput as UploadSSHPublicKeyResponse,
   // $IMPORTS_END
@@ -207,6 +212,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateLoginProfile IAM: CreateLoginProfile}
    */
   CreateLoginProfile: (input: { Password: string, UserName: string, PasswordResetRequired?: boolean }) => Promise<CreateLoginProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html IAM: CreateOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateOpenIDConnectProvider IAM: CreateOpenIDConnectProvider}
+   */
+  CreateOpenIDConnectProvider: (input: { Url: string, ClientIDList?: any[], Tags?: any[], ThumbprintList?: any[] }) => Promise<CreateOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html IAM: CreatePolicy}
@@ -311,6 +322,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePolicy IAM: DeleteRolePolicy}
    */
   DeleteRolePolicy: (input: { RoleName: string, PolicyName: string }) => Promise<DeleteRolePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html IAM: DeleteServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServerCertificate IAM: DeleteServerCertificate}
+   */
+  DeleteServerCertificate: (input: { ServerCertificateName: string }) => Promise<DeleteServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceLinkedRole.html IAM: DeleteServiceLinkedRole}
@@ -477,6 +494,12 @@ declare interface AwsLiteIAM {
   GetRolePolicy: (input: { PolicyName: string, RoleName: string }) => Promise<GetRolePolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html IAM: GetServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServerCertificate IAM: GetServerCertificate}
+   */
+  GetServerCertificate: (input: { ServerCertificateName: string }) => Promise<GetServerCertificateResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html IAM: GetServiceLastAccessedDetails}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetails IAM: GetServiceLastAccessedDetails}
    */
@@ -627,6 +650,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRoleTags IAM: ListRoleTags}
    */
   ListRoleTags: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRoleTagsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html IAM: ListServerCertificates}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServerCertificates IAM: ListServerCertificates}
+   */
+  ListServerCertificates: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListServerCertificatesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html IAM: ListServiceSpecificCredentials}
@@ -869,6 +898,12 @@ declare interface AwsLiteIAM {
   UpdateUser: (input: { UserName: string, NewPath?: string, NewUserName?: string }) => Promise<UpdateUserResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html IAM: UploadServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadServerCertificate IAM: UploadServerCertificate}
+   */
+  UploadServerCertificate: (input: { CertificateBody: string, PrivateKey: string, ServerCertificateName: string, CertificateChain?: string, Path?: string, Tags?: any[] }) => Promise<UploadServerCertificateResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html IAM: UploadSigningCertificate}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadSigningCertificate IAM: UploadSigningCertificate}
    */
@@ -904,6 +939,7 @@ export type {
   CreateGroupResponse,
   CreateInstanceProfileResponse,
   CreateLoginProfileResponse,
+  CreateOpenIDConnectProviderResponse,
   CreatePolicyResponse,
   CreateRoleResponse,
   CreateServiceLinkedRoleResponse,
@@ -922,6 +958,7 @@ export type {
   DeleteRoleResponse,
   DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyResponse,
+  DeleteServerCertificateResponse,
   DeleteServiceLinkedRoleResponse,
   DeleteServiceSpecificCredentialResponse,
   DeleteSigningCertificateResponse,
@@ -952,6 +989,7 @@ export type {
   GetPolicyVersionResponse,
   GetRoleResponse,
   GetRolePolicyResponse,
+  GetServerCertificateResponse,
   GetServiceLastAccessedDetailsResponse,
   GetServiceLastAccessedDetailsWithEntitiesResponse,
   GetSSHPublicKeyResponse,
@@ -978,6 +1016,7 @@ export type {
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
+  ListServerCertificatesResponse,
   ListServiceSpecificCredentialsResponse,
   ListSigningCertificatesResponse,
   ListSSHPublicKeysResponse,
@@ -1018,6 +1057,7 @@ export type {
   UpdateSigningCertificateResponse,
   UpdateSSHPublicKeyResponse,
   UpdateUserResponse,
+  UploadServerCertificateResponse,
   UploadSigningCertificateResponse,
   UploadSSHPublicKeyResponse,
   // $EXPORT_END
