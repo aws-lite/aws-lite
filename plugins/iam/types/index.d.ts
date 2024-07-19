@@ -91,6 +91,7 @@ import {
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
   ListServerCertificatesCommandOutput as ListServerCertificatesResponse,
+  ListServerCertificateTagsCommandOutput as ListServerCertificateTagsResponse,
   ListServiceSpecificCredentialsCommandOutput as ListServiceSpecificCredentialsResponse,
   ListSigningCertificatesCommandOutput as ListSigningCertificatesResponse,
   ListSSHPublicKeysCommandOutput as ListSSHPublicKeysResponse,
@@ -111,6 +112,7 @@ import {
   TagOpenIDConnectProviderCommandOutput as TagOpenIDConnectProviderResponse,
   TagPolicyCommandOutput as TagPolicyResponse,
   TagRoleCommandOutput as TagRoleResponse,
+  TagServerCertificateCommandOutput as TagServerCertificateResponse,
   TagUserCommandOutput as TagUserResponse,
   SimulateCustomPolicyCommandOutput as SimulateCustomPolicyResponse,
   SimulatePrincipalPolicyCommandOutput as SimulatePrincipalPolicyResponse,
@@ -118,6 +120,7 @@ import {
   UntagOpenIDConnectProviderCommandOutput as UntagOpenIDConnectProviderResponse,
   UntagPolicyCommandOutput as UntagPolicyResponse,
   UntagRoleCommandOutput as UntagRoleResponse,
+  UntagServerCertificateCommandOutput as UntagServerCertificateResponse,
   UntagUserCommandOutput as UntagUserResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
   UpdateAccountPasswordPolicyCommandOutput as UpdateAccountPasswordPolicyResponse,
@@ -127,6 +130,7 @@ import {
   UpdateOpenIDConnectProviderThumbprintCommandOutput as UpdateOpenIDConnectProviderThumbprintResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
+  UpdateServerCertificateCommandOutput as UpdateServerCertificateResponse,
   UpdateServiceSpecificCredentialCommandOutput as UpdateServiceSpecificCredentialResponse,
   UpdateSigningCertificateCommandOutput as UpdateSigningCertificateResponse,
   UpdateSSHPublicKeyCommandOutput as UpdateSSHPublicKeyResponse,
@@ -658,6 +662,12 @@ declare interface AwsLiteIAM {
   ListServerCertificates: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListServerCertificatesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html IAM: ListServerCertificateTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServerCertificateTags IAM: ListServerCertificateTags}
+   */
+  ListServerCertificateTags: (input: { ServerCertificateName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListServerCertificateTagsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html IAM: ListServiceSpecificCredentials}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServiceSpecificCredentials IAM: ListServiceSpecificCredentials}
    */
@@ -778,6 +788,12 @@ declare interface AwsLiteIAM {
   TagRole: (input: { RoleName: string, Tags: any[] }) => Promise<TagRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagServerCertificate.html IAM: TagServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagServerCertificate IAM: TagServerCertificate}
+   */
+  TagServerCertificate: (input: { ServerCertificateName: string, Tags: any[] }) => Promise<TagServerCertificateResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagUser.html IAM: TagUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagUser IAM: TagUser}
    */
@@ -818,6 +834,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagRole IAM: UntagRole}
    */
   UntagRole: (input: { RoleName: string, TagKeys: any[] }) => Promise<UntagRoleResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html IAM: UntagServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagServerCertificate IAM: UntagServerCertificate}
+   */
+  UntagServerCertificate: (input: { ServerCertificateName: string, TagKeys: any[] }) => Promise<UntagServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagUser.html IAM: UntagUser}
@@ -872,6 +894,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRoleDescription IAM: UpdateRoleDescription}
    */
   UpdateRoleDescription: (input: { RoleName: string, Description?: string }) => Promise<UpdateRoleDescriptionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html IAM: UpdateServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateServerCertificate IAM: UpdateServerCertificate}
+   */
+  UpdateServerCertificate: (input: { ServerCertificateName: string, NewPath?: string, NewServerCertificateName?: string }) => Promise<UpdateServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html IAM: UpdateServiceSpecificCredential}
@@ -1017,6 +1045,7 @@ export type {
   ListRolesResponse,
   ListRoleTagsResponse,
   ListServerCertificatesResponse,
+  ListServerCertificateTagsResponse,
   ListServiceSpecificCredentialsResponse,
   ListSigningCertificatesResponse,
   ListSSHPublicKeysResponse,
@@ -1037,6 +1066,7 @@ export type {
   TagOpenIDConnectProviderResponse,
   TagPolicyResponse,
   TagRoleResponse,
+  TagServerCertificateResponse,
   TagUserResponse,
   SimulateCustomPolicyResponse,
   SimulatePrincipalPolicyResponse,
@@ -1044,6 +1074,7 @@ export type {
   UntagOpenIDConnectProviderResponse,
   UntagPolicyResponse,
   UntagRoleResponse,
+  UntagServerCertificateResponse,
   UntagUserResponse,
   UpdateAccessKeyResponse,
   UpdateAccountPasswordPolicyResponse,
@@ -1053,6 +1084,7 @@ export type {
   UpdateOpenIDConnectProviderThumbprintResponse,
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
+  UpdateServerCertificateResponse,
   UpdateServiceSpecificCredentialResponse,
   UpdateSigningCertificateResponse,
   UpdateSSHPublicKeyResponse,

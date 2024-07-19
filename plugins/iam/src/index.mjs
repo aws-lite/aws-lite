@@ -2312,6 +2312,40 @@ const ListServerCertificates = {
   },
 }
 
+const ListServerCertificateTags = {
+  awsDoc: docRoot + 'API_ListServerCertificateTags.html',
+  validate: {
+    ServerCertificateName,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: params => {
+    let query = {
+      Action: 'ListServerCertificateTags',
+      Version: defaultVersion,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        token: 'ListServerCertificateTagsResult.Marker',
+        accumulator: 'ListServerCertificateTagsResult.Tags.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.ListServerCertificateTagsResult
+    normalizeResponse(result, arrayKeys)
+    return result
+  },
+}
+
 const ListServiceSpecificCredentials = {
   awsDoc: docRoot + 'API_ListServiceSpecificCredentials.html',
   validate: {
@@ -2928,6 +2962,25 @@ const TagRole = {
   response: emptyResponse,
 }
 
+const TagServerCertificate = {
+  awsDoc: docRoot + 'API_TagServerCertificate.html',
+  validate: {
+    ServerCertificateName,
+    Tags: { ...Tags, required },
+  },
+  request: params => {
+    const { ServerCertificateName, Tags } = params
+    const query = {
+      Action: 'TagServerCertificate',
+      Version: defaultVersion,
+      ServerCertificateName,
+    }
+    Object.assign(query, serializeArray(Tags, 'Tags', true))
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const TagUser = {
   awsDoc: docRoot + 'API_TagUser.html',
   validate: {
@@ -3018,6 +3071,25 @@ const UntagRole = {
       Action: 'UntagRole',
       Version: defaultVersion,
       RoleName,
+    }
+    Object.assign(query, serializeArray(TagKeys, 'TagKeys'))
+    return { query }
+  },
+  response: emptyResponse,
+}
+
+const UntagServerCertificate = {
+  awsDoc: docRoot + 'API_UntagServerCertificate.html',
+  validate: {
+    ServerCertificateName,
+    TagKeys,
+  },
+  request: params => {
+    const { ServerCertificateName, TagKeys } = params
+    let query = {
+      Action: 'UntagServerCertificate',
+      Version: defaultVersion,
+      ServerCertificateName,
     }
     Object.assign(query, serializeArray(TagKeys, 'TagKeys'))
     return { query }
@@ -3205,6 +3277,25 @@ const UpdateRoleDescription = {
   },
 }
 
+const UpdateServerCertificate = {
+  awsDoc: docRoot + 'API_UpdateServerCertificate.html',
+  validate: {
+    ServerCertificateName,
+    NewPath,
+    NewServerCertificateName: { ...str, comment: 'New name for the server certificate' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'UpdateServerCertificate',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const UpdateServiceSpecificCredential = {
   awsDoc: docRoot + 'API_UpdateServiceSpecificCredential.html',
   validate: {
@@ -3305,7 +3396,12 @@ const UploadServerCertificate = {
     if (Tags) Object.assign(query, serializeArray(Tags, 'Tags', true))
     return { query }
   },
-  response: ({ payload }) => payload.UploadServerCertificateResult,
+  response: ({ payload }) => {
+    const arrayKeys = new Set([ 'Tags' ])
+    const result = payload.UploadServerCertificateResult
+    normalizeResponse(result, arrayKeys, true)
+    return result
+  },
 }
 
 const UploadSigningCertificate = {
@@ -3442,6 +3538,7 @@ export default {
     ListRoles,
     ListRoleTags,
     ListServerCertificates,
+    ListServerCertificateTags,
     ListServiceSpecificCredentials,
     ListSigningCertificates,
     ListSSHPublicKeys,
@@ -3462,6 +3559,7 @@ export default {
     TagOpenIDConnectProvider,
     TagPolicy,
     TagRole,
+    TagServerCertificate,
     TagUser,
     SimulateCustomPolicy,
     SimulatePrincipalPolicy,
@@ -3469,6 +3567,7 @@ export default {
     UntagOpenIDConnectProvider,
     UntagPolicy,
     UntagRole,
+    UntagServerCertificate,
     UntagUser,
     UpdateAccessKey,
     UpdateAccountPasswordPolicy,
@@ -3478,6 +3577,7 @@ export default {
     UpdateOpenIDConnectProviderThumbprint,
     UpdateRole,
     UpdateRoleDescription,
+    UpdateServerCertificate,
     UpdateServiceSpecificCredential,
     UpdateSigningCertificate,
     UpdateSSHPublicKey,
