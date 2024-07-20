@@ -15,6 +15,7 @@ import {
   CreateLoginProfileCommandOutput as CreateLoginProfileResponse,
   CreateOpenIDConnectProviderCommandOutput as CreateOpenIDConnectProviderResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
+  CreatePolicyVersionCommandOutput as CreatePolicyVersionResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
   CreateServiceSpecificCredentialCommandOutput as CreateServiceSpecificCredentialResponse,
@@ -111,14 +112,15 @@ import {
   RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
   ResetServiceSpecificCredentialCommandOutput as ResetServiceSpecificCredentialResponse,
   SetDefaultPolicyVersionCommandOutput as SetDefaultPolicyVersionResponse,
+  SetSecurityTokenServicePreferencesCommandOutput as SetSecurityTokenServicePreferencesResponse,
+  SimulateCustomPolicyCommandOutput as SimulateCustomPolicyResponse,
+  SimulatePrincipalPolicyCommandOutput as SimulatePrincipalPolicyResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
   TagOpenIDConnectProviderCommandOutput as TagOpenIDConnectProviderResponse,
   TagPolicyCommandOutput as TagPolicyResponse,
   TagRoleCommandOutput as TagRoleResponse,
   TagServerCertificateCommandOutput as TagServerCertificateResponse,
   TagUserCommandOutput as TagUserResponse,
-  SimulateCustomPolicyCommandOutput as SimulateCustomPolicyResponse,
-  SimulatePrincipalPolicyCommandOutput as SimulatePrincipalPolicyResponse,
   UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
   UntagOpenIDConnectProviderCommandOutput as UntagOpenIDConnectProviderResponse,
   UntagPolicyCommandOutput as UntagPolicyResponse,
@@ -231,6 +233,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicy IAM: CreatePolicy}
    */
   CreatePolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, Description?: string, Path?: string, Tags?: any[] }) => Promise<CreatePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html IAM: CreatePolicyVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicyVersion IAM: CreatePolicyVersion}
+   */
+  CreatePolicyVersion: (input: { PolicyArn: string, PolicyDocument: string | Record<string, any>, SetAsDefault?: boolean }) => Promise<CreatePolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html IAM: CreateRole}
@@ -785,6 +793,24 @@ declare interface AwsLiteIAM {
   SetDefaultPolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<SetDefaultPolicyVersionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html IAM: SetSecurityTokenServicePreferences}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SetSecurityTokenServicePreferences IAM: SetSecurityTokenServicePreferences}
+   */
+  SetSecurityTokenServicePreferences: (input: { GlobalEndpointTokenVersion: string }) => Promise<SetSecurityTokenServicePreferencesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html IAM: SimulateCustomPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulateCustomPolicy IAM: SimulateCustomPolicy}
+   */
+  SimulateCustomPolicy: (input: { ActionNames: any[], PolicyInputList: any[], CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulateCustomPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html IAM: SimulatePrincipalPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulatePrincipalPolicy IAM: SimulatePrincipalPolicy}
+   */
+  SimulatePrincipalPolicy: (input: { ActionNames: any[], PolicySourceArn: string, CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], PolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulatePrincipalPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html IAM: TagInstanceProfile}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagInstanceProfile IAM: TagInstanceProfile}
    */
@@ -819,18 +845,6 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagUser IAM: TagUser}
    */
   TagUser: (input: { UserName: string, Tags: any[] }) => Promise<TagUserResponse>
-  /**
-   * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html IAM: SimulateCustomPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulateCustomPolicy IAM: SimulateCustomPolicy}
-   */
-  SimulateCustomPolicy: (input: { ActionNames: any[], PolicyInputList: any[], CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulateCustomPolicyResponse>
-  /**
-   * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html IAM: SimulatePrincipalPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulatePrincipalPolicy IAM: SimulatePrincipalPolicy}
-   */
-  SimulatePrincipalPolicy: (input: { ActionNames: any[], PolicySourceArn: string, CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], PolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulatePrincipalPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html IAM: UntagInstanceProfile}
@@ -990,6 +1004,7 @@ export type {
   CreateLoginProfileResponse,
   CreateOpenIDConnectProviderResponse,
   CreatePolicyResponse,
+  CreatePolicyVersionResponse,
   CreateRoleResponse,
   CreateServiceLinkedRoleResponse,
   CreateServiceSpecificCredentialResponse,
@@ -1086,14 +1101,15 @@ export type {
   RemoveUserFromGroupResponse,
   ResetServiceSpecificCredentialResponse,
   SetDefaultPolicyVersionResponse,
+  SetSecurityTokenServicePreferencesResponse,
+  SimulateCustomPolicyResponse,
+  SimulatePrincipalPolicyResponse,
   TagInstanceProfileResponse,
   TagOpenIDConnectProviderResponse,
   TagPolicyResponse,
   TagRoleResponse,
   TagServerCertificateResponse,
   TagUserResponse,
-  SimulateCustomPolicyResponse,
-  SimulatePrincipalPolicyResponse,
   UntagInstanceProfileResponse,
   UntagOpenIDConnectProviderResponse,
   UntagPolicyResponse,

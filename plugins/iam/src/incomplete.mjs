@@ -1,7 +1,6 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/IAM/latest/APIReference/'
 export default {
-  CreatePolicyVersion:                       { disabled, awsDoc: docRoot + 'API_CreatePolicyVersion.html' }, // TODO: figure out why this returns status code 302
   CreateSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_CreateSAMLProvider.html' },
   DeactivateMFADevice:                       { disabled, awsDoc: docRoot + 'API_DeactivateMFADevice.html' },
   DeleteSAMLProvider:                        { disabled, awsDoc: docRoot + 'API_DeleteSAMLProvider.html' },
@@ -14,7 +13,6 @@ export default {
   ListSAMLProviders:                         { disabled, awsDoc: docRoot + 'API_ListSAMLProviders.html' },
   ListSAMLProviderTags:                      { disabled, awsDoc: docRoot + 'API_ListSAMLProviderTags.html' },
   ResyncMFADevice:                           { disabled, awsDoc: docRoot + 'API_ResyncMFADevice.html' },
-  SetSecurityTokenServicePreferences:        { disabled, awsDoc: docRoot + 'API_SetSecurityTokenServicePreferences.html' },
   TagMFADevice:                              { disabled, awsDoc: docRoot + 'API_TagMFADevice.html' },
   TagSAMLProvider:                           { disabled, awsDoc: docRoot + 'API_TagSAMLProvider.html' },
   UntagMFADevice:                            { disabled, awsDoc: docRoot + 'API_UntagMFADevice.html' },

@@ -204,6 +204,19 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
+### `CreatePolicyVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`PolicyDocument` (string, object) [required]**
+  - The policy document; can be an object, or JSON or YAML string
+- **`SetAsDefault` (boolean)**
+  - Set to true to make this the default version used by all IAM resources
+
+
 ### `CreateRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
@@ -1384,6 +1397,80 @@ Properties:
   - ID of the policy version; typically `v<n>`
 
 
+### `SetSecurityTokenServicePreferences`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html)
+
+Properties:
+- **`GlobalEndpointTokenVersion` (string) [required]**
+  - Version of the global endpoint token; can be one of: `v1Token`, `v2Token`
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html#API_SetSecurityTokenServicePreferences_RequestParameters)
+
+
+### `SimulateCustomPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html)
+
+Properties:
+- **`ActionNames` (array) [required]**
+  - Array of between 3 to 128 API operation names
+- **`PolicyInputList` (array) [required]**
+  - Array of policy document objects
+- **`CallerArn` (string)**
+  - ARN of the IAM user to use as the simulated caller of the API operations
+- **`ContextEntries` (array)**
+  - Array of context keys and values
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PermissionsBoundaryPolicyInputList` (array)**
+  - IAM permissions boundary policy to simulate
+- **`ResourceArns` (array)**
+  - Array of AWS resource ARNs; default `*`
+- **`ResourceHandlingOption` (string)**
+  - Specify the type of simulation to run
+- **`ResourceOwner` (string)**
+  - ARN representing the AWS account ID that owns any simulated resources
+- **`ResourcePolicy` (string, object)**
+  - A resource based policy
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `SimulatePrincipalPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html)
+
+Properties:
+- **`ActionNames` (array) [required]**
+  - Array of between 3 to 128 API operation names
+- **`PolicySourceArn` (string) [required]**
+  - ARN of the user, group or role whose policies will be included in the simulation
+- **`CallerArn` (string)**
+  - ARN of the IAM user to use as the simulated caller of the API operations
+- **`ContextEntries` (array)**
+  - Array of context keys and values
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PermissionsBoundaryPolicyInputList` (array)**
+  - IAM permissions boundary policy to simulate
+- **`PolicyInputList` (array)**
+  - Array of policy document objects
+- **`ResourceArns` (array)**
+  - Array of AWS resource ARNs; default `*`
+- **`ResourceHandlingOption` (string)**
+  - Specify the type of simulation to run
+- **`ResourceOwner` (string)**
+  - ARN representing the AWS account ID that owns any simulated resources
+- **`ResourcePolicy` (string, object)**
+  - A resource based policy
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `TagInstanceProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html)
@@ -1454,70 +1541,6 @@ Properties:
 - **`Tags` (array) [required]**
   - List of tags to attach to the resource
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
-
-
-### `SimulateCustomPolicy`
-
-[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html)
-
-Properties:
-- **`ActionNames` (array) [required]**
-  - Array of between 3 to 128 API operation names
-- **`PolicyInputList` (array) [required]**
-  - Array of policy document objects
-- **`CallerArn` (string)**
-  - ARN of the IAM user to use as the simulated caller of the API operations
-- **`ContextEntries` (array)**
-  - Array of context keys and values
-- **`Marker` (string)**
-  - Pagination cursor
-- **`MaxItems` (number)**
-  - Maximum number of items to be returned in a response; at most 1000
-- **`PermissionsBoundaryPolicyInputList` (array)**
-  - IAM permissions boundary policy to simulate
-- **`ResourceArns` (array)**
-  - Array of AWS resource ARNs; default `*`
-- **`ResourceHandlingOption` (string)**
-  - Specify the type of simulation to run
-- **`ResourceOwner` (string)**
-  - ARN representing the AWS account ID that owns any simulated resources
-- **`ResourcePolicy` (string, object)**
-  - A resource based policy
-- **`paginate` (boolean)**
-  - Enable automatic result pagination; use this instead of making your own individual pagination requests
-
-
-### `SimulatePrincipalPolicy`
-
-[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html)
-
-Properties:
-- **`ActionNames` (array) [required]**
-  - Array of between 3 to 128 API operation names
-- **`PolicySourceArn` (string) [required]**
-  - ARN of the user, group or role whose policies will be included in the simulation
-- **`CallerArn` (string)**
-  - ARN of the IAM user to use as the simulated caller of the API operations
-- **`ContextEntries` (array)**
-  - Array of context keys and values
-- **`Marker` (string)**
-  - Pagination cursor
-- **`MaxItems` (number)**
-  - Maximum number of items to be returned in a response; at most 1000
-- **`PermissionsBoundaryPolicyInputList` (array)**
-  - IAM permissions boundary policy to simulate
-- **`PolicyInputList` (array)**
-  - Array of policy document objects
-- **`ResourceArns` (array)**
-  - Array of AWS resource ARNs; default `*`
-- **`ResourceHandlingOption` (string)**
-  - Specify the type of simulation to run
-- **`ResourceOwner` (string)**
-  - ARN representing the AWS account ID that owns any simulated resources
-- **`ResourcePolicy` (string, object)**
-  - A resource based policy
-- **`paginate` (boolean)**
-  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `UntagInstanceProfile`
@@ -1812,7 +1835,6 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreatePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
 - [`CreateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateSAMLProvider.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
 - [`DeleteSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSAMLProvider.html)
@@ -1825,7 +1847,6 @@ Properties:
 - [`ListSAMLProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviders.html)
 - [`ListSAMLProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviderTags.html)
 - [`ResyncMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResyncMFADevice.html)
-- [`SetSecurityTokenServicePreferences`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html)
 - [`TagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagMFADevice.html)
 - [`TagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagSAMLProvider.html)
 - [`UntagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagMFADevice.html)

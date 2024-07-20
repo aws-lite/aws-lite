@@ -350,28 +350,26 @@ const CreatePolicy = {
   },
 }
 
-// TODO: figure out why this returns status code 302
-// const CreatePolicyVersion = {
-//   awsDoc: docRoot + 'API_CreatePolicyVersion.html',
-//   validate: {
-//     PolicyArn,
-//     PolicyDocument,
-//     SetAsDefault: { ...bool, comment: 'Set to true to make this the default version used by all IAM resources' },
-//   },
-//   request: params => {
-//     let query = {
-//       Action: 'CreatePolicyVersion',
-//       Version: defaultVersion,
-//       ...params,
-//     }
-//     if (typeof query.PolicyDocument !== 'string') {
-//       query.PolicyDocument = JSON.stringify(query.PolicyDocument)
-//     }
-//   },
-//   response: ( payload ) => {
-//     return payload
-//   },
-// }
+const CreatePolicyVersion = {
+  awsDoc: docRoot + 'API_CreatePolicyVersion.html',
+  validate: {
+    PolicyArn,
+    PolicyDocument,
+    SetAsDefault: { ...bool, comment: 'Set to true to make this the default version used by all IAM resources' },
+  },
+  request: params => {
+    let query = {
+      Action: 'CreatePolicyVersion',
+      Version: defaultVersion,
+      ...params,
+    }
+    if (typeof query.PolicyDocument !== 'string') {
+      query.PolicyDocument = JSON.stringify(query.PolicyDocument)
+    }
+    return { query }
+  },
+  response: ({ payload }) => payload.CreatePolicyVersionResult,
+}
 
 const CreateRole = {
   awsDoc: docRoot + 'API_CreateRole.html',
@@ -1373,7 +1371,11 @@ const GetPolicyVersion = {
       },
     }
   },
-  response: ({ payload }) => payload.GetPolicyVersionResult,
+  response: ({ payload }) => {
+    const result = payload.GetPolicyVersionResult
+    result.PolicyVersion.Document = JSON.parse(qs.unescape(result.PolicyVersion.Document))
+    return result
+  },
 }
 
 const GetRole = {
@@ -2800,6 +2802,23 @@ const SetDefaultPolicyVersion = {
   response: emptyResponse,
 }
 
+const SetSecurityTokenServicePreferences = {
+  awsDoc: docRoot + 'API_SetSecurityTokenServicePreferences.html',
+  validate: {
+    GlobalEndpointTokenVersion: { ...str, required, comment: 'Version of the global endpoint token; can be one of: `v1Token`, `v2Token`', ref: docRoot + 'API_SetSecurityTokenServicePreferences.html#API_SetSecurityTokenServicePreferences_RequestParameters' },
+  },
+  request: params => {
+    return {
+      query: {
+        Action: 'SetSecurityTokenServicePreferences',
+        Version: defaultVersion,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 // TODO: improve documentation
 const SimulateCustomPolicy = {
   awsDoc: docRoot + 'API_SimulateCustomPolicy.html',
@@ -3531,7 +3550,7 @@ export default {
     CreateLoginProfile,
     CreateOpenIDConnectProvider,
     CreatePolicy,
-    // CreatePolicyVersion,
+    CreatePolicyVersion,
     CreateRole,
     CreateServiceLinkedRole,
     CreateServiceSpecificCredential,
@@ -3630,14 +3649,15 @@ export default {
     RemoveUserFromGroup,
     ResetServiceSpecificCredential,
     SetDefaultPolicyVersion,
+    SetSecurityTokenServicePreferences,
+    SimulateCustomPolicy,
+    SimulatePrincipalPolicy,
     TagInstanceProfile,
     TagOpenIDConnectProvider,
     TagPolicy,
     TagRole,
     TagServerCertificate,
     TagUser,
-    SimulateCustomPolicy,
-    SimulatePrincipalPolicy,
     UntagInstanceProfile,
     UntagOpenIDConnectProvider,
     UntagPolicy,
