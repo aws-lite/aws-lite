@@ -989,15 +989,14 @@ const GetAccessKeyLastUsed = {
   response: ({ payload }) => payload.GetAccessKeyLastUsedResult,
 }
 
-// TODO: maybe force async pagination when paginating?
-// Requires multiple accumulators, use async iterator paginator when paginating
+// TODO: enable async paginator
 const GetAccountAuthorizationDetails = {
   awsDoc: docRoot + 'API_GetAccountAuthorizationDetails.html',
   validate: {
     Filter: { ...arr, comment: 'Filter results by entity type', ref: docRoot + 'API_GetAccountAuthorizationDetails.html#API_GetAccountAuthorizationDetails_RequestParameters' },
     Marker,
     MaxItems,
-    paginate: valPaginate,
+    // paginate: valPaginate,
   },
   request: params => {
     const { Filter, paginate } = params
@@ -1017,17 +1016,15 @@ const GetAccountAuthorizationDetails = {
         type: 'query',
         cursor: 'GetAccountAuthorizationDetailsResult.Marker',
         token: 'Marker',
-        // accumulator: 'GetAccountAuthorizationDetailsResult.UserDetailList.member',
       },
     }
   },
   response: ({ payload }) => {
     // Arrays nested in arrays nested in arrays
-    const arrayKeys = new Set(
-      [ 'UserDetailList', 'UserPolicyList', 'GroupList', 'AttachedManagedPolicies', 'Tags',
-        'GroupDetailList', 'GroupPolicyList', 'AttachedManagedPolicies',
-        'RoleDetailList', 'InstanceProfileList', 'Roles', 'RolePolicyList', 'AttachedManagedPolicies',
-        'Policies', 'PolicyVersionList' ])
+    const arrayKeys = new Set([ 'UserDetailList', 'UserPolicyList', 'GroupList', 'AttachedManagedPolicies',
+      'Tags', 'GroupDetailList', 'GroupPolicyList', 'RoleDetailList', 'InstanceProfileList', 'Roles',
+      'RolePolicyList', 'Policies', 'PolicyVersionList',
+    ])
     let result = payload.GetAccountAuthorizationDetailsResult
     normalizeResponse(result, arrayKeys, true)
     return result
@@ -1142,15 +1139,14 @@ const GetCredentialReport = {
   },
 }
 
-// TODO: stop paginator from omitting `Group` field
-// TODO: figure out why `User.Tags` is mentioned in documentation, but is not returned in response
+// TODO: enable async paginator
 const GetGroup = {
   awsDoc: docRoot + 'API_GetGroup.html',
   validate: {
     GroupName,
     Marker,
     MaxItems,
-    paginate: valPaginate,
+    // paginate: valPaginate,
   },
   request: params => {
     let query = {
@@ -1166,7 +1162,6 @@ const GetGroup = {
       paginator: {
         ...paginator,
         token: 'GetGroupResult.Marker',
-        accumulator: 'GetGroupResult.Users.member',
       },
     }
   },
@@ -1780,7 +1775,7 @@ const ListAttachedUserPolicies = {
   },
 }
 
-// TODO: enable pagination when iterator pagination is available
+// TODO: enable async paginator
 const ListEntitiesForPolicy = {
   awsDoc: docRoot + 'API_ListEntitiesForPolicy.html',
   validate: {
@@ -1806,7 +1801,6 @@ const ListEntitiesForPolicy = {
       paginator: {
         ...paginator,
         token: 'ListEntitiesForPolicyResult.Marker',
-        // accumulator: 'ListEntitiesForPolicyResult.AttachedPolicies.member',
       },
     }
   },
@@ -2819,7 +2813,7 @@ const SetSecurityTokenServicePreferences = {
   response: emptyResponse,
 }
 
-// TODO: improve documentation
+// TODO: maybe improve documentation?
 const SimulateCustomPolicy = {
   awsDoc: docRoot + 'API_SimulateCustomPolicy.html',
   validate: {
@@ -2896,7 +2890,7 @@ const SimulateCustomPolicy = {
   },
 }
 
-// TODO: improve documentation
+// TODO: maybe improve documentation?
 const SimulatePrincipalPolicy = {
   awsDoc: docRoot + 'API_SimulatePrincipalPolicy.html',
   validate: {

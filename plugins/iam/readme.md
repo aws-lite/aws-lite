@@ -595,8 +595,6 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
-  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `GetAccountPasswordPolicy`
@@ -655,8 +653,6 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
-  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `GetGroupPolicy`

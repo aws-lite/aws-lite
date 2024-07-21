@@ -440,7 +440,7 @@ declare interface AwsLiteIAM {
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountAuthorizationDetails.html IAM: GetAccountAuthorizationDetails}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountAuthorizationDetails IAM: GetAccountAuthorizationDetails}
    */
-  GetAccountAuthorizationDetails: (input: { Filter?: any[], Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetAccountAuthorizationDetailsResponse>
+  GetAccountAuthorizationDetails: (input: { Filter?: any[], Marker?: string, MaxItems?: number }) => Promise<GetAccountAuthorizationDetailsResponse>
   /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountPasswordPolicy IAM: GetAccountPasswordPolicy} */
   GetAccountPasswordPolicy: () => Promise<GetAccountPasswordPolicyResponse>
   /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountSummary IAM: GetAccountSummary} */
@@ -464,7 +464,7 @@ declare interface AwsLiteIAM {
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html IAM: GetGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroup IAM: GetGroup}
    */
-  GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetGroupResponse>
+  GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number }) => Promise<GetGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html IAM: GetGroupPolicy}
