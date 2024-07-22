@@ -1,4 +1,5 @@
 let { exists, getHomedir, isInLambda, loadAwsConfig, readFile } = require('../lib')
+let noConnection = /(EHOSTDOWN|ECONNREFUSED)/g
 
 /**
  * Credential provider chain order
@@ -259,7 +260,10 @@ async function getCredsFromIMDS (params) {
         },
         service: 'ECS IMDSv2',
       })
-      return validate(result.payload)
+      let creds = result.payload
+      try { creds = JSON.parse(creds) }
+      catch { /* noop */ }
+      return validate(creds)
     }
     catch (err) {
       console.error('Failed to load credentials via ECS IMDSv2')
@@ -271,7 +275,12 @@ async function getCredsFromIMDS (params) {
   }
 
   // EC2 next
-  if (AWS_EC2_METADATA_DISABLED) return
+  if (AWS_EC2_METADATA_DISABLED) {
+    if (config.debug) {
+      console.error(`[aws-lite] IMDSv2 disabled via AWS_EC2_METADATA_DISABLED env var`)
+    }
+    return
+  }
 
   let profile = awsConfig?.currentProfile
   let defaultEndpoints = {
@@ -288,9 +297,17 @@ async function getCredsFromIMDS (params) {
   if (defaultEndpoints[mode]) {
     endpoint = defaultEndpoints[mode]
   }
-  if (!endpoint) return
+  if (!endpoint) endpoint = defaultEndpoints.IPv4
 
   try {
+    let IMDSHostIsAvailable = await checkHost(endpoint)
+    if (!IMDSHostIsAvailable) {
+      if (config.debug) {
+        console.error(`[aws-lite] IMDSv2 host is unavailable: ${endpoint}`)
+      }
+      return
+    }
+
     let path = '/latest/meta-data/iam/security-credentials/'
 
     // Get the IMDS token first
@@ -318,7 +335,7 @@ async function getCredsFromIMDS (params) {
     })).payload.toString()
 
     // Finally, get the credentials
-    let credResponse = await request({
+    let result = await request({
       params: {
         endpoint,
         path: path + profile,
@@ -327,9 +344,20 @@ async function getCredsFromIMDS (params) {
       },
       service: 'IMDSv2 credentials',
     })
-    return validate(credResponse.payload)
+    // Response `content-type` is `text/plain`, so that's something
+    let creds = result.payload
+    try { creds = JSON.parse(creds) }
+    catch { /* noop */ }
+    return validate(creds)
   }
   catch (err) {
+    // Windows GitHub Actions runs IIS, thus throwing false positive errors
+    if (err.statusCode === 400 &&
+        process.platform.startsWith('win') &&
+        process.env.GITHUB_ACTIONS) {
+      return
+    }
+
     console.error('Failed to load credentials via ECS IMDSv2')
     if (err?.error?.message) {
       throw new Error('ECS IMDSv2 error: ' + err.error.message)
@@ -383,3 +411,47 @@ async function request ({ params, region, config, service }) {
     { service },
   )
 }
+
+// Check if the IMDS host is up before connecting
+/* istanbul ignore next */
+function checkHost (url) {
+  return new Promise((res, rej) => {
+    try {
+      if (hostCache[url] !== undefined) {
+        res(hostCache[url])
+      }
+      let { hostname, port } = new URL(url)
+      port = port || (url?.startsWith('https:') ? 443 : 80)
+      let net = require('node:net')
+      let socket = net.createConnection({ hostname, port })
+      socket.setTimeout(0)
+      socket.on('timeout', () => {
+        terminate()
+        hostCache[url] = false
+        res(hostCache[url])
+      })
+      socket.on('connect', () => {
+        terminate()
+        hostCache[url] = true
+        res(hostCache[url])
+      })
+      socket.on('error', err => {
+        terminate()
+        if (err.code.match(noConnection)) {
+          hostCache[url] = false
+          res(hostCache[url])
+        }
+        else rej(err)
+      })
+      function terminate () {
+        if (!socket.destroyed) socket.destroy()
+      }
+    }
+    catch (err) {
+      rej(err)
+    }
+  })
+}
+
+// Assume if IMDS is (un)available, it will remain that way
+let hostCache = {}
