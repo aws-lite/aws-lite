@@ -1,5 +1,5 @@
 let { exists, getHomedir, isInLambda, loadAwsConfig, readFile } = require('../lib')
-let noConnection = /(EHOSTDOWN|ECONNREFUSED|EHOSTUNREACH)/g
+let noConnection = /(EHOSTDOWN|ECONNREFUSED|EHOSTUNREACH|ECONNRESET|ETIMEDOUT|Unknown system errno 64)/g
 
 /**
  * Credential provider chain order
@@ -475,11 +475,13 @@ let hostCache = {}
 // IMDS response normalizer
 /* istanbul ignore next */
 function normalize (creds) {
-  let {
-    AccessKeyId: accessKeyId,
-    SecretAccessKey: secretAccessKey,
-    Token: sessionToken,
-    Expiration: expiration,
-  } = creds
-  return { accessKeyId, secretAccessKey, sessionToken, expiration }
+  if (!creds.AccessKeyId || !creds.SecretAccessKey || !creds.Token) {
+    throw ReferenceError('Invalid IMDSv2 response or missing credentials')
+  }
+  return {
+    accessKeyId:      creds.AccessKeyId,
+    secretAccessKey:  creds.SecretAccessKey,
+    sessionToken:     creds.Token,
+    expiration:       new Date(creds.Expiration),
+  }
 }
