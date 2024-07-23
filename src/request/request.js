@@ -93,7 +93,8 @@ function call (params, args) {
     let http = isHTTPS ? require('node:https') : require('node:http')
 
     // Port configuration
-    options.port = params.port || config.port
+    /* istanbul ignore next */
+    options.port = options.port || params.port || config.port
 
     // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
     options.agent = getAgent(http, isHTTPS, config)
@@ -182,7 +183,7 @@ function call (params, args) {
           // Sometimes AWS omits content type from responses (cough, S3) and errors (ahem, Lambda) so that's fun
           // In performance testing JSON.parse fails fast and early
           // However, fast-xml-parser does not – so make an initial effort to detect before we attempt a very slow parse
-          /* istanbul ignore next */ // TODO remove + test
+          /* istanbul ignore next: TODO remove + test */
           if (body.length && !contentType) {
             try {
               payload = JSON.parse(body)

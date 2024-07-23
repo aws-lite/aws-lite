@@ -13,9 +13,9 @@ module.exports = {
       },
       request: async function ({ name }) {
         return {
-          path: `/2015-03-31/functions/${name}/configuration`
+          path: `/2015-03-31/functions/${name}/configuration`,
         }
       },
     },
-  }
+  },
 }

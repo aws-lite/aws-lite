@@ -1,6 +1,5 @@
 // Service API plugin getter
 module.exports = async function getPlugin (config) {
-
   let { autoloadPlugins = false, plugins = [] } = config
 
   if (!Array.isArray(plugins)) {

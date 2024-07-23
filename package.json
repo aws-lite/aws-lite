@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/client",
-  "version": "0.21.10",
+  "version": "0.22.2",
   "description": "A simple, fast, extensible AWS client",
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {
@@ -42,18 +42,18 @@
   "devDependencies": {
     "@actions/core": "^1.10.1",
     "@architect/eslint-config": "^3.0.0",
-    "@aws-sdk/util-dynamodb": "^3.596.0",
-    "@smithy/smithy-client": "^3.1.2",
+    "@aws-sdk/util-dynamodb": "^3.616.0",
+    "@smithy/smithy-client": "^3.1.9",
     "adm-zip": "^0.5.14",
     "cross-env": "^7.0.3",
-    "eslint": "^9.4.0",
+    "eslint": "^9.7.0",
     "fast-xml-parser": "^4.4.0",
     "mock-tmp": "^0.0.4",
     "nyc": "^17.0.0",
-    "semver": "^7.6.2",
+    "semver": "^7.6.3",
     "simple-git-hooks": "^2.11.1",
     "tap-arc": "^1.2.2",
-    "tape": "^5.7.5"
+    "tape": "^5.8.1"
   },
   "files": [
     "src"

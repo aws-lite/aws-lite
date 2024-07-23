@@ -1,51 +1,46 @@
 let regions = require('./regions.json')
 
 module.exports = async function getRegion (params) {
-  let paramsRegion = validateRegion(params, params.region)
-  if (paramsRegion) return paramsRegion
+  let { config } = params
 
-  let envRegion = getRegionFromEnv(params)
+  let configRegion = validateRegion(config, config.region)
+  if (configRegion) return configRegion
+
+  let envRegion = getRegionFromEnv(config)
   if (envRegion) return envRegion
 
-  let isInLambda = process.env.AWS_LAMBDA_FUNCTION_NAME
-  if (!isInLambda) {
-    let configRegion = await getRegionFromConfig(params)
-    if (configRegion) return configRegion
-  }
+  let AWSConfigRegion = await getRegionFromAWSConfig(params)
+  if (AWSConfigRegion) return AWSConfigRegion
 
-  throw ReferenceError('You must supply an AWS region via params, environment variables, or config file')
+  throw ReferenceError('Unable to find AWS region via params, environment variables, or credential / config files')
 }
 
-function getRegionFromEnv (params) {
+function getRegionFromEnv (config) {
   let { AWS_REGION, AWS_DEFAULT_REGION, AMAZON_REGION } = process.env
   let region = AWS_REGION || AWS_DEFAULT_REGION || AMAZON_REGION
 
-  return validateRegion(params, region)
+  return validateRegion(config, region)
 }
 
-async function getRegionFromConfig (params) {
+async function getRegionFromAWSConfig (params) {
+  let { config, awsConfig } = params
   let { loadAwsConfig } = require('../lib')
 
-  let awsConfig = await loadAwsConfig(params)
-  if (awsConfig) {
-    let { profile } = params
-    let profileName = profile === 'default' ? profile : `profile ${profile}`
+  // Only check for an AWS config if absolutely necessary since it's multiple filesystem reads
+  awsConfig = params.awsConfig = (awsConfig || await loadAwsConfig(config))
+  let profile = awsConfig?.currentProfile
 
-    if (!awsConfig[profileName]) {
-      throw TypeError(`Profile not found: ${profile}`)
-    }
-    let { region } = awsConfig[profileName]
-
-    return validateRegion(params, region)
+  if (awsConfig && profile) {
+    return validateRegion(config, profile.region)
   }
 }
 
-function validateRegion (params, region) {
+function validateRegion (config, region) {
   if (region) {
     if (typeof region !== 'string') {
       throw TypeError('Region must be a string')
     }
-    if (!params.host && !regions.includes(region)) {
+    if (!config.host && !regions.includes(region)) {
       throw ReferenceError(`Invalid region specified: ${region}`)
     }
     return region

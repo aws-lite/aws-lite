@@ -51,7 +51,7 @@ test('Configuration - basic config', async t => {
     await client()
   }
   catch (err) {
-    t.match(err.message, /You must supply AWS credentials/, 'Client configurator throws without creds and region')
+    t.match(err.message, /Unable to find AWS credentials/, 'Client configurator throws without creds and region')
     reset()
   }
 })
