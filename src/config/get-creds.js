@@ -1,5 +1,5 @@
 let { exists, getHomedir, isInLambda, loadAwsConfig, readFile } = require('../lib')
-let noConnection = /(EHOSTDOWN|ECONNREFUSED)/g
+let noConnection = /(EHOSTDOWN|ECONNREFUSED|EHOSTUNREACH)/g
 
 /**
  * Credential provider chain order
@@ -263,7 +263,7 @@ async function getCredsFromIMDS (params) {
       let creds = result.payload
       try { creds = JSON.parse(creds) }
       catch { /* noop */ }
-      return validate(creds)
+      return validate(normalize(creds))
     }
     catch (err) {
       console.error('Failed to load credentials via ECS IMDSv2')
@@ -300,7 +300,7 @@ async function getCredsFromIMDS (params) {
   if (!endpoint) endpoint = defaultEndpoints.IPv4
 
   try {
-    let IMDSHostIsAvailable = await checkHost(endpoint)
+    let IMDSHostIsAvailable = await checkHost(endpoint, config.debug)
     if (!IMDSHostIsAvailable) {
       if (config.debug) {
         console.error(`[aws-lite] IMDSv2 host is unavailable: ${endpoint}`)
@@ -348,13 +348,13 @@ async function getCredsFromIMDS (params) {
     let creds = result.payload
     try { creds = JSON.parse(creds) }
     catch { /* noop */ }
-    return validate(creds)
+    return validate(normalize(creds))
   }
   catch (err) {
     // Windows GitHub Actions runs IIS, thus throwing false positive errors
     if (err.statusCode === 400 &&
-        process.platform.startsWith('win') &&
-        process.env.GITHUB_ACTIONS) {
+      err.headers.server?.includes('Microsoft-IIS') &&
+      process.env.GITHUB_ACTIONS) {
       return
     }
 
@@ -414,32 +414,43 @@ async function request ({ params, region, config, service }) {
 
 // Check if the IMDS host is up before connecting
 /* istanbul ignore next */
-function checkHost (url) {
+function checkHost (endpoint, debug) {
   return new Promise((res, rej) => {
     try {
-      if (hostCache[url] !== undefined) {
-        res(hostCache[url])
+      if (hostCache[endpoint] !== undefined) {
+        res(hostCache[endpoint])
       }
-      let { hostname, port } = new URL(url)
-      port = port || (url?.startsWith('https:') ? 443 : 80)
+      let { hostname: host, port } = new URL(endpoint)
+      port = port || (endpoint?.startsWith('https:') ? 443 : 80)
       let net = require('node:net')
-      let socket = net.createConnection({ hostname, port })
-      socket.setTimeout(0)
+      if (debug) {
+        console.error(`[aws-lite] Checking IMDSv2 host; host: ${host}, port: ${port}`)
+      }
+      let socket = net.createConnection({ host, port, timeout: 1 })
       socket.on('timeout', () => {
+        if (debug) {
+          console.error(`[aws-lite] IMDSv2 host timed out`)
+        }
         terminate()
-        hostCache[url] = false
-        res(hostCache[url])
+        hostCache[endpoint] = false
+        res(hostCache[endpoint])
       })
       socket.on('connect', () => {
+        if (debug) {
+          console.error(`[aws-lite] IMDSv2 host is available`)
+        }
         terminate()
-        hostCache[url] = true
-        res(hostCache[url])
+        hostCache[endpoint] = true
+        res(hostCache[endpoint])
       })
       socket.on('error', err => {
+        if (debug) {
+          console.error(`[aws-lite] IMDSv2 connection error`, err)
+        }
         terminate()
         if (err.code.match(noConnection)) {
-          hostCache[url] = false
-          res(hostCache[url])
+          hostCache[endpoint] = false
+          res(hostCache[endpoint])
         }
         else rej(err)
       })
@@ -448,6 +459,9 @@ function checkHost (url) {
       }
     }
     catch (err) {
+      if (debug) {
+        console.error(`[aws-lite] IMDSv2 checkHost util error`, err)
+      }
       rej(err)
     }
   })
@@ -455,3 +469,15 @@ function checkHost (url) {
 
 // Assume if IMDS is (un)available, it will remain that way
 let hostCache = {}
+
+// IMDS response normalizer
+/* istanbul ignore next */
+function normalize (creds) {
+  let {
+    AccessKeyId: accessKeyId,
+    SecretAccessKey: secretAccessKey,
+    Token: sessionToken,
+    Expiration: expiration,
+  } = creds
+  return { accessKeyId, secretAccessKey, sessionToken, expiration }
+}
