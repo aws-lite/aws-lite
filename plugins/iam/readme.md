@@ -837,7 +837,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`UserName` (string)**
   - User name
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -850,7 +850,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -867,7 +867,7 @@ Properties:
   - Filter results by path prefix
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -884,7 +884,7 @@ Properties:
   - Filter results by path prefix
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -901,7 +901,7 @@ Properties:
   - Filter results by path prefix
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -937,7 +937,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -952,7 +952,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -967,7 +967,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -982,7 +982,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -997,7 +997,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1012,7 +1012,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1056,7 +1056,7 @@ Properties:
   - Filter results by how they are used; can be one of: `PermissionsPolicy`, `PermissionsBoundary`
 - **`Scope` (string)**
   - Filter results by how they are managed; can be one of: `All`, `AWS`, `Local` (customer managed)
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1086,7 +1086,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1116,7 +1116,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1131,7 +1131,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1146,7 +1146,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1228,7 +1228,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1243,7 +1243,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1258,7 +1258,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
