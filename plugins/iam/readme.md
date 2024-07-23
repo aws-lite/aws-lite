@@ -167,6 +167,24 @@ Properties:
   - Set to true to specify the user must make a new password on next sign-in
 
 
+### `CreateOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
+
+Properties:
+- **`Url` (string) [required]**
+  - URL of the identity provider; must begin with `https://`
+- **`ClientIDList` (array)**
+  - Array of at most 255 client IDs
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters)
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+- **`ThumbprintList` (array)**
+  - Array of server certificate thumbprints for the OIDC identity providers server certificates
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html#API_CreateOpenIDConnectProvider_RequestParameters)
+
+
 ### `CreatePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html)
@@ -184,6 +202,19 @@ Properties:
 - **`Tags` (array)**
   - List of tags to attach to the resource
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
+### `CreatePolicyVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`PolicyDocument` (string, object) [required]**
+  - The policy document; can be an object, or JSON or YAML string
+- **`SetAsDefault` (boolean)**
+  - Set to true to make this the default version used by all IAM resources
 
 
 ### `CreateRole`
@@ -222,6 +253,17 @@ Properties:
   - Description of the resource
 
 
+### `CreateServiceSpecificCredential`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html)
+
+Properties:
+- **`ServiceName` (string) [required]**
+  - Name of the AWS service
+- **`UserName` (string) [required]**
+  - User name
+
+
 ### `CreateUser`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html)
@@ -234,6 +276,21 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
 - **`PermissionsBoundary` (string)**
   - ARN of a managed policy to be used to set the resource's permissions boundary
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
+### `CreateVirtualMFADevice`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
+
+Properties:
+- **`VirtualMFADeviceName` (string) [required]**
+  - Name of the virtual MFA device
+- **`Path` (string)**
+  - Path for the identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
 - **`Tags` (array)**
   - List of tags to attach to the resource
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
@@ -257,6 +314,14 @@ Properties:
 Properties:
 - **`AccountAlias` (string) [required]**
   - The account alias
+
+
+### `DeleteAccountPasswordPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountPasswordPolicy.html)
+
+Properties:
+
 
 
 ### `DeleteGroup`
@@ -297,6 +362,15 @@ Properties:
   - User name
 
 
+### `DeleteOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
+
+Properties:
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
+
+
 ### `DeletePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html)
@@ -306,9 +380,29 @@ Properties:
   - Arn of the policy
 
 
+### `DeletePolicyVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`VersionId` (string) [required]**
+  - ID of the policy version; typically `v<n>`
+
+
 ### `DeleteRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRole.html)
+
+Properties:
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
+### `DeleteRolePermissionsBoundary`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html)
 
 Properties:
 - **`RoleName` (string) [required]**
@@ -326,6 +420,15 @@ Properties:
   - Name of the policy
 
 
+### `DeleteServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html)
+
+Properties:
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
+
+
 ### `DeleteServiceLinkedRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceLinkedRole.html)
@@ -335,9 +438,51 @@ Properties:
   - Name of the role
 
 
+### `DeleteServiceSpecificCredential`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceSpecificCredential.html)
+
+Properties:
+- **`ServiceSpecificCredentialId` (string) [required]**
+  - ID of the service specific credential
+- **`UserName` (string) [required]**
+  - User name
+
+
+### `DeleteSigningCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html)
+
+Properties:
+- **`CertificateId` (string) [required]**
+  - ID of the signing certificate
+- **`UserName` (string)**
+  - User name
+
+
+### `DeleteSSHPublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html)
+
+Properties:
+- **`SSHPublicKeyId` (string) [required]**
+  - ID of the SSH public key
+- **`UserName` (string) [required]**
+  - User name
+
+
 ### `DeleteUser`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html)
+
+Properties:
+- **`UserName` (string) [required]**
+  - User name
+
+
+### `DeleteUserPermissionsBoundary`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html)
 
 Properties:
 - **`UserName` (string) [required]**
@@ -353,6 +498,15 @@ Properties:
   - Name of the policy
 - **`UserName` (string) [required]**
   - User name
+
+
+### `DeleteVirtualMFADevice`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
+
+Properties:
+- **`SerialNumber` (string) [required]**
+  - Serial number or ARN of the virtual MFA device
 
 
 ### `DetachGroupPolicy`
@@ -388,6 +542,38 @@ Properties:
   - User name
 
 
+### `GenerateCredentialReport`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateCredentialReport.html)
+
+Properties:
+
+
+
+### `GenerateOrganizationsAccessReport`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html)
+
+Properties:
+- **`EntityPath` (string) [required]**
+  - Path of the AWS Organizations entity
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html#API_GenerateOrganizationsAccessReport_RequestParameters)
+- **`OrganizationsPolicyId` (string)**
+  - ID of the AWS Organizations service control policy
+
+
+### `GenerateServiceLastAccessedDetails`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html)
+
+Properties:
+- **`Arn` (string) [required]**
+  - ARN of the IAM resource used to generate the report
+- **`Granularity` (string)**
+  - Specify the type of access information; can be one of: `SERVICE_LEVEL` (default), `ACTION_LEVEL`
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html#API_GenerateServiceLastAccessedDetails_RequestParameters)
+
+
 ### `GetAccessKeyLastUsed`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html)
@@ -395,6 +581,65 @@ Properties:
 Properties:
 - **`AccessKeyId` (string) [required]**
   - ID of the access key
+
+
+### `GetAccountAuthorizationDetails`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountAuthorizationDetails.html)
+
+Properties:
+- **`Filter` (array)**
+  - Filter results by entity type
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountAuthorizationDetails.html#API_GetAccountAuthorizationDetails_RequestParameters)
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+
+
+### `GetAccountPasswordPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountPasswordPolicy.html)
+
+Properties:
+
+
+
+### `GetAccountSummary`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountSummary.html)
+
+Properties:
+
+
+
+### `GetContextKeysForCustomPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html)
+
+Properties:
+- **`PolicyInputList` (array) [required]**
+  - Array of policies to get context keys, each item must be a complete policy object
+
+
+### `GetContextKeysForPrincipalPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html)
+
+Properties:
+- **`PolicySourceArn` (string) [required]**
+  - ARN of the user, group or role for which the resources context keys will be listed
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html#API_GetContextKeysForPrincipalPolicy_RequestParameters)
+- **`PolicyInputList` (array)**
+  - Array of policies to get context keys, each item must be a complete policy object
+
+
+### `GetCredentialReport`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetCredentialReport.html)
+
+Properties:
+
 
 
 ### `GetGroup`
@@ -408,8 +653,17 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean, string)**
-  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `GetGroupPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`PolicyName` (string) [required]**
+  - Name of the policy
 
 
 ### `GetInstanceProfile`
@@ -430,6 +684,33 @@ Properties:
   - User name
 
 
+### `GetOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html)
+
+Properties:
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
+
+
+### `GetOrganizationsAccessReport`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html)
+
+Properties:
+- **`JobId` (string) [required]**
+  - ID of the report provided in the `GenerateOrganizationsAccessReport` response
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`SortKey` (string)**
+  - Sort results by key
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html#API_GetOrganizationsAccessReport_RequestParameters)
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `GetPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html)
@@ -437,6 +718,17 @@ Properties:
 Properties:
 - **`PolicyArn` (string) [required]**
   - Arn of the policy
+
+
+### `GetPolicyVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`VersionId` (string) [required]**
+  - ID of the policy version; typically `v<n>`
 
 
 ### `GetRole`
@@ -448,11 +740,88 @@ Properties:
   - Name of the role
 
 
+### `GetRolePolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
+
+Properties:
+- **`PolicyName` (string) [required]**
+  - Name of the policy
+- **`RoleName` (string) [required]**
+  - Name of the role
+
+
+### `GetServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html)
+
+Properties:
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
+
+
+### `GetServiceLastAccessedDetails`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html)
+
+Properties:
+- **`JobId` (string) [required]**
+  - ID of the report provided in the `GenerateServiceLastAccessedDetails` response
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `GetServiceLastAccessedDetailsWithEntities`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html)
+
+Properties:
+- **`JobId` (string) [required]**
+  - ID of the report provided in the `GenerateServiceLastAccessedDetails` response
+- **`ServiceNamespace` (string) [required]**
+  - The service namespace for an AWS service
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html#API_GetServiceLastAccessedDetailsWithEntities_RequestParameters)
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `GetSSHPublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html)
+
+Properties:
+- **`Encoding` (string) [required]**
+  - Specify the encoding format used in the response; can be one of: `SSH`, `PEM`
+- **`SSHPublicKeyId` (string) [required]**
+  - ID of the SSH public key
+- **`UserName` (string) [required]**
+  - User name
+
+
 ### `GetUser`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html)
 
 Properties:
+- **`UserName` (string) [required]**
+  - User name
+
+
+### `GetUserPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html)
+
+Properties:
+- **`PolicyName` (string) [required]**
+  - Name of the policy
 - **`UserName` (string) [required]**
   - User name
 
@@ -534,6 +903,27 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListEntitiesForPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`EntityFilter` (string)**
+  - Filter results by entity type
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters)
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`PolicyUsageFilter` (string)**
+  - Filter results by policy usage
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters)
 
 
 ### `ListGroupPolicies`
@@ -626,6 +1016,29 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListOpenIDConnectProviders`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviders.html)
+
+Properties:
+
+
+
+### `ListOpenIDConnectProviderTags`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviderTags.html)
+
+Properties:
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListPolicies`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicies.html)
@@ -647,6 +1060,21 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListPoliciesGrantingServiceAccess`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html)
+
+Properties:
+- **`Arn` (string) [required]**
+  - ARN of the IAM identity whose policies you want to list
+- **`ServiceNamespaces` (array) [required]**
+  - Array of namespaces for the AWS services to be listed
+- **`Marker` (string)**
+  - Pagination cursor
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListPolicyTags`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html)
@@ -659,6 +1087,21 @@ Properties:
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
 - **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListPolicyVersions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyVersions.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -707,6 +1150,73 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListServerCertificates`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PathPrefix` (string)**
+  - Filter results by path prefix
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListServerCertificateTags`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html)
+
+Properties:
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListServiceSpecificCredentials`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html)
+
+Properties:
+- **`ServiceName` (string)**
+  - Filter results to a specific service
+- **`UserName` (string)**
+  - User name
+
+
+### `ListSigningCertificates`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`UserName` (string)**
+  - User name
+
+
+### `ListSSHPublicKeys`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`UserName` (string)**
+  - User name
+
+
 ### `ListUserPolicies`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserPolicies.html)
@@ -752,6 +1262,21 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListVirtualMFADevices`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html)
+
+Properties:
+- **`AssignmentStatus` (string)**
+  - Filter results by assignment status; can be one of: `Assigned`, `Unassigned`, `Any`
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `PutGroupPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html)
@@ -763,6 +1288,17 @@ Properties:
   - The policy document; can be an object, or JSON or YAML string
 - **`PolicyName` (string) [required]**
   - Name of the policy
+
+
+### `PutRolePermissionsBoundary`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePermissionsBoundary.html)
+
+Properties:
+- **`PermissionsBoundary` (string) [required]**
+  - ARN of a managed policy to be used to set the resource's permissions boundary
+- **`RoleName` (string) [required]**
+  - Name of the role
 
 
 ### `PutRolePolicy`
@@ -778,6 +1314,17 @@ Properties:
   - Name of the role
 
 
+### `PutUserPermissionsBoundary`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPermissionsBoundary.html)
+
+Properties:
+- **`PermissionsBoundary` (string) [required]**
+  - ARN of a managed policy to be used to set the resource's permissions boundary
+- **`UserName` (string) [required]**
+  - User name
+
+
 ### `PutUserPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPolicy.html)
@@ -791,15 +1338,15 @@ Properties:
   - User name
 
 
-### `RemoveUserFromGroup`
+### `RemoveClientIDFromOpenIDConnectProvider`
 
-[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html)
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html)
 
 Properties:
-- **`GroupName` (string) [required]**
-  - Name of the group; names are not distinguished by case
-- **`UserName` (string) [required]**
-  - User name
+- **`ClientID` (string) [required]**
+  - The client ID
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
 
 
 ### `RemoveRoleFromInstanceProfile`
@@ -813,6 +1360,113 @@ Properties:
   - Name of the role
 
 
+### `RemoveUserFromGroup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html)
+
+Properties:
+- **`GroupName` (string) [required]**
+  - Name of the group; names are not distinguished by case
+- **`UserName` (string) [required]**
+  - User name
+
+
+### `ResetServiceSpecificCredential`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResetServiceSpecificCredential.html)
+
+Properties:
+- **`ServiceSpecificCredentialId` (string) [required]**
+  - ID of the service specific credential
+- **`UserName` (string)**
+  - User name
+
+
+### `SetDefaultPolicyVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetDefaultPolicyVersion.html)
+
+Properties:
+- **`PolicyArn` (string) [required]**
+  - Arn of the policy
+- **`VersionId` (string) [required]**
+  - ID of the policy version; typically `v<n>`
+
+
+### `SetSecurityTokenServicePreferences`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html)
+
+Properties:
+- **`GlobalEndpointTokenVersion` (string) [required]**
+  - Version of the global endpoint token; can be one of: `v1Token`, `v2Token`
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html#API_SetSecurityTokenServicePreferences_RequestParameters)
+
+
+### `SimulateCustomPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html)
+
+Properties:
+- **`ActionNames` (array) [required]**
+  - Array of between 3 to 128 API operation names
+- **`PolicyInputList` (array) [required]**
+  - Array of policy document objects
+- **`CallerArn` (string)**
+  - ARN of the IAM user to use as the simulated caller of the API operations
+- **`ContextEntries` (array)**
+  - Array of context keys and values
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PermissionsBoundaryPolicyInputList` (array)**
+  - IAM permissions boundary policy to simulate
+- **`ResourceArns` (array)**
+  - Array of AWS resource ARNs; default `*`
+- **`ResourceHandlingOption` (string)**
+  - Specify the type of simulation to run
+- **`ResourceOwner` (string)**
+  - ARN representing the AWS account ID that owns any simulated resources
+- **`ResourcePolicy` (string, object)**
+  - A resource based policy
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `SimulatePrincipalPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html)
+
+Properties:
+- **`ActionNames` (array) [required]**
+  - Array of between 3 to 128 API operation names
+- **`PolicySourceArn` (string) [required]**
+  - ARN of the user, group or role whose policies will be included in the simulation
+- **`CallerArn` (string)**
+  - ARN of the IAM user to use as the simulated caller of the API operations
+- **`ContextEntries` (array)**
+  - Array of context keys and values
+- **`Marker` (string)**
+  - Pagination cursor
+- **`MaxItems` (number)**
+  - Maximum number of items to be returned in a response; at most 1000
+- **`PermissionsBoundaryPolicyInputList` (array)**
+  - IAM permissions boundary policy to simulate
+- **`PolicyInputList` (array)**
+  - Array of policy document objects
+- **`ResourceArns` (array)**
+  - Array of AWS resource ARNs; default `*`
+- **`ResourceHandlingOption` (string)**
+  - Specify the type of simulation to run
+- **`ResourceOwner` (string)**
+  - ARN representing the AWS account ID that owns any simulated resources
+- **`ResourcePolicy` (string, object)**
+  - A resource based policy
+- **`paginate` (boolean)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `TagInstanceProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html)
@@ -820,6 +1474,18 @@ Properties:
 Properties:
 - **`InstanceProfileName` (string) [required]**
   - Name of the instance profile
+- **`Tags` (array) [required]**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
+### `TagOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagOpenIDConnectProvider.html)
+
+Properties:
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
 - **`Tags` (array) [required]**
   - List of tags to attach to the resource
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
@@ -849,6 +1515,18 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
 
 
+### `TagServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagServerCertificate.html)
+
+Properties:
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
+- **`Tags` (array) [required]**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
 ### `TagUser`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagUser.html)
@@ -868,6 +1546,17 @@ Properties:
 Properties:
 - **`InstanceProfileName` (string) [required]**
   - Name of the instance profile
+- **`TagKeys` (array) [required]**
+  - Array of tag keys
+
+
+### `UntagOpenIDConnectProvider`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagOpenIDConnectProvider.html)
+
+Properties:
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
 - **`TagKeys` (array) [required]**
   - Array of tag keys
 
@@ -894,6 +1583,17 @@ Properties:
   - Array of tag keys
 
 
+### `UntagServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html)
+
+Properties:
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
+- **`TagKeys` (array) [required]**
+  - Array of tag keys
+
+
 ### `UntagUser`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagUser.html)
@@ -916,6 +1616,31 @@ Properties:
   - New status for the access key; can be one of: `Active`, `Inactive`
 - **`UserName` (string)**
   - User name
+
+
+### `UpdateAccountPasswordPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html)
+
+Properties:
+- **`AllowUsersToChangePassword` (boolean)**
+  - Set to true to allow users to change their own passwords
+- **`HardExpiry` (boolean)**
+  - Set to true to prevent users their password after it expires
+- **`MaxPasswordAge` (number)**
+  - Number of days between 1 and 1095 before passwords expire
+- **`MinimumPasswordLength` (number)**
+  - Minimum number of characters between 6 and 128 allowed in a password
+- **`PasswordReusePrevention` (number)**
+  - Specify how many new passwords from 1 to 24 before a password may be reused
+- **`RequireLowercaseCharacters` (boolean)**
+  - Set to true to require at least one lowercase character
+- **`RequireNumbers` (boolean)**
+  - Set to true to require at least one numeric character
+- **`RequireSymbols` (boolean)**
+  - Set to true to require at least one non-alphanumeric character
+- **`RequireUppercaseCharacters` (boolean)**
+  - Set to true to require at least one uppercase character
 
 
 ### `UpdateAssumeRolePolicy`
@@ -955,6 +1680,18 @@ Properties:
   - Set to true to specify the user must make a new password on next sign-in
 
 
+### `UpdateOpenIDConnectProviderThumbprint`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
+
+Properties:
+- **`OpenIDConnectProviderArn` (string) [required]**
+  - ARN of the OpenID Connect resource
+- **`ThumbprintList` (array) [required]**
+  - List of certificate thumbprints
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html#API_UpdateOpenIDConnectProviderThumbprint_RequestParameters)
+
+
 ### `UpdateRole`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html)
@@ -979,6 +1716,58 @@ Properties:
   - Description of the resource
 
 
+### `UpdateServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html)
+
+Properties:
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
+- **`NewPath` (string)**
+  - New path for the service
+- **`NewServerCertificateName` (string)**
+  - New name for the server certificate
+
+
+### `UpdateServiceSpecificCredential`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html)
+
+Properties:
+- **`ServiceSpecificCredentialId` (string) [required]**
+  - ID of the service specific credential
+- **`Status` (string) [required]**
+  - Status to be assigned to the credential; can be one of: `Active`, `Inactive`
+- **`UserName` (string)**
+  - User name
+
+
+### `UpdateSigningCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html)
+
+Properties:
+- **`CertificateId` (string) [required]**
+  - ID of the signing certificate
+- **`Status` (string) [required]**
+  - Status to be assigned to the signing certificate; can be one of: `Active`, `Inactive`
+- **`UserName` (string)**
+  - User name
+
+
+### `UpdateSSHPublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html)
+
+Properties:
+- **`SSHPublicKeyId` (string) [required]**
+  - ID of the SSH public key
+- **`Status` (string) [required]**
+  - New status for the SSH key; can be one of : `Active`, `Inactive`
+- **`UserName` (string) [required]**
+  - User name
+
+
 ### `UpdateUser`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateUser.html)
@@ -992,91 +1781,73 @@ Properties:
   - New user name
 
 
+### `UploadServerCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
+
+Properties:
+- **`CertificateBody` (string) [required]**
+  - PEM encoded public key
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html#API_UploadServerCertificate_RequestParameters)
+- **`PrivateKey` (string) [required]**
+  - PEM encoded private key
+- **`ServerCertificateName` (string) [required]**
+  - Name of the server certificate; do not include path, cannot contain spaces
+- **`CertificateChain` (string)**
+  - Contents of the certificate chain
+- **`Path` (string)**
+  - Path for the identifier
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/reference_identifiers.html)
+- **`Tags` (array)**
+  - List of tags to attach to the resource
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/id_tags.html)
+
+
+### `UploadSigningCertificate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html)
+
+Properties:
+- **`CertificateBody` (string) [required]**
+  - Contents of the signing certificate
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html#API_UploadSigningCertificate_RequestParameters)
+- **`UserName` (string)**
+  - User name
+
+
+### `UploadSSHPublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html)
+
+Properties:
+- **`SSHPublicKeyBody` (string) [required]**
+  - SSH public key encoded in SSH-RSA or PEM format; minimum length is 2048 bits
+  - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html#API_UploadSSHPublicKey_RequestParameters)
+- **`UserName` (string) [required]**
+  - User name
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreateOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html)
-- [`CreatePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html)
 - [`CreateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateSAMLProvider.html)
-- [`CreateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html)
-- [`CreateVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html)
 - [`DeactivateMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeactivateMFADevice.html)
-- [`DeleteAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountPasswordPolicy.html)
-- [`DeleteOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html)
-- [`DeletePolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html)
-- [`DeleteRolePermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html)
 - [`DeleteSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSAMLProvider.html)
-- [`DeleteServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html)
-- [`DeleteServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceSpecificCredential.html)
-- [`DeleteSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html)
-- [`DeleteSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html)
-- [`DeleteUserPermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html)
-- [`DeleteVirtualMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html)
 - [`EnableMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_EnableMFADevice.html)
-- [`GenerateCredentialReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateCredentialReport.html)
-- [`GenerateOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html)
-- [`GenerateServiceLastAccessedDetails`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html)
-- [`GetAccountAuthorizationDetails`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountAuthorizationDetails.html)
-- [`GetAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountPasswordPolicy.html)
-- [`GetAccountSummary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountSummary.html)
-- [`GetContextKeysForCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html)
-- [`GetContextKeysForPrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html)
-- [`GetCredentialReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetCredentialReport.html)
-- [`GetGroupPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html)
 - [`GetMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetMFADevice.html)
-- [`GetOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html)
-- [`GetOrganizationsAccessReport`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html)
-- [`GetPolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html)
-- [`GetRolePolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html)
 - [`GetSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSAMLProvider.html)
-- [`GetServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html)
-- [`GetServiceLastAccessedDetails`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html)
-- [`GetServiceLastAccessedDetailsWithEntities`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html)
 - [`GetServiceLinkedRoleDeletionStatus`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLinkedRoleDeletionStatus.html)
-- [`GetSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html)
-- [`ListEntitiesForPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html)
 - [`ListMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADevices.html)
 - [`ListMFADeviceTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html)
-- [`ListOpenIDConnectProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviders.html)
-- [`ListOpenIDConnectProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviderTags.html)
-- [`ListPoliciesGrantingServiceAccess`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html)
-- [`ListPolicyVersions`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyVersions.html)
 - [`ListSAMLProviders`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviders.html)
 - [`ListSAMLProviderTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSAMLProviderTags.html)
-- [`ListServerCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html)
-- [`ListServerCertificateTags`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html)
-- [`ListServiceSpecificCredentials`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html)
-- [`ListSigningCertificates`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html)
-- [`ListSSHPublicKeys`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html)
-- [`ListVirtualMFADevices`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html)
-- [`PutRolePermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePermissionsBoundary.html)
-- [`PutUserPermissionsBoundary`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPermissionsBoundary.html)
-- [`RemoveClientIDFromOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html)
-- [`ResetServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResetServiceSpecificCredential.html)
 - [`ResyncMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResyncMFADevice.html)
-- [`SetDefaultPolicyVersion`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetDefaultPolicyVersion.html)
-- [`SetSecurityTokenServicePreferences`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html)
-- [`SimulateCustomPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html)
-- [`SimulatePrincipalPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html)
 - [`TagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagMFADevice.html)
-- [`TagOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagOpenIDConnectProvider.html)
 - [`TagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagSAMLProvider.html)
-- [`TagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagServerCertificate.html)
 - [`UntagMFADevice`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagMFADevice.html)
-- [`UntagOpenIDConnectProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagOpenIDConnectProvider.html)
 - [`UntagSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagSAMLProvider.html)
-- [`UntagServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html)
-- [`UpdateAccountPasswordPolicy`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html)
-- [`UpdateOpenIDConnectProviderThumbprint`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html)
 - [`UpdateSAMLProvider`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSAMLProvider.html)
-- [`UpdateServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html)
-- [`UpdateServiceSpecificCredential`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html)
-- [`UpdateSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html)
-- [`UpdateSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html)
-- [`UploadServerCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html)
-- [`UploadSigningCertificate`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html)
-- [`UploadSSHPublicKey`](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html)
 <!-- METHOD_DOCS_END -->
 
 

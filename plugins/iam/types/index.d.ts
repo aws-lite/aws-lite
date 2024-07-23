@@ -13,71 +13,136 @@ import {
   CreateGroupCommandOutput as CreateGroupResponse,
   CreateInstanceProfileCommandOutput as CreateInstanceProfileResponse,
   CreateLoginProfileCommandOutput as CreateLoginProfileResponse,
+  CreateOpenIDConnectProviderCommandOutput as CreateOpenIDConnectProviderResponse,
   CreatePolicyCommandOutput as CreatePolicyResponse,
+  CreatePolicyVersionCommandOutput as CreatePolicyVersionResponse,
   CreateRoleCommandOutput as CreateRoleResponse,
   CreateServiceLinkedRoleCommandOutput as CreateServiceLinkedRoleResponse,
+  CreateServiceSpecificCredentialCommandOutput as CreateServiceSpecificCredentialResponse,
   CreateUserCommandOutput as CreateUserResponse,
+  CreateVirtualMFADeviceCommandOutput as CreateVirtualMFADeviceResponse,
   DeleteAccessKeyCommandOutput as DeleteAccessKeyResponse,
   DeleteAccountAliasCommandOutput as DeleteAccountAliasResponse,
+  DeleteAccountPasswordPolicyCommandOutput as DeleteAccountPasswordPolicyResponse,
   DeleteGroupCommandOutput as DeleteGroupResponse,
   DeleteGroupPolicyCommandOutput as DeleteGroupPolicyResponse,
   DeleteInstanceProfileCommandOutput as DeleteInstanceProfileResponse,
   DeleteLoginProfileCommandOutput as DeleteLoginProfileResponse,
+  DeleteOpenIDConnectProviderCommandOutput as DeleteOpenIDConnectProviderResponse,
   DeletePolicyCommandOutput as DeletePolicyResponse,
+  DeletePolicyVersionCommandOutput as DeletePolicyVersionResponse,
   DeleteRoleCommandOutput as DeleteRoleResponse,
+  DeleteRolePermissionsBoundaryCommandOutput as DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyCommandOutput as DeleteRolePolicyResponse,
+  DeleteServerCertificateCommandOutput as DeleteServerCertificateResponse,
   DeleteServiceLinkedRoleCommandOutput as DeleteServiceLinkedRoleResponse,
+  DeleteServiceSpecificCredentialCommandOutput as DeleteServiceSpecificCredentialResponse,
+  DeleteSigningCertificateCommandOutput as DeleteSigningCertificateResponse,
+  DeleteSSHPublicKeyCommandOutput as DeleteSSHPublicKeyResponse,
   DeleteUserCommandOutput as DeleteUserResponse,
+  DeleteUserPermissionsBoundaryCommandOutput as DeleteUserPermissionsBoundaryResponse,
   DeleteUserPolicyCommandOutput as DeleteUserPolicyResponse,
+  DeleteVirtualMFADeviceCommandOutput as DeleteVirtualMFADeviceResponse,
   DetachGroupPolicyCommandOutput as DetachGroupPolicyResponse,
   DetachRolePolicyCommandOutput as DetachRolePolicyResponse,
   DetachUserPolicyCommandOutput as DetachUserPolicyResponse,
+  GenerateCredentialReportCommandOutput as GenerateCredentialReportResponse,
+  GenerateOrganizationsAccessReportCommandOutput as GenerateOrganizationsAccessReportResponse,
+  GenerateServiceLastAccessedDetailsCommandOutput as GenerateServiceLastAccessedDetailsResponse,
   GetAccessKeyLastUsedCommandOutput as GetAccessKeyLastUsedResponse,
+  GetAccountAuthorizationDetailsCommandOutput as GetAccountAuthorizationDetailsResponse,
+  GetAccountPasswordPolicyCommandOutput as GetAccountPasswordPolicyResponse,
+  GetAccountSummaryCommandOutput as GetAccountSummaryResponse,
+  GetContextKeysForCustomPolicyCommandOutput as GetContextKeysForCustomPolicyResponse,
+  GetContextKeysForPrincipalPolicyCommandOutput as GetContextKeysForPrincipalPolicyResponse,
+  GetCredentialReportCommandOutput as GetCredentialReportResponse,
   GetGroupCommandOutput as GetGroupResponse,
+  GetGroupPolicyCommandOutput as GetGroupPolicyResponse,
   GetInstanceProfileCommandOutput as GetInstanceProfileResponse,
   GetLoginProfileCommandOutput as GetLoginProfileResponse,
+  GetOpenIDConnectProviderCommandOutput as GetOpenIDConnectProviderResponse,
+  GetOrganizationsAccessReportCommandOutput as GetOrganizationsAccessReportResponse,
   GetPolicyCommandOutput as GetPolicyResponse,
+  GetPolicyVersionCommandOutput as GetPolicyVersionResponse,
   GetRoleCommandOutput as GetRoleResponse,
+  GetRolePolicyCommandOutput as GetRolePolicyResponse,
+  GetServerCertificateCommandOutput as GetServerCertificateResponse,
+  GetServiceLastAccessedDetailsCommandOutput as GetServiceLastAccessedDetailsResponse,
+  GetServiceLastAccessedDetailsWithEntitiesCommandOutput as GetServiceLastAccessedDetailsWithEntitiesResponse,
+  GetSSHPublicKeyCommandOutput as GetSSHPublicKeyResponse,
   GetUserCommandOutput as GetUserResponse,
+  GetUserPolicyCommandOutput as GetUserPolicyResponse,
   ListAccessKeysCommandOutput as ListAccessKeysResponse,
   ListAccountAliasesCommandOutput as ListAccountAliasesResponse,
   ListAttachedGroupPoliciesCommandOutput as ListAttachedGroupPoliciesResponse,
   ListAttachedRolePoliciesCommandOutput as ListAttachedRolePoliciesResponse,
   ListAttachedUserPoliciesCommandOutput as ListAttachedUserPoliciesResponse,
+  ListEntitiesForPolicyCommandOutput as ListEntitiesForPolicyResponse,
   ListGroupPoliciesCommandOutput as ListGroupPoliciesResponse,
   ListGroupsCommandOutput as ListGroupsResponse,
   ListGroupsForUserCommandOutput as ListGroupsForUserResponse,
   ListInstanceProfilesCommandOutput as ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleCommandOutput as ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsCommandOutput as ListInstanceProfileTagsResponse,
+  ListOpenIDConnectProvidersCommandOutput as ListOpenIDConnectProvidersResponse,
+  ListOpenIDConnectProviderTagsCommandOutput as ListOpenIDConnectProviderTagsResponse,
   ListPoliciesCommandOutput as ListPoliciesResponse,
+  ListPoliciesGrantingServiceAccessCommandOutput as ListPoliciesGrantingServiceAccessResponse,
   ListPolicyTagsCommandOutput as ListPolicyTagsResponse,
+  ListPolicyVersionsCommandOutput as ListPolicyVersionsResponse,
   ListRolePoliciesCommandOutput as ListRolePoliciesResponse,
   ListRolesCommandOutput as ListRolesResponse,
   ListRoleTagsCommandOutput as ListRoleTagsResponse,
+  ListServerCertificatesCommandOutput as ListServerCertificatesResponse,
+  ListServerCertificateTagsCommandOutput as ListServerCertificateTagsResponse,
+  ListServiceSpecificCredentialsCommandOutput as ListServiceSpecificCredentialsResponse,
+  ListSigningCertificatesCommandOutput as ListSigningCertificatesResponse,
+  ListSSHPublicKeysCommandOutput as ListSSHPublicKeysResponse,
   ListUserPoliciesCommandOutput as ListUserPoliciesResponse,
   ListUsersCommandOutput as ListUsersResponse,
   ListUserTagsCommandOutput as ListUserTagsResponse,
+  ListVirtualMFADevicesCommandOutput as ListVirtualMFADevicesResponse,
   PutGroupPolicyCommandOutput as PutGroupPolicyResponse,
+  PutRolePermissionsBoundaryCommandOutput as PutRolePermissionsBoundaryResponse,
   PutRolePolicyCommandOutput as PutRolePolicyResponse,
+  PutUserPermissionsBoundaryCommandOutput as PutUserPermissionsBoundaryResponse,
   PutUserPolicyCommandOutput as PutUserPolicyResponse,
-  RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
+  RemoveClientIDFromOpenIDConnectProviderCommandOutput as RemoveClientIDFromOpenIDConnectProviderResponse,
   RemoveRoleFromInstanceProfileCommandOutput as RemoveRoleFromInstanceProfileResponse,
+  RemoveUserFromGroupCommandOutput as RemoveUserFromGroupResponse,
+  ResetServiceSpecificCredentialCommandOutput as ResetServiceSpecificCredentialResponse,
+  SetDefaultPolicyVersionCommandOutput as SetDefaultPolicyVersionResponse,
+  SetSecurityTokenServicePreferencesCommandOutput as SetSecurityTokenServicePreferencesResponse,
+  SimulateCustomPolicyCommandOutput as SimulateCustomPolicyResponse,
+  SimulatePrincipalPolicyCommandOutput as SimulatePrincipalPolicyResponse,
   TagInstanceProfileCommandOutput as TagInstanceProfileResponse,
+  TagOpenIDConnectProviderCommandOutput as TagOpenIDConnectProviderResponse,
   TagPolicyCommandOutput as TagPolicyResponse,
   TagRoleCommandOutput as TagRoleResponse,
+  TagServerCertificateCommandOutput as TagServerCertificateResponse,
   TagUserCommandOutput as TagUserResponse,
   UntagInstanceProfileCommandOutput as UntagInstanceProfileResponse,
+  UntagOpenIDConnectProviderCommandOutput as UntagOpenIDConnectProviderResponse,
   UntagPolicyCommandOutput as UntagPolicyResponse,
   UntagRoleCommandOutput as UntagRoleResponse,
+  UntagServerCertificateCommandOutput as UntagServerCertificateResponse,
   UntagUserCommandOutput as UntagUserResponse,
   UpdateAccessKeyCommandOutput as UpdateAccessKeyResponse,
+  UpdateAccountPasswordPolicyCommandOutput as UpdateAccountPasswordPolicyResponse,
   UpdateAssumeRolePolicyCommandOutput as UpdateAssumeRolePolicyResponse,
   UpdateGroupCommandOutput as UpdateGroupResponse,
   UpdateLoginProfileCommandOutput as UpdateLoginProfileResponse,
+  UpdateOpenIDConnectProviderThumbprintCommandOutput as UpdateOpenIDConnectProviderThumbprintResponse,
   UpdateRoleCommandOutput as UpdateRoleResponse,
   UpdateRoleDescriptionCommandOutput as UpdateRoleDescriptionResponse,
+  UpdateServerCertificateCommandOutput as UpdateServerCertificateResponse,
+  UpdateServiceSpecificCredentialCommandOutput as UpdateServiceSpecificCredentialResponse,
+  UpdateSigningCertificateCommandOutput as UpdateSigningCertificateResponse,
+  UpdateSSHPublicKeyCommandOutput as UpdateSSHPublicKeyResponse,
   UpdateUserCommandOutput as UpdateUserResponse,
+  UploadServerCertificateCommandOutput as UploadServerCertificateResponse,
+  UploadSigningCertificateCommandOutput as UploadSigningCertificateResponse,
+  UploadSSHPublicKeyCommandOutput as UploadSSHPublicKeyResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-iam";
 
@@ -158,10 +223,22 @@ declare interface AwsLiteIAM {
   CreateLoginProfile: (input: { Password: string, UserName: string, PasswordResetRequired?: boolean }) => Promise<CreateLoginProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html IAM: CreateOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateOpenIDConnectProvider IAM: CreateOpenIDConnectProvider}
+   */
+  CreateOpenIDConnectProvider: (input: { Url: string, ClientIDList?: any[], Tags?: any[], ThumbprintList?: any[] }) => Promise<CreateOpenIDConnectProviderResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html IAM: CreatePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicy IAM: CreatePolicy}
    */
   CreatePolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, Description?: string, Path?: string, Tags?: any[] }) => Promise<CreatePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html IAM: CreatePolicyVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicyVersion IAM: CreatePolicyVersion}
+   */
+  CreatePolicyVersion: (input: { PolicyArn: string, PolicyDocument: string | Record<string, any>, SetAsDefault?: boolean }) => Promise<CreatePolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html IAM: CreateRole}
@@ -176,10 +253,22 @@ declare interface AwsLiteIAM {
   CreateServiceLinkedRole: (input: { AWSServiceName: string, CustomSuffix?: string, Description?: string }) => Promise<CreateServiceLinkedRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html IAM: CreateServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateServiceSpecificCredential IAM: CreateServiceSpecificCredential}
+   */
+  CreateServiceSpecificCredential: (input: { ServiceName: string, UserName: string }) => Promise<CreateServiceSpecificCredentialResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html IAM: CreateUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateUser IAM: CreateUser}
    */
   CreateUser: (input: { UserName: string, Path?: string, PermissionsBoundary?: string, Tags?: any[] }) => Promise<CreateUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html IAM: CreateVirtualMFADevice}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateVirtualMFADevice IAM: CreateVirtualMFADevice}
+   */
+  CreateVirtualMFADevice: (input: { VirtualMFADeviceName: string, Path?: string, Tags?: any[] }) => Promise<CreateVirtualMFADeviceResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccessKey.html IAM: DeleteAccessKey}
@@ -192,6 +281,8 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountAlias IAM: DeleteAccountAlias}
    */
   DeleteAccountAlias: (input: { AccountAlias: string }) => Promise<DeleteAccountAliasResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountPasswordPolicy IAM: DeleteAccountPasswordPolicy} */
+  DeleteAccountPasswordPolicy: () => Promise<DeleteAccountPasswordPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html IAM: DeleteGroup}
@@ -218,10 +309,22 @@ declare interface AwsLiteIAM {
   DeleteLoginProfile: (input: { UserName: string }) => Promise<DeleteLoginProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html IAM: DeleteOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteOpenIDConnectProvider IAM: DeleteOpenIDConnectProvider}
+   */
+  DeleteOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string }) => Promise<DeleteOpenIDConnectProviderResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html IAM: DeletePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeletePolicy IAM: DeletePolicy}
    */
   DeletePolicy: (input: { PolicyArn: string }) => Promise<DeletePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html IAM: DeletePolicyVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeletePolicyVersion IAM: DeletePolicyVersion}
+   */
+  DeletePolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<DeletePolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRole.html IAM: DeleteRole}
@@ -230,10 +333,22 @@ declare interface AwsLiteIAM {
   DeleteRole: (input: { RoleName: string }) => Promise<DeleteRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html IAM: DeleteRolePermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePermissionsBoundary IAM: DeleteRolePermissionsBoundary}
+   */
+  DeleteRolePermissionsBoundary: (input: { RoleName: string }) => Promise<DeleteRolePermissionsBoundaryResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePolicy.html IAM: DeleteRolePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePolicy IAM: DeleteRolePolicy}
    */
   DeleteRolePolicy: (input: { RoleName: string, PolicyName: string }) => Promise<DeleteRolePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html IAM: DeleteServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServerCertificate IAM: DeleteServerCertificate}
+   */
+  DeleteServerCertificate: (input: { ServerCertificateName: string }) => Promise<DeleteServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceLinkedRole.html IAM: DeleteServiceLinkedRole}
@@ -242,16 +357,46 @@ declare interface AwsLiteIAM {
   DeleteServiceLinkedRole: (input: { RoleName: string }) => Promise<DeleteServiceLinkedRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceSpecificCredential.html IAM: DeleteServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceSpecificCredential IAM: DeleteServiceSpecificCredential}
+   */
+  DeleteServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, UserName: string }) => Promise<DeleteServiceSpecificCredentialResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html IAM: DeleteSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteSigningCertificate IAM: DeleteSigningCertificate}
+   */
+  DeleteSigningCertificate: (input: { CertificateId: string, UserName?: string }) => Promise<DeleteSigningCertificateResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html IAM: DeleteSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteSSHPublicKey IAM: DeleteSSHPublicKey}
+   */
+  DeleteSSHPublicKey: (input: { SSHPublicKeyId: string, UserName: string }) => Promise<DeleteSSHPublicKeyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html IAM: DeleteUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUser IAM: DeleteUser}
    */
   DeleteUser: (input: { UserName: string }) => Promise<DeleteUserResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html IAM: DeleteUserPermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPermissionsBoundary IAM: DeleteUserPermissionsBoundary}
+   */
+  DeleteUserPermissionsBoundary: (input: { UserName: string }) => Promise<DeleteUserPermissionsBoundaryResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPolicy.html IAM: DeleteUserPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPolicy IAM: DeleteUserPolicy}
    */
   DeleteUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<DeleteUserPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html IAM: DeleteVirtualMFADevice}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteVirtualMFADevice IAM: DeleteVirtualMFADevice}
+   */
+  DeleteVirtualMFADevice: (input: { SerialNumber: string }) => Promise<DeleteVirtualMFADeviceResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachGroupPolicy.html IAM: DetachGroupPolicy}
@@ -270,6 +415,20 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachUserPolicy IAM: DetachUserPolicy}
    */
   DetachUserPolicy: (input: { PolicyArn: string, UserName: string }) => Promise<DetachUserPolicyResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateCredentialReport IAM: GenerateCredentialReport} */
+  GenerateCredentialReport: () => Promise<GenerateCredentialReportResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html IAM: GenerateOrganizationsAccessReport}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateOrganizationsAccessReport IAM: GenerateOrganizationsAccessReport}
+   */
+  GenerateOrganizationsAccessReport: (input: { EntityPath: string, OrganizationsPolicyId?: string }) => Promise<GenerateOrganizationsAccessReportResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html IAM: GenerateServiceLastAccessedDetails}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateServiceLastAccessedDetails IAM: GenerateServiceLastAccessedDetails}
+   */
+  GenerateServiceLastAccessedDetails: (input: { Arn: string, Granularity?: string }) => Promise<GenerateServiceLastAccessedDetailsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html IAM: GetAccessKeyLastUsed}
@@ -278,10 +437,40 @@ declare interface AwsLiteIAM {
   GetAccessKeyLastUsed: (input: { AccessKeyId: string }) => Promise<GetAccessKeyLastUsedResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountAuthorizationDetails.html IAM: GetAccountAuthorizationDetails}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountAuthorizationDetails IAM: GetAccountAuthorizationDetails}
+   */
+  GetAccountAuthorizationDetails: (input: { Filter?: any[], Marker?: string, MaxItems?: number }) => Promise<GetAccountAuthorizationDetailsResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountPasswordPolicy IAM: GetAccountPasswordPolicy} */
+  GetAccountPasswordPolicy: () => Promise<GetAccountPasswordPolicyResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountSummary IAM: GetAccountSummary} */
+  GetAccountSummary: () => Promise<GetAccountSummaryResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html IAM: GetContextKeysForCustomPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetContextKeysForCustomPolicy IAM: GetContextKeysForCustomPolicy}
+   */
+  GetContextKeysForCustomPolicy: (input: { PolicyInputList: any[] }) => Promise<GetContextKeysForCustomPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html IAM: GetContextKeysForPrincipalPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetContextKeysForPrincipalPolicy IAM: GetContextKeysForPrincipalPolicy}
+   */
+  GetContextKeysForPrincipalPolicy: (input: { PolicySourceArn: string, PolicyInputList?: any[] }) => Promise<GetContextKeysForPrincipalPolicyResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetCredentialReport IAM: GetCredentialReport} */
+  GetCredentialReport: () => Promise<GetCredentialReportResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html IAM: GetGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroup IAM: GetGroup}
    */
-  GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<GetGroupResponse>
+  GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number }) => Promise<GetGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html IAM: GetGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroupPolicy IAM: GetGroupPolicy}
+   */
+  GetGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<GetGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html IAM: GetInstanceProfile}
@@ -296,10 +485,28 @@ declare interface AwsLiteIAM {
   GetLoginProfile: (input: { UserName: string }) => Promise<GetLoginProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html IAM: GetOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetOpenIDConnectProvider IAM: GetOpenIDConnectProvider}
+   */
+  GetOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string }) => Promise<GetOpenIDConnectProviderResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html IAM: GetOrganizationsAccessReport}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetOrganizationsAccessReport IAM: GetOrganizationsAccessReport}
+   */
+  GetOrganizationsAccessReport: (input: { JobId: string, Marker?: string, MaxItems?: number, SortKey?: string, paginate?: boolean }) => Promise<GetOrganizationsAccessReportResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html IAM: GetPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetPolicy IAM: GetPolicy}
    */
   GetPolicy: (input: { PolicyArn: string }) => Promise<GetPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html IAM: GetPolicyVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetPolicyVersion IAM: GetPolicyVersion}
+   */
+  GetPolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<GetPolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html IAM: GetRole}
@@ -308,10 +515,46 @@ declare interface AwsLiteIAM {
   GetRole: (input: { RoleName: string }) => Promise<GetRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html IAM: GetRolePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRolePolicy IAM: GetRolePolicy}
+   */
+  GetRolePolicy: (input: { PolicyName: string, RoleName: string }) => Promise<GetRolePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html IAM: GetServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServerCertificate IAM: GetServerCertificate}
+   */
+  GetServerCertificate: (input: { ServerCertificateName: string }) => Promise<GetServerCertificateResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html IAM: GetServiceLastAccessedDetails}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetails IAM: GetServiceLastAccessedDetails}
+   */
+  GetServiceLastAccessedDetails: (input: { JobId: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetServiceLastAccessedDetailsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html IAM: GetServiceLastAccessedDetailsWithEntities}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetailsWithEntities IAM: GetServiceLastAccessedDetailsWithEntities}
+   */
+  GetServiceLastAccessedDetailsWithEntities: (input: { JobId: string, ServiceNamespace: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetServiceLastAccessedDetailsWithEntitiesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html IAM: GetSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetSSHPublicKey IAM: GetSSHPublicKey}
+   */
+  GetSSHPublicKey: (input: { Encoding: string, SSHPublicKeyId: string, UserName: string }) => Promise<GetSSHPublicKeyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html IAM: GetUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUser IAM: GetUser}
    */
   GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html IAM: GetUserPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUserPolicy IAM: GetUserPolicy}
+   */
+  GetUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<GetUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccessKeys.html IAM: ListAccessKeys}
@@ -342,6 +585,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedUserPolicies IAM: ListAttachedUserPolicies}
    */
   ListAttachedUserPolicies: (input: { UserName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListAttachedUserPoliciesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html IAM: ListEntitiesForPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListEntitiesForPolicy IAM: ListEntitiesForPolicy}
+   */
+  ListEntitiesForPolicy: (input: { PolicyArn: string, EntityFilter?: string, Marker?: string, MaxItems?: number, PathPrefix?: string, PolicyUsageFilter?: string }) => Promise<ListEntitiesForPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html IAM: ListGroupPolicies}
@@ -377,7 +626,15 @@ declare interface AwsLiteIAM {
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfileTags.html IAM: ListInstanceProfileTags}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfileTags IAM: ListInstanceProfileTags}
    */
-  ListInstanceProfileTags: (input: { InstanceProfileName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListInstanceProfileTagsResponse>
+  ListInstanceProfileTags: (input: { InstanceProfileName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfileTagsResponse>
+  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListOpenIDConnectProviders IAM: ListOpenIDConnectProviders} */
+  ListOpenIDConnectProviders: () => Promise<ListOpenIDConnectProvidersResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviderTags.html IAM: ListOpenIDConnectProviderTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListOpenIDConnectProviderTags IAM: ListOpenIDConnectProviderTags}
+   */
+  ListOpenIDConnectProviderTags: (input: { OpenIDConnectProviderArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListOpenIDConnectProviderTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicies.html IAM: ListPolicies}
@@ -386,10 +643,22 @@ declare interface AwsLiteIAM {
   ListPolicies: (input: { Marker?: string, MaxItems?: number, OnlyAttached?: boolean, PathPrefix?: string, PolicyUsageFilter?: string, Scope?: string, paginate?: boolean | string }) => Promise<ListPoliciesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html IAM: ListPoliciesGrantingServiceAccess}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPoliciesGrantingServiceAccess IAM: ListPoliciesGrantingServiceAccess}
+   */
+  ListPoliciesGrantingServiceAccess: (input: { Arn: string, ServiceNamespaces: any[], Marker?: string, paginate?: boolean }) => Promise<ListPoliciesGrantingServiceAccessResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html IAM: ListPolicyTags}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyTags IAM: ListPolicyTags}
    */
   ListPolicyTags: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListPolicyTagsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyVersions.html IAM: ListPolicyVersions}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyVersions IAM: ListPolicyVersions}
+   */
+  ListPolicyVersions: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListPolicyVersionsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html IAM: ListRolePolicies}
@@ -410,6 +679,36 @@ declare interface AwsLiteIAM {
   ListRoleTags: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListRoleTagsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html IAM: ListServerCertificates}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServerCertificates IAM: ListServerCertificates}
+   */
+  ListServerCertificates: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListServerCertificatesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html IAM: ListServerCertificateTags}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServerCertificateTags IAM: ListServerCertificateTags}
+   */
+  ListServerCertificateTags: (input: { ServerCertificateName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListServerCertificateTagsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html IAM: ListServiceSpecificCredentials}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServiceSpecificCredentials IAM: ListServiceSpecificCredentials}
+   */
+  ListServiceSpecificCredentials: (input: { ServiceName?: string, UserName?: string }) => Promise<ListServiceSpecificCredentialsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html IAM: ListSigningCertificates}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListSigningCertificates IAM: ListSigningCertificates}
+   */
+  ListSigningCertificates: (input: { Marker?: string, MaxItems?: number, UserName?: string }) => Promise<ListSigningCertificatesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html IAM: ListSSHPublicKeys}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListSSHPublicKeys IAM: ListSSHPublicKeys}
+   */
+  ListSSHPublicKeys: (input: { Marker?: string, MaxItems?: number, UserName?: string }) => Promise<ListSSHPublicKeysResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserPolicies.html IAM: ListUserPolicies}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListUserPolicies IAM: ListUserPolicies}
    */
@@ -428,10 +727,22 @@ declare interface AwsLiteIAM {
   ListUserTags: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListUserTagsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html IAM: ListVirtualMFADevices}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListVirtualMFADevices IAM: ListVirtualMFADevices}
+   */
+  ListVirtualMFADevices: (input: { AssignmentStatus?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListVirtualMFADevicesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
   PutGroupPolicy: (input: { GroupName: string, PolicyDocument: string | Record<string, any>, PolicyName: string }) => Promise<PutGroupPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePermissionsBoundary.html IAM: PutRolePermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutRolePermissionsBoundary IAM: PutRolePermissionsBoundary}
+   */
+  PutRolePermissionsBoundary: (input: { PermissionsBoundary: string, RoleName: string }) => Promise<PutRolePermissionsBoundaryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePolicy.html IAM: PutRolePolicy}
@@ -440,16 +751,22 @@ declare interface AwsLiteIAM {
   PutRolePolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, RoleName: string }) => Promise<PutRolePolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPermissionsBoundary.html IAM: PutUserPermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutUserPermissionsBoundary IAM: PutUserPermissionsBoundary}
+   */
+  PutUserPermissionsBoundary: (input: { PermissionsBoundary: string, UserName: string }) => Promise<PutUserPermissionsBoundaryResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPolicy.html IAM: PutUserPolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutUserPolicy IAM: PutUserPolicy}
    */
   PutUserPolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, UserName: string }) => Promise<PutUserPolicyResponse>
   /**
    * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html IAM: RemoveUserFromGroup}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveUserFromGroup IAM: RemoveUserFromGroup}
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html IAM: RemoveClientIDFromOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveClientIDFromOpenIDConnectProvider IAM: RemoveClientIDFromOpenIDConnectProvider}
    */
-  RemoveUserFromGroup: (input: { GroupName: string, UserName: string }) => Promise<RemoveUserFromGroupResponse>
+  RemoveClientIDFromOpenIDConnectProvider: (input: { ClientID: string, OpenIDConnectProviderArn: string }) => Promise<RemoveClientIDFromOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html IAM: RemoveRoleFromInstanceProfile}
@@ -458,10 +775,52 @@ declare interface AwsLiteIAM {
   RemoveRoleFromInstanceProfile: (input: { InstanceProfileName: string, RoleName: string }) => Promise<RemoveRoleFromInstanceProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html IAM: RemoveUserFromGroup}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveUserFromGroup IAM: RemoveUserFromGroup}
+   */
+  RemoveUserFromGroup: (input: { GroupName: string, UserName: string }) => Promise<RemoveUserFromGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResetServiceSpecificCredential.html IAM: ResetServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ResetServiceSpecificCredential IAM: ResetServiceSpecificCredential}
+   */
+  ResetServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, UserName?: string }) => Promise<ResetServiceSpecificCredentialResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetDefaultPolicyVersion.html IAM: SetDefaultPolicyVersion}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SetDefaultPolicyVersion IAM: SetDefaultPolicyVersion}
+   */
+  SetDefaultPolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<SetDefaultPolicyVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html IAM: SetSecurityTokenServicePreferences}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SetSecurityTokenServicePreferences IAM: SetSecurityTokenServicePreferences}
+   */
+  SetSecurityTokenServicePreferences: (input: { GlobalEndpointTokenVersion: string }) => Promise<SetSecurityTokenServicePreferencesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html IAM: SimulateCustomPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulateCustomPolicy IAM: SimulateCustomPolicy}
+   */
+  SimulateCustomPolicy: (input: { ActionNames: any[], PolicyInputList: any[], CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulateCustomPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html IAM: SimulatePrincipalPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulatePrincipalPolicy IAM: SimulatePrincipalPolicy}
+   */
+  SimulatePrincipalPolicy: (input: { ActionNames: any[], PolicySourceArn: string, CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], PolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulatePrincipalPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html IAM: TagInstanceProfile}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagInstanceProfile IAM: TagInstanceProfile}
    */
   TagInstanceProfile: (input: { InstanceProfileName: string, Tags: any[] }) => Promise<TagInstanceProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagOpenIDConnectProvider.html IAM: TagOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagOpenIDConnectProvider IAM: TagOpenIDConnectProvider}
+   */
+  TagOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string, Tags: any[] }) => Promise<TagOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagPolicy.html IAM: TagPolicy}
@@ -476,6 +835,12 @@ declare interface AwsLiteIAM {
   TagRole: (input: { RoleName: string, Tags: any[] }) => Promise<TagRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagServerCertificate.html IAM: TagServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagServerCertificate IAM: TagServerCertificate}
+   */
+  TagServerCertificate: (input: { ServerCertificateName: string, Tags: any[] }) => Promise<TagServerCertificateResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagUser.html IAM: TagUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagUser IAM: TagUser}
    */
@@ -486,6 +851,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagInstanceProfile IAM: UntagInstanceProfile}
    */
   UntagInstanceProfile: (input: { InstanceProfileName: string, TagKeys: any[] }) => Promise<UntagInstanceProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagOpenIDConnectProvider.html IAM: UntagOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagOpenIDConnectProvider IAM: UntagOpenIDConnectProvider}
+   */
+  UntagOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string, TagKeys: any[] }) => Promise<UntagOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagPolicy.html IAM: UntagPolicy}
@@ -500,6 +871,12 @@ declare interface AwsLiteIAM {
   UntagRole: (input: { RoleName: string, TagKeys: any[] }) => Promise<UntagRoleResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html IAM: UntagServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagServerCertificate IAM: UntagServerCertificate}
+   */
+  UntagServerCertificate: (input: { ServerCertificateName: string, TagKeys: any[] }) => Promise<UntagServerCertificateResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagUser.html IAM: UntagUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagUser IAM: UntagUser}
    */
@@ -510,6 +887,12 @@ declare interface AwsLiteIAM {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccessKey IAM: UpdateAccessKey}
    */
   UpdateAccessKey: (input: { AccessKeyId: string, Status: string, UserName?: string }) => Promise<UpdateAccessKeyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html IAM: UpdateAccountPasswordPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccountPasswordPolicy IAM: UpdateAccountPasswordPolicy}
+   */
+  UpdateAccountPasswordPolicy: (input: { AllowUsersToChangePassword?: boolean, HardExpiry?: boolean, MaxPasswordAge?: number, MinimumPasswordLength?: number, PasswordReusePrevention?: number, RequireLowercaseCharacters?: boolean, RequireNumbers?: boolean, RequireSymbols?: boolean, RequireUppercaseCharacters?: boolean }) => Promise<UpdateAccountPasswordPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAssumeRolePolicy.html IAM: UpdateAssumeRolePolicy}
@@ -530,6 +913,12 @@ declare interface AwsLiteIAM {
   UpdateLoginProfile: (input: { UserName: string, Password?: string, PasswordResetRequired?: boolean }) => Promise<UpdateLoginProfileResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html IAM: UpdateOpenIDConnectProviderThumbprint}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateOpenIDConnectProviderThumbprint IAM: UpdateOpenIDConnectProviderThumbprint}
+   */
+  UpdateOpenIDConnectProviderThumbprint: (input: { OpenIDConnectProviderArn: string, ThumbprintList: any[] }) => Promise<UpdateOpenIDConnectProviderThumbprintResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html IAM: UpdateRole}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRole IAM: UpdateRole}
    */
@@ -542,10 +931,52 @@ declare interface AwsLiteIAM {
   UpdateRoleDescription: (input: { RoleName: string, Description?: string }) => Promise<UpdateRoleDescriptionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html IAM: UpdateServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateServerCertificate IAM: UpdateServerCertificate}
+   */
+  UpdateServerCertificate: (input: { ServerCertificateName: string, NewPath?: string, NewServerCertificateName?: string }) => Promise<UpdateServerCertificateResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html IAM: UpdateServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateServiceSpecificCredential IAM: UpdateServiceSpecificCredential}
+   */
+  UpdateServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, Status: string, UserName?: string }) => Promise<UpdateServiceSpecificCredentialResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html IAM: UpdateSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateSigningCertificate IAM: UpdateSigningCertificate}
+   */
+  UpdateSigningCertificate: (input: { CertificateId: string, Status: string, UserName?: string }) => Promise<UpdateSigningCertificateResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html IAM: UpdateSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateSSHPublicKey IAM: UpdateSSHPublicKey}
+   */
+  UpdateSSHPublicKey: (input: { SSHPublicKeyId: string, Status: string, UserName: string }) => Promise<UpdateSSHPublicKeyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateUser.html IAM: UpdateUser}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateUser IAM: UpdateUser}
    */
   UpdateUser: (input: { UserName: string, NewPath?: string, NewUserName?: string }) => Promise<UpdateUserResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html IAM: UploadServerCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadServerCertificate IAM: UploadServerCertificate}
+   */
+  UploadServerCertificate: (input: { CertificateBody: string, PrivateKey: string, ServerCertificateName: string, CertificateChain?: string, Path?: string, Tags?: any[] }) => Promise<UploadServerCertificateResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html IAM: UploadSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadSigningCertificate IAM: UploadSigningCertificate}
+   */
+  UploadSigningCertificate: (input: { CertificateBody: string, UserName?: string }) => Promise<UploadSigningCertificateResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html IAM: UploadSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadSSHPublicKey IAM: UploadSSHPublicKey}
+   */
+  UploadSSHPublicKey: (input: { SSHPublicKeyBody: string, UserName: string }) => Promise<UploadSSHPublicKeyResponse>
   // $METHODS_END
 }
 
@@ -571,70 +1002,135 @@ export type {
   CreateGroupResponse,
   CreateInstanceProfileResponse,
   CreateLoginProfileResponse,
+  CreateOpenIDConnectProviderResponse,
   CreatePolicyResponse,
+  CreatePolicyVersionResponse,
   CreateRoleResponse,
   CreateServiceLinkedRoleResponse,
+  CreateServiceSpecificCredentialResponse,
   CreateUserResponse,
+  CreateVirtualMFADeviceResponse,
   DeleteAccessKeyResponse,
   DeleteAccountAliasResponse,
+  DeleteAccountPasswordPolicyResponse,
   DeleteGroupResponse,
   DeleteGroupPolicyResponse,
   DeleteInstanceProfileResponse,
   DeleteLoginProfileResponse,
+  DeleteOpenIDConnectProviderResponse,
   DeletePolicyResponse,
+  DeletePolicyVersionResponse,
   DeleteRoleResponse,
+  DeleteRolePermissionsBoundaryResponse,
   DeleteRolePolicyResponse,
+  DeleteServerCertificateResponse,
   DeleteServiceLinkedRoleResponse,
+  DeleteServiceSpecificCredentialResponse,
+  DeleteSigningCertificateResponse,
+  DeleteSSHPublicKeyResponse,
   DeleteUserResponse,
+  DeleteUserPermissionsBoundaryResponse,
   DeleteUserPolicyResponse,
+  DeleteVirtualMFADeviceResponse,
   DetachGroupPolicyResponse,
   DetachRolePolicyResponse,
   DetachUserPolicyResponse,
+  GenerateCredentialReportResponse,
+  GenerateOrganizationsAccessReportResponse,
+  GenerateServiceLastAccessedDetailsResponse,
   GetAccessKeyLastUsedResponse,
+  GetAccountAuthorizationDetailsResponse,
+  GetAccountPasswordPolicyResponse,
+  GetAccountSummaryResponse,
+  GetContextKeysForCustomPolicyResponse,
+  GetContextKeysForPrincipalPolicyResponse,
+  GetCredentialReportResponse,
   GetGroupResponse,
+  GetGroupPolicyResponse,
   GetInstanceProfileResponse,
   GetLoginProfileResponse,
+  GetOpenIDConnectProviderResponse,
+  GetOrganizationsAccessReportResponse,
   GetPolicyResponse,
+  GetPolicyVersionResponse,
   GetRoleResponse,
+  GetRolePolicyResponse,
+  GetServerCertificateResponse,
+  GetServiceLastAccessedDetailsResponse,
+  GetServiceLastAccessedDetailsWithEntitiesResponse,
+  GetSSHPublicKeyResponse,
   GetUserResponse,
+  GetUserPolicyResponse,
   ListAccessKeysResponse,
   ListAccountAliasesResponse,
   ListAttachedGroupPoliciesResponse,
   ListAttachedRolePoliciesResponse,
   ListAttachedUserPoliciesResponse,
+  ListEntitiesForPolicyResponse,
   ListGroupPoliciesResponse,
   ListGroupsResponse,
   ListGroupsForUserResponse,
   ListInstanceProfilesResponse,
   ListInstanceProfilesForRoleResponse,
   ListInstanceProfileTagsResponse,
+  ListOpenIDConnectProvidersResponse,
+  ListOpenIDConnectProviderTagsResponse,
   ListPoliciesResponse,
+  ListPoliciesGrantingServiceAccessResponse,
   ListPolicyTagsResponse,
+  ListPolicyVersionsResponse,
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
+  ListServerCertificatesResponse,
+  ListServerCertificateTagsResponse,
+  ListServiceSpecificCredentialsResponse,
+  ListSigningCertificatesResponse,
+  ListSSHPublicKeysResponse,
   ListUserPoliciesResponse,
   ListUsersResponse,
   ListUserTagsResponse,
+  ListVirtualMFADevicesResponse,
   PutGroupPolicyResponse,
+  PutRolePermissionsBoundaryResponse,
   PutRolePolicyResponse,
+  PutUserPermissionsBoundaryResponse,
   PutUserPolicyResponse,
-  RemoveUserFromGroupResponse,
+  RemoveClientIDFromOpenIDConnectProviderResponse,
   RemoveRoleFromInstanceProfileResponse,
+  RemoveUserFromGroupResponse,
+  ResetServiceSpecificCredentialResponse,
+  SetDefaultPolicyVersionResponse,
+  SetSecurityTokenServicePreferencesResponse,
+  SimulateCustomPolicyResponse,
+  SimulatePrincipalPolicyResponse,
   TagInstanceProfileResponse,
+  TagOpenIDConnectProviderResponse,
   TagPolicyResponse,
   TagRoleResponse,
+  TagServerCertificateResponse,
   TagUserResponse,
   UntagInstanceProfileResponse,
+  UntagOpenIDConnectProviderResponse,
   UntagPolicyResponse,
   UntagRoleResponse,
+  UntagServerCertificateResponse,
   UntagUserResponse,
   UpdateAccessKeyResponse,
+  UpdateAccountPasswordPolicyResponse,
   UpdateAssumeRolePolicyResponse,
   UpdateGroupResponse,
   UpdateLoginProfileResponse,
+  UpdateOpenIDConnectProviderThumbprintResponse,
   UpdateRoleResponse,
   UpdateRoleDescriptionResponse,
+  UpdateServerCertificateResponse,
+  UpdateServiceSpecificCredentialResponse,
+  UpdateSigningCertificateResponse,
+  UpdateSSHPublicKeyResponse,
   UpdateUserResponse,
+  UploadServerCertificateResponse,
+  UploadSigningCertificateResponse,
+  UploadSSHPublicKeyResponse,
   // $EXPORT_END
 }
