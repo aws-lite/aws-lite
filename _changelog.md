@@ -6,10 +6,11 @@
 
 ### Added
 
-- Added initial support for acquiring AWS credentials via SSO (AWS IAM Identity Center)
-- Added initial support for acquiring AWS credentials in ECS, EC2, and other environments that use IMDSv2
-  - IMDSv1 is not currently supported
-- Increased support for creds and other various kinds of configuration via AWS config files (`~/.aws/config`)
+- Added support for the AWS credential provider chain, including:
+  - Support for acquiring AWS credentials via SSO (AWS IAM Identity Center)
+  - Support for acquiring AWS credentials in ECS, EC2, and other environments that use IMDSv2
+  - Increased support for creds and other various kinds of configuration via AWS config files (`~/.aws/config`)
+  - Learn more at: http://aws-lite.org/configuration#credential-provider-chain-details
 - Added support for async iterator pagination by specifying `iterator` as the pagination type
 
 
