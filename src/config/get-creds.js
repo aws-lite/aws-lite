@@ -8,7 +8,7 @@ let noConnection = /(EHOSTDOWN|ECONNREFUSED|EHOSTUNREACH)/g
  * - SSO
  * - Configuration files (~/.aws/[credentials|config], etc.)
  * - Process
- * - Token file (TODO)
+ * - TODO: Token file
  * - IMDS (aka "remote provider"): container (ECS) then instance (EC2) metadata
  * See also: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
  */
@@ -79,6 +79,7 @@ module.exports = async function getCreds (params) {
     if (profileCreds) return profileCreds
   }
 
+  // TODO:
   // let tokenFileCreds = await getCredsFromTokenFileCreds(params)
   // if (tokenFileCreds) {
   //   /* istanbul ignore next */
@@ -94,7 +95,7 @@ module.exports = async function getCreds (params) {
   if (IMDSCreds) {
     /* istanbul ignore next */
     if (config.debug) {
-      console.error(`[aws-lite] Loaded credentials from IMDS in ${Date.now() - IMDSStart}ms`)
+      console.error(`[aws-lite] Loaded credentials from IMDSv2 in ${Date.now() - IMDSStart}ms`)
     }
     return IMDSCreds
   }
@@ -424,7 +425,7 @@ function checkHost (endpoint, debug) {
       port = port || (endpoint?.startsWith('https:') ? 443 : 80)
       let net = require('node:net')
       if (debug) {
-        console.error(`[aws-lite] Checking IMDSv2 host; host: ${host}, port: ${port}`)
+        console.error(`[aws-lite] Checking IMDSv2 host; ${host}:${port}`)
       }
       // Amazon's default timeout: 1 second. Seems kind of excessive, if you ask me.
       let socket = net.createConnection({ host, port, timeout: 1000 })
