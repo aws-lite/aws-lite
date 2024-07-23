@@ -1,3 +1,7 @@
+// IAM response arrays are almost always <Key><member>data</member><Key>
+// arrayKeys is a Set of keys that are expected to be arrays
+// set recurse to true to recursively search for nested arrays
+// TODO: maybe change recurse to maxDepth
 function normalizeResponse (object, arrayKeys, recurse) {
   if (typeof object !== 'object') return
   if (Array.isArray(object) && recurse) {
@@ -18,6 +22,10 @@ function normalizeResponse (object, arrayKeys, recurse) {
   }
 }
 
+// IAM requests are all passed through the URL. Typical arrays are serialized in the format `<key>.member.<n>`.
+// Nested objects or arrays tend to serialize to `<keyA>.member.<n>.<KeyB>...`
+// set recurse to true to handle nested values
+// TODO: maybe change recurse to maxDepth
 function serializeArray (arr, key, recurse) {
   let result = {}
   arr.forEach((value, i) => {
@@ -34,6 +42,8 @@ function serializeArray (arr, key, recurse) {
   return result
 }
 
+// Mostly used to handle serializing objects in an array
+// TODO: maybe add maxDepth
 function serializeObject (obj, parentKey = '') {
   let result = {}
   Object.entries(obj).forEach(([ key, value ]) => {
