@@ -595,6 +595,8 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (string)**
+  - Set to `iterator` to enable async result pagination; response structure is not compatible with the fully automated paginator
 
 
 ### `GetAccountPasswordPolicy`
@@ -653,6 +655,8 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `GetGroupPolicy`
@@ -707,7 +711,7 @@ Properties:
 - **`SortKey` (string)**
   - Sort results by key
   - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html#API_GetOrganizationsAccessReport_RequestParameters)
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -771,7 +775,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -789,7 +793,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -837,7 +841,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`UserName` (string)**
   - User name
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -850,7 +854,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -867,7 +871,7 @@ Properties:
   - Filter results by path prefix
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -884,7 +888,7 @@ Properties:
   - Filter results by path prefix
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -901,7 +905,7 @@ Properties:
   - Filter results by path prefix
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -924,6 +928,8 @@ Properties:
 - **`PolicyUsageFilter` (string)**
   - Filter results by policy usage
   - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters)
+- **`paginate` (string)**
+  - Set to `iterator` to enable async result pagination; response structure is not compatible with the fully automated paginator
 
 
 ### `ListGroupPolicies`
@@ -937,7 +943,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -952,7 +958,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -967,7 +973,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -982,7 +988,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -997,7 +1003,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1012,7 +1018,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1035,7 +1041,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1056,7 +1062,7 @@ Properties:
   - Filter results by how they are used; can be one of: `PermissionsPolicy`, `PermissionsBoundary`
 - **`Scope` (string)**
   - Filter results by how they are managed; can be one of: `All`, `AWS`, `Local` (customer managed)
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1071,7 +1077,7 @@ Properties:
   - Array of namespaces for the AWS services to be listed
 - **`Marker` (string)**
   - Pagination cursor
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1086,7 +1092,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1101,7 +1107,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1116,7 +1122,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1131,7 +1137,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1146,7 +1152,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1161,7 +1167,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1176,7 +1182,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1228,7 +1234,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1243,7 +1249,7 @@ Properties:
   - Maximum number of items to be returned in a response; at most 1000
 - **`PathPrefix` (string)**
   - Filter results by path prefix
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1258,7 +1264,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1273,7 +1279,7 @@ Properties:
   - Pagination cursor
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1430,7 +1436,7 @@ Properties:
   - ARN representing the AWS account ID that owns any simulated resources
 - **`ResourcePolicy` (string, object)**
   - A resource based policy
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -1463,7 +1469,7 @@ Properties:
   - ARN representing the AWS account ID that owns any simulated resources
 - **`ResourcePolicy` (string, object)**
   - A resource based policy
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
