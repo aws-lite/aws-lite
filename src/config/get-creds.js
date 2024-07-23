@@ -426,7 +426,8 @@ function checkHost (endpoint, debug) {
       if (debug) {
         console.error(`[aws-lite] Checking IMDSv2 host; host: ${host}, port: ${port}`)
       }
-      let socket = net.createConnection({ host, port, timeout: 1 })
+      // Amazon's default timeout: 1 second. Seems kind of excessive, if you ask me.
+      let socket = net.createConnection({ host, port, timeout: 1000 })
       socket.on('timeout', () => {
         if (debug) {
           console.error(`[aws-lite] IMDSv2 host timed out`)
