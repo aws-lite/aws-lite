@@ -1488,9 +1488,8 @@ const ListBucketAnalyticsConfigurations = {
     const queryParams = [ 'ContinuationToken' ]
     const { host, pathPrefix } = getHost(params, utils)
     const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
-    let query = { analytics: '', ...getQueryFromParams(params, queryParams) }
-    let paginate
-    if (params.paginate) paginate = true
+    const query = { analytics: '', ...getQueryFromParams(params, queryParams) }
+    const { paginate } = params
     return {
       host,
       pathPrefix,
@@ -1528,9 +1527,8 @@ const ListBucketIntelligentTieringConfigurations = {
     const queryParams = [ 'ContinuationToken' ]
     const { host, pathPrefix } = getHost(params, utils)
     const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
-    let query = { 'intelligent-tiering': '', ...getQueryFromParams(params, queryParams) }
-    let paginate
-    if (params.paginate) paginate = true
+    const query = { 'intelligent-tiering': '', ...getQueryFromParams(params, queryParams) }
+    const { paginate } = params
     return {
       host,
       pathPrefix,
@@ -1570,9 +1568,8 @@ const ListBucketInventoryConfigurations = {
     const queryParams = [ 'ContinuationToken' ]
     const { host, pathPrefix } = getHost(params, utils)
     const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
-    let query = { 'inventory': '', ...getQueryFromParams(params, queryParams) }
-    let paginate
-    if (params.paginate) paginate = true
+    const query = { 'inventory': '', ...getQueryFromParams(params, queryParams) }
+    const { paginate } = params
     return {
       host,
       pathPrefix,
@@ -1613,9 +1610,8 @@ const ListBucketMetricsConfigurations = {
     const queryParams = [ 'ContinuationToken' ]
     const { host, pathPrefix } = getHost(params, utils)
     const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
-    let query = { 'metrics': '', ...getQueryFromParams(params, queryParams) }
-    let paginate
-    if (params.paginate) paginate = true
+    const query = { 'metrics': '', ...getQueryFromParams(params, queryParams) }
+    const { paginate } = params
     return {
       host,
       pathPrefix,
@@ -1675,9 +1671,8 @@ const ListMultipartUploads = {
     const queryParams = [ 'Delimiter', 'EncodingType', 'KeyMarker', 'MaxUploads', 'UploadMarker' ]
     const { host, pathPrefix } = getHost(params, utils)
     const headers = getHeadersFromParams(params, queryParams + [ 'paginate' ])
-    let query = { uploads: '', ...getQueryFromParams(params, queryParams) }
-    let paginate
-    if (params.paginate) paginate = params.paginate
+    const query = { uploads: '', ...getQueryFromParams(params, queryParams) }
+    const { paginate } = params
     return {
       host,
       pathPrefix,
@@ -1805,7 +1800,6 @@ const ListObjectVersions = {
   },
 }
 
-// TODO: prevent paginator from excluding fields that are not the accumulator
 const ListParts = {
   awsDoc: docRoot + 'API_ListParts.html',
   validate: {
@@ -1814,26 +1808,26 @@ const ListParts = {
     UploadId,
     MaxParts: { ...num, comment: 'Maximum number of parts (at most 1000) to be returned in the response' },
     PartNumberMarker: { ...str, comment: 'Pagination cursor' },
-    // paginate: valPaginate,
+    paginate: valPaginate,
     ...getValidateHeaders('RequestPayer', 'ExpectedBucketOwner', 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5'),
   },
   request: (params, utils) => {
     const queryParams = [ 'MaxParts', 'PartNumberMarker', 'UploadId' ]
     const { host, pathPrefix } = getHost(params, utils)
-    const { Key /* paginate*/ } = params
+    const { Key, paginate } = params
     return {
       host,
       pathPrefix,
       path: `/${Key}`,
       query: getQueryFromParams(params, queryParams),
       headers: getHeadersFromParams(params, queryParams),
-      // paginate,
-      // paginator: {
-      //   type: 'query',
-      //   cursor: 'part-number-marker',
-      //   token: 'NextPartNumberMarker',
-      //   accumulator: 'Part',
-      // },
+      paginate,
+      paginator: {
+        type: 'query',
+        cursor: 'part-number-marker',
+        token: 'NextPartNumberMarker',
+        accumulator: 'Part',
+      },
     }
   },
   response: ({ payload, headers }) => {
@@ -1926,7 +1920,7 @@ const PutBucketAnalyticsConfiguration = {
     const query = { analytics: '', ...getQueryFromParams(params, queryParams) }
     const { AnalyticsConfiguration } = params
     const { Id, Filter, StorageClassAnalysis } = AnalyticsConfiguration
-    let payload = { Id, StorageClassAnalysis }
+    const payload = { Id, StorageClassAnalysis }
     if (Filter) payload.Filter = serializeRequestFilter(Filter)
     return {
       method: 'PUT',
@@ -2028,7 +2022,7 @@ const PutBucketIntelligentTieringConfiguration = {
     const query = { 'intelligent-tiering': '', ...getQueryFromParams(params, [ 'Id' ]) }
     const { IntelligentTieringConfiguration } = params
     const { Id, Filter, Status, Tierings: Tiering } = IntelligentTieringConfiguration
-    let payload = { Id, Status, Tiering }
+    const payload = { Id, Status, Tiering }
     if (Filter) payload.Filter = serializeRequestFilter(Filter)
     return {
       method: 'PUT',
@@ -2057,7 +2051,7 @@ const PutBucketInventoryConfiguration = {
     const query = { 'inventory': '', ...getQueryFromParams(params, queryParams) }
     const headers = { ...xml, ...getHeadersFromParams(params, queryParams) }
     const { InventoryConfiguration } = params
-    let payload = { ...InventoryConfiguration }
+    const payload = { ...InventoryConfiguration }
     if (payload.OptionalFields) payload.OptionalFields = { Field: payload.OptionalFields }
     return {
       method: 'PUT',
@@ -2181,7 +2175,7 @@ const PutBucketNotificationConfiguration = {
     const { host, pathPrefix } = getHost(params, utils)
     const { NotificationConfiguration } = params
     const { TopicConfigurations, QueueConfigurations, LambdaFunctionConfigurations, EventBridgeConfiguration } = NotificationConfiguration
-    let payload = { EventBridgeConfiguration }
+    const payload = { EventBridgeConfiguration }
     const serializeFilter = Filter => {
       return {
         S3Key: {
