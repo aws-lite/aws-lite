@@ -279,7 +279,7 @@ declare interface AwsLiteDynamoDB {
    * - AWS docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html DynamoDB: Query}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/dynamodb/readme.md#Query DynamoDB: Query}
    */
-  Query: (input: { TableName: string, AttributesToGet?: any[], ConditionalOperator?: string, ConsistentRead?: boolean, ExclusiveStartKey?: Record<string, any>, ExpressionAttributeNames?: Record<string, any>, ExpressionAttributeValues?: Record<string, any>, FilterExpression?: string, IndexName?: string, KeyConditionExpression?: string, KeyConditions?: Record<string, any>, Limit?: number, ProjectionExpression?: string, QueryFilter?: Record<string, any>, ReturnConsumedCapacity?: string, ScanIndexForward?: boolean, Select?: string, paginate?: boolean }) => Promise<QueryResponse>
+  Query: (input: { TableName: string, AttributesToGet?: any[], ConditionalOperator?: string, ConsistentRead?: boolean, ExclusiveStartKey?: Record<string, any>, ExpressionAttributeNames?: Record<string, any>, ExpressionAttributeValues?: Record<string, any>, FilterExpression?: string, IndexName?: string, KeyConditionExpression?: string, KeyConditions?: Record<string, any>, Limit?: number, ProjectionExpression?: string, QueryFilter?: Record<string, any>, ReturnConsumedCapacity?: string, ScanIndexForward?: boolean, Select?: string, paginate?: boolean | string }) => Promise<QueryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_RestoreTableFromBackup.html DynamoDB: RestoreTableFromBackup}
@@ -297,7 +297,7 @@ declare interface AwsLiteDynamoDB {
    * - AWS docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html DynamoDB: Scan}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/dynamodb/readme.md#Scan DynamoDB: Scan}
    */
-  Scan: (input: { TableName: string, AttributesToGet?: any[], ConditionalOperator?: string, ConsistentRead?: boolean, ExclusiveStartKey?: Record<string, any>, ExpressionAttributeNames?: Record<string, any>, ExpressionAttributeValues?: Record<string, any>, FilterExpression?: string, IndexName?: string, Limit?: number, ProjectionExpression?: string, ReturnConsumedCapacity?: string, ScanFilter?: Record<string, any>, Segment?: number, Select?: string, TotalSegments?: number, paginate?: boolean }) => Promise<ScanResponse>
+  Scan: (input: { TableName: string, AttributesToGet?: any[], ConditionalOperator?: string, ConsistentRead?: boolean, ExclusiveStartKey?: Record<string, any>, ExpressionAttributeNames?: Record<string, any>, ExpressionAttributeValues?: Record<string, any>, FilterExpression?: string, IndexName?: string, Limit?: number, ProjectionExpression?: string, ReturnConsumedCapacity?: string, ScanFilter?: Record<string, any>, Segment?: number, Select?: string, TotalSegments?: number, paginate?: boolean | string }) => Promise<ScanResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TagResource.html DynamoDB: TagResource}

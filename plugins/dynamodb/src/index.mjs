@@ -54,7 +54,7 @@ const StreamSpecification = { ...obj, comment: 'Settings for Streams, including:
 const TableClass = { ...str, comment: 'Class of the table, can be set to: `STANDARD`, or `STANDARD_INFREQUENT_ACCESS`' }
 const TableName = { ...str, required, comment: 'DynamoDB table name' }
 const TargetTableName = { ...str, required, comment: 'Name of the new table into which the backup will be restored' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => payload
 const defaultError = params => {
@@ -761,17 +761,15 @@ const Query = {
     paginate: valPaginate,
   },
   request: async (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
     return {
       awsjson: awsjsonReq,
       headers: headers('Query'),
       paginate,
       paginator,
-      payload: params,
+      payload,
     }
   },
   response: async ({ payload }, { awsjsonUnmarshall, config }) => {
@@ -846,15 +844,13 @@ const Scan = {
     paginate: valPaginate,
   },
   request: async (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
     return {
       awsjson: awsjsonReq,
       headers: headers('Scan'),
-      payload: params,
+      payload,
       paginate,
       paginator,
     }
