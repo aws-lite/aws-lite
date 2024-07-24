@@ -71,12 +71,11 @@ const Timeout = { ...num, comment: 'Time (in seconds) a function is allowed to r
 const Topics = { ...arr, comment: 'Array of exactly 1 string specifying the name of the `Kafka` topic' }
 const TracingConfig = { ...obj, comment: 'Sample and trace a subset of incoming requests with X-Ray', ref: docRoot + 'API_TracingConfig.html' }
 const TumblingWindowInSeconds = { ...num, comment: 'Time (in seconds) from 0 to 900 specifying the duration of a processing window for `DynamoDB` and `Kinesis` event stream sources' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionNumber = { ...num, required, comment: 'The version number of the layer' }
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
 
-const defaultResponse = ({ payload }) => payload
-const emptyResponse = () => ({ })
+const defaultResponse = ({ payload }) => payload || {}
 const paginator = {
   type: 'query',
   token: 'NextMarker',
@@ -94,18 +93,16 @@ const AddLayerVersionPermission = {
     Principal: { ...str, comment: 'Account ID being granted permissions. Use `*` along with the `OrganizationId` to grant permissions to all accounts in the specified organization' },
     StatementId: { ...str, required, comment: 'ID to distinguish the policy from other policies on the same layer version' },
   },
-  request: async (params) => {
+  request: (params) => {
     const { LayerName, RevisionId, VersionNumber } = params
     let payload = { ...params }
     let query
     delete payload.LayerName
     delete payload.VersionNumber
-
     if (RevisionId) {
       query = { RevisionId }
       delete params.RevisionId
     }
-
     return {
       path: `/2018-10-31/layers/${LayerName}/versions/${VersionNumber}/policy`,
       query,
@@ -129,18 +126,16 @@ const AddPermission = {
     SourceArn: { ...str, comment: 'ARN of the AWS resource that invokes the function, such as an Amazon S3 bucket' },
     StatementId: { ...str, required, comment: 'A statement identifier that differentiates the statement from others in the same policy' },
   },
-  request: async (params) => {
+  request: (params) => {
     const { FunctionName, Qualifier } = params
-    let payload = { ...params }
+    const payload = { ...params }
     let query
     delete payload.FunctionName
     delete payload.Qualifier
-
     if (Qualifier) {
       query = { Qualifier }
       delete payload.Qualifier
     }
-
     return {
       path: `/2015-03-31/functions/${FunctionName}/policy`,
       query,
@@ -159,11 +154,10 @@ const CreateAlias = {
     Name: { ...str, required, comment: 'Name of the alias' }, //
     RoutingConfig,
   },
-  request: async (params) => {
+  request: (params) => {
     const { FunctionName } = params
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.FunctionName
-
     return {
       path: `/2015-03-31/functions/${FunctionName}/aliases`,
       payload,
@@ -179,7 +173,7 @@ const CreateCodeSigningConfig = {
     CodeSigningPolicies: { ...CodeSigningPolicies, ref: 'https://docs.aws.amazon.com/lambda/latest/api/API_CodeSigningPolicies.html' },
     Description,
   },
-  request: async (payload) => {
+  request: (payload) => {
     return {
       path: '/2020-04-22/code-signing-configs/',
       payload,
@@ -193,7 +187,7 @@ const CreateEventSourceMapping = {
   validate: {
     FunctionName,
     AmazonManagedKafkaEventSourceConfig: { ...AmazonManagedKafkaEventSourceConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-AmazonManagedKafkaEventSourceConfig' },
-    BatchSize: { ...BatchSize, ref:  docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-BatchSize' },
+    BatchSize: { ...BatchSize, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-BatchSize' },
     BisectBatchOnFunctionError,
     DestinationConfig: { ...DestinationConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DestinationConfig' },
     DocumentDBEventSourceConfig: { ...DocumentDBEventSourceConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-DocumentDBEventSourceConfig' },
@@ -210,7 +204,7 @@ const CreateEventSourceMapping = {
     SelfManagedEventSource: { ...SelfManagedEventSource, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
     SelfManagedKafkaEventSourceConfig: { ...SelfManagedKafkaEventSourceConfig, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-SelfManagedEventSource' },
     SourceAccessConfigurations,
-    StartingPosition: { ...StartingPosition, ref: docRoot +  'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition' },
+    StartingPosition: { ...StartingPosition, ref: docRoot + 'API_CreateEventSourceMapping.html#lambda-CreateEventSourceMapping-request-StartingPosition' },
     StartingPositionTimestamp,
     Topics,
     TumblingWindowInSeconds,
@@ -266,7 +260,7 @@ const CreateFunctionUrlConfig = {
   validate: {
     AuthType,
     FunctionName,
-    Cors: { ...Cors, ref: docRoot +  'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-Cors' },
+    Cors: { ...Cors, ref: docRoot + 'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-Cors' },
     InvokeMode: { ...InvokeMode, ref: docRoot + 'API_CreateFunctionUrlConfig.html#lambda-CreateFunctionUrlConfig-request-InvokeMode' },
     Qualifier,
   },
@@ -300,7 +294,7 @@ const DeleteAlias = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const DeleteCodeSigningConfig = {
@@ -314,7 +308,7 @@ const DeleteCodeSigningConfig = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const DeleteEventSourceMapping = {
@@ -346,7 +340,7 @@ const DeleteFunction = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const DeleteFunctionCodeSigningConfig = {
@@ -360,7 +354,7 @@ const DeleteFunctionCodeSigningConfig = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const DeleteFunctionConcurrency = {
@@ -374,7 +368,7 @@ const DeleteFunctionConcurrency = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const DeleteFunctionEventInvokeConfig = {
@@ -392,7 +386,7 @@ const DeleteFunctionEventInvokeConfig = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const DeleteFunctionUrlConfig = {
@@ -410,7 +404,7 @@ const DeleteFunctionUrlConfig = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const DeleteLayerVersion = {
@@ -425,7 +419,7 @@ const DeleteLayerVersion = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const DeleteProvisionedConcurrencyConfig = {
@@ -441,7 +435,7 @@ const DeleteProvisionedConcurrencyConfig = {
       method: 'DELETE',
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const GetAccountSettings = {
@@ -751,14 +745,10 @@ const ListAliases = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let { FunctionName } = params
-    let query = { ...params }
+    const { FunctionName, paginate } = params
+    const query = { ...params }
     delete query.FunctionName
-    let paginate
-    if (query.paginate) {
-      delete query.paginate
-      paginate = true
-    }
+    if (paginate) delete query.paginate
     return {
       path: `/2015-03-31/functions/${FunctionName}/aliases`,
       paginate,
@@ -777,15 +767,12 @@ const ListCodeSigningConfigs = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
-
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
     return {
       path: '/2020-04-22/code-signing-configs/',
-      query: params,
+      query,
       paginate,
       paginator: { ...paginator, accumulator: 'CodeSigningConfigs' },
     }
@@ -802,12 +789,10 @@ const ListEventSourceMappings = {
     MaxItems,
     paginate: valPaginate,
   },
-  request: (query) => {
-    let paginate
-    if (query.paginate) {
-      delete query.paginate
-      paginate = true
-    }
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
     return {
       path: '/2015-03-31/event-source-mappings/',
       query,
@@ -826,14 +811,11 @@ const ListFunctionEventInvokeConfigs = {
     MaxItems,
     paginate: valPaginate,
   },
-  request: (query) => {
-    const { FunctionName } = query
-    let paginate
-    delete query.FuncionName
-    if (query.paginate) {
-      delete query.paginate
-      paginate = true
-    }
+  request: (params) => {
+    const { FunctionName, paginate } = params
+    const query = { ...params }
+    delete query.FunctionName
+    if (paginate) delete query.paginate
     return {
       path: `/2019-09-25/functions/${FunctionName}/event-invoke-config/list`,
       query,
@@ -854,18 +836,17 @@ const ListFunctions = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
     return {
       path: '/2015-03-31/functions/',
-      query: params,
+      params,
       paginate,
       paginator: { ...paginator, accumulator: 'Functions' },
     }
   },
+  response: defaultResponse,
 }
 
 const ListFunctionsByCodeSigningConfig = {
@@ -877,14 +858,10 @@ const ListFunctionsByCodeSigningConfig = {
     paginate: valPaginate,
   },
   request: (params) => {
-    const { CodeSigningConfigArn } = params
-    let query = { ...params }
-    let paginate
+    const query = { ...params }
+    const { CodeSigningConfigArn, paginate } = params
     delete query.CodeSigningConfigArn
-    if (query.paginate) {
-      delete query.paginate
-      paginate = true
-    }
+    if (paginate) delete query.paginate
     return {
       path: `/2020-04-22/code-signing-configs/${CodeSigningConfigArn}/functions`,
       query,
@@ -905,7 +882,7 @@ const ListFunctionUrlConfigs = {
   },
   request: (params) => {
     const { FunctionName, paginate } = params
-    let query = { ...params }
+    const query = { ...params }
     delete query.FunctionName
     if (paginate) delete query.paginate
     return {
@@ -928,14 +905,12 @@ const ListLayers = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const { paginate } = params
+    const query = { ...params }
+    if (paginate) delete params.paginate
     return {
       path: '/2018-10-31/layers',
-      query: params,
+      query,
       paginate,
       paginator: { ...paginator, accumulator: 'Layers' },
     }
@@ -954,14 +929,10 @@ const ListLayerVersions = {
     paginate: valPaginate,
   },
   request: (params) => {
-    const { LayerName } = params
-    let query = { ...params }
-    let paginate
+    const { LayerName, paginate } = params
+    const query = { ...params }
     delete query.LayerName
-    if (query.paginate) {
-      paginate = true
-      delete query.paginate
-    }
+    if (paginate) delete query.paginate
     return {
       path: `/2018-10-31/layers/${LayerName}/versions`,
       query,
@@ -981,15 +952,10 @@ const ListProvisionedConcurrencyConfigs = {
     paginate: valPaginate,
   },
   request: (params) => {
-    const { FunctionName } = params
-    let query = { ...params }
-    let paginate
-    query.List = 'ALL'
+    const { FunctionName, paginate } = params
+    const query = { ...params, List: 'ALL' }
     delete query.FunctionName
-    if (query.paginate) {
-      delete query.paginate
-      paginate = true
-    }
+    if (paginate) delete query.paginate
     return {
       path: `/2019-09-30/functions/${FunctionName}/provisioned-concurrency`,
       query,
@@ -1022,14 +988,10 @@ const ListVersionsByFunction = {
     paginate: valPaginate,
   },
   request: (params) => {
-    const { FunctionName } = params
-    let query = { ...params }
-    let paginate
+    const { FunctionName, paginate } = params
+    const query = { ...params }
     delete query.FunctionName
-    if (query.paginate) {
-      delete query.paginate
-      paginate = true
-    }
+    if (paginate) delete query.paginate
     return {
       path: `/2015-03-31/functions/${FunctionName}/versions`,
       query,
@@ -1045,13 +1007,13 @@ const PublishLayerVersion = {
   validate: {
     Content: { ...obj, required, comment: 'Contents of the layer; object can contain: `S3Bucket`, `S3Key`, `S3ObjectVersion`, or `ZipFile` (base64-encoded zip)', ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-Content' },
     CompatibleArchitectures: { ...arr, comment: 'Array with a maximum of 2 strings specifying instruction set architecture; array can contain: `x86_64`, `arm64`', ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleArchitectures' },
-    CompatibleRuntimes: { ...arr, comment: 'Array with a maximum of 15 strings specifying compatible runtime environments', ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleRuntimes'  },
+    CompatibleRuntimes: { ...arr, comment: 'Array with a maximum of 15 strings specifying compatible runtime environments', ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-CompatibleRuntimes' },
     Description,
     LiscenceInfo: { ...str, comment: `The layer's software license`, ref: docRoot + 'API_PublishLayerVersion.html#lambda-PublishLayerVersion-request-LicenseInfo' },
   },
   request: (params) => {
     const { LayerName } = params
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.LayerName
     return {
       path: `/2018-10-31/layers/${LayerName}/versions`,
@@ -1071,7 +1033,7 @@ const PublishVersion = {
   },
   request: (params) => {
     const { FunctionName } = params
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.FunctionName
     return {
       path: `/2015-03-31/functions/${FunctionName}/versions`,
@@ -1126,7 +1088,7 @@ const PutFunctionEventInvokeConfig = {
   request: (params) => {
     const { FunctionName, Qualifier } = params
     let query
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.FunctionName
     if (Qualifier) {
       query = { Qualifier }
@@ -1172,7 +1134,7 @@ const PutRuntimeManagementConfig = {
   request: (params) => {
     const { FunctionName, Qualifier } = params
     let query
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.FunctionName
     if (Qualifier) {
       query = { Qualifier }
@@ -1208,7 +1170,7 @@ const RemoveLayerVersionPermission = {
       query,
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const RemovePermission = {
@@ -1221,7 +1183,7 @@ const RemovePermission = {
   },
   request: (params) => {
     const { FunctionName, StatementId } = params
-    let query = { ...params }
+    const query = { ...params }
     delete query.FunctionName
     delete query.StatementId
     return {
@@ -1230,7 +1192,7 @@ const RemovePermission = {
       query,
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const TagResource = {
@@ -1245,7 +1207,7 @@ const TagResource = {
       payload: { Tags },
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const UntagResource = {
@@ -1261,7 +1223,7 @@ const UntagResource = {
       query: { tagKeys: TagKeys },
     }
   },
-  response: emptyResponse,
+  response: defaultResponse,
 }
 
 const UpdateAlias = {
@@ -1276,10 +1238,9 @@ const UpdateAlias = {
   },
   request: async (params) => {
     const { FunctionName, Name } = params
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.FunctionName
     delete payload.Name
-
     return {
       path: `/2015-03-31/functions/${FunctionName}/aliases/${Name}`,
       method: 'PUT',
@@ -1299,7 +1260,7 @@ const UpdateCodeSigningConfig = {
   },
   request: (params) => {
     const { CodeSigningConfigArn } = params
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.CodeSigningConfigArn
     return {
       path: `/2020-04-22/code-signing-configs/${CodeSigningConfigArn}`,
@@ -1315,7 +1276,7 @@ const UpdateEventSourceMapping = {
   validate: {
     UUID: { ...str, required, comment: 'UUID of the event source mapping' },
     AmazonManagedKafkaEventSourceConfig: { ...AmazonManagedKafkaEventSourceConfig, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-BatchSize' },
-    BatchSize: { ...BatchSize, ref:  docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-BatchSize' },
+    BatchSize: { ...BatchSize, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-BatchSize' },
     BisectBatchOnFunctionError,
     DestinationConfig: { ...DestinationConfig, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-DestinationConfig' },
     DocumentDBEventSourceConfig: { ...DocumentDBEventSourceConfig, ref: docRoot + 'API_UpdateEventSourceMapping.html#lambda-UpdateEventSourceMapping-request-DocumentDBEventSourceConfig' },
@@ -1334,7 +1295,7 @@ const UpdateEventSourceMapping = {
   },
   request: (params) => {
     const { UUID } = params
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.UUID
     return {
       path: `/2015-03-31/event-source-mappings/${UUID}`,
@@ -1424,7 +1385,7 @@ const UpdateFunctionEventInvokeConfig = {
   request: (params) => {
     const { FunctionName, Qualifier } = params
     let query
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.FunctionName
     if (Qualifier) {
       delete payload.Qualifier
@@ -1451,7 +1412,7 @@ const UpdateFunctionUrlConfig = {
   request: (params) => {
     const { FunctionName, Qualifier } = params
     let query
-    let payload = { ...params }
+    const payload = { ...params }
     delete payload.FunctionName
     if (Qualifier) {
       delete payload.Qualifier

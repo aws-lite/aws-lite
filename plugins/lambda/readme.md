@@ -554,7 +554,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -567,7 +567,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -584,7 +584,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -599,7 +599,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -617,7 +617,7 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html#API_ListFunctions_RequestSyntax)
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -632,7 +632,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -647,7 +647,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -665,7 +665,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -685,7 +685,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -700,7 +700,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -724,7 +724,7 @@ Properties:
   - Pagination token
 - **`MaxItems` (number)**
   - Maximum number of items to be returned; maximum 10,000
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
