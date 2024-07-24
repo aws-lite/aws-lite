@@ -1107,6 +1107,8 @@ Properties:
   - Maximum number of parts (at most 1000) to be returned in the response
 - **`PartNumberMarker` (string)**
   - Pagination cursor
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`RequestPayer` (string)**
   - Sets request header: `x-amz-request-payer`
 - **`ExpectedBucketOwner` (string)**
