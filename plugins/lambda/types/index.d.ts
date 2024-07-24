@@ -283,61 +283,61 @@ declare interface AwsLiteLambda {
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListAliases.html Lambda: ListAliases}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListAliases Lambda: ListAliases}
    */
-  ListAliases: (input: { FunctionName: string, FunctionVersion?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAliasesResponse>
+  ListAliases: (input: { FunctionName: string, FunctionVersion?: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListAliasesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListCodeSigningConfigs.html Lambda: ListCodeSigningConfigs}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListCodeSigningConfigs Lambda: ListCodeSigningConfigs}
    */
-  ListCodeSigningConfigs: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListCodeSigningConfigsResponse>
+  ListCodeSigningConfigs: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListCodeSigningConfigsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListEventSourceMappings.html Lambda: ListEventSourceMappings}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListEventSourceMappings Lambda: ListEventSourceMappings}
    */
-  ListEventSourceMappings: (input: { EventSourceArn?: string, FunctionName?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListEventSourceMappingsResponse>
+  ListEventSourceMappings: (input: { EventSourceArn?: string, FunctionName?: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListEventSourceMappingsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionEventInvokeConfigs.html Lambda: ListFunctionEventInvokeConfigs}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionEventInvokeConfigs Lambda: ListFunctionEventInvokeConfigs}
    */
-  ListFunctionEventInvokeConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionEventInvokeConfigsResponse>
+  ListFunctionEventInvokeConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListFunctionEventInvokeConfigsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctions.html Lambda: ListFunctions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctions Lambda: ListFunctions}
    */
-  ListFunctions: (input: { FunctionVersion?: string, Marker?: string, MasterRegion?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionsResponse>
+  ListFunctions: (input: { FunctionVersion?: string, Marker?: string, MasterRegion?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListFunctionsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionsByCodeSigningConfig.html Lambda: ListFunctionsByCodeSigningConfig}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionsByCodeSigningConfig Lambda: ListFunctionsByCodeSigningConfig}
    */
-  ListFunctionsByCodeSigningConfig: (input: { CodeSigningConfigArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionsByCodeSigningConfigResponse>
+  ListFunctionsByCodeSigningConfig: (input: { CodeSigningConfigArn: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListFunctionsByCodeSigningConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListFunctionUrlConfigs.html Lambda: ListFunctionUrlConfigs}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListFunctionUrlConfigs Lambda: ListFunctionUrlConfigs}
    */
-  ListFunctionUrlConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListFunctionUrlConfigsResponse>
+  ListFunctionUrlConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListFunctionUrlConfigsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayers.html Lambda: ListLayers}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListLayers Lambda: ListLayers}
    */
-  ListLayers: (input: { CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListLayersResponse>
+  ListLayers: (input: { CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListLayersResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListLayerVersions.html Lambda: ListLayerVersions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListLayerVersions Lambda: ListLayerVersions}
    */
-  ListLayerVersions: (input: { LayerName: string, CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListLayerVersionsResponse>
+  ListLayerVersions: (input: { LayerName: string, CompatibleArchitecture?: string, CompatibleRuntime?: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListLayerVersionsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListProvisionedConcurrencyConfigs.html Lambda: ListProvisionedConcurrencyConfigs}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListProvisionedConcurrencyConfigs Lambda: ListProvisionedConcurrencyConfigs}
    */
-  ListProvisionedConcurrencyConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListProvisionedConcurrencyConfigsResponse>
+  ListProvisionedConcurrencyConfigs: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListProvisionedConcurrencyConfigsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListTags.html Lambda: ListTags}
@@ -349,7 +349,7 @@ declare interface AwsLiteLambda {
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_ListVersionsByFunction.html Lambda: ListVersionsByFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/lambda/readme.md#ListVersionsByFunction Lambda: ListVersionsByFunction}
    */
-  ListVersionsByFunction: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListVersionsByFunctionResponse>
+  ListVersionsByFunction: (input: { FunctionName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListVersionsByFunctionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/lambda/latest/dg/API_PublishLayerVersion.html Lambda: PublishLayerVersion}
