@@ -42,6 +42,19 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html#API_CreateDistribution_RequestSyntax)
 
 
+### `CreateFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFunction.html)
+
+Properties:
+- **`FunctionCode` (string) [required]**
+  - Function code
+- **`FunctionConfig` (object) [required]**
+  - Function configuration
+- **`Name` (string) [required]**
+  - Function name
+
+
 ### `CreateInvalidation`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateInvalidation.html)
@@ -65,6 +78,17 @@ Properties:
   - Distribution ID
 - **`IfMatch` (string)**
   - Value of previous `GetDistribution` call's `ETag` property
+
+
+### `DescribeFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeFunction.html)
+
+Properties:
+- **`Name` (string) [required]**
+  - Function name
+- **`Stage` (string)**
+  - The functions stage; can be one of: `DEVELOPMENT`, `LIVE`
 
 
 ### `GetDistribution`
@@ -124,7 +148,6 @@ Properties:
 - [`CreateDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html)
 - [`CreateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionConfig.html)
 - [`CreateFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionProfile.html)
-- [`CreateFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFunction.html)
 - [`CreateKeyGroup`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyGroup.html)
 - [`CreateKeyValueStore`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyValueStore.html)
 - [`CreateMonitoringSubscription`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateMonitoringSubscription.html)
@@ -150,7 +173,6 @@ Properties:
 - [`DeleteRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteRealtimeLogConfig.html)
 - [`DeleteResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteResponseHeadersPolicy.html)
 - [`DeleteStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteStreamingDistribution.html)
-- [`DescribeFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeFunction.html)
 - [`DescribeKeyValueStore`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeKeyValueStore.html)
 - [`GetCachePolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCachePolicy.html)
 - [`GetCachePolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCachePolicyConfig.html)

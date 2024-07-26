@@ -74,6 +74,51 @@ const CreateDistribution = {
   },
 }
 
+const CreateFunction = {
+  awsDoc: docRoot + 'API_CreateFunction.html',
+  validate: {
+    // TODO: handle files
+    FunctionCode: { ...str, required, comment: 'Function code' },
+    FunctionConfig: { ...obj, required, comment: 'Function configuration' },
+    Name: { ...str, required, comment: 'Function name' },
+  },
+  request: (params) => {
+    let { FunctionCode, FunctionConfig, Name } = params
+    FunctionCode = btoa(FunctionCode)
+    if (FunctionConfig.KeyValueStoreAssociations?.Items) {
+      // unpack things to prevent mutating params
+      FunctionConfig = { ...FunctionConfig }
+      const KeyValueStoreAssociations = { ...FunctionConfig.KeyValueStoreAssociations }
+      const KeyValueStoreAssociation = KeyValueStoreAssociations.Items
+      KeyValueStoreAssociations.Items = { KeyValueStoreAssociation }
+      FunctionConfig.KeyValueStoreAssociations = KeyValueStoreAssociations
+    }
+    const payload = {
+      CreateFunctionRequest: {
+        FunctionCode,
+        FunctionConfig,
+        Name,
+      },
+    }
+    return {
+      path: '/2020-05-31/function',
+      methods: 'POST',
+      headers: xml,
+      xmlns: 'http://cloudfront.amazonaws.com/doc/2020-05-31/',
+      payload,
+    }
+  },
+  response: ({ payload }) => {
+    const { FunctionConfig } = payload
+    if (FunctionConfig.KeyValueStoreAssociations?.Items?.KeyValueStoreAssociation) {
+      const { KeyValueStoreAssociations } = FunctionConfig
+      const { KeyValueStoreAssociation } = KeyValueStoreAssociations.Items
+      KeyValueStoreAssociations.Items = Array.isArray(KeyValueStoreAssociation) ?
+        KeyValueStoreAssociation : [ KeyValueStoreAssociation ]
+    }
+  },
+}
+
 const CreateInvalidation = {
   awsDoc: docRoot + 'API_CreateInvalidation.html',
   validate: {
@@ -118,6 +163,40 @@ const DeleteDistribution = {
   },
   response: () => ({}),
 }
+
+// const DeleteFunction = {
+//   awsDoc: docRoot + 'API_DeleteFunction.html' ,
+//   validate: {
+
+//   }
+// }
+
+const DescribeFunction = {
+  awsDoc: docRoot + 'API_DescribeFunction.html',
+  validate: {
+    Name: { ...str, required, comment: 'Function name' },
+    Stage: { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' },
+  },
+  request: (params) => {
+    const { Name, Stage } = params
+    const query = {}
+    if (Stage) query.Stage = Stage
+    return {
+      path: `/2020-05-31/function/${Name}/describe`,
+      query,
+    }
+  },
+  response: ({ payload }) => {
+    const { FunctionConfig } = payload
+    if (FunctionConfig.KeyValueStoreAssociations?.Items?.KeyValueStoreAssociation) {
+      const { KeyValueStoreAssociation } = FunctionConfig.KeyValueStoreAssociations.Items
+      FunctionConfig.KeyValueStoreAssociations.Items = Array.isArray(KeyValueStoreAssociation) ?
+        KeyValueStoreAssociation : [ KeyValueStoreAssociation ]
+    }
+    return payload
+  },
+}
+
 
 const GetDistribution = {
   awsDoc: docRoot + 'API_GetDistribution.html',
@@ -174,7 +253,7 @@ const ListDistributions = {
   },
   response: ({ headers, payload }) => {
     const isPaginated = Array.isArray(payload.Items) &&
-                        payload.Items.every(i => i?.DistributionSummary)
+      payload.Items.every(i => i?.DistributionSummary)
     if (isPaginated) {
       // In the raw paginated state, each response is its own array nested in an object containing a DistributionSummary property
       // So we have to pull out all the arrays, concat + flatten them, then re-wrap the array in a single DistributionSummary obj before we run arrayifyItemsProp
@@ -215,5 +294,16 @@ export default {
   name: '@aws-lite/cloudfront',
   service,
   property,
-  methods: { CreateDistribution, CreateInvalidation, DeleteDistribution, GetDistribution, GetDistributionConfig, ListDistributions, UpdateDistribution, ...incomplete },
+  methods: {
+    CreateDistribution,
+    CreateFunction,
+    CreateInvalidation,
+    DeleteDistribution,
+    DescribeFunction,
+    GetDistribution,
+    GetDistributionConfig,
+    ListDistributions,
+    UpdateDistribution,
+    ...incomplete,
+  },
 }
