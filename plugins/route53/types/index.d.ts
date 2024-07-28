@@ -20,7 +20,7 @@ declare interface AwsLiteRoute53 {
    * - AWS docs: {@link https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html Route 53: ListResourceRecordSets}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/route53/readme.md#ListResourceRecordSets Route 53: ListResourceRecordSets}
    */
-  ListResourceRecordSets: (input: { HostedZoneId: string, MaxItems?: number, StartRecordIdentifier?: string, StartRecordName?: string, StartRecordType?: string, paginate?: boolean }) => Promise<ListResourceRecordSetsResponse>
+  ListResourceRecordSets: (input: { HostedZoneId: string, MaxItems?: number, StartRecordIdentifier?: string, StartRecordName?: string, StartRecordType?: string, paginate?: boolean | string }) => Promise<ListResourceRecordSetsResponse>
   // $METHODS_END
 }
 

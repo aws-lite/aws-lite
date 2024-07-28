@@ -11,7 +11,7 @@ const property = 'Organizations'
 
 const num = { type: 'number' }
 const str = { type: 'string' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const ListAccounts = {
   awsDoc: docRoot + 'API_ListAccounts.html',
@@ -21,17 +21,15 @@ const ListAccounts = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
     return {
       awsjson: false,
       headers: {
         'X-Amz-Target': 'AWSOrganizationsV20161128.ListAccounts',
         'Content-Type': 'application/x-amz-json-1.1' },
-      payload: params,
+      payload,
       paginate,
       paginator: {
         token: 'NextToken',

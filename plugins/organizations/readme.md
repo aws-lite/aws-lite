@@ -41,7 +41,7 @@ Properties:
   - Maximum number of items to be returned
 - **`NextToken` (string)**
   - Pagination token
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 

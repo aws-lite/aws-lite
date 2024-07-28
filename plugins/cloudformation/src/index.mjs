@@ -38,7 +38,7 @@ const TemplateURL = { ...str, comment: 'S3 location of CloudFormation template; 
 const TimeoutInMinutes = { ...num, comment: 'Amount of time before the stack status becomes `CREATE_FAILED`' }
 const StackName = { ...str, required, comment: 'Stack name or ID' }
 const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultError = ({ statusCode, error }) => ({ statusCode, error })
 const deMemberify = (prop) => {
@@ -142,11 +142,15 @@ const DescribeStacks = {
     paginate: valPaginate,
   },
   request: async (params) => {
+    const query = {
+      Action: 'DescribeStacks',
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
     return {
-      query: {
-        Action: 'DescribeStacks',
-        ...params,
-      },
+      query,
+      paginate,
       paginator: {
         cursor: 'NextToken',
         token: 'DescribeStacksResponse.NextToken',
@@ -179,11 +183,15 @@ const ListStackResources = {
     paginate: valPaginate,
   },
   request: async (params) => {
+    const query = {
+      Action: 'ListStackResources',
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
     return {
-      query: {
-        Action: 'ListStackResources',
-        ...params,
-      },
+      query,
+      paginate,
       paginator: {
         cursor: 'NextToken',
         token: 'ListStackResourcesResult.NextToken',

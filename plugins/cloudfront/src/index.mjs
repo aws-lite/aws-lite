@@ -24,7 +24,7 @@ const CallerReference = { ...str, required, comment: 'Unique value that ensures 
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
 const Id = { ...str, required, comment: 'Distribution ID' }
 const IfMatch = { ...str, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const maybeAddETag = (result, headers) => {
   const ETag = headers.etag || headers.ETag
@@ -161,9 +161,13 @@ const ListDistributions = {
     paginate: valPaginate,
   },
   request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
     return {
       path: '/2020-05-31/distribution',
-      query: params,
+      query,
+      paginate,
       paginator: {
         cursor: 'Marker',
         token: 'NextMarker',

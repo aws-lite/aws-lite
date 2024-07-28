@@ -28,7 +28,7 @@ declare interface AwsLiteACM {
    * - AWS docs: {@link https://docs.aws.amazon.com/acm/latest/APIReference/API_ListCertificates.html ACM: ListCertificates}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/acm/readme.md#ListCertificates ACM: ListCertificates}
    */
-  ListCertificates: (input: { CertificateStatuses?: any[], Includes?: Record<string, any>, MaxItems?: number, NextToken?: string, SortBy?: string, SortOrder?: string, paginate?: boolean }) => Promise<ListCertificatesResponse>
+  ListCertificates: (input: { CertificateStatuses?: any[], Includes?: Record<string, any>, MaxItems?: number, NextToken?: string, SortBy?: string, SortOrder?: string, paginate?: boolean | string }) => Promise<ListCertificatesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/acm/latest/APIReference/API_RequestCertificate.html ACM: RequestCertificate}
