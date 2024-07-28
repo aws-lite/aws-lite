@@ -51,7 +51,7 @@ declare interface AwsLiteAPIGatewayV2 {
    * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/domainnames-domainname-apimappings.html#GetApiMappings API Gateway V2: GetApiMappings}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#GetApiMappings API Gateway V2: GetApiMappings}
    */
-  GetApiMappings: (input: { DomainName: string, MaxResults?: number, NextToken?: string, paginate?: boolean }) => Promise<GetApiMappingsResponse>
+  GetApiMappings: (input: { DomainName: string, MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<GetApiMappingsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments-deploymentid.html#GetDeployment API Gateway V2: GetDeployment}
@@ -63,7 +63,7 @@ declare interface AwsLiteAPIGatewayV2 {
    * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-deployments.html#GetDeployments API Gateway V2: GetDeployments}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/apigatewayv2/readme.md#GetDeployments API Gateway V2: GetDeployments}
    */
-  GetDeployments: (input: { ApiId: string, NextToken?: string, MaxResults?: number, paginate?: boolean }) => Promise<GetDeploymentsResponse>
+  GetDeployments: (input: { ApiId: string, NextToken?: string, MaxResults?: number, paginate?: boolean | string }) => Promise<GetDeploymentsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigatewayv2/latest/api-reference/apis-apiid-stages-stagename.html#UpdateStage API Gateway V2: UpdateStage}

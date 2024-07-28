@@ -37,13 +37,13 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStacks.html CloudFormation: DescribeStacks}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStacks CloudFormation: DescribeStacks}
    */
-  DescribeStacks: (input: { StackName?: string, NextToken?: string, paginate?: boolean }) => Promise<DescribeStacksResponse>
+  DescribeStacks: (input: { StackName?: string, NextToken?: string, paginate?: boolean | string }) => Promise<DescribeStacksResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackResources.html CloudFormation: ListStackResources}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackResources CloudFormation: ListStackResources}
    */
-  ListStackResources: (input: { StackName: string, NextToken?: string, paginate?: boolean }) => Promise<ListStackResourcesResponse>
+  ListStackResources: (input: { StackName: string, NextToken?: string, paginate?: boolean | string }) => Promise<ListStackResourcesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html CloudFormation: UpdateStack}

@@ -118,7 +118,7 @@ Properties:
   - Stack name or ID
 - **`NextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -131,7 +131,7 @@ Properties:
   - Stack name or ID
 - **`NextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 

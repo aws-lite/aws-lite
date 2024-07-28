@@ -59,7 +59,7 @@ Properties:
   - Name of the first resource record to be listed in lexicographic ordering. If the name doesn't exist, results will begin from the first record with a name greater than the provided value
 - **`StartRecordType` (string)**
   - The type of resource record to begin listing from
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 

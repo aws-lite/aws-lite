@@ -13,7 +13,7 @@ declare interface AwsLiteOrganizations {
    * - AWS docs: {@link https://docs.aws.amazon.com/organizations/latest/APIReference/API_ListAccounts.html Organizations: ListAccounts}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/organizations/readme.md#ListAccounts Organizations: ListAccounts}
    */
-  ListAccounts: (input: { MaxResults?: number, NextToken?: string, paginate?: boolean }) => Promise<ListAccountsResponse>
+  ListAccounts: (input: { MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListAccountsResponse>
   // $METHODS_END
 }
 

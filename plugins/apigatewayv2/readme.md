@@ -108,7 +108,7 @@ Properties:
   - Maximum number of items to evaluate and return
 - **`NextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -136,7 +136,7 @@ Properties:
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`MaxResults` (number)**
   - Maximum number of items to evaluate and return
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 

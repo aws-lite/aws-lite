@@ -22,7 +22,7 @@ const DomainName = { ...str, required, comment: 'The domain name' }
 const Limit = { ...num, comment: 'Maximum number of items to evaluate and return' }
 const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const StageName = { ...str, comment: 'Stage name' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => CamelToPascalParams(payload)
 const emptyResponse = () => ({})
@@ -189,11 +189,7 @@ const GetDeployments = {
   },
   request: async (params) => {
     const { apiId, nextToken, maxResults } = pascalToCamelParams(params)
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const { paginate } = params
     return {
       path: `/v2/apis/${apiId}/deployments`,
       query: { nextToken, maxResults },

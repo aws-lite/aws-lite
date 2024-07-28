@@ -15,14 +15,14 @@ const str = { type: 'string' }
 
 const xml = { 'content-type': 'application/xml' }
 
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const HostedZoneId = { ...str, required, comment: 'ID of the hosted zone containing the resource records set' }
 
 const ChangeResourceRecordSets = {
   awsDoc: docRoot + 'API_ChangeResourceRecordSets.html',
   validate: {
     HostedZoneId,
-    ChangeBatch: { ...obj, comment: '`ChangeBatch` object', ref: docRoot + 'API_ChangeResourceRecordSets.html#Route53-ChangeResourceRecordSets-request-ChangeBatch'  },
+    ChangeBatch: { ...obj, comment: '`ChangeBatch` object', ref: docRoot + 'API_ChangeResourceRecordSets.html#Route53-ChangeResourceRecordSets-request-ChangeBatch' },
   },
   request: (params) => {
     const { HostedZoneId } = params
@@ -61,13 +61,9 @@ const ListResourceRecordSets = {
       StartRecordName: name,
       StartRecordType: type,
       StartRecordIdentifier: identifier,
+      paginate,
     } = params
-
-    let query = { identifier, name, type, maxitems }
-    let paginate
-    if (params.paginate) {
-      paginate = true
-    }
+    const query = { identifier, name, type, maxitems }
     return {
       path: `/2013-04-01/hostedzone/${Id}/rrset`,
       query,

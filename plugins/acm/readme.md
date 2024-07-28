@@ -68,7 +68,7 @@ Properties:
   - Specify the create date to sort results; must also specify `SortOrder`
 - **`SortOrder` (string)**
   - Specify the order results will be sorted; value can be one of: `ASCENDING`, `DESCENDING`, must also specify `SortBy`
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 

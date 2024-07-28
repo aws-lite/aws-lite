@@ -20,7 +20,7 @@ const limit = { ...num, comment: 'Maximum number of items to evaluate and return
 const logGroupName = { ...str, comment: 'Name of the log group' }
 const nextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const logGroupIdentifier = { ...str, comment: 'Name or ARN of the log group' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const headers = (method, additional) => ({
   'X-Amz-Target': `Logs_20140328.${method}`,
@@ -57,15 +57,13 @@ const DescribeLogGroups = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
     return {
       awsjson: false,
       headers: headers('DescribeLogGroups'),
-      payload: params,
+      payload,
       paginate,
       paginator: {
         cursor: 'nextToken',
@@ -90,15 +88,13 @@ const DescribeLogStreams = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
     return {
       awsjson: false,
       headers: headers('DescribeLogStreams'),
-      payload: params,
+      payload,
       paginate,
       paginator: {
         cursor: 'nextToken',
@@ -125,15 +121,13 @@ const GetLogEvents = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
     return {
       awsjson: false,
       headers: headers('GetLogEvents'),
-      payload: params,
+      payload,
       paginate,
       paginator: {
         cursor: 'nextToken',
