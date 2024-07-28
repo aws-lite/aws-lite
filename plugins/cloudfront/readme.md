@@ -109,6 +109,17 @@ Properties:
   - Distribution ID
 
 
+### `GetFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFunction.html)
+
+Properties:
+- **`Name` (string) [required]**
+  - Function name
+- **`Stage` (string)**
+  - The functions stage; can be one of: `DEVELOPMENT`, `LIVE`
+
+
 ### `ListDistributions`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html)
@@ -184,7 +195,6 @@ Properties:
 - [`GetFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionConfig.html)
 - [`GetFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionProfile.html)
 - [`GetFieldLevelEncryptionProfileConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionProfileConfig.html)
-- [`GetFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFunction.html)
 - [`GetInvalidation`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html)
 - [`GetKeyGroup`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetKeyGroup.html)
 - [`GetKeyGroupConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetKeyGroupConfig.html)

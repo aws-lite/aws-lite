@@ -24,6 +24,9 @@ const CallerReference = { ...str, required, comment: 'Unique value that ensures 
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
 const Id = { ...str, required, comment: 'Distribution ID' }
 const IfMatch = { ...str, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' }
+const Name = { ...str, required, comment: 'Function name' }
+const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
+
 const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const maybeAddETag = (result, headers) => {
@@ -80,7 +83,7 @@ const CreateFunction = {
     // TODO: handle files
     FunctionCode: { ...str, required, comment: 'Function code' },
     FunctionConfig: { ...obj, required, comment: 'Function configuration' },
-    Name: { ...str, required, comment: 'Function name' },
+    Name,
   },
   request: (params) => {
     let { FunctionCode, FunctionConfig, Name } = params
@@ -174,8 +177,8 @@ const DeleteDistribution = {
 const DescribeFunction = {
   awsDoc: docRoot + 'API_DescribeFunction.html',
   validate: {
-    Name: { ...str, required, comment: 'Function name' },
-    Stage: { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' },
+    Name,
+    Stage,
   },
   request: (params) => {
     const { Name, Stage } = params
@@ -229,6 +232,28 @@ const GetDistributionConfig = {
   response: ({ headers, payload }) => {
     const DistributionConfig = arrayifyObject(payload)
     return maybeAddETag({ DistributionConfig }, headers)
+  },
+}
+
+// TODO: confirm response
+const GetFunction = {
+  awsDoc: docRoot + 'API_GetFunction.html',
+  validate: {
+    Name,
+    Stage,
+  },
+  request: (params) => {
+    const { Name, Stage } = params
+    const query = {}
+    if (Stage) query.Stage = Stage
+    return {
+      path: `/2020-05-31/function/${Name}`,
+      query,
+      streamResponsePayload: true,
+    }
+  },
+  response: (payload) => {
+    return payload
   },
 }
 
@@ -302,6 +327,7 @@ export default {
     DescribeFunction,
     GetDistribution,
     GetDistributionConfig,
+    GetFunction,
     ListDistributions,
     UpdateDistribution,
     ...incomplete,

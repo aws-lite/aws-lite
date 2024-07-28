@@ -8,6 +8,7 @@ import {
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
+  GetFunctionCommandOutput as GetFunctionResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
   UpdateDistributionCommandOutput as UpdateDistributionResponse,
   // $IMPORTS_END
@@ -60,6 +61,12 @@ declare interface AwsLiteCloudFront {
   GetDistributionConfig: (input: { Id: string }) => Promise<GetDistributionConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFunction.html CloudFront: GetFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetFunction CloudFront: GetFunction}
+   */
+  GetFunction: (input: { Name: string, Stage?: string }) => Promise<GetFunctionResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html CloudFront: ListDistributions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListDistributions CloudFront: ListDistributions}
    */
@@ -90,6 +97,7 @@ export type {
   DescribeFunctionResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
+  GetFunctionResponse,
   ListDistributionsResponse,
   UpdateDistributionResponse,
   // $EXPORT_END
