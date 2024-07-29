@@ -26,8 +26,22 @@ const Id = { ...str, required, comment: 'Distribution ID' }
 const IfMatch = { ...str, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' }
 const Name = { ...str, required, comment: 'Function name' }
 const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
+const Marker = { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' }
+const MaxItems = { ...num, comment: 'Maximum number of items to return' }
+const FunctionCode = { ...str, required, comment: 'Function code' }
+const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
 
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+
+const xmlns = 'http://cloudfront.amazonaws.com/doc/2020-05-31/'
+
+const paginator = {
+  cursor: 'Marker',
+  token: 'NextMarker',
+  type: 'query',
+}
+
+const defaultResponse = ({ payload }) => payload || {}
 
 const maybeAddETag = (result, headers) => {
   const ETag = headers.etag || headers.ETag
@@ -77,12 +91,13 @@ const CreateDistribution = {
   },
 }
 
+// TODO: Handle file input for `FunctionCode`
+// TODO: Test normalization of `KeyValueStoreAssociations` in response
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
   validate: {
-    // TODO: handle files
-    FunctionCode: { ...str, required, comment: 'Function code' },
-    FunctionConfig: { ...obj, required, comment: 'Function configuration' },
+    FunctionCode,
+    FunctionConfig,
     Name,
   },
   request: (params) => {
@@ -107,17 +122,17 @@ const CreateFunction = {
       path: '/2020-05-31/function',
       methods: 'POST',
       headers: xml,
-      xmlns: 'http://cloudfront.amazonaws.com/doc/2020-05-31/',
+      xmlns,
       payload,
     }
   },
-  response: ({ payload }) => {
-    const { FunctionConfig } = payload
-    if (FunctionConfig.KeyValueStoreAssociations?.Items?.KeyValueStoreAssociation) {
-      const { KeyValueStoreAssociations } = FunctionConfig
-      const { KeyValueStoreAssociation } = KeyValueStoreAssociations.Items
-      KeyValueStoreAssociations.Items = Array.isArray(KeyValueStoreAssociation) ?
-        KeyValueStoreAssociation : [ KeyValueStoreAssociation ]
+  response: ({ headers, payload }) => {
+    const { etag, location } = headers
+    const FunctionSummary = arrayifyObject(payload)
+    return {
+      FunctionSummary,
+      Location: location,
+      ETag: etag,
     }
   },
 }
@@ -167,12 +182,22 @@ const DeleteDistribution = {
   response: () => ({}),
 }
 
-// const DeleteFunction = {
-//   awsDoc: docRoot + 'API_DeleteFunction.html' ,
-//   validate: {
-
-//   }
-// }
+const DeleteFunction = {
+  awsDoc: docRoot + 'API_DeleteFunction.html',
+  validate: {
+    Name,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: (params) => {
+    const { Name, IfMatch } = params
+    return {
+      path: `/2020-05-31/function/${Name}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
 
 const DescribeFunction = {
   awsDoc: docRoot + 'API_DescribeFunction.html',
@@ -189,14 +214,10 @@ const DescribeFunction = {
       query,
     }
   },
-  response: ({ payload }) => {
-    const { FunctionConfig } = payload
-    if (FunctionConfig.KeyValueStoreAssociations?.Items?.KeyValueStoreAssociation) {
-      const { KeyValueStoreAssociation } = FunctionConfig.KeyValueStoreAssociations.Items
-      FunctionConfig.KeyValueStoreAssociations.Items = Array.isArray(KeyValueStoreAssociation) ?
-        KeyValueStoreAssociation : [ KeyValueStoreAssociation ]
-    }
-    return payload
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    const FunctionSummary = arrayifyObject(payload)
+    return { FunctionSummary, ETag: etag }
   },
 }
 
@@ -292,6 +313,65 @@ const ListDistributions = {
   },
 }
 
+// TODO: confirm `KeyValueStoreAssociations.Items` get normalized correctly
+const ListFunctions = {
+  awsDoc: docRoot + 'API_ListFunctions.html',
+  validate: {
+    Marker,
+    MaxItems,
+    Stage,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: '/2020-05-31/function',
+      query,
+      paginate,
+      paginator: { ...paginator, accumulator: 'Items.FunctionSummary' },
+    }
+  },
+  response: ({ payload }) => {
+    const FunctionList = arrayifyItemsProp(payload)
+    FunctionList.Items = FunctionList.Items.map(i => arrayifyObject(i))
+    return { FunctionList }
+  },
+}
+
+// TODO: improve documentation for `EventObject`
+// TODO: more testing
+const TestFunction = {
+  awsDoc: docRoot + 'API_TestFunction.html',
+  validate: {
+    Name,
+    IfMatch: { ...IfMatch, required },
+    EventObject: { ...str, required, comment: 'Base64 encoded binary `Event` object that will be passed to your function as an argument' },
+    Stage,
+  },
+  request: (params) => {
+    const { Name, IfMatch, EventObject, Stage } = params
+    const payload = {
+      TestFunctionRequest: { EventObject },
+    }
+    if (Stage) payload.Stage = Stage
+    return {
+      path: `/2020-05-31/function/${Name}/test`,
+      method: 'POST',
+      headers: { ...xml, 'if-match': IfMatch },
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ payload }) => {
+    const { TestResult } = arrayifyObject(payload)
+    const { FunctionExecutionLogs } = TestResult
+    TestResult.FunctionExecutionLogs = Array.isArray(FunctionExecutionLogs) ? FunctionExecutionLogs : [ FunctionExecutionLogs ]
+    return { TestResult }
+  },
+}
+
 const UpdateDistribution = {
   awsDoc: docRoot + 'API_UpdateDistribution.html',
   validate: {
@@ -315,6 +395,52 @@ const UpdateDistribution = {
   },
 }
 
+// TODO: Handle file input for `FunctionCode`
+const UpdateFunction = {
+  awsDoc: docRoot + 'API_UpdateFunction.html',
+  validate: {
+    IfMatch: { ...IfMatch, required },
+    Name,
+    FunctionCode,
+    FunctionConfig,
+  },
+  request: (params) => {
+    let { FunctionCode, FunctionConfig, Name, IfMatch } = params
+    FunctionCode = btoa(FunctionCode)
+    if (FunctionConfig.KeyValueStoreAssociations?.Items) {
+      // unpack things to prevent mutating params
+      FunctionConfig = { ...FunctionConfig }
+      const KeyValueStoreAssociations = { ...FunctionConfig.KeyValueStoreAssociations }
+      const KeyValueStoreAssociation = KeyValueStoreAssociations.Items
+      KeyValueStoreAssociations.Items = { KeyValueStoreAssociation }
+      FunctionConfig.KeyValueStoreAssociations = KeyValueStoreAssociations
+    }
+    const payload = {
+      UpdateFunctionRequest: {
+        FunctionCode,
+        FunctionConfig,
+        Name,
+      },
+    }
+    return {
+      path: `/2020-05-31/function/${Name}`,
+      method: 'PUT',
+      headers: { ...xml, 'if-match': IfMatch },
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { ettag } = headers
+    const { FunctionConfig } = payload
+    arrayifyObject(FunctionConfig)
+    return {
+      FunctionSummary: { ...payload },
+      ETag: ettag,
+    }
+  },
+}
+
 export default {
   name: '@aws-lite/cloudfront',
   service,
@@ -324,12 +450,16 @@ export default {
     CreateFunction,
     CreateInvalidation,
     DeleteDistribution,
+    DeleteFunction,
     DescribeFunction,
     GetDistribution,
     GetDistributionConfig,
     GetFunction,
     ListDistributions,
+    ListFunctions,
+    TestFunction,
     UpdateDistribution,
+    UpdateFunction,
     ...incomplete,
   },
 }

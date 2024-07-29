@@ -80,6 +80,17 @@ Properties:
   - Value of previous `GetDistribution` call's `ETag` property
 
 
+### `DeleteFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFunction.html)
+
+Properties:
+- **`Name` (string) [required]**
+  - Function name
+- **`IfMatch` (string) [required]**
+  - Value of previous `GetDistribution` call's `ETag` property
+
+
 ### `DescribeFunction`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeFunction.html)
@@ -129,8 +140,38 @@ Properties:
   - Pagination cursor token to be used if `NextMarker` was returned in a previous response
 - **`MaxItems` (number)**
   - Maximum number of items to return
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFunctions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFunctions.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (number)**
+  - Maximum number of items to return
+- **`Stage` (string)**
+  - The functions stage; can be one of: `DEVELOPMENT`, `LIVE`
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `TestFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html)
+
+Properties:
+- **`Name` (string) [required]**
+  - Function name
+- **`IfMatch` (string) [required]**
+  - Value of previous `GetDistribution` call's `ETag` property
+- **`EventObject` (string) [required]**
+  - Base64 encoded binary `Event` object that will be passed to your function as an argument
+- **`Stage` (string)**
+  - The functions stage; can be one of: `DEVELOPMENT`, `LIVE`
 
 
 ### `UpdateDistribution`
@@ -145,6 +186,21 @@ Properties:
   - Distribution ID
 - **`IfMatch` (string) [required]**
   - Value of previous `GetDistribution` call's `ETag` property
+
+
+### `UpdateFunction`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFunction.html)
+
+Properties:
+- **`IfMatch` (string) [required]**
+  - Value of previous `GetDistribution` call's `ETag` property
+- **`Name` (string) [required]**
+  - Function name
+- **`FunctionCode` (string) [required]**
+  - Function code
+- **`FunctionConfig` (object) [required]**
+  - Function configuration
 
 
 ### Methods yet to be implemented
@@ -174,7 +230,6 @@ Properties:
 - [`DeleteContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteContinuousDeploymentPolicy.html)
 - [`DeleteFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionConfig.html)
 - [`DeleteFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionProfile.html)
-- [`DeleteFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFunction.html)
 - [`DeleteKeyGroup`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteKeyGroup.html)
 - [`DeleteKeyValueStore`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteKeyValueStore.html)
 - [`DeleteMonitoringSubscription`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteMonitoringSubscription.html)
@@ -222,7 +277,6 @@ Properties:
 - [`ListDistributionsByWebACLId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByWebACLId.html)
 - [`ListFieldLevelEncryptionConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFieldLevelEncryptionConfigs.html)
 - [`ListFieldLevelEncryptionProfiles`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFieldLevelEncryptionProfiles.html)
-- [`ListFunctions`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFunctions.html)
 - [`ListInvalidations`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListInvalidations.html)
 - [`ListKeyGroups`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListKeyGroups.html)
 - [`ListKeyValueStores`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListKeyValueStores.html)
@@ -235,7 +289,6 @@ Properties:
 - [`ListTagsForResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListTagsForResource.html)
 - [`PublishFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_PublishFunction.html)
 - [`TagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TagResource.html)
-- [`TestFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html)
 - [`UntagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html)
 - [`UpdateCachePolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCachePolicy.html)
 - [`UpdateCloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCloudFrontOriginAccessIdentity.html)
@@ -243,7 +296,6 @@ Properties:
 - [`UpdateDistributionWithStagingConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistributionWithStagingConfig.html)
 - [`UpdateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionConfig.html)
 - [`UpdateFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionProfile.html)
-- [`UpdateFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFunction.html)
 - [`UpdateKeyGroup`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateKeyGroup.html)
 - [`UpdateKeyValueStore`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateKeyValueStore.html)
 - [`UpdateOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginAccessControl.html)

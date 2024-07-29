@@ -1,40 +1,43 @@
 // Each item here is expected to contain an Items property; each value is the XML property containing the Items in question
 const arrayProperties = {
   // Distributions
-  'ActiveTrustedKeyGroups':                                        'KeyGroup',
-  'ActiveTrustedKeyGroups.Items.KeyPairIds':                       'KeyPairId',
-  'ActiveTrustedSigners':                                          'Signer',
-  'ActiveTrustedSigners.Items.KeyPairIds':                         'KeyPairId',
-  'Aliases':                                                       'CNAME',
-  'CacheBehaviors':                                                'CacheBehavior',
-  'CacheBehaviors.Items.AllowedMethods':                           'Method',
-  'CacheBehaviors.Items.AllowedMethods.CachedMethods':             'Method',
+  'ActiveTrustedKeyGroups': 'KeyGroup',
+  'ActiveTrustedKeyGroups.Items.KeyPairIds': 'KeyPairId',
+  'ActiveTrustedSigners': 'Signer',
+  'ActiveTrustedSigners.Items.KeyPairIds': 'KeyPairId',
+  'Aliases': 'CNAME',
+  'CacheBehaviors': 'CacheBehavior',
+  'CacheBehaviors.Items.AllowedMethods': 'Method',
+  'CacheBehaviors.Items.AllowedMethods.CachedMethods': 'Method',
   'CacheBehaviors.Items.ForwardedValues.Cookies.WhitelistedNames': 'Name',
-  'CacheBehaviors.Items.ForwardedValues.Headers':                  'Name',
-  'CacheBehaviors.Items.ForwardedValues.QueryStringCacheKeys':     'Name',
-  'CacheBehaviors.Items.FunctionAssociations':                     'FunctionAssociation',
-  'CacheBehaviors.Items.LambdaFunctionAssociations':               'LambdaFunctionAssociation',
-  'CacheBehaviors.Items.TrustedKeyGroups':                         'KeyGroup',
-  'CacheBehaviors.Items.TrustedSigners':                           'AwsAccountNumber',
-  'CustomErrorResponses':                                          'CustomErrorResponse',
-  'DefaultCacheBehavior.AllowedMethods':                           'Method',
-  'DefaultCacheBehavior.AllowedMethods.CachedMethods':             'Method',
-  'DefaultCacheBehavior.ForwardedValues.Headers':                  'Name',
-  'DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys':     'Name',
+  'CacheBehaviors.Items.ForwardedValues.Headers': 'Name',
+  'CacheBehaviors.Items.ForwardedValues.QueryStringCacheKeys': 'Name',
+  'CacheBehaviors.Items.FunctionAssociations': 'FunctionAssociation',
+  'CacheBehaviors.Items.LambdaFunctionAssociations': 'LambdaFunctionAssociation',
+  'CacheBehaviors.Items.TrustedKeyGroups': 'KeyGroup',
+  'CacheBehaviors.Items.TrustedSigners': 'AwsAccountNumber',
+  'CustomErrorResponses': 'CustomErrorResponse',
+  'DefaultCacheBehavior.AllowedMethods': 'Method',
+  'DefaultCacheBehavior.AllowedMethods.CachedMethods': 'Method',
+  'DefaultCacheBehavior.ForwardedValues.Headers': 'Name',
+  'DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys': 'Name',
   'DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames': 'Name',
-  'DefaultCacheBehavior.FunctionAssociations':                     'FunctionAssociation',
-  'DefaultCacheBehavior.LambdaFunctionAssociations':               'LambdaFunctionAssociation',
-  'DefaultCacheBehavior.TrustedKeyGroups':                         'KeyGroup',
-  'DefaultCacheBehavior.TrustedSigners':                           'AwsAccountNumber',
-  'OriginGroups':                                                  'OriginGroup',
-  'OriginGroups.Items.Members':                                    'OriginGroupMember',
-  'OriginGroups.Items.FailoverCriteria.StatusCodes':               'StatusCode',
-  'Origins':                                                       'Origin',
-  'Origins.Items.CustomHeaders':                                   'OriginCustomHeader',
-  'Origins.Items.CustomOriginConfig.OriginSslProtocols':           'SslProtocol',
-  'Restrictions.GeoRestriction':                                   'Location',
+  'DefaultCacheBehavior.FunctionAssociations': 'FunctionAssociation',
+  'DefaultCacheBehavior.LambdaFunctionAssociations': 'LambdaFunctionAssociation',
+  'DefaultCacheBehavior.TrustedKeyGroups': 'KeyGroup',
+  'DefaultCacheBehavior.TrustedSigners': 'AwsAccountNumber',
+  'OriginGroups': 'OriginGroup',
+  'OriginGroups.Items.Members': 'OriginGroupMember',
+  'OriginGroups.Items.FailoverCriteria.StatusCodes': 'StatusCode',
+  'Origins': 'Origin',
+  'Origins.Items.CustomHeaders': 'OriginCustomHeader',
+  'Origins.Items.CustomOriginConfig.OriginSslProtocols': 'SslProtocol',
+  'Restrictions.GeoRestriction': 'Location',
   // Invalidations
-  'InvalidationBatch.Paths':                                       'Path',
+  'InvalidationBatch.Paths': 'Path',
+  // Functions
+  'FunctionConfig.KeyValueStoreAssociations': 'Items',
+  'FunctionExecutionLogs.member': 'FunctionExecutionLogs',
 }
 
 const arrayifyItemsProp = obj => {
@@ -150,6 +153,35 @@ function unarrayifyObject (obj, lastPropertyPath) {
   })
   return obj
 } */
+
+
+
+// Maybe expand on normalizing/serializing arrays. Cloudfront is horribly inconsistent
+/*
+function normalizeObject (obj, maxDepth = 0) {
+  if (typeof obj !== 'object' || maxDepth < 0) return
+
+  Object.entries(obj).forEach(([ key, value ]) => {
+    if (key === 'Items') {
+      Object.entries(value).forEach(([ arrayKey, arr ]) => {
+        if (Array.isArray(arr) && maxDepth > 0) normalizeArray(arr, maxDepth - 1)
+        obj[key] = Array.isArray(arr) ? arr : [ arr ]
+      })
+    }
+    else if (typeof value === 'object' && maxDepth > 0) normalizeObject(value, maxDepth - 1)
+  })
+}
+
+function normalizeArray (arr, maxDepth = 0) {
+  if (maxDepth <= 0) return
+
+  arr.forEach(i => {
+    if (typeof i === 'object') {
+      normalizeObject(i, maxDepth - 1)
+    }
+  })
+}
+*/
 
 export {
   arrayifyItemsProp,

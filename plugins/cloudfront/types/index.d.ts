@@ -5,12 +5,16 @@ import {
   CreateFunctionCommandOutput as CreateFunctionResponse,
   CreateInvalidationCommandOutput as CreateInvalidationResponse,
   DeleteDistributionCommandOutput as DeleteDistributionResponse,
+  DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
+  ListFunctionsCommandOutput as ListFunctionsResponse,
+  TestFunctionCommandOutput as TestFunctionResponse,
   UpdateDistributionCommandOutput as UpdateDistributionResponse,
+  UpdateFunctionCommandOutput as UpdateFunctionResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudfront";
 
@@ -43,6 +47,12 @@ declare interface AwsLiteCloudFront {
   DeleteDistribution: (input: { Id: string, IfMatch?: string }) => Promise<DeleteDistributionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFunction.html CloudFront: DeleteFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteFunction CloudFront: DeleteFunction}
+   */
+  DeleteFunction: (input: { Name: string, IfMatch: string }) => Promise<DeleteFunctionResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeFunction.html CloudFront: DescribeFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DescribeFunction CloudFront: DescribeFunction}
    */
@@ -70,13 +80,31 @@ declare interface AwsLiteCloudFront {
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html CloudFront: ListDistributions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListDistributions CloudFront: ListDistributions}
    */
-  ListDistributions: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListDistributionsResponse>
+  ListDistributions: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListDistributionsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFunctions.html CloudFront: ListFunctions}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListFunctions CloudFront: ListFunctions}
+   */
+  ListFunctions: (input: { Marker?: string, MaxItems?: number, Stage?: string, paginate?: boolean | string }) => Promise<ListFunctionsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html CloudFront: TestFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#TestFunction CloudFront: TestFunction}
+   */
+  TestFunction: (input: { Name: string, IfMatch: string, EventObject: string, Stage?: string }) => Promise<TestFunctionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html CloudFront: UpdateDistribution}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateDistribution CloudFront: UpdateDistribution}
    */
   UpdateDistribution: (input: { DistributionConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateDistributionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFunction.html CloudFront: UpdateFunction}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateFunction CloudFront: UpdateFunction}
+   */
+  UpdateFunction: (input: { IfMatch: string, Name: string, FunctionCode: string, FunctionConfig: Record<string, any> }) => Promise<UpdateFunctionResponse>
   // $METHODS_END
 }
 
@@ -94,11 +122,15 @@ export type {
   CreateFunctionResponse,
   CreateInvalidationResponse,
   DeleteDistributionResponse,
+  DeleteFunctionResponse,
   DescribeFunctionResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
   GetFunctionResponse,
   ListDistributionsResponse,
+  ListFunctionsResponse,
+  TestFunctionResponse,
   UpdateDistributionResponse,
+  UpdateFunctionResponse,
   // $EXPORT_END
 }
