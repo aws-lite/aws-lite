@@ -115,7 +115,7 @@ async function main () {
       }
       if (incompleteMethods.length) {
         methodDocs += `\n\n### Methods yet to be implemented\n\n` +
-                      `> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!\n\n` +
+                      `> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!\n\n` +
                       incompleteMethods.map(({ method, awsDoc }) => awsDoc
                         ? `- [\`${method}\`](${awsDoc})`
                         : `- \`${method}\``,

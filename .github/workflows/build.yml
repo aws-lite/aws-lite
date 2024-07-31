@@ -151,7 +151,7 @@ jobs:
           github-token: ${{ secrets.ARC_TOKEN }}
           script: |
             github.rest.actions.createWorkflowDispatch({
-              owner: 'architect',
+              owner: 'aws-lite',
               repo: 'aws-lite.org',
               workflow_id: 'build.yml',
               ref: 'main',

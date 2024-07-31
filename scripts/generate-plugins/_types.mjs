@@ -74,13 +74,13 @@ function createTypesStr ({ methods, service, awsSdkName, property, display, exis
 
         const descString = [ '  /**', '   * @description' ]
         if (awsDoc) descString.push(`   * - AWS docs: {@link ${awsDoc} ${display}: ${method}}`)
-        descString.push(`   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/${service}/readme.md#${method} ${display}: ${method}}`)
+        descString.push(`   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/${service}/readme.md#${method} ${display}: ${method}}`)
         descString.push('   */')
         methodTypes.push(descString.join('\n'))
         methodTypes.push(`  ${method}: (input: { ${inputTypeString.join(', ')} }) => Promise<${methodResponse}>`)
       }
       else {
-        methodTypes.push(`  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/${service}/readme.md#${method} ${display}: ${method}} */`)
+        methodTypes.push(`  /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/${service}/readme.md#${method} ${display}: ${method}} */`)
         methodTypes.push(`  ${method}: () => Promise<${methodResponse}>`)
       }
     }

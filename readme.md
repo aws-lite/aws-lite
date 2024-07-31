@@ -9,10 +9,10 @@
 > You can think of it as a community-driven alternative to AWS's JavaScript SDK.
 
 <p>
-  <a href="https://github.com/architect/aws-lite/actions/workflows/build.yml?query=workflow:%22Node+CI%22">
-    <img src=https://github.com/architect/aws-lite/workflows/Node%20CI/badge.svg alt="GitHub CI status">
+  <a href="https://github.com/aws-lite/aws-lite/actions/workflows/build.yml?query=workflow:%22Node+CI%22">
+    <img src=https://github.com/aws-lite/aws-lite/workflows/Node%20CI/badge.svg alt="GitHub CI status">
   </a>
-  <a href="https://github.com/architect/aws-lite/actions/workflows/build.yml?query=workflow:%22Node+CI%22">
+  <a href="https://github.com/aws-lite/aws-lite/actions/workflows/build.yml?query=workflow:%22Node+CI%22">
     <img src="https://img.shields.io/badge/Code_coverage-100%25-green">
   </a>
   <a href="https://badge.fury.io/js/%40aws-lite%2Fclient">
