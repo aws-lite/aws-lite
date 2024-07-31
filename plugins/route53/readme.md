@@ -65,7 +65,7 @@ Properties:
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`ActivateKeySigningKey`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ActivateKeySigningKey.html)
 - [`AssociateVPCWithHostedZone`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_AssociateVPCWithHostedZone.html)

@@ -2,13 +2,13 @@
   "name": "@aws-lite/s3",
   "version": "0.2.4",
   "description": "Official `aws-lite` plugin for S3",
-  "homepage": "https://github.com/architect/aws-lite",
+  "homepage": "https://github.com/aws-lite/aws-lite",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/architect/aws-lite.git",
+    "url": "git+https://github.com/aws-lite/aws-lite.git",
     "directory": "plugins/s3"
   },
-  "bugs": "https://github.com/architect/aws-lite/issues",
+  "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "src/index.mjs",
   "engines": {
     "node": ">=16"

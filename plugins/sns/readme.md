@@ -54,7 +54,7 @@ Properties:
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`AddPermission`](https://docs.aws.amazon.com/sns/latest/api/API_AddPermission.html)
 - [`CheckIfPhoneNumberIsOptedOut`](https://docs.aws.amazon.com/sns/latest/api/API_CheckIfPhoneNumberIsOptedOut.html)

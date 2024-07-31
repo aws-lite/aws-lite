@@ -190,7 +190,7 @@ Properties:
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`ActivateOrganizationsAccess`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ActivateOrganizationsAccess.html)
 - [`ActivateType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ActivateType.html)

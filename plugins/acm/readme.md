@@ -106,7 +106,7 @@ Properties:
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`AddTagsToCertificate`](https://docs.aws.amazon.com/acm/latest/APIReference/API_AddTagsToCertificate.html)
 - [`ExportCertificate`](https://docs.aws.amazon.com/acm/latest/APIReference/API_ExportCertificate.html)

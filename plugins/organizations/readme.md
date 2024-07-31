@@ -47,7 +47,7 @@ Properties:
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`AcceptHandshake`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_AcceptHandshake.html)
 - [`AttachPolicy`](https://docs.aws.amazon.com/organizations/latest/APIReference/API_AttachPolicy.html)
