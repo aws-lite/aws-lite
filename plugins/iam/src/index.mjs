@@ -57,8 +57,7 @@ const UserName = { ...str, required, comment: 'User name' }
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionId = { ...str, required, comment: 'ID of the policy version; typically `v<n>`' }
 const VirtualMFADeviceName = { ...str, required, comment: 'Name of the virtual MFA device' }
-const valPaginateAsyncOnly = { type: 'string', comment: 'Set to `iterator` to enable async result pagination; response structure is not compatible with the fully automated paginator' }
-
+const valPaginateAsyncOnly = { type: 'string', comment: 'Set to `iterator` to enable automatic result pagination via async iterator; use this instead of making your own individual pagination requests' }
 
 const paginator = { type: 'query', cursor: 'Marker' }
 

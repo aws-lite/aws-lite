@@ -596,7 +596,7 @@ Properties:
 - **`MaxItems` (number)**
   - Maximum number of items to be returned in a response; at most 1000
 - **`paginate` (string)**
-  - Set to `iterator` to enable async result pagination; response structure is not compatible with the fully automated paginator
+  - Set to `iterator` to enable automatic result pagination via async iterator; use this instead of making your own individual pagination requests
 
 
 ### `GetAccountPasswordPolicy`
@@ -929,7 +929,7 @@ Properties:
   - Filter results by policy usage
   - [More details (AWS)](https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters)
 - **`paginate` (string)**
-  - Set to `iterator` to enable async result pagination; response structure is not compatible with the fully automated paginator
+  - Set to `iterator` to enable automatic result pagination via async iterator; use this instead of making your own individual pagination requests
 
 
 ### `ListGroupPolicies`
