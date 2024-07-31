@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/organizations-types",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Type definitions for the `@aws-lite/organizations` plugin",
   "homepage": "https://aws-lite.org/services/organizations",
   "repository": {

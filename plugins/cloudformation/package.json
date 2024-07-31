@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/cloudformation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Official `aws-lite` plugin for CloudFormation",
   "homepage": "https://github.com/architect/aws-lite",
   "repository": {
