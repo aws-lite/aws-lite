@@ -160,25 +160,25 @@ function unarrayifyObject (obj, lastPropertyPath) {
 // the existing stuff expects arrays to be an `Items` property, which is not the case.
 // Max depth can be used to prevent unnecessary recursion into arrays
 // TODO: test more
-function normalizeResponse (object, arrayProps, maxDepth = 0) {
+function normalizeResponse (obj, arrayProps, maxDepth = 0) {
   if (maxDepth < 0) return
 
-  if (typeof object === 'object') {
-    Object.entries(object).forEach(([ key, value ]) => {
+  if (typeof obj === 'object') {
+    Object.entries(obj).forEach(([ key, value ]) => {
       if (arrayProps.has(key)) {
         let temp = Object.values(value)[0]
         if (temp === undefined) temp = []
-        object[key] = Array.isArray(temp) ? temp : [ temp ]
+        obj[key] = Array.isArray(temp) ? temp : [ temp ]
       }
       if (maxDepth > 0) {
         normalizeResponse(value, arrayProps, maxDepth - 1)
       }
     })
   }
-  else if (Array.isArray(object) && maxDepth > 0) {
-    object.forEach(i => normalizeResponse(i, arrayProps, maxDepth - 1))
+  else if (Array.isArray(obj) && maxDepth > 0) {
+    obj.forEach(i => normalizeResponse(i, arrayProps, maxDepth - 1))
   }
-  return object
+  return obj
 }
 
 export {

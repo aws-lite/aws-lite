@@ -22,16 +22,16 @@ const xml = { 'content-type': 'application/xml' }
 
 const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
-const Id = { ...str, required, comment: 'ID of the resource' }
+const Id = { ...str, required, comment: 'The resource ID' }
 const IfMatch = { ...str, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' }
-const Name = { ...str, required, comment: 'Function name' }
+const Name = { ...str, required, comment: 'User assigned name for the resource' }
 const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
 const Marker = { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' }
 const MaxItems = { ...num, comment: 'Maximum number of items to return' }
 const FunctionCode = { ...str, required, comment: 'Base64 encoded function code' }
 const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
 const KeyGroupConfig = { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_KeyGroupConfig.html' }
-
+const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', ref: docRoot + 'API_ImportSource.html' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -183,6 +183,32 @@ const CreateKeyGroup = {
   },
 }
 
+const CreateKeyValueStore = {
+  awsDoc: docRoot + 'API_CreateKeyValueStore.html',
+  validate: {
+    Name,
+    ImportSource,
+    Comment: { ...str, comment: 'Comment for the key value store' },
+  },
+  request: (params) => {
+    return {
+      path: '/2020-05-31/key-value-store',
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: { CreateKeyValueStoreRequest: params },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag, location } = headers
+    return {
+      KeyValueStore: payload,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
+
 const CreatePublicKey = {
   awsDoc: docRoot + 'API_CreatePublicKey.html',
   validate: {
@@ -248,6 +274,22 @@ const DeleteKeyGroup = {
   response: defaultResponse,
 }
 
+const DeleteKeyValueStore = {
+  awsDoc: docRoot + 'API_DeleteKeyValueStore.html',
+  validate: {
+    Name,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ Name, IfMatch }) => {
+    return {
+      path: `/2020-05-31/key-value-store/${Name}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
 const DeletePublicKey = {
   awsDoc: docRoot + 'API_DeletePublicKey.html',
   validate: {
@@ -284,6 +326,26 @@ const DescribeFunction = {
     const FunctionSummary = normalizeResponse(payload, arrayProperties, 2)
     return {
       FunctionSummary,
+      ETag: etag,
+    }
+  },
+}
+
+const DescribeKeyValueStore = {
+  awsDoc: docRoot + 'API_DescribeKeyValueStore.html',
+  validate: {
+    Name,
+  },
+  request: ({ Name }) => {
+    return {
+      path: `/2020-05-31/key-value-store/${Name}`,
+      method: 'GET',
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    return {
+      KeyValueStore: payload,
       ETag: etag,
     }
   },
@@ -516,6 +578,36 @@ const ListKeyGroups = {
   },
 }
 
+const ListKeyValueStores = {
+  awsDoc: docRoot + 'API_ListKeyValueStores.html',
+  validate: {
+    Marker,
+    MaxItems,
+    Status: { ...str, comment: 'Status of the key value store; can be one of: `READY`, `PROVISIONING`' },
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/key-value-store`,
+      method: 'GET',
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.KeyValueStore',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const KeyValueStoreList = normalizeResponse(payload, arrayProperties)
+    return { KeyValueStoreList }
+  },
+}
+
 const ListPublicKeys = {
   awsDoc: docRoot + 'API_ListPublicKeys.html',
   validate: {
@@ -659,6 +751,31 @@ const UpdateKeyGroup = {
   },
 }
 
+const UpdateKeyValueStore = {
+  awsDoc: docRoot + 'API_UpdateKeyValueStore.html',
+  validate: {
+    Name,
+    Comment: { ...str, required, comment: 'New comment for the key value store' },
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ Name, Comment, IfMatch }) => {
+    return {
+      path: `/2020-05-31/key-value-store/${Name}`,
+      method: 'PUT',
+      headers: { 'if-match': IfMatch, ...xml },
+      xmlns,
+      payload: { UpdateKeyValueStoreRequest: { Comment } },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    return {
+      KeyValueStore: payload,
+      ETag: etag,
+    }
+  },
+}
+
 const UpdatePublicKey = {
   awsDoc: docRoot + 'API_UpdatePublicKey.html',
   validate: {
@@ -694,12 +811,15 @@ export default {
     CreateFunction,
     CreateInvalidation,
     CreateKeyGroup,
+    CreateKeyValueStore,
     CreatePublicKey,
     DeleteDistribution,
     DeleteFunction,
     DeleteKeyGroup,
+    DeleteKeyValueStore,
     DeletePublicKey,
     DescribeFunction,
+    DescribeKeyValueStore,
     GetDistribution,
     GetDistributionConfig,
     GetFunction,
@@ -710,11 +830,13 @@ export default {
     ListDistributions,
     ListFunctions,
     ListKeyGroups,
+    ListKeyValueStores,
     ListPublicKeys,
     TestFunction,
     UpdateDistribution,
     UpdateFunction,
     UpdateKeyGroup,
+    UpdateKeyValueStore,
     UpdatePublicKey,
     ...incomplete,
   },

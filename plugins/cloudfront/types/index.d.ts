@@ -5,12 +5,15 @@ import {
   CreateFunctionCommandOutput as CreateFunctionResponse,
   CreateInvalidationCommandOutput as CreateInvalidationResponse,
   CreateKeyGroupCommandOutput as CreateKeyGroupResponse,
+  CreateKeyValueStoreCommandOutput as CreateKeyValueStoreResponse,
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
   DeleteDistributionCommandOutput as DeleteDistributionResponse,
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DeleteKeyGroupCommandOutput as DeleteKeyGroupResponse,
+  DeleteKeyValueStoreCommandOutput as DeleteKeyValueStoreResponse,
   DeletePublicKeyCommandOutput as DeletePublicKeyResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
+  DescribeKeyValueStoreCommandOutput as DescribeKeyValueStoreResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
@@ -21,11 +24,13 @@ import {
   ListDistributionsCommandOutput as ListDistributionsResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
   ListKeyGroupsCommandOutput as ListKeyGroupsResponse,
+  ListKeyValueStoresCommandOutput as ListKeyValueStoresResponse,
   ListPublicKeysCommandOutput as ListPublicKeysResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
   UpdateDistributionCommandOutput as UpdateDistributionResponse,
   UpdateFunctionCommandOutput as UpdateFunctionResponse,
   UpdateKeyGroupCommandOutput as UpdateKeyGroupResponse,
+  UpdateKeyValueStoreCommandOutput as UpdateKeyValueStoreResponse,
   UpdatePublicKeyCommandOutput as UpdatePublicKeyResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudfront";
@@ -59,6 +64,12 @@ declare interface AwsLiteCloudFront {
   CreateKeyGroup: (input: { KeyGroupConfig: Record<string, any> }) => Promise<CreateKeyGroupResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyValueStore.html CloudFront: CreateKeyValueStore}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateKeyValueStore CloudFront: CreateKeyValueStore}
+   */
+  CreateKeyValueStore: (input: { Name: string, ImportSource?: Record<string, any>, Comment?: string }) => Promise<CreateKeyValueStoreResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html CloudFront: CreatePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreatePublicKey CloudFront: CreatePublicKey}
    */
@@ -83,6 +94,12 @@ declare interface AwsLiteCloudFront {
   DeleteKeyGroup: (input: { Name: string, IfMatch?: string }) => Promise<DeleteKeyGroupResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteKeyValueStore.html CloudFront: DeleteKeyValueStore}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteKeyValueStore CloudFront: DeleteKeyValueStore}
+   */
+  DeleteKeyValueStore: (input: { Name: string, IfMatch: string }) => Promise<DeleteKeyValueStoreResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html CloudFront: DeletePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeletePublicKey CloudFront: DeletePublicKey}
    */
@@ -93,6 +110,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DescribeFunction CloudFront: DescribeFunction}
    */
   DescribeFunction: (input: { Name: string, Stage?: string }) => Promise<DescribeFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeKeyValueStore.html CloudFront: DescribeKeyValueStore}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DescribeKeyValueStore CloudFront: DescribeKeyValueStore}
+   */
+  DescribeKeyValueStore: (input: { Name: string }) => Promise<DescribeKeyValueStoreResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistribution.html CloudFront: GetDistribution}
@@ -155,6 +178,12 @@ declare interface AwsLiteCloudFront {
   ListKeyGroups: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListKeyGroupsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListKeyValueStores.html CloudFront: ListKeyValueStores}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListKeyValueStores CloudFront: ListKeyValueStores}
+   */
+  ListKeyValueStores: (input: { Marker?: string, MaxItems?: number, Status?: string, paginate?: boolean | string }) => Promise<ListKeyValueStoresResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListPublicKeys.html CloudFront: ListPublicKeys}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListPublicKeys CloudFront: ListPublicKeys}
    */
@@ -185,6 +214,12 @@ declare interface AwsLiteCloudFront {
   UpdateKeyGroup: (input: { KeyGroupConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateKeyGroupResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateKeyValueStore.html CloudFront: UpdateKeyValueStore}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateKeyValueStore CloudFront: UpdateKeyValueStore}
+   */
+  UpdateKeyValueStore: (input: { Name: string, Comment: string, IfMatch: string }) => Promise<UpdateKeyValueStoreResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html CloudFront: UpdatePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdatePublicKey CloudFront: UpdatePublicKey}
    */
@@ -206,12 +241,15 @@ export type {
   CreateFunctionResponse,
   CreateInvalidationResponse,
   CreateKeyGroupResponse,
+  CreateKeyValueStoreResponse,
   CreatePublicKeyResponse,
   DeleteDistributionResponse,
   DeleteFunctionResponse,
   DeleteKeyGroupResponse,
+  DeleteKeyValueStoreResponse,
   DeletePublicKeyResponse,
   DescribeFunctionResponse,
+  DescribeKeyValueStoreResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
   GetFunctionResponse,
@@ -222,11 +260,13 @@ export type {
   ListDistributionsResponse,
   ListFunctionsResponse,
   ListKeyGroupsResponse,
+  ListKeyValueStoresResponse,
   ListPublicKeysResponse,
   TestFunctionResponse,
   UpdateDistributionResponse,
   UpdateFunctionResponse,
   UpdateKeyGroupResponse,
+  UpdateKeyValueStoreResponse,
   UpdatePublicKeyResponse,
   // $EXPORT_END
 }
