@@ -69,6 +69,26 @@ Properties:
   - Unique value that ensures that the request cannot be replayed
 
 
+### `CreateKeyGroup`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyGroup.html)
+
+Properties:
+- **`KeyGroupConfig` (object) [required]**
+  - Key group configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyGroup.html#cloudfront-CreateKeyGroup-request-KeyGroupConfig)
+
+
+### `CreatePublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html)
+
+Properties:
+- **`PublicKeyConfig` (object) [required]**
+  - Public key configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html#cloudfront-CreatePublicKey-request-PublicKeyConfig)
+
+
 ### `DeleteDistribution`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html)
@@ -129,6 +149,24 @@ Properties:
   - Function name
 - **`Stage` (string)**
   - The functions stage; can be one of: `DEVELOPMENT`, `LIVE`
+
+
+### `GetPublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetPublicKey.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - Public key ID
+
+
+### `GetPublicKeyConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetPublicKeyConfig.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - Public key ID
 
 
 ### `ListDistributions`
@@ -215,12 +253,10 @@ Properties:
 - [`CreateDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html)
 - [`CreateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionConfig.html)
 - [`CreateFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionProfile.html)
-- [`CreateKeyGroup`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyGroup.html)
 - [`CreateKeyValueStore`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyValueStore.html)
 - [`CreateMonitoringSubscription`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateMonitoringSubscription.html)
 - [`CreateOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginAccessControl.html)
 - [`CreateOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginRequestPolicy.html)
-- [`CreatePublicKey`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html)
 - [`CreateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateRealtimeLogConfig.html)
 - [`CreateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateResponseHeadersPolicy.html)
 - [`CreateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistribution.html)
@@ -258,8 +294,6 @@ Properties:
 - [`GetOriginAccessControlConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControlConfig.html)
 - [`GetOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicy.html)
 - [`GetOriginRequestPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicyConfig.html)
-- [`GetPublicKey`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetPublicKey.html)
-- [`GetPublicKeyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetPublicKeyConfig.html)
 - [`GetRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetRealtimeLogConfig.html)
 - [`GetResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicy.html)
 - [`GetResponseHeadersPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicyConfig.html)

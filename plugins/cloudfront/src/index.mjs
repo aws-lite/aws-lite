@@ -157,6 +157,48 @@ const CreateInvalidation = {
   },
 }
 
+const CreateKeyGroup = {
+  awsDoc: docRoot + 'API_CreateKeyGroup.html',
+  validate: {
+    KeyGroupConfig: { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_CreateKeyGroup.html#cloudfront-CreateKeyGroup-request-KeyGroupConfig' },
+  },
+  request: (params) => {
+    const payload = unarrayifyObject(params)
+    return {
+      path: '/2020-05-31/key-group',
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag: ETag, location: Location } = headers
+    const KeyGroup = arrayifyObject(payload)
+    return {
+      KeyGroup,
+      Location,
+      ETag,
+    }
+  },
+}
+
+const CreatePublicKey = {
+  awsDoc: docRoot + 'API_CreatePublicKey.html',
+  validate: {
+    PublicKeyConfig: { ...obj, required, comment: 'Public key configuration', ref: docRoot + 'API_CreatePublicKey.html#cloudfront-CreatePublicKey-request-PublicKeyConfig' },
+  },
+  request: (params) => {
+    return {
+      path: '/2020-05-31/public-key',
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: params,
+    }
+  },
+}
+
 const DeleteDistribution = {
   awsDoc: docRoot + 'API_DeleteDistribution.html',
   validate: {
@@ -269,6 +311,46 @@ const GetFunction = {
   },
   response: (payload) => {
     return payload
+  },
+}
+
+const GetPublicKey = {
+  awsDoc: docRoot + 'API_GetPublicKey.html',
+  validate: {
+    Id: { ...str, required, comment: 'Public key ID' },
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/public-key/${Id}`,
+      method: 'GET',
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    return {
+      PublicKey: payload,
+      ETag: etag,
+    }
+  },
+}
+
+const GetPublicKeyConfig = {
+  awsDoc: docRoot + 'API_GetPublicKeyConfig.html',
+  validate: {
+    Id: { ...str, required, comment: 'Public key ID' },
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/public-key/${Id}/config`,
+      method: 'GET',
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    return {
+      PublicKeyConfig: payload,
+      ETag: etag,
+    }
   },
 }
 
@@ -433,12 +515,16 @@ export default {
     CreateDistribution,
     CreateFunction,
     CreateInvalidation,
+    CreateKeyGroup,
+    CreatePublicKey,
     DeleteDistribution,
     DeleteFunction,
     DescribeFunction,
     GetDistribution,
     GetDistributionConfig,
     GetFunction,
+    GetPublicKey,
+    GetPublicKeyConfig,
     ListDistributions,
     ListFunctions,
     TestFunction,

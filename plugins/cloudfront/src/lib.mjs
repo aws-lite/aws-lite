@@ -38,6 +38,8 @@ const arrayProperties = {
   // Functions
   'KeyValueStoreAssociations': 'KeyValueStoreAssociation',
   'FunctionExecutionLogs.member': 'FunctionExecutionLogs',
+  // KeyGroups
+  'KeyGroupConfig': 'PublicKey',
 }
 
 const arrayifyItemsProp = obj => {
@@ -116,7 +118,6 @@ function unarrayifyObject (obj, lastPropertyPath) {
 
     // We've traversed into a property that needs to have its `Items` array readied for XML
     if (arrayProperties[currentPropertyPath] && value.Items) {
-      console.log(value)
       obj[key] = { ...value }
       if (value.Items.length === 0) {
         delete obj[key].Items

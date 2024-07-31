@@ -4,12 +4,16 @@ import {
   CreateDistributionCommandOutput as CreateDistributionResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
   CreateInvalidationCommandOutput as CreateInvalidationResponse,
+  CreateKeyGroupCommandOutput as CreateKeyGroupResponse,
+  CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
   DeleteDistributionCommandOutput as DeleteDistributionResponse,
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
+  GetPublicKeyCommandOutput as GetPublicKeyResponse,
+  GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
@@ -39,6 +43,18 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateInvalidation CloudFront: CreateInvalidation}
    */
   CreateInvalidation: (input: { Id: string, InvalidationBatch?: string | any[], CallerReference: string }) => Promise<CreateInvalidationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateKeyGroup.html CloudFront: CreateKeyGroup}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateKeyGroup CloudFront: CreateKeyGroup}
+   */
+  CreateKeyGroup: (input: { KeyGroupConfig: Record<string, any> }) => Promise<CreateKeyGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html CloudFront: CreatePublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreatePublicKey CloudFront: CreatePublicKey}
+   */
+  CreatePublicKey: (input: { PublicKeyConfig: Record<string, any> }) => Promise<CreatePublicKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html CloudFront: DeleteDistribution}
@@ -75,6 +91,18 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetFunction CloudFront: GetFunction}
    */
   GetFunction: (input: { Name: string, Stage?: string }) => Promise<GetFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetPublicKey.html CloudFront: GetPublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetPublicKey CloudFront: GetPublicKey}
+   */
+  GetPublicKey: (input: { Id: string }) => Promise<GetPublicKeyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetPublicKeyConfig.html CloudFront: GetPublicKeyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetPublicKeyConfig CloudFront: GetPublicKeyConfig}
+   */
+  GetPublicKeyConfig: (input: { Id: string }) => Promise<GetPublicKeyConfigResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html CloudFront: ListDistributions}
@@ -121,12 +149,16 @@ export type {
   CreateDistributionResponse,
   CreateFunctionResponse,
   CreateInvalidationResponse,
+  CreateKeyGroupResponse,
+  CreatePublicKeyResponse,
   DeleteDistributionResponse,
   DeleteFunctionResponse,
   DescribeFunctionResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
   GetFunctionResponse,
+  GetPublicKeyResponse,
+  GetPublicKeyConfigResponse,
   ListDistributionsResponse,
   ListFunctionsResponse,
   TestFunctionResponse,
