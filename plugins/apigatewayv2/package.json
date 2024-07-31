@@ -2,7 +2,7 @@
   "name": "@aws-lite/apigatewayv2",
   "version": "0.0.7",
   "description": "Official `aws-lite` plugin for API Gateway V2",
-  "homepage": "https://github.com/aws-lite/aws-lite",
+  "homepage": "https://aws-lite.org",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

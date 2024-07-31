@@ -2,7 +2,7 @@
   "name": "@aws-lite/rds-data",
   "version": "0.0.6",
   "description": "Official `aws-lite` plugin for RDS Data Service",
-  "homepage": "https://github.com/aws-lite/aws-lite",
+  "homepage": "https://aws-lite.org",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

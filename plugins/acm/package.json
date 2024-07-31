@@ -2,7 +2,7 @@
   "name": "@aws-lite/acm",
   "version": "0.0.1",
   "description": "Official `aws-lite` plugin for ACM",
-  "homepage": "https://github.com/aws-lite/aws-lite",
+  "homepage": "https://aws-lite.org",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

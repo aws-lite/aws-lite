@@ -2,7 +2,7 @@
   "name": "@aws-lite/client",
   "version": "0.22.3",
   "description": "A simple, fast, extensible AWS client",
-  "homepage": "https://github.com/aws-lite/aws-lite",
+  "homepage": "https://aws-lite.org",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git"
