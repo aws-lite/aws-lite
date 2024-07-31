@@ -36,7 +36,7 @@ const arrayProperties = {
   // Invalidations
   'InvalidationBatch.Paths': 'Path',
   // Functions
-  'FunctionConfig.KeyValueStoreAssociations': 'Items',
+  'KeyValueStoreAssociations': 'KeyValueStoreAssociation',
   'FunctionExecutionLogs.member': 'FunctionExecutionLogs',
 }
 
@@ -116,6 +116,7 @@ function unarrayifyObject (obj, lastPropertyPath) {
 
     // We've traversed into a property that needs to have its `Items` array readied for XML
     if (arrayProperties[currentPropertyPath] && value.Items) {
+      console.log(value)
       obj[key] = { ...value }
       if (value.Items.length === 0) {
         delete obj[key].Items
@@ -154,37 +155,34 @@ function unarrayifyObject (obj, lastPropertyPath) {
   return obj
 } */
 
+// Expanding on object serialization/normalization.. Cloudfront is painfully inconsistent,
+// the existing stuff expects arrays to be an `Items` property, which is not the case.
+// Max depth can be used to prevent unnecessary recursion into arrays
+// TODO: test more
+function normalizeResponse (object, arrayProps, maxDepth = 0) {
+  if (maxDepth < 0) return
 
-
-// Maybe expand on normalizing/serializing arrays. Cloudfront is horribly inconsistent
-/*
-function normalizeObject (obj, maxDepth = 0) {
-  if (typeof obj !== 'object' || maxDepth < 0) return
-
-  Object.entries(obj).forEach(([ key, value ]) => {
-    if (key === 'Items') {
-      Object.entries(value).forEach(([ arrayKey, arr ]) => {
-        if (Array.isArray(arr) && maxDepth > 0) normalizeArray(arr, maxDepth - 1)
-        obj[key] = Array.isArray(arr) ? arr : [ arr ]
-      })
-    }
-    else if (typeof value === 'object' && maxDepth > 0) normalizeObject(value, maxDepth - 1)
-  })
+  if (typeof object === 'object') {
+    Object.entries(object).forEach(([ key, value ]) => {
+      if (arrayProps.has(key)) {
+        let temp = Object.values(value)[0]
+        if (temp === undefined) temp = []
+        object[key] = Array.isArray(temp) ? temp : [ temp ]
+      }
+      if (maxDepth > 0) {
+        normalizeResponse(value, arrayProps, maxDepth - 1)
+      }
+    })
+  }
+  else if (Array.isArray(object) && maxDepth > 0) {
+    object.forEach(i => normalizeResponse(i, arrayProps, maxDepth - 1))
+  }
+  return object
 }
-
-function normalizeArray (arr, maxDepth = 0) {
-  if (maxDepth <= 0) return
-
-  arr.forEach(i => {
-    if (typeof i === 'object') {
-      normalizeObject(i, maxDepth - 1)
-    }
-  })
-}
-*/
 
 export {
   arrayifyItemsProp,
   arrayifyObject,
   unarrayifyObject,
+  normalizeResponse,
 }

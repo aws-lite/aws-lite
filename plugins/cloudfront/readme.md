@@ -48,7 +48,7 @@ Properties:
 
 Properties:
 - **`FunctionCode` (string) [required]**
-  - Function code
+  - Base64 encoded function code
 - **`FunctionConfig` (object) [required]**
   - Function configuration
 - **`Name` (string) [required]**
@@ -198,7 +198,7 @@ Properties:
 - **`Name` (string) [required]**
   - Function name
 - **`FunctionCode` (string) [required]**
-  - Function code
+  - Base64 encoded function code
 - **`FunctionConfig` (object) [required]**
   - Function configuration
 

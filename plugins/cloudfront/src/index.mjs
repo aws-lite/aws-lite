@@ -3,7 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
-import { arrayifyItemsProp, arrayifyObject, unarrayifyObject } from './lib.mjs'
+import { arrayifyItemsProp, arrayifyObject, unarrayifyObject, normalizeResponse } from './lib.mjs'
 
 const service = 'cloudfront'
 const property = 'CloudFront'
@@ -28,7 +28,7 @@ const Name = { ...str, required, comment: 'Function name' }
 const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
 const Marker = { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' }
 const MaxItems = { ...num, comment: 'Maximum number of items to return' }
-const FunctionCode = { ...str, required, comment: 'Function code' }
+const FunctionCode = { ...str, required, comment: 'Base64 encoded function code' }
 const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
@@ -91,8 +91,6 @@ const CreateDistribution = {
   },
 }
 
-// TODO: Handle file input for `FunctionCode`
-// TODO: Test normalization of `KeyValueStoreAssociations` in response
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
   validate: {
@@ -102,15 +100,7 @@ const CreateFunction = {
   },
   request: (params) => {
     let { FunctionCode, FunctionConfig, Name } = params
-    FunctionCode = btoa(FunctionCode)
-    if (FunctionConfig.KeyValueStoreAssociations?.Items) {
-      // unpack things to prevent mutating params
-      FunctionConfig = { ...FunctionConfig }
-      const KeyValueStoreAssociations = { ...FunctionConfig.KeyValueStoreAssociations }
-      const KeyValueStoreAssociation = KeyValueStoreAssociations.Items
-      KeyValueStoreAssociations.Items = { KeyValueStoreAssociation }
-      FunctionConfig.KeyValueStoreAssociations = KeyValueStoreAssociations
-    }
+    FunctionConfig = unarrayifyObject(FunctionConfig)
     const payload = {
       CreateFunctionRequest: {
         FunctionCode,
@@ -127,8 +117,9 @@ const CreateFunction = {
     }
   },
   response: ({ headers, payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
     const { etag, location } = headers
-    const FunctionSummary = arrayifyObject(payload)
+    const FunctionSummary = normalizeResponse(payload, arrayProperties, 2)
     return {
       FunctionSummary,
       Location: location,
@@ -215,12 +206,15 @@ const DescribeFunction = {
     }
   },
   response: ({ headers, payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
     const { etag } = headers
-    const FunctionSummary = arrayifyObject(payload)
-    return { FunctionSummary, ETag: etag }
+    const FunctionSummary = normalizeResponse(payload, arrayProperties, 2)
+    return {
+      FunctionSummary,
+      ETag: etag,
+    }
   },
 }
-
 
 const GetDistribution = {
   awsDoc: docRoot + 'API_GetDistribution.html',
@@ -334,8 +328,8 @@ const ListFunctions = {
     }
   },
   response: ({ payload }) => {
-    const FunctionList = arrayifyItemsProp(payload)
-    FunctionList.Items = FunctionList.Items.map(i => arrayifyObject(i))
+    const arrayProperties = new Set([ 'Items' ])
+    const FunctionList = normalizeResponse(payload, arrayProperties, 5)
     return { FunctionList }
   },
 }
@@ -365,9 +359,8 @@ const TestFunction = {
     }
   },
   response: ({ payload }) => {
-    const { TestResult } = arrayifyObject(payload)
-    const { FunctionExecutionLogs } = TestResult
-    TestResult.FunctionExecutionLogs = Array.isArray(FunctionExecutionLogs) ? FunctionExecutionLogs : [ FunctionExecutionLogs ]
+    const arrayProperties = new Set([ 'Items', 'FunctionExecutionLogs' ])
+    const TestResult = normalizeResponse(payload, arrayProperties, 2)
     return { TestResult }
   },
 }
@@ -395,7 +388,6 @@ const UpdateDistribution = {
   },
 }
 
-// TODO: Handle file input for `FunctionCode`
 const UpdateFunction = {
   awsDoc: docRoot + 'API_UpdateFunction.html',
   validate: {
@@ -406,15 +398,7 @@ const UpdateFunction = {
   },
   request: (params) => {
     let { FunctionCode, FunctionConfig, Name, IfMatch } = params
-    FunctionCode = btoa(FunctionCode)
-    if (FunctionConfig.KeyValueStoreAssociations?.Items) {
-      // unpack things to prevent mutating params
-      FunctionConfig = { ...FunctionConfig }
-      const KeyValueStoreAssociations = { ...FunctionConfig.KeyValueStoreAssociations }
-      const KeyValueStoreAssociation = KeyValueStoreAssociations.Items
-      KeyValueStoreAssociations.Items = { KeyValueStoreAssociation }
-      FunctionConfig.KeyValueStoreAssociations = KeyValueStoreAssociations
-    }
+    FunctionConfig = unarrayifyObject(FunctionConfig)
     const payload = {
       UpdateFunctionRequest: {
         FunctionCode,
@@ -431,11 +415,11 @@ const UpdateFunction = {
     }
   },
   response: ({ headers, payload }) => {
-    const { ettag } = headers
-    const { FunctionConfig } = payload
-    arrayifyObject(FunctionConfig)
+    const arrayProperties = new Set([ 'Items' ])
+    const { ettag } = headers // wtf amazon
+    const FunctionSummary = normalizeResponse(payload, arrayProperties, 2)
     return {
-      FunctionSummary: { ...payload },
+      FunctionSummary,
       ETag: ettag,
     }
   },
