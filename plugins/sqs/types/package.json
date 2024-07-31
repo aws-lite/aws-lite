@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/sqs-types",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Type definitions for the `@aws-lite/sqs` plugin",
   "homepage": "https://aws-lite.org/services/sqs",
   "repository": {

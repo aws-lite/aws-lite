@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/organizations",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Official `aws-lite` plugin for Organizations",
   "homepage": "https://aws-lite.org",
   "repository": {

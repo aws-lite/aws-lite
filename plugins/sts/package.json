@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/sts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Official `aws-lite` plugin for STS",
   "homepage": "https://aws-lite.org",
   "repository": {

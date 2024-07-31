@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/cloudfront-types",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Type definitions for the `@aws-lite/cloudfront` plugin",
   "homepage": "https://aws-lite.org/services/cloudfront",
   "repository": {

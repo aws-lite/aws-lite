@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/route53",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Official `aws-lite` plugin for Route 53",
   "homepage": "https://aws-lite.org",
   "repository": {

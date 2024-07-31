@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/iam",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Official `aws-lite` plugin for IAM",
   "homepage": "https://aws-lite.org",
   "repository": {
