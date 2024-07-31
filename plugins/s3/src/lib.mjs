@@ -1,9 +1,9 @@
-import { isIPv4, isIPv6 } from 'node:net'
+import { isIP } from 'node:net'
 
 function getHost ({ Bucket }, { region, config }) {
   // Deprecated path-style URLs, still necessary for buckets with periods
   // (also need to be used when emulating S3 locally, check for localhost and an IPv4 or 6 host)
-  if (config.host === 'localhost' || isIPv4(config.host) || isIPv6(config.host) || /\./.test(Bucket)) {
+  if (config.host === 'localhost' || isIP(config.host) || /\./.test(Bucket)) {
     return {
       host: config.host || `s3.${region}.amazonaws.com`,
       pathPrefix: `/${Bucket}`,
