@@ -232,6 +232,23 @@ const DeleteFunction = {
   response: defaultResponse,
 }
 
+const DeletePublicKey = {
+  awsDoc: docRoot + 'API_DeletePublicKey.html',
+  validate: {
+    Id: { ...str, required, comment: 'Public key ID' },
+    IfMatch,
+  },
+  request: (params) => {
+    const { Id, IfMatch } = params
+    return {
+      path: `/2020-05-31/public-key/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
 const DescribeFunction = {
   awsDoc: docRoot + 'API_DescribeFunction.html',
   validate: {
@@ -416,6 +433,34 @@ const ListFunctions = {
   },
 }
 
+const ListPublicKeys = {
+  awsDoc: docRoot + 'API_ListPublicKeys.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/public-key`,
+      method: 'GET',
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.PublicKeySummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const PublicKeyList = arrayifyItemsProp(payload)
+    return { PublicKeyList }
+  },
+}
+
 // TODO: improve documentation for `EventObject`
 // TODO: more testing
 const TestFunction = {
@@ -507,6 +552,32 @@ const UpdateFunction = {
   },
 }
 
+const UpdatePublicKey = {
+  awsDoc: docRoot + 'API_UpdatePublicKey.html',
+  validate: {
+    PublicKeyConfig: { ...obj, required, comment: 'Public key configuration', ref: docRoot + 'API_UpdatePublicKey.html#cloudfront-UpdatePublicKey-request-PublicKeyConfig' },
+    Id: { ...str, required, comment: 'Public key ID' },
+    IfMatch: { ...IfMatch, required },
+  },
+  request: (params) => {
+    const { PublicKeyConfig, Id, IfMatch } = params
+    return {
+      path: `/2020-05-31/public-key/${Id}/config`,
+      method: 'PUT',
+      headers: { 'if-match': IfMatch, ...xml },
+      xmlns,
+      payload: { PublicKeyConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag: ETag } = headers
+    return {
+      PublicKey: payload,
+      ETag,
+    }
+  },
+}
+
 export default {
   name: '@aws-lite/cloudfront',
   service,
@@ -519,6 +590,7 @@ export default {
     CreatePublicKey,
     DeleteDistribution,
     DeleteFunction,
+    DeletePublicKey,
     DescribeFunction,
     GetDistribution,
     GetDistributionConfig,
@@ -527,9 +599,11 @@ export default {
     GetPublicKeyConfig,
     ListDistributions,
     ListFunctions,
+    ListPublicKeys,
     TestFunction,
     UpdateDistribution,
     UpdateFunction,
+    UpdatePublicKey,
     ...incomplete,
   },
 }

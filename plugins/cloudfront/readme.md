@@ -111,6 +111,17 @@ Properties:
   - Value of previous `GetDistribution` call's `ETag` property
 
 
+### `DeletePublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - Public key ID
+- **`IfMatch` (string)**
+  - Value of previous `GetDistribution` call's `ETag` property
+
+
 ### `DescribeFunction`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeFunction.html)
@@ -197,6 +208,19 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListPublicKeys`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListPublicKeys.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (number)**
+  - Maximum number of items to return
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `TestFunction`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html)
@@ -241,6 +265,20 @@ Properties:
   - Function configuration
 
 
+### `UpdatePublicKey`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html)
+
+Properties:
+- **`PublicKeyConfig` (object) [required]**
+  - Public key configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html#cloudfront-UpdatePublicKey-request-PublicKeyConfig)
+- **`Id` (string) [required]**
+  - Public key ID
+- **`IfMatch` (string) [required]**
+  - Value of previous `GetDistribution` call's `ETag` property
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
@@ -271,7 +309,6 @@ Properties:
 - [`DeleteMonitoringSubscription`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteMonitoringSubscription.html)
 - [`DeleteOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginAccessControl.html)
 - [`DeleteOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginRequestPolicy.html)
-- [`DeletePublicKey`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html)
 - [`DeleteRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteRealtimeLogConfig.html)
 - [`DeleteResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteResponseHeadersPolicy.html)
 - [`DeleteStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteStreamingDistribution.html)
@@ -316,7 +353,6 @@ Properties:
 - [`ListKeyValueStores`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListKeyValueStores.html)
 - [`ListOriginAccessControls`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginAccessControls.html)
 - [`ListOriginRequestPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginRequestPolicies.html)
-- [`ListPublicKeys`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListPublicKeys.html)
 - [`ListRealtimeLogConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListRealtimeLogConfigs.html)
 - [`ListResponseHeadersPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListResponseHeadersPolicies.html)
 - [`ListStreamingDistributions`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListStreamingDistributions.html)
@@ -334,7 +370,6 @@ Properties:
 - [`UpdateKeyValueStore`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateKeyValueStore.html)
 - [`UpdateOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginAccessControl.html)
 - [`UpdateOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginRequestPolicy.html)
-- [`UpdatePublicKey`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html)
 - [`UpdateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateRealtimeLogConfig.html)
 - [`UpdateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateResponseHeadersPolicy.html)
 - [`UpdateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateStreamingDistribution.html)

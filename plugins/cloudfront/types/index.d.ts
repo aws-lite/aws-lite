@@ -8,6 +8,7 @@ import {
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
   DeleteDistributionCommandOutput as DeleteDistributionResponse,
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
+  DeletePublicKeyCommandOutput as DeletePublicKeyResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
@@ -16,9 +17,11 @@ import {
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
+  ListPublicKeysCommandOutput as ListPublicKeysResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
   UpdateDistributionCommandOutput as UpdateDistributionResponse,
   UpdateFunctionCommandOutput as UpdateFunctionResponse,
+  UpdatePublicKeyCommandOutput as UpdatePublicKeyResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudfront";
 
@@ -69,6 +72,12 @@ declare interface AwsLiteCloudFront {
   DeleteFunction: (input: { Name: string, IfMatch: string }) => Promise<DeleteFunctionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html CloudFront: DeletePublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeletePublicKey CloudFront: DeletePublicKey}
+   */
+  DeletePublicKey: (input: { Id: string, IfMatch?: string }) => Promise<DeletePublicKeyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeFunction.html CloudFront: DescribeFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DescribeFunction CloudFront: DescribeFunction}
    */
@@ -117,6 +126,12 @@ declare interface AwsLiteCloudFront {
   ListFunctions: (input: { Marker?: string, MaxItems?: number, Stage?: string, paginate?: boolean | string }) => Promise<ListFunctionsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListPublicKeys.html CloudFront: ListPublicKeys}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListPublicKeys CloudFront: ListPublicKeys}
+   */
+  ListPublicKeys: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListPublicKeysResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html CloudFront: TestFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#TestFunction CloudFront: TestFunction}
    */
@@ -133,6 +148,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateFunction CloudFront: UpdateFunction}
    */
   UpdateFunction: (input: { IfMatch: string, Name: string, FunctionCode: string, FunctionConfig: Record<string, any> }) => Promise<UpdateFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html CloudFront: UpdatePublicKey}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdatePublicKey CloudFront: UpdatePublicKey}
+   */
+  UpdatePublicKey: (input: { PublicKeyConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdatePublicKeyResponse>
   // $METHODS_END
 }
 
@@ -153,6 +174,7 @@ export type {
   CreatePublicKeyResponse,
   DeleteDistributionResponse,
   DeleteFunctionResponse,
+  DeletePublicKeyResponse,
   DescribeFunctionResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
@@ -161,8 +183,10 @@ export type {
   GetPublicKeyConfigResponse,
   ListDistributionsResponse,
   ListFunctionsResponse,
+  ListPublicKeysResponse,
   TestFunctionResponse,
   UpdateDistributionResponse,
   UpdateFunctionResponse,
+  UpdatePublicKeyResponse,
   // $EXPORT_END
 }
