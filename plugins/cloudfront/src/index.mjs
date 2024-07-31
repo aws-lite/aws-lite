@@ -22,7 +22,7 @@ const xml = { 'content-type': 'application/xml' }
 
 const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
-const Id = { ...str, required, comment: 'Distribution ID' }
+const Id = { ...str, required, comment: 'ID of the resource' }
 const IfMatch = { ...str, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' }
 const Name = { ...str, required, comment: 'Function name' }
 const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
@@ -30,6 +30,8 @@ const Marker = { ...str, comment: 'Pagination cursor token to be used if `NextMa
 const MaxItems = { ...num, comment: 'Maximum number of items to return' }
 const FunctionCode = { ...str, required, comment: 'Base64 encoded function code' }
 const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
+const KeyGroupConfig = { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_KeyGroupConfig.html' }
+
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -98,22 +100,20 @@ const CreateFunction = {
     FunctionConfig,
     Name,
   },
-  request: (params) => {
-    let { FunctionCode, FunctionConfig, Name } = params
+  request: ({ FunctionCode, FunctionConfig, Name }) => {
     FunctionConfig = unarrayifyObject(FunctionConfig)
-    const payload = {
-      CreateFunctionRequest: {
-        FunctionCode,
-        FunctionConfig,
-        Name,
-      },
-    }
     return {
       path: '/2020-05-31/function',
       methods: 'POST',
       headers: xml,
       xmlns,
-      payload,
+      payload: {
+        CreateFunctionRequest: {
+          FunctionCode,
+          FunctionConfig,
+          Name,
+        },
+      },
     }
   },
   response: ({ headers, payload }) => {
@@ -160,7 +160,7 @@ const CreateInvalidation = {
 const CreateKeyGroup = {
   awsDoc: docRoot + 'API_CreateKeyGroup.html',
   validate: {
-    KeyGroupConfig: { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_CreateKeyGroup.html#cloudfront-CreateKeyGroup-request-KeyGroupConfig' },
+    KeyGroupConfig,
   },
   request: (params) => {
     const payload = unarrayifyObject(params)
@@ -221,8 +221,7 @@ const DeleteFunction = {
     Name,
     IfMatch: { ...IfMatch, required },
   },
-  request: (params) => {
-    const { Name, IfMatch } = params
+  request: ({ Name, IfMatch }) => {
     return {
       path: `/2020-05-31/function/${Name}`,
       method: 'DELETE',
@@ -232,18 +231,35 @@ const DeleteFunction = {
   response: defaultResponse,
 }
 
+const DeleteKeyGroup = {
+  awsDoc: docRoot + 'API_DeleteKeyGroup.html',
+  validate: {
+    Name,
+    IfMatch,
+  },
+  request: ({ Name, IfMatch }) => {
+    const headers = IfMatch ? { 'if-match': IfMatch } : {}
+    return {
+      path: `/2020-05-31/key-value-store/${Name}`,
+      method: 'DELETE',
+      headers,
+    }
+  },
+  response: defaultResponse,
+}
+
 const DeletePublicKey = {
   awsDoc: docRoot + 'API_DeletePublicKey.html',
   validate: {
-    Id: { ...str, required, comment: 'Public key ID' },
+    Id,
     IfMatch,
   },
-  request: (params) => {
-    const { Id, IfMatch } = params
+  request: ({ Id, IfMatch }) => {
+    const headers = IfMatch ? { 'if-match': IfMatch } : {}
     return {
       path: `/2020-05-31/public-key/${Id}`,
       method: 'DELETE',
-      headers: { 'if-match': IfMatch },
+      headers,
     }
   },
   response: defaultResponse,
@@ -255,10 +271,8 @@ const DescribeFunction = {
     Name,
     Stage,
   },
-  request: (params) => {
-    const { Name, Stage } = params
-    const query = {}
-    if (Stage) query.Stage = Stage
+  request: ({ Name, Stage }) => {
+    const query = Stage ? { Stage } : {}
     return {
       path: `/2020-05-31/function/${Name}/describe`,
       query,
@@ -316,10 +330,8 @@ const GetFunction = {
     Name,
     Stage,
   },
-  request: (params) => {
-    const { Name, Stage } = params
-    const query = {}
-    if (Stage) query.Stage = Stage
+  request: ({ Name, Stage }) => {
+    const query = Stage ? { Stage } : {}
     return {
       path: `/2020-05-31/function/${Name}`,
       query,
@@ -331,10 +343,52 @@ const GetFunction = {
   },
 }
 
+const GetKeyGroup = {
+  awsDoc: docRoot + 'API_GetKeyGroup.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/key-group/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const { etag: ETag } = headers
+    const KeyGroup = normalizeResponse(payload, arrayProperties, 1)
+    return {
+      KeyGroup,
+      ETag,
+    }
+  },
+}
+
+const GetKeyGroupConfig = {
+  awsDoc: docRoot + 'API_GetKeyGroupConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/key-group/${Id}/config`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const { etag: ETag } = headers
+    const KeyGroupConfig = normalizeResponse(payload, arrayProperties, 1)
+    return {
+      KeyGroupConfig,
+      ETag,
+    }
+  },
+}
+
 const GetPublicKey = {
   awsDoc: docRoot + 'API_GetPublicKey.html',
   validate: {
-    Id: { ...str, required, comment: 'Public key ID' },
+    Id,
   },
   request: ({ Id }) => {
     return {
@@ -354,7 +408,7 @@ const GetPublicKey = {
 const GetPublicKeyConfig = {
   awsDoc: docRoot + 'API_GetPublicKeyConfig.html',
   validate: {
-    Id: { ...str, required, comment: 'Public key ID' },
+    Id,
   },
   request: ({ Id }) => {
     return {
@@ -433,6 +487,35 @@ const ListFunctions = {
   },
 }
 
+const ListKeyGroups = {
+  awsDoc: docRoot + 'API_ListKeyGroups.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/key-group`,
+      method: 'GET',
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.KeyGroupSummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const KeyGroupList = normalizeResponse(payload, arrayProperties, 4)
+    return { KeyGroupList }
+  },
+}
+
 const ListPublicKeys = {
   awsDoc: docRoot + 'API_ListPublicKeys.html',
   validate: {
@@ -473,9 +556,7 @@ const TestFunction = {
   },
   request: (params) => {
     const { Name, IfMatch, EventObject, Stage } = params
-    const payload = {
-      TestFunctionRequest: { EventObject },
-    }
+    const payload = { TestFunctionRequest: { EventObject } }
     if (Stage) payload.Stage = Stage
     return {
       path: `/2020-05-31/function/${Name}/test`,
@@ -526,19 +607,18 @@ const UpdateFunction = {
   request: (params) => {
     let { FunctionCode, FunctionConfig, Name, IfMatch } = params
     FunctionConfig = unarrayifyObject(FunctionConfig)
-    const payload = {
-      UpdateFunctionRequest: {
-        FunctionCode,
-        FunctionConfig,
-        Name,
-      },
-    }
     return {
       path: `/2020-05-31/function/${Name}`,
       method: 'PUT',
       headers: { ...xml, 'if-match': IfMatch },
       xmlns,
-      payload,
+      payload: {
+        UpdateFunctionRequest: {
+          FunctionCode,
+          FunctionConfig,
+          Name,
+        },
+      },
     }
   },
   response: ({ headers, payload }) => {
@@ -552,11 +632,38 @@ const UpdateFunction = {
   },
 }
 
+const UpdateKeyGroup = {
+  awsDoc: docRoot + 'API_UpdateKeyGroup.html',
+  validate: {
+    KeyGroupConfig,
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ KeyGroupConfig, Id, IfMatch }) => {
+    const payload = unarrayifyObject({ KeyGroupConfig })
+    return {
+      path: `/2020-05-31/key-group/${Id}`,
+      method: 'PUT',
+      headers: { 'if-match': IfMatch, ...xml },
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    const KeyGroup = arrayifyObject(payload)
+    return {
+      KeyGroup,
+      ETag: etag,
+    }
+  },
+}
+
 const UpdatePublicKey = {
   awsDoc: docRoot + 'API_UpdatePublicKey.html',
   validate: {
     PublicKeyConfig: { ...obj, required, comment: 'Public key configuration', ref: docRoot + 'API_UpdatePublicKey.html#cloudfront-UpdatePublicKey-request-PublicKeyConfig' },
-    Id: { ...str, required, comment: 'Public key ID' },
+    Id,
     IfMatch: { ...IfMatch, required },
   },
   request: (params) => {
@@ -570,10 +677,10 @@ const UpdatePublicKey = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag: ETag } = headers
+    const { etag } = headers
     return {
       PublicKey: payload,
-      ETag,
+      ETag: etag,
     }
   },
 }
@@ -590,19 +697,24 @@ export default {
     CreatePublicKey,
     DeleteDistribution,
     DeleteFunction,
+    DeleteKeyGroup,
     DeletePublicKey,
     DescribeFunction,
     GetDistribution,
     GetDistributionConfig,
     GetFunction,
+    GetKeyGroup,
+    GetKeyGroupConfig,
     GetPublicKey,
     GetPublicKeyConfig,
     ListDistributions,
     ListFunctions,
+    ListKeyGroups,
     ListPublicKeys,
     TestFunction,
     UpdateDistribution,
     UpdateFunction,
+    UpdateKeyGroup,
     UpdatePublicKey,
     ...incomplete,
   },
