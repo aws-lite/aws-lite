@@ -2,7 +2,7 @@
   "name": "@aws-lite/cloudformation",
   "version": "0.1.2",
   "description": "Official `aws-lite` plugin for CloudFormation",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/cloudformation",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

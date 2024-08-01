@@ -46,6 +46,7 @@ async function main () {
       pkg.name = packageName
       pkg.description = desc
       pkg.author = maintainersList
+      pkg.homepage = `https://aws-lite.org/services/${service}`
       pkg.repository.directory = repoDir
       writeFileSync(join(pluginDir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
 

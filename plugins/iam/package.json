@@ -2,7 +2,7 @@
   "name": "@aws-lite/iam",
   "version": "0.0.4",
   "description": "Official `aws-lite` plugin for IAM",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/iam",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

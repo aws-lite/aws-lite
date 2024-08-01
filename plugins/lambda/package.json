@@ -2,7 +2,7 @@
   "name": "@aws-lite/lambda",
   "version": "0.1.4",
   "description": "Official `aws-lite` plugin for Lambda",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/lambda",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

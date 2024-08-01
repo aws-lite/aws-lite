@@ -2,7 +2,7 @@
   "name": "@aws-lite/cloudfront",
   "version": "0.0.10",
   "description": "Official `aws-lite` plugin for CloudFront",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/cloudfront",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

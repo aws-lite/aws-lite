@@ -2,7 +2,7 @@
   "name": "@aws-lite/sns",
   "version": "0.0.7",
   "description": "Official `aws-lite` plugin for SNS",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/sns",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

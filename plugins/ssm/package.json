@@ -2,7 +2,7 @@
   "name": "@aws-lite/ssm",
   "version": "0.2.4",
   "description": "Official `aws-lite` plugin for SSM",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/ssm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

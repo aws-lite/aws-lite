@@ -2,7 +2,7 @@
   "name": "@aws-lite/sts",
   "version": "0.1.1",
   "description": "Official `aws-lite` plugin for STS",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/sts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

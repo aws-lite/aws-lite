@@ -2,7 +2,7 @@
   "name": "@aws-lite/cloudwatch-logs",
   "version": "0.0.7",
   "description": "Official `aws-lite` plugin for CloudWatch Logs",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/cloudwatch-logs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",

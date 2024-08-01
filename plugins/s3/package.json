@@ -2,7 +2,7 @@
   "name": "@aws-lite/s3",
   "version": "0.2.5",
   "description": "Official `aws-lite` plugin for S3",
-  "homepage": "https://aws-lite.org",
+  "homepage": "https://aws-lite.org/services/s3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",
