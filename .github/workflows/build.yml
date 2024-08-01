@@ -148,6 +148,7 @@ jobs:
         if: contains(github.ref, 'RC') == false && steps.publish.outputs.publish
         uses: actions/github-script@v7
         with:
+          # Workflow dispatches can't use GITHUB_TOKEN, so this uses a PAT from ArchitectCI
           github-token: ${{ secrets.ARC_TOKEN }}
           script: |
             github.rest.actions.createWorkflowDispatch({
