@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/s3",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Official `aws-lite` plugin for S3",
   "homepage": "https://aws-lite.org/services/s3",
   "repository": {

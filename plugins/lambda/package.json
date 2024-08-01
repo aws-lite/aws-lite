@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/lambda",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Official `aws-lite` plugin for Lambda",
   "homepage": "https://aws-lite.org/services/lambda",
   "repository": {

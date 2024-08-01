@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/sns-types",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Type definitions for the `@aws-lite/sns` plugin",
   "homepage": "https://aws-lite.org/services/sns",
   "repository": {

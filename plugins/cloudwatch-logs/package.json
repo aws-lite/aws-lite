@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/cloudwatch-logs",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Official `aws-lite` plugin for CloudWatch Logs",
   "homepage": "https://aws-lite.org/services/cloudwatch-logs",
   "repository": {

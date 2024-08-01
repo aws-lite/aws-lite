@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/apigatewaymanagementapi-types",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Type definitions for the `@aws-lite/apigatewaymanagementapi` plugin",
   "homepage": "https://aws-lite.org/services/apigatewaymanagementapi",
   "repository": {

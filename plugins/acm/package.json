@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/acm",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Official `aws-lite` plugin for ACM",
   "homepage": "https://aws-lite.org/services/acm",
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/sns",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Official `aws-lite` plugin for SNS",
   "homepage": "https://aws-lite.org/services/sns",
   "repository": {

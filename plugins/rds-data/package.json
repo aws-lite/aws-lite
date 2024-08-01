@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/rds-data",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Official `aws-lite` plugin for RDS Data Service",
   "homepage": "https://aws-lite.org/services/rds-data",
   "repository": {
