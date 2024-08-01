@@ -3,7 +3,7 @@ const docRoot = 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/'
 export default {
   AssociateAlias:                             { disabled, awsDoc: docRoot + 'API_AssociateAlias.html' },
   CopyDistribution:                           { disabled, awsDoc: docRoot + 'API_CopyDistribution.html' },
-  CreateCachePolicy:                          { disabled, awsDoc: docRoot + 'API_CreateCachePolicy.html' },
+  // CreateCachePolicy:                          { disabled, awsDoc: docRoot + 'API_CreateCachePolicy.html' },
   CreateCloudFrontOriginAccessIdentity:       { disabled, awsDoc: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' },
   CreateContinuousDeploymentPolicy:           { disabled, awsDoc: docRoot + 'API_CreateContinuousDeploymentPolicy.html' },
   CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' },

@@ -40,6 +40,10 @@ const arrayProperties = {
   'FunctionExecutionLogs.member': 'FunctionExecutionLogs',
   // KeyGroups
   'KeyGroupConfig': 'PublicKey',
+  // CachePolicyConfigs
+  'ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  'ParametersInCacheKeyAndForwardedToOrigin,QueryStringsConfig.QueryStrings': 'Name',
 }
 
 const arrayifyItemsProp = obj => {

@@ -51,6 +51,33 @@ const maybeAddETag = (result, headers) => {
   return result
 }
 
+// const CreateCachePolicy = {
+//   awsDoc: docRoot + 'API_CreateCachePolicy.html',
+//   validate: {
+//     CachePolicyConfig: { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CreateCachePolicy.html#cloudfront-CreateCachePolicy-request-CachePolicyConfig' },
+//   },
+//   request: (params) => {
+//     const CachePolicyConfig  = unarrayifyObject(params)
+//     return {
+//       path: '/2020-05-31/cache-policy',
+//       method: 'POST',
+//       headers: xml,
+//       xmlns,
+//       payload: CachePolicyConfig,
+//     }
+//   },
+//   response: ({ headers, payload }) => {
+//     const arrayProperties = new Set([ 'Items' ])
+//     const { etag, location } = headers
+//     const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
+//     return {
+//       CachePolicy,
+//       Location: location,
+//       ETag: etag,
+//     }
+//   },
+// }
+
 const CreateDistribution = {
   awsDoc: docRoot + 'API_CreateDistribution.html',
   validate: {
