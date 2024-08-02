@@ -32,6 +32,8 @@ const FunctionCode = { ...str, required, comment: 'Base64 encoded function code'
 const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
 const KeyGroupConfig = { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_KeyGroupConfig.html' }
 const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', ref: docRoot + 'API_ImportSource.html' }
+const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CachePolicyConfig.html' }
+
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -51,32 +53,32 @@ const maybeAddETag = (result, headers) => {
   return result
 }
 
-// const CreateCachePolicy = {
-//   awsDoc: docRoot + 'API_CreateCachePolicy.html',
-//   validate: {
-//     CachePolicyConfig: { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CreateCachePolicy.html#cloudfront-CreateCachePolicy-request-CachePolicyConfig' },
-//   },
-//   request: (params) => {
-//     const CachePolicyConfig  = unarrayifyObject(params)
-//     return {
-//       path: '/2020-05-31/cache-policy',
-//       method: 'POST',
-//       headers: xml,
-//       xmlns,
-//       payload: CachePolicyConfig,
-//     }
-//   },
-//   response: ({ headers, payload }) => {
-//     const arrayProperties = new Set([ 'Items' ])
-//     const { etag, location } = headers
-//     const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
-//     return {
-//       CachePolicy,
-//       Location: location,
-//       ETag: etag,
-//     }
-//   },
-// }
+const CreateCachePolicy = {
+  awsDoc: docRoot + 'API_CreateCachePolicy.html',
+  validate: {
+    CachePolicyConfig,
+  },
+  request: (params) => {
+    const CachePolicyConfig = unarrayifyObject(params)
+    return {
+      path: '/2020-05-31/cache-policy',
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: CachePolicyConfig,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const { etag, location } = headers
+    const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
+    return {
+      CachePolicy,
+      Location: location,
+      ETag: etag,
+    }
+  },
+}
 
 const CreateDistribution = {
   awsDoc: docRoot + 'API_CreateDistribution.html',
@@ -252,6 +254,22 @@ const CreatePublicKey = {
   },
 }
 
+const DeleteCachePolicy = {
+  awsDoc: docRoot + 'API_DeleteCachePolicy.html',
+  validate: {
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ Id, IfMatch }) => {
+    return {
+      path: `/2020-05-31/cache-policy/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
 const DeleteDistribution = {
   awsDoc: docRoot + 'API_DeleteDistribution.html',
   validate: {
@@ -373,6 +391,48 @@ const DescribeKeyValueStore = {
     const { etag } = headers
     return {
       KeyValueStore: payload,
+      ETag: etag,
+    }
+  },
+}
+
+const GetCachePolicy = {
+  awsDoc: docRoot + 'API_GetCachePolicy.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/cache-policy/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const { etag } = headers
+    const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
+    return {
+      CachePolicy,
+      ETag: etag,
+    }
+  },
+}
+
+const GetCachePolicyConfig = {
+  awsDoc: docRoot + 'API_GetCachePolicyConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/cache-policy/${Id}/config`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const { etag } = headers
+    const CachePolicyConfig = normalizeResponse(payload, arrayProperties, 3)
+    return {
+      CachePolicyConfig,
       ETag: etag,
     }
   },
@@ -511,6 +571,30 @@ const GetPublicKeyConfig = {
       PublicKeyConfig: payload,
       ETag: etag,
     }
+  },
+}
+
+const ListCachePolicies = {
+  awsDoc: docRoot + 'API_ListCachePolicies.html',
+  validate: {
+    Marker,
+    MaxItems,
+    Type: { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' },
+  },
+  request: (params) => {
+    return {
+      path: '/2020-05-31/cache-policy',
+      query: params,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.CachePolicySummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const CachePolicyList = normalizeResponse(payload, arrayProperties, 8)
+    return { CachePolicyList }
   },
 }
 
@@ -692,6 +776,34 @@ const TestFunction = {
   },
 }
 
+const UpdateCachePolicy = {
+  awsDoc: docRoot + 'API_UpdateCachePolicy.html',
+  validate: {
+    CachePolicyConfig,
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ CachePolicyConfig, Id, IfMatch }) => {
+    CachePolicyConfig = unarrayifyObject({ CachePolicyConfig })
+    return {
+      path: `/2020-05-31/cache-policy/${Id}`,
+      method: 'PUT',
+      headers: { ...xml, 'if-match': IfMatch },
+      xmlns,
+      payload: CachePolicyConfig,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const { etag } = headers
+    const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
+    return {
+      CachePolicy,
+      ETag: etag,
+    }
+  },
+}
+
 const UpdateDistribution = {
   awsDoc: docRoot + 'API_UpdateDistribution.html',
   validate: {
@@ -834,12 +946,14 @@ export default {
   service,
   property,
   methods: {
+    CreateCachePolicy,
     CreateDistribution,
     CreateFunction,
     CreateInvalidation,
     CreateKeyGroup,
     CreateKeyValueStore,
     CreatePublicKey,
+    DeleteCachePolicy,
     DeleteDistribution,
     DeleteFunction,
     DeleteKeyGroup,
@@ -847,6 +961,8 @@ export default {
     DeletePublicKey,
     DescribeFunction,
     DescribeKeyValueStore,
+    GetCachePolicy,
+    GetCachePolicyConfig,
     GetDistribution,
     GetDistributionConfig,
     GetFunction,
@@ -854,12 +970,14 @@ export default {
     GetKeyGroupConfig,
     GetPublicKey,
     GetPublicKeyConfig,
+    ListCachePolicies,
     ListDistributions,
     ListFunctions,
     ListKeyGroups,
     ListKeyValueStores,
     ListPublicKeys,
     TestFunction,
+    UpdateCachePolicy,
     UpdateDistribution,
     UpdateFunction,
     UpdateKeyGroup,

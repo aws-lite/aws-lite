@@ -41,9 +41,9 @@ const arrayProperties = {
   // KeyGroups
   'KeyGroupConfig': 'PublicKey',
   // CachePolicyConfigs
-  'ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
-  'ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
-  'ParametersInCacheKeyAndForwardedToOrigin,QueryStringsConfig.QueryStrings': 'Name',
+  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
 }
 
 const arrayifyItemsProp = obj => {

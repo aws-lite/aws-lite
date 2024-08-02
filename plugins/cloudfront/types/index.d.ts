@@ -1,12 +1,14 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  CreateCachePolicyCommandOutput as CreateCachePolicyResponse,
   CreateDistributionCommandOutput as CreateDistributionResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
   CreateInvalidationCommandOutput as CreateInvalidationResponse,
   CreateKeyGroupCommandOutput as CreateKeyGroupResponse,
   CreateKeyValueStoreCommandOutput as CreateKeyValueStoreResponse,
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
+  DeleteCachePolicyCommandOutput as DeleteCachePolicyResponse,
   DeleteDistributionCommandOutput as DeleteDistributionResponse,
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DeleteKeyGroupCommandOutput as DeleteKeyGroupResponse,
@@ -14,6 +16,8 @@ import {
   DeletePublicKeyCommandOutput as DeletePublicKeyResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   DescribeKeyValueStoreCommandOutput as DescribeKeyValueStoreResponse,
+  GetCachePolicyCommandOutput as GetCachePolicyResponse,
+  GetCachePolicyConfigCommandOutput as GetCachePolicyConfigResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
@@ -21,12 +25,14 @@ import {
   GetKeyGroupConfigCommandOutput as GetKeyGroupConfigResponse,
   GetPublicKeyCommandOutput as GetPublicKeyResponse,
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
+  ListCachePoliciesCommandOutput as ListCachePoliciesResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
   ListKeyGroupsCommandOutput as ListKeyGroupsResponse,
   ListKeyValueStoresCommandOutput as ListKeyValueStoresResponse,
   ListPublicKeysCommandOutput as ListPublicKeysResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
+  UpdateCachePolicyCommandOutput as UpdateCachePolicyResponse,
   UpdateDistributionCommandOutput as UpdateDistributionResponse,
   UpdateFunctionCommandOutput as UpdateFunctionResponse,
   UpdateKeyGroupCommandOutput as UpdateKeyGroupResponse,
@@ -38,6 +44,12 @@ import {
 declare interface AwsLiteCloudFront {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCachePolicy.html CloudFront: CreateCachePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateCachePolicy CloudFront: CreateCachePolicy}
+   */
+  CreateCachePolicy: (input: { CachePolicyConfig: Record<string, any> }) => Promise<CreateCachePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html CloudFront: CreateDistribution}
@@ -74,6 +86,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreatePublicKey CloudFront: CreatePublicKey}
    */
   CreatePublicKey: (input: { PublicKeyConfig: Record<string, any> }) => Promise<CreatePublicKeyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCachePolicy.html CloudFront: DeleteCachePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteCachePolicy CloudFront: DeleteCachePolicy}
+   */
+  DeleteCachePolicy: (input: { Id: string, IfMatch: string }) => Promise<DeleteCachePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html CloudFront: DeleteDistribution}
@@ -118,6 +136,18 @@ declare interface AwsLiteCloudFront {
   DescribeKeyValueStore: (input: { Name: string }) => Promise<DescribeKeyValueStoreResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCachePolicy.html CloudFront: GetCachePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetCachePolicy CloudFront: GetCachePolicy}
+   */
+  GetCachePolicy: (input: { Id: string }) => Promise<GetCachePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCachePolicyConfig.html CloudFront: GetCachePolicyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetCachePolicyConfig CloudFront: GetCachePolicyConfig}
+   */
+  GetCachePolicyConfig: (input: { Id: string }) => Promise<GetCachePolicyConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistribution.html CloudFront: GetDistribution}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetDistribution CloudFront: GetDistribution}
    */
@@ -160,6 +190,12 @@ declare interface AwsLiteCloudFront {
   GetPublicKeyConfig: (input: { Id: string }) => Promise<GetPublicKeyConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListCachePolicies.html CloudFront: ListCachePolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListCachePolicies CloudFront: ListCachePolicies}
+   */
+  ListCachePolicies: (input: { Marker?: string, MaxItems?: number, Type?: string }) => Promise<ListCachePoliciesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html CloudFront: ListDistributions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListDistributions CloudFront: ListDistributions}
    */
@@ -194,6 +230,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#TestFunction CloudFront: TestFunction}
    */
   TestFunction: (input: { Name: string, IfMatch: string, EventObject: string, Stage?: string }) => Promise<TestFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCachePolicy.html CloudFront: UpdateCachePolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateCachePolicy CloudFront: UpdateCachePolicy}
+   */
+  UpdateCachePolicy: (input: { CachePolicyConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateCachePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html CloudFront: UpdateDistribution}
@@ -237,12 +279,14 @@ export type {
   AwsLiteCloudFront,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
+  CreateCachePolicyResponse,
   CreateDistributionResponse,
   CreateFunctionResponse,
   CreateInvalidationResponse,
   CreateKeyGroupResponse,
   CreateKeyValueStoreResponse,
   CreatePublicKeyResponse,
+  DeleteCachePolicyResponse,
   DeleteDistributionResponse,
   DeleteFunctionResponse,
   DeleteKeyGroupResponse,
@@ -250,6 +294,8 @@ export type {
   DeletePublicKeyResponse,
   DescribeFunctionResponse,
   DescribeKeyValueStoreResponse,
+  GetCachePolicyResponse,
+  GetCachePolicyConfigResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
   GetFunctionResponse,
@@ -257,12 +303,14 @@ export type {
   GetKeyGroupConfigResponse,
   GetPublicKeyResponse,
   GetPublicKeyConfigResponse,
+  ListCachePoliciesResponse,
   ListDistributionsResponse,
   ListFunctionsResponse,
   ListKeyGroupsResponse,
   ListKeyValueStoresResponse,
   ListPublicKeysResponse,
   TestFunctionResponse,
+  UpdateCachePolicyResponse,
   UpdateDistributionResponse,
   UpdateFunctionResponse,
   UpdateKeyGroupResponse,
