@@ -42,6 +42,16 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CachePolicyConfig.html)
 
 
+### `CreateCloudFrontOriginAccessIdentity`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCloudFrontOriginAccessIdentity.html)
+
+Properties:
+- **`CloudFrontOriginAccessIdentityConfig` (object) [required]**
+  - Complete  Cloud Front origin access identity configuration object
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCloudFrontOriginAccessIdentity.html)
+
+
 ### `CreateDistribution`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html)
@@ -116,6 +126,17 @@ Properties:
 ### `DeleteCachePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCachePolicy.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of previous `GetDistribution` call's `ETag` property
+
+
+### `DeleteCloudFrontOriginAccessIdentity`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCloudFrontOriginAccessIdentity.html)
 
 Properties:
 - **`Id` (string) [required]**
@@ -217,6 +238,24 @@ Properties:
   - The resource ID
 
 
+### `GetCloudFrontOriginAccessIdentity`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCloudFrontOriginAccessIdentity.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
+### `GetCloudFrontOriginAccessIdentityConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCloudFrontOriginAccessIdentityConfig.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
 ### `GetDistribution`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistribution.html)
@@ -293,6 +332,21 @@ Properties:
   - Maximum number of items to return
 - **`Type` (string)**
   - Filter results by policy type; can be one of: `managed`, `custom`
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListCloudFrontOriginAccessIdentities`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListCloudFrontOriginAccessIdentities.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (number)**
+  - Maximum number of items to return
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `ListDistributions`
@@ -393,6 +447,20 @@ Properties:
   - Value of previous `GetDistribution` call's `ETag` property
 
 
+### `UpdateCloudFrontOriginAccessIdentity`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCloudFrontOriginAccessIdentity.html)
+
+Properties:
+- **`CloudFrontOriginAccessIdentityConfig` (object) [required]**
+  - Complete  Cloud Front origin access identity configuration object
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCloudFrontOriginAccessIdentity.html)
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of previous `GetDistribution` call's `ETag` property
+
+
 ### `UpdateDistribution`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html)
@@ -469,7 +537,6 @@ Properties:
 
 - [`AssociateAlias`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_AssociateAlias.html)
 - [`CopyDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CopyDistribution.html)
-- [`CreateCloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCloudFrontOriginAccessIdentity.html)
 - [`CreateContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateContinuousDeploymentPolicy.html)
 - [`CreateDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html)
 - [`CreateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionConfig.html)
@@ -481,7 +548,6 @@ Properties:
 - [`CreateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateResponseHeadersPolicy.html)
 - [`CreateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistribution.html)
 - [`CreateStreamingDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistributionWithTags.html)
-- [`DeleteCloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCloudFrontOriginAccessIdentity.html)
 - [`DeleteContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteContinuousDeploymentPolicy.html)
 - [`DeleteFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionConfig.html)
 - [`DeleteFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionProfile.html)
@@ -491,8 +557,6 @@ Properties:
 - [`DeleteRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteRealtimeLogConfig.html)
 - [`DeleteResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteResponseHeadersPolicy.html)
 - [`DeleteStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteStreamingDistribution.html)
-- [`GetCloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCloudFrontOriginAccessIdentity.html)
-- [`GetCloudFrontOriginAccessIdentityConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCloudFrontOriginAccessIdentityConfig.html)
 - [`GetContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetContinuousDeploymentPolicy.html)
 - [`GetContinuousDeploymentPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetContinuousDeploymentPolicyConfig.html)
 - [`GetFieldLevelEncryption`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryption.html)
@@ -510,7 +574,6 @@ Properties:
 - [`GetResponseHeadersPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicyConfig.html)
 - [`GetStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetStreamingDistribution.html)
 - [`GetStreamingDistributionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetStreamingDistributionConfig.html)
-- [`ListCloudFrontOriginAccessIdentities`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListCloudFrontOriginAccessIdentities.html)
 - [`ListConflictingAliases`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListConflictingAliases.html)
 - [`ListContinuousDeploymentPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListContinuousDeploymentPolicies.html)
 - [`ListDistributionsByCachePolicyId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByCachePolicyId.html)
@@ -531,7 +594,6 @@ Properties:
 - [`PublishFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_PublishFunction.html)
 - [`TagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TagResource.html)
 - [`UntagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html)
-- [`UpdateCloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCloudFrontOriginAccessIdentity.html)
 - [`UpdateContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateContinuousDeploymentPolicy.html)
 - [`UpdateDistributionWithStagingConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistributionWithStagingConfig.html)
 - [`UpdateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionConfig.html)

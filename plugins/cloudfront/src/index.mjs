@@ -33,7 +33,7 @@ const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
 const KeyGroupConfig = { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_KeyGroupConfig.html' }
 const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', ref: docRoot + 'API_ImportSource.html' }
 const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CachePolicyConfig.html' }
-
+const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration object', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -74,6 +74,30 @@ const CreateCachePolicy = {
     const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
     return {
       CachePolicy,
+      Location: location,
+      ETag: etag,
+    }
+  },
+}
+
+const CreateCloudFrontOriginAccessIdentity = {
+  awsDoc: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html',
+  validate: {
+    CloudFrontOriginAccessIdentityConfig,
+  },
+  request: ({ CloudFrontOriginAccessIdentityConfig }) => {
+    return {
+      path: `/2020-05-31/origin-access-identity/cloudfront`,
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: { CloudFrontOriginAccessIdentityConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag, location } = headers
+    return {
+      CloudFrontOriginAccessIdentity: payload,
       Location: location,
       ETag: etag,
     }
@@ -270,6 +294,22 @@ const DeleteCachePolicy = {
   response: defaultResponse,
 }
 
+const DeleteCloudFrontOriginAccessIdentity = {
+  awsDoc: docRoot + 'API_DeleteCloudFrontOriginAccessIdentity.html',
+  validate: {
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ Id, IfMatch }) => {
+    return {
+      path: `//2020-05-31/origin-access-identity/cloudfront/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
 const DeleteDistribution = {
   awsDoc: docRoot + 'API_DeleteDistribution.html',
   validate: {
@@ -438,6 +478,40 @@ const GetCachePolicyConfig = {
   },
 }
 
+const GetCloudFrontOriginAccessIdentity = {
+  awsDoc: docRoot + 'API_GetCloudFrontOriginAccessIdentity.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return { path: `/2020-05-31/origin-access-identity/cloudfront/${Id}` }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    return {
+      CloudFrontOriginAccessIdentity: payload,
+      ETag: etag,
+    }
+  },
+}
+
+const GetCloudFrontOriginAccessIdentityConfig = {
+  awsDoc: docRoot + 'API_GetCloudFrontOriginAccessIdentityConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return { path: `/2020-05-31/origin-access-identity/cloudfront/${Id}/config` }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    return {
+      CloudFrontOriginAccessIdentityConfig: payload,
+      ETag: etag,
+    }
+  },
+}
+
 const GetDistribution = {
   awsDoc: docRoot + 'API_GetDistribution.html',
   validate: {
@@ -580,11 +654,15 @@ const ListCachePolicies = {
     Marker,
     MaxItems,
     Type: { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' },
+    paginate: valPaginate,
   },
   request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
     return {
       path: '/2020-05-31/cache-policy',
-      query: params,
+      query,
       paginator: {
         ...paginator,
         accumulator: 'Items.CachePolicySummary',
@@ -598,6 +676,33 @@ const ListCachePolicies = {
   },
 }
 
+const ListCloudFrontOriginAccessIdentities = {
+  awsDoc: docRoot + 'API_ListCloudFrontOriginAccessIdentities.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: '/2020-05-31/origin-access-identity/cloudfront',
+      query,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.CloudFrontOriginAccessIdentitySummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const arrayProperties = new Set([ 'Items' ])
+    const CloudFrontOriginAccessIdentityList = normalizeResponse(payload, arrayProperties)
+    return { CloudFrontOriginAccessIdentityList }
+  },
+}
+
 const ListDistributions = {
   awsDoc: docRoot + 'API_ListDistributions.html',
   validate: {
@@ -606,9 +711,12 @@ const ListDistributions = {
     paginate: valPaginate,
   },
   request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
     return {
       path: '/2020-05-31/distribution',
-      query: params,
+      query,
       paginator: {
         cursor: 'Marker',
         token: 'NextMarker',
@@ -804,6 +912,31 @@ const UpdateCachePolicy = {
   },
 }
 
+const UpdateCloudFrontOriginAccessIdentity = {
+  awsDoc: docRoot + 'API_UpdateCloudFrontOriginAccessIdentity.html',
+  validate: {
+    CloudFrontOriginAccessIdentityConfig,
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ CloudFrontOriginAccessIdentityConfig, Id, IfMatch }) => {
+    return {
+      path: `/2020-05-31/origin-access-identity/cloudfront/${Id}/config`,
+      method: 'PUT',
+      headers: { ...xml, 'if-match': IfMatch },
+      xmlns,
+      payload: { CloudFrontOriginAccessIdentityConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    return {
+      CloudFrontOriginAccessIdentity: payload,
+      ETag: etag,
+    }
+  },
+}
+
 const UpdateDistribution = {
   awsDoc: docRoot + 'API_UpdateDistribution.html',
   validate: {
@@ -947,6 +1080,7 @@ export default {
   property,
   methods: {
     CreateCachePolicy,
+    CreateCloudFrontOriginAccessIdentity,
     CreateDistribution,
     CreateFunction,
     CreateInvalidation,
@@ -954,6 +1088,7 @@ export default {
     CreateKeyValueStore,
     CreatePublicKey,
     DeleteCachePolicy,
+    DeleteCloudFrontOriginAccessIdentity,
     DeleteDistribution,
     DeleteFunction,
     DeleteKeyGroup,
@@ -963,6 +1098,8 @@ export default {
     DescribeKeyValueStore,
     GetCachePolicy,
     GetCachePolicyConfig,
+    GetCloudFrontOriginAccessIdentity,
+    GetCloudFrontOriginAccessIdentityConfig,
     GetDistribution,
     GetDistributionConfig,
     GetFunction,
@@ -971,6 +1108,7 @@ export default {
     GetPublicKey,
     GetPublicKeyConfig,
     ListCachePolicies,
+    ListCloudFrontOriginAccessIdentities,
     ListDistributions,
     ListFunctions,
     ListKeyGroups,
@@ -978,6 +1116,7 @@ export default {
     ListPublicKeys,
     TestFunction,
     UpdateCachePolicy,
+    UpdateCloudFrontOriginAccessIdentity,
     UpdateDistribution,
     UpdateFunction,
     UpdateKeyGroup,

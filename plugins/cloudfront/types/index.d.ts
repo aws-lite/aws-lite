@@ -2,6 +2,7 @@ import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
   CreateCachePolicyCommandOutput as CreateCachePolicyResponse,
+  CreateCloudFrontOriginAccessIdentityCommandOutput as CreateCloudFrontOriginAccessIdentityResponse,
   CreateDistributionCommandOutput as CreateDistributionResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
   CreateInvalidationCommandOutput as CreateInvalidationResponse,
@@ -9,6 +10,7 @@ import {
   CreateKeyValueStoreCommandOutput as CreateKeyValueStoreResponse,
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
   DeleteCachePolicyCommandOutput as DeleteCachePolicyResponse,
+  DeleteCloudFrontOriginAccessIdentityCommandOutput as DeleteCloudFrontOriginAccessIdentityResponse,
   DeleteDistributionCommandOutput as DeleteDistributionResponse,
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DeleteKeyGroupCommandOutput as DeleteKeyGroupResponse,
@@ -18,6 +20,8 @@ import {
   DescribeKeyValueStoreCommandOutput as DescribeKeyValueStoreResponse,
   GetCachePolicyCommandOutput as GetCachePolicyResponse,
   GetCachePolicyConfigCommandOutput as GetCachePolicyConfigResponse,
+  GetCloudFrontOriginAccessIdentityCommandOutput as GetCloudFrontOriginAccessIdentityResponse,
+  GetCloudFrontOriginAccessIdentityConfigCommandOutput as GetCloudFrontOriginAccessIdentityConfigResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
@@ -26,6 +30,7 @@ import {
   GetPublicKeyCommandOutput as GetPublicKeyResponse,
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
   ListCachePoliciesCommandOutput as ListCachePoliciesResponse,
+  ListCloudFrontOriginAccessIdentitiesCommandOutput as ListCloudFrontOriginAccessIdentitiesResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
   ListKeyGroupsCommandOutput as ListKeyGroupsResponse,
@@ -33,6 +38,7 @@ import {
   ListPublicKeysCommandOutput as ListPublicKeysResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
   UpdateCachePolicyCommandOutput as UpdateCachePolicyResponse,
+  UpdateCloudFrontOriginAccessIdentityCommandOutput as UpdateCloudFrontOriginAccessIdentityResponse,
   UpdateDistributionCommandOutput as UpdateDistributionResponse,
   UpdateFunctionCommandOutput as UpdateFunctionResponse,
   UpdateKeyGroupCommandOutput as UpdateKeyGroupResponse,
@@ -50,6 +56,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateCachePolicy CloudFront: CreateCachePolicy}
    */
   CreateCachePolicy: (input: { CachePolicyConfig: Record<string, any> }) => Promise<CreateCachePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCloudFrontOriginAccessIdentity.html CloudFront: CreateCloudFrontOriginAccessIdentity}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateCloudFrontOriginAccessIdentity CloudFront: CreateCloudFrontOriginAccessIdentity}
+   */
+  CreateCloudFrontOriginAccessIdentity: (input: { CloudFrontOriginAccessIdentityConfig: Record<string, any> }) => Promise<CreateCloudFrontOriginAccessIdentityResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html CloudFront: CreateDistribution}
@@ -92,6 +104,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteCachePolicy CloudFront: DeleteCachePolicy}
    */
   DeleteCachePolicy: (input: { Id: string, IfMatch: string }) => Promise<DeleteCachePolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCloudFrontOriginAccessIdentity.html CloudFront: DeleteCloudFrontOriginAccessIdentity}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteCloudFrontOriginAccessIdentity CloudFront: DeleteCloudFrontOriginAccessIdentity}
+   */
+  DeleteCloudFrontOriginAccessIdentity: (input: { Id: string, IfMatch: string }) => Promise<DeleteCloudFrontOriginAccessIdentityResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html CloudFront: DeleteDistribution}
@@ -148,6 +166,18 @@ declare interface AwsLiteCloudFront {
   GetCachePolicyConfig: (input: { Id: string }) => Promise<GetCachePolicyConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCloudFrontOriginAccessIdentity.html CloudFront: GetCloudFrontOriginAccessIdentity}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetCloudFrontOriginAccessIdentity CloudFront: GetCloudFrontOriginAccessIdentity}
+   */
+  GetCloudFrontOriginAccessIdentity: (input: { Id: string }) => Promise<GetCloudFrontOriginAccessIdentityResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetCloudFrontOriginAccessIdentityConfig.html CloudFront: GetCloudFrontOriginAccessIdentityConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetCloudFrontOriginAccessIdentityConfig CloudFront: GetCloudFrontOriginAccessIdentityConfig}
+   */
+  GetCloudFrontOriginAccessIdentityConfig: (input: { Id: string }) => Promise<GetCloudFrontOriginAccessIdentityConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistribution.html CloudFront: GetDistribution}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetDistribution CloudFront: GetDistribution}
    */
@@ -193,7 +223,13 @@ declare interface AwsLiteCloudFront {
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListCachePolicies.html CloudFront: ListCachePolicies}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListCachePolicies CloudFront: ListCachePolicies}
    */
-  ListCachePolicies: (input: { Marker?: string, MaxItems?: number, Type?: string }) => Promise<ListCachePoliciesResponse>
+  ListCachePolicies: (input: { Marker?: string, MaxItems?: number, Type?: string, paginate?: boolean | string }) => Promise<ListCachePoliciesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListCloudFrontOriginAccessIdentities.html CloudFront: ListCloudFrontOriginAccessIdentities}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListCloudFrontOriginAccessIdentities CloudFront: ListCloudFrontOriginAccessIdentities}
+   */
+  ListCloudFrontOriginAccessIdentities: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListCloudFrontOriginAccessIdentitiesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html CloudFront: ListDistributions}
@@ -238,6 +274,12 @@ declare interface AwsLiteCloudFront {
   UpdateCachePolicy: (input: { CachePolicyConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateCachePolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCloudFrontOriginAccessIdentity.html CloudFront: UpdateCloudFrontOriginAccessIdentity}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateCloudFrontOriginAccessIdentity CloudFront: UpdateCloudFrontOriginAccessIdentity}
+   */
+  UpdateCloudFrontOriginAccessIdentity: (input: { CloudFrontOriginAccessIdentityConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateCloudFrontOriginAccessIdentityResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html CloudFront: UpdateDistribution}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateDistribution CloudFront: UpdateDistribution}
    */
@@ -280,6 +322,7 @@ export type {
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   CreateCachePolicyResponse,
+  CreateCloudFrontOriginAccessIdentityResponse,
   CreateDistributionResponse,
   CreateFunctionResponse,
   CreateInvalidationResponse,
@@ -287,6 +330,7 @@ export type {
   CreateKeyValueStoreResponse,
   CreatePublicKeyResponse,
   DeleteCachePolicyResponse,
+  DeleteCloudFrontOriginAccessIdentityResponse,
   DeleteDistributionResponse,
   DeleteFunctionResponse,
   DeleteKeyGroupResponse,
@@ -296,6 +340,8 @@ export type {
   DescribeKeyValueStoreResponse,
   GetCachePolicyResponse,
   GetCachePolicyConfigResponse,
+  GetCloudFrontOriginAccessIdentityResponse,
+  GetCloudFrontOriginAccessIdentityConfigResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
   GetFunctionResponse,
@@ -304,6 +350,7 @@ export type {
   GetPublicKeyResponse,
   GetPublicKeyConfigResponse,
   ListCachePoliciesResponse,
+  ListCloudFrontOriginAccessIdentitiesResponse,
   ListDistributionsResponse,
   ListFunctionsResponse,
   ListKeyGroupsResponse,
@@ -311,6 +358,7 @@ export type {
   ListPublicKeysResponse,
   TestFunctionResponse,
   UpdateCachePolicyResponse,
+  UpdateCloudFrontOriginAccessIdentityResponse,
   UpdateDistributionResponse,
   UpdateFunctionResponse,
   UpdateKeyGroupResponse,
