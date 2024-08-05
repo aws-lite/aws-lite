@@ -36,14 +36,20 @@ const arrayProperties = {
   // Invalidations
   'InvalidationBatch.Paths': 'Path',
   // Functions
-  'KeyValueStoreAssociations': 'KeyValueStoreAssociation',
-  'FunctionExecutionLogs.member': 'FunctionExecutionLogs',
+  'FunctionConfig.KeyValueStoreAssociations': 'KeyValueStoreAssociation',
   // KeyGroups
   'KeyGroupConfig': 'PublicKey',
   // CachePolicyConfigs
   'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
   'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
   'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
+  // FieldLevelEncryptionConfig
+  'FieldLevelEncryptionConfig.ContentTypeProfileConfig.ContentTypeProfiles': 'ContentTypeProfile',
+  'FieldLevelEncryptionConfig.QueryArgProfileConfig.QueryArgProfiles': 'QueryArgProfile',
+  // FieldLevelEncryptionProfileConfig
+  'FieldLevelEncryptionProfileConfig.EncryptionEntities': 'EncryptionEntity',
+  'FieldPatterns': 'FieldPattern',
+
 }
 
 const arrayifyItemsProp = obj => {

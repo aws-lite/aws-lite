@@ -34,6 +34,8 @@ const KeyGroupConfig = { ...obj, required, comment: 'Key group configuration', r
 const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', ref: docRoot + 'API_ImportSource.html' }
 const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CachePolicyConfig.html' }
 const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration object', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
+// const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption config object', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
+const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -69,9 +71,8 @@ const CreateCachePolicy = {
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
+    const CachePolicy = arrayifyItemsProp(payload)
     const { etag, location } = headers
-    const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
     return {
       CachePolicy,
       Location: location,
@@ -146,6 +147,64 @@ const CreateDistribution = {
   },
 }
 
+// const CreateFieldLevelEncryptionConfig = {
+//   awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html' ,
+//   validate: {
+//     FieldLevelEncryptionConfig,
+//   },
+//   request: (params) => {
+//     const FieldLevelEncryptionConfig = unarrayifyObject(params)
+//     return {
+//       path: '/2020-05-31/field-level-encryption',
+//       method: 'POST',
+//       headers: xml,
+//       xmlns,
+//       payload: FieldLevelEncryptionConfig,
+//     }
+//   },
+//   response: ({headers, payload}) => {
+//     const arrayProperties = new Set(['Items'])
+//     const {etag, location} = headers
+//     const FieldLevelEncryption = normalizeResponse(payload)
+//     return {
+//       FieldLevelEncryption,
+//       ETag: etag,
+//       Location: location
+//     }
+//   }
+// }
+
+const CreateFieldLevelEncryptionProfile = {
+  awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html',
+  validate: {
+    FieldLevelEncryptionProfileConfig,
+  },
+  request: (params) => {
+    const FieldLevelEncryptionProfileConfig = unarrayifyObject(params)
+    console.dir(FieldLevelEncryptionProfileConfig, { depth: null })
+    let { EncryptionEntity } = FieldLevelEncryptionProfileConfig.FieldLevelEncryptionProfileConfig.EncryptionEntities.Items
+    if (!Array.isArray(EncryptionEntity)) EncryptionEntity = [ EncryptionEntity ]
+    EncryptionEntity = unarrayifyObject(EncryptionEntity)
+    FieldLevelEncryptionProfileConfig.FieldLevelEncryptionProfileConfig.EncryptionEntities.Items.EncryptionEntity = EncryptionEntity
+    return {
+      path: '/2020-05-31/field-level-encryption-profile',
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: FieldLevelEncryptionProfileConfig,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const FieldLevelEncryptionProfile = arrayifyObject(payload)
+    const { etag, location } = headers
+    return {
+      FieldLevelEncryptionProfile,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
+
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
   validate: {
@@ -153,26 +212,21 @@ const CreateFunction = {
     FunctionConfig,
     Name,
   },
-  request: ({ FunctionCode, FunctionConfig, Name }) => {
-    FunctionConfig = unarrayifyObject(FunctionConfig)
+  request: (params) => {
+    const CreateFunctionRequest = unarrayifyObject(params)
     return {
       path: '/2020-05-31/function',
       methods: 'POST',
       headers: xml,
       xmlns,
       payload: {
-        CreateFunctionRequest: {
-          FunctionCode,
-          FunctionConfig,
-          Name,
-        },
+        CreateFunctionRequest,
       },
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
+    const FunctionSummary = arrayifyObject(payload)
     const { etag, location } = headers
-    const FunctionSummary = normalizeResponse(payload, arrayProperties, 2)
     return {
       FunctionSummary,
       Location: location,
@@ -326,6 +380,22 @@ const DeleteDistribution = {
   response: () => ({}),
 }
 
+const DeleteFieldLevelEncryptionProfile = {
+  awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html',
+  validate: {
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ Name, IfMatch }) => {
+    return {
+      path: `/2020-05-31/field-level-encryption-profile/${Name}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
 const DeleteFunction = {
   awsDoc: docRoot + 'API_DeleteFunction.html',
   validate: {
@@ -406,9 +476,8 @@ const DescribeFunction = {
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
     const { etag } = headers
-    const FunctionSummary = normalizeResponse(payload, arrayProperties, 2)
+    const FunctionSummary = arrayifyObject(payload)
     return {
       FunctionSummary,
       ETag: etag,
@@ -447,9 +516,8 @@ const GetCachePolicy = {
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
+    const CachePolicy = arrayifyObject(payload)
     const { etag } = headers
-    const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
     return {
       CachePolicy,
       ETag: etag,
@@ -468,9 +536,8 @@ const GetCachePolicyConfig = {
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
+    const CachePolicyConfig = arrayifyObject(payload)
     const { etag } = headers
-    const CachePolicyConfig = normalizeResponse(payload, arrayProperties, 3)
     return {
       CachePolicyConfig,
       ETag: etag,
@@ -546,6 +613,27 @@ const GetDistributionConfig = {
   },
 }
 
+// const GetFieldLevelEncryptionProfile = {
+//   awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfile.html',
+//   validate: {
+//     Id,
+//   },
+//   request: (params) => {
+//     return {
+//       path: `/2020-05-31/field-level-encryption-profile/${Id}`,
+//     }
+//   },
+//   response: ({ headers, payload }) => {
+//     const arrayProperties = new Set([ 'Items' ])
+//     const { etag } = headers
+//     const FieldLevelEncryptionProfile = arrayifyObject(payload)
+//     return {
+//       FieldLevelEncryptionConfig,
+//       ETag: etag,
+//     }
+//   },
+// }
+
 // TODO: confirm response
 const GetFunction = {
   awsDoc: docRoot + 'API_GetFunction.html',
@@ -577,9 +665,8 @@ const GetKeyGroup = {
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
+    const KeyGroup = arrayifyObject(payload)
     const { etag: ETag } = headers
-    const KeyGroup = normalizeResponse(payload, arrayProperties, 1)
     return {
       KeyGroup,
       ETag,
@@ -598,9 +685,8 @@ const GetKeyGroupConfig = {
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
+    const KeyGroupConfig = arrayifyObject(payload)
     const { etag: ETag } = headers
-    const KeyGroupConfig = normalizeResponse(payload, arrayProperties, 1)
     return {
       KeyGroupConfig,
       ETag,
@@ -670,8 +756,8 @@ const ListCachePolicies = {
     }
   },
   response: ({ payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
-    const CachePolicyList = normalizeResponse(payload, arrayProperties, 8)
+    const CachePolicyList = arrayifyItemsProp(payload)
+    CachePolicyList.Items = CachePolicyList.Items.map(i => arrayifyObject(i))
     return { CachePolicyList }
   },
 }
@@ -697,8 +783,7 @@ const ListCloudFrontOriginAccessIdentities = {
     }
   },
   response: ({ payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
-    const CloudFrontOriginAccessIdentityList = normalizeResponse(payload, arrayProperties)
+    const CloudFrontOriginAccessIdentityList = arrayifyItemsProp(payload)
     return { CloudFrontOriginAccessIdentityList }
   },
 }
@@ -762,8 +847,8 @@ const ListFunctions = {
     }
   },
   response: ({ payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
-    const FunctionList = normalizeResponse(payload, arrayProperties, 5)
+    const FunctionList = arrayifyItemsProp(payload)
+    FunctionList.Items = FunctionList.Items.map(i => { return arrayifyObject(i) })
     return { FunctionList }
   },
 }
@@ -791,8 +876,7 @@ const ListKeyGroups = {
     }
   },
   response: ({ payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
-    const KeyGroupList = normalizeResponse(payload, arrayProperties, 4)
+    const KeyGroupList = arrayifyItemsProp(payload)
     return { KeyGroupList }
   },
 }
@@ -821,8 +905,7 @@ const ListKeyValueStores = {
     }
   },
   response: ({ payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
-    const KeyValueStoreList = normalizeResponse(payload, arrayProperties)
+    const KeyValueStoreList = arrayifyItemsProp(payload)
     return { KeyValueStoreList }
   },
 }
@@ -1082,6 +1165,8 @@ export default {
     CreateCachePolicy,
     CreateCloudFrontOriginAccessIdentity,
     CreateDistribution,
+    // CreateFieldLevelEncryptionConfig,
+    CreateFieldLevelEncryptionProfile,
     CreateFunction,
     CreateInvalidation,
     CreateKeyGroup,
@@ -1090,6 +1175,7 @@ export default {
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
     DeleteDistribution,
+    DeleteFieldLevelEncryptionProfile,
     DeleteFunction,
     DeleteKeyGroup,
     DeleteKeyValueStore,

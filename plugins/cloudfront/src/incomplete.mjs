@@ -5,8 +5,8 @@ export default {
   CopyDistribution:                           { disabled, awsDoc: docRoot + 'API_CopyDistribution.html' },
   CreateContinuousDeploymentPolicy:           { disabled, awsDoc: docRoot + 'API_CreateContinuousDeploymentPolicy.html' },
   CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' },
-  CreateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html' },
-  CreateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html' },
+  CreateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html' }, // TODO
+  CreateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html' }, // TODO
   // CreateKeyValueStore:                        { disabled, awsDoc: docRoot + 'API_CreateKeyValueStore.html' },
   CreateMonitoringSubscription:               { disabled, awsDoc: docRoot + 'API_CreateMonitoringSubscription.html' },
   CreateOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_CreateOriginAccessControl.html' },
@@ -17,7 +17,7 @@ export default {
   CreateStreamingDistributionWithTags:        { disabled, awsDoc: docRoot + 'API_CreateStreamingDistributionWithTags.html' },
   DeleteContinuousDeploymentPolicy:           { disabled, awsDoc: docRoot + 'API_DeleteContinuousDeploymentPolicy.html' },
   DeleteFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionConfig.html' },
-  DeleteFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html' },
+  DeleteFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html' }, // TODO
   // DeleteKeyGroup:                             { disabled, awsDoc: docRoot + 'API_DeleteKeyGroup.html' },
   // DeleteKeyValueStore:                        { disabled, awsDoc: docRoot + 'API_DeleteKeyValueStore.html' },
   DeleteMonitoringSubscription:               { disabled, awsDoc: docRoot + 'API_DeleteMonitoringSubscription.html' },
@@ -31,7 +31,7 @@ export default {
   GetContinuousDeploymentPolicyConfig:        { disabled, awsDoc: docRoot + 'API_GetContinuousDeploymentPolicyConfig.html' },
   GetFieldLevelEncryption:                    { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryption.html' },
   GetFieldLevelEncryptionConfig:              { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionConfig.html' },
-  GetFieldLevelEncryptionProfile:             { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfile.html' },
+  GetFieldLevelEncryptionProfile:             { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfile.html' }, // TODO
   GetFieldLevelEncryptionProfileConfig:       { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfileConfig.html' },
   GetInvalidation:                            { disabled, awsDoc: docRoot + 'API_GetInvalidation.html' },
   // GetKeyGroup:                                { disabled, awsDoc: docRoot + 'API_GetKeyGroup.html' },
