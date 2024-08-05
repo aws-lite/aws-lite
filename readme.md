@@ -1,5 +1,8 @@
 <a href="https://aws-lite.org">
-  <img src=https://aws-lite.org/_public/img/aws-lite-7af26ade9a.svg alt="aws-lite">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/aws-lite/aws-lite.org/raw/main/public/img/aws-lite_white.svg">
+    <img alt="aws-lite" src="https://github.com/aws-lite/aws-lite.org/raw/main/public/img/aws-lite.svg">
+  </picture>
 </a>
 
 > [`aws-lite`][1] is simple, extremely fast, extensible Node.js client for interacting with AWS services.
