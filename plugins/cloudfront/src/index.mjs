@@ -36,6 +36,8 @@ const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy co
 const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration object', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
 // const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption config object', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
 const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
+const DistributionId = { ...str, required, comment: 'Distribution ID' }
+
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -316,6 +318,26 @@ const CreateKeyValueStore = {
   },
 }
 
+const CreateMonitoringSubscription = {
+  awsDoc: docRoot + 'API_CreateMonitoringSubscription.html',
+  validate: {
+    DistributionId,
+    MonitoringSubscription: { ...obj, required, comment: 'Configuration for additional metrics', ref: docRoot + 'API_RealtimeMetricsSubscriptionConfig.html' },
+  },
+  request: ({ DistributionId, MonitoringSubscription }) => {
+    return {
+      path: `/2020-05-31/distributions/${DistributionId}/monitoring-subscription`,
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: { MonitoringSubscription },
+    }
+  },
+  response: ({ payload }) => {
+    return { MonitoringSubscription: payload }
+  },
+}
+
 const CreatePublicKey = {
   awsDoc: docRoot + 'API_CreatePublicKey.html',
   validate: {
@@ -440,6 +462,20 @@ const DeleteKeyValueStore = {
       path: `/2020-05-31/key-value-store/${Name}`,
       method: 'DELETE',
       headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
+const DeleteMonitoringSubscription = {
+  awsDoc: docRoot + 'API_DeleteMonitoringSubscription.html',
+  validate: {
+    DistributionId,
+  },
+  request: ({ DistributionId }) => {
+    return {
+      path: `/2020-05-31/distributions/${DistributionId}/monitoring-subscription`,
+      method: 'DELETE',
     }
   },
   response: defaultResponse,
@@ -691,6 +727,21 @@ const GetKeyGroupConfig = {
       KeyGroupConfig,
       ETag,
     }
+  },
+}
+
+const GetMonitoringSubscription = {
+  awsDoc: docRoot + 'API_GetMonitoringSubscription.html',
+  validate: {
+    DistributionId,
+  },
+  request: ({ DistributionId }) => {
+    return {
+      path: `/2020-05-31/distributions/${DistributionId}/monitoring-subscription`,
+    }
+  },
+  response: ({ payload }) => {
+    return { MonitoringSubscription: payload }
   },
 }
 
@@ -1171,6 +1222,7 @@ export default {
     CreateInvalidation,
     CreateKeyGroup,
     CreateKeyValueStore,
+    CreateMonitoringSubscription,
     CreatePublicKey,
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
@@ -1179,6 +1231,7 @@ export default {
     DeleteFunction,
     DeleteKeyGroup,
     DeleteKeyValueStore,
+    DeleteMonitoringSubscription,
     DeletePublicKey,
     DescribeFunction,
     DescribeKeyValueStore,
@@ -1191,6 +1244,7 @@ export default {
     GetFunction,
     GetKeyGroup,
     GetKeyGroupConfig,
+    GetMonitoringSubscription,
     GetPublicKey,
     GetPublicKeyConfig,
     ListCachePolicies,

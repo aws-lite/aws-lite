@@ -8,7 +8,7 @@ export default {
   CreateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html' }, // TODO
   CreateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html' }, // TODO
   // CreateKeyValueStore:                        { disabled, awsDoc: docRoot + 'API_CreateKeyValueStore.html' },
-  CreateMonitoringSubscription:               { disabled, awsDoc: docRoot + 'API_CreateMonitoringSubscription.html' },
+  // CreateMonitoringSubscription:               { disabled, awsDoc: docRoot + 'API_CreateMonitoringSubscription.html' },
   CreateOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_CreateOriginAccessControl.html' },
   CreateOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_CreateOriginRequestPolicy.html' },
   CreateRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html' },
@@ -20,7 +20,7 @@ export default {
   DeleteFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html' }, // TODO
   // DeleteKeyGroup:                             { disabled, awsDoc: docRoot + 'API_DeleteKeyGroup.html' },
   // DeleteKeyValueStore:                        { disabled, awsDoc: docRoot + 'API_DeleteKeyValueStore.html' },
-  DeleteMonitoringSubscription:               { disabled, awsDoc: docRoot + 'API_DeleteMonitoringSubscription.html' },
+  // DeleteMonitoringSubscription:               { disabled, awsDoc: docRoot + 'API_DeleteMonitoringSubscription.html' },
   DeleteOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_DeleteOriginAccessControl.html' },
   DeleteOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_DeleteOriginRequestPolicy.html' },
   DeleteRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_DeleteRealtimeLogConfig.html' },
@@ -36,7 +36,7 @@ export default {
   GetInvalidation:                            { disabled, awsDoc: docRoot + 'API_GetInvalidation.html' },
   // GetKeyGroup:                                { disabled, awsDoc: docRoot + 'API_GetKeyGroup.html' },
   // GetKeyGroupConfig:                          { disabled, awsDoc: docRoot + 'API_GetKeyGroupConfig.html' },
-  GetMonitoringSubscription:                  { disabled, awsDoc: docRoot + 'API_GetMonitoringSubscription.html' },
+  // GetMonitoringSubscription:                  { disabled, awsDoc: docRoot + 'API_GetMonitoringSubscription.html' },
   GetOriginAccessControl:                     { disabled, awsDoc: docRoot + 'API_GetOriginAccessControl.html' },
   GetOriginAccessControlConfig:               { disabled, awsDoc: docRoot + 'API_GetOriginAccessControlConfig.html' },
   GetOriginRequestPolicy:                     { disabled, awsDoc: docRoot + 'API_GetOriginRequestPolicy.html' },

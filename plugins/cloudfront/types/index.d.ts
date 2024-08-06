@@ -8,6 +8,7 @@ import {
   CreateInvalidationCommandOutput as CreateInvalidationResponse,
   CreateKeyGroupCommandOutput as CreateKeyGroupResponse,
   CreateKeyValueStoreCommandOutput as CreateKeyValueStoreResponse,
+  CreateMonitoringSubscriptionCommandOutput as CreateMonitoringSubscriptionResponse,
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
   DeleteCachePolicyCommandOutput as DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityCommandOutput as DeleteCloudFrontOriginAccessIdentityResponse,
@@ -15,6 +16,7 @@ import {
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DeleteKeyGroupCommandOutput as DeleteKeyGroupResponse,
   DeleteKeyValueStoreCommandOutput as DeleteKeyValueStoreResponse,
+  DeleteMonitoringSubscriptionCommandOutput as DeleteMonitoringSubscriptionResponse,
   DeletePublicKeyCommandOutput as DeletePublicKeyResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   DescribeKeyValueStoreCommandOutput as DescribeKeyValueStoreResponse,
@@ -27,6 +29,7 @@ import {
   GetFunctionCommandOutput as GetFunctionResponse,
   GetKeyGroupCommandOutput as GetKeyGroupResponse,
   GetKeyGroupConfigCommandOutput as GetKeyGroupConfigResponse,
+  GetMonitoringSubscriptionCommandOutput as GetMonitoringSubscriptionResponse,
   GetPublicKeyCommandOutput as GetPublicKeyResponse,
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
   ListCachePoliciesCommandOutput as ListCachePoliciesResponse,
@@ -94,6 +97,12 @@ declare interface AwsLiteCloudFront {
   CreateKeyValueStore: (input: { Name: string, ImportSource?: Record<string, any>, Comment?: string }) => Promise<CreateKeyValueStoreResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateMonitoringSubscription.html CloudFront: CreateMonitoringSubscription}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateMonitoringSubscription CloudFront: CreateMonitoringSubscription}
+   */
+  CreateMonitoringSubscription: (input: { DistributionId: string, MonitoringSubscription: Record<string, any> }) => Promise<CreateMonitoringSubscriptionResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html CloudFront: CreatePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreatePublicKey CloudFront: CreatePublicKey}
    */
@@ -134,6 +143,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteKeyValueStore CloudFront: DeleteKeyValueStore}
    */
   DeleteKeyValueStore: (input: { Name: string, IfMatch: string }) => Promise<DeleteKeyValueStoreResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteMonitoringSubscription.html CloudFront: DeleteMonitoringSubscription}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteMonitoringSubscription CloudFront: DeleteMonitoringSubscription}
+   */
+  DeleteMonitoringSubscription: (input: { DistributionId: string }) => Promise<DeleteMonitoringSubscriptionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html CloudFront: DeletePublicKey}
@@ -206,6 +221,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetKeyGroupConfig CloudFront: GetKeyGroupConfig}
    */
   GetKeyGroupConfig: (input: { Id: string }) => Promise<GetKeyGroupConfigResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html CloudFront: GetMonitoringSubscription}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetMonitoringSubscription CloudFront: GetMonitoringSubscription}
+   */
+  GetMonitoringSubscription: (input: { DistributionId: string }) => Promise<GetMonitoringSubscriptionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetPublicKey.html CloudFront: GetPublicKey}
@@ -328,6 +349,7 @@ export type {
   CreateInvalidationResponse,
   CreateKeyGroupResponse,
   CreateKeyValueStoreResponse,
+  CreateMonitoringSubscriptionResponse,
   CreatePublicKeyResponse,
   DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityResponse,
@@ -335,6 +357,7 @@ export type {
   DeleteFunctionResponse,
   DeleteKeyGroupResponse,
   DeleteKeyValueStoreResponse,
+  DeleteMonitoringSubscriptionResponse,
   DeletePublicKeyResponse,
   DescribeFunctionResponse,
   DescribeKeyValueStoreResponse,
@@ -347,6 +370,7 @@ export type {
   GetFunctionResponse,
   GetKeyGroupResponse,
   GetKeyGroupConfigResponse,
+  GetMonitoringSubscriptionResponse,
   GetPublicKeyResponse,
   GetPublicKeyConfigResponse,
   ListCachePoliciesResponse,

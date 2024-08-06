@@ -113,6 +113,18 @@ Properties:
   - Comment for the key value store
 
 
+### `CreateMonitoringSubscription`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateMonitoringSubscription.html)
+
+Properties:
+- **`DistributionId` (string) [required]**
+  - Distribution ID
+- **`MonitoringSubscription` (object) [required]**
+  - Configuration for additional metrics
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_RealtimeMetricsSubscriptionConfig.html)
+
+
 ### `CreatePublicKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html)
@@ -187,6 +199,15 @@ Properties:
   - User assigned name for the resource
 - **`IfMatch` (string) [required]**
   - Value of previous `GetDistribution` call's `ETag` property
+
+
+### `DeleteMonitoringSubscription`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteMonitoringSubscription.html)
+
+Properties:
+- **`DistributionId` (string) [required]**
+  - Distribution ID
 
 
 ### `DeletePublicKey`
@@ -301,6 +322,15 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - The resource ID
+
+
+### `GetMonitoringSubscription`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html)
+
+Properties:
+- **`DistributionId` (string) [required]**
+  - Distribution ID
 
 
 ### `GetPublicKey`
@@ -542,7 +572,6 @@ Properties:
 - [`CreateContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateContinuousDeploymentPolicy.html)
 - [`CreateDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html)
 - [`CreateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionConfig.html)
-- [`CreateMonitoringSubscription`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateMonitoringSubscription.html)
 - [`CreateOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginAccessControl.html)
 - [`CreateOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginRequestPolicy.html)
 - [`CreateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateRealtimeLogConfig.html)
@@ -551,7 +580,6 @@ Properties:
 - [`CreateStreamingDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistributionWithTags.html)
 - [`DeleteContinuousDeploymentPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteContinuousDeploymentPolicy.html)
 - [`DeleteFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionConfig.html)
-- [`DeleteMonitoringSubscription`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteMonitoringSubscription.html)
 - [`DeleteOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginAccessControl.html)
 - [`DeleteOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginRequestPolicy.html)
 - [`DeleteRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteRealtimeLogConfig.html)
@@ -564,7 +592,6 @@ Properties:
 - [`GetFieldLevelEncryptionProfile`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionProfile.html)
 - [`GetFieldLevelEncryptionProfileConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionProfileConfig.html)
 - [`GetInvalidation`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html)
-- [`GetMonitoringSubscription`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html)
 - [`GetOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControl.html)
 - [`GetOriginAccessControlConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControlConfig.html)
 - [`GetOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicy.html)
