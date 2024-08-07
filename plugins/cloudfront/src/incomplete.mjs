@@ -5,7 +5,6 @@ export default {
   CopyDistribution:                           { disabled, awsDoc: docRoot + 'API_CopyDistribution.html' },
   CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' },
   CreateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html' }, // TODO
-  CreateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html' }, // TODO
   CreateOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_CreateOriginAccessControl.html' },
   CreateOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_CreateOriginRequestPolicy.html' },
   CreateRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html' },
@@ -13,7 +12,6 @@ export default {
   CreateStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_CreateStreamingDistribution.html' },
   CreateStreamingDistributionWithTags:        { disabled, awsDoc: docRoot + 'API_CreateStreamingDistributionWithTags.html' },
   DeleteFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionConfig.html' },
-  DeleteFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html' }, // TODO
   DeleteOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_DeleteOriginAccessControl.html' },
   DeleteOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_DeleteOriginRequestPolicy.html' },
   DeleteRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_DeleteRealtimeLogConfig.html' },
@@ -21,8 +19,6 @@ export default {
   DeleteStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_DeleteStreamingDistribution.html' },
   GetFieldLevelEncryption:                    { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryption.html' },
   GetFieldLevelEncryptionConfig:              { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionConfig.html' },
-  GetFieldLevelEncryptionProfile:             { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfile.html' }, // TODO
-  GetFieldLevelEncryptionProfileConfig:       { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfileConfig.html' },
   GetInvalidation:                            { disabled, awsDoc: docRoot + 'API_GetInvalidation.html' },
   GetOriginAccessControl:                     { disabled, awsDoc: docRoot + 'API_GetOriginAccessControl.html' },
   GetOriginAccessControlConfig:               { disabled, awsDoc: docRoot + 'API_GetOriginAccessControlConfig.html' },
@@ -41,7 +37,6 @@ export default {
   ListDistributionsByResponseHeadersPolicyId: { disabled, awsDoc: docRoot + 'API_ListDistributionsByResponseHeadersPolicyId.html' },
   ListDistributionsByWebACLId:                { disabled, awsDoc: docRoot + 'API_ListDistributionsByWebACLId.html' },
   ListFieldLevelEncryptionConfigs:            { disabled, awsDoc: docRoot + 'API_ListFieldLevelEncryptionConfigs.html' },
-  ListFieldLevelEncryptionProfiles:           { disabled, awsDoc: docRoot + 'API_ListFieldLevelEncryptionProfiles.html' },
   ListInvalidations:                          { disabled, awsDoc: docRoot + 'API_ListInvalidations.html' },
   ListOriginAccessControls:                   { disabled, awsDoc: docRoot + 'API_ListOriginAccessControls.html' },
   ListOriginRequestPolicies:                  { disabled, awsDoc: docRoot + 'API_ListOriginRequestPolicies.html' },
@@ -54,7 +49,6 @@ export default {
   UntagResource:                              { disabled, awsDoc: docRoot + 'API_UntagResource.html' },
   UpdateDistributionWithStagingConfig:        { disabled, awsDoc: docRoot + 'API_UpdateDistributionWithStagingConfig.html' },
   UpdateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_UpdateFieldLevelEncryptionConfig.html' },
-  UpdateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_UpdateFieldLevelEncryptionProfile.html' },
   UpdateOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_UpdateOriginAccessControl.html' },
   UpdateOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_UpdateOriginRequestPolicy.html' },
   UpdateRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_UpdateRealtimeLogConfig.html' },

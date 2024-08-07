@@ -35,7 +35,7 @@ const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', r
 const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CachePolicyConfig.html' }
 const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration object', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
 // const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption config object', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
-// const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
+const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
 const DistributionId = { ...str, required, comment: 'Distribution ID' }
 const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
 
@@ -202,36 +202,31 @@ const CreateDistribution = {
 //   }
 // }
 
-// const CreateFieldLevelEncryptionProfile = {
-//   awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html',
-//   validate: {
-//     FieldLevelEncryptionProfileConfig,
-//   },
-//   request: (params) => {
-//     const FieldLevelEncryptionProfileConfig = unarrayifyObject(params)
-//     console.dir(FieldLevelEncryptionProfileConfig, { depth: null })
-//     let { EncryptionEntity } = FieldLevelEncryptionProfileConfig.FieldLevelEncryptionProfileConfig.EncryptionEntities.Items
-//     if (!Array.isArray(EncryptionEntity)) EncryptionEntity = [ EncryptionEntity ]
-//     EncryptionEntity = unarrayifyObject(EncryptionEntity)
-//     FieldLevelEncryptionProfileConfig.FieldLevelEncryptionProfileConfig.EncryptionEntities.Items.EncryptionEntity = EncryptionEntity
-//     return {
-//       path: '/2020-05-31/field-level-encryption-profile',
-//       method: 'POST',
-//       headers: xml,
-//       xmlns,
-//       payload: FieldLevelEncryptionProfileConfig,
-//     }
-//   },
-//   response: ({ headers, payload }) => {
-//     const FieldLevelEncryptionProfile = arrayifyObject(payload)
-//     const { etag, location } = headers
-//     return {
-//       FieldLevelEncryptionProfile,
-//       ETag: etag,
-//       Location: location,
-//     }
-//   },
-// }
+const CreateFieldLevelEncryptionProfile = {
+  awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html',
+  validate: {
+    FieldLevelEncryptionProfileConfig,
+  },
+  request: (params) => {
+    const FieldLevelEncryptionProfileConfig = unarrayifyObject(params)
+    return {
+      path: '/2020-05-31/field-level-encryption-profile',
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: FieldLevelEncryptionProfileConfig,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const FieldLevelEncryptionProfile = arrayifyObject(payload)
+    const { etag, location } = headers
+    return {
+      FieldLevelEncryptionProfile,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
 
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
@@ -452,21 +447,21 @@ const DeleteDistribution = {
   response: () => ({}),
 }
 
-// const DeleteFieldLevelEncryptionProfile = {
-//   awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html',
-//   validate: {
-//     Id,
-//     IfMatch: { ...IfMatch, required },
-//   },
-//   request: ({ Name, IfMatch }) => {
-//     return {
-//       path: `/2020-05-31/field-level-encryption-profile/${Name}`,
-//       method: 'DELETE',
-//       headers: { 'if-match': IfMatch },
-//     }
-//   },
-//   response: defaultResponse,
-// }
+const DeleteFieldLevelEncryptionProfile = {
+  awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html',
+  validate: {
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ Id, IfMatch }) => {
+    return {
+      path: `/2020-05-31/field-level-encryption-profile/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
 
 const DeleteFunction = {
   awsDoc: docRoot + 'API_DeleteFunction.html',
@@ -739,28 +734,46 @@ const GetDistributionConfig = {
   },
 }
 
-// const GetFieldLevelEncryptionProfile = {
-//   awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfile.html',
-//   validate: {
-//     Id,
-//   },
-//   request: (params) => {
-//     return {
-//       path: `/2020-05-31/field-level-encryption-profile/${Id}`,
-//     }
-//   },
-//   response: ({ headers, payload }) => {
-//     const arrayProperties = new Set([ 'Items' ])
-//     const { etag } = headers
-//     const FieldLevelEncryptionProfile = arrayifyObject(payload)
-//     return {
-//       FieldLevelEncryptionConfig,
-//       ETag: etag,
-//     }
-//   },
-// }
+const GetFieldLevelEncryptionProfile = {
+  awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfile.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/field-level-encryption-profile/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const FieldLevelEncryptionProfile = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      FieldLevelEncryptionProfile,
+      ETag: etag,
+    }
+  },
+}
 
-// TODO: confirm response
+const GetFieldLevelEncryptionProfileConfig = {
+  awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfileConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/field-level-encryption-profile/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const FieldLevelEncryptionProfileConfig = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      FieldLevelEncryptionProfileConfig,
+      ETag: etag,
+    }
+  },
+}
+
 const GetFunction = {
   awsDoc: docRoot + 'API_GetFunction.html',
   validate: {
@@ -992,6 +1005,34 @@ const ListDistributions = {
     const DistributionList = arrayifyItemsProp(payload)
     DistributionList.Items = DistributionList.Items.map(i => arrayifyObject(i))
     return maybeAddETag({ DistributionList }, headers)
+  },
+}
+
+const ListFieldLevelEncryptionProfiles = {
+  awsDoc: docRoot + 'API_ListFieldLevelEncryptionProfiles.html',
+  validate: {
+    Marker: { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' },
+    MaxItems: { ...num, comment: 'Maximum number of items to return' },
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/field-level-encryption-profile`,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.FieldLevelEncryptionProfileSummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const FieldLevelEncryptionProfileList = arrayifyItemsProp(payload)
+    FieldLevelEncryptionProfileList.Items = FieldLevelEncryptionProfileList.Items.map(i => arrayifyObject(i))
+    return { FieldLevelEncryptionProfileList }
   },
 }
 
@@ -1238,6 +1279,33 @@ const UpdateDistribution = {
   },
 }
 
+const UpdateFieldLevelEncryptionProfile = {
+  awsDoc: docRoot + 'API_UpdateFieldLevelEncryptionProfile.html',
+  validate: {
+    FieldLevelEncryptionProfileConfig,
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ FieldLevelEncryptionProfileConfig, Id, IfMatch }) => {
+    FieldLevelEncryptionProfileConfig = unarrayifyObject(FieldLevelEncryptionProfileConfig)
+    return {
+      path: `/2020-05-31/field-level-encryption-profile/${Id}/config`,
+      method: 'PUT',
+      headers: { ...xml, 'if-match': IfMatch },
+      xmlns,
+      payload: { FieldLevelEncryptionProfileConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const FieldLevelEncryptionProfile = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      FieldLevelEncryptionProfile,
+      ETag: etag,
+    }
+  },
+}
+
 const UpdateFunction = {
   awsDoc: docRoot + 'API_UpdateFunction.html',
   validate: {
@@ -1355,7 +1423,7 @@ export default {
     CreateContinuousDeploymentPolicy,
     CreateDistribution,
     // CreateFieldLevelEncryptionConfig,
-    // CreateFieldLevelEncryptionProfile,
+    CreateFieldLevelEncryptionProfile,
     CreateFunction,
     CreateInvalidation,
     CreateKeyGroup,
@@ -1366,7 +1434,7 @@ export default {
     DeleteCloudFrontOriginAccessIdentity,
     DeleteContinuousDeploymentPolicy,
     DeleteDistribution,
-    // DeleteFieldLevelEncryptionProfile,
+    DeleteFieldLevelEncryptionProfile,
     DeleteFunction,
     DeleteKeyGroup,
     DeleteKeyValueStore,
@@ -1382,6 +1450,8 @@ export default {
     GetContinuousDeploymentPolicyConfig,
     GetDistribution,
     GetDistributionConfig,
+    GetFieldLevelEncryptionProfile,
+    GetFieldLevelEncryptionProfileConfig,
     GetFunction,
     GetKeyGroup,
     GetKeyGroupConfig,
@@ -1392,6 +1462,7 @@ export default {
     ListCloudFrontOriginAccessIdentities,
     ListContinuousDeploymentPolicies,
     ListDistributions,
+    ListFieldLevelEncryptionProfiles,
     ListFunctions,
     ListKeyGroups,
     ListKeyValueStores,
@@ -1401,6 +1472,7 @@ export default {
     UpdateCloudFrontOriginAccessIdentity,
     UpdateContinuousDeploymentPolicy,
     UpdateDistribution,
+    UpdateFieldLevelEncryptionProfile,
     UpdateFunction,
     UpdateKeyGroup,
     UpdateKeyValueStore,

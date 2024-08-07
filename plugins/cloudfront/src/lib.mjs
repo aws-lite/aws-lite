@@ -56,7 +56,9 @@ const arrayProperties = {
   'FieldLevelEncryptionConfig.QueryArgProfileConfig.QueryArgProfiles': 'QueryArgProfile',
   // FieldLevelEncryptionProfileConfig
   'FieldLevelEncryptionProfileConfig.EncryptionEntities': 'EncryptionEntity',
-  'FieldPatterns': 'FieldPattern',
+  'FieldLevelEncryptionProfileConfig.EncryptionEntities.Items.FieldPatterns': 'FieldPattern',
+  'EncryptionEntities': 'EncryptionEntity',
+  'EncryptionEntities.Items.FieldPatterns': 'FieldPattern',
   // ContinuousDeploymentPolicyConfig
   'StagingDistributionDnsNames': 'DnsName',
   'ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
@@ -115,6 +117,7 @@ function arrayifyObject (obj, lastPropertyPath, arraysList = arrayProperties) {
   return obj
 }
 
+// TODO: refactor to prevent mutating input
 // Specifically for unarrayifying distros to be re-serialized to XML (see: UpdateDistribution)
 function unarrayifyObject (obj, lastPropertyPath) {
   Object.entries(obj).forEach(([ key, value ]) => {

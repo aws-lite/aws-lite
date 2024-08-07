@@ -5,6 +5,7 @@ import {
   CreateCloudFrontOriginAccessIdentityCommandOutput as CreateCloudFrontOriginAccessIdentityResponse,
   CreateContinuousDeploymentPolicyCommandOutput as CreateContinuousDeploymentPolicyResponse,
   CreateDistributionCommandOutput as CreateDistributionResponse,
+  CreateFieldLevelEncryptionProfileCommandOutput as CreateFieldLevelEncryptionProfileResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
   CreateInvalidationCommandOutput as CreateInvalidationResponse,
   CreateKeyGroupCommandOutput as CreateKeyGroupResponse,
@@ -15,6 +16,7 @@ import {
   DeleteCloudFrontOriginAccessIdentityCommandOutput as DeleteCloudFrontOriginAccessIdentityResponse,
   DeleteContinuousDeploymentPolicyCommandOutput as DeleteContinuousDeploymentPolicyResponse,
   DeleteDistributionCommandOutput as DeleteDistributionResponse,
+  DeleteFieldLevelEncryptionProfileCommandOutput as DeleteFieldLevelEncryptionProfileResponse,
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DeleteKeyGroupCommandOutput as DeleteKeyGroupResponse,
   DeleteKeyValueStoreCommandOutput as DeleteKeyValueStoreResponse,
@@ -30,6 +32,8 @@ import {
   GetContinuousDeploymentPolicyConfigCommandOutput as GetContinuousDeploymentPolicyConfigResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
+  GetFieldLevelEncryptionProfileCommandOutput as GetFieldLevelEncryptionProfileResponse,
+  GetFieldLevelEncryptionProfileConfigCommandOutput as GetFieldLevelEncryptionProfileConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
   GetKeyGroupCommandOutput as GetKeyGroupResponse,
   GetKeyGroupConfigCommandOutput as GetKeyGroupConfigResponse,
@@ -40,6 +44,7 @@ import {
   ListCloudFrontOriginAccessIdentitiesCommandOutput as ListCloudFrontOriginAccessIdentitiesResponse,
   ListContinuousDeploymentPoliciesCommandOutput as ListContinuousDeploymentPoliciesResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
+  ListFieldLevelEncryptionProfilesCommandOutput as ListFieldLevelEncryptionProfilesResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
   ListKeyGroupsCommandOutput as ListKeyGroupsResponse,
   ListKeyValueStoresCommandOutput as ListKeyValueStoresResponse,
@@ -49,6 +54,7 @@ import {
   UpdateCloudFrontOriginAccessIdentityCommandOutput as UpdateCloudFrontOriginAccessIdentityResponse,
   UpdateContinuousDeploymentPolicyCommandOutput as UpdateContinuousDeploymentPolicyResponse,
   UpdateDistributionCommandOutput as UpdateDistributionResponse,
+  UpdateFieldLevelEncryptionProfileCommandOutput as UpdateFieldLevelEncryptionProfileResponse,
   UpdateFunctionCommandOutput as UpdateFunctionResponse,
   UpdateKeyGroupCommandOutput as UpdateKeyGroupResponse,
   UpdateKeyValueStoreCommandOutput as UpdateKeyValueStoreResponse,
@@ -83,6 +89,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateDistribution CloudFront: CreateDistribution}
    */
   CreateDistribution: (input: { DistributionConfig: Record<string, any> }) => Promise<CreateDistributionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionProfile.html CloudFront: CreateFieldLevelEncryptionProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateFieldLevelEncryptionProfile CloudFront: CreateFieldLevelEncryptionProfile}
+   */
+  CreateFieldLevelEncryptionProfile: (input: { FieldLevelEncryptionProfileConfig: Record<string, any> }) => Promise<CreateFieldLevelEncryptionProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFunction.html CloudFront: CreateFunction}
@@ -143,6 +155,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteDistribution CloudFront: DeleteDistribution}
    */
   DeleteDistribution: (input: { Id: string, IfMatch?: string }) => Promise<DeleteDistributionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionProfile.html CloudFront: DeleteFieldLevelEncryptionProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteFieldLevelEncryptionProfile CloudFront: DeleteFieldLevelEncryptionProfile}
+   */
+  DeleteFieldLevelEncryptionProfile: (input: { Id: string, IfMatch: string }) => Promise<DeleteFieldLevelEncryptionProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFunction.html CloudFront: DeleteFunction}
@@ -235,6 +253,18 @@ declare interface AwsLiteCloudFront {
   GetDistributionConfig: (input: { Id: string }) => Promise<GetDistributionConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionProfile.html CloudFront: GetFieldLevelEncryptionProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetFieldLevelEncryptionProfile CloudFront: GetFieldLevelEncryptionProfile}
+   */
+  GetFieldLevelEncryptionProfile: (input: { Id: string }) => Promise<GetFieldLevelEncryptionProfileResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionProfileConfig.html CloudFront: GetFieldLevelEncryptionProfileConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetFieldLevelEncryptionProfileConfig CloudFront: GetFieldLevelEncryptionProfileConfig}
+   */
+  GetFieldLevelEncryptionProfileConfig: (input: { Id: string }) => Promise<GetFieldLevelEncryptionProfileConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFunction.html CloudFront: GetFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetFunction CloudFront: GetFunction}
    */
@@ -295,6 +325,12 @@ declare interface AwsLiteCloudFront {
   ListDistributions: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListDistributionsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFieldLevelEncryptionProfiles.html CloudFront: ListFieldLevelEncryptionProfiles}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListFieldLevelEncryptionProfiles CloudFront: ListFieldLevelEncryptionProfiles}
+   */
+  ListFieldLevelEncryptionProfiles: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListFieldLevelEncryptionProfilesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFunctions.html CloudFront: ListFunctions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListFunctions CloudFront: ListFunctions}
    */
@@ -349,6 +385,12 @@ declare interface AwsLiteCloudFront {
   UpdateDistribution: (input: { DistributionConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateDistributionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionProfile.html CloudFront: UpdateFieldLevelEncryptionProfile}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateFieldLevelEncryptionProfile CloudFront: UpdateFieldLevelEncryptionProfile}
+   */
+  UpdateFieldLevelEncryptionProfile: (input: { FieldLevelEncryptionProfileConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateFieldLevelEncryptionProfileResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFunction.html CloudFront: UpdateFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateFunction CloudFront: UpdateFunction}
    */
@@ -388,6 +430,7 @@ export type {
   CreateCloudFrontOriginAccessIdentityResponse,
   CreateContinuousDeploymentPolicyResponse,
   CreateDistributionResponse,
+  CreateFieldLevelEncryptionProfileResponse,
   CreateFunctionResponse,
   CreateInvalidationResponse,
   CreateKeyGroupResponse,
@@ -398,6 +441,7 @@ export type {
   DeleteCloudFrontOriginAccessIdentityResponse,
   DeleteContinuousDeploymentPolicyResponse,
   DeleteDistributionResponse,
+  DeleteFieldLevelEncryptionProfileResponse,
   DeleteFunctionResponse,
   DeleteKeyGroupResponse,
   DeleteKeyValueStoreResponse,
@@ -413,6 +457,8 @@ export type {
   GetContinuousDeploymentPolicyConfigResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
+  GetFieldLevelEncryptionProfileResponse,
+  GetFieldLevelEncryptionProfileConfigResponse,
   GetFunctionResponse,
   GetKeyGroupResponse,
   GetKeyGroupConfigResponse,
@@ -423,6 +469,7 @@ export type {
   ListCloudFrontOriginAccessIdentitiesResponse,
   ListContinuousDeploymentPoliciesResponse,
   ListDistributionsResponse,
+  ListFieldLevelEncryptionProfilesResponse,
   ListFunctionsResponse,
   ListKeyGroupsResponse,
   ListKeyValueStoresResponse,
@@ -432,6 +479,7 @@ export type {
   UpdateCloudFrontOriginAccessIdentityResponse,
   UpdateContinuousDeploymentPolicyResponse,
   UpdateDistributionResponse,
+  UpdateFieldLevelEncryptionProfileResponse,
   UpdateFunctionResponse,
   UpdateKeyGroupResponse,
   UpdateKeyValueStoreResponse,
