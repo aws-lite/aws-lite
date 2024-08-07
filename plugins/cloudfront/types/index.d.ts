@@ -136,7 +136,7 @@ declare interface AwsLiteCloudFront {
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteKeyGroup.html CloudFront: DeleteKeyGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteKeyGroup CloudFront: DeleteKeyGroup}
    */
-  DeleteKeyGroup: (input: { Name: string, IfMatch?: string }) => Promise<DeleteKeyGroupResponse>
+  DeleteKeyGroup: (input: { Id: string, IfMatch?: string }) => Promise<DeleteKeyGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteKeyValueStore.html CloudFront: DeleteKeyValueStore}

@@ -37,19 +37,29 @@ const arrayProperties = {
   'InvalidationBatch.Paths': 'Path',
   // Functions
   'FunctionConfig.KeyValueStoreAssociations': 'KeyValueStoreAssociation',
+  'FunctionSummary.FunctionConfig.KeyValueStoreAssociations': 'KeyValueStoreAssociation',
   // KeyGroups
   'KeyGroupConfig': 'PublicKey',
+  'KeyGroup.KeyGroupConfig': 'PublicKey',
   // CachePolicyConfigs
-  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
   'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
   'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
+  'ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  'ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
   // FieldLevelEncryptionConfig
   'FieldLevelEncryptionConfig.ContentTypeProfileConfig.ContentTypeProfiles': 'ContentTypeProfile',
   'FieldLevelEncryptionConfig.QueryArgProfileConfig.QueryArgProfiles': 'QueryArgProfile',
   // FieldLevelEncryptionProfileConfig
   'FieldLevelEncryptionProfileConfig.EncryptionEntities': 'EncryptionEntity',
   'FieldPatterns': 'FieldPattern',
-
+  // ContinuousDeploymentPolicyConfig
+  'StagingDistributionDnsNames': 'DnsName',
+  'ContinuousDeploymentPolicy.StagingDistributionDnsNames': 'DnsName',
 }
 
 const arrayifyItemsProp = obj => {
@@ -80,7 +90,6 @@ function getPropertyPath (obj, lastPropertyPath, key) {
 function arrayifyObject (obj, lastPropertyPath, arraysList = arrayProperties) {
   Object.entries(obj).forEach(([ key, value ]) => {
     const currentPropertyPath = getPropertyPath(obj, lastPropertyPath, key)
-
     // We've traversed into a property that should have an `Items` array
     if (arraysList[currentPropertyPath]) {
       obj[key] = arrayifyItemsProp(value)

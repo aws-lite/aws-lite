@@ -35,9 +35,9 @@ const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', r
 const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CachePolicyConfig.html' }
 const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration object', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
 // const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption config object', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
-const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
+// const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
 const DistributionId = { ...str, required, comment: 'Distribution ID' }
-
+// const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -73,7 +73,7 @@ const CreateCachePolicy = {
     }
   },
   response: ({ headers, payload }) => {
-    const CachePolicy = arrayifyItemsProp(payload)
+    const CachePolicy = arrayifyObject(payload)
     const { etag, location } = headers
     return {
       CachePolicy,
@@ -106,6 +106,32 @@ const CreateCloudFrontOriginAccessIdentity = {
     }
   },
 }
+
+// const CreateContinuousDeploymentPolicy = {
+//   awsDoc: docRoot + 'API_CreateContinuousDeploymentPolicy.html',
+//   validate: {
+//     ContinuousDeploymentPolicyConfig,
+//   },
+//   request: ({ ContinuousDeploymentPolicyConfig }) => {
+//     ContinuousDeploymentPolicyConfig = unarrayifyObject(ContinuousDeploymentPolicyConfig)
+//     return {
+//       path: `/2020-05-31/continuous-deployment-policy`,
+//       method: 'POST',
+//       headers: xml,
+//       xmlns,
+//       payload: { ContinuousDeploymentPolicyConfig },
+//     }
+//   },
+//   response: ({ headers, payload }) => {
+//     const ContinuousDeploymentPolicy = arrayifyObject(payload)
+//     const { etag, location } = headers
+//     return {
+//       ContinuousDeploymentPolicy,
+//       ETag: etag,
+//       Location: location,
+//     }
+//   },
+// }
 
 const CreateDistribution = {
   awsDoc: docRoot + 'API_CreateDistribution.html',
@@ -176,36 +202,36 @@ const CreateDistribution = {
 //   }
 // }
 
-const CreateFieldLevelEncryptionProfile = {
-  awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html',
-  validate: {
-    FieldLevelEncryptionProfileConfig,
-  },
-  request: (params) => {
-    const FieldLevelEncryptionProfileConfig = unarrayifyObject(params)
-    console.dir(FieldLevelEncryptionProfileConfig, { depth: null })
-    let { EncryptionEntity } = FieldLevelEncryptionProfileConfig.FieldLevelEncryptionProfileConfig.EncryptionEntities.Items
-    if (!Array.isArray(EncryptionEntity)) EncryptionEntity = [ EncryptionEntity ]
-    EncryptionEntity = unarrayifyObject(EncryptionEntity)
-    FieldLevelEncryptionProfileConfig.FieldLevelEncryptionProfileConfig.EncryptionEntities.Items.EncryptionEntity = EncryptionEntity
-    return {
-      path: '/2020-05-31/field-level-encryption-profile',
-      method: 'POST',
-      headers: xml,
-      xmlns,
-      payload: FieldLevelEncryptionProfileConfig,
-    }
-  },
-  response: ({ headers, payload }) => {
-    const FieldLevelEncryptionProfile = arrayifyObject(payload)
-    const { etag, location } = headers
-    return {
-      FieldLevelEncryptionProfile,
-      ETag: etag,
-      Location: location,
-    }
-  },
-}
+// const CreateFieldLevelEncryptionProfile = {
+//   awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html',
+//   validate: {
+//     FieldLevelEncryptionProfileConfig,
+//   },
+//   request: (params) => {
+//     const FieldLevelEncryptionProfileConfig = unarrayifyObject(params)
+//     console.dir(FieldLevelEncryptionProfileConfig, { depth: null })
+//     let { EncryptionEntity } = FieldLevelEncryptionProfileConfig.FieldLevelEncryptionProfileConfig.EncryptionEntities.Items
+//     if (!Array.isArray(EncryptionEntity)) EncryptionEntity = [ EncryptionEntity ]
+//     EncryptionEntity = unarrayifyObject(EncryptionEntity)
+//     FieldLevelEncryptionProfileConfig.FieldLevelEncryptionProfileConfig.EncryptionEntities.Items.EncryptionEntity = EncryptionEntity
+//     return {
+//       path: '/2020-05-31/field-level-encryption-profile',
+//       method: 'POST',
+//       headers: xml,
+//       xmlns,
+//       payload: FieldLevelEncryptionProfileConfig,
+//     }
+//   },
+//   response: ({ headers, payload }) => {
+//     const FieldLevelEncryptionProfile = arrayifyObject(payload)
+//     const { etag, location } = headers
+//     return {
+//       FieldLevelEncryptionProfile,
+//       ETag: etag,
+//       Location: location,
+//     }
+//   },
+// }
 
 const CreateFunction = {
   awsDoc: docRoot + 'API_CreateFunction.html',
@@ -282,12 +308,12 @@ const CreateKeyGroup = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag: ETag, location: Location } = headers
     const KeyGroup = arrayifyObject(payload)
+    const { etag: ETag, location: Location } = headers
     return {
       KeyGroup,
-      Location,
       ETag,
+      Location,
     }
   },
 }
@@ -352,6 +378,14 @@ const CreatePublicKey = {
       payload: params,
     }
   },
+  response: ({ headers, payload }) => {
+    const { etag, location } = headers
+    return {
+      PublicKey: payload,
+      ETag: etag,
+      Location: location,
+    }
+  },
 }
 
 const DeleteCachePolicy = {
@@ -402,21 +436,21 @@ const DeleteDistribution = {
   response: () => ({}),
 }
 
-const DeleteFieldLevelEncryptionProfile = {
-  awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html',
-  validate: {
-    Id,
-    IfMatch: { ...IfMatch, required },
-  },
-  request: ({ Name, IfMatch }) => {
-    return {
-      path: `/2020-05-31/field-level-encryption-profile/${Name}`,
-      method: 'DELETE',
-      headers: { 'if-match': IfMatch },
-    }
-  },
-  response: defaultResponse,
-}
+// const DeleteFieldLevelEncryptionProfile = {
+//   awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html',
+//   validate: {
+//     Id,
+//     IfMatch: { ...IfMatch, required },
+//   },
+//   request: ({ Name, IfMatch }) => {
+//     return {
+//       path: `/2020-05-31/field-level-encryption-profile/${Name}`,
+//       method: 'DELETE',
+//       headers: { 'if-match': IfMatch },
+//     }
+//   },
+//   response: defaultResponse,
+// }
 
 const DeleteFunction = {
   awsDoc: docRoot + 'API_DeleteFunction.html',
@@ -437,13 +471,13 @@ const DeleteFunction = {
 const DeleteKeyGroup = {
   awsDoc: docRoot + 'API_DeleteKeyGroup.html',
   validate: {
-    Name,
+    Id,
     IfMatch,
   },
-  request: ({ Name, IfMatch }) => {
+  request: ({ Id, IfMatch }) => {
     const headers = IfMatch ? { 'if-match': IfMatch } : {}
     return {
-      path: `/2020-05-31/key-value-store/${Name}`,
+      path: `/2020-05-31/key-group/${Id}`,
       method: 'DELETE',
       headers,
     }
@@ -721,7 +755,7 @@ const GetKeyGroupConfig = {
     }
   },
   response: ({ headers, payload }) => {
-    const KeyGroupConfig = arrayifyObject(payload)
+    const KeyGroupConfig = arrayifyItemsProp(payload)
     const { etag: ETag } = headers
     return {
       KeyGroupConfig,
@@ -877,7 +911,6 @@ const ListDistributions = {
   },
 }
 
-// TODO: confirm `KeyValueStoreAssociations.Items` get normalized correctly
 const ListFunctions = {
   awsDoc: docRoot + 'API_ListFunctions.html',
   validate: {
@@ -928,6 +961,7 @@ const ListKeyGroups = {
   },
   response: ({ payload }) => {
     const KeyGroupList = arrayifyItemsProp(payload)
+    KeyGroupList.Items = KeyGroupList.Items.map(i => arrayifyObject(i))
     return { KeyGroupList }
   },
 }
@@ -1012,8 +1046,7 @@ const TestFunction = {
     }
   },
   response: ({ payload }) => {
-    const arrayProperties = new Set([ 'Items', 'FunctionExecutionLogs' ])
-    const TestResult = normalizeResponse(payload, arrayProperties, 2)
+    const TestResult = arrayifyObject(payload)
     return { TestResult }
   },
 }
@@ -1103,26 +1136,19 @@ const UpdateFunction = {
     FunctionConfig,
   },
   request: (params) => {
-    let { FunctionCode, FunctionConfig, Name, IfMatch } = params
-    FunctionConfig = unarrayifyObject(FunctionConfig)
+    const { Name, IfMatch } = params
+    const UpdateFunctionRequest = unarrayifyObject(params)
     return {
       path: `/2020-05-31/function/${Name}`,
       method: 'PUT',
       headers: { ...xml, 'if-match': IfMatch },
       xmlns,
-      payload: {
-        UpdateFunctionRequest: {
-          FunctionCode,
-          FunctionConfig,
-          Name,
-        },
-      },
+      payload: { UpdateFunctionRequest },
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
+    const FunctionSummary = arrayifyObject(payload)
     const { ettag } = headers // wtf amazon
-    const FunctionSummary = normalizeResponse(payload, arrayProperties, 2)
     return {
       FunctionSummary,
       ETag: ettag,
@@ -1148,8 +1174,8 @@ const UpdateKeyGroup = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
     const KeyGroup = arrayifyObject(payload)
+    const { etag } = headers
     return {
       KeyGroup,
       ETag: etag,
@@ -1215,9 +1241,10 @@ export default {
   methods: {
     CreateCachePolicy,
     CreateCloudFrontOriginAccessIdentity,
+    // CreateContinuousDeploymentPolicy,
     CreateDistribution,
     // CreateFieldLevelEncryptionConfig,
-    CreateFieldLevelEncryptionProfile,
+    // CreateFieldLevelEncryptionProfile,
     CreateFunction,
     CreateInvalidation,
     CreateKeyGroup,
@@ -1227,7 +1254,7 @@ export default {
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
     DeleteDistribution,
-    DeleteFieldLevelEncryptionProfile,
+    // DeleteFieldLevelEncryptionProfile,
     DeleteFunction,
     DeleteKeyGroup,
     DeleteKeyValueStore,

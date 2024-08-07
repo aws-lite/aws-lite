@@ -7,8 +7,6 @@ export default {
   CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' },
   CreateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html' }, // TODO
   CreateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html' }, // TODO
-  // CreateKeyValueStore:                        { disabled, awsDoc: docRoot + 'API_CreateKeyValueStore.html' },
-  // CreateMonitoringSubscription:               { disabled, awsDoc: docRoot + 'API_CreateMonitoringSubscription.html' },
   CreateOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_CreateOriginAccessControl.html' },
   CreateOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_CreateOriginRequestPolicy.html' },
   CreateRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html' },
@@ -18,15 +16,11 @@ export default {
   DeleteContinuousDeploymentPolicy:           { disabled, awsDoc: docRoot + 'API_DeleteContinuousDeploymentPolicy.html' },
   DeleteFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionConfig.html' },
   DeleteFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html' }, // TODO
-  // DeleteKeyGroup:                             { disabled, awsDoc: docRoot + 'API_DeleteKeyGroup.html' },
-  // DeleteKeyValueStore:                        { disabled, awsDoc: docRoot + 'API_DeleteKeyValueStore.html' },
-  // DeleteMonitoringSubscription:               { disabled, awsDoc: docRoot + 'API_DeleteMonitoringSubscription.html' },
   DeleteOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_DeleteOriginAccessControl.html' },
   DeleteOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_DeleteOriginRequestPolicy.html' },
   DeleteRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_DeleteRealtimeLogConfig.html' },
   DeleteResponseHeadersPolicy:                { disabled, awsDoc: docRoot + 'API_DeleteResponseHeadersPolicy.html' },
   DeleteStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_DeleteStreamingDistribution.html' },
-  // DescribeKeyValueStore:                      { disabled, awsDoc: docRoot + 'API_DescribeKeyValueStore.html' },
   GetContinuousDeploymentPolicy:              { disabled, awsDoc: docRoot + 'API_GetContinuousDeploymentPolicy.html' },
   GetContinuousDeploymentPolicyConfig:        { disabled, awsDoc: docRoot + 'API_GetContinuousDeploymentPolicyConfig.html' },
   GetFieldLevelEncryption:                    { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryption.html' },
@@ -34,9 +28,6 @@ export default {
   GetFieldLevelEncryptionProfile:             { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfile.html' }, // TODO
   GetFieldLevelEncryptionProfileConfig:       { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfileConfig.html' },
   GetInvalidation:                            { disabled, awsDoc: docRoot + 'API_GetInvalidation.html' },
-  // GetKeyGroup:                                { disabled, awsDoc: docRoot + 'API_GetKeyGroup.html' },
-  // GetKeyGroupConfig:                          { disabled, awsDoc: docRoot + 'API_GetKeyGroupConfig.html' },
-  // GetMonitoringSubscription:                  { disabled, awsDoc: docRoot + 'API_GetMonitoringSubscription.html' },
   GetOriginAccessControl:                     { disabled, awsDoc: docRoot + 'API_GetOriginAccessControl.html' },
   GetOriginAccessControlConfig:               { disabled, awsDoc: docRoot + 'API_GetOriginAccessControlConfig.html' },
   GetOriginRequestPolicy:                     { disabled, awsDoc: docRoot + 'API_GetOriginRequestPolicy.html' },
@@ -56,10 +47,7 @@ export default {
   ListDistributionsByWebACLId:                { disabled, awsDoc: docRoot + 'API_ListDistributionsByWebACLId.html' },
   ListFieldLevelEncryptionConfigs:            { disabled, awsDoc: docRoot + 'API_ListFieldLevelEncryptionConfigs.html' },
   ListFieldLevelEncryptionProfiles:           { disabled, awsDoc: docRoot + 'API_ListFieldLevelEncryptionProfiles.html' },
-  // ListFunctions:                              { disabled, awsDoc: docRoot + 'API_ListFunctions.html' }, // TODO: test response
   ListInvalidations:                          { disabled, awsDoc: docRoot + 'API_ListInvalidations.html' },
-  // ListKeyGroups:                              { disabled, awsDoc: docRoot + 'API_ListKeyGroups.html' },
-  // ListKeyValueStores:                         { disabled, awsDoc: docRoot + 'API_ListKeyValueStores.html' },
   ListOriginAccessControls:                   { disabled, awsDoc: docRoot + 'API_ListOriginAccessControls.html' },
   ListOriginRequestPolicies:                  { disabled, awsDoc: docRoot + 'API_ListOriginRequestPolicies.html' },
   ListRealtimeLogConfigs:                     { disabled, awsDoc: docRoot + 'API_ListRealtimeLogConfigs.html' },
@@ -68,15 +56,11 @@ export default {
   ListTagsForResource:                        { disabled, awsDoc: docRoot + 'API_ListTagsForResource.html' },
   PublishFunction:                            { disabled, awsDoc: docRoot + 'API_PublishFunction.html' },
   TagResource:                                { disabled, awsDoc: docRoot + 'API_TagResource.html' },
-  // TestFunction:                               { disabled, awsDoc: docRoot + 'API_TestFunction.html' }, // TODO: test response
   UntagResource:                              { disabled, awsDoc: docRoot + 'API_UntagResource.html' },
   UpdateContinuousDeploymentPolicy:           { disabled, awsDoc: docRoot + 'API_UpdateContinuousDeploymentPolicy.html' },
   UpdateDistributionWithStagingConfig:        { disabled, awsDoc: docRoot + 'API_UpdateDistributionWithStagingConfig.html' },
   UpdateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_UpdateFieldLevelEncryptionConfig.html' },
   UpdateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_UpdateFieldLevelEncryptionProfile.html' },
-  // UpdateFunction:                             { disabled, awsDoc: docRoot + 'API_UpdateFunction.html' }, // TODO: test response
-  // UpdateKeyGroup:                             { disabled, awsDoc: docRoot + 'API_UpdateKeyGroup.html' },
-  // UpdateKeyValueStore:                        { disabled, awsDoc: docRoot + 'API_UpdateKeyValueStore.html' },
   UpdateOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_UpdateOriginAccessControl.html' },
   UpdateOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_UpdateOriginRequestPolicy.html' },
   UpdateRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_UpdateRealtimeLogConfig.html' },
