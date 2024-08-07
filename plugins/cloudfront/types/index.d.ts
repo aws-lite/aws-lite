@@ -3,6 +3,7 @@ import {
   // $IMPORTS_START
   CreateCachePolicyCommandOutput as CreateCachePolicyResponse,
   CreateCloudFrontOriginAccessIdentityCommandOutput as CreateCloudFrontOriginAccessIdentityResponse,
+  CreateContinuousDeploymentPolicyCommandOutput as CreateContinuousDeploymentPolicyResponse,
   CreateDistributionCommandOutput as CreateDistributionResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
   CreateInvalidationCommandOutput as CreateInvalidationResponse,
@@ -12,6 +13,7 @@ import {
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
   DeleteCachePolicyCommandOutput as DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityCommandOutput as DeleteCloudFrontOriginAccessIdentityResponse,
+  DeleteContinuousDeploymentPolicyCommandOutput as DeleteContinuousDeploymentPolicyResponse,
   DeleteDistributionCommandOutput as DeleteDistributionResponse,
   DeleteFunctionCommandOutput as DeleteFunctionResponse,
   DeleteKeyGroupCommandOutput as DeleteKeyGroupResponse,
@@ -24,6 +26,8 @@ import {
   GetCachePolicyConfigCommandOutput as GetCachePolicyConfigResponse,
   GetCloudFrontOriginAccessIdentityCommandOutput as GetCloudFrontOriginAccessIdentityResponse,
   GetCloudFrontOriginAccessIdentityConfigCommandOutput as GetCloudFrontOriginAccessIdentityConfigResponse,
+  GetContinuousDeploymentPolicyCommandOutput as GetContinuousDeploymentPolicyResponse,
+  GetContinuousDeploymentPolicyConfigCommandOutput as GetContinuousDeploymentPolicyConfigResponse,
   GetDistributionCommandOutput as GetDistributionResponse,
   GetDistributionConfigCommandOutput as GetDistributionConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
@@ -34,6 +38,7 @@ import {
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
   ListCachePoliciesCommandOutput as ListCachePoliciesResponse,
   ListCloudFrontOriginAccessIdentitiesCommandOutput as ListCloudFrontOriginAccessIdentitiesResponse,
+  ListContinuousDeploymentPoliciesCommandOutput as ListContinuousDeploymentPoliciesResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
   ListKeyGroupsCommandOutput as ListKeyGroupsResponse,
@@ -42,6 +47,7 @@ import {
   TestFunctionCommandOutput as TestFunctionResponse,
   UpdateCachePolicyCommandOutput as UpdateCachePolicyResponse,
   UpdateCloudFrontOriginAccessIdentityCommandOutput as UpdateCloudFrontOriginAccessIdentityResponse,
+  UpdateContinuousDeploymentPolicyCommandOutput as UpdateContinuousDeploymentPolicyResponse,
   UpdateDistributionCommandOutput as UpdateDistributionResponse,
   UpdateFunctionCommandOutput as UpdateFunctionResponse,
   UpdateKeyGroupCommandOutput as UpdateKeyGroupResponse,
@@ -65,6 +71,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateCloudFrontOriginAccessIdentity CloudFront: CreateCloudFrontOriginAccessIdentity}
    */
   CreateCloudFrontOriginAccessIdentity: (input: { CloudFrontOriginAccessIdentityConfig: Record<string, any> }) => Promise<CreateCloudFrontOriginAccessIdentityResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateContinuousDeploymentPolicy.html CloudFront: CreateContinuousDeploymentPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateContinuousDeploymentPolicy CloudFront: CreateContinuousDeploymentPolicy}
+   */
+  CreateContinuousDeploymentPolicy: (input: { ContinuousDeploymentPolicyConfig: Record<string, any> }) => Promise<CreateContinuousDeploymentPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html CloudFront: CreateDistribution}
@@ -119,6 +131,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteCloudFrontOriginAccessIdentity CloudFront: DeleteCloudFrontOriginAccessIdentity}
    */
   DeleteCloudFrontOriginAccessIdentity: (input: { Id: string, IfMatch: string }) => Promise<DeleteCloudFrontOriginAccessIdentityResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteContinuousDeploymentPolicy.html CloudFront: DeleteContinuousDeploymentPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteContinuousDeploymentPolicy CloudFront: DeleteContinuousDeploymentPolicy}
+   */
+  DeleteContinuousDeploymentPolicy: (input: { Id: string, IfMatch: string }) => Promise<DeleteContinuousDeploymentPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html CloudFront: DeleteDistribution}
@@ -193,6 +211,18 @@ declare interface AwsLiteCloudFront {
   GetCloudFrontOriginAccessIdentityConfig: (input: { Id: string }) => Promise<GetCloudFrontOriginAccessIdentityConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetContinuousDeploymentPolicy.html CloudFront: GetContinuousDeploymentPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetContinuousDeploymentPolicy CloudFront: GetContinuousDeploymentPolicy}
+   */
+  GetContinuousDeploymentPolicy: (input: { Id: string }) => Promise<GetContinuousDeploymentPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetContinuousDeploymentPolicyConfig.html CloudFront: GetContinuousDeploymentPolicyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetContinuousDeploymentPolicyConfig CloudFront: GetContinuousDeploymentPolicyConfig}
+   */
+  GetContinuousDeploymentPolicyConfig: (input: { Id: string }) => Promise<GetContinuousDeploymentPolicyConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistribution.html CloudFront: GetDistribution}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetDistribution CloudFront: GetDistribution}
    */
@@ -253,6 +283,12 @@ declare interface AwsLiteCloudFront {
   ListCloudFrontOriginAccessIdentities: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListCloudFrontOriginAccessIdentitiesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListContinuousDeploymentPolicies.html CloudFront: ListContinuousDeploymentPolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListContinuousDeploymentPolicies CloudFront: ListContinuousDeploymentPolicies}
+   */
+  ListContinuousDeploymentPolicies: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListContinuousDeploymentPoliciesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html CloudFront: ListDistributions}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListDistributions CloudFront: ListDistributions}
    */
@@ -301,6 +337,12 @@ declare interface AwsLiteCloudFront {
   UpdateCloudFrontOriginAccessIdentity: (input: { CloudFrontOriginAccessIdentityConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateCloudFrontOriginAccessIdentityResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateContinuousDeploymentPolicy.html CloudFront: UpdateContinuousDeploymentPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateContinuousDeploymentPolicy CloudFront: UpdateContinuousDeploymentPolicy}
+   */
+  UpdateContinuousDeploymentPolicy: (input: { ContinuousDeploymentPolicyConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateContinuousDeploymentPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html CloudFront: UpdateDistribution}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateDistribution CloudFront: UpdateDistribution}
    */
@@ -344,6 +386,7 @@ export type {
   // $EXPORT_START
   CreateCachePolicyResponse,
   CreateCloudFrontOriginAccessIdentityResponse,
+  CreateContinuousDeploymentPolicyResponse,
   CreateDistributionResponse,
   CreateFunctionResponse,
   CreateInvalidationResponse,
@@ -353,6 +396,7 @@ export type {
   CreatePublicKeyResponse,
   DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityResponse,
+  DeleteContinuousDeploymentPolicyResponse,
   DeleteDistributionResponse,
   DeleteFunctionResponse,
   DeleteKeyGroupResponse,
@@ -365,6 +409,8 @@ export type {
   GetCachePolicyConfigResponse,
   GetCloudFrontOriginAccessIdentityResponse,
   GetCloudFrontOriginAccessIdentityConfigResponse,
+  GetContinuousDeploymentPolicyResponse,
+  GetContinuousDeploymentPolicyConfigResponse,
   GetDistributionResponse,
   GetDistributionConfigResponse,
   GetFunctionResponse,
@@ -375,6 +421,7 @@ export type {
   GetPublicKeyConfigResponse,
   ListCachePoliciesResponse,
   ListCloudFrontOriginAccessIdentitiesResponse,
+  ListContinuousDeploymentPoliciesResponse,
   ListDistributionsResponse,
   ListFunctionsResponse,
   ListKeyGroupsResponse,
@@ -383,6 +430,7 @@ export type {
   TestFunctionResponse,
   UpdateCachePolicyResponse,
   UpdateCloudFrontOriginAccessIdentityResponse,
+  UpdateContinuousDeploymentPolicyResponse,
   UpdateDistributionResponse,
   UpdateFunctionResponse,
   UpdateKeyGroupResponse,

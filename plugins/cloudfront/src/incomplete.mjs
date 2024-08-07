@@ -3,7 +3,6 @@ const docRoot = 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/'
 export default {
   AssociateAlias:                             { disabled, awsDoc: docRoot + 'API_AssociateAlias.html' },
   CopyDistribution:                           { disabled, awsDoc: docRoot + 'API_CopyDistribution.html' },
-  CreateContinuousDeploymentPolicy:           { disabled, awsDoc: docRoot + 'API_CreateContinuousDeploymentPolicy.html' },
   CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' },
   CreateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html' }, // TODO
   CreateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_CreateFieldLevelEncryptionProfile.html' }, // TODO
@@ -13,7 +12,6 @@ export default {
   CreateResponseHeadersPolicy:                { disabled, awsDoc: docRoot + 'API_CreateResponseHeadersPolicy.html' },
   CreateStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_CreateStreamingDistribution.html' },
   CreateStreamingDistributionWithTags:        { disabled, awsDoc: docRoot + 'API_CreateStreamingDistributionWithTags.html' },
-  DeleteContinuousDeploymentPolicy:           { disabled, awsDoc: docRoot + 'API_DeleteContinuousDeploymentPolicy.html' },
   DeleteFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionConfig.html' },
   DeleteFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html' }, // TODO
   DeleteOriginAccessControl:                  { disabled, awsDoc: docRoot + 'API_DeleteOriginAccessControl.html' },
@@ -21,8 +19,6 @@ export default {
   DeleteRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_DeleteRealtimeLogConfig.html' },
   DeleteResponseHeadersPolicy:                { disabled, awsDoc: docRoot + 'API_DeleteResponseHeadersPolicy.html' },
   DeleteStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_DeleteStreamingDistribution.html' },
-  GetContinuousDeploymentPolicy:              { disabled, awsDoc: docRoot + 'API_GetContinuousDeploymentPolicy.html' },
-  GetContinuousDeploymentPolicyConfig:        { disabled, awsDoc: docRoot + 'API_GetContinuousDeploymentPolicyConfig.html' },
   GetFieldLevelEncryption:                    { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryption.html' },
   GetFieldLevelEncryptionConfig:              { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionConfig.html' },
   GetFieldLevelEncryptionProfile:             { disabled, awsDoc: docRoot + 'API_GetFieldLevelEncryptionProfile.html' }, // TODO
@@ -38,7 +34,6 @@ export default {
   GetStreamingDistribution:                   { disabled, awsDoc: docRoot + 'API_GetStreamingDistribution.html' },
   GetStreamingDistributionConfig:             { disabled, awsDoc: docRoot + 'API_GetStreamingDistributionConfig.html' },
   ListConflictingAliases:                     { disabled, awsDoc: docRoot + 'API_ListConflictingAliases.html' },
-  ListContinuousDeploymentPolicies:           { disabled, awsDoc: docRoot + 'API_ListContinuousDeploymentPolicies.html' },
   ListDistributionsByCachePolicyId:           { disabled, awsDoc: docRoot + 'API_ListDistributionsByCachePolicyId.html' },
   ListDistributionsByKeyGroup:                { disabled, awsDoc: docRoot + 'API_ListDistributionsByKeyGroup.html' },
   ListDistributionsByOriginRequestPolicyId:   { disabled, awsDoc: docRoot + 'API_ListDistributionsByOriginRequestPolicyId.html' },
@@ -57,7 +52,6 @@ export default {
   PublishFunction:                            { disabled, awsDoc: docRoot + 'API_PublishFunction.html' },
   TagResource:                                { disabled, awsDoc: docRoot + 'API_TagResource.html' },
   UntagResource:                              { disabled, awsDoc: docRoot + 'API_UntagResource.html' },
-  UpdateContinuousDeploymentPolicy:           { disabled, awsDoc: docRoot + 'API_UpdateContinuousDeploymentPolicy.html' },
   UpdateDistributionWithStagingConfig:        { disabled, awsDoc: docRoot + 'API_UpdateDistributionWithStagingConfig.html' },
   UpdateFieldLevelEncryptionConfig:           { disabled, awsDoc: docRoot + 'API_UpdateFieldLevelEncryptionConfig.html' },
   UpdateFieldLevelEncryptionProfile:          { disabled, awsDoc: docRoot + 'API_UpdateFieldLevelEncryptionProfile.html' },

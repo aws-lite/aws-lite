@@ -59,7 +59,8 @@ const arrayProperties = {
   'FieldPatterns': 'FieldPattern',
   // ContinuousDeploymentPolicyConfig
   'StagingDistributionDnsNames': 'DnsName',
-  'ContinuousDeploymentPolicy.StagingDistributionDnsNames': 'DnsName',
+  'ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
+  'ContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
 }
 
 const arrayifyItemsProp = obj => {

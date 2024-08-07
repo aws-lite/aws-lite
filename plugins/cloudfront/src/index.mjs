@@ -37,7 +37,7 @@ const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Compl
 // const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption config object', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
 // const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
 const DistributionId = { ...str, required, comment: 'Distribution ID' }
-// const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
+const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -107,31 +107,31 @@ const CreateCloudFrontOriginAccessIdentity = {
   },
 }
 
-// const CreateContinuousDeploymentPolicy = {
-//   awsDoc: docRoot + 'API_CreateContinuousDeploymentPolicy.html',
-//   validate: {
-//     ContinuousDeploymentPolicyConfig,
-//   },
-//   request: ({ ContinuousDeploymentPolicyConfig }) => {
-//     ContinuousDeploymentPolicyConfig = unarrayifyObject(ContinuousDeploymentPolicyConfig)
-//     return {
-//       path: `/2020-05-31/continuous-deployment-policy`,
-//       method: 'POST',
-//       headers: xml,
-//       xmlns,
-//       payload: { ContinuousDeploymentPolicyConfig },
-//     }
-//   },
-//   response: ({ headers, payload }) => {
-//     const ContinuousDeploymentPolicy = arrayifyObject(payload)
-//     const { etag, location } = headers
-//     return {
-//       ContinuousDeploymentPolicy,
-//       ETag: etag,
-//       Location: location,
-//     }
-//   },
-// }
+const CreateContinuousDeploymentPolicy = {
+  awsDoc: docRoot + 'API_CreateContinuousDeploymentPolicy.html',
+  validate: {
+    ContinuousDeploymentPolicyConfig,
+  },
+  request: (params) => {
+    const ContinuousDeploymentPolicyConfig = unarrayifyObject(params)
+    return {
+      path: `/2020-05-31/continuous-deployment-policy`,
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: ContinuousDeploymentPolicyConfig,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const ContinuousDeploymentPolicy = arrayifyObject(payload)
+    const { etag, location } = headers
+    return {
+      ContinuousDeploymentPolicy,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
 
 const CreateDistribution = {
   awsDoc: docRoot + 'API_CreateDistribution.html',
@@ -412,7 +412,23 @@ const DeleteCloudFrontOriginAccessIdentity = {
   },
   request: ({ Id, IfMatch }) => {
     return {
-      path: `//2020-05-31/origin-access-identity/cloudfront/${Id}`,
+      path: `/2020-05-31/origin-access-identity/cloudfront/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
+const DeleteContinuousDeploymentPolicy = {
+  awsDoc: docRoot + 'API_DeleteContinuousDeploymentPolicy.html',
+  validate: {
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ Id, IfMatch }) => {
+    return {
+      path: `/2020-05-31/continuous-deployment-policy/${Id}`,
       method: 'DELETE',
       headers: { 'if-match': IfMatch },
     }
@@ -649,6 +665,46 @@ const GetCloudFrontOriginAccessIdentityConfig = {
   },
 }
 
+const GetContinuousDeploymentPolicy = {
+  awsDoc: docRoot + 'API_GetContinuousDeploymentPolicy.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/continuous-deployment-policy/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const ContinuousDeploymentPolicy = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      ContinuousDeploymentPolicy,
+      ETag: etag,
+    }
+  },
+}
+
+const GetContinuousDeploymentPolicyConfig = {
+  awsDoc: docRoot + 'API_GetContinuousDeploymentPolicyConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/continuous-deployment-policy/${Id}/config`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const ContinuousDeploymentPolicyConfig = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      ContinuousDeploymentPolicyConfig,
+      ETag: etag,
+    }
+  },
+}
+
 const GetDistribution = {
   awsDoc: docRoot + 'API_GetDistribution.html',
   validate: {
@@ -870,6 +926,34 @@ const ListCloudFrontOriginAccessIdentities = {
   response: ({ payload }) => {
     const CloudFrontOriginAccessIdentityList = arrayifyItemsProp(payload)
     return { CloudFrontOriginAccessIdentityList }
+  },
+}
+
+const ListContinuousDeploymentPolicies = {
+  awsDoc: docRoot + 'API_ListContinuousDeploymentPolicies.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/continuous-deployment-policy`,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.ContinuousDeploymentPolicySummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const ContinuousDeploymentPolicyList = arrayifyItemsProp(payload)
+    ContinuousDeploymentPolicyList.Items = ContinuousDeploymentPolicyList.Items.map(i => arrayifyObject(i))
+    return { ContinuousDeploymentPolicyList }
   },
 }
 
@@ -1104,6 +1188,33 @@ const UpdateCloudFrontOriginAccessIdentity = {
   },
 }
 
+const UpdateContinuousDeploymentPolicy = {
+  awsDoc: docRoot + 'API_UpdateContinuousDeploymentPolicy.html',
+  validate: {
+    ContinuousDeploymentPolicyConfig,
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ ContinuousDeploymentPolicyConfig, Id, IfMatch }) => {
+    ContinuousDeploymentPolicyConfig = unarrayifyObject(ContinuousDeploymentPolicyConfig)
+    return {
+      path: `/2020-05-31/continuous-deployment-policy/${Id}`,
+      method: 'PUT',
+      headers: { ...xml, 'if-match': IfMatch },
+      xmlns,
+      payload: { ContinuousDeploymentPolicyConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const ContinuousDeploymentPolicy = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      ContinuousDeploymentPolicy,
+      ETag: etag,
+    }
+  },
+}
+
 const UpdateDistribution = {
   awsDoc: docRoot + 'API_UpdateDistribution.html',
   validate: {
@@ -1241,7 +1352,7 @@ export default {
   methods: {
     CreateCachePolicy,
     CreateCloudFrontOriginAccessIdentity,
-    // CreateContinuousDeploymentPolicy,
+    CreateContinuousDeploymentPolicy,
     CreateDistribution,
     // CreateFieldLevelEncryptionConfig,
     // CreateFieldLevelEncryptionProfile,
@@ -1253,6 +1364,7 @@ export default {
     CreatePublicKey,
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
+    DeleteContinuousDeploymentPolicy,
     DeleteDistribution,
     // DeleteFieldLevelEncryptionProfile,
     DeleteFunction,
@@ -1266,6 +1378,8 @@ export default {
     GetCachePolicyConfig,
     GetCloudFrontOriginAccessIdentity,
     GetCloudFrontOriginAccessIdentityConfig,
+    GetContinuousDeploymentPolicy,
+    GetContinuousDeploymentPolicyConfig,
     GetDistribution,
     GetDistributionConfig,
     GetFunction,
@@ -1276,6 +1390,7 @@ export default {
     GetPublicKeyConfig,
     ListCachePolicies,
     ListCloudFrontOriginAccessIdentities,
+    ListContinuousDeploymentPolicies,
     ListDistributions,
     ListFunctions,
     ListKeyGroups,
@@ -1284,6 +1399,7 @@ export default {
     TestFunction,
     UpdateCachePolicy,
     UpdateCloudFrontOriginAccessIdentity,
+    UpdateContinuousDeploymentPolicy,
     UpdateDistribution,
     UpdateFunction,
     UpdateKeyGroup,
