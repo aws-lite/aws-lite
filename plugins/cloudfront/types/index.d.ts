@@ -11,6 +11,7 @@ import {
   CreateKeyGroupCommandOutput as CreateKeyGroupResponse,
   CreateKeyValueStoreCommandOutput as CreateKeyValueStoreResponse,
   CreateMonitoringSubscriptionCommandOutput as CreateMonitoringSubscriptionResponse,
+  CreateOriginAccessControlCommandOutput as CreateOriginAccessControlResponse,
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
   DeleteCachePolicyCommandOutput as DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityCommandOutput as DeleteCloudFrontOriginAccessIdentityResponse,
@@ -21,6 +22,7 @@ import {
   DeleteKeyGroupCommandOutput as DeleteKeyGroupResponse,
   DeleteKeyValueStoreCommandOutput as DeleteKeyValueStoreResponse,
   DeleteMonitoringSubscriptionCommandOutput as DeleteMonitoringSubscriptionResponse,
+  DeleteOriginAccessControlCommandOutput as DeleteOriginAccessControlResponse,
   DeletePublicKeyCommandOutput as DeletePublicKeyResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   DescribeKeyValueStoreCommandOutput as DescribeKeyValueStoreResponse,
@@ -127,6 +129,12 @@ declare interface AwsLiteCloudFront {
   CreateMonitoringSubscription: (input: { DistributionId: string, MonitoringSubscription: Record<string, any> }) => Promise<CreateMonitoringSubscriptionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginAccessControl.html CloudFront: CreateOriginAccessControl}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateOriginAccessControl CloudFront: CreateOriginAccessControl}
+   */
+  CreateOriginAccessControl: (input: { OriginAccessControlConfig: Record<string, any> }) => Promise<CreateOriginAccessControlResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html CloudFront: CreatePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreatePublicKey CloudFront: CreatePublicKey}
    */
@@ -185,6 +193,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteMonitoringSubscription CloudFront: DeleteMonitoringSubscription}
    */
   DeleteMonitoringSubscription: (input: { DistributionId: string }) => Promise<DeleteMonitoringSubscriptionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginAccessControl.html CloudFront: DeleteOriginAccessControl}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteOriginAccessControl CloudFront: DeleteOriginAccessControl}
+   */
+  DeleteOriginAccessControl: (input: { Id: string, IfMatch: string }) => Promise<DeleteOriginAccessControlResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html CloudFront: DeletePublicKey}
@@ -436,6 +450,7 @@ export type {
   CreateKeyGroupResponse,
   CreateKeyValueStoreResponse,
   CreateMonitoringSubscriptionResponse,
+  CreateOriginAccessControlResponse,
   CreatePublicKeyResponse,
   DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityResponse,
@@ -446,6 +461,7 @@ export type {
   DeleteKeyGroupResponse,
   DeleteKeyValueStoreResponse,
   DeleteMonitoringSubscriptionResponse,
+  DeleteOriginAccessControlResponse,
   DeletePublicKeyResponse,
   DescribeFunctionResponse,
   DescribeKeyValueStoreResponse,

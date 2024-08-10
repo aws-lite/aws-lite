@@ -38,6 +38,7 @@ const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Compl
 const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
 const DistributionId = { ...str, required, comment: 'Distribution ID' }
 const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
+const OriginAccessControlConfig = { ...obj, required, comment: 'Complete origin access control config', ref: docRoot + 'API_OriginAccessControlConfig.html' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -359,6 +360,30 @@ const CreateMonitoringSubscription = {
   },
 }
 
+const CreateOriginAccessControl = {
+  awsDoc: docRoot + 'API_CreateOriginAccessControl.html',
+  validate: {
+    OriginAccessControlConfig,
+  },
+  request: ({ OriginAccessControlConfig }) => {
+    return {
+      path: `/2020-05-31/origin-access-control`,
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: { OriginAccessControlConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag, location } = headers
+    return {
+      OriginAccessControl: payload,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
+
 const CreatePublicKey = {
   awsDoc: docRoot + 'API_CreatePublicKey.html',
   validate: {
@@ -521,6 +546,22 @@ const DeleteMonitoringSubscription = {
     return {
       path: `/2020-05-31/distributions/${DistributionId}/monitoring-subscription`,
       method: 'DELETE',
+    }
+  },
+  response: defaultResponse,
+}
+
+const DeleteOriginAccessControl = {
+  awsDoc: docRoot + 'API_DeleteOriginAccessControl.html',
+  validate: {
+    Id,
+    IfMatch: { ...IfMatch, required },
+  },
+  request: ({ Id, IfMatch }) => {
+    return {
+      path: `/2020-05-31/origin-access-control/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
     }
   },
   response: defaultResponse,
@@ -1429,6 +1470,7 @@ export default {
     CreateKeyGroup,
     CreateKeyValueStore,
     CreateMonitoringSubscription,
+    CreateOriginAccessControl,
     CreatePublicKey,
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
@@ -1439,6 +1481,7 @@ export default {
     DeleteKeyGroup,
     DeleteKeyValueStore,
     DeleteMonitoringSubscription,
+    DeleteOriginAccessControl,
     DeletePublicKey,
     DescribeFunction,
     DescribeKeyValueStore,
