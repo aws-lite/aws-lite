@@ -1,7 +1,6 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/'
 export default {
-  AssociateAlias:                             { disabled, awsDoc: docRoot + 'API_AssociateAlias.html' },
   CopyDistribution:                           { disabled, awsDoc: docRoot + 'API_CopyDistribution.html' },
   CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' },
   CreateOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_CreateOriginRequestPolicy.html' },
@@ -21,7 +20,6 @@ export default {
   GetResponseHeadersPolicyConfig:             { disabled, awsDoc: docRoot + 'API_GetResponseHeadersPolicyConfig.html' },
   GetStreamingDistribution:                   { disabled, awsDoc: docRoot + 'API_GetStreamingDistribution.html' },
   GetStreamingDistributionConfig:             { disabled, awsDoc: docRoot + 'API_GetStreamingDistributionConfig.html' },
-  ListConflictingAliases:                     { disabled, awsDoc: docRoot + 'API_ListConflictingAliases.html' },
   ListDistributionsByCachePolicyId:           { disabled, awsDoc: docRoot + 'API_ListDistributionsByCachePolicyId.html' },
   ListDistributionsByKeyGroup:                { disabled, awsDoc: docRoot + 'API_ListDistributionsByKeyGroup.html' },
   ListDistributionsByOriginRequestPolicyId:   { disabled, awsDoc: docRoot + 'API_ListDistributionsByOriginRequestPolicyId.html' },

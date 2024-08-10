@@ -39,6 +39,7 @@ const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete
 const DistributionId = { ...str, required, comment: 'Distribution ID' }
 const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
 const OriginAccessControlConfig = { ...obj, required, comment: 'Complete origin access control config', ref: docRoot + 'API_OriginAccessControlConfig.html' }
+const Alias = { ...str, required, comment: 'Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -56,6 +57,22 @@ const maybeAddETag = (result, headers) => {
   const ETag = headers.etag || headers.ETag
   if (ETag) result.ETag = ETag
   return result
+}
+
+const AssociateAlias = {
+  awsDoc: docRoot + 'API_AssociateAlias.html',
+  validate: {
+    TargetDistributionId: { ...str, required, comment: 'Distribution ID to alias' },
+    Alias,
+  },
+  request: ({ TargetDistributionId, Alias }) => {
+    return {
+      path: `/2020-05-31/distribution/${TargetDistributionId}/associate-alias`,
+      method: 'PUT',
+      query: { Alias },
+    }
+  },
+  response: defaultResponse,
 }
 
 const CreateCachePolicy = {
@@ -1070,6 +1087,36 @@ const ListCloudFrontOriginAccessIdentities = {
   },
 }
 
+const ListConflictingAliases = {
+  awsDoc: docRoot + 'API_ListConflictingAliases.html',
+  validate: {
+    DistributionId,
+    Alias,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: '/2020-05-31/conflicting-alias',
+      query,
+      paginator: {
+        cursor: 'Marker',
+        token: 'NextMarker',
+        accumulator: 'Items.ConflictingAlias',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const ConflictingAliasesList = arrayifyItemsProp(payload)
+    return { ConflictingAliasesList }
+  },
+}
+
 const ListContinuousDeploymentPolicies = {
   awsDoc: docRoot + 'API_ListContinuousDeploymentPolicies.html',
   validate: {
@@ -1656,6 +1703,7 @@ export default {
   service,
   property,
   methods: {
+    AssociateAlias,
     CreateCachePolicy,
     CreateCloudFrontOriginAccessIdentity,
     CreateContinuousDeploymentPolicy,
@@ -1705,6 +1753,7 @@ export default {
     GetPublicKeyConfig,
     ListCachePolicies,
     ListCloudFrontOriginAccessIdentities,
+    ListConflictingAliases,
     ListContinuousDeploymentPolicies,
     ListDistributions,
     ListFieldLevelEncryptionConfigs,

@@ -1,6 +1,7 @@
 import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
+  AssociateAliasCommandOutput as AssociateAliasResponse,
   CreateCachePolicyCommandOutput as CreateCachePolicyResponse,
   CreateCloudFrontOriginAccessIdentityCommandOutput as CreateCloudFrontOriginAccessIdentityResponse,
   CreateContinuousDeploymentPolicyCommandOutput as CreateContinuousDeploymentPolicyResponse,
@@ -50,6 +51,7 @@ import {
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
   ListCachePoliciesCommandOutput as ListCachePoliciesResponse,
   ListCloudFrontOriginAccessIdentitiesCommandOutput as ListCloudFrontOriginAccessIdentitiesResponse,
+  ListConflictingAliasesCommandOutput as ListConflictingAliasesResponse,
   ListContinuousDeploymentPoliciesCommandOutput as ListContinuousDeploymentPoliciesResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
   ListFieldLevelEncryptionConfigsCommandOutput as ListFieldLevelEncryptionConfigsResponse,
@@ -77,6 +79,12 @@ import {
 declare interface AwsLiteCloudFront {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_AssociateAlias.html CloudFront: AssociateAlias}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#AssociateAlias CloudFront: AssociateAlias}
+   */
+  AssociateAlias: (input: { TargetDistributionId: string, Alias: string }) => Promise<AssociateAliasResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCachePolicy.html CloudFront: CreateCachePolicy}
@@ -373,6 +381,12 @@ declare interface AwsLiteCloudFront {
   ListCloudFrontOriginAccessIdentities: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListCloudFrontOriginAccessIdentitiesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListConflictingAliases.html CloudFront: ListConflictingAliases}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListConflictingAliases CloudFront: ListConflictingAliases}
+   */
+  ListConflictingAliases: (input: { DistributionId: string, Alias: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListConflictingAliasesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListContinuousDeploymentPolicies.html CloudFront: ListContinuousDeploymentPolicies}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListContinuousDeploymentPolicies CloudFront: ListContinuousDeploymentPolicies}
    */
@@ -510,6 +524,7 @@ export type {
   AwsLiteCloudFront,
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
+  AssociateAliasResponse,
   CreateCachePolicyResponse,
   CreateCloudFrontOriginAccessIdentityResponse,
   CreateContinuousDeploymentPolicyResponse,
@@ -559,6 +574,7 @@ export type {
   GetPublicKeyConfigResponse,
   ListCachePoliciesResponse,
   ListCloudFrontOriginAccessIdentitiesResponse,
+  ListConflictingAliasesResponse,
   ListContinuousDeploymentPoliciesResponse,
   ListDistributionsResponse,
   ListFieldLevelEncryptionConfigsResponse,
