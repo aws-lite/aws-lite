@@ -23,7 +23,7 @@ const xml = { 'content-type': 'application/xml' }
 const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
 const Id = { ...str, required, comment: 'The resource ID' }
-const IfMatch = { ...str, comment: 'Value of previous `GetDistribution` call\'s `ETag` property' }
+const IfMatch = { ...str, required, comment: 'Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource' }
 const Name = { ...str, required, comment: 'User assigned name for the resource' }
 const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
 const Marker = { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' }
@@ -412,7 +412,7 @@ const DeleteCachePolicy = {
   awsDoc: docRoot + 'API_DeleteCachePolicy.html',
   validate: {
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ Id, IfMatch }) => {
     return {
@@ -428,7 +428,7 @@ const DeleteCloudFrontOriginAccessIdentity = {
   awsDoc: docRoot + 'API_DeleteCloudFrontOriginAccessIdentity.html',
   validate: {
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ Id, IfMatch }) => {
     return {
@@ -444,7 +444,7 @@ const DeleteContinuousDeploymentPolicy = {
   awsDoc: docRoot + 'API_DeleteContinuousDeploymentPolicy.html',
   validate: {
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ Id, IfMatch }) => {
     return {
@@ -466,7 +466,7 @@ const DeleteDistribution = {
     return {
       path: `/2020-05-31/distribution/${Id}`,
       method: 'DELETE',
-      headers: IfMatch ? { 'if-match': IfMatch } : {},
+      headers: { 'if-match': IfMatch },
     }
   },
   response: () => ({}),
@@ -476,7 +476,7 @@ const DeleteFieldLevelEncryptionProfile = {
   awsDoc: docRoot + 'API_DeleteFieldLevelEncryptionProfile.html',
   validate: {
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ Id, IfMatch }) => {
     return {
@@ -492,7 +492,7 @@ const DeleteFunction = {
   awsDoc: docRoot + 'API_DeleteFunction.html',
   validate: {
     Name,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ Name, IfMatch }) => {
     return {
@@ -511,11 +511,10 @@ const DeleteKeyGroup = {
     IfMatch,
   },
   request: ({ Id, IfMatch }) => {
-    const headers = IfMatch ? { 'if-match': IfMatch } : {}
     return {
       path: `/2020-05-31/key-group/${Id}`,
       method: 'DELETE',
-      headers,
+      headers: { 'if-match': IfMatch },
     }
   },
   response: defaultResponse,
@@ -525,7 +524,7 @@ const DeleteKeyValueStore = {
   awsDoc: docRoot + 'API_DeleteKeyValueStore.html',
   validate: {
     Name,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ Name, IfMatch }) => {
     return {
@@ -555,7 +554,7 @@ const DeleteOriginAccessControl = {
   awsDoc: docRoot + 'API_DeleteOriginAccessControl.html',
   validate: {
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ Id, IfMatch }) => {
     return {
@@ -574,11 +573,10 @@ const DeletePublicKey = {
     IfMatch,
   },
   request: ({ Id, IfMatch }) => {
-    const headers = IfMatch ? { 'if-match': IfMatch } : {}
     return {
       path: `/2020-05-31/public-key/${Id}`,
       method: 'DELETE',
-      headers,
+      headers: { 'if-match': IfMatch },
     }
   },
   response: defaultResponse,
@@ -889,6 +887,44 @@ const GetMonitoringSubscription = {
   },
 }
 
+const GetOriginAccessControl = {
+  awsDoc: docRoot + 'API_GetOriginAccessControl.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/origin-access-control/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    let { etag } = headers
+    return {
+      OriginAccessControl: payload,
+      ETag: etag,
+    }
+  },
+}
+
+const GetOriginAccessControlConfig = {
+  awsDoc: docRoot + 'API_GetOriginAccessControlConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/origin-access-control/${Id}/config`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    let { etag } = headers
+    return {
+      OriginAccessControlConfig: payload,
+      ETag: etag,
+    }
+  },
+}
+
 const GetPublicKey = {
   awsDoc: docRoot + 'API_GetPublicKey.html',
   validate: {
@@ -1161,6 +1197,34 @@ const ListKeyValueStores = {
   },
 }
 
+const ListOriginAccessControls = {
+  awsDoc: docRoot + 'API_ListOriginAccessControls.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/origin-access-control`,
+      method: 'GET',
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.OriginAccessControlSummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const OriginAccessControlList = arrayifyItemsProp(payload)
+    return { OriginAccessControlList }
+  },
+}
+
 const ListPublicKeys = {
   awsDoc: docRoot + 'API_ListPublicKeys.html',
   validate: {
@@ -1195,7 +1259,7 @@ const TestFunction = {
   awsDoc: docRoot + 'API_TestFunction.html',
   validate: {
     Name,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
     EventObject: { ...str, required, comment: 'Base64 encoded binary `Event` object that will be passed to your function as an argument' },
     Stage,
   },
@@ -1222,7 +1286,7 @@ const UpdateCachePolicy = {
   validate: {
     CachePolicyConfig,
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ CachePolicyConfig, Id, IfMatch }) => {
     CachePolicyConfig = unarrayifyObject({ CachePolicyConfig })
@@ -1250,7 +1314,7 @@ const UpdateCloudFrontOriginAccessIdentity = {
   validate: {
     CloudFrontOriginAccessIdentityConfig,
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ CloudFrontOriginAccessIdentityConfig, Id, IfMatch }) => {
     return {
@@ -1275,7 +1339,7 @@ const UpdateContinuousDeploymentPolicy = {
   validate: {
     ContinuousDeploymentPolicyConfig,
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ ContinuousDeploymentPolicyConfig, Id, IfMatch }) => {
     ContinuousDeploymentPolicyConfig = unarrayifyObject(ContinuousDeploymentPolicyConfig)
@@ -1302,7 +1366,7 @@ const UpdateDistribution = {
   validate: {
     DistributionConfig: { ...obj, required, comment: 'Complete distribution configuration object from `GetDistribution` call', ref: docRoot + 'API_UpdateDistribution.html#API_UpdateDistribution_RequestBody' },
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: (params) => {
     const { Id, IfMatch } = params
@@ -1325,7 +1389,7 @@ const UpdateFieldLevelEncryptionProfile = {
   validate: {
     FieldLevelEncryptionProfileConfig,
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ FieldLevelEncryptionProfileConfig, Id, IfMatch }) => {
     FieldLevelEncryptionProfileConfig = unarrayifyObject(FieldLevelEncryptionProfileConfig)
@@ -1350,7 +1414,7 @@ const UpdateFieldLevelEncryptionProfile = {
 const UpdateFunction = {
   awsDoc: docRoot + 'API_UpdateFunction.html',
   validate: {
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
     Name,
     FunctionCode,
     FunctionConfig,
@@ -1381,7 +1445,7 @@ const UpdateKeyGroup = {
   validate: {
     KeyGroupConfig,
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ KeyGroupConfig, Id, IfMatch }) => {
     const payload = unarrayifyObject({ KeyGroupConfig })
@@ -1408,7 +1472,7 @@ const UpdateKeyValueStore = {
   validate: {
     Name,
     Comment: { ...str, required, comment: 'New comment for the key value store' },
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: ({ Name, Comment, IfMatch }) => {
     return {
@@ -1428,12 +1492,38 @@ const UpdateKeyValueStore = {
   },
 }
 
+const UpdateOriginAccessControl = {
+  awsDoc: docRoot + 'API_UpdateOriginAccessControl.html',
+  validate: {
+    OriginAccessControlConfig,
+    Id,
+    IfMatch,
+  },
+  request: (params) => {
+    const { OriginAccessControlConfig, Id, IfMatch } = params
+    return {
+      path: `/2020-05-31/origin-access-control/${Id}/config`,
+      method: 'PUT',
+      headers: { 'if-match': IfMatch, ...xml },
+      xmlns,
+      payload: { OriginAccessControlConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag } = headers
+    return {
+      OriginAccessControl: payload,
+      ETag: etag,
+    }
+  },
+}
+
 const UpdatePublicKey = {
   awsDoc: docRoot + 'API_UpdatePublicKey.html',
   validate: {
     PublicKeyConfig: { ...obj, required, comment: 'Public key configuration', ref: docRoot + 'API_UpdatePublicKey.html#cloudfront-UpdatePublicKey-request-PublicKeyConfig' },
     Id,
-    IfMatch: { ...IfMatch, required },
+    IfMatch,
   },
   request: (params) => {
     const { PublicKeyConfig, Id, IfMatch } = params
@@ -1498,6 +1588,8 @@ export default {
     GetFunction,
     GetKeyGroup,
     GetKeyGroupConfig,
+    GetOriginAccessControl,
+    GetOriginAccessControlConfig,
     GetMonitoringSubscription,
     GetPublicKey,
     GetPublicKeyConfig,
@@ -1509,6 +1601,7 @@ export default {
     ListFunctions,
     ListKeyGroups,
     ListKeyValueStores,
+    ListOriginAccessControls,
     ListPublicKeys,
     TestFunction,
     UpdateCachePolicy,
@@ -1519,6 +1612,7 @@ export default {
     UpdateFunction,
     UpdateKeyGroup,
     UpdateKeyValueStore,
+    UpdateOriginAccessControl,
     UpdatePublicKey,
     ...incomplete,
   },

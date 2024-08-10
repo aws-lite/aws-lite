@@ -173,7 +173,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeleteCloudFrontOriginAccessIdentity`
@@ -184,7 +184,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeleteContinuousDeploymentPolicy`
@@ -195,7 +195,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeleteDistribution`
@@ -205,8 +205,8 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - The resource ID
-- **`IfMatch` (string)**
-  - Value of previous `GetDistribution` call's `ETag` property
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeleteFieldLevelEncryptionProfile`
@@ -217,7 +217,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeleteFunction`
@@ -228,7 +228,7 @@ Properties:
 - **`Name` (string) [required]**
   - User assigned name for the resource
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeleteKeyGroup`
@@ -238,8 +238,8 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - The resource ID
-- **`IfMatch` (string)**
-  - Value of previous `GetDistribution` call's `ETag` property
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeleteKeyValueStore`
@@ -250,7 +250,7 @@ Properties:
 - **`Name` (string) [required]**
   - User assigned name for the resource
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeleteMonitoringSubscription`
@@ -270,7 +270,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DeletePublicKey`
@@ -280,8 +280,8 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - The resource ID
-- **`IfMatch` (string)**
-  - Value of previous `GetDistribution` call's `ETag` property
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `DescribeFunction`
@@ -417,6 +417,24 @@ Properties:
 ### `GetKeyGroupConfig`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetKeyGroupConfig.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
+### `GetOriginAccessControl`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControl.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
+### `GetOriginAccessControlConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControlConfig.html)
 
 Properties:
 - **`Id` (string) [required]**
@@ -560,6 +578,19 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListOriginAccessControls`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginAccessControls.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (number)**
+  - Maximum number of items to return
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListPublicKeys`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListPublicKeys.html)
@@ -581,7 +612,7 @@ Properties:
 - **`Name` (string) [required]**
   - User assigned name for the resource
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 - **`EventObject` (string) [required]**
   - Base64 encoded binary `Event` object that will be passed to your function as an argument
 - **`Stage` (string)**
@@ -599,7 +630,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `UpdateCloudFrontOriginAccessIdentity`
@@ -613,7 +644,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `UpdateContinuousDeploymentPolicy`
@@ -627,7 +658,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `UpdateDistribution`
@@ -641,7 +672,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `UpdateFieldLevelEncryptionProfile`
@@ -655,7 +686,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `UpdateFunction`
@@ -664,7 +695,7 @@ Properties:
 
 Properties:
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 - **`Name` (string) [required]**
   - User assigned name for the resource
 - **`FunctionCode` (string) [required]**
@@ -684,7 +715,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `UpdateKeyValueStore`
@@ -697,7 +728,21 @@ Properties:
 - **`Comment` (string) [required]**
   - New comment for the key value store
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
+
+
+### `UpdateOriginAccessControl`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginAccessControl.html)
+
+Properties:
+- **`OriginAccessControlConfig` (object) [required]**
+  - Complete origin access control config
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_OriginAccessControlConfig.html)
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### `UpdatePublicKey`
@@ -711,7 +756,7 @@ Properties:
 - **`Id` (string) [required]**
   - The resource ID
 - **`IfMatch` (string) [required]**
-  - Value of previous `GetDistribution` call's `ETag` property
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
 ### Methods yet to be implemented
@@ -735,8 +780,6 @@ Properties:
 - [`GetFieldLevelEncryption`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryption.html)
 - [`GetFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionConfig.html)
 - [`GetInvalidation`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html)
-- [`GetOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControl.html)
-- [`GetOriginAccessControlConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControlConfig.html)
 - [`GetOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicy.html)
 - [`GetOriginRequestPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicyConfig.html)
 - [`GetRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetRealtimeLogConfig.html)
@@ -753,7 +796,6 @@ Properties:
 - [`ListDistributionsByWebACLId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByWebACLId.html)
 - [`ListFieldLevelEncryptionConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFieldLevelEncryptionConfigs.html)
 - [`ListInvalidations`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListInvalidations.html)
-- [`ListOriginAccessControls`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginAccessControls.html)
 - [`ListOriginRequestPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginRequestPolicies.html)
 - [`ListRealtimeLogConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListRealtimeLogConfigs.html)
 - [`ListResponseHeadersPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListResponseHeadersPolicies.html)
@@ -764,7 +806,6 @@ Properties:
 - [`UntagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html)
 - [`UpdateDistributionWithStagingConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistributionWithStagingConfig.html)
 - [`UpdateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionConfig.html)
-- [`UpdateOriginAccessControl`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginAccessControl.html)
 - [`UpdateOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginRequestPolicy.html)
 - [`UpdateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateRealtimeLogConfig.html)
 - [`UpdateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateResponseHeadersPolicy.html)

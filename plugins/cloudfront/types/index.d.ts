@@ -39,6 +39,8 @@ import {
   GetFunctionCommandOutput as GetFunctionResponse,
   GetKeyGroupCommandOutput as GetKeyGroupResponse,
   GetKeyGroupConfigCommandOutput as GetKeyGroupConfigResponse,
+  GetOriginAccessControlCommandOutput as GetOriginAccessControlResponse,
+  GetOriginAccessControlConfigCommandOutput as GetOriginAccessControlConfigResponse,
   GetMonitoringSubscriptionCommandOutput as GetMonitoringSubscriptionResponse,
   GetPublicKeyCommandOutput as GetPublicKeyResponse,
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
@@ -50,6 +52,7 @@ import {
   ListFunctionsCommandOutput as ListFunctionsResponse,
   ListKeyGroupsCommandOutput as ListKeyGroupsResponse,
   ListKeyValueStoresCommandOutput as ListKeyValueStoresResponse,
+  ListOriginAccessControlsCommandOutput as ListOriginAccessControlsResponse,
   ListPublicKeysCommandOutput as ListPublicKeysResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
   UpdateCachePolicyCommandOutput as UpdateCachePolicyResponse,
@@ -60,6 +63,7 @@ import {
   UpdateFunctionCommandOutput as UpdateFunctionResponse,
   UpdateKeyGroupCommandOutput as UpdateKeyGroupResponse,
   UpdateKeyValueStoreCommandOutput as UpdateKeyValueStoreResponse,
+  UpdateOriginAccessControlCommandOutput as UpdateOriginAccessControlResponse,
   UpdatePublicKeyCommandOutput as UpdatePublicKeyResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudfront";
@@ -162,7 +166,7 @@ declare interface AwsLiteCloudFront {
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html CloudFront: DeleteDistribution}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteDistribution CloudFront: DeleteDistribution}
    */
-  DeleteDistribution: (input: { Id: string, IfMatch?: string }) => Promise<DeleteDistributionResponse>
+  DeleteDistribution: (input: { Id: string, IfMatch: string }) => Promise<DeleteDistributionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionProfile.html CloudFront: DeleteFieldLevelEncryptionProfile}
@@ -180,7 +184,7 @@ declare interface AwsLiteCloudFront {
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteKeyGroup.html CloudFront: DeleteKeyGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteKeyGroup CloudFront: DeleteKeyGroup}
    */
-  DeleteKeyGroup: (input: { Id: string, IfMatch?: string }) => Promise<DeleteKeyGroupResponse>
+  DeleteKeyGroup: (input: { Id: string, IfMatch: string }) => Promise<DeleteKeyGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteKeyValueStore.html CloudFront: DeleteKeyValueStore}
@@ -204,7 +208,7 @@ declare interface AwsLiteCloudFront {
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html CloudFront: DeletePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeletePublicKey CloudFront: DeletePublicKey}
    */
-  DeletePublicKey: (input: { Id: string, IfMatch?: string }) => Promise<DeletePublicKeyResponse>
+  DeletePublicKey: (input: { Id: string, IfMatch: string }) => Promise<DeletePublicKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeFunction.html CloudFront: DescribeFunction}
@@ -297,6 +301,18 @@ declare interface AwsLiteCloudFront {
   GetKeyGroupConfig: (input: { Id: string }) => Promise<GetKeyGroupConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControl.html CloudFront: GetOriginAccessControl}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetOriginAccessControl CloudFront: GetOriginAccessControl}
+   */
+  GetOriginAccessControl: (input: { Id: string }) => Promise<GetOriginAccessControlResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControlConfig.html CloudFront: GetOriginAccessControlConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetOriginAccessControlConfig CloudFront: GetOriginAccessControlConfig}
+   */
+  GetOriginAccessControlConfig: (input: { Id: string }) => Promise<GetOriginAccessControlConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html CloudFront: GetMonitoringSubscription}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetMonitoringSubscription CloudFront: GetMonitoringSubscription}
    */
@@ -363,6 +379,12 @@ declare interface AwsLiteCloudFront {
   ListKeyValueStores: (input: { Marker?: string, MaxItems?: number, Status?: string, paginate?: boolean | string }) => Promise<ListKeyValueStoresResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginAccessControls.html CloudFront: ListOriginAccessControls}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListOriginAccessControls CloudFront: ListOriginAccessControls}
+   */
+  ListOriginAccessControls: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListOriginAccessControlsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListPublicKeys.html CloudFront: ListPublicKeys}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListPublicKeys CloudFront: ListPublicKeys}
    */
@@ -423,6 +445,12 @@ declare interface AwsLiteCloudFront {
   UpdateKeyValueStore: (input: { Name: string, Comment: string, IfMatch: string }) => Promise<UpdateKeyValueStoreResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginAccessControl.html CloudFront: UpdateOriginAccessControl}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateOriginAccessControl CloudFront: UpdateOriginAccessControl}
+   */
+  UpdateOriginAccessControl: (input: { OriginAccessControlConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateOriginAccessControlResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html CloudFront: UpdatePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdatePublicKey CloudFront: UpdatePublicKey}
    */
@@ -478,6 +506,8 @@ export type {
   GetFunctionResponse,
   GetKeyGroupResponse,
   GetKeyGroupConfigResponse,
+  GetOriginAccessControlResponse,
+  GetOriginAccessControlConfigResponse,
   GetMonitoringSubscriptionResponse,
   GetPublicKeyResponse,
   GetPublicKeyConfigResponse,
@@ -489,6 +519,7 @@ export type {
   ListFunctionsResponse,
   ListKeyGroupsResponse,
   ListKeyValueStoresResponse,
+  ListOriginAccessControlsResponse,
   ListPublicKeysResponse,
   TestFunctionResponse,
   UpdateCachePolicyResponse,
@@ -499,6 +530,7 @@ export type {
   UpdateFunctionResponse,
   UpdateKeyGroupResponse,
   UpdateKeyValueStoreResponse,
+  UpdateOriginAccessControlResponse,
   UpdatePublicKeyResponse,
   // $EXPORT_END
 }
