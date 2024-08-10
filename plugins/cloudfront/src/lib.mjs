@@ -1,5 +1,19 @@
 // Each item here is expected to contain an Items property; each value is the XML property containing the Items in question
 const arrayProperties = {
+  // CachePolicyConfigs
+  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
+  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
+  'ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  'ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
+  // ContinuousDeploymentPolicyConfig
+  'StagingDistributionDnsNames': 'DnsName',
+  'ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
+  'ContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
   // Distributions
   'ActiveTrustedKeyGroups': 'KeyGroup',
   'ActiveTrustedKeyGroups.Items.KeyPairIds': 'KeyPairId',
@@ -33,24 +47,8 @@ const arrayProperties = {
   'Origins.Items.CustomHeaders': 'OriginCustomHeader',
   'Origins.Items.CustomOriginConfig.OriginSslProtocols': 'SslProtocol',
   'Restrictions.GeoRestriction': 'Location',
-  // Invalidations
-  'InvalidationBatch.Paths': 'Path',
-  // Functions
-  'FunctionConfig.KeyValueStoreAssociations': 'KeyValueStoreAssociation',
-  'FunctionSummary.FunctionConfig.KeyValueStoreAssociations': 'KeyValueStoreAssociation',
-  // KeyGroups
-  'KeyGroupConfig': 'PublicKey',
-  'KeyGroup.KeyGroupConfig': 'PublicKey',
-  // CachePolicyConfigs
-  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
-  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
-  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
-  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
-  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
-  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
-  'ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
-  'ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
-  'ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
+  'DistributionConfigWithTags.Tags': 'Tag',
+  'Tags': 'Tag',
   // FieldLevelEncryptionConfig
   'FieldLevelEncryptionConfig.ContentTypeProfileConfig.ContentTypeProfiles': 'ContentTypeProfile',
   'FieldLevelEncryptionConfig.QueryArgProfileConfig.QueryArgProfiles': 'QueryArgProfile',
@@ -61,10 +59,24 @@ const arrayProperties = {
   'FieldLevelEncryptionProfileConfig.EncryptionEntities.Items.FieldPatterns': 'FieldPattern',
   'EncryptionEntities': 'EncryptionEntity',
   'EncryptionEntities.Items.FieldPatterns': 'FieldPattern',
-  // ContinuousDeploymentPolicyConfig
-  'StagingDistributionDnsNames': 'DnsName',
-  'ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
-  'ContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
+  // Functions
+  'FunctionConfig.KeyValueStoreAssociations': 'KeyValueStoreAssociation',
+  'FunctionSummary.FunctionConfig.KeyValueStoreAssociations': 'KeyValueStoreAssociation',
+  // Invalidations
+  'InvalidationBatch.Paths': 'Path',
+  // KeyGroups
+  'KeyGroupConfig': 'PublicKey',
+  'KeyGroup.KeyGroupConfig': 'PublicKey',
+  // OriginRequestPolicy
+  'OriginRequestPolicyConfig.CookiesConfig.Cookies': 'Name',
+  'OriginRequestPolicyConfig.HeadersConfig.Headers': 'Name',
+  'OriginRequestPolicyConfig.QueryStringsConfig.QueryStrings': 'Name',
+  'OriginRequestPolicy.OriginRequestPolicyConfig.CookiesConfig.Cookies': 'Name',
+  'OriginRequestPolicy.OriginRequestPolicyConfig.HeadersConfig.Headers': 'Name',
+  'OriginRequestPolicy.OriginRequestPolicyConfig.QueryStringsConfig.QueryStrings': 'Name',
+  'CookiesConfig.Cookies': 'Name',
+  'HeadersConfig.Headers': 'Name',
+  'QueryStringsConfig.QueryStrings': 'Name',
 }
 
 const arrayifyItemsProp = obj => {

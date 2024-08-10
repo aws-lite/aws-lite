@@ -13,7 +13,7 @@ const docRoot = 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/'
 
 // Validation types
 // const arr = { type: 'array' }
-// const bool = { type: 'boolean' }
+const bool = { type: 'boolean' }
 const obj = { type: 'object' }
 const str = { type: 'string' }
 const num = { type: 'number' }
@@ -40,6 +40,9 @@ const DistributionId = { ...str, required, comment: 'Distribution ID' }
 const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
 const OriginAccessControlConfig = { ...obj, required, comment: 'Complete origin access control config', ref: docRoot + 'API_OriginAccessControlConfig.html' }
 const Alias = { ...str, required, comment: 'Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`' }
+const Type = { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' }
+const OriginRequestPolicyConfig = { ...obj, required, comment: 'Complete origin request policy config', ref: docRoot + 'API_OriginRequestPolicyConfig.html' }
+
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -73,6 +76,46 @@ const AssociateAlias = {
     }
   },
   response: defaultResponse,
+}
+
+const CopyDistribution = {
+  awsDoc: docRoot + 'API_CopyDistribution.html',
+  validate: {
+    PrimaryDistributionId: { ...str, required, comment: 'ID of the distribution to be copied' },
+    CallerReference,
+    IfMatch,
+    Staging: { ...bool, comment: 'Set to true to specify that the primary distribution will be copied to a staging distribution' },
+    Enabled: { ...bool, comment: 'Set to false to disable the copied distribution upon creation' },
+  },
+  request: (params) => {
+    const { PrimaryDistributionId, CallerReference, IfMatch, Staging, Enabled = true } = params
+    return {
+      path: `/2020-05-31/distribution/${PrimaryDistributionId}/copy`,
+      method: 'POST',
+      headers: {
+        ...xml,
+        'if-match': IfMatch,
+        Staging,
+      },
+      xmlns,
+      payload: {
+        CopyDistributionRequest: {
+          CallerReference,
+          Enabled,
+        },
+      },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const Distribution = arrayifyObject(payload)
+    Distribution.DistributionConfig = arrayifyObject(Distribution.DistributionConfig)
+    const { etag, location } = headers
+    return {
+      Distribution,
+      ETag: etag,
+      Location: location,
+    }
+  },
 }
 
 const CreateCachePolicy = {
@@ -192,6 +235,29 @@ const CreateDistribution = {
     return maybeAddETag({ Distribution }, headers)
   },
 }
+
+// TODO: test
+// const CreateDistributionWithTags = {
+//   awsDoc: docRoot + 'API_CreateDistributionWithTags.html',
+//   validate: {
+//     DistributionConfigWithTags: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistributionWithTags.html#cloudfront-CreateDistributionWithTags-request-DistributionConfigWithTags' },
+//   },
+//   request: (params) => {
+//     const DistributionConfigWithTags = unarrayifyObject(params)
+//     DistributionConfigWithTags.DistributionConfig = unarrayifyObject(DistributionConfigWithTags.DistributionConfig)
+//     return {
+//       path: '/2020-05-31/distribution?WithTags',
+//       method: 'POST',
+//       headers: xml,
+//       xmlns,
+//       payload: { DistributionConfigWithTags },
+//     }
+//   },
+//   response: ({ headers, payload }) => {
+//     const Distribution = arrayifyObject(payload)
+//     return maybeAddETag({ Distribution }, headers)
+//   },
+// }
 
 const CreateFieldLevelEncryptionConfig = {
   awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html',
@@ -400,6 +466,32 @@ const CreateOriginAccessControl = {
   },
 }
 
+const CreateOriginRequestPolicy = {
+  awsDoc: docRoot + 'API_CreateOriginRequestPolicy.html',
+  validate: {
+    OriginRequestPolicyConfig,
+  },
+  request: (params) => {
+    const OriginRequestPolicyConfig = unarrayifyObject(params)
+    return {
+      path: `/2020-05-31/origin-request-policy`,
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload: OriginRequestPolicyConfig,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const OriginRequestPolicy = arrayifyObject(payload)
+    const { etag, location } = headers
+    return {
+      OriginRequestPolicy,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
+
 const CreatePublicKey = {
   awsDoc: docRoot + 'API_CreatePublicKey.html',
   validate: {
@@ -591,6 +683,22 @@ const DeleteOriginAccessControl = {
   request: ({ Id, IfMatch }) => {
     return {
       path: `/2020-05-31/origin-access-control/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
+const DeleteOriginRequestPolicy = {
+  awsDoc: docRoot + 'API_DeleteOriginRequestPolicy.html',
+  validate: {
+    Id,
+    IfMatch,
+  },
+  request: ({ Id, IfMatch }) => {
+    return {
+      path: `/2020-05-31/origin-request-policy/${Id}`,
       method: 'DELETE',
       headers: { 'if-match': IfMatch },
     }
@@ -993,6 +1101,46 @@ const GetOriginAccessControlConfig = {
   },
 }
 
+const GetOriginRequestPolicy = {
+  awsDoc: docRoot + 'API_GetOriginRequestPolicy.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/origin-request-policy/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const OriginRequestPolicy = arrayifyObject(payload)
+    let { etag } = headers
+    return {
+      OriginRequestPolicy,
+      ETag: etag,
+    }
+  },
+}
+
+const GetOriginRequestPolicyConfig = {
+  awsDoc: docRoot + 'API_GetOriginRequestPolicyConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/origin-request-policy/${Id}/config`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const OriginRequestPolicyConfig = arrayifyObject(payload)
+    let { etag } = headers
+    return {
+      OriginRequestPolicyConfig,
+      ETag: etag,
+    }
+  },
+}
+
 const GetPublicKey = {
   awsDoc: docRoot + 'API_GetPublicKey.html',
   validate: {
@@ -1038,7 +1186,7 @@ const ListCachePolicies = {
   validate: {
     Marker,
     MaxItems,
-    Type: { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' },
+    Type,
     paginate: valPaginate,
   },
   request: (params) => {
@@ -1349,6 +1497,36 @@ const ListOriginAccessControls = {
   response: ({ payload }) => {
     const OriginAccessControlList = arrayifyItemsProp(payload)
     return { OriginAccessControlList }
+  },
+}
+
+const ListOriginRequestPolicies = {
+  awsDoc: docRoot + 'API_ListOriginRequestPolicies.html',
+  validate: {
+    Marker,
+    MaxItems,
+    Type,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/origin-request-policy`,
+      method: 'GET',
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.OriginRequestPolicySummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const OriginRequestPolicyList = arrayifyItemsProp(payload)
+    OriginRequestPolicyList.Items = OriginRequestPolicyList.Items.map(i => arrayifyObject(i))
+    return { OriginRequestPolicyList }
   },
 }
 
@@ -1672,6 +1850,33 @@ const UpdateOriginAccessControl = {
   },
 }
 
+const UpdateOriginRequestPolicy = {
+  awsDoc: docRoot + 'API_UpdateOriginRequestPolicy.html',
+  validate: {
+    OriginRequestPolicyConfig,
+    Id,
+    IfMatch,
+  },
+  request: ({ OriginRequestPolicyConfig, Id, IfMatch }) => {
+    const payload = unarrayifyObject({ OriginRequestPolicyConfig })
+    return {
+      path: `/2020-05-31/origin-request-policy/${Id}`,
+      method: 'PUT',
+      headers: { 'if-match': IfMatch, ...xml },
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const OriginRequestPolicy = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      OriginRequestPolicy,
+      ETag: etag,
+    }
+  },
+}
+
 const UpdatePublicKey = {
   awsDoc: docRoot + 'API_UpdatePublicKey.html',
   validate: {
@@ -1704,6 +1909,7 @@ export default {
   property,
   methods: {
     AssociateAlias,
+    CopyDistribution,
     CreateCachePolicy,
     CreateCloudFrontOriginAccessIdentity,
     CreateContinuousDeploymentPolicy,
@@ -1716,6 +1922,7 @@ export default {
     CreateKeyValueStore,
     CreateMonitoringSubscription,
     CreateOriginAccessControl,
+    CreateOriginRequestPolicy,
     CreatePublicKey,
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
@@ -1728,6 +1935,7 @@ export default {
     DeleteKeyValueStore,
     DeleteMonitoringSubscription,
     DeleteOriginAccessControl,
+    DeleteOriginRequestPolicy,
     DeletePublicKey,
     DescribeFunction,
     DescribeKeyValueStore,
@@ -1748,6 +1956,8 @@ export default {
     GetKeyGroupConfig,
     GetOriginAccessControl,
     GetOriginAccessControlConfig,
+    GetOriginRequestPolicy,
+    GetOriginRequestPolicyConfig,
     GetMonitoringSubscription,
     GetPublicKey,
     GetPublicKeyConfig,
@@ -1762,6 +1972,7 @@ export default {
     ListKeyGroups,
     ListKeyValueStores,
     ListOriginAccessControls,
+    ListOriginRequestPolicies,
     ListPublicKeys,
     TestFunction,
     UpdateCachePolicy,
@@ -1774,6 +1985,7 @@ export default {
     UpdateKeyGroup,
     UpdateKeyValueStore,
     UpdateOriginAccessControl,
+    UpdateOriginRequestPolicy,
     UpdatePublicKey,
     ...incomplete,
   },

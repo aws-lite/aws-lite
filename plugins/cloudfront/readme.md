@@ -43,6 +43,23 @@ Properties:
   - Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`
 
 
+### `CopyDistribution`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CopyDistribution.html)
+
+Properties:
+- **`PrimaryDistributionId` (string) [required]**
+  - ID of the distribution to be copied
+- **`CallerReference` (string) [required]**
+  - Unique value that ensures that the request cannot be replayed
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
+- **`Staging` (boolean)**
+  - Set to true to specify that the primary distribution will be copied to a staging distribution
+- **`Enabled` (boolean)**
+  - Set to false to disable the copied distribution upon creation
+
+
 ### `CreateCachePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCachePolicy.html)
@@ -176,6 +193,16 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_OriginAccessControlConfig.html)
 
 
+### `CreateOriginRequestPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginRequestPolicy.html)
+
+Properties:
+- **`OriginRequestPolicyConfig` (object) [required]**
+  - Complete origin request policy config
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_OriginRequestPolicyConfig.html)
+
+
 ### `CreatePublicKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html)
@@ -297,6 +324,17 @@ Properties:
 ### `DeleteOriginAccessControl`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginAccessControl.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
+
+
+### `DeleteOriginRequestPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginRequestPolicy.html)
 
 Properties:
 - **`Id` (string) [required]**
@@ -491,6 +529,24 @@ Properties:
   - The resource ID
 
 
+### `GetOriginRequestPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicy.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
+### `GetOriginRequestPolicyConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicyConfig.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
 ### `GetMonitoringSubscription`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html)
@@ -671,6 +727,21 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListOriginRequestPolicies`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginRequestPolicies.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (number)**
+  - Maximum number of items to return
+- **`Type` (string)**
+  - Filter results by policy type; can be one of: `managed`, `custom`
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListPublicKeys`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListPublicKeys.html)
@@ -839,6 +910,20 @@ Properties:
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
+### `UpdateOriginRequestPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginRequestPolicy.html)
+
+Properties:
+- **`OriginRequestPolicyConfig` (object) [required]**
+  - Complete origin request policy config
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_OriginRequestPolicyConfig.html)
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
+
+
 ### `UpdatePublicKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html)
@@ -857,20 +942,15 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CopyDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CopyDistribution.html)
 - [`CreateDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html)
-- [`CreateOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginRequestPolicy.html)
 - [`CreateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateRealtimeLogConfig.html)
 - [`CreateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateResponseHeadersPolicy.html)
 - [`CreateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistribution.html)
 - [`CreateStreamingDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistributionWithTags.html)
-- [`DeleteOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginRequestPolicy.html)
 - [`DeleteRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteRealtimeLogConfig.html)
 - [`DeleteResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteResponseHeadersPolicy.html)
 - [`DeleteStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteStreamingDistribution.html)
 - [`GetInvalidation`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html)
-- [`GetOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicy.html)
-- [`GetOriginRequestPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicyConfig.html)
 - [`GetRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetRealtimeLogConfig.html)
 - [`GetResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicy.html)
 - [`GetResponseHeadersPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicyConfig.html)
@@ -883,7 +963,6 @@ Properties:
 - [`ListDistributionsByResponseHeadersPolicyId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByResponseHeadersPolicyId.html)
 - [`ListDistributionsByWebACLId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByWebACLId.html)
 - [`ListInvalidations`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListInvalidations.html)
-- [`ListOriginRequestPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginRequestPolicies.html)
 - [`ListRealtimeLogConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListRealtimeLogConfigs.html)
 - [`ListResponseHeadersPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListResponseHeadersPolicies.html)
 - [`ListStreamingDistributions`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListStreamingDistributions.html)
@@ -892,7 +971,6 @@ Properties:
 - [`TagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TagResource.html)
 - [`UntagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html)
 - [`UpdateDistributionWithStagingConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistributionWithStagingConfig.html)
-- [`UpdateOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginRequestPolicy.html)
 - [`UpdateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateRealtimeLogConfig.html)
 - [`UpdateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateResponseHeadersPolicy.html)
 - [`UpdateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateStreamingDistribution.html)

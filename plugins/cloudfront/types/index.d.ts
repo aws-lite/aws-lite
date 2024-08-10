@@ -2,6 +2,7 @@ import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
   AssociateAliasCommandOutput as AssociateAliasResponse,
+  CopyDistributionCommandOutput as CopyDistributionResponse,
   CreateCachePolicyCommandOutput as CreateCachePolicyResponse,
   CreateCloudFrontOriginAccessIdentityCommandOutput as CreateCloudFrontOriginAccessIdentityResponse,
   CreateContinuousDeploymentPolicyCommandOutput as CreateContinuousDeploymentPolicyResponse,
@@ -14,6 +15,7 @@ import {
   CreateKeyValueStoreCommandOutput as CreateKeyValueStoreResponse,
   CreateMonitoringSubscriptionCommandOutput as CreateMonitoringSubscriptionResponse,
   CreateOriginAccessControlCommandOutput as CreateOriginAccessControlResponse,
+  CreateOriginRequestPolicyCommandOutput as CreateOriginRequestPolicyResponse,
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
   DeleteCachePolicyCommandOutput as DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityCommandOutput as DeleteCloudFrontOriginAccessIdentityResponse,
@@ -26,6 +28,7 @@ import {
   DeleteKeyValueStoreCommandOutput as DeleteKeyValueStoreResponse,
   DeleteMonitoringSubscriptionCommandOutput as DeleteMonitoringSubscriptionResponse,
   DeleteOriginAccessControlCommandOutput as DeleteOriginAccessControlResponse,
+  DeleteOriginRequestPolicyCommandOutput as DeleteOriginRequestPolicyResponse,
   DeletePublicKeyCommandOutput as DeletePublicKeyResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   DescribeKeyValueStoreCommandOutput as DescribeKeyValueStoreResponse,
@@ -46,6 +49,8 @@ import {
   GetKeyGroupConfigCommandOutput as GetKeyGroupConfigResponse,
   GetOriginAccessControlCommandOutput as GetOriginAccessControlResponse,
   GetOriginAccessControlConfigCommandOutput as GetOriginAccessControlConfigResponse,
+  GetOriginRequestPolicyCommandOutput as GetOriginRequestPolicyResponse,
+  GetOriginRequestPolicyConfigCommandOutput as GetOriginRequestPolicyConfigResponse,
   GetMonitoringSubscriptionCommandOutput as GetMonitoringSubscriptionResponse,
   GetPublicKeyCommandOutput as GetPublicKeyResponse,
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
@@ -60,6 +65,7 @@ import {
   ListKeyGroupsCommandOutput as ListKeyGroupsResponse,
   ListKeyValueStoresCommandOutput as ListKeyValueStoresResponse,
   ListOriginAccessControlsCommandOutput as ListOriginAccessControlsResponse,
+  ListOriginRequestPoliciesCommandOutput as ListOriginRequestPoliciesResponse,
   ListPublicKeysCommandOutput as ListPublicKeysResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
   UpdateCachePolicyCommandOutput as UpdateCachePolicyResponse,
@@ -72,6 +78,7 @@ import {
   UpdateKeyGroupCommandOutput as UpdateKeyGroupResponse,
   UpdateKeyValueStoreCommandOutput as UpdateKeyValueStoreResponse,
   UpdateOriginAccessControlCommandOutput as UpdateOriginAccessControlResponse,
+  UpdateOriginRequestPolicyCommandOutput as UpdateOriginRequestPolicyResponse,
   UpdatePublicKeyCommandOutput as UpdatePublicKeyResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudfront";
@@ -85,6 +92,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#AssociateAlias CloudFront: AssociateAlias}
    */
   AssociateAlias: (input: { TargetDistributionId: string, Alias: string }) => Promise<AssociateAliasResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CopyDistribution.html CloudFront: CopyDistribution}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CopyDistribution CloudFront: CopyDistribution}
+   */
+  CopyDistribution: (input: { PrimaryDistributionId: string, CallerReference: string, IfMatch: string, Staging?: boolean, Enabled?: boolean }) => Promise<CopyDistributionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCachePolicy.html CloudFront: CreateCachePolicy}
@@ -159,6 +172,12 @@ declare interface AwsLiteCloudFront {
   CreateOriginAccessControl: (input: { OriginAccessControlConfig: Record<string, any> }) => Promise<CreateOriginAccessControlResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginRequestPolicy.html CloudFront: CreateOriginRequestPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateOriginRequestPolicy CloudFront: CreateOriginRequestPolicy}
+   */
+  CreateOriginRequestPolicy: (input: { OriginRequestPolicyConfig: Record<string, any> }) => Promise<CreateOriginRequestPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html CloudFront: CreatePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreatePublicKey CloudFront: CreatePublicKey}
    */
@@ -229,6 +248,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteOriginAccessControl CloudFront: DeleteOriginAccessControl}
    */
   DeleteOriginAccessControl: (input: { Id: string, IfMatch: string }) => Promise<DeleteOriginAccessControlResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginRequestPolicy.html CloudFront: DeleteOriginRequestPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteOriginRequestPolicy CloudFront: DeleteOriginRequestPolicy}
+   */
+  DeleteOriginRequestPolicy: (input: { Id: string, IfMatch: string }) => Promise<DeleteOriginRequestPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html CloudFront: DeletePublicKey}
@@ -351,6 +376,18 @@ declare interface AwsLiteCloudFront {
   GetOriginAccessControlConfig: (input: { Id: string }) => Promise<GetOriginAccessControlConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicy.html CloudFront: GetOriginRequestPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetOriginRequestPolicy CloudFront: GetOriginRequestPolicy}
+   */
+  GetOriginRequestPolicy: (input: { Id: string }) => Promise<GetOriginRequestPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicyConfig.html CloudFront: GetOriginRequestPolicyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetOriginRequestPolicyConfig CloudFront: GetOriginRequestPolicyConfig}
+   */
+  GetOriginRequestPolicyConfig: (input: { Id: string }) => Promise<GetOriginRequestPolicyConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html CloudFront: GetMonitoringSubscription}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetMonitoringSubscription CloudFront: GetMonitoringSubscription}
    */
@@ -435,6 +472,12 @@ declare interface AwsLiteCloudFront {
   ListOriginAccessControls: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListOriginAccessControlsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginRequestPolicies.html CloudFront: ListOriginRequestPolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListOriginRequestPolicies CloudFront: ListOriginRequestPolicies}
+   */
+  ListOriginRequestPolicies: (input: { Marker?: string, MaxItems?: number, Type?: string, paginate?: boolean | string }) => Promise<ListOriginRequestPoliciesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListPublicKeys.html CloudFront: ListPublicKeys}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListPublicKeys CloudFront: ListPublicKeys}
    */
@@ -507,6 +550,12 @@ declare interface AwsLiteCloudFront {
   UpdateOriginAccessControl: (input: { OriginAccessControlConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateOriginAccessControlResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginRequestPolicy.html CloudFront: UpdateOriginRequestPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateOriginRequestPolicy CloudFront: UpdateOriginRequestPolicy}
+   */
+  UpdateOriginRequestPolicy: (input: { OriginRequestPolicyConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateOriginRequestPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html CloudFront: UpdatePublicKey}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdatePublicKey CloudFront: UpdatePublicKey}
    */
@@ -525,6 +574,7 @@ export type {
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   AssociateAliasResponse,
+  CopyDistributionResponse,
   CreateCachePolicyResponse,
   CreateCloudFrontOriginAccessIdentityResponse,
   CreateContinuousDeploymentPolicyResponse,
@@ -537,6 +587,7 @@ export type {
   CreateKeyValueStoreResponse,
   CreateMonitoringSubscriptionResponse,
   CreateOriginAccessControlResponse,
+  CreateOriginRequestPolicyResponse,
   CreatePublicKeyResponse,
   DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityResponse,
@@ -549,6 +600,7 @@ export type {
   DeleteKeyValueStoreResponse,
   DeleteMonitoringSubscriptionResponse,
   DeleteOriginAccessControlResponse,
+  DeleteOriginRequestPolicyResponse,
   DeletePublicKeyResponse,
   DescribeFunctionResponse,
   DescribeKeyValueStoreResponse,
@@ -569,6 +621,8 @@ export type {
   GetKeyGroupConfigResponse,
   GetOriginAccessControlResponse,
   GetOriginAccessControlConfigResponse,
+  GetOriginRequestPolicyResponse,
+  GetOriginRequestPolicyConfigResponse,
   GetMonitoringSubscriptionResponse,
   GetPublicKeyResponse,
   GetPublicKeyConfigResponse,
@@ -583,6 +637,7 @@ export type {
   ListKeyGroupsResponse,
   ListKeyValueStoresResponse,
   ListOriginAccessControlsResponse,
+  ListOriginRequestPoliciesResponse,
   ListPublicKeysResponse,
   TestFunctionResponse,
   UpdateCachePolicyResponse,
@@ -595,6 +650,7 @@ export type {
   UpdateKeyGroupResponse,
   UpdateKeyValueStoreResponse,
   UpdateOriginAccessControlResponse,
+  UpdateOriginRequestPolicyResponse,
   UpdatePublicKeyResponse,
   // $EXPORT_END
 }

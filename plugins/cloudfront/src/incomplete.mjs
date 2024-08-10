@@ -1,20 +1,15 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/'
 export default {
-  CopyDistribution:                           { disabled, awsDoc: docRoot + 'API_CopyDistribution.html' },
-  CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' },
-  CreateOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_CreateOriginRequestPolicy.html' },
+  CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' }, // TODO: test
   CreateRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html' },
   CreateResponseHeadersPolicy:                { disabled, awsDoc: docRoot + 'API_CreateResponseHeadersPolicy.html' },
   CreateStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_CreateStreamingDistribution.html' },
   CreateStreamingDistributionWithTags:        { disabled, awsDoc: docRoot + 'API_CreateStreamingDistributionWithTags.html' },
-  DeleteOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_DeleteOriginRequestPolicy.html' },
   DeleteRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_DeleteRealtimeLogConfig.html' },
   DeleteResponseHeadersPolicy:                { disabled, awsDoc: docRoot + 'API_DeleteResponseHeadersPolicy.html' },
   DeleteStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_DeleteStreamingDistribution.html' },
   GetInvalidation:                            { disabled, awsDoc: docRoot + 'API_GetInvalidation.html' },
-  GetOriginRequestPolicy:                     { disabled, awsDoc: docRoot + 'API_GetOriginRequestPolicy.html' },
-  GetOriginRequestPolicyConfig:               { disabled, awsDoc: docRoot + 'API_GetOriginRequestPolicyConfig.html' },
   GetRealtimeLogConfig:                       { disabled, awsDoc: docRoot + 'API_GetRealtimeLogConfig.html' },
   GetResponseHeadersPolicy:                   { disabled, awsDoc: docRoot + 'API_GetResponseHeadersPolicy.html' },
   GetResponseHeadersPolicyConfig:             { disabled, awsDoc: docRoot + 'API_GetResponseHeadersPolicyConfig.html' },
@@ -27,7 +22,6 @@ export default {
   ListDistributionsByResponseHeadersPolicyId: { disabled, awsDoc: docRoot + 'API_ListDistributionsByResponseHeadersPolicyId.html' },
   ListDistributionsByWebACLId:                { disabled, awsDoc: docRoot + 'API_ListDistributionsByWebACLId.html' },
   ListInvalidations:                          { disabled, awsDoc: docRoot + 'API_ListInvalidations.html' },
-  ListOriginRequestPolicies:                  { disabled, awsDoc: docRoot + 'API_ListOriginRequestPolicies.html' },
   ListRealtimeLogConfigs:                     { disabled, awsDoc: docRoot + 'API_ListRealtimeLogConfigs.html' },
   ListResponseHeadersPolicies:                { disabled, awsDoc: docRoot + 'API_ListResponseHeadersPolicies.html' },
   ListStreamingDistributions:                 { disabled, awsDoc: docRoot + 'API_ListStreamingDistributions.html' },
@@ -36,7 +30,6 @@ export default {
   TagResource:                                { disabled, awsDoc: docRoot + 'API_TagResource.html' },
   UntagResource:                              { disabled, awsDoc: docRoot + 'API_UntagResource.html' },
   UpdateDistributionWithStagingConfig:        { disabled, awsDoc: docRoot + 'API_UpdateDistributionWithStagingConfig.html' },
-  UpdateOriginRequestPolicy:                  { disabled, awsDoc: docRoot + 'API_UpdateOriginRequestPolicy.html' },
   UpdateRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_UpdateRealtimeLogConfig.html' },
   UpdateResponseHeadersPolicy:                { disabled, awsDoc: docRoot + 'API_UpdateResponseHeadersPolicy.html' },
   UpdateStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_UpdateStreamingDistribution.html' },
