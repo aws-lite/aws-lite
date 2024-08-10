@@ -54,6 +54,8 @@ const arrayProperties = {
   // FieldLevelEncryptionConfig
   'FieldLevelEncryptionConfig.ContentTypeProfileConfig.ContentTypeProfiles': 'ContentTypeProfile',
   'FieldLevelEncryptionConfig.QueryArgProfileConfig.QueryArgProfiles': 'QueryArgProfile',
+  'ContentTypeProfileConfig.ContentTypeProfiles': 'ContentTypeProfile',
+  'QueryArgProfileConfig.QueryArgProfiles': 'QueryArgProfile',
   // FieldLevelEncryptionProfileConfig
   'FieldLevelEncryptionProfileConfig.EncryptionEntities': 'EncryptionEntity',
   'FieldLevelEncryptionProfileConfig.EncryptionEntities.Items.FieldPatterns': 'FieldPattern',

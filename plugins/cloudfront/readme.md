@@ -72,6 +72,16 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html#API_CreateDistribution_RequestSyntax)
 
 
+### `CreateFieldLevelEncryptionConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionConfig.html)
+
+Properties:
+- **`FieldLevelEncryptionConfig` (object) [required]**
+  - Complete field level encryption config object
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_FieldLevelEncryptionConfig.html)
+
+
 ### `CreateFieldLevelEncryptionProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionProfile.html)
@@ -201,6 +211,17 @@ Properties:
 ### `DeleteDistribution`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteDistribution.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
+
+
+### `DeleteFieldLevelEncryptionConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionConfig.html)
 
 Properties:
 - **`Id` (string) [required]**
@@ -376,6 +397,24 @@ Properties:
   - The resource ID
 
 
+### `GetFieldLevelEncryption`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionConfig.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
+### `GetFieldLevelEncryptionConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionConfig.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
 ### `GetFieldLevelEncryptionProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionProfile.html)
@@ -512,6 +551,19 @@ Properties:
 ### `ListDistributions`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (number)**
+  - Maximum number of items to return
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListFieldLevelEncryptionConfigs`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFieldLevelEncryptionConfigs.html)
 
 Properties:
 - **`Marker` (string)**
@@ -675,6 +727,20 @@ Properties:
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
+### `UpdateFieldLevelEncryptionConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionConfig.html)
+
+Properties:
+- **`FieldLevelEncryptionConfig` (object) [required]**
+  - Complete field level encryption config object
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_FieldLevelEncryptionConfig.html)
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
+
+
 ### `UpdateFieldLevelEncryptionProfile`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionProfile.html)
@@ -766,19 +832,15 @@ Properties:
 - [`AssociateAlias`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_AssociateAlias.html)
 - [`CopyDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CopyDistribution.html)
 - [`CreateDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html)
-- [`CreateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionConfig.html)
 - [`CreateOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateOriginRequestPolicy.html)
 - [`CreateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateRealtimeLogConfig.html)
 - [`CreateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateResponseHeadersPolicy.html)
 - [`CreateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistribution.html)
 - [`CreateStreamingDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistributionWithTags.html)
-- [`DeleteFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteFieldLevelEncryptionConfig.html)
 - [`DeleteOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteOriginRequestPolicy.html)
 - [`DeleteRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteRealtimeLogConfig.html)
 - [`DeleteResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteResponseHeadersPolicy.html)
 - [`DeleteStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteStreamingDistribution.html)
-- [`GetFieldLevelEncryption`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryption.html)
-- [`GetFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetFieldLevelEncryptionConfig.html)
 - [`GetInvalidation`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html)
 - [`GetOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicy.html)
 - [`GetOriginRequestPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginRequestPolicyConfig.html)
@@ -794,7 +856,6 @@ Properties:
 - [`ListDistributionsByRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByRealtimeLogConfig.html)
 - [`ListDistributionsByResponseHeadersPolicyId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByResponseHeadersPolicyId.html)
 - [`ListDistributionsByWebACLId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByWebACLId.html)
-- [`ListFieldLevelEncryptionConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFieldLevelEncryptionConfigs.html)
 - [`ListInvalidations`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListInvalidations.html)
 - [`ListOriginRequestPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListOriginRequestPolicies.html)
 - [`ListRealtimeLogConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListRealtimeLogConfigs.html)
@@ -805,7 +866,6 @@ Properties:
 - [`TagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TagResource.html)
 - [`UntagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html)
 - [`UpdateDistributionWithStagingConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistributionWithStagingConfig.html)
-- [`UpdateFieldLevelEncryptionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateFieldLevelEncryptionConfig.html)
 - [`UpdateOriginRequestPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateOriginRequestPolicy.html)
 - [`UpdateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateRealtimeLogConfig.html)
 - [`UpdateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateResponseHeadersPolicy.html)
