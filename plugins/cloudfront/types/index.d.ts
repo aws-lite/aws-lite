@@ -17,6 +17,7 @@ import {
   CreateOriginAccessControlCommandOutput as CreateOriginAccessControlResponse,
   CreateOriginRequestPolicyCommandOutput as CreateOriginRequestPolicyResponse,
   CreatePublicKeyCommandOutput as CreatePublicKeyResponse,
+  CreateResponseHeadersPolicyCommandOutput as CreateResponseHeadersPolicyResponse,
   DeleteCachePolicyCommandOutput as DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityCommandOutput as DeleteCloudFrontOriginAccessIdentityResponse,
   DeleteContinuousDeploymentPolicyCommandOutput as DeleteContinuousDeploymentPolicyResponse,
@@ -30,6 +31,7 @@ import {
   DeleteOriginAccessControlCommandOutput as DeleteOriginAccessControlResponse,
   DeleteOriginRequestPolicyCommandOutput as DeleteOriginRequestPolicyResponse,
   DeletePublicKeyCommandOutput as DeletePublicKeyResponse,
+  DeleteResponseHeadersPolicyCommandOutput as DeleteResponseHeadersPolicyResponse,
   DescribeFunctionCommandOutput as DescribeFunctionResponse,
   DescribeKeyValueStoreCommandOutput as DescribeKeyValueStoreResponse,
   GetCachePolicyCommandOutput as GetCachePolicyResponse,
@@ -54,6 +56,8 @@ import {
   GetMonitoringSubscriptionCommandOutput as GetMonitoringSubscriptionResponse,
   GetPublicKeyCommandOutput as GetPublicKeyResponse,
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
+  GetResponseHeadersPolicyCommandOutput as GetResponseHeadersPolicyResponse,
+  GetResponseHeadersPolicyConfigCommandOutput as GetResponseHeadersPolicyConfigResponse,
   ListCachePoliciesCommandOutput as ListCachePoliciesResponse,
   ListCloudFrontOriginAccessIdentitiesCommandOutput as ListCloudFrontOriginAccessIdentitiesResponse,
   ListConflictingAliasesCommandOutput as ListConflictingAliasesResponse,
@@ -67,6 +71,7 @@ import {
   ListOriginAccessControlsCommandOutput as ListOriginAccessControlsResponse,
   ListOriginRequestPoliciesCommandOutput as ListOriginRequestPoliciesResponse,
   ListPublicKeysCommandOutput as ListPublicKeysResponse,
+  ListResponseHeadersPoliciesCommandOutput as ListResponseHeadersPoliciesResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
   UpdateCachePolicyCommandOutput as UpdateCachePolicyResponse,
   UpdateCloudFrontOriginAccessIdentityCommandOutput as UpdateCloudFrontOriginAccessIdentityResponse,
@@ -80,6 +85,7 @@ import {
   UpdateOriginAccessControlCommandOutput as UpdateOriginAccessControlResponse,
   UpdateOriginRequestPolicyCommandOutput as UpdateOriginRequestPolicyResponse,
   UpdatePublicKeyCommandOutput as UpdatePublicKeyResponse,
+  UpdateResponseHeadersPolicyCommandOutput as UpdateResponseHeadersPolicyResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudfront";
 
@@ -184,6 +190,12 @@ declare interface AwsLiteCloudFront {
   CreatePublicKey: (input: { PublicKeyConfig: Record<string, any> }) => Promise<CreatePublicKeyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateResponseHeadersPolicy.html CloudFront: CreateResponseHeadersPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateResponseHeadersPolicy CloudFront: CreateResponseHeadersPolicy}
+   */
+  CreateResponseHeadersPolicy: (input: { ResponseHeadersPolicyConfig: Record<string, any> }) => Promise<CreateResponseHeadersPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCachePolicy.html CloudFront: DeleteCachePolicy}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteCachePolicy CloudFront: DeleteCachePolicy}
    */
@@ -260,6 +272,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeletePublicKey CloudFront: DeletePublicKey}
    */
   DeletePublicKey: (input: { Id: string, IfMatch: string }) => Promise<DeletePublicKeyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteResponseHeadersPolicy.html CloudFront: DeleteResponseHeadersPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#DeleteResponseHeadersPolicy CloudFront: DeleteResponseHeadersPolicy}
+   */
+  DeleteResponseHeadersPolicy: (input: { Id: string, IfMatch: string }) => Promise<DeleteResponseHeadersPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DescribeFunction.html CloudFront: DescribeFunction}
@@ -406,6 +424,18 @@ declare interface AwsLiteCloudFront {
   GetPublicKeyConfig: (input: { Id: string }) => Promise<GetPublicKeyConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicy.html CloudFront: GetResponseHeadersPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetResponseHeadersPolicy CloudFront: GetResponseHeadersPolicy}
+   */
+  GetResponseHeadersPolicy: (input: { Id: string }) => Promise<GetResponseHeadersPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicyConfig.html CloudFront: GetResponseHeadersPolicyConfig}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetResponseHeadersPolicyConfig CloudFront: GetResponseHeadersPolicyConfig}
+   */
+  GetResponseHeadersPolicyConfig: (input: { Id: string }) => Promise<GetResponseHeadersPolicyConfigResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListCachePolicies.html CloudFront: ListCachePolicies}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListCachePolicies CloudFront: ListCachePolicies}
    */
@@ -484,6 +514,12 @@ declare interface AwsLiteCloudFront {
   ListPublicKeys: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListPublicKeysResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListResponseHeadersPolicies.html CloudFront: ListResponseHeadersPolicies}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListResponseHeadersPolicies CloudFront: ListResponseHeadersPolicies}
+   */
+  ListResponseHeadersPolicies: (input: { Marker?: string, MaxItems?: number, Type?: string, paginate?: boolean | string }) => Promise<ListResponseHeadersPoliciesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html CloudFront: TestFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#TestFunction CloudFront: TestFunction}
    */
@@ -560,6 +596,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdatePublicKey CloudFront: UpdatePublicKey}
    */
   UpdatePublicKey: (input: { PublicKeyConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdatePublicKeyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateResponseHeadersPolicy.html CloudFront: UpdateResponseHeadersPolicy}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UpdateResponseHeadersPolicy CloudFront: UpdateResponseHeadersPolicy}
+   */
+  UpdateResponseHeadersPolicy: (input: { ResponseHeadersPolicyConfig: Record<string, any>, Id: string, IfMatch: string }) => Promise<UpdateResponseHeadersPolicyResponse>
   // $METHODS_END
 }
 
@@ -589,6 +631,7 @@ export type {
   CreateOriginAccessControlResponse,
   CreateOriginRequestPolicyResponse,
   CreatePublicKeyResponse,
+  CreateResponseHeadersPolicyResponse,
   DeleteCachePolicyResponse,
   DeleteCloudFrontOriginAccessIdentityResponse,
   DeleteContinuousDeploymentPolicyResponse,
@@ -602,6 +645,7 @@ export type {
   DeleteOriginAccessControlResponse,
   DeleteOriginRequestPolicyResponse,
   DeletePublicKeyResponse,
+  DeleteResponseHeadersPolicyResponse,
   DescribeFunctionResponse,
   DescribeKeyValueStoreResponse,
   GetCachePolicyResponse,
@@ -626,6 +670,8 @@ export type {
   GetMonitoringSubscriptionResponse,
   GetPublicKeyResponse,
   GetPublicKeyConfigResponse,
+  GetResponseHeadersPolicyResponse,
+  GetResponseHeadersPolicyConfigResponse,
   ListCachePoliciesResponse,
   ListCloudFrontOriginAccessIdentitiesResponse,
   ListConflictingAliasesResponse,
@@ -639,6 +685,7 @@ export type {
   ListOriginAccessControlsResponse,
   ListOriginRequestPoliciesResponse,
   ListPublicKeysResponse,
+  ListResponseHeadersPoliciesResponse,
   TestFunctionResponse,
   UpdateCachePolicyResponse,
   UpdateCloudFrontOriginAccessIdentityResponse,
@@ -652,5 +699,6 @@ export type {
   UpdateOriginAccessControlResponse,
   UpdateOriginRequestPolicyResponse,
   UpdatePublicKeyResponse,
+  UpdateResponseHeadersPolicyResponse,
   // $EXPORT_END
 }

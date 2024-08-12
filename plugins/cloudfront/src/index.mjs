@@ -42,7 +42,7 @@ const OriginAccessControlConfig = { ...obj, required, comment: 'Complete origin 
 const Alias = { ...str, required, comment: 'Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`' }
 const Type = { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' }
 const OriginRequestPolicyConfig = { ...obj, required, comment: 'Complete origin request policy config', ref: docRoot + 'API_OriginRequestPolicyConfig.html' }
-
+const ResponseHeadersPolicyConfig = { ...obj, required, comment: 'Complete response headers policy config', ref: docRoot + 'API_ResponseHeadersPolicyConfig.html' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -516,6 +516,62 @@ const CreatePublicKey = {
   },
 }
 
+/* TODO: Test
+const CreateRealtimeLogConfig = {
+  awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html',
+  validate: {
+    EndPoints: { ...arr, required, comment: 'Array of `Endpoint` objects containing information about the Kinesis data stream', ref: docRoot + 'API_CreateRealtimeLogConfig.html#cloudfront-CreateRealtimeLogConfig-request-EndPoints' },
+    Fields: { ...arr, required, comment: 'Array of strings specifying fields to include in each log record', ref: docRoot + 'API_CreateRealtimeLogConfig.html#cloudfront-CreateRealtimeLogConfig-request-Fields' },
+    Name,
+    SamplingRate: { ...num, required, comment: 'Percentage of viewer requests between 1 and 100 (inclusive) that will be sampled to generate logs' },
+  },
+  request: (params) => {
+    const { EndPoints, Fields } = params
+    const CreateRealtimeLogConfigRequest = { ...params }
+    CreateRealtimeLogConfigRequest.EndPoints = { EndPoint: EndPoints }
+    CreateRealtimeLogConfigRequest.Fields = { Field: Fields }
+    return {
+      path: '/2020-05-31/realtime-log-config',
+      headers: xml,
+      xmlns,
+      payload: { CreateRealtimeLogConfigRequest },
+    }
+  },
+  response: ({ payload }) => {
+    const { EndPoint } = payload.EndPoints
+    const { Field } = payload.Field
+    payload.EndPoints = Array.isArray(EndPoint) ? EndPoint : [ EndPoint ]
+    payload.Fields = Array.isArray(Field) ? Field : [ Field ]
+    return { RealtimeLogConfig: payload }
+  },
+}
+*/
+
+const CreateResponseHeadersPolicy = {
+  awsDoc: docRoot + 'API_CreateResponseHeadersPolicy.html',
+  validate: {
+    ResponseHeadersPolicyConfig,
+  },
+  request: (params) => {
+    const ResponseHeadersPolicyConfig = unarrayifyObject(params)
+    return {
+      path: '/2020-05-31/response-headers-policy',
+      headers: xml,
+      xmlns,
+      payload: ResponseHeadersPolicyConfig,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag, location } = headers
+    const ResponseHeadersPolicy = arrayifyObject(payload)
+    return {
+      ResponseHeadersPolicy,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
+
 const DeleteCachePolicy = {
   awsDoc: docRoot + 'API_DeleteCachePolicy.html',
   validate: {
@@ -715,6 +771,22 @@ const DeletePublicKey = {
   request: ({ Id, IfMatch }) => {
     return {
       path: `/2020-05-31/public-key/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
+const DeleteResponseHeadersPolicy = {
+  awsDoc: docRoot + 'API_DeleteResponseHeadersPolicy.html',
+  validate: {
+    Id,
+    IfMatch,
+  },
+  request: ({ Id, IfMatch }) => {
+    return {
+      path: `/2020-05-31/response-headers-policy/${Id}`,
       method: 'DELETE',
       headers: { 'if-match': IfMatch },
     }
@@ -1181,6 +1253,46 @@ const GetPublicKeyConfig = {
   },
 }
 
+const GetResponseHeadersPolicy = {
+  awsDoc: docRoot + 'API_GetResponseHeadersPolicy.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/response-headers-policy/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const ResponseHeadersPolicy = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      ResponseHeadersPolicy,
+      ETag: etag,
+    }
+  },
+}
+
+const GetResponseHeadersPolicyConfig = {
+  awsDoc: docRoot + 'API_GetResponseHeadersPolicyConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/response-headers-policy/${Id}/config`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const ResponseHeadersPolicyConfig = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      ResponseHeadersPolicyConfig,
+      ETag: etag,
+    }
+  },
+}
+
 const ListCachePolicies = {
   awsDoc: docRoot + 'API_ListCachePolicies.html',
   validate: {
@@ -1558,6 +1670,35 @@ const ListPublicKeys = {
   },
 }
 
+const ListResponseHeadersPolicies = {
+  awsDoc: docRoot + 'API_ListResponseHeadersPolicies.html',
+  validate: {
+    Marker,
+    MaxItems,
+    Type,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { paginate } = params
+    const query = { ...params }
+    if (paginate) delete query.paginate
+    return {
+      path: '/2020-05-31/response-headers-policy',
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.ResponseHeadersPolicySummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const ResponseHeadersPolicyList = arrayifyItemsProp(payload)
+    ResponseHeadersPolicyList.Items = ResponseHeadersPolicyList.Items.map(i => arrayifyObject(i))
+    return { ResponseHeadersPolicyList }
+  },
+}
+
 // TODO: improve documentation for `EventObject`
 // TODO: more testing
 const TestFunction = {
@@ -1903,6 +2044,33 @@ const UpdatePublicKey = {
   },
 }
 
+const UpdateResponseHeadersPolicy = {
+  awsDoc: docRoot + 'API_UpdateResponseHeadersPolicy.html',
+  validate: {
+    ResponseHeadersPolicyConfig,
+    Id,
+    IfMatch,
+  },
+  request: ({ ResponseHeadersPolicyConfig, Id, IfMatch }) => {
+    const payload = unarrayifyObject({ ResponseHeadersPolicyConfig })
+    return {
+      path: `/2020-05-31/response-headers-policy/${Id}`,
+      method: 'PUT',
+      headers: { 'if-match': IfMatch, ...xml },
+      xmlns,
+      payload: payload,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const ResponseHeadersPolicy = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      ResponseHeadersPolicy,
+      ETag: etag,
+    }
+  },
+}
+
 export default {
   name: '@aws-lite/cloudfront',
   service,
@@ -1924,6 +2092,8 @@ export default {
     CreateOriginAccessControl,
     CreateOriginRequestPolicy,
     CreatePublicKey,
+    // CreateRealtimeLogConfig,
+    CreateResponseHeadersPolicy,
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
     DeleteContinuousDeploymentPolicy,
@@ -1937,6 +2107,7 @@ export default {
     DeleteOriginAccessControl,
     DeleteOriginRequestPolicy,
     DeletePublicKey,
+    DeleteResponseHeadersPolicy,
     DescribeFunction,
     DescribeKeyValueStore,
     GetCachePolicy,
@@ -1961,6 +2132,8 @@ export default {
     GetMonitoringSubscription,
     GetPublicKey,
     GetPublicKeyConfig,
+    GetResponseHeadersPolicy,
+    GetResponseHeadersPolicyConfig,
     ListCachePolicies,
     ListCloudFrontOriginAccessIdentities,
     ListConflictingAliases,
@@ -1974,6 +2147,7 @@ export default {
     ListOriginAccessControls,
     ListOriginRequestPolicies,
     ListPublicKeys,
+    ListResponseHeadersPolicies,
     TestFunction,
     UpdateCachePolicy,
     UpdateCloudFrontOriginAccessIdentity,
@@ -1987,6 +2161,7 @@ export default {
     UpdateOriginAccessControl,
     UpdateOriginRequestPolicy,
     UpdatePublicKey,
+    UpdateResponseHeadersPolicy,
     ...incomplete,
   },
 }

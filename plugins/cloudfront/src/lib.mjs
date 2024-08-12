@@ -77,6 +77,26 @@ const arrayProperties = {
   'CookiesConfig.Cookies': 'Name',
   'HeadersConfig.Headers': 'Name',
   'QueryStringsConfig.QueryStrings': 'Name',
+  // ResponseHeadersPolicy
+  'CorsConfig.AccessControlAllowHeaders': 'Header',
+  'CorsConfig.AccessControlAllowMethods': 'Method',
+  'CorsConfig.AccessControlAllowOrigins': 'Origin',
+  'CorsConfig.AccessControlExposeHeaders': 'Header',
+  'CustomHeadersConfig': 'ResponseHeadersPolicyCustomHeader',
+  'RemoveHeadersConfig': 'ResponseHeadersPolicyRemoveHeader',
+  'ResponseHeadersPolicyConfig.CorsConfig.AccessControlAllowHeaders': 'Header',
+  'ResponseHeadersPolicyConfig.CorsConfig.AccessControlAllowMethods': 'Method',
+  'ResponseHeadersPolicyConfig.CorsConfig.AccessControlAllowOrigins': 'Origin',
+  'ResponseHeadersPolicyConfig.CorsConfig.AccessControlExposeHeaders': 'Header',
+  'ResponseHeadersPolicyConfig.CustomHeadersConfig': 'ResponseHeadersPolicyCustomHeader',
+  'ResponseHeadersPolicyConfig.RemoveHeadersConfig': 'ResponseHeadersPolicyRemoveHeader',
+  'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.CorsConfig.AccessControlAllowHeaders': 'Header',
+  'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.CorsConfig.AccessControlAllowMethods': 'Method',
+  'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.CorsConfig.AccessControlAllowOrigins': 'Origin',
+  'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.CorsConfig.AccessControlExposeHeaders': 'Header',
+  'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.CustomHeadersConfig': 'ResponseHeadersPolicyCustomHeader',
+  'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.RemoveHeadersConfig': 'ResponseHeadersPolicyRemoveHeader',
+
 }
 
 const arrayifyItemsProp = obj => {

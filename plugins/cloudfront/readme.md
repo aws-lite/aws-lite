@@ -213,6 +213,16 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html#cloudfront-CreatePublicKey-request-PublicKeyConfig)
 
 
+### `CreateResponseHeadersPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateResponseHeadersPolicy.html)
+
+Properties:
+- **`ResponseHeadersPolicyConfig` (object) [required]**
+  - Complete response headers policy config
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ResponseHeadersPolicyConfig.html)
+
+
 ### `DeleteCachePolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteCachePolicy.html)
@@ -346,6 +356,17 @@ Properties:
 ### `DeletePublicKey`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeletePublicKey.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
+
+
+### `DeleteResponseHeadersPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteResponseHeadersPolicy.html)
 
 Properties:
 - **`Id` (string) [required]**
@@ -574,6 +595,24 @@ Properties:
   - The resource ID
 
 
+### `GetResponseHeadersPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicy.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
+### `GetResponseHeadersPolicyConfig`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicyConfig.html)
+
+Properties:
+- **`Id` (string) [required]**
+  - The resource ID
+
+
 ### `ListCachePolicies`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListCachePolicies.html)
@@ -751,6 +790,21 @@ Properties:
   - Pagination cursor token to be used if `NextMarker` was returned in a previous response
 - **`MaxItems` (number)**
   - Maximum number of items to return
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListResponseHeadersPolicies`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListResponseHeadersPolicies.html)
+
+Properties:
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (number)**
+  - Maximum number of items to return
+- **`Type` (string)**
+  - Filter results by policy type; can be one of: `managed`, `custom`
 - **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -938,22 +992,32 @@ Properties:
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
 
+### `UpdateResponseHeadersPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateResponseHeadersPolicy.html)
+
+Properties:
+- **`ResponseHeadersPolicyConfig` (object) [required]**
+  - Complete response headers policy config
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ResponseHeadersPolicyConfig.html)
+- **`Id` (string) [required]**
+  - The resource ID
+- **`IfMatch` (string) [required]**
+  - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
 
 - [`CreateDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html)
 - [`CreateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateRealtimeLogConfig.html)
-- [`CreateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateResponseHeadersPolicy.html)
 - [`CreateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistribution.html)
 - [`CreateStreamingDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistributionWithTags.html)
 - [`DeleteRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteRealtimeLogConfig.html)
-- [`DeleteResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteResponseHeadersPolicy.html)
 - [`DeleteStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteStreamingDistribution.html)
 - [`GetInvalidation`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html)
 - [`GetRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetRealtimeLogConfig.html)
-- [`GetResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicy.html)
-- [`GetResponseHeadersPolicyConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetResponseHeadersPolicyConfig.html)
 - [`GetStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetStreamingDistribution.html)
 - [`GetStreamingDistributionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetStreamingDistributionConfig.html)
 - [`ListDistributionsByCachePolicyId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByCachePolicyId.html)
@@ -964,7 +1028,6 @@ Properties:
 - [`ListDistributionsByWebACLId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByWebACLId.html)
 - [`ListInvalidations`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListInvalidations.html)
 - [`ListRealtimeLogConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListRealtimeLogConfigs.html)
-- [`ListResponseHeadersPolicies`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListResponseHeadersPolicies.html)
 - [`ListStreamingDistributions`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListStreamingDistributions.html)
 - [`ListTagsForResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListTagsForResource.html)
 - [`PublishFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_PublishFunction.html)
@@ -972,7 +1035,6 @@ Properties:
 - [`UntagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html)
 - [`UpdateDistributionWithStagingConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistributionWithStagingConfig.html)
 - [`UpdateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateRealtimeLogConfig.html)
-- [`UpdateResponseHeadersPolicy`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateResponseHeadersPolicy.html)
 - [`UpdateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateStreamingDistribution.html)
 <!-- METHOD_DOCS_END -->
 
