@@ -1,18 +1,15 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/'
 export default {
-  ActivateType:                      { disabled, awsDoc: docRoot + 'API_ActivateType.html' },
   BatchDescribeTypeConfigurations:   { disabled, awsDoc: docRoot + 'API_BatchDescribeTypeConfigurations.html' },
   CancelUpdateStack:                 { disabled, awsDoc: docRoot + 'API_CancelUpdateStack.html' },
   ContinueUpdateRollback:            { disabled, awsDoc: docRoot + 'API_ContinueUpdateRollback.html' },
   CreateChangeSet:                   { disabled, awsDoc: docRoot + 'API_CreateChangeSet.html' },
   CreateStackInstances:              { disabled, awsDoc: docRoot + 'API_CreateStackInstances.html' },
   CreateStackSet:                    { disabled, awsDoc: docRoot + 'API_CreateStackSet.html' },
-  DeactivateType:                    { disabled, awsDoc: docRoot + 'API_DeactivateType.html' },
   DeleteChangeSet:                   { disabled, awsDoc: docRoot + 'API_DeleteChangeSet.html' },
   DeleteStackInstances:              { disabled, awsDoc: docRoot + 'API_DeleteStackInstances.html' },
   DeleteStackSet:                    { disabled, awsDoc: docRoot + 'API_DeleteStackSet.html' },
-  DeregisterType:                    { disabled, awsDoc: docRoot + 'API_DeregisterType.html' },
   DescribeAccountLimits:             { disabled, awsDoc: docRoot + 'API_DescribeAccountLimits.html' },
   DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' },
   DescribeChangeSetHooks:            { disabled, awsDoc: docRoot + 'API_DescribeChangeSetHooks.html' },
@@ -50,7 +47,6 @@ export default {
   PublishType:                       { disabled, awsDoc: docRoot + 'API_PublishType.html' },
   RecordHandlerProgress:             { disabled, awsDoc: docRoot + 'API_RecordHandlerProgress.html' },
   RegisterPublisher:                 { disabled, awsDoc: docRoot + 'API_RegisterPublisher.html' },
-  RegisterType:                      { disabled, awsDoc: docRoot + 'API_RegisterType.html' },
   RollbackStack:                     { disabled, awsDoc: docRoot + 'API_RollbackStack.html' },
   SetStackPolicy:                    { disabled, awsDoc: docRoot + 'API_SetStackPolicy.html' },
   SetTypeConfiguration:              { disabled, awsDoc: docRoot + 'API_SetTypeConfiguration.html' },

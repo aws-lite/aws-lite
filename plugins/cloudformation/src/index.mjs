@@ -38,6 +38,13 @@ const TemplateURL = { ...str, comment: 'S3 location of CloudFormation template; 
 const TimeoutInMinutes = { ...num, comment: 'Amount of time before the stack status becomes `CREATE_FAILED`' }
 const StackName = { ...str, required, comment: 'Stack name or ID' }
 const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
+const Type = { ...str, comment: 'Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`' }
+const TypeName = { ...str, comment: 'Name of the extension with length between 10 and 204 (inclusive)' }
+const Arn = { ...str, comment: 'Amazon resource name' }
+const ExecutionRoleArn = { ...str, comment: 'ARN of the IAM execution role used to activate the extension' }
+const LoggingConfig = { ...obj, comment: 'Logging configuration', ref: docRoot + 'API_LoggingConfig.html' }
+
+
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const emptyResponse = () => { return {} }
@@ -58,6 +65,32 @@ const ActivateOrganizationsAccess = {
     }
   },
   response: emptyResponse,
+}
+
+const ActivateType = {
+  awsDoc: docRoot + 'API_ActivateType.html',
+  validate: {
+    AutoUpdate: { ...bool, comment: 'Set to false to disable auto updates when a minor version is published' },
+    ExecutionRoleArn,
+    LoggingConfig,
+    MajorVersion: { ...num, comment: 'Specify major version of the extension to be activated; default is the latest version' },
+    PublicTypeArn: { ...str, comment: 'ARN of the public extension; you must provide either `PublicTypeArn` or all of: `TypeName`, `Type`, `PublisherId`' },
+    PublisherId: { ...str, comment: 'ID of the extension publisher; you must provide either `PublicTypeArn` or all of: `TypeName`, `Type`, `PublisherId`' },
+    Type,
+    TypeName,
+    TypeNameAlias: { ...str, comment: 'Optional alias for the public extension; must be unique within the account and region' },
+    VersionBump: { ...str, comment: 'Manually update a previously-activated type to a new major or minor version if available; can be one of: `MAJOR`, `MINOR`' },
+  },
+  request: (params) => {
+    const query = querystringifyParams(params)
+    return {
+      query: {
+        Action: 'ActivateType',
+        ...query,
+      },
+    }
+  },
+  response: ({ payload }) => payload.ActivateTypeResult,
 }
 
 const CreateStack = {
@@ -113,6 +146,24 @@ const DeactivateOrganizationsAccess = {
   response: emptyResponse,
 }
 
+const DeactivateType = {
+  awsDoc: docRoot + 'API_DeactivateType.html',
+  validate: {
+    Arn: { ...str, comment: 'ARN of the extension' },
+    Type,
+    TypeName,
+  },
+  request: (params) => {
+    return  {
+      query: {
+        Action: 'DeactivateType',
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const DeleteStack = {
   awsDoc: docRoot + 'API_DeleteStack.html',
   validate: {
@@ -131,6 +182,25 @@ const DeleteStack = {
   },
   response: () => ({}),
   error: defaultError,
+}
+
+const DeregisterType = {
+  awsDoc: docRoot + 'API_DeregisterType.html',
+  validate: {
+    Arn,
+    Type,
+    TypeName,
+    VersionId: { ...str, comment: 'ID of a specific extension version; found at the end of the ARN of the extension version' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DeregisterType',
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
 }
 
 const DescribeOrganizationsAccess = {
@@ -248,6 +318,25 @@ const ListStackResources = {
   error: defaultError,
 }
 
+const RegisterType = {
+  awsDoc: docRoot + 'API_RegisterType.html',
+  validate: {
+    ClientRequestToken: { ...str, comment: 'Unique identifier that acts as an idempotency key for the request' },
+    ExecutionRoleArn,
+    LoggingConfig,
+    Type,
+    TypeName,
+  },
+  request: (params) => {
+    const query = querystringifyParams(params)
+    return {
+      Action: 'RegisterType',
+      ...query,
+    }
+  },
+  response: (payload ) => payload,
+}
+
 const UpdateStack = {
   awsDoc: docRoot + 'API_UpdateStack.html',
   validate: {
@@ -315,13 +404,17 @@ export default {
   property,
   methods: {
     ActivateOrganizationsAccess,
+    ActivateType,
     CreateStack,
     DeactivateOrganizationsAccess,
+    DeactivateType,
     DeleteStack,
+    DeregisterType,
     DescribeOrganizationsAccess,
     DescribeStackResources,
     DescribeStacks,
     ListStackResources,
+    RegisterType,
     UpdateStack,
     UpdateTerminationProtection,
     ...incomplete },

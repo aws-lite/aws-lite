@@ -40,6 +40,34 @@ Properties:
 
 
 
+### `ActivateType`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ActivateType.html)
+
+Properties:
+- **`AutoUpdate` (boolean)**
+  - Set to false to disable auto updates when a minor version is published
+- **`ExecutionRoleArn` (string)**
+  - ARN of the IAM execution role used to activate the extension
+- **`LoggingConfig` (object)**
+  - Logging configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_LoggingConfig.html)
+- **`MajorVersion` (number)**
+  - Specify major version of the extension to be activated; default is the latest version
+- **`PublicTypeArn` (string)**
+  - ARN of the public extension; you must provide either `PublicTypeArn` or all of: `TypeName`, `Type`, `PublisherId`
+- **`PublisherId` (string)**
+  - ID of the extension publisher; you must provide either `PublicTypeArn` or all of: `TypeName`, `Type`, `PublisherId`
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
+- **`TypeNameAlias` (string)**
+  - Optional alias for the public extension; must be unique within the account and region
+- **`VersionBump` (string)**
+  - Manually update a previously-activated type to a new major or minor version if available; can be one of: `MAJOR`, `MINOR`
+
+
 ### `CreateStack`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStack.html)
@@ -97,6 +125,19 @@ Properties:
 
 
 
+### `DeactivateType`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeactivateType.html)
+
+Properties:
+- **`Arn` (string)**
+  - ARN of the extension
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
+
+
 ### `DeleteStack`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStack.html)
@@ -110,6 +151,21 @@ Properties:
   - List of logical resource IDs to retain after stack deletion
 - **`RoleARN` (string)**
   - IAM role ARN to assume during deletion
+
+
+### `DeregisterType`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeregisterType.html)
+
+Properties:
+- **`Arn` (string)**
+  - Amazon resource name
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
+- **`VersionId` (string)**
+  - ID of a specific extension version; found at the end of the ARN of the extension version
 
 
 ### `DescribeOrganizationsAccess`
@@ -159,6 +215,24 @@ Properties:
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `RegisterType`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterType.html)
+
+Properties:
+- **`ClientRequestToken` (string)**
+  - Unique identifier that acts as an idempotency key for the request
+- **`ExecutionRoleArn` (string)**
+  - ARN of the IAM execution role used to activate the extension
+- **`LoggingConfig` (object)**
+  - Logging configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_LoggingConfig.html)
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
 
 
 ### `UpdateStack`
@@ -218,18 +292,15 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
-- [`ActivateType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ActivateType.html)
 - [`BatchDescribeTypeConfigurations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_BatchDescribeTypeConfigurations.html)
 - [`CancelUpdateStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html)
 - [`ContinueUpdateRollback`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ContinueUpdateRollback.html)
 - [`CreateChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateChangeSet.html)
 - [`CreateStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html)
 - [`CreateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackSet.html)
-- [`DeactivateType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeactivateType.html)
 - [`DeleteChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteChangeSet.html)
 - [`DeleteStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackInstances.html)
 - [`DeleteStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackSet.html)
-- [`DeregisterType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeregisterType.html)
 - [`DescribeAccountLimits`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeAccountLimits.html)
 - [`DescribeChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSet.html)
 - [`DescribeChangeSetHooks`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSetHooks.html)
@@ -267,7 +338,6 @@ Properties:
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)
 - [`RegisterPublisher`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterPublisher.html)
-- [`RegisterType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterType.html)
 - [`RollbackStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RollbackStack.html)
 - [`SetStackPolicy`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetStackPolicy.html)
 - [`SetTypeConfiguration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeConfiguration.html)
