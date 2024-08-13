@@ -1080,6 +1080,25 @@ const GetFunction = {
   },
 }
 
+/* TODO: test
+const GetInvalidation = {
+  awsDoc: docRoot + 'API_GetInvalidation.html',
+  validate: {
+    DistributionId,
+    Id,
+  },
+  request: ({ DistributionId, Id }) => {
+    return {
+      path: `/2020-05-31/distribution/${DistributionId}/invalidation/${Id}`,
+    }
+  },
+  response: ({ payload }) => {
+    const Invalidation = arrayifyObject(payload)
+    return { Invalidation }
+  },
+}
+*/
+
 const GetKeyGroup = {
   awsDoc: docRoot + 'API_GetKeyGroup.html',
   validate: {
@@ -1526,6 +1545,38 @@ const ListFunctions = {
   },
 }
 
+/* TODO: test
+const ListInvalidations = {
+  awsDoc: docRoot + 'API_ListInvalidations.html',
+  validate: {
+    DistributionId,
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { DistributionId, paginate } = params
+    const query = { ...params }
+    delete query.DistributionId
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/distribution/${DistributionId}/invalidation`,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.InvalidationSummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const InvalidationList = arrayifyItemsProp(payload)
+    InvalidationList.Items = InvalidationList.Items.map(i => arrayifyObject(i))
+    return { InvalidationList }
+  },
+}
+*/
+
 const ListKeyGroups = {
   awsDoc: docRoot + 'API_ListKeyGroups.html',
   validate: {
@@ -1698,6 +1749,33 @@ const ListResponseHeadersPolicies = {
     return { ResponseHeadersPolicyList }
   },
 }
+
+/* TODO: determine correct params/formatting, docs are broken
+const TagResource = {
+  awsDoc: docRoot + 'API_TagResource.html',
+  validate: {
+    Resource: { ...str, required, comment: 'ARN of a cloudfront resource' },
+    Tags: { ...arr, required, comment: 'Array of tags' },
+  },
+  request: ({ Resource, Tags }) => {
+    const payload = {
+      Tags: {
+        Items: { Tag: Tags },
+        Resource,
+      },
+    }
+    return {
+      path: '/2020-05-31/tagging',
+      methods: 'POST',
+      query: { Operation: 'Tag' },
+      headers: xml,
+      xmlns,
+      payload,
+    }
+  },
+  response: defaultResponse,
+}
+*/
 
 // TODO: improve documentation for `EventObject`
 // TODO: more testing
@@ -2123,6 +2201,7 @@ export default {
     GetFieldLevelEncryptionProfile,
     GetFieldLevelEncryptionProfileConfig,
     GetFunction,
+    // GetInvalidation,
     GetKeyGroup,
     GetKeyGroupConfig,
     GetOriginAccessControl,
@@ -2142,12 +2221,14 @@ export default {
     ListFieldLevelEncryptionConfigs,
     ListFieldLevelEncryptionProfiles,
     ListFunctions,
+    // ListInvalidations,
     ListKeyGroups,
     ListKeyValueStores,
     ListOriginAccessControls,
     ListOriginRequestPolicies,
     ListPublicKeys,
     ListResponseHeadersPolicies,
+    // TagResource,
     TestFunction,
     UpdateCachePolicy,
     UpdateCloudFrontOriginAccessIdentity,
