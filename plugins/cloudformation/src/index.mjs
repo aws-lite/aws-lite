@@ -40,12 +40,24 @@ const StackName = { ...str, required, comment: 'Stack name or ID' }
 const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
+const emptyResponse = () => { return {} }
 const defaultError = ({ statusCode, error }) => ({ statusCode, error })
 const deMemberify = (prop) => {
   let result = []
   if (Array.isArray(prop.member) && prop.member.length) result = prop.member
   else if (prop.member) result = [ prop.member ]
   return result
+}
+
+const ActivateOrganizationsAccess = {
+  awsDoc: docRoot + 'API_ActivateOrganizationsAccess.html',
+  validate: {},
+  request: () => {
+    return {
+      query: { Action: 'ActivateOrganizationsAccess' },
+    }
+  },
+  response: emptyResponse,
 }
 
 const CreateStack = {
@@ -90,6 +102,17 @@ const CreateStack = {
   response: ({ payload }) => ({ StackId: payload.CreateStackResult.StackId }),
 }
 
+const DeactivateOrganizationsAccess = {
+  awsDoc: docRoot + 'API_DeactivateOrganizationsAccess.html',
+  validate: {},
+  request: () => {
+    return {
+      query: { Action: 'DeactivateOrganizationsAccess' },
+    }
+  },
+  response: emptyResponse,
+}
+
 const DeleteStack = {
   awsDoc: docRoot + 'API_DeleteStack.html',
   validate: {
@@ -108,6 +131,22 @@ const DeleteStack = {
   },
   response: () => ({}),
   error: defaultError,
+}
+
+const DescribeOrganizationsAccess = {
+  awsDoc: docRoot + 'API_DescribeOrganizationsAccess.html',
+  validate: {
+    CallAs: { ...str, comment: 'Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`', ref: docRoot + 'API_DescribeOrganizationsAccess.html' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeOrganizationsAccess',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DescribeOrganizationsAccessResult,
 }
 
 const DescribeStackResources = {
@@ -274,5 +313,16 @@ export default {
   name: '@aws-lite/cloudformation',
   service,
   property,
-  methods: { CreateStack, DeleteStack, DescribeStackResources, DescribeStacks, ListStackResources, UpdateStack, UpdateTerminationProtection, ...incomplete },
+  methods: {
+    ActivateOrganizationsAccess,
+    CreateStack,
+    DeactivateOrganizationsAccess,
+    DeleteStack,
+    DescribeOrganizationsAccess,
+    DescribeStackResources,
+    DescribeStacks,
+    ListStackResources,
+    UpdateStack,
+    UpdateTerminationProtection,
+    ...incomplete },
 }

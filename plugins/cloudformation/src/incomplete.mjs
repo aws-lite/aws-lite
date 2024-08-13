@@ -1,7 +1,6 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/'
 export default {
-  ActivateOrganizationsAccess:       { disabled, awsDoc: docRoot + 'API_ActivateOrganizationsAccess.html' },
   ActivateType:                      { disabled, awsDoc: docRoot + 'API_ActivateType.html' },
   BatchDescribeTypeConfigurations:   { disabled, awsDoc: docRoot + 'API_BatchDescribeTypeConfigurations.html' },
   CancelUpdateStack:                 { disabled, awsDoc: docRoot + 'API_CancelUpdateStack.html' },
@@ -9,7 +8,6 @@ export default {
   CreateChangeSet:                   { disabled, awsDoc: docRoot + 'API_CreateChangeSet.html' },
   CreateStackInstances:              { disabled, awsDoc: docRoot + 'API_CreateStackInstances.html' },
   CreateStackSet:                    { disabled, awsDoc: docRoot + 'API_CreateStackSet.html' },
-  DeactivateOrganizationsAccess:     { disabled, awsDoc: docRoot + 'API_DeactivateOrganizationsAccess.html' },
   DeactivateType:                    { disabled, awsDoc: docRoot + 'API_DeactivateType.html' },
   DeleteChangeSet:                   { disabled, awsDoc: docRoot + 'API_DeleteChangeSet.html' },
   DeleteStackInstances:              { disabled, awsDoc: docRoot + 'API_DeleteStackInstances.html' },
@@ -18,7 +16,6 @@ export default {
   DescribeAccountLimits:             { disabled, awsDoc: docRoot + 'API_DescribeAccountLimits.html' },
   DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' },
   DescribeChangeSetHooks:            { disabled, awsDoc: docRoot + 'API_DescribeChangeSetHooks.html' },
-  DescribeOrganizationsAccess:       { disabled, awsDoc: docRoot + 'API_DescribeOrganizationsAccess.html' },
   DescribePublisher:                 { disabled, awsDoc: docRoot + 'API_DescribePublisher.html' },
   DescribeStackDriftDetectionStatus: { disabled, awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html' },
   DescribeStackEvents:               { disabled, awsDoc: docRoot + 'API_DescribeStackEvents.html' },
