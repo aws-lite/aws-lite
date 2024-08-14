@@ -11,7 +11,9 @@ import {
   DescribeOrganizationsAccessCommandOutput as DescribeOrganizationsAccessResponse,
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
   DescribeStacksCommandOutput as DescribeStacksResponse,
+  DescribeTypeCommandOutput as DescribeTypeResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
+  ListTypesCommandOutput as ListTypesResponse,
   RegisterTypeCommandOutput as RegisterTypeResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
   UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
@@ -75,16 +77,28 @@ declare interface AwsLiteCloudFormation {
   DescribeStacks: (input: { StackName?: string, NextToken?: string, paginate?: boolean | string }) => Promise<DescribeStacksResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeType.html CloudFormation: DescribeType}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeType CloudFormation: DescribeType}
+   */
+  DescribeType: (input: { Arn?: string, PublicVersionNumber?: string, PublisherId?: string, Type?: string, TypeName?: string, VersionId?: string }) => Promise<DescribeTypeResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackResources.html CloudFormation: ListStackResources}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackResources CloudFormation: ListStackResources}
    */
   ListStackResources: (input: { StackName: string, NextToken?: string, paginate?: boolean | string }) => Promise<ListStackResourcesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypes.html CloudFormation: ListTypes}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListTypes CloudFormation: ListTypes}
+   */
+  ListTypes: (input: { DeprecatedStatus?: string, Filters?: Record<string, any>, MaxResults?: number, NextToken?: string, ProvisioningType?: string, Type?: string, Visibility?: string, paginate?: boolean | string }) => Promise<ListTypesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterType.html CloudFormation: RegisterType}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#RegisterType CloudFormation: RegisterType}
    */
-  RegisterType: (input: { ClientRequestToken?: string, ExecutionRoleArn?: string, LoggingConfig?: Record<string, any>, Type?: string, TypeName?: string }) => Promise<RegisterTypeResponse>
+  RegisterType: (input: { SchemaHandlerPackage: string, TypeName: string, ClientRequestToken?: string, ExecutionRoleArn?: string, LoggingConfig?: Record<string, any>, Type?: string }) => Promise<RegisterTypeResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html CloudFormation: UpdateStack}
@@ -120,7 +134,9 @@ export type {
   DescribeOrganizationsAccessResponse,
   DescribeStackResourcesResponse,
   DescribeStacksResponse,
+  DescribeTypeResponse,
   ListStackResourcesResponse,
+  ListTypesResponse,
   RegisterTypeResponse,
   UpdateStackResponse,
   UpdateTerminationProtectionResponse,

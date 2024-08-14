@@ -43,7 +43,9 @@ const TypeName = { ...str, comment: 'Name of the extension with length between 1
 const Arn = { ...str, comment: 'Amazon resource name' }
 const ExecutionRoleArn = { ...str, comment: 'ARN of the IAM execution role used to activate the extension' }
 const LoggingConfig = { ...obj, comment: 'Logging configuration', ref: docRoot + 'API_LoggingConfig.html' }
-
+const PublisherId = { ...str, comment: 'ID of the extension publisher' }
+const VersionId = { ...str, comment: 'ID of a specific extension version; found at the end of the ARN of the extension version' }
+const MaxResults = { ...num, comment: 'Maximum number of results to be returned in a response' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -75,7 +77,7 @@ const ActivateType = {
     LoggingConfig,
     MajorVersion: { ...num, comment: 'Specify major version of the extension to be activated; default is the latest version' },
     PublicTypeArn: { ...str, comment: 'ARN of the public extension; you must provide either `PublicTypeArn` or all of: `TypeName`, `Type`, `PublisherId`' },
-    PublisherId: { ...str, comment: 'ID of the extension publisher; you must provide either `PublicTypeArn` or all of: `TypeName`, `Type`, `PublisherId`' },
+    PublisherId,
     Type,
     TypeName,
     TypeNameAlias: { ...str, comment: 'Optional alias for the public extension; must be unique within the account and region' },
@@ -154,7 +156,7 @@ const DeactivateType = {
     TypeName,
   },
   request: (params) => {
-    return  {
+    return {
       query: {
         Action: 'DeactivateType',
         ...params,
@@ -284,6 +286,27 @@ const DescribeStacks = {
   error: defaultError,
 }
 
+const DescribeType = {
+  awsDoc: docRoot + 'API_DescribeType.html',
+  validate: {
+    Arn,
+    PublicVersionNumber: { ...str, comment: 'Version number of the public third-party extension' },
+    PublisherId,
+    Type,
+    TypeName,
+    VersionId,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeType',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DescribeTypeResult,
+}
+
 const ListStackResources = {
   awsDoc: docRoot + 'API_ListStackResources.html',
   validate: {
@@ -318,23 +341,97 @@ const ListStackResources = {
   error: defaultError,
 }
 
+/* TODO: test
+const ListTypeRegistrations = {
+  awsDoc: docRoot + 'API_ListTypeRegistrations.html',
+  validate: {
+    MaxResults,
+    NextToken,
+    RegistrationStatusFilter: { ...str, comment: 'Filter results by status; can be one of: `COMPLETE`, `IN_PROGRESS` (default), `FAILED`' },
+    Type,
+    TypeArn: { ...str, comment: 'ARN of the extension' },
+    TypeName,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListTypeRegistrations',
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListTypeRegistrationsResult.NextToken',
+        accumulator: 'ListTypeRegistrationsResult.RegistrationTokenList',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => payload.ListTypeRegistrationsResult,
+}
+*/
+
+const ListTypes = {
+  awsDoc: docRoot + 'API_ListTypes.html',
+  validate: {
+    DeprecatedStatus: { ...str, comment: 'Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`' },
+    Filters: { ...obj, comment: 'Filter configurations', ref:  docRoot + 'API_TypeFilters.html' },
+    MaxResults,
+    NextToken,
+    ProvisioningType: { ...str, comment: 'Filter results by provisioning type; can be one of: `FULLY_MUTABLE` (default), `IMMUTABLE`, `NON_PROVISIONABLE`' },
+    Type,
+    Visibility: { ...str, comment: 'Filter results by visibility; can be one of: `PRIVATE` (default), `PUBLIC`' },
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListTypes',
+      ...querystringifyParams(params),
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListTypesResult.NextToken',
+        accumulator: 'ListTypesResult.TypeSummaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { ListTypesResult } = payload
+    ListTypesResult.TypeSummaries = deMemberify(ListTypesResult.TypeSummaries)
+    return ListTypesResult
+  },
+}
+
+// TODO: test result
 const RegisterType = {
   awsDoc: docRoot + 'API_RegisterType.html',
   validate: {
+    SchemaHandlerPackage: { ...str, required, comment: 'A URL to the S3 bucket containing the extension project package that contains the necessary files for the extension you want to register' },
+    TypeName: { ...TypeName, required },
     ClientRequestToken: { ...str, comment: 'Unique identifier that acts as an idempotency key for the request' },
     ExecutionRoleArn,
     LoggingConfig,
     Type,
-    TypeName,
   },
   request: (params) => {
-    const query = querystringifyParams(params)
     return {
-      Action: 'RegisterType',
-      ...query,
+      query: {
+        Action: 'RegisterType',
+        ...querystringifyParams(params),
+      },
     }
   },
-  response: (payload ) => payload,
+  response: ({ payload }) => payload.RegisterTypeResult,
 }
 
 const UpdateStack = {
@@ -413,9 +510,13 @@ export default {
     DescribeOrganizationsAccess,
     DescribeStackResources,
     DescribeStacks,
+    DescribeType,
     ListStackResources,
+    // ListTypeRegistrations,
+    ListTypes,
     RegisterType,
     UpdateStack,
     UpdateTerminationProtection,
-    ...incomplete },
+    ...incomplete,
+  },
 }

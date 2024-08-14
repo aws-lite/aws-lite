@@ -57,7 +57,7 @@ Properties:
 - **`PublicTypeArn` (string)**
   - ARN of the public extension; you must provide either `PublicTypeArn` or all of: `TypeName`, `Type`, `PublisherId`
 - **`PublisherId` (string)**
-  - ID of the extension publisher; you must provide either `PublicTypeArn` or all of: `TypeName`, `Type`, `PublisherId`
+  - ID of the extension publisher
 - **`Type` (string)**
   - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
 - **`TypeName` (string)**
@@ -204,6 +204,25 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `DescribeType`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeType.html)
+
+Properties:
+- **`Arn` (string)**
+  - Amazon resource name
+- **`PublicVersionNumber` (string)**
+  - Version number of the public third-party extension
+- **`PublisherId` (string)**
+  - ID of the extension publisher
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
+- **`VersionId` (string)**
+  - ID of a specific extension version; found at the end of the ARN of the extension version
+
+
 ### `ListStackResources`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackResources.html)
@@ -217,11 +236,39 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListTypes`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypes.html)
+
+Properties:
+- **`DeprecatedStatus` (string)**
+  - Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`
+- **`Filters` (object)**
+  - Filter configurations
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TypeFilters.html)
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`ProvisioningType` (string)**
+  - Filter results by provisioning type; can be one of: `FULLY_MUTABLE` (default), `IMMUTABLE`, `NON_PROVISIONABLE`
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`Visibility` (string)**
+  - Filter results by visibility; can be one of: `PRIVATE` (default), `PUBLIC`
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `RegisterType`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterType.html)
 
 Properties:
+- **`SchemaHandlerPackage` (string) [required]**
+  - A URL to the S3 bucket containing the extension project package that contains the necessary files for the extension you want to register
+- **`TypeName` (string) [required]**
+  - Name of the extension with length between 10 and 204 (inclusive)
 - **`ClientRequestToken` (string)**
   - Unique identifier that acts as an idempotency key for the request
 - **`ExecutionRoleArn` (string)**
@@ -231,8 +278,6 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_LoggingConfig.html)
 - **`Type` (string)**
   - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
-- **`TypeName` (string)**
-  - Name of the extension with length between 10 and 204 (inclusive)
 
 
 ### `UpdateStack`
@@ -312,7 +357,6 @@ Properties:
 - [`DescribeStackResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html)
 - [`DescribeStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackSet.html)
 - [`DescribeStackSetOperation`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackSetOperation.html)
-- [`DescribeType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeType.html)
 - [`DescribeTypeRegistration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeTypeRegistration.html)
 - [`DetectStackDrift`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html)
 - [`DetectStackResourceDrift`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackResourceDrift.html)
@@ -333,7 +377,6 @@ Properties:
 - [`ListStackSetOperations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperations.html)
 - [`ListStackSets`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSets.html)
 - [`ListTypeRegistrations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeRegistrations.html)
-- [`ListTypes`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypes.html)
 - [`ListTypeVersions`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeVersions.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)

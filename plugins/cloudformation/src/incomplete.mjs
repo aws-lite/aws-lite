@@ -21,7 +21,6 @@ export default {
   DescribeStackResourceDrifts:       { disabled, awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html' },
   DescribeStackSet:                  { disabled, awsDoc: docRoot + 'API_DescribeStackSet.html' },
   DescribeStackSetOperation:         { disabled, awsDoc: docRoot + 'API_DescribeStackSetOperation.html' },
-  DescribeType:                      { disabled, awsDoc: docRoot + 'API_DescribeType.html' },
   DescribeTypeRegistration:          { disabled, awsDoc: docRoot + 'API_DescribeTypeRegistration.html' },
   DetectStackDrift:                  { disabled, awsDoc: docRoot + 'API_DetectStackDrift.html' },
   DetectStackResourceDrift:          { disabled, awsDoc: docRoot + 'API_DetectStackResourceDrift.html' },
@@ -41,8 +40,7 @@ export default {
   ListStackSetOperationResults:      { disabled, awsDoc: docRoot + 'API_ListStackSetOperationResults.html' },
   ListStackSetOperations:            { disabled, awsDoc: docRoot + 'API_ListStackSetOperations.html' },
   ListStackSets:                     { disabled, awsDoc: docRoot + 'API_ListStackSets.html' },
-  ListTypeRegistrations:             { disabled, awsDoc: docRoot + 'API_ListTypeRegistrations.html' },
-  ListTypes:                         { disabled, awsDoc: docRoot + 'API_ListTypes.html' },
+  ListTypeRegistrations:             { disabled, awsDoc: docRoot + 'API_ListTypeRegistrations.html' }, // TODO: test
   ListTypeVersions:                  { disabled, awsDoc: docRoot + 'API_ListTypeVersions.html' },
   PublishType:                       { disabled, awsDoc: docRoot + 'API_PublishType.html' },
   RecordHandlerProgress:             { disabled, awsDoc: docRoot + 'API_RecordHandlerProgress.html' },
