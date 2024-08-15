@@ -3,7 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
-import { arrayifyItemsProp, arrayifyObject, unarrayifyObject, normalizeResponse } from './lib.mjs'
+import { arrayifyItemsProp, arrayifyObject, unarrayifyObject } from './lib.mjs'
 
 const service = 'cloudfront'
 const property = 'CloudFront'
@@ -12,7 +12,7 @@ const docRoot = 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/'
 // const devGuide = 'https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/'
 
 // Validation types
-// const arr = { type: 'array' }
+const arr = { type: 'array' }
 const bool = { type: 'boolean' }
 const obj = { type: 'object' }
 const str = { type: 'string' }
@@ -43,6 +43,7 @@ const Alias = { ...str, required, comment: 'Alternative domain name; must contai
 const Type = { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' }
 const OriginRequestPolicyConfig = { ...obj, required, comment: 'Complete origin request policy config', ref: docRoot + 'API_OriginRequestPolicyConfig.html' }
 const ResponseHeadersPolicyConfig = { ...obj, required, comment: 'Complete response headers policy config', ref: docRoot + 'API_ResponseHeadersPolicyConfig.html' }
+const Resource = { ...str, required, comment: 'ARN of a cloudfront resource' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -237,27 +238,33 @@ const CreateDistribution = {
 }
 
 // TODO: test
-// const CreateDistributionWithTags = {
-//   awsDoc: docRoot + 'API_CreateDistributionWithTags.html',
-//   validate: {
-//     DistributionConfigWithTags: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistributionWithTags.html#cloudfront-CreateDistributionWithTags-request-DistributionConfigWithTags' },
-//   },
-//   request: (params) => {
-//     const DistributionConfigWithTags = unarrayifyObject(params)
-//     DistributionConfigWithTags.DistributionConfig = unarrayifyObject(DistributionConfigWithTags.DistributionConfig)
-//     return {
-//       path: '/2020-05-31/distribution?WithTags',
-//       method: 'POST',
-//       headers: xml,
-//       xmlns,
-//       payload: { DistributionConfigWithTags },
-//     }
-//   },
-//   response: ({ headers, payload }) => {
-//     const Distribution = arrayifyObject(payload)
-//     return maybeAddETag({ Distribution }, headers)
-//   },
-// }
+const CreateDistributionWithTags = {
+  awsDoc: docRoot + 'API_CreateDistributionWithTags.html',
+  validate: {
+    DistributionConfigWithTags: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistributionWithTags.html#cloudfront-CreateDistributionWithTags-request-DistributionConfigWithTags' },
+  },
+  request: (params) => {
+    const payload = unarrayifyObject(params)
+    payload.DistributionConfigWithTags.DistributionConfig = unarrayifyObject(payload.DistributionConfigWithTags.DistributionConfig)
+    return {
+      path: '/2020-05-31/distribution?WithTags',
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag, location } = headers
+    const Distribution = arrayifyObject(payload)
+    return {
+      Distribution,
+      ETag: etag,
+      Location: location,
+    }
+    // return maybeAddETag({ Distribution }, headers)
+  },
+}
 
 const CreateFieldLevelEncryptionConfig = {
   awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html',
@@ -516,36 +523,35 @@ const CreatePublicKey = {
   },
 }
 
-/* TODO: Test
-const CreateRealtimeLogConfig = {
-  awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html',
-  validate: {
-    EndPoints: { ...arr, required, comment: 'Array of `Endpoint` objects containing information about the Kinesis data stream', ref: docRoot + 'API_CreateRealtimeLogConfig.html#cloudfront-CreateRealtimeLogConfig-request-EndPoints' },
-    Fields: { ...arr, required, comment: 'Array of strings specifying fields to include in each log record', ref: docRoot + 'API_CreateRealtimeLogConfig.html#cloudfront-CreateRealtimeLogConfig-request-Fields' },
-    Name,
-    SamplingRate: { ...num, required, comment: 'Percentage of viewer requests between 1 and 100 (inclusive) that will be sampled to generate logs' },
-  },
-  request: (params) => {
-    const { EndPoints, Fields } = params
-    const CreateRealtimeLogConfigRequest = { ...params }
-    CreateRealtimeLogConfigRequest.EndPoints = { EndPoint: EndPoints }
-    CreateRealtimeLogConfigRequest.Fields = { Field: Fields }
-    return {
-      path: '/2020-05-31/realtime-log-config',
-      headers: xml,
-      xmlns,
-      payload: { CreateRealtimeLogConfigRequest },
-    }
-  },
-  response: ({ payload }) => {
-    const { EndPoint } = payload.EndPoints
-    const { Field } = payload.Field
-    payload.EndPoints = Array.isArray(EndPoint) ? EndPoint : [ EndPoint ]
-    payload.Fields = Array.isArray(Field) ? Field : [ Field ]
-    return { RealtimeLogConfig: payload }
-  },
-}
-*/
+// TODO: Test
+// const CreateRealtimeLogConfig = {
+//   awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html',
+//   validate: {
+//     EndPoints: { ...arr, required, comment: 'Array of `Endpoint` objects containing information about the Kinesis data stream', ref: docRoot + 'API_CreateRealtimeLogConfig.html#cloudfront-CreateRealtimeLogConfig-request-EndPoints' },
+//     Fields: { ...arr, required, comment: 'Array of strings specifying fields to include in each log record', ref: docRoot + 'API_CreateRealtimeLogConfig.html#cloudfront-CreateRealtimeLogConfig-request-Fields' },
+//     Name,
+//     SamplingRate: { ...num, required, comment: 'Percentage of viewer requests between 1 and 100 (inclusive) that will be sampled to generate logs' },
+//   },
+//   request: (params) => {
+//     const { EndPoints, Fields } = params
+//     const CreateRealtimeLogConfigRequest = { ...params }
+//     CreateRealtimeLogConfigRequest.EndPoints = { EndPoint: EndPoints }
+//     CreateRealtimeLogConfigRequest.Fields = { Field: Fields }
+//     return {
+//       path: '/2020-05-31/realtime-log-config',
+//       headers: xml,
+//       xmlns,
+//       payload: { CreateRealtimeLogConfigRequest },
+//     }
+//   },
+//   response: ({ payload }) => {
+//     const { EndPoint } = payload.EndPoints
+//     const { Field } = payload.Field
+//     payload.EndPoints = Array.isArray(EndPoint) ? EndPoint : [ EndPoint ]
+//     payload.Fields = Array.isArray(Field) ? Field : [ Field ]
+//     return { RealtimeLogConfig: payload }
+//   },
+// }
 
 const CreateResponseHeadersPolicy = {
   awsDoc: docRoot + 'API_CreateResponseHeadersPolicy.html',
@@ -571,6 +577,32 @@ const CreateResponseHeadersPolicy = {
     }
   },
 }
+
+// TODO: figure out why `rate exceeded` error happens
+// const CreateStreamingDistribution = {
+//   awsDoc: docRoot + 'API_CreateStreamingDistribution.html',
+//   validate: {
+//     StreamingDistributionConfig: { ...obj, required, comment: 'Complete streaming distribution configuration', ref: docRoot + 'API_StreamingDistributionConfig.html' },
+//   },
+//   request: (params) => {
+//     const StreamingDistributionConfig = unarrayifyObject(params.StreamingDistributionConfig)
+//     return {
+//       path: '/2020-05-31/streaming-distribution',
+//       headers: xml,
+//       xmlns,
+//       payload: { StreamingDistributionConfig },
+//     }
+//   },
+//   response: ({ headers, payload }) => {
+//     const StreamingDistribution = arrayifyObject(payload)
+//     const { etag, location } = headers
+//     return {
+//       StreamingDistribution,
+//       ETag: etag,
+//       Location: location,
+//     }
+//   },
+// }
 
 const DeleteCachePolicy = {
   awsDoc: docRoot + 'API_DeleteCachePolicy.html',
@@ -1080,7 +1112,7 @@ const GetFunction = {
   },
 }
 
-/* TODO: test
+// TODO: test
 const GetInvalidation = {
   awsDoc: docRoot + 'API_GetInvalidation.html',
   validate: {
@@ -1097,7 +1129,7 @@ const GetInvalidation = {
     return { Invalidation }
   },
 }
-*/
+
 
 const GetKeyGroup = {
   awsDoc: docRoot + 'API_GetKeyGroup.html',
@@ -1545,7 +1577,6 @@ const ListFunctions = {
   },
 }
 
-/* TODO: test
 const ListInvalidations = {
   awsDoc: docRoot + 'API_ListInvalidations.html',
   validate: {
@@ -1575,7 +1606,6 @@ const ListInvalidations = {
     return { InvalidationList }
   },
 }
-*/
 
 const ListKeyGroups = {
   awsDoc: docRoot + 'API_ListKeyGroups.html',
@@ -1750,24 +1780,41 @@ const ListResponseHeadersPolicies = {
   },
 }
 
-/* TODO: determine correct params/formatting, docs are broken
+const ListTagsForResource = {
+  awsDoc: docRoot + 'API_ListTagsForResource.html',
+  validate: {
+    Resource,
+  },
+  request: ({ Resource }) => {
+    return {
+      path: '/2020-05-31/tagging',
+      query: { Resource },
+    }
+  },
+  response: ({ payload }) => {
+    const Tags = arrayifyItemsProp(payload)
+    return { Tags }
+  },
+}
+
 const TagResource = {
   awsDoc: docRoot + 'API_TagResource.html',
   validate: {
-    Resource: { ...str, required, comment: 'ARN of a cloudfront resource' },
+    Resource,
     Tags: { ...arr, required, comment: 'Array of tags' },
   },
   request: ({ Resource, Tags }) => {
     const payload = {
       Tags: {
-        Items: { Tag: Tags },
-        Resource,
+        Items: {
+          Tag: Tags,
+        },
       },
     }
     return {
       path: '/2020-05-31/tagging',
       methods: 'POST',
-      query: { Operation: 'Tag' },
+      query: { Operation: 'Tag', Resource },
       headers: xml,
       xmlns,
       payload,
@@ -1775,16 +1822,13 @@ const TagResource = {
   },
   response: defaultResponse,
 }
-*/
 
-// TODO: improve documentation for `EventObject`
-// TODO: more testing
 const TestFunction = {
   awsDoc: docRoot + 'API_TestFunction.html',
   validate: {
     Name,
     IfMatch,
-    EventObject: { ...str, required, comment: 'Base64 encoded binary `Event` object that will be passed to your function as an argument' },
+    EventObject: { ...str, required, comment: 'Base64 encoded binary data event object that will be passed to your function as an argument', ref: docRoot + 'API_TestFunction.html#cloudfront-TestFunction-request-EventObject' },
     Stage,
   },
   request: (params) => {
@@ -1801,8 +1845,38 @@ const TestFunction = {
   },
   response: ({ payload }) => {
     const TestResult = arrayifyObject(payload)
+    if (TestResult.FunctionExecutionLogs?.member) {
+      const member = TestResult.FunctionExecutionLogs.member
+      TestResult.FunctionExecutionLogs = Array.isArray(member) ? member : [ member ]
+    }
     return { TestResult }
   },
+}
+
+const UntagResource = {
+  awsDoc: docRoot + 'API_UntagResource.html',
+  validate: {
+    Resource,
+    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+  },
+  request: ({ Resource, TagKeys }) => {
+    const payload = {
+      TagKeys: {
+        Items: {
+          Key: TagKeys,
+        },
+      },
+    }
+    return {
+      path: '/2020-05-31/tagging',
+      methods: 'POST',
+      query: { Operation: 'Untag', Resource },
+      headers: xml,
+      xmlns,
+      payload,
+    }
+  },
+  response: defaultResponse,
 }
 
 const UpdateCachePolicy = {
@@ -1823,9 +1897,8 @@ const UpdateCachePolicy = {
     }
   },
   response: ({ headers, payload }) => {
-    const arrayProperties = new Set([ 'Items' ])
+    const CachePolicy = arrayifyObject(payload)
     const { etag } = headers
-    const CachePolicy = normalizeResponse(payload, arrayProperties, 4)
     return {
       CachePolicy,
       ETag: etag,
@@ -2160,6 +2233,7 @@ export default {
     CreateCloudFrontOriginAccessIdentity,
     CreateContinuousDeploymentPolicy,
     CreateDistribution,
+    CreateDistributionWithTags,
     CreateFieldLevelEncryptionConfig,
     CreateFieldLevelEncryptionProfile,
     CreateFunction,
@@ -2172,6 +2246,7 @@ export default {
     CreatePublicKey,
     // CreateRealtimeLogConfig,
     CreateResponseHeadersPolicy,
+    // CreateStreamingDistribution,
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
     DeleteContinuousDeploymentPolicy,
@@ -2201,7 +2276,7 @@ export default {
     GetFieldLevelEncryptionProfile,
     GetFieldLevelEncryptionProfileConfig,
     GetFunction,
-    // GetInvalidation,
+    GetInvalidation,
     GetKeyGroup,
     GetKeyGroupConfig,
     GetOriginAccessControl,
@@ -2221,15 +2296,17 @@ export default {
     ListFieldLevelEncryptionConfigs,
     ListFieldLevelEncryptionProfiles,
     ListFunctions,
-    // ListInvalidations,
+    ListInvalidations,
     ListKeyGroups,
     ListKeyValueStores,
     ListOriginAccessControls,
     ListOriginRequestPolicies,
     ListPublicKeys,
     ListResponseHeadersPolicies,
-    // TagResource,
+    ListTagsForResource,
+    TagResource,
     TestFunction,
+    UntagResource,
     UpdateCachePolicy,
     UpdateCloudFrontOriginAccessIdentity,
     UpdateContinuousDeploymentPolicy,

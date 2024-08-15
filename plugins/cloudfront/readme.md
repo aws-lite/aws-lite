@@ -514,6 +514,17 @@ Properties:
   - The functions stage; can be one of: `DEVELOPMENT`, `LIVE`
 
 
+### `GetInvalidation`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html)
+
+Properties:
+- **`DistributionId` (string) [required]**
+  - Distribution ID
+- **`Id` (string) [required]**
+  - The resource ID
+
+
 ### `GetKeyGroup`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetKeyGroup.html)
@@ -725,6 +736,21 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListInvalidations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListInvalidations.html)
+
+Properties:
+- **`DistributionId` (string) [required]**
+  - Distribution ID
+- **`Marker` (string)**
+  - Pagination cursor token to be used if `NextMarker` was returned in a previous response
+- **`MaxItems` (number)**
+  - Maximum number of items to return
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListKeyGroups`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListKeyGroups.html)
@@ -809,6 +835,26 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListTagsForResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListTagsForResource.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of a cloudfront resource
+
+
+### `TagResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TagResource.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of a cloudfront resource
+- **`Tags` (array) [required]**
+  - Array of tags
+
+
 ### `TestFunction`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html)
@@ -819,9 +865,21 @@ Properties:
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 - **`EventObject` (string) [required]**
-  - Base64 encoded binary `Event` object that will be passed to your function as an argument
+  - Base64 encoded binary data event object that will be passed to your function as an argument
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html#cloudfront-TestFunction-request-EventObject)
 - **`Stage` (string)**
   - The functions stage; can be one of: `DEVELOPMENT`, `LIVE`
+
+
+### `UntagResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html)
+
+Properties:
+- **`Resource` (string) [required]**
+  - ARN of a cloudfront resource
+- **`TagKeys` (array) [required]**
+  - Array of tag keys
 
 
 ### `UpdateCachePolicy`
@@ -1016,7 +1074,6 @@ Properties:
 - [`CreateStreamingDistributionWithTags`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateStreamingDistributionWithTags.html)
 - [`DeleteRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteRealtimeLogConfig.html)
 - [`DeleteStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DeleteStreamingDistribution.html)
-- [`GetInvalidation`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html)
 - [`GetRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetRealtimeLogConfig.html)
 - [`GetStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetStreamingDistribution.html)
 - [`GetStreamingDistributionConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetStreamingDistributionConfig.html)
@@ -1026,13 +1083,9 @@ Properties:
 - [`ListDistributionsByRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByRealtimeLogConfig.html)
 - [`ListDistributionsByResponseHeadersPolicyId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByResponseHeadersPolicyId.html)
 - [`ListDistributionsByWebACLId`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByWebACLId.html)
-- [`ListInvalidations`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListInvalidations.html)
 - [`ListRealtimeLogConfigs`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListRealtimeLogConfigs.html)
 - [`ListStreamingDistributions`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListStreamingDistributions.html)
-- [`ListTagsForResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListTagsForResource.html)
 - [`PublishFunction`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_PublishFunction.html)
-- [`TagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TagResource.html)
-- [`UntagResource`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html)
 - [`UpdateDistributionWithStagingConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistributionWithStagingConfig.html)
 - [`UpdateRealtimeLogConfig`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateRealtimeLogConfig.html)
 - [`UpdateStreamingDistribution`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateStreamingDistribution.html)

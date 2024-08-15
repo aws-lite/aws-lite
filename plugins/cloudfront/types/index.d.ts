@@ -47,6 +47,7 @@ import {
   GetFieldLevelEncryptionProfileCommandOutput as GetFieldLevelEncryptionProfileResponse,
   GetFieldLevelEncryptionProfileConfigCommandOutput as GetFieldLevelEncryptionProfileConfigResponse,
   GetFunctionCommandOutput as GetFunctionResponse,
+  GetInvalidationCommandOutput as GetInvalidationResponse,
   GetKeyGroupCommandOutput as GetKeyGroupResponse,
   GetKeyGroupConfigCommandOutput as GetKeyGroupConfigResponse,
   GetOriginAccessControlCommandOutput as GetOriginAccessControlResponse,
@@ -66,13 +67,17 @@ import {
   ListFieldLevelEncryptionConfigsCommandOutput as ListFieldLevelEncryptionConfigsResponse,
   ListFieldLevelEncryptionProfilesCommandOutput as ListFieldLevelEncryptionProfilesResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
+  ListInvalidationsCommandOutput as ListInvalidationsResponse,
   ListKeyGroupsCommandOutput as ListKeyGroupsResponse,
   ListKeyValueStoresCommandOutput as ListKeyValueStoresResponse,
   ListOriginAccessControlsCommandOutput as ListOriginAccessControlsResponse,
   ListOriginRequestPoliciesCommandOutput as ListOriginRequestPoliciesResponse,
   ListPublicKeysCommandOutput as ListPublicKeysResponse,
   ListResponseHeadersPoliciesCommandOutput as ListResponseHeadersPoliciesResponse,
+  ListTagsForResourceCommandOutput as ListTagsForResourceResponse,
+  TagResourceCommandOutput as TagResourceResponse,
   TestFunctionCommandOutput as TestFunctionResponse,
+  UntagResourceCommandOutput as UntagResourceResponse,
   UpdateCachePolicyCommandOutput as UpdateCachePolicyResponse,
   UpdateCloudFrontOriginAccessIdentityCommandOutput as UpdateCloudFrontOriginAccessIdentityResponse,
   UpdateContinuousDeploymentPolicyCommandOutput as UpdateContinuousDeploymentPolicyResponse,
@@ -370,6 +375,12 @@ declare interface AwsLiteCloudFront {
   GetFunction: (input: { Name: string, Stage?: string }) => Promise<GetFunctionResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetInvalidation.html CloudFront: GetInvalidation}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetInvalidation CloudFront: GetInvalidation}
+   */
+  GetInvalidation: (input: { DistributionId: string, Id: string }) => Promise<GetInvalidationResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetKeyGroup.html CloudFront: GetKeyGroup}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetKeyGroup CloudFront: GetKeyGroup}
    */
@@ -484,6 +495,12 @@ declare interface AwsLiteCloudFront {
   ListFunctions: (input: { Marker?: string, MaxItems?: number, Stage?: string, paginate?: boolean | string }) => Promise<ListFunctionsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListInvalidations.html CloudFront: ListInvalidations}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListInvalidations CloudFront: ListInvalidations}
+   */
+  ListInvalidations: (input: { DistributionId: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListInvalidationsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListKeyGroups.html CloudFront: ListKeyGroups}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListKeyGroups CloudFront: ListKeyGroups}
    */
@@ -520,10 +537,28 @@ declare interface AwsLiteCloudFront {
   ListResponseHeadersPolicies: (input: { Marker?: string, MaxItems?: number, Type?: string, paginate?: boolean | string }) => Promise<ListResponseHeadersPoliciesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListTagsForResource.html CloudFront: ListTagsForResource}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListTagsForResource CloudFront: ListTagsForResource}
+   */
+  ListTagsForResource: (input: { Resource: string }) => Promise<ListTagsForResourceResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TagResource.html CloudFront: TagResource}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#TagResource CloudFront: TagResource}
+   */
+  TagResource: (input: { Resource: string, Tags: any[] }) => Promise<TagResourceResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TestFunction.html CloudFront: TestFunction}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#TestFunction CloudFront: TestFunction}
    */
   TestFunction: (input: { Name: string, IfMatch: string, EventObject: string, Stage?: string }) => Promise<TestFunctionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UntagResource.html CloudFront: UntagResource}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#UntagResource CloudFront: UntagResource}
+   */
+  UntagResource: (input: { Resource: string, TagKeys: any[] }) => Promise<UntagResourceResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateCachePolicy.html CloudFront: UpdateCachePolicy}
@@ -661,6 +696,7 @@ export type {
   GetFieldLevelEncryptionProfileResponse,
   GetFieldLevelEncryptionProfileConfigResponse,
   GetFunctionResponse,
+  GetInvalidationResponse,
   GetKeyGroupResponse,
   GetKeyGroupConfigResponse,
   GetOriginAccessControlResponse,
@@ -680,13 +716,17 @@ export type {
   ListFieldLevelEncryptionConfigsResponse,
   ListFieldLevelEncryptionProfilesResponse,
   ListFunctionsResponse,
+  ListInvalidationsResponse,
   ListKeyGroupsResponse,
   ListKeyValueStoresResponse,
   ListOriginAccessControlsResponse,
   ListOriginRequestPoliciesResponse,
   ListPublicKeysResponse,
   ListResponseHeadersPoliciesResponse,
+  ListTagsForResourceResponse,
+  TagResourceResponse,
   TestFunctionResponse,
+  UntagResourceResponse,
   UpdateCachePolicyResponse,
   UpdateCloudFrontOriginAccessIdentityResponse,
   UpdateContinuousDeploymentPolicyResponse,

@@ -49,6 +49,7 @@ const arrayProperties = {
   'Restrictions.GeoRestriction': 'Location',
   'DistributionConfigWithTags.Tags': 'Tag',
   'Tags': 'Tag',
+  'TrustedSigners': 'AwsAccountNumber',
   // FieldLevelEncryptionConfig
   'FieldLevelEncryptionConfig.ContentTypeProfileConfig.ContentTypeProfiles': 'ContentTypeProfile',
   'FieldLevelEncryptionConfig.QueryArgProfileConfig.QueryArgProfiles': 'QueryArgProfile',
@@ -213,34 +214,8 @@ function unarrayifyObject (obj, lastPropertyPath) {
   return obj
 } */
 
-// Expanding on object serialization/normalization.. Cloudfront is painfully inconsistent,
-// the existing stuff expects arrays to be an `Items` property, which is not the case.
-// Max depth can be used to prevent unnecessary recursion into arrays
-// TODO: test more
-function normalizeResponse (obj, arrayProps, maxDepth = 0) {
-  if (maxDepth < 0) return
-
-  if (typeof obj === 'object') {
-    Object.entries(obj).forEach(([ key, value ]) => {
-      if (arrayProps.has(key)) {
-        let temp = Object.values(value)[0]
-        if (temp === undefined) temp = []
-        obj[key] = Array.isArray(temp) ? temp : [ temp ]
-      }
-      if (maxDepth > 0) {
-        normalizeResponse(value, arrayProps, maxDepth - 1)
-      }
-    })
-  }
-  else if (Array.isArray(obj) && maxDepth > 0) {
-    obj.forEach(i => normalizeResponse(i, arrayProps, maxDepth - 1))
-  }
-  return obj
-}
-
 export {
   arrayifyItemsProp,
   arrayifyObject,
   unarrayifyObject,
-  normalizeResponse,
 }
