@@ -64,6 +64,10 @@ import {
   ListConflictingAliasesCommandOutput as ListConflictingAliasesResponse,
   ListContinuousDeploymentPoliciesCommandOutput as ListContinuousDeploymentPoliciesResponse,
   ListDistributionsCommandOutput as ListDistributionsResponse,
+  ListDistributionsByCachePolicyIdCommandOutput as ListDistributionsByCachePolicyIdResponse,
+  ListDistributionsByKeyGroupCommandOutput as ListDistributionsByKeyGroupResponse,
+  ListDistributionsByOriginRequestPolicyIdCommandOutput as ListDistributionsByOriginRequestPolicyIdResponse,
+  ListDistributionsByResponseHeadersPolicyIdCommandOutput as ListDistributionsByResponseHeadersPolicyIdResponse,
   ListFieldLevelEncryptionConfigsCommandOutput as ListFieldLevelEncryptionConfigsResponse,
   ListFieldLevelEncryptionProfilesCommandOutput as ListFieldLevelEncryptionProfilesResponse,
   ListFunctionsCommandOutput as ListFunctionsResponse,
@@ -477,6 +481,30 @@ declare interface AwsLiteCloudFront {
   ListDistributions: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListDistributionsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByCachePolicyId.html CloudFront: ListDistributionsByCachePolicyId}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListDistributionsByCachePolicyId CloudFront: ListDistributionsByCachePolicyId}
+   */
+  ListDistributionsByCachePolicyId: (input: { CachePolicyId: string, MaxItems?: number, Marker?: string, paginate?: boolean | string }) => Promise<ListDistributionsByCachePolicyIdResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByKeyGroup.html CloudFront: ListDistributionsByKeyGroup}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListDistributionsByKeyGroup CloudFront: ListDistributionsByKeyGroup}
+   */
+  ListDistributionsByKeyGroup: (input: { KeyGroupId: string, MaxItems?: number, Marker?: string, paginate?: boolean | string }) => Promise<ListDistributionsByKeyGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByOriginRequestPolicyId.html CloudFront: ListDistributionsByOriginRequestPolicyId}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListDistributionsByOriginRequestPolicyId CloudFront: ListDistributionsByOriginRequestPolicyId}
+   */
+  ListDistributionsByOriginRequestPolicyId: (input: { OriginRequestPolicyId: string, MaxItems?: number, Marker?: string, paginate?: boolean | string }) => Promise<ListDistributionsByOriginRequestPolicyIdResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributionsByResponseHeadersPolicyId.html CloudFront: ListDistributionsByResponseHeadersPolicyId}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListDistributionsByResponseHeadersPolicyId CloudFront: ListDistributionsByResponseHeadersPolicyId}
+   */
+  ListDistributionsByResponseHeadersPolicyId: (input: { ResponseHeadersPolicyId: string, MaxItems?: number, Marker?: string, paginate?: boolean | string }) => Promise<ListDistributionsByResponseHeadersPolicyIdResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListFieldLevelEncryptionConfigs.html CloudFront: ListFieldLevelEncryptionConfigs}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#ListFieldLevelEncryptionConfigs CloudFront: ListFieldLevelEncryptionConfigs}
    */
@@ -713,6 +741,10 @@ export type {
   ListConflictingAliasesResponse,
   ListContinuousDeploymentPoliciesResponse,
   ListDistributionsResponse,
+  ListDistributionsByCachePolicyIdResponse,
+  ListDistributionsByKeyGroupResponse,
+  ListDistributionsByOriginRequestPolicyIdResponse,
+  ListDistributionsByResponseHeadersPolicyIdResponse,
   ListFieldLevelEncryptionConfigsResponse,
   ListFieldLevelEncryptionProfilesResponse,
   ListFunctionsResponse,

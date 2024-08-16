@@ -1490,6 +1490,122 @@ const ListDistributions = {
   },
 }
 
+const ListDistributionsByCachePolicyId = {
+  awsDoc: docRoot + 'API_ListDistributionsByCachePolicyId.html',
+  validate: {
+    CachePolicyId: { ...str, required, comment: 'Cache policy ID' },
+    MaxItems,
+    Marker,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate, CachePolicyId } = params
+    delete query.CachePolicyId
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/distributionsByCachePolicyId/${CachePolicyId}`,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.DistributionId',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const DistributionIdList = arrayifyItemsProp(payload)
+    return { DistributionIdList }
+  },
+}
+
+const ListDistributionsByKeyGroup = {
+  awsDoc: docRoot + 'API_ListDistributionsByKeyGroup.html',
+  validate: {
+    KeyGroupId: { ...str, required, comment: 'Key group ID' },
+    MaxItems,
+    Marker,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate, KeyGroupId } = params
+    delete query.CachePolicyId
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/distributionsByKeyGroupId/${KeyGroupId}`,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.DistributionId',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const DistributionIdList = arrayifyItemsProp(payload)
+    return { DistributionIdList }
+  },
+}
+
+const ListDistributionsByOriginRequestPolicyId = {
+  awsDoc: docRoot + 'API_ListDistributionsByOriginRequestPolicyId.html',
+  validate: {
+    OriginRequestPolicyId: { ...str, required, comment: 'Origin request policy ID' },
+    MaxItems,
+    Marker,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate, OriginRequestPolicyId } = params
+    delete query.CachePolicyId
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/distributionsByOriginRequestPolicyId/${OriginRequestPolicyId}`,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.DistributionId',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const DistributionIdList = arrayifyItemsProp(payload)
+    return { DistributionIdList }
+  },
+}
+
+const ListDistributionsByResponseHeadersPolicyId = {
+  awsDoc: docRoot + 'API_ListDistributionsByResponseHeadersPolicyId.html',
+  validate: {
+    ResponseHeadersPolicyId: { ...str, required, comment: 'Response headers policy ID' },
+    MaxItems,
+    Marker,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate, ResponseHeadersPolicyId } = params
+    delete query.CachePolicyId
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/distributionsByResponseHeadersPolicyId/${ResponseHeadersPolicyId}`,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.DistributionId',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const DistributionIdList = arrayifyItemsProp(payload)
+    return { DistributionIdList }
+  },
+}
+
 const ListFieldLevelEncryptionConfigs = {
   awsDoc: docRoot + 'API_ListFieldLevelEncryptionConfigs.html',
   validate: {
@@ -2289,6 +2405,10 @@ export default {
     ListConflictingAliases,
     ListContinuousDeploymentPolicies,
     ListDistributions,
+    ListDistributionsByCachePolicyId,
+    ListDistributionsByKeyGroup,
+    ListDistributionsByOriginRequestPolicyId,
+    ListDistributionsByResponseHeadersPolicyId,
     ListFieldLevelEncryptionConfigs,
     ListFieldLevelEncryptionProfiles,
     ListFunctions,
