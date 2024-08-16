@@ -16,7 +16,7 @@ const num = { type: 'number' }
 const str = { type: 'string' }
 
 const CertificateArn = { ...str, required, comment: 'ARN of the ACM certificate' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const defaultResponse = ({ payload }) => payload
 
@@ -68,18 +68,16 @@ const ListCertificates = {
     paginate: valPaginate,
   },
   request: (params) => {
-    let paginate
-    if (params.paginate) {
-      delete params.paginate
-      paginate = true
-    }
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
     return {
       awsjson: false,
       headers: {
         'X-Amz-Target': 'CertificateManager.ListCertificates',
         'Content-Type': 'application/x-amz-json-1.1',
       },
-      payload: params,
+      payload,
       paginate,
       paginator: {
         token: 'NextToken',

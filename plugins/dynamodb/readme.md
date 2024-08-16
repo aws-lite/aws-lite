@@ -580,7 +580,7 @@ Properties:
 - **`Select` (string)**
   - Attributes to be returned in the result, can be set to: `ALL_ATTRIBUTES`, `ALL_PROJECTED_ATTRIBUTES`, `COUNT`, or `SPECIFIC_ATTRIBUTES`
   - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-Select)
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -675,7 +675,7 @@ Properties:
 - **`TotalSegments` (number)**
   - Total number of segments to be scanned in a parallel `Scan` request
   - [More details (AWS)](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html#DDB-Scan-request-ScanFilter)
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 

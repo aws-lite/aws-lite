@@ -1,14 +1,14 @@
 {
   "name": "@aws-lite/rds-data-types",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "Type definitions for the `@aws-lite/rds-data` plugin",
   "homepage": "https://aws-lite.org/services/rds-data",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/architect/aws-lite.git",
+    "url": "git+https://github.com/aws-lite/aws-lite.git",
     "directory": "plugins/rds-data/types"
   },
-  "bugs": "https://github.com/architect/aws-lite/issues",
+  "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "",
   "engines": {
     "node": ">=16"

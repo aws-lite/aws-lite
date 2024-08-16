@@ -1,14 +1,14 @@
 {
   "name": "@aws-lite/cloudfront-types",
-  "version": "0.0.11",
+  "version": "0.0.14",
   "description": "Type definitions for the `@aws-lite/cloudfront` plugin",
   "homepage": "https://aws-lite.org/services/cloudfront",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/architect/aws-lite.git",
+    "url": "git+https://github.com/aws-lite/aws-lite.git",
     "directory": "plugins/cloudfront/types"
   },
-  "bugs": "https://github.com/architect/aws-lite/issues",
+  "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "",
   "engines": {
     "node": ">=16"

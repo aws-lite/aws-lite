@@ -152,829 +152,829 @@ declare interface AwsLiteIAM {
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddClientIDToOpenIDConnectProvider.html IAM: AddClientIDToOpenIDConnectProvider}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AddClientIDToOpenIDConnectProvider IAM: AddClientIDToOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#AddClientIDToOpenIDConnectProvider IAM: AddClientIDToOpenIDConnectProvider}
    */
   AddClientIDToOpenIDConnectProvider: (input: { ClientID: string, OpenIDConnectProviderArn: string }) => Promise<AddClientIDToOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddRoleToInstanceProfile.html IAM: AddRoleToInstanceProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AddRoleToInstanceProfile IAM: AddRoleToInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#AddRoleToInstanceProfile IAM: AddRoleToInstanceProfile}
    */
   AddRoleToInstanceProfile: (input: { InstanceProfileName: string, RoleName: string }) => Promise<AddRoleToInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddUserToGroup.html IAM: AddUserToGroup}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AddUserToGroup IAM: AddUserToGroup}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#AddUserToGroup IAM: AddUserToGroup}
    */
   AddUserToGroup: (input: { GroupName: string, UserName: string }) => Promise<AddUserToGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachGroupPolicy.html IAM: AttachGroupPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AttachGroupPolicy IAM: AttachGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#AttachGroupPolicy IAM: AttachGroupPolicy}
    */
   AttachGroupPolicy: (input: { GroupName: string, PolicyArn: string }) => Promise<AttachGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachRolePolicy.html IAM: AttachRolePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AttachRolePolicy IAM: AttachRolePolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#AttachRolePolicy IAM: AttachRolePolicy}
    */
   AttachRolePolicy: (input: { PolicyArn: string, RoleName: string }) => Promise<AttachRolePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html IAM: AttachUserPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#AttachUserPolicy IAM: AttachUserPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#AttachUserPolicy IAM: AttachUserPolicy}
    */
   AttachUserPolicy: (input: { PolicyArn: string, UserName: string }) => Promise<AttachUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html IAM: ChangePassword}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ChangePassword IAM: ChangePassword}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ChangePassword IAM: ChangePassword}
    */
   ChangePassword: (input: { NewPassword: string, OldPassword: string }) => Promise<ChangePasswordResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccessKey.html IAM: CreateAccessKey}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateAccessKey IAM: CreateAccessKey}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateAccessKey IAM: CreateAccessKey}
    */
   CreateAccessKey: (input: { UserName: string }) => Promise<CreateAccessKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccountAlias.html IAM: CreateAccountAlias}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateAccountAlias IAM: CreateAccountAlias}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateAccountAlias IAM: CreateAccountAlias}
    */
   CreateAccountAlias: (input: { AccountAlias: string }) => Promise<CreateAccountAliasResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateGroup.html IAM: CreateGroup}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateGroup IAM: CreateGroup}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateGroup IAM: CreateGroup}
    */
   CreateGroup: (input: { GroupName: string, Path?: string }) => Promise<CreateGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateInstanceProfile.html IAM: CreateInstanceProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateInstanceProfile IAM: CreateInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateInstanceProfile IAM: CreateInstanceProfile}
    */
   CreateInstanceProfile: (input: { InstanceProfileName: string, Path?: string, Tags?: any[] }) => Promise<CreateInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html IAM: CreateLoginProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateLoginProfile IAM: CreateLoginProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateLoginProfile IAM: CreateLoginProfile}
    */
   CreateLoginProfile: (input: { Password: string, UserName: string, PasswordResetRequired?: boolean }) => Promise<CreateLoginProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateOpenIDConnectProvider.html IAM: CreateOpenIDConnectProvider}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateOpenIDConnectProvider IAM: CreateOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateOpenIDConnectProvider IAM: CreateOpenIDConnectProvider}
    */
   CreateOpenIDConnectProvider: (input: { Url: string, ClientIDList?: any[], Tags?: any[], ThumbprintList?: any[] }) => Promise<CreateOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicy.html IAM: CreatePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicy IAM: CreatePolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicy IAM: CreatePolicy}
    */
   CreatePolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, Description?: string, Path?: string, Tags?: any[] }) => Promise<CreatePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html IAM: CreatePolicyVersion}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicyVersion IAM: CreatePolicyVersion}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreatePolicyVersion IAM: CreatePolicyVersion}
    */
   CreatePolicyVersion: (input: { PolicyArn: string, PolicyDocument: string | Record<string, any>, SetAsDefault?: boolean }) => Promise<CreatePolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html IAM: CreateRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateRole IAM: CreateRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateRole IAM: CreateRole}
    */
   CreateRole: (input: { AssumeRolePolicyDocument: string | Record<string, any>, RoleName: string, Description?: string, MaxSessionDuration?: number, Path?: string, PermissionsBoundary?: string, Tags?: any[] }) => Promise<CreateRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceLinkedRole.html IAM: CreateServiceLinkedRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateServiceLinkedRole IAM: CreateServiceLinkedRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateServiceLinkedRole IAM: CreateServiceLinkedRole}
    */
   CreateServiceLinkedRole: (input: { AWSServiceName: string, CustomSuffix?: string, Description?: string }) => Promise<CreateServiceLinkedRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceSpecificCredential.html IAM: CreateServiceSpecificCredential}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateServiceSpecificCredential IAM: CreateServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateServiceSpecificCredential IAM: CreateServiceSpecificCredential}
    */
   CreateServiceSpecificCredential: (input: { ServiceName: string, UserName: string }) => Promise<CreateServiceSpecificCredentialResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html IAM: CreateUser}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateUser IAM: CreateUser}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateUser IAM: CreateUser}
    */
   CreateUser: (input: { UserName: string, Path?: string, PermissionsBoundary?: string, Tags?: any[] }) => Promise<CreateUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html IAM: CreateVirtualMFADevice}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#CreateVirtualMFADevice IAM: CreateVirtualMFADevice}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#CreateVirtualMFADevice IAM: CreateVirtualMFADevice}
    */
   CreateVirtualMFADevice: (input: { VirtualMFADeviceName: string, Path?: string, Tags?: any[] }) => Promise<CreateVirtualMFADeviceResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccessKey.html IAM: DeleteAccessKey}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccessKey IAM: DeleteAccessKey}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccessKey IAM: DeleteAccessKey}
    */
   DeleteAccessKey: (input: { AccessKeyId: string, UserName?: string }) => Promise<DeleteAccessKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteAccountAlias.html IAM: DeleteAccountAlias}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountAlias IAM: DeleteAccountAlias}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountAlias IAM: DeleteAccountAlias}
    */
   DeleteAccountAlias: (input: { AccountAlias: string }) => Promise<DeleteAccountAliasResponse>
-  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountPasswordPolicy IAM: DeleteAccountPasswordPolicy} */
+  /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteAccountPasswordPolicy IAM: DeleteAccountPasswordPolicy} */
   DeleteAccountPasswordPolicy: () => Promise<DeleteAccountPasswordPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html IAM: DeleteGroup}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteGroup IAM: DeleteGroup}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteGroup IAM: DeleteGroup}
    */
   DeleteGroup: (input: { GroupName: string }) => Promise<DeleteGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroupPolicy.html IAM: DeleteGroupPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteGroupPolicy IAM: DeleteGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteGroupPolicy IAM: DeleteGroupPolicy}
    */
   DeleteGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<DeleteGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteInstanceProfile.html IAM: DeleteInstanceProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteInstanceProfile IAM: DeleteInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteInstanceProfile IAM: DeleteInstanceProfile}
    */
   DeleteInstanceProfile: (input: { InstanceProfileName: string }) => Promise<DeleteInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteLoginProfile.html IAM: DeleteLoginProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteLoginProfile IAM: DeleteLoginProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteLoginProfile IAM: DeleteLoginProfile}
    */
   DeleteLoginProfile: (input: { UserName: string }) => Promise<DeleteLoginProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteOpenIDConnectProvider.html IAM: DeleteOpenIDConnectProvider}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteOpenIDConnectProvider IAM: DeleteOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteOpenIDConnectProvider IAM: DeleteOpenIDConnectProvider}
    */
   DeleteOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string }) => Promise<DeleteOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicy.html IAM: DeletePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeletePolicy IAM: DeletePolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeletePolicy IAM: DeletePolicy}
    */
   DeletePolicy: (input: { PolicyArn: string }) => Promise<DeletePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeletePolicyVersion.html IAM: DeletePolicyVersion}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeletePolicyVersion IAM: DeletePolicyVersion}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeletePolicyVersion IAM: DeletePolicyVersion}
    */
   DeletePolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<DeletePolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRole.html IAM: DeleteRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRole IAM: DeleteRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteRole IAM: DeleteRole}
    */
   DeleteRole: (input: { RoleName: string }) => Promise<DeleteRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePermissionsBoundary.html IAM: DeleteRolePermissionsBoundary}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePermissionsBoundary IAM: DeleteRolePermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePermissionsBoundary IAM: DeleteRolePermissionsBoundary}
    */
   DeleteRolePermissionsBoundary: (input: { RoleName: string }) => Promise<DeleteRolePermissionsBoundaryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteRolePolicy.html IAM: DeleteRolePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePolicy IAM: DeleteRolePolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteRolePolicy IAM: DeleteRolePolicy}
    */
   DeleteRolePolicy: (input: { RoleName: string, PolicyName: string }) => Promise<DeleteRolePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServerCertificate.html IAM: DeleteServerCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServerCertificate IAM: DeleteServerCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteServerCertificate IAM: DeleteServerCertificate}
    */
   DeleteServerCertificate: (input: { ServerCertificateName: string }) => Promise<DeleteServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceLinkedRole.html IAM: DeleteServiceLinkedRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceLinkedRole IAM: DeleteServiceLinkedRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceLinkedRole IAM: DeleteServiceLinkedRole}
    */
   DeleteServiceLinkedRole: (input: { RoleName: string }) => Promise<DeleteServiceLinkedRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceSpecificCredential.html IAM: DeleteServiceSpecificCredential}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceSpecificCredential IAM: DeleteServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteServiceSpecificCredential IAM: DeleteServiceSpecificCredential}
    */
   DeleteServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, UserName: string }) => Promise<DeleteServiceSpecificCredentialResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSigningCertificate.html IAM: DeleteSigningCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteSigningCertificate IAM: DeleteSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteSigningCertificate IAM: DeleteSigningCertificate}
    */
   DeleteSigningCertificate: (input: { CertificateId: string, UserName?: string }) => Promise<DeleteSigningCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteSSHPublicKey.html IAM: DeleteSSHPublicKey}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteSSHPublicKey IAM: DeleteSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteSSHPublicKey IAM: DeleteSSHPublicKey}
    */
   DeleteSSHPublicKey: (input: { SSHPublicKeyId: string, UserName: string }) => Promise<DeleteSSHPublicKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUser.html IAM: DeleteUser}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUser IAM: DeleteUser}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteUser IAM: DeleteUser}
    */
   DeleteUser: (input: { UserName: string }) => Promise<DeleteUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html IAM: DeleteUserPermissionsBoundary}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPermissionsBoundary IAM: DeleteUserPermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPermissionsBoundary IAM: DeleteUserPermissionsBoundary}
    */
   DeleteUserPermissionsBoundary: (input: { UserName: string }) => Promise<DeleteUserPermissionsBoundaryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPolicy.html IAM: DeleteUserPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPolicy IAM: DeleteUserPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteUserPolicy IAM: DeleteUserPolicy}
    */
   DeleteUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<DeleteUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteVirtualMFADevice.html IAM: DeleteVirtualMFADevice}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DeleteVirtualMFADevice IAM: DeleteVirtualMFADevice}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DeleteVirtualMFADevice IAM: DeleteVirtualMFADevice}
    */
   DeleteVirtualMFADevice: (input: { SerialNumber: string }) => Promise<DeleteVirtualMFADeviceResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachGroupPolicy.html IAM: DetachGroupPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachGroupPolicy IAM: DetachGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DetachGroupPolicy IAM: DetachGroupPolicy}
    */
   DetachGroupPolicy: (input: { GroupName: string, PolicyArn: string }) => Promise<DetachGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachRolePolicy.html IAM: DetachRolePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachRolePolicy IAM: DetachRolePolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DetachRolePolicy IAM: DetachRolePolicy}
    */
   DetachRolePolicy: (input: { PolicyArn: string, RoleName: string }) => Promise<DetachRolePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachUserPolicy.html IAM: DetachUserPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#DetachUserPolicy IAM: DetachUserPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#DetachUserPolicy IAM: DetachUserPolicy}
    */
   DetachUserPolicy: (input: { PolicyArn: string, UserName: string }) => Promise<DetachUserPolicyResponse>
-  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateCredentialReport IAM: GenerateCredentialReport} */
+  /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GenerateCredentialReport IAM: GenerateCredentialReport} */
   GenerateCredentialReport: () => Promise<GenerateCredentialReportResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateOrganizationsAccessReport.html IAM: GenerateOrganizationsAccessReport}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateOrganizationsAccessReport IAM: GenerateOrganizationsAccessReport}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GenerateOrganizationsAccessReport IAM: GenerateOrganizationsAccessReport}
    */
   GenerateOrganizationsAccessReport: (input: { EntityPath: string, OrganizationsPolicyId?: string }) => Promise<GenerateOrganizationsAccessReportResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GenerateServiceLastAccessedDetails.html IAM: GenerateServiceLastAccessedDetails}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GenerateServiceLastAccessedDetails IAM: GenerateServiceLastAccessedDetails}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GenerateServiceLastAccessedDetails IAM: GenerateServiceLastAccessedDetails}
    */
   GenerateServiceLastAccessedDetails: (input: { Arn: string, Granularity?: string }) => Promise<GenerateServiceLastAccessedDetailsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html IAM: GetAccessKeyLastUsed}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccessKeyLastUsed IAM: GetAccessKeyLastUsed}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetAccessKeyLastUsed IAM: GetAccessKeyLastUsed}
    */
   GetAccessKeyLastUsed: (input: { AccessKeyId: string }) => Promise<GetAccessKeyLastUsedResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountAuthorizationDetails.html IAM: GetAccountAuthorizationDetails}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountAuthorizationDetails IAM: GetAccountAuthorizationDetails}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetAccountAuthorizationDetails IAM: GetAccountAuthorizationDetails}
    */
-  GetAccountAuthorizationDetails: (input: { Filter?: any[], Marker?: string, MaxItems?: number }) => Promise<GetAccountAuthorizationDetailsResponse>
-  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountPasswordPolicy IAM: GetAccountPasswordPolicy} */
+  GetAccountAuthorizationDetails: (input: { Filter?: any[], Marker?: string, MaxItems?: number, paginate?: string }) => Promise<GetAccountAuthorizationDetailsResponse>
+  /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetAccountPasswordPolicy IAM: GetAccountPasswordPolicy} */
   GetAccountPasswordPolicy: () => Promise<GetAccountPasswordPolicyResponse>
-  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetAccountSummary IAM: GetAccountSummary} */
+  /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetAccountSummary IAM: GetAccountSummary} */
   GetAccountSummary: () => Promise<GetAccountSummaryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html IAM: GetContextKeysForCustomPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetContextKeysForCustomPolicy IAM: GetContextKeysForCustomPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetContextKeysForCustomPolicy IAM: GetContextKeysForCustomPolicy}
    */
   GetContextKeysForCustomPolicy: (input: { PolicyInputList: any[] }) => Promise<GetContextKeysForCustomPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html IAM: GetContextKeysForPrincipalPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetContextKeysForPrincipalPolicy IAM: GetContextKeysForPrincipalPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetContextKeysForPrincipalPolicy IAM: GetContextKeysForPrincipalPolicy}
    */
   GetContextKeysForPrincipalPolicy: (input: { PolicySourceArn: string, PolicyInputList?: any[] }) => Promise<GetContextKeysForPrincipalPolicyResponse>
-  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetCredentialReport IAM: GetCredentialReport} */
+  /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetCredentialReport IAM: GetCredentialReport} */
   GetCredentialReport: () => Promise<GetCredentialReportResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroup.html IAM: GetGroup}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroup IAM: GetGroup}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetGroup IAM: GetGroup}
    */
-  GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number }) => Promise<GetGroupResponse>
+  GetGroup: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<GetGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetGroupPolicy.html IAM: GetGroupPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetGroupPolicy IAM: GetGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetGroupPolicy IAM: GetGroupPolicy}
    */
   GetGroupPolicy: (input: { GroupName: string, PolicyName: string }) => Promise<GetGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetInstanceProfile.html IAM: GetInstanceProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetInstanceProfile IAM: GetInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetInstanceProfile IAM: GetInstanceProfile}
    */
   GetInstanceProfile: (input: { InstanceProfileName: string }) => Promise<GetInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetLoginProfile.html IAM: GetLoginProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetLoginProfile IAM: GetLoginProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetLoginProfile IAM: GetLoginProfile}
    */
   GetLoginProfile: (input: { UserName: string }) => Promise<GetLoginProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html IAM: GetOpenIDConnectProvider}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetOpenIDConnectProvider IAM: GetOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetOpenIDConnectProvider IAM: GetOpenIDConnectProvider}
    */
   GetOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string }) => Promise<GetOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOrganizationsAccessReport.html IAM: GetOrganizationsAccessReport}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetOrganizationsAccessReport IAM: GetOrganizationsAccessReport}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetOrganizationsAccessReport IAM: GetOrganizationsAccessReport}
    */
-  GetOrganizationsAccessReport: (input: { JobId: string, Marker?: string, MaxItems?: number, SortKey?: string, paginate?: boolean }) => Promise<GetOrganizationsAccessReportResponse>
+  GetOrganizationsAccessReport: (input: { JobId: string, Marker?: string, MaxItems?: number, SortKey?: string, paginate?: boolean | string }) => Promise<GetOrganizationsAccessReportResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicy.html IAM: GetPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetPolicy IAM: GetPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetPolicy IAM: GetPolicy}
    */
   GetPolicy: (input: { PolicyArn: string }) => Promise<GetPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetPolicyVersion.html IAM: GetPolicyVersion}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetPolicyVersion IAM: GetPolicyVersion}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetPolicyVersion IAM: GetPolicyVersion}
    */
   GetPolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<GetPolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html IAM: GetRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRole IAM: GetRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetRole IAM: GetRole}
    */
   GetRole: (input: { RoleName: string }) => Promise<GetRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRolePolicy.html IAM: GetRolePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetRolePolicy IAM: GetRolePolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetRolePolicy IAM: GetRolePolicy}
    */
   GetRolePolicy: (input: { PolicyName: string, RoleName: string }) => Promise<GetRolePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html IAM: GetServerCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServerCertificate IAM: GetServerCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetServerCertificate IAM: GetServerCertificate}
    */
   GetServerCertificate: (input: { ServerCertificateName: string }) => Promise<GetServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetails.html IAM: GetServiceLastAccessedDetails}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetails IAM: GetServiceLastAccessedDetails}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetails IAM: GetServiceLastAccessedDetails}
    */
-  GetServiceLastAccessedDetails: (input: { JobId: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetServiceLastAccessedDetailsResponse>
+  GetServiceLastAccessedDetails: (input: { JobId: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<GetServiceLastAccessedDetailsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServiceLastAccessedDetailsWithEntities.html IAM: GetServiceLastAccessedDetailsWithEntities}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetailsWithEntities IAM: GetServiceLastAccessedDetailsWithEntities}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetServiceLastAccessedDetailsWithEntities IAM: GetServiceLastAccessedDetailsWithEntities}
    */
-  GetServiceLastAccessedDetailsWithEntities: (input: { JobId: string, ServiceNamespace: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<GetServiceLastAccessedDetailsWithEntitiesResponse>
+  GetServiceLastAccessedDetailsWithEntities: (input: { JobId: string, ServiceNamespace: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<GetServiceLastAccessedDetailsWithEntitiesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetSSHPublicKey.html IAM: GetSSHPublicKey}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetSSHPublicKey IAM: GetSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetSSHPublicKey IAM: GetSSHPublicKey}
    */
   GetSSHPublicKey: (input: { Encoding: string, SSHPublicKeyId: string, UserName: string }) => Promise<GetSSHPublicKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html IAM: GetUser}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUser IAM: GetUser}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetUser IAM: GetUser}
    */
   GetUser: (input: { UserName: string }) => Promise<GetUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUserPolicy.html IAM: GetUserPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#GetUserPolicy IAM: GetUserPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#GetUserPolicy IAM: GetUserPolicy}
    */
   GetUserPolicy: (input: { PolicyName: string, UserName: string }) => Promise<GetUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccessKeys.html IAM: ListAccessKeys}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAccessKeys IAM: ListAccessKeys}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListAccessKeys IAM: ListAccessKeys}
    */
-  ListAccessKeys: (input: { Marker?: string, MaxItems?: number, UserName?: string, paginate?: boolean }) => Promise<ListAccessKeysResponse>
+  ListAccessKeys: (input: { Marker?: string, MaxItems?: number, UserName?: string, paginate?: boolean | string }) => Promise<ListAccessKeysResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccountAliases.html IAM: ListAccountAliases}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAccountAliases IAM: ListAccountAliases}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListAccountAliases IAM: ListAccountAliases}
    */
-  ListAccountAliases: (input: { Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAccountAliasesResponse>
+  ListAccountAliases: (input: { Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListAccountAliasesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedGroupPolicies.html IAM: ListAttachedGroupPolicies}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedGroupPolicies IAM: ListAttachedGroupPolicies}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedGroupPolicies IAM: ListAttachedGroupPolicies}
    */
-  ListAttachedGroupPolicies: (input: { GroupName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedGroupPoliciesResponse>
+  ListAttachedGroupPolicies: (input: { GroupName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListAttachedGroupPoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedRolePolicies.html IAM: ListAttachedRolePolicies}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedRolePolicies IAM: ListAttachedRolePolicies}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedRolePolicies IAM: ListAttachedRolePolicies}
    */
-  ListAttachedRolePolicies: (input: { RoleName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedRolePoliciesResponse>
+  ListAttachedRolePolicies: (input: { RoleName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListAttachedRolePoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedUserPolicies.html IAM: ListAttachedUserPolicies}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedUserPolicies IAM: ListAttachedUserPolicies}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListAttachedUserPolicies IAM: ListAttachedUserPolicies}
    */
-  ListAttachedUserPolicies: (input: { UserName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListAttachedUserPoliciesResponse>
+  ListAttachedUserPolicies: (input: { UserName: string, Marker?: string, PathPrefix?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListAttachedUserPoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListEntitiesForPolicy.html IAM: ListEntitiesForPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListEntitiesForPolicy IAM: ListEntitiesForPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListEntitiesForPolicy IAM: ListEntitiesForPolicy}
    */
-  ListEntitiesForPolicy: (input: { PolicyArn: string, EntityFilter?: string, Marker?: string, MaxItems?: number, PathPrefix?: string, PolicyUsageFilter?: string }) => Promise<ListEntitiesForPolicyResponse>
+  ListEntitiesForPolicy: (input: { PolicyArn: string, EntityFilter?: string, Marker?: string, MaxItems?: number, PathPrefix?: string, PolicyUsageFilter?: string, paginate?: string }) => Promise<ListEntitiesForPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html IAM: ListGroupPolicies}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroupPolicies IAM: ListGroupPolicies}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListGroupPolicies IAM: ListGroupPolicies}
    */
-  ListGroupPolicies: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListGroupPoliciesResponse>
+  ListGroupPolicies: (input: { GroupName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListGroupPoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroups.html IAM: ListGroups}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroups IAM: ListGroups}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListGroups IAM: ListGroups}
    */
-  ListGroups: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListGroupsResponse>
+  ListGroups: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean | string }) => Promise<ListGroupsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupsForUser.html IAM: ListGroupsForUser}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListGroupsForUser IAM: ListGroupsForUser}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListGroupsForUser IAM: ListGroupsForUser}
    */
-  ListGroupsForUser: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListGroupsForUserResponse>
+  ListGroupsForUser: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListGroupsForUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfiles.html IAM: ListInstanceProfiles}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfiles IAM: ListInstanceProfiles}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfiles IAM: ListInstanceProfiles}
    */
-  ListInstanceProfiles: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListInstanceProfilesResponse>
+  ListInstanceProfiles: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean | string }) => Promise<ListInstanceProfilesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfilesForRole.html IAM: ListInstanceProfilesForRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfilesForRole IAM: ListInstanceProfilesForRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfilesForRole IAM: ListInstanceProfilesForRole}
    */
-  ListInstanceProfilesForRole: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfilesForRoleResponse>
+  ListInstanceProfilesForRole: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListInstanceProfilesForRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListInstanceProfileTags.html IAM: ListInstanceProfileTags}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfileTags IAM: ListInstanceProfileTags}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListInstanceProfileTags IAM: ListInstanceProfileTags}
    */
-  ListInstanceProfileTags: (input: { InstanceProfileName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListInstanceProfileTagsResponse>
-  /** @description aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListOpenIDConnectProviders IAM: ListOpenIDConnectProviders} */
+  ListInstanceProfileTags: (input: { InstanceProfileName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListInstanceProfileTagsResponse>
+  /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListOpenIDConnectProviders IAM: ListOpenIDConnectProviders} */
   ListOpenIDConnectProviders: () => Promise<ListOpenIDConnectProvidersResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviderTags.html IAM: ListOpenIDConnectProviderTags}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListOpenIDConnectProviderTags IAM: ListOpenIDConnectProviderTags}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListOpenIDConnectProviderTags IAM: ListOpenIDConnectProviderTags}
    */
-  ListOpenIDConnectProviderTags: (input: { OpenIDConnectProviderArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListOpenIDConnectProviderTagsResponse>
+  ListOpenIDConnectProviderTags: (input: { OpenIDConnectProviderArn: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListOpenIDConnectProviderTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicies.html IAM: ListPolicies}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicies IAM: ListPolicies}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListPolicies IAM: ListPolicies}
    */
-  ListPolicies: (input: { Marker?: string, MaxItems?: number, OnlyAttached?: boolean, PathPrefix?: string, PolicyUsageFilter?: string, Scope?: string, paginate?: boolean }) => Promise<ListPoliciesResponse>
+  ListPolicies: (input: { Marker?: string, MaxItems?: number, OnlyAttached?: boolean, PathPrefix?: string, PolicyUsageFilter?: string, Scope?: string, paginate?: boolean | string }) => Promise<ListPoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPoliciesGrantingServiceAccess.html IAM: ListPoliciesGrantingServiceAccess}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPoliciesGrantingServiceAccess IAM: ListPoliciesGrantingServiceAccess}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListPoliciesGrantingServiceAccess IAM: ListPoliciesGrantingServiceAccess}
    */
-  ListPoliciesGrantingServiceAccess: (input: { Arn: string, ServiceNamespaces: any[], Marker?: string, paginate?: boolean }) => Promise<ListPoliciesGrantingServiceAccessResponse>
+  ListPoliciesGrantingServiceAccess: (input: { Arn: string, ServiceNamespaces: any[], Marker?: string, paginate?: boolean | string }) => Promise<ListPoliciesGrantingServiceAccessResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyTags.html IAM: ListPolicyTags}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyTags IAM: ListPolicyTags}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyTags IAM: ListPolicyTags}
    */
-  ListPolicyTags: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListPolicyTagsResponse>
+  ListPolicyTags: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListPolicyTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListPolicyVersions.html IAM: ListPolicyVersions}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyVersions IAM: ListPolicyVersions}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListPolicyVersions IAM: ListPolicyVersions}
    */
-  ListPolicyVersions: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListPolicyVersionsResponse>
+  ListPolicyVersions: (input: { PolicyArn: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListPolicyVersionsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRolePolicies.html IAM: ListRolePolicies}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRolePolicies IAM: ListRolePolicies}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListRolePolicies IAM: ListRolePolicies}
    */
-  ListRolePolicies: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRolePoliciesResponse>
+  ListRolePolicies: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListRolePoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoles.html IAM: ListRoles}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRoles IAM: ListRoles}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListRoles IAM: ListRoles}
    */
-  ListRoles: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListRolesResponse>
+  ListRoles: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean | string }) => Promise<ListRolesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListRoleTags.html IAM: ListRoleTags}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListRoleTags IAM: ListRoleTags}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListRoleTags IAM: ListRoleTags}
    */
-  ListRoleTags: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListRoleTagsResponse>
+  ListRoleTags: (input: { RoleName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListRoleTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html IAM: ListServerCertificates}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServerCertificates IAM: ListServerCertificates}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListServerCertificates IAM: ListServerCertificates}
    */
-  ListServerCertificates: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListServerCertificatesResponse>
+  ListServerCertificates: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean | string }) => Promise<ListServerCertificatesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificateTags.html IAM: ListServerCertificateTags}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServerCertificateTags IAM: ListServerCertificateTags}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListServerCertificateTags IAM: ListServerCertificateTags}
    */
-  ListServerCertificateTags: (input: { ServerCertificateName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListServerCertificateTagsResponse>
+  ListServerCertificateTags: (input: { ServerCertificateName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListServerCertificateTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServiceSpecificCredentials.html IAM: ListServiceSpecificCredentials}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListServiceSpecificCredentials IAM: ListServiceSpecificCredentials}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListServiceSpecificCredentials IAM: ListServiceSpecificCredentials}
    */
   ListServiceSpecificCredentials: (input: { ServiceName?: string, UserName?: string }) => Promise<ListServiceSpecificCredentialsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSigningCertificates.html IAM: ListSigningCertificates}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListSigningCertificates IAM: ListSigningCertificates}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListSigningCertificates IAM: ListSigningCertificates}
    */
   ListSigningCertificates: (input: { Marker?: string, MaxItems?: number, UserName?: string }) => Promise<ListSigningCertificatesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListSSHPublicKeys.html IAM: ListSSHPublicKeys}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListSSHPublicKeys IAM: ListSSHPublicKeys}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListSSHPublicKeys IAM: ListSSHPublicKeys}
    */
   ListSSHPublicKeys: (input: { Marker?: string, MaxItems?: number, UserName?: string }) => Promise<ListSSHPublicKeysResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserPolicies.html IAM: ListUserPolicies}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListUserPolicies IAM: ListUserPolicies}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListUserPolicies IAM: ListUserPolicies}
    */
-  ListUserPolicies: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListUserPoliciesResponse>
+  ListUserPolicies: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListUserPoliciesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUsers.html IAM: ListUsers}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListUsers IAM: ListUsers}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListUsers IAM: ListUsers}
    */
-  ListUsers: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean }) => Promise<ListUsersResponse>
+  ListUsers: (input: { Marker?: string, MaxItems?: number, PathPrefix?: string, paginate?: boolean | string }) => Promise<ListUsersResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUserTags.html IAM: ListUserTags}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListUserTags IAM: ListUserTags}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListUserTags IAM: ListUserTags}
    */
-  ListUserTags: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListUserTagsResponse>
+  ListUserTags: (input: { UserName: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListUserTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html IAM: ListVirtualMFADevices}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ListVirtualMFADevices IAM: ListVirtualMFADevices}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ListVirtualMFADevices IAM: ListVirtualMFADevices}
    */
-  ListVirtualMFADevices: (input: { AssignmentStatus?: string, Marker?: string, MaxItems?: number, paginate?: boolean }) => Promise<ListVirtualMFADevicesResponse>
+  ListVirtualMFADevices: (input: { AssignmentStatus?: string, Marker?: string, MaxItems?: number, paginate?: boolean | string }) => Promise<ListVirtualMFADevicesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutGroupPolicy.html IAM: PutGroupPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#PutGroupPolicy IAM: PutGroupPolicy}
    */
   PutGroupPolicy: (input: { GroupName: string, PolicyDocument: string | Record<string, any>, PolicyName: string }) => Promise<PutGroupPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePermissionsBoundary.html IAM: PutRolePermissionsBoundary}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutRolePermissionsBoundary IAM: PutRolePermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#PutRolePermissionsBoundary IAM: PutRolePermissionsBoundary}
    */
   PutRolePermissionsBoundary: (input: { PermissionsBoundary: string, RoleName: string }) => Promise<PutRolePermissionsBoundaryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePolicy.html IAM: PutRolePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutRolePolicy IAM: PutRolePolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#PutRolePolicy IAM: PutRolePolicy}
    */
   PutRolePolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, RoleName: string }) => Promise<PutRolePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPermissionsBoundary.html IAM: PutUserPermissionsBoundary}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutUserPermissionsBoundary IAM: PutUserPermissionsBoundary}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#PutUserPermissionsBoundary IAM: PutUserPermissionsBoundary}
    */
   PutUserPermissionsBoundary: (input: { PermissionsBoundary: string, UserName: string }) => Promise<PutUserPermissionsBoundaryResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPolicy.html IAM: PutUserPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#PutUserPolicy IAM: PutUserPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#PutUserPolicy IAM: PutUserPolicy}
    */
   PutUserPolicy: (input: { PolicyDocument: string | Record<string, any>, PolicyName: string, UserName: string }) => Promise<PutUserPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveClientIDFromOpenIDConnectProvider.html IAM: RemoveClientIDFromOpenIDConnectProvider}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveClientIDFromOpenIDConnectProvider IAM: RemoveClientIDFromOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#RemoveClientIDFromOpenIDConnectProvider IAM: RemoveClientIDFromOpenIDConnectProvider}
    */
   RemoveClientIDFromOpenIDConnectProvider: (input: { ClientID: string, OpenIDConnectProviderArn: string }) => Promise<RemoveClientIDFromOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveRoleFromInstanceProfile.html IAM: RemoveRoleFromInstanceProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveRoleFromInstanceProfile IAM: RemoveRoleFromInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#RemoveRoleFromInstanceProfile IAM: RemoveRoleFromInstanceProfile}
    */
   RemoveRoleFromInstanceProfile: (input: { InstanceProfileName: string, RoleName: string }) => Promise<RemoveRoleFromInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_RemoveUserFromGroup.html IAM: RemoveUserFromGroup}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#RemoveUserFromGroup IAM: RemoveUserFromGroup}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#RemoveUserFromGroup IAM: RemoveUserFromGroup}
    */
   RemoveUserFromGroup: (input: { GroupName: string, UserName: string }) => Promise<RemoveUserFromGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_ResetServiceSpecificCredential.html IAM: ResetServiceSpecificCredential}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#ResetServiceSpecificCredential IAM: ResetServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#ResetServiceSpecificCredential IAM: ResetServiceSpecificCredential}
    */
   ResetServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, UserName?: string }) => Promise<ResetServiceSpecificCredentialResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetDefaultPolicyVersion.html IAM: SetDefaultPolicyVersion}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SetDefaultPolicyVersion IAM: SetDefaultPolicyVersion}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#SetDefaultPolicyVersion IAM: SetDefaultPolicyVersion}
    */
   SetDefaultPolicyVersion: (input: { PolicyArn: string, VersionId: string }) => Promise<SetDefaultPolicyVersionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetSecurityTokenServicePreferences.html IAM: SetSecurityTokenServicePreferences}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SetSecurityTokenServicePreferences IAM: SetSecurityTokenServicePreferences}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#SetSecurityTokenServicePreferences IAM: SetSecurityTokenServicePreferences}
    */
   SetSecurityTokenServicePreferences: (input: { GlobalEndpointTokenVersion: string }) => Promise<SetSecurityTokenServicePreferencesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulateCustomPolicy.html IAM: SimulateCustomPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulateCustomPolicy IAM: SimulateCustomPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#SimulateCustomPolicy IAM: SimulateCustomPolicy}
    */
-  SimulateCustomPolicy: (input: { ActionNames: any[], PolicyInputList: any[], CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulateCustomPolicyResponse>
+  SimulateCustomPolicy: (input: { ActionNames: any[], PolicyInputList: any[], CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean | string }) => Promise<SimulateCustomPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html IAM: SimulatePrincipalPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#SimulatePrincipalPolicy IAM: SimulatePrincipalPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#SimulatePrincipalPolicy IAM: SimulatePrincipalPolicy}
    */
-  SimulatePrincipalPolicy: (input: { ActionNames: any[], PolicySourceArn: string, CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], PolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean }) => Promise<SimulatePrincipalPolicyResponse>
+  SimulatePrincipalPolicy: (input: { ActionNames: any[], PolicySourceArn: string, CallerArn?: string, ContextEntries?: any[], Marker?: string, MaxItems?: number, PermissionsBoundaryPolicyInputList?: any[], PolicyInputList?: any[], ResourceArns?: any[], ResourceHandlingOption?: string, ResourceOwner?: string, ResourcePolicy?: string | Record<string, any>, paginate?: boolean | string }) => Promise<SimulatePrincipalPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagInstanceProfile.html IAM: TagInstanceProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagInstanceProfile IAM: TagInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#TagInstanceProfile IAM: TagInstanceProfile}
    */
   TagInstanceProfile: (input: { InstanceProfileName: string, Tags: any[] }) => Promise<TagInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagOpenIDConnectProvider.html IAM: TagOpenIDConnectProvider}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagOpenIDConnectProvider IAM: TagOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#TagOpenIDConnectProvider IAM: TagOpenIDConnectProvider}
    */
   TagOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string, Tags: any[] }) => Promise<TagOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagPolicy.html IAM: TagPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagPolicy IAM: TagPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#TagPolicy IAM: TagPolicy}
    */
   TagPolicy: (input: { PolicyArn: string, Tags: any[] }) => Promise<TagPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagRole.html IAM: TagRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagRole IAM: TagRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#TagRole IAM: TagRole}
    */
   TagRole: (input: { RoleName: string, Tags: any[] }) => Promise<TagRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagServerCertificate.html IAM: TagServerCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagServerCertificate IAM: TagServerCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#TagServerCertificate IAM: TagServerCertificate}
    */
   TagServerCertificate: (input: { ServerCertificateName: string, Tags: any[] }) => Promise<TagServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_TagUser.html IAM: TagUser}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#TagUser IAM: TagUser}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#TagUser IAM: TagUser}
    */
   TagUser: (input: { UserName: string, Tags: any[] }) => Promise<TagUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagInstanceProfile.html IAM: UntagInstanceProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagInstanceProfile IAM: UntagInstanceProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UntagInstanceProfile IAM: UntagInstanceProfile}
    */
   UntagInstanceProfile: (input: { InstanceProfileName: string, TagKeys: any[] }) => Promise<UntagInstanceProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagOpenIDConnectProvider.html IAM: UntagOpenIDConnectProvider}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagOpenIDConnectProvider IAM: UntagOpenIDConnectProvider}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UntagOpenIDConnectProvider IAM: UntagOpenIDConnectProvider}
    */
   UntagOpenIDConnectProvider: (input: { OpenIDConnectProviderArn: string, TagKeys: any[] }) => Promise<UntagOpenIDConnectProviderResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagPolicy.html IAM: UntagPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagPolicy IAM: UntagPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UntagPolicy IAM: UntagPolicy}
    */
   UntagPolicy: (input: { PolicyArn: string, TagKeys: any[] }) => Promise<UntagPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagRole.html IAM: UntagRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagRole IAM: UntagRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UntagRole IAM: UntagRole}
    */
   UntagRole: (input: { RoleName: string, TagKeys: any[] }) => Promise<UntagRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagServerCertificate.html IAM: UntagServerCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagServerCertificate IAM: UntagServerCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UntagServerCertificate IAM: UntagServerCertificate}
    */
   UntagServerCertificate: (input: { ServerCertificateName: string, TagKeys: any[] }) => Promise<UntagServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UntagUser.html IAM: UntagUser}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UntagUser IAM: UntagUser}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UntagUser IAM: UntagUser}
    */
   UntagUser: (input: { UserName: string, TagKeys: any[] }) => Promise<UntagUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccessKey.html IAM: UpdateAccessKey}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccessKey IAM: UpdateAccessKey}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccessKey IAM: UpdateAccessKey}
    */
   UpdateAccessKey: (input: { AccessKeyId: string, Status: string, UserName?: string }) => Promise<UpdateAccessKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html IAM: UpdateAccountPasswordPolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccountPasswordPolicy IAM: UpdateAccountPasswordPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateAccountPasswordPolicy IAM: UpdateAccountPasswordPolicy}
    */
   UpdateAccountPasswordPolicy: (input: { AllowUsersToChangePassword?: boolean, HardExpiry?: boolean, MaxPasswordAge?: number, MinimumPasswordLength?: number, PasswordReusePrevention?: number, RequireLowercaseCharacters?: boolean, RequireNumbers?: boolean, RequireSymbols?: boolean, RequireUppercaseCharacters?: boolean }) => Promise<UpdateAccountPasswordPolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAssumeRolePolicy.html IAM: UpdateAssumeRolePolicy}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateAssumeRolePolicy IAM: UpdateAssumeRolePolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateAssumeRolePolicy IAM: UpdateAssumeRolePolicy}
    */
   UpdateAssumeRolePolicy: (input: { PolicyDocument: string | Record<string, any>, RoleName: string }) => Promise<UpdateAssumeRolePolicyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateGroup.html IAM: UpdateGroup}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateGroup IAM: UpdateGroup}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateGroup IAM: UpdateGroup}
    */
   UpdateGroup: (input: { GroupName: string, NewGroupName?: string, NewPath?: string }) => Promise<UpdateGroupResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateLoginProfile.html IAM: UpdateLoginProfile}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateLoginProfile IAM: UpdateLoginProfile}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateLoginProfile IAM: UpdateLoginProfile}
    */
   UpdateLoginProfile: (input: { UserName: string, Password?: string, PasswordResetRequired?: boolean }) => Promise<UpdateLoginProfileResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateOpenIDConnectProviderThumbprint.html IAM: UpdateOpenIDConnectProviderThumbprint}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateOpenIDConnectProviderThumbprint IAM: UpdateOpenIDConnectProviderThumbprint}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateOpenIDConnectProviderThumbprint IAM: UpdateOpenIDConnectProviderThumbprint}
    */
   UpdateOpenIDConnectProviderThumbprint: (input: { OpenIDConnectProviderArn: string, ThumbprintList: any[] }) => Promise<UpdateOpenIDConnectProviderThumbprintResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html IAM: UpdateRole}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRole IAM: UpdateRole}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateRole IAM: UpdateRole}
    */
   UpdateRole: (input: { RoleName: string, Description?: string, MaxSessionDuration?: number }) => Promise<UpdateRoleResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRoleDescription.html IAM: UpdateRoleDescription}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateRoleDescription IAM: UpdateRoleDescription}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateRoleDescription IAM: UpdateRoleDescription}
    */
   UpdateRoleDescription: (input: { RoleName: string, Description?: string }) => Promise<UpdateRoleDescriptionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServerCertificate.html IAM: UpdateServerCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateServerCertificate IAM: UpdateServerCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateServerCertificate IAM: UpdateServerCertificate}
    */
   UpdateServerCertificate: (input: { ServerCertificateName: string, NewPath?: string, NewServerCertificateName?: string }) => Promise<UpdateServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateServiceSpecificCredential.html IAM: UpdateServiceSpecificCredential}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateServiceSpecificCredential IAM: UpdateServiceSpecificCredential}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateServiceSpecificCredential IAM: UpdateServiceSpecificCredential}
    */
   UpdateServiceSpecificCredential: (input: { ServiceSpecificCredentialId: string, Status: string, UserName?: string }) => Promise<UpdateServiceSpecificCredentialResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSigningCertificate.html IAM: UpdateSigningCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateSigningCertificate IAM: UpdateSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateSigningCertificate IAM: UpdateSigningCertificate}
    */
   UpdateSigningCertificate: (input: { CertificateId: string, Status: string, UserName?: string }) => Promise<UpdateSigningCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateSSHPublicKey.html IAM: UpdateSSHPublicKey}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateSSHPublicKey IAM: UpdateSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateSSHPublicKey IAM: UpdateSSHPublicKey}
    */
   UpdateSSHPublicKey: (input: { SSHPublicKeyId: string, Status: string, UserName: string }) => Promise<UpdateSSHPublicKeyResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateUser.html IAM: UpdateUser}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UpdateUser IAM: UpdateUser}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UpdateUser IAM: UpdateUser}
    */
   UpdateUser: (input: { UserName: string, NewPath?: string, NewUserName?: string }) => Promise<UpdateUserResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadServerCertificate.html IAM: UploadServerCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadServerCertificate IAM: UploadServerCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UploadServerCertificate IAM: UploadServerCertificate}
    */
   UploadServerCertificate: (input: { CertificateBody: string, PrivateKey: string, ServerCertificateName: string, CertificateChain?: string, Path?: string, Tags?: any[] }) => Promise<UploadServerCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSigningCertificate.html IAM: UploadSigningCertificate}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadSigningCertificate IAM: UploadSigningCertificate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UploadSigningCertificate IAM: UploadSigningCertificate}
    */
   UploadSigningCertificate: (input: { CertificateBody: string, UserName?: string }) => Promise<UploadSigningCertificateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/IAM/latest/APIReference/API_UploadSSHPublicKey.html IAM: UploadSSHPublicKey}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/iam/readme.md#UploadSSHPublicKey IAM: UploadSSHPublicKey}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/iam/readme.md#UploadSSHPublicKey IAM: UploadSSHPublicKey}
    */
   UploadSSHPublicKey: (input: { SSHPublicKeyBody: string, UserName: string }) => Promise<UploadSSHPublicKeyResponse>
   // $METHODS_END

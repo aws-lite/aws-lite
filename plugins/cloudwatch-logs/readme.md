@@ -61,7 +61,7 @@ Properties:
 - **`logGroupClass` (string)**
   - Log group class setting: `STANDARD` (supports all CloudWatch Logs features), or `INFREQUENT_ACCESS` (feature subset with lower costs)
   - [More details (AWS)](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html)
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -84,7 +84,7 @@ Properties:
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`orderBy` (string)**
   - Order results by log stream name (`LogStreamName`) or event time (`LastEventTime`)
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -111,7 +111,7 @@ Properties:
   - Start of the time range in epoch milliseconds
 - **`unmask` (boolean)**
   - Display log event fields with all sensitive data unmasked and visible (`true`)
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -147,7 +147,7 @@ Properties:
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`AssociateKmsKey`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_AssociateKmsKey.html)
 - [`CancelExportTask`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CancelExportTask.html)

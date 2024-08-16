@@ -1,14 +1,14 @@
 {
   "name": "@aws-lite/sts-types",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Type definitions for the `@aws-lite/sts` plugin",
   "homepage": "https://aws-lite.org/services/sts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/architect/aws-lite.git",
+    "url": "git+https://github.com/aws-lite/aws-lite.git",
     "directory": "plugins/sts/types"
   },
-  "bugs": "https://github.com/architect/aws-lite/issues",
+  "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "",
   "engines": {
     "node": ">=16"

@@ -68,7 +68,7 @@ Properties:
   - Specify the create date to sort results; must also specify `SortOrder`
 - **`SortOrder` (string)**
   - Specify the order results will be sorted; value can be one of: `ASCENDING`, `DESCENDING`, must also specify `SortBy`
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
@@ -106,7 +106,7 @@ Properties:
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`AddTagsToCertificate`](https://docs.aws.amazon.com/acm/latest/APIReference/API_AddTagsToCertificate.html)
 - [`ExportCertificate`](https://docs.aws.amazon.com/acm/latest/APIReference/API_ExportCertificate.html)

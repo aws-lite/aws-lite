@@ -46,6 +46,7 @@ async function main () {
       pkg.name = packageName
       pkg.description = desc
       pkg.author = maintainersList
+      pkg.homepage = `https://aws-lite.org/services/${service}`
       pkg.repository.directory = repoDir
       writeFileSync(join(pluginDir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
 
@@ -115,7 +116,7 @@ async function main () {
       }
       if (incompleteMethods.length) {
         methodDocs += `\n\n### Methods yet to be implemented\n\n` +
-                      `> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!\n\n` +
+                      `> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!\n\n` +
                       incompleteMethods.map(({ method, awsDoc }) => awsDoc
                         ? `- [\`${method}\`](${awsDoc})`
                         : `- \`${method}\``,

@@ -1107,6 +1107,8 @@ Properties:
   - Maximum number of parts (at most 1000) to be returned in the response
 - **`PartNumberMarker` (string)**
   - Pagination cursor
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 - **`RequestPayer` (string)**
   - Sets request header: `x-amz-request-payer`
 - **`ExpectedBucketOwner` (string)**
@@ -1742,7 +1744,7 @@ Properties:
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`CreateSession`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html)
 - [`GetBucketLifecycle`](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html)

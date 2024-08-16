@@ -59,13 +59,13 @@ Properties:
   - Name of the first resource record to be listed in lexicographic ordering. If the name doesn't exist, results will begin from the first record with a name greater than the provided value
 - **`StartRecordType` (string)**
   - The type of resource record to begin listing from
-- **`paginate` (boolean)**
+- **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`ActivateKeySigningKey`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_ActivateKeySigningKey.html)
 - [`AssociateVPCWithHostedZone`](https://docs.aws.amazon.com/Route53/latest/APIReference/API_AssociateVPCWithHostedZone.html)

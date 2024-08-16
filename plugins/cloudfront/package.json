@@ -1,14 +1,14 @@
 {
   "name": "@aws-lite/cloudfront",
-  "version": "0.0.8",
+  "version": "0.0.11",
   "description": "Official `aws-lite` plugin for CloudFront",
-  "homepage": "https://github.com/architect/aws-lite",
+  "homepage": "https://aws-lite.org/services/cloudfront",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/architect/aws-lite.git",
+    "url": "git+https://github.com/aws-lite/aws-lite.git",
     "directory": "plugins/cloudfront"
   },
-  "bugs": "https://github.com/architect/aws-lite/issues",
+  "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "src/index.mjs",
   "engines": {
     "node": ">=16"

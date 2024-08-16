@@ -12,15 +12,15 @@ declare interface AwsLiteRoute53 {
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html Route 53: ChangeResourceRecordSets}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/route53/readme.md#ChangeResourceRecordSets Route 53: ChangeResourceRecordSets}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/route53/readme.md#ChangeResourceRecordSets Route 53: ChangeResourceRecordSets}
    */
   ChangeResourceRecordSets: (input: { HostedZoneId: string, ChangeBatch?: Record<string, any> }) => Promise<ChangeResourceRecordSetsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html Route 53: ListResourceRecordSets}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/route53/readme.md#ListResourceRecordSets Route 53: ListResourceRecordSets}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/route53/readme.md#ListResourceRecordSets Route 53: ListResourceRecordSets}
    */
-  ListResourceRecordSets: (input: { HostedZoneId: string, MaxItems?: number, StartRecordIdentifier?: string, StartRecordName?: string, StartRecordType?: string, paginate?: boolean }) => Promise<ListResourceRecordSetsResponse>
+  ListResourceRecordSets: (input: { HostedZoneId: string, MaxItems?: number, StartRecordIdentifier?: string, StartRecordName?: string, StartRecordType?: string, paginate?: boolean | string }) => Promise<ListResourceRecordSetsResponse>
   // $METHODS_END
 }
 

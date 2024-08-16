@@ -1,14 +1,14 @@
 {
   "name": "@aws-lite/iam-types",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "Type definitions for the `@aws-lite/iam` plugin",
   "homepage": "https://aws-lite.org/services/iam",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/architect/aws-lite.git",
+    "url": "git+https://github.com/aws-lite/aws-lite.git",
     "directory": "plugins/iam/types"
   },
-  "bugs": "https://github.com/architect/aws-lite/issues",
+  "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "",
   "engines": {
     "node": ">=16"

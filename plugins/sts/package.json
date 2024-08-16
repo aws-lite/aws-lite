@@ -1,14 +1,14 @@
 {
   "name": "@aws-lite/sts",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Official `aws-lite` plugin for STS",
-  "homepage": "https://github.com/architect/aws-lite",
+  "homepage": "https://aws-lite.org/services/sts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/architect/aws-lite.git",
+    "url": "git+https://github.com/aws-lite/aws-lite.git",
     "directory": "plugins/sts"
   },
-  "bugs": "https://github.com/architect/aws-lite/issues",
+  "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "src/index.mjs",
   "engines": {
     "node": ">=16"

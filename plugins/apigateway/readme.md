@@ -37,7 +37,7 @@ npm i -D @aws-lite/apigateway-types
 
 ### Methods yet to be implemented
 
-> Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
+> Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`CreateApiKey`](https://docs.aws.amazon.com/apigateway/latest/api/API_CreateApiKey.html)
 - [`CreateAuthorizer`](https://docs.aws.amazon.com/apigateway/latest/api/API_CreateAuthorizer.html)

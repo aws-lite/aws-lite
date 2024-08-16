@@ -54,9 +54,10 @@ const SSHPublicKeyId = { ...str, required, comment: 'ID of the SSH public key' }
 const TagKeys = { ...arr, required, comment: 'Array of tag keys' }
 const Tags = { ...arr, comment: 'List of tags to attach to the resource', ref: userGuide + 'id_tags.html' }
 const UserName = { ...str, required, comment: 'User name' }
-const valPaginate = { type: 'boolean', comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const VersionId = { ...str, required, comment: 'ID of the policy version; typically `v<n>`' }
 const VirtualMFADeviceName = { ...str, required, comment: 'Name of the virtual MFA device' }
+const valPaginateAsyncOnly = { type: 'string', comment: 'Set to `iterator` to enable automatic result pagination via async iterator; use this instead of making your own individual pagination requests' }
 
 const paginator = { type: 'query', cursor: 'Marker' }
 
@@ -989,14 +990,13 @@ const GetAccessKeyLastUsed = {
   response: ({ payload }) => payload.GetAccessKeyLastUsedResult,
 }
 
-// TODO: enable async paginator
 const GetAccountAuthorizationDetails = {
   awsDoc: docRoot + 'API_GetAccountAuthorizationDetails.html',
   validate: {
     Filter: { ...arr, comment: 'Filter results by entity type', ref: docRoot + 'API_GetAccountAuthorizationDetails.html#API_GetAccountAuthorizationDetails_RequestParameters' },
     Marker,
     MaxItems,
-    // paginate: valPaginate,
+    paginate: valPaginateAsyncOnly,
   },
   request: params => {
     const { Filter, paginate } = params
@@ -1013,9 +1013,8 @@ const GetAccountAuthorizationDetails = {
       query,
       paginate,
       paginator: {
-        type: 'query',
-        cursor: 'GetAccountAuthorizationDetailsResult.Marker',
-        token: 'Marker',
+        ...paginator,
+        token: 'GetAccountAuthorizationDetailsResult.Marker',
       },
     }
   },
@@ -1139,14 +1138,13 @@ const GetCredentialReport = {
   },
 }
 
-// TODO: enable async paginator
 const GetGroup = {
   awsDoc: docRoot + 'API_GetGroup.html',
   validate: {
     GroupName,
     Marker,
     MaxItems,
-    // paginate: valPaginate,
+    paginate: valPaginate,
   },
   request: params => {
     let query = {
@@ -1162,18 +1160,15 @@ const GetGroup = {
       paginator: {
         ...paginator,
         token: 'GetGroupResult.Marker',
+        accumulator: 'GetGroupResult.Users.member',
       },
     }
   },
   response: ({ payload }) => {
-    let result = payload.GetGroupResult
-    let { Group, Users } = result
-    Users = Users.member || []
-    if (!Array.isArray(Users)) Users = [ Users ]
-    return {
-      Group,
-      Users,
-    }
+    const arrayKeys = new Set([ 'Users' ])
+    const result = payload.GetGroupResult
+    normalizeResponse(result, arrayKeys)
+    return result
   },
 }
 
@@ -1775,7 +1770,6 @@ const ListAttachedUserPolicies = {
   },
 }
 
-// TODO: enable async paginator
 const ListEntitiesForPolicy = {
   awsDoc: docRoot + 'API_ListEntitiesForPolicy.html',
   validate: {
@@ -1785,7 +1779,7 @@ const ListEntitiesForPolicy = {
     MaxItems,
     PathPrefix,
     PolicyUsageFilter: { ...str, comment: 'Filter results by policy usage', ref: docRoot + 'API_ListEntitiesForPolicy.html#API_ListEntitiesForPolicy_RequestParameters' },
-    // paginate: valPaginate,
+    paginate: valPaginateAsyncOnly,
   },
   request: params => {
     const { paginate } = params
