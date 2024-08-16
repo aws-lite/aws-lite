@@ -50,11 +50,11 @@ import {
   GetInvalidationCommandOutput as GetInvalidationResponse,
   GetKeyGroupCommandOutput as GetKeyGroupResponse,
   GetKeyGroupConfigCommandOutput as GetKeyGroupConfigResponse,
+  GetMonitoringSubscriptionCommandOutput as GetMonitoringSubscriptionResponse,
   GetOriginAccessControlCommandOutput as GetOriginAccessControlResponse,
   GetOriginAccessControlConfigCommandOutput as GetOriginAccessControlConfigResponse,
   GetOriginRequestPolicyCommandOutput as GetOriginRequestPolicyResponse,
   GetOriginRequestPolicyConfigCommandOutput as GetOriginRequestPolicyConfigResponse,
-  GetMonitoringSubscriptionCommandOutput as GetMonitoringSubscriptionResponse,
   GetPublicKeyCommandOutput as GetPublicKeyResponse,
   GetPublicKeyConfigCommandOutput as GetPublicKeyConfigResponse,
   GetResponseHeadersPolicyCommandOutput as GetResponseHeadersPolicyResponse,
@@ -393,6 +393,12 @@ declare interface AwsLiteCloudFront {
   GetKeyGroupConfig: (input: { Id: string }) => Promise<GetKeyGroupConfigResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html CloudFront: GetMonitoringSubscription}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetMonitoringSubscription CloudFront: GetMonitoringSubscription}
+   */
+  GetMonitoringSubscription: (input: { DistributionId: string }) => Promise<GetMonitoringSubscriptionResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControl.html CloudFront: GetOriginAccessControl}
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetOriginAccessControl CloudFront: GetOriginAccessControl}
    */
@@ -415,12 +421,6 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetOriginRequestPolicyConfig CloudFront: GetOriginRequestPolicyConfig}
    */
   GetOriginRequestPolicyConfig: (input: { Id: string }) => Promise<GetOriginRequestPolicyConfigResponse>
-  /**
-   * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html CloudFront: GetMonitoringSubscription}
-   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/cloudfront/readme.md#GetMonitoringSubscription CloudFront: GetMonitoringSubscription}
-   */
-  GetMonitoringSubscription: (input: { DistributionId: string }) => Promise<GetMonitoringSubscriptionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetPublicKey.html CloudFront: GetPublicKey}
@@ -699,11 +699,11 @@ export type {
   GetInvalidationResponse,
   GetKeyGroupResponse,
   GetKeyGroupConfigResponse,
+  GetMonitoringSubscriptionResponse,
   GetOriginAccessControlResponse,
   GetOriginAccessControlConfigResponse,
   GetOriginRequestPolicyResponse,
   GetOriginRequestPolicyConfigResponse,
-  GetMonitoringSubscriptionResponse,
   GetPublicKeyResponse,
   GetPublicKeyConfigResponse,
   GetResponseHeadersPolicyResponse,

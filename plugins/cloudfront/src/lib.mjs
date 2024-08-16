@@ -97,7 +97,6 @@ const arrayProperties = {
   'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.CorsConfig.AccessControlExposeHeaders': 'Header',
   'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.CustomHeadersConfig': 'ResponseHeadersPolicyCustomHeader',
   'ResponseHeadersPolicy.ResponseHeadersPolicyConfig.RemoveHeadersConfig': 'ResponseHeadersPolicyRemoveHeader',
-
 }
 
 const arrayifyItemsProp = obj => {

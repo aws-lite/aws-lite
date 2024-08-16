@@ -543,6 +543,15 @@ Properties:
   - The resource ID
 
 
+### `GetMonitoringSubscription`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html)
+
+Properties:
+- **`DistributionId` (string) [required]**
+  - Distribution ID
+
+
 ### `GetOriginAccessControl`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetOriginAccessControl.html)
@@ -577,15 +586,6 @@ Properties:
 Properties:
 - **`Id` (string) [required]**
   - The resource ID
-
-
-### `GetMonitoringSubscription`
-
-[Canonical AWS API doc](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetMonitoringSubscription.html)
-
-Properties:
-- **`DistributionId` (string) [required]**
-  - Distribution ID
 
 
 ### `GetPublicKey`

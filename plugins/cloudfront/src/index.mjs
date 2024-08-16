@@ -20,31 +20,30 @@ const num = { type: 'number' }
 
 const xml = { 'content-type': 'application/xml' }
 
-const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
-const Id = { ...str, required, comment: 'The resource ID' }
-const IfMatch = { ...str, required, comment: 'Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource' }
-const Name = { ...str, required, comment: 'User assigned name for the resource' }
-const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
-const Marker = { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' }
-const MaxItems = { ...num, comment: 'Maximum number of items to return' }
-const FunctionCode = { ...str, required, comment: 'Base64 encoded function code' }
-const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
-const KeyGroupConfig = { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_KeyGroupConfig.html' }
-const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', ref: docRoot + 'API_ImportSource.html' }
+const Alias = { ...str, required, comment: 'Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`' }
 const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CachePolicyConfig.html' }
+const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration object', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
+const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
+const DistributionId = { ...str, required, comment: 'Distribution ID' }
 const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption config object', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
 const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
-const DistributionId = { ...str, required, comment: 'Distribution ID' }
-const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
+const FunctionCode = { ...str, required, comment: 'Base64 encoded function code' }
+const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
+const Id = { ...str, required, comment: 'The resource ID' }
+const IfMatch = { ...str, required, comment: 'Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource' }
+const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', ref: docRoot + 'API_ImportSource.html' }
+const KeyGroupConfig = { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_KeyGroupConfig.html' }
+const Marker = { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' }
+const MaxItems = { ...num, comment: 'Maximum number of items to return' }
+const Name = { ...str, required, comment: 'User assigned name for the resource' }
 const OriginAccessControlConfig = { ...obj, required, comment: 'Complete origin access control config', ref: docRoot + 'API_OriginAccessControlConfig.html' }
-const Alias = { ...str, required, comment: 'Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`' }
-const Type = { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' }
 const OriginRequestPolicyConfig = { ...obj, required, comment: 'Complete origin request policy config', ref: docRoot + 'API_OriginRequestPolicyConfig.html' }
 const ResponseHeadersPolicyConfig = { ...obj, required, comment: 'Complete response headers policy config', ref: docRoot + 'API_ResponseHeadersPolicyConfig.html' }
+const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
+const Type = { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' }
 const Resource = { ...str, required, comment: 'ARN of a cloudfront resource' }
-
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const xmlns = 'http://cloudfront.amazonaws.com/doc/2020-05-31/'
@@ -237,34 +236,33 @@ const CreateDistribution = {
   },
 }
 
-// TODO: test
-const CreateDistributionWithTags = {
-  awsDoc: docRoot + 'API_CreateDistributionWithTags.html',
-  validate: {
-    DistributionConfigWithTags: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistributionWithTags.html#cloudfront-CreateDistributionWithTags-request-DistributionConfigWithTags' },
-  },
-  request: (params) => {
-    const payload = unarrayifyObject(params)
-    payload.DistributionConfigWithTags.DistributionConfig = unarrayifyObject(payload.DistributionConfigWithTags.DistributionConfig)
-    return {
-      path: '/2020-05-31/distribution?WithTags',
-      method: 'POST',
-      headers: xml,
-      xmlns,
-      payload,
-    }
-  },
-  response: ({ headers, payload }) => {
-    const { etag, location } = headers
-    const Distribution = arrayifyObject(payload)
-    return {
-      Distribution,
-      ETag: etag,
-      Location: location,
-    }
-    // return maybeAddETag({ Distribution }, headers)
-  },
-}
+// TODO: double check response
+// const CreateDistributionWithTags = {
+//   awsDoc: docRoot + 'API_CreateDistributionWithTags.html',
+//   validate: {
+//     DistributionConfigWithTags: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistributionWithTags.html#cloudfront-CreateDistributionWithTags-request-DistributionConfigWithTags' },
+//   },
+//   request: (params) => {
+//     const payload = unarrayifyObject(params)
+//     payload.DistributionConfigWithTags.DistributionConfig = unarrayifyObject(payload.DistributionConfigWithTags.DistributionConfig)
+//     return {
+//       path: '/2020-05-31/distribution?WithTags',
+//       method: 'POST',
+//       headers: xml,
+//       xmlns,
+//       payload,
+//     }
+//   },
+//   response: ({ headers, payload }) => {
+//     const { etag, location } = headers
+//     const Distribution = arrayifyObject(payload)
+//     return {
+//       Distribution,
+//       ETag: etag,
+//       Location: location,
+//     }
+//   },
+// }
 
 const CreateFieldLevelEncryptionConfig = {
   awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html',
@@ -1112,7 +1110,6 @@ const GetFunction = {
   },
 }
 
-// TODO: test
 const GetInvalidation = {
   awsDoc: docRoot + 'API_GetInvalidation.html',
   validate: {
@@ -1129,7 +1126,6 @@ const GetInvalidation = {
     return { Invalidation }
   },
 }
-
 
 const GetKeyGroup = {
   awsDoc: docRoot + 'API_GetKeyGroup.html',
@@ -2233,7 +2229,7 @@ export default {
     CreateCloudFrontOriginAccessIdentity,
     CreateContinuousDeploymentPolicy,
     CreateDistribution,
-    CreateDistributionWithTags,
+    // CreateDistributionWithTags,
     CreateFieldLevelEncryptionConfig,
     CreateFieldLevelEncryptionProfile,
     CreateFunction,
@@ -2279,11 +2275,11 @@ export default {
     GetInvalidation,
     GetKeyGroup,
     GetKeyGroupConfig,
+    GetMonitoringSubscription,
     GetOriginAccessControl,
     GetOriginAccessControlConfig,
     GetOriginRequestPolicy,
     GetOriginRequestPolicyConfig,
-    GetMonitoringSubscription,
     GetPublicKey,
     GetPublicKeyConfig,
     GetResponseHeadersPolicy,
