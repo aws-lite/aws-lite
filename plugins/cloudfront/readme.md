@@ -38,7 +38,7 @@ npm i -D @aws-lite/cloudfront-types
 
 Properties:
 - **`TargetDistributionId` (string) [required]**
-  - Distribution ID to alias
+  - Distribution ID
 - **`Alias` (string) [required]**
   - Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`
 
@@ -49,15 +49,15 @@ Properties:
 
 Properties:
 - **`PrimaryDistributionId` (string) [required]**
-  - ID of the distribution to be copied
+  - Distribution ID
 - **`CallerReference` (string) [required]**
   - Unique value that ensures that the request cannot be replayed
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 - **`Staging` (boolean)**
-  - Set to true to specify that the primary distribution will be copied to a staging distribution
+  - Set to true to specify that the copy will be a staging distribution
 - **`Enabled` (boolean)**
-  - Set to false to disable the copied distribution upon creation
+  - Set to false to disable the copy upon creation
 
 
 ### `CreateCachePolicy`
@@ -66,7 +66,7 @@ Properties:
 
 Properties:
 - **`CachePolicyConfig` (object) [required]**
-  - Complete cache policy configuration object
+  - Complete cache policy configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CachePolicyConfig.html)
 
 
@@ -76,7 +76,7 @@ Properties:
 
 Properties:
 - **`CloudFrontOriginAccessIdentityConfig` (object) [required]**
-  - Complete  Cloud Front origin access identity configuration object
+  - Complete  Cloud Front origin access identity configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCloudFrontOriginAccessIdentity.html)
 
 
@@ -96,8 +96,8 @@ Properties:
 
 Properties:
 - **`DistributionConfig` (object) [required]**
-  - Complete distribution configuration object
-  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistribution.html#API_CreateDistribution_RequestSyntax)
+  - Complete distribution configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DistributionConfig.html)
 
 
 ### `CreateFieldLevelEncryptionConfig`
@@ -106,7 +106,7 @@ Properties:
 
 Properties:
 - **`FieldLevelEncryptionConfig` (object) [required]**
-  - Complete field level encryption config object
+  - Complete field level encryption configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_FieldLevelEncryptionConfig.html)
 
 
@@ -116,7 +116,7 @@ Properties:
 
 Properties:
 - **`FieldLevelEncryptionProfileConfig` (object) [required]**
-  - Complete field level encryption profile config
+  - Complete field level encryption profile configuration
   - [More details (AWS)](API_FieldLevelEncryptionProfileConfig.html)
 
 
@@ -139,7 +139,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`InvalidationBatch` (string, array)**
   - One or more invalidation parameters
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateInvalidation.html#API_CreateInvalidation_RequestSyntax)
@@ -189,7 +189,7 @@ Properties:
 
 Properties:
 - **`OriginAccessControlConfig` (object) [required]**
-  - Complete origin access control config
+  - Complete origin access control configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_OriginAccessControlConfig.html)
 
 
@@ -199,7 +199,7 @@ Properties:
 
 Properties:
 - **`OriginRequestPolicyConfig` (object) [required]**
-  - Complete origin request policy config
+  - Complete origin request policy configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_OriginRequestPolicyConfig.html)
 
 
@@ -210,7 +210,7 @@ Properties:
 Properties:
 - **`PublicKeyConfig` (object) [required]**
   - Public key configuration
-  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreatePublicKey.html#cloudfront-CreatePublicKey-request-PublicKeyConfig)
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_PublicKeyConfig.html)
 
 
 ### `CreateResponseHeadersPolicy`
@@ -219,7 +219,7 @@ Properties:
 
 Properties:
 - **`ResponseHeadersPolicyConfig` (object) [required]**
-  - Complete response headers policy config
+  - Complete response headers policy configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ResponseHeadersPolicyConfig.html)
 
 
@@ -229,7 +229,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -240,7 +240,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -251,7 +251,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -262,7 +262,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -273,7 +273,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -284,7 +284,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -306,7 +306,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -337,7 +337,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -348,7 +348,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -359,7 +359,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -370,7 +370,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -401,7 +401,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetCachePolicyConfig`
@@ -410,7 +410,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetCloudFrontOriginAccessIdentity`
@@ -419,7 +419,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetCloudFrontOriginAccessIdentityConfig`
@@ -428,7 +428,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetContinuousDeploymentPolicy`
@@ -437,7 +437,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetContinuousDeploymentPolicyConfig`
@@ -446,7 +446,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetDistribution`
@@ -455,7 +455,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetDistributionConfig`
@@ -464,7 +464,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetFieldLevelEncryption`
@@ -473,7 +473,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetFieldLevelEncryptionConfig`
@@ -482,7 +482,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetFieldLevelEncryptionProfile`
@@ -491,7 +491,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetFieldLevelEncryptionProfileConfig`
@@ -500,7 +500,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetFunction`
@@ -522,7 +522,7 @@ Properties:
 - **`DistributionId` (string) [required]**
   - Distribution ID
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetKeyGroup`
@@ -531,7 +531,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetKeyGroupConfig`
@@ -540,7 +540,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetMonitoringSubscription`
@@ -558,7 +558,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetOriginAccessControlConfig`
@@ -567,7 +567,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetOriginRequestPolicy`
@@ -576,7 +576,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetOriginRequestPolicyConfig`
@@ -585,7 +585,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetPublicKey`
@@ -594,7 +594,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetPublicKeyConfig`
@@ -603,7 +603,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetResponseHeadersPolicy`
@@ -612,7 +612,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `GetResponseHeadersPolicyConfig`
@@ -621,7 +621,7 @@ Properties:
 
 Properties:
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 
 
 ### `ListCachePolicies`
@@ -912,7 +912,8 @@ Properties:
 - **`Resource` (string) [required]**
   - ARN of a cloudfront resource
 - **`Tags` (array) [required]**
-  - Array of tags
+  - Array of `Tag` objects
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_Tags.html)
 
 
 ### `TestFunction`
@@ -940,6 +941,7 @@ Properties:
   - ARN of a cloudfront resource
 - **`TagKeys` (array) [required]**
   - Array of tag keys
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_TagKeys.html)
 
 
 ### `UpdateCachePolicy`
@@ -948,10 +950,10 @@ Properties:
 
 Properties:
 - **`CachePolicyConfig` (object) [required]**
-  - Complete cache policy configuration object
+  - Complete cache policy configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CachePolicyConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -962,10 +964,10 @@ Properties:
 
 Properties:
 - **`CloudFrontOriginAccessIdentityConfig` (object) [required]**
-  - Complete  Cloud Front origin access identity configuration object
+  - Complete  Cloud Front origin access identity configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateCloudFrontOriginAccessIdentity.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -979,7 +981,7 @@ Properties:
   - Complete continuous deployment policy configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ContinuousDeploymentPolicyConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -990,10 +992,10 @@ Properties:
 
 Properties:
 - **`DistributionConfig` (object) [required]**
-  - Complete distribution configuration object from `GetDistribution` call
-  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html#API_UpdateDistribution_RequestBody)
+  - Complete distribution configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_DistributionConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -1004,10 +1006,10 @@ Properties:
 
 Properties:
 - **`FieldLevelEncryptionConfig` (object) [required]**
-  - Complete field level encryption config object
+  - Complete field level encryption configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_FieldLevelEncryptionConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -1018,10 +1020,10 @@ Properties:
 
 Properties:
 - **`FieldLevelEncryptionProfileConfig` (object) [required]**
-  - Complete field level encryption profile config
+  - Complete field level encryption profile configuration
   - [More details (AWS)](API_FieldLevelEncryptionProfileConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -1050,7 +1052,7 @@ Properties:
   - Key group configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_KeyGroupConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -1074,10 +1076,10 @@ Properties:
 
 Properties:
 - **`OriginAccessControlConfig` (object) [required]**
-  - Complete origin access control config
+  - Complete origin access control configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_OriginAccessControlConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -1088,10 +1090,10 @@ Properties:
 
 Properties:
 - **`OriginRequestPolicyConfig` (object) [required]**
-  - Complete origin request policy config
+  - Complete origin request policy configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_OriginRequestPolicyConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -1103,9 +1105,9 @@ Properties:
 Properties:
 - **`PublicKeyConfig` (object) [required]**
   - Public key configuration
-  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdatePublicKey.html#cloudfront-UpdatePublicKey-request-PublicKeyConfig)
+  - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_PublicKeyConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 
@@ -1116,10 +1118,10 @@ Properties:
 
 Properties:
 - **`ResponseHeadersPolicyConfig` (object) [required]**
-  - Complete response headers policy config
+  - Complete response headers policy configuration
   - [More details (AWS)](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ResponseHeadersPolicyConfig.html)
 - **`Id` (string) [required]**
-  - The resource ID
+  - Resource ID
 - **`IfMatch` (string) [required]**
   - Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource
 

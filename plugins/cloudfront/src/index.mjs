@@ -3,7 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
-import { arrayifyItemsProp, arrayifyObject, unarrayifyObject } from './lib.mjs'
+import { arrayifyItemsProp, arrayifyObject, maybeAddETag, unarrayifyObject } from './lib.mjs'
 
 const service = 'cloudfront'
 const property = 'CloudFront'
@@ -22,28 +22,30 @@ const xml = { 'content-type': 'application/xml' }
 
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
 const Alias = { ...str, required, comment: 'Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`' }
-const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration object', ref: docRoot + 'API_CachePolicyConfig.html' }
+const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration', ref: docRoot + 'API_CachePolicyConfig.html' }
 const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
-const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration object', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
+const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
 const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
+const DistributionConfig = { ...obj, required, comment: 'Complete distribution configuration', ref: docRoot + 'API_DistributionConfig.html' }
 const DistributionId = { ...str, required, comment: 'Distribution ID' }
-const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption config object', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
-const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile config', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
+const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption configuration', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
+const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile configuration', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
 const FunctionCode = { ...str, required, comment: 'Base64 encoded function code' }
 const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
-const Id = { ...str, required, comment: 'The resource ID' }
+const Id = { ...str, required, comment: 'Resource ID' }
 const IfMatch = { ...str, required, comment: 'Value of `ETag` property returned from a recent call to any of: `Create`, `Get` methods associated with the resource' }
 const ImportSource = { ...obj, comment: 'Describe the S3 source ARN and type', ref: docRoot + 'API_ImportSource.html' }
 const KeyGroupConfig = { ...obj, required, comment: 'Key group configuration', ref: docRoot + 'API_KeyGroupConfig.html' }
 const Marker = { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' }
 const MaxItems = { ...num, comment: 'Maximum number of items to return' }
 const Name = { ...str, required, comment: 'User assigned name for the resource' }
-const OriginAccessControlConfig = { ...obj, required, comment: 'Complete origin access control config', ref: docRoot + 'API_OriginAccessControlConfig.html' }
-const OriginRequestPolicyConfig = { ...obj, required, comment: 'Complete origin request policy config', ref: docRoot + 'API_OriginRequestPolicyConfig.html' }
-const ResponseHeadersPolicyConfig = { ...obj, required, comment: 'Complete response headers policy config', ref: docRoot + 'API_ResponseHeadersPolicyConfig.html' }
+const OriginAccessControlConfig = { ...obj, required, comment: 'Complete origin access control configuration', ref: docRoot + 'API_OriginAccessControlConfig.html' }
+const OriginRequestPolicyConfig = { ...obj, required, comment: 'Complete origin request policy configuration', ref: docRoot + 'API_OriginRequestPolicyConfig.html' }
+const PublicKeyConfig = { ...obj, required, comment: 'Public key configuration', ref: docRoot + 'API_PublicKeyConfig.html' }
+const Resource = { ...str, required, comment: 'ARN of a cloudfront resource' }
+const ResponseHeadersPolicyConfig = { ...obj, required, comment: 'Complete response headers policy configuration', ref: docRoot + 'API_ResponseHeadersPolicyConfig.html' }
 const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
 const Type = { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' }
-const Resource = { ...str, required, comment: 'ARN of a cloudfront resource' }
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
 const xmlns = 'http://cloudfront.amazonaws.com/doc/2020-05-31/'
@@ -56,16 +58,10 @@ const paginator = {
 
 const defaultResponse = ({ payload }) => payload || {}
 
-const maybeAddETag = (result, headers) => {
-  const ETag = headers.etag || headers.ETag
-  if (ETag) result.ETag = ETag
-  return result
-}
-
 const AssociateAlias = {
   awsDoc: docRoot + 'API_AssociateAlias.html',
   validate: {
-    TargetDistributionId: { ...str, required, comment: 'Distribution ID to alias' },
+    TargetDistributionId: { ...str, required, comment: 'Distribution ID' },
     Alias,
   },
   request: ({ TargetDistributionId, Alias }) => {
@@ -81,11 +77,11 @@ const AssociateAlias = {
 const CopyDistribution = {
   awsDoc: docRoot + 'API_CopyDistribution.html',
   validate: {
-    PrimaryDistributionId: { ...str, required, comment: 'ID of the distribution to be copied' },
+    PrimaryDistributionId: { ...str, required, comment: 'Distribution ID' },
     CallerReference,
     IfMatch,
-    Staging: { ...bool, comment: 'Set to true to specify that the primary distribution will be copied to a staging distribution' },
-    Enabled: { ...bool, comment: 'Set to false to disable the copied distribution upon creation' },
+    Staging: { ...bool, comment: 'Set to true to specify that the copy will be a staging distribution' },
+    Enabled: { ...bool, comment: 'Set to false to disable the copy upon creation' },
   },
   request: (params) => {
     const { PrimaryDistributionId, CallerReference, IfMatch, Staging, Enabled = true } = params
@@ -197,7 +193,7 @@ const CreateContinuousDeploymentPolicy = {
 const CreateDistribution = {
   awsDoc: docRoot + 'API_CreateDistribution.html',
   validate: {
-    DistributionConfig: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistribution.html#API_CreateDistribution_RequestSyntax' },
+    DistributionConfig,
     // TODO enable nested validation
     /*
     CallerReference,
@@ -500,7 +496,7 @@ const CreateOriginRequestPolicy = {
 const CreatePublicKey = {
   awsDoc: docRoot + 'API_CreatePublicKey.html',
   validate: {
-    PublicKeyConfig: { ...obj, required, comment: 'Public key configuration', ref: docRoot + 'API_CreatePublicKey.html#cloudfront-CreatePublicKey-request-PublicKeyConfig' },
+    PublicKeyConfig,
   },
   request: (params) => {
     return {
@@ -1455,8 +1451,8 @@ const ListContinuousDeploymentPolicies = {
 const ListDistributions = {
   awsDoc: docRoot + 'API_ListDistributions.html',
   validate: {
-    Marker: { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' },
-    MaxItems: { ...num, comment: 'Maximum number of items to return' },
+    Marker,
+    MaxItems,
     paginate: valPaginate,
   },
   request: (params) => {
@@ -1609,8 +1605,8 @@ const ListDistributionsByResponseHeadersPolicyId = {
 const ListFieldLevelEncryptionConfigs = {
   awsDoc: docRoot + 'API_ListFieldLevelEncryptionConfigs.html',
   validate: {
-    Marker: { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' },
-    MaxItems: { ...num, comment: 'Maximum number of items to return' },
+    Marker,
+    MaxItems,
     paginate: valPaginate,
   },
   request: (params) => {
@@ -1638,8 +1634,8 @@ const ListFieldLevelEncryptionConfigs = {
 const ListFieldLevelEncryptionProfiles = {
   awsDoc: docRoot + 'API_ListFieldLevelEncryptionProfiles.html',
   validate: {
-    Marker: { ...str, comment: 'Pagination cursor token to be used if `NextMarker` was returned in a previous response' },
-    MaxItems: { ...num, comment: 'Maximum number of items to return' },
+    Marker,
+    MaxItems,
     paginate: valPaginate,
   },
   request: (params) => {
@@ -1913,7 +1909,7 @@ const TagResource = {
   awsDoc: docRoot + 'API_TagResource.html',
   validate: {
     Resource,
-    Tags: { ...arr, required, comment: 'Array of tags' },
+    Tags: { ...arr, required, comment: 'Array of `Tag` objects', ref: docRoot + 'API_Tags.html' },
   },
   request: ({ Resource, Tags }) => {
     const payload = {
@@ -1969,7 +1965,7 @@ const UntagResource = {
   awsDoc: docRoot + 'API_UntagResource.html',
   validate: {
     Resource,
-    TagKeys: { ...arr, required, comment: 'Array of tag keys' },
+    TagKeys: { ...arr, required, comment: 'Array of tag keys', ref: docRoot + 'API_TagKeys.html' },
   },
   request: ({ Resource, TagKeys }) => {
     const payload = {
@@ -2073,7 +2069,7 @@ const UpdateContinuousDeploymentPolicy = {
 const UpdateDistribution = {
   awsDoc: docRoot + 'API_UpdateDistribution.html',
   validate: {
-    DistributionConfig: { ...obj, required, comment: 'Complete distribution configuration object from `GetDistribution` call', ref: docRoot + 'API_UpdateDistribution.html#API_UpdateDistribution_RequestBody' },
+    DistributionConfig,
     Id,
     IfMatch,
   },
@@ -2284,7 +2280,7 @@ const UpdateOriginRequestPolicy = {
 const UpdatePublicKey = {
   awsDoc: docRoot + 'API_UpdatePublicKey.html',
   validate: {
-    PublicKeyConfig: { ...obj, required, comment: 'Public key configuration', ref: docRoot + 'API_UpdatePublicKey.html#cloudfront-UpdatePublicKey-request-PublicKeyConfig' },
+    PublicKeyConfig,
     Id,
     IfMatch,
   },

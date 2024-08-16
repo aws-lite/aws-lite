@@ -151,8 +151,14 @@ function arrayifyObject (obj, lastPropertyPath, arraysList = arrayProperties) {
   return obj
 }
 
-// TODO: refactor to prevent mutating input
+function maybeAddETag (result, headers) {
+  const ETag = headers.etag || headers.ETag
+  if (ETag) result.ETag = ETag
+  return result
+}
+
 // Specifically for unarrayifying distros to be re-serialized to XML (see: UpdateDistribution)
+// TODO: refactor to prevent mutating input
 function unarrayifyObject (obj, lastPropertyPath) {
   Object.entries(obj).forEach(([ key, value ]) => {
     const currentPropertyPath = getPropertyPath(obj, lastPropertyPath, key)
@@ -216,5 +222,6 @@ function unarrayifyObject (obj, lastPropertyPath) {
 export {
   arrayifyItemsProp,
   arrayifyObject,
+  maybeAddETag,
   unarrayifyObject,
 }
