@@ -53,7 +53,33 @@ export interface AwsLiteClient {
   (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
 }
 
+interface AwsLiteBaseMock {
+  method: string;
+  time: string;
+}
+interface AwsLiteMockRequest extends AwsLiteBaseMock {
+  request: any;
+}
+interface AwsLiteMockResponse extends AwsLiteBaseMock {
+  response: any;
+}
+
+interface AwsLiteTesting {
+  debug: (args?: { print?: boolean }) => any;
+  disable: () => void;
+  enable: (args?: { usePluginResponseMethod?: boolean }) => void;
+  getAllRequests: (target?: string) => AwsLiteMockRequest[];
+  getAllResponses: (target?: string) => AwsLiteMockRequest[];
+  getLastRequest: (target?: string) => AwsLiteMockRequest;
+  getLastResponse: (target?: string) => AwsLiteMockResponse;
+  mock: (target: string, mock: any) => void;
+  reset: () => void;
+}
+
 declare module "@aws-lite/client" {
-  const CreateAwsLite: (config?: AwsLiteConfig) => Promise<AwsLiteClient>;
+  const CreateAwsLite: {
+    (config?: AwsLiteConfig): Promise<AwsLiteClient>;
+    testing: AwsLiteTesting;
+  }
   export = CreateAwsLite;
 }
