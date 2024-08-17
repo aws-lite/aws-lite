@@ -35,6 +35,19 @@ function querystringifyParams (obj) {
   return query
 }
 
+function normalizeResponse (obj, maxDepth = 0) {
+  if (maxDepth < 0) return
+  if (typeof obj === 'object') {
+    Object.entries(obj).forEach(([ key, value ]) => {
+      if (maxDepth > 0) normalizeResponse(value, maxDepth - 1)
+
+      if (typeof value === 'object' && value.member) obj[key] = Array.isArray(value.member) ? value.member : [ value.member ]
+    })
+  }
+
+}
+
 export {
   querystringifyParams,
+  normalizeResponse,
 }

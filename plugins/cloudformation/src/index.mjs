@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import { default as qs } from 'node:querystring'
-import { querystringifyParams } from './lib.mjs'
+import { querystringifyParams, normalizeResponse } from './lib.mjs'
 
 const service = 'cloudformation'
 const property = 'CloudFormation'
@@ -168,6 +168,36 @@ const CreateStackInstances = {
     }
   },
   response: ({ payload }) => payload.CreateStackInstancesResult,
+}
+
+const CreateStackSet = {
+  awsDoc: docRoot + 'API_CreateStackSet.html',
+  validate: {
+    ClientRequestToken: { ...ClientRequestToken, required },
+    StackSetName,
+    AdministrationRoleARN: { ...str, comment: 'ARN of the IAM role to use' },
+    AutoDeployment: { ...str, comment: 'Specify if stack sets automatically deploy to organization accounts that are added to the target organization; can be `SERVICE_MANAGED`' },
+    CallAs,
+    Capabilities,
+    Description: { ...str, comment: 'Description' },
+    ExecutionRoleName: { ...str, comment: 'Name of the IAM execution role used to create the stack set; defaults to `AWSCloudFormationStackSetExecutionRole`' },
+    ManagedExecution: { ...obj, comment: 'Specify if the stack sets operate concurrently when possible', ref: docRoot + 'API_ManagedExecution.html' },
+    Parameters,
+    PermissionModel: { ...str, comment: 'Describe how IAM roles required for operations are created; can be one of: `SELF_MANAGED` (default), `SERVICE_MANAGED`' },
+    StackId: { ...str, comment: 'ARN of a stack to be imported' },
+    Tags,
+    TemplateBody,
+    TemplateURL,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'CreateStackSet',
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => payload.CreateStackSetResult,
 }
 
 const DeactivateOrganizationsAccess = {
@@ -361,6 +391,27 @@ const DescribeStacks = {
   error: defaultError,
 }
 
+const DescribeStackSet = {
+  awsDoc: docRoot + 'API_DescribeStackSet.html',
+  validate: {
+    StackSetName,
+    CallAs,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeStackSet',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { DescribeStackSetResult } = payload
+    normalizeResponse(DescribeStackSetResult, 1)
+    return DescribeStackSetResult
+  },
+}
+
 const DescribeType = {
   awsDoc: docRoot + 'API_DescribeType.html',
   validate: {
@@ -407,11 +458,11 @@ const ListStackInstances = {
         cursor: 'NextToken',
         token: 'ListStackInstancesResult.NextToken',
         accumulator: 'ListStackInstancesResult.Summaries.member',
+        type: 'query',
       },
     }
   },
   response: ({ payload }) => {
-    // return payload
     const { ListStackInstancesResult, NextToken } = payload
     const Summaries = deMemberify(ListStackInstancesResult.Summaries)
     const result = { Summaries }
@@ -452,6 +503,40 @@ const ListStackResources = {
     return result
   },
   error: defaultError,
+}
+
+const ListStacks = {
+  awsDoc: docRoot + 'API_ListStacks.html',
+  validate: {
+    NextToken,
+    StackStatusFilter: { ...arr, comment: 'Filter results by status', ref: docRoot + 'API_ListStacks.html#API_ListStacks_RequestParameters' },
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListStacks',
+      ...querystringifyParams(params),
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListStacksResult.NextToken',
+        accumulator: 'ListStacksResult.StackSummaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { ListStacksResult, NextToken } = payload
+    const StackSummaries = deMemberify(ListStacksResult.StackSummaries)
+    const result = { StackSummaries }
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
 }
 
 /* TODO: test
@@ -640,6 +725,7 @@ export default {
     ActivateType,
     CreateStack,
     CreateStackInstances,
+    CreateStackSet,
     DeactivateOrganizationsAccess,
     DeactivateType,
     DeleteStack,
@@ -649,9 +735,11 @@ export default {
     DescribeStackInstance,
     DescribeStackResources,
     DescribeStacks,
+    DescribeStackSet,
     DescribeType,
     ListStackInstances,
     ListStackResources,
+    ListStacks,
     // ListTypeRegistrations,
     ListTypes,
     RegisterType,
