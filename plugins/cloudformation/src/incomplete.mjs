@@ -48,7 +48,6 @@ export default {
   SignalResource:                    { disabled, awsDoc: docRoot + 'API_SignalResource.html' },
   StopStackSetOperation:             { disabled, awsDoc: docRoot + 'API_StopStackSetOperation.html' },
   TestType:                          { disabled, awsDoc: docRoot + 'API_TestType.html' },
-  UpdateStackInstances:              { disabled, awsDoc: docRoot + 'API_UpdateStackInstances.html' },
   UpdateStackSet:                    { disabled, awsDoc: docRoot + 'API_UpdateStackSet.html' },
   ValidateTemplate:                  { disabled, awsDoc: docRoot + 'API_ValidateTemplate.html' },
 }

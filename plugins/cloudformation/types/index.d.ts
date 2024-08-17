@@ -20,6 +20,7 @@ import {
   ListTypesCommandOutput as ListTypesResponse,
   RegisterTypeCommandOutput as RegisterTypeResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
+  UpdateStackInstancesCommandOutput as UpdateStackInstancesResponse,
   UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudformation";
@@ -135,6 +136,12 @@ declare interface AwsLiteCloudFormation {
   UpdateStack: (input: { StackName: string, Capabilities?: any[], ClientRequestToken?: string, DisableRollback?: boolean, NotificationARNs?: any[], Parameters?: any[], ResourceTypes?: any[], RetainExceptOnCreate?: boolean, RoleARN?: string, RollbackConfiguration?: Record<string, any>, StackPolicyBody?: string | Record<string, any>, StackPolicyURL?: string, Tags?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string }) => Promise<UpdateStackResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackInstances.html CloudFormation: UpdateStackInstances}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateStackInstances CloudFormation: UpdateStackInstances}
+   */
+  UpdateStackInstances: (input: { OperationId: string, Regions: any[], StackSetName: string, Accounts?: any[], CallAs?: string, DeploymentTargets?: Record<string, any>, OperationPreferences?: Record<string, any>, ParameterOverrides?: any[] }) => Promise<UpdateStackInstancesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateTerminationProtection.html CloudFormation: UpdateTerminationProtection}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateTerminationProtection CloudFormation: UpdateTerminationProtection}
    */
@@ -171,6 +178,7 @@ export type {
   ListTypesResponse,
   RegisterTypeResponse,
   UpdateStackResponse,
+  UpdateStackInstancesResponse,
   UpdateTerminationProtectionResponse,
   // $EXPORT_END
 }

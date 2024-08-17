@@ -414,6 +414,33 @@ Properties:
   - S3 location of CloudFormation template; can be up to 460,800 b
 
 
+### `UpdateStackInstances`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackInstances.html)
+
+Properties:
+- **`OperationId` (string) [required]**
+  - Unique identifier for this stack set operation; prevents repeats of the same request
+- **`Regions` (array) [required]**
+  - Array of regions where the stack instances will be created
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`Accounts` (array)**
+  - Names of the AWS accounts that will be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+- **`DeploymentTargets` (object)**
+  - Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html)
+- **`OperationPreferences` (object)**
+  - Preferences for how the stack set operation will be performed
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
+- **`ParameterOverrides` (array)**
+  - Array of `Parameter` objects defining stack set parameters to override in the stack instances
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
+
+
 ### `UpdateTerminationProtection`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateTerminationProtection.html)
@@ -476,7 +503,6 @@ Properties:
 - [`SignalResource`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SignalResource.html)
 - [`StopStackSetOperation`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StopStackSetOperation.html)
 - [`TestType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TestType.html)
-- [`UpdateStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackInstances.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
 - [`ValidateTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ValidateTemplate.html)
 <!-- METHOD_DOCS_END -->

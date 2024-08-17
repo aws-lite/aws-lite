@@ -55,6 +55,7 @@ const OperationId = { ...str, required, comment: 'Unique identifier for this sta
 const OperationPreferences = { ...obj, comment: 'Preferences for how the stack set operation will be performed', ref: docRoot + 'API_StackSetOperationPreferences.html' }
 const StackInstanceAccount = { ...str, comment: 'ID of an AWS account associated with the stack instance' }
 const StackInstanceRegion = { ...str, comment: 'Region associated with the stack instance' }
+const ParameterOverrides = { ...arr, comment: 'Array of `Parameter` objects defining stack set parameters to override in the stack instances', ref: docRoot + 'API_Parameter.html' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -156,7 +157,7 @@ const CreateStackInstances = {
     CallAs,
     DeploymentTargets,
     OperationPreferences,
-    ParameterOverrides: { ...arr, comment: 'Array of `Parameter` objects defining stack set parameters to override in the stack instances', ref: docRoot + 'API_Parameter.html' },
+    ParameterOverrides,
   },
   request: (params) => {
     return {
@@ -588,6 +589,29 @@ const UpdateStack = {
   response: ({ payload }) => ({ StackId: payload.UpdateStackResult.StackId }),
 }
 
+const UpdateStackInstances = {
+  awsDoc: docRoot + 'API_UpdateStackInstances.html',
+  validate: {
+    OperationId,
+    Regions,
+    StackSetName,
+    Accounts,
+    CallAs,
+    DeploymentTargets,
+    OperationPreferences,
+    ParameterOverrides,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'UpdateStackInstances',
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => payload.UpdateStackInstancesResult,
+}
+
 const UpdateTerminationProtection = {
   awsDoc: docRoot + 'API_UpdateTerminationProtection.html',
   validate: {
@@ -632,6 +656,7 @@ export default {
     ListTypes,
     RegisterType,
     UpdateStack,
+    UpdateStackInstances,
     UpdateTerminationProtection,
     ...incomplete,
   },
