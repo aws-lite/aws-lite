@@ -19,6 +19,7 @@ const obj = { type: 'object' }
 const str = { type: 'string' }
 const num = { type: 'number' }
 
+const Accounts = { ...arr, comment: 'Names of the AWS accounts that will be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both' }
 const Capabilities = { ...arr, comment: 'Array of CloudFormation capabilities necessary for stack creation; can be any of: `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`, `CAPABILITY_AUTO_EXPAND`' }
 const ClientRequestToken = { ...str, comment: 'Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`' }
 const DisableRollback = { ...bool, comment: 'Set to true to disable rollback of the stack if stack creation failed' }
@@ -46,6 +47,14 @@ const LoggingConfig = { ...obj, comment: 'Logging configuration', ref: docRoot +
 const PublisherId = { ...str, comment: 'ID of the extension publisher' }
 const VersionId = { ...str, comment: 'ID of a specific extension version; found at the end of the ARN of the extension version' }
 const MaxResults = { ...num, comment: 'Maximum number of results to be returned in a response' }
+const CallAs = { ...str, comment: 'Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`', ref: docRoot + 'API_DescribeOrganizationsAccess.html' }
+const Regions = { ...arr, required, comment: 'Array of regions where the stack instances will be created' }
+const StackSetName = { ...str, required, comment: 'Name or ID of a stack set' }
+const DeploymentTargets = { ...obj, comment: 'Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both', ref: docRoot + 'API_DeploymentTargets.html' }
+const OperationId = { ...str, required, comment: 'Unique identifier for this stack set operation; prevents repeats of the same request' }
+const OperationPreferences = { ...obj, comment: 'Preferences for how the stack set operation will be performed', ref: docRoot + 'API_StackSetOperationPreferences.html' }
+const StackInstanceAccount = { ...str, comment: 'ID of an AWS account associated with the stack instance' }
+const StackInstanceRegion = { ...str, comment: 'Region associated with the stack instance' }
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -137,6 +146,29 @@ const CreateStack = {
   response: ({ payload }) => ({ StackId: payload.CreateStackResult.StackId }),
 }
 
+const CreateStackInstances = {
+  awsDoc: docRoot + 'API_CreateStackInstances.html',
+  validate: {
+    OperationId,
+    Regions,
+    StackSetName,
+    Accounts,
+    CallAs,
+    DeploymentTargets,
+    OperationPreferences,
+    ParameterOverrides: { ...arr, comment: 'Array of `Parameter` objects defining stack set parameters to override in the stack instances', ref: docRoot + 'API_Parameter.html' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'CreateStackInstances',
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => payload.CreateStackInstancesResult,
+}
+
 const DeactivateOrganizationsAccess = {
   awsDoc: docRoot + 'API_DeactivateOrganizationsAccess.html',
   validate: {},
@@ -186,6 +218,29 @@ const DeleteStack = {
   error: defaultError,
 }
 
+const DeleteStackInstances = {
+  awsDoc: docRoot + 'API_DeleteStackInstances.html',
+  validate: {
+    OperationId,
+    Regions,
+    RetainStacks: { ...bool, required, comment: 'Specify if stacks will be retained after the instances are removed from the stack set' },
+    StackSetName,
+    Accounts,
+    CallAs,
+    DeploymentTargets,
+    OperationPreferences,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DeleteStackInstances',
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => payload.DeleteStackInstancesResult,
+}
+
 const DeregisterType = {
   awsDoc: docRoot + 'API_DeregisterType.html',
   validate: {
@@ -219,6 +274,25 @@ const DescribeOrganizationsAccess = {
     }
   },
   response: ({ payload }) => payload.DescribeOrganizationsAccessResult,
+}
+
+const DescribeStackInstance = {
+  awsDoc: docRoot + 'API_DescribeStackInstance.html',
+  validate: {
+    StackInstanceAccount: { ...StackInstanceAccount, required },
+    StackInstanceRegion: { ...StackInstanceRegion, required },
+    StackSetName,
+    CallAs,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeStackInstance',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DescribeStackInstanceResult,
 }
 
 const DescribeStackResources = {
@@ -305,6 +379,44 @@ const DescribeType = {
     }
   },
   response: ({ payload }) => payload.DescribeTypeResult,
+}
+
+const ListStackInstances = {
+  awsDoc: docRoot + 'API_ListStackInstances.html',
+  validate: {
+    StackSetName,
+    CallAs,
+    Filters: { ...arr, comment: 'Array of `StackInstanceFilter` objects to specify filters for the results', ref: docRoot + 'API_StackInstanceFilter.html' },
+    MaxResults,
+    NextToken,
+    StackInstanceAccount,
+    StackInstanceRegion,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListStackInstances',
+      ...querystringifyParams(params),
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListStackInstancesResult.NextToken',
+        accumulator: 'ListStackInstancesResult.Summaries.member',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    // return payload
+    const { ListStackInstancesResult, NextToken } = payload
+    const Summaries = deMemberify(ListStackInstancesResult.Summaries)
+    const result = { Summaries }
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
 }
 
 const ListStackResources = {
@@ -503,14 +615,18 @@ export default {
     ActivateOrganizationsAccess,
     ActivateType,
     CreateStack,
+    CreateStackInstances,
     DeactivateOrganizationsAccess,
     DeactivateType,
     DeleteStack,
+    DeleteStackInstances,
     DeregisterType,
     DescribeOrganizationsAccess,
+    DescribeStackInstance,
     DescribeStackResources,
     DescribeStacks,
     DescribeType,
+    ListStackInstances,
     ListStackResources,
     // ListTypeRegistrations,
     ListTypes,

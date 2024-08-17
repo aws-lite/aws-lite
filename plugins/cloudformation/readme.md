@@ -117,6 +117,33 @@ Properties:
   - Amount of time before the stack status becomes `CREATE_FAILED`
 
 
+### `CreateStackInstances`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html)
+
+Properties:
+- **`OperationId` (string) [required]**
+  - Unique identifier for this stack set operation; prevents repeats of the same request
+- **`Regions` (array) [required]**
+  - Array of regions where the stack instances will be created
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`Accounts` (array)**
+  - Names of the AWS accounts that will be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+- **`DeploymentTargets` (object)**
+  - Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html)
+- **`OperationPreferences` (object)**
+  - Preferences for how the stack set operation will be performed
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
+- **`ParameterOverrides` (array)**
+  - Array of `Parameter` objects defining stack set parameters to override in the stack instances
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
+
+
 ### `DeactivateOrganizationsAccess`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeactivateOrganizationsAccess.html)
@@ -153,6 +180,32 @@ Properties:
   - IAM role ARN to assume during deletion
 
 
+### `DeleteStackInstances`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackInstances.html)
+
+Properties:
+- **`OperationId` (string) [required]**
+  - Unique identifier for this stack set operation; prevents repeats of the same request
+- **`Regions` (array) [required]**
+  - Array of regions where the stack instances will be created
+- **`RetainStacks` (boolean) [required]**
+  - Specify if stacks will be retained after the instances are removed from the stack set
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`Accounts` (array)**
+  - Names of the AWS accounts that will be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+- **`DeploymentTargets` (object)**
+  - Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html)
+- **`OperationPreferences` (object)**
+  - Preferences for how the stack set operation will be performed
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
+
+
 ### `DeregisterType`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeregisterType.html)
@@ -173,6 +226,22 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 
 Properties:
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+
+
+### `DescribeStackInstance`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackInstance.html)
+
+Properties:
+- **`StackInstanceAccount` (string) [required]**
+  - ID of an AWS account associated with the stack instance
+- **`StackInstanceRegion` (string) [required]**
+  - Region associated with the stack instance
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
@@ -221,6 +290,29 @@ Properties:
   - Name of the extension with length between 10 and 204 (inclusive)
 - **`VersionId` (string)**
   - ID of a specific extension version; found at the end of the ARN of the extension version
+
+
+### `ListStackInstances`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html)
+
+Properties:
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+- **`Filters` (array)**
+  - Array of `StackInstanceFilter` objects to specify filters for the results
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackInstanceFilter.html)
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`StackInstanceAccount` (string)**
+  - ID of an AWS account associated with the stack instance
+- **`StackInstanceRegion` (string)**
+  - Region associated with the stack instance
 
 
 ### `ListStackResources`
@@ -341,10 +433,8 @@ Properties:
 - [`CancelUpdateStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html)
 - [`ContinueUpdateRollback`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ContinueUpdateRollback.html)
 - [`CreateChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateChangeSet.html)
-- [`CreateStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html)
 - [`CreateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackSet.html)
 - [`DeleteChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteChangeSet.html)
-- [`DeleteStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackInstances.html)
 - [`DeleteStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackSet.html)
 - [`DescribeAccountLimits`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeAccountLimits.html)
 - [`DescribeChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSet.html)
@@ -352,7 +442,6 @@ Properties:
 - [`DescribePublisher`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribePublisher.html)
 - [`DescribeStackDriftDetectionStatus`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackDriftDetectionStatus.html)
 - [`DescribeStackEvents`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackEvents.html)
-- [`DescribeStackInstance`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackInstance.html)
 - [`DescribeStackResource`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResource.html)
 - [`DescribeStackResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html)
 - [`DescribeStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackSet.html)
@@ -371,7 +460,6 @@ Properties:
 - [`ListExports`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListExports.html)
 - [`ListImports`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
-- [`ListStackInstances`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html)
 - [`ListStacks`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStacks.html)
 - [`ListStackSetOperationResults`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperationResults.html)
 - [`ListStackSetOperations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperations.html)
