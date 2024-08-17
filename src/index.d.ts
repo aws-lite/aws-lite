@@ -65,9 +65,9 @@ interface AwsLiteMockResponse extends AwsLiteBaseMock {
 }
 
 interface AwsLiteTesting {
-  debug: (args: { print?: boolean }) => any;
+  debug: (args?: { print?: boolean }) => any;
   disable: () => void;
-  enable: (args: { usePluginResponseMethod?: boolean }) => void;
+  enable: (args?: { usePluginResponseMethod?: boolean }) => void;
   getAllRequests: (target?: string) => AwsLiteMockRequest[];
   getAllResponses: (target?: string) => AwsLiteMockRequest[];
   getLastRequest: (target?: string) => AwsLiteMockRequest;
