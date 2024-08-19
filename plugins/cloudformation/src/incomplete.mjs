@@ -1,9 +1,9 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/'
 export default {
-  DeleteChangeSet:                   { disabled, awsDoc: docRoot + 'API_DeleteChangeSet.html' },
-  DescribeAccountLimits:             { disabled, awsDoc: docRoot + 'API_DescribeAccountLimits.html' },
-  DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' },
+  // DeleteChangeSet:                   { disabled, awsDoc: docRoot + 'API_DeleteChangeSet.html' },
+  // DescribeAccountLimits:             { disabled, awsDoc: docRoot + 'API_DescribeAccountLimits.html' },
+  DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' }, // TODO: test
   DescribeChangeSetHooks:            { disabled, awsDoc: docRoot + 'API_DescribeChangeSetHooks.html' },
   DescribePublisher:                 { disabled, awsDoc: docRoot + 'API_DescribePublisher.html' },
   DescribeStackDriftDetectionStatus: { disabled, awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html' },

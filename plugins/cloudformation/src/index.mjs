@@ -57,9 +57,11 @@ const StackInstanceAccount = { ...str, comment: 'ID of an AWS account associated
 const StackInstanceRegion = { ...str, comment: 'Region associated with the stack instance' }
 const ParameterOverrides = { ...arr, comment: 'Array of `Parameter` objects defining stack set parameters to override in the stack instances', ref: docRoot + 'API_Parameter.html' }
 const Description = { ...str, comment: 'Description' }
-
-
+const ChangeSetName = { ...str, required, comment: 'User created ID for the change set' }
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+// const valIteratorPaginate = { ...str, comment: 'Enable iterator pagination; use this instead of making your own individual pagination requests' }
+
+const Version = '2010-05-15'
 
 const emptyResponse = () => { return {} }
 const defaultError = ({ statusCode, error }) => ({ statusCode, error })
@@ -155,7 +157,7 @@ const ContinueUpdateRollback = {
     return {
       query: {
         Action: 'ContinueUpdateRollback',
-        Version: '2010-05-15',
+        Version,
         ...querystringifyParams(params),
       },
     }
@@ -166,7 +168,7 @@ const ContinueUpdateRollback = {
 const CreateChangeSet = {
   awsDoc: docRoot + 'API_CreateChangeSet.html',
   validate: {
-    ChangeSetName: { ...str, required, comment: 'User created ID for the change set' },
+    ChangeSetName,
     StackName,
     Capabilities,
     ChangeSetType: { ...str, comment: 'Type of the change set; can be one of: `CREATE`, `UPDATE`, `IMPORT`' },
@@ -231,7 +233,7 @@ const CreateStack = {
     return {
       query: {
         Action: 'CreateStack',
-        Version: '2010-05-15',
+        Version,
         ...query,
       },
     }
@@ -321,6 +323,24 @@ const DeactivateType = {
   response: emptyResponse,
 }
 
+const DeleteChangeSet = {
+  awsDoc: docRoot + 'API_DeleteChangeSet.html',
+  validate: {
+    ChangeSetName,
+    StackName: { ...str, comment: 'Stack name; must be provided if `ChangeSetName` is not an ARN' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DeleteChangeSet',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
 const DeleteStack = {
   awsDoc: docRoot + 'API_DeleteStack.html',
   validate: {
@@ -399,6 +419,71 @@ const DeregisterType = {
   },
   response: emptyResponse,
 }
+
+const DescribeAccountLimits = {
+  awsDoc: docRoot + 'API_DescribeAccountLimits.html',
+  validate: {
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: ({ NextToken, paginate }) => {
+    let query = {
+      Action: 'DescribeAccountLimits',
+      Version,
+    }
+    if (NextToken) query.NextToken = NextToken
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'DescribeAccountLimitsResult.NextToken',
+        accumulator: 'DescribeAccountLimitsResult.AccountLimits.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { DescribeAccountLimitsResult } = payload
+    DescribeAccountLimitsResult.AccountLimits = deMemberify(DescribeAccountLimitsResult.AccountLimits)
+    return DescribeAccountLimitsResult
+  },
+}
+
+// TODO: test
+// const DescribeChangeSet = {
+//   awsDoc: docRoot + 'API_DescribeChangeSet.html',
+//   validate: {
+//     ChangeSetName,
+//     IncludePropertyValues: { ...bool, comment: 'Set to `true` to include property values in the response' },
+//     NextToken,
+//     StackName: { ...str, comment: 'Stack name; must be provided if `ChangeSetName` is not an ARN' },
+//     paginate: valIteratorPaginate,
+//   },
+//   request: (params) => {
+//     const query = {
+//       Action: 'DescribeChangeSet',
+//       Version,
+//       ...params,
+//     }
+//     const { paginate } = params
+//     if (paginate) delete query.paginate
+//     return {
+//       query,
+//       paginate,
+//       paginator: {
+//         cursor: 'NextToken',
+//         token: 'DescribeChangeSetResult.NextToken',
+//         type: 'query',
+//       },
+//     }
+//   },
+//   response: ({ payload }) => {
+//     const  DescribeChangeSetResult = normalizeResponse(payload.DescribeChangeSetResult)
+//     if (DescribeChangeSetResult.Changes) DescribeChangeSetResult.Changes.map(i => normalizeResponse(i, 1))
+//     return DescribeChangeSetResult
+//   },
+// }
 
 const DescribeOrganizationsAccess = {
   awsDoc: docRoot + 'API_DescribeOrganizationsAccess.html',
@@ -885,7 +970,7 @@ const UpdateStack = {
     return {
       query: {
         Action: 'UpdateStack',
-        Version: '2010-05-15',
+        Version,
         ...query,
       },
     }
@@ -927,7 +1012,7 @@ const UpdateTerminationProtection = {
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: qs.stringify({
         Action: 'UpdateTerminationProtection',
-        Version: '2010-05-15',
+        Version,
         ...params,
       }),
     }
@@ -950,11 +1035,14 @@ export default {
     CreateStackInstances,
     CreateStackSet,
     DeactivateOrganizationsAccess,
+    DeleteChangeSet,
     DeactivateType,
     DeleteStack,
     DeleteStackInstances,
     DeleteStackSet,
     DeregisterType,
+    DescribeAccountLimits,
+    // DescribeChangeSet,
     DescribeOrganizationsAccess,
     DescribeStackInstance,
     DescribeStackResources,

@@ -280,6 +280,17 @@ Properties:
 
 
 
+### `DeleteChangeSet`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteChangeSet.html)
+
+Properties:
+- **`ChangeSetName` (string) [required]**
+  - User created ID for the change set
+- **`StackName` (string)**
+  - Stack name; must be provided if `ChangeSetName` is not an ARN
+
+
 ### `DeactivateType`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeactivateType.html)
@@ -359,6 +370,17 @@ Properties:
   - Name of the extension with length between 10 and 204 (inclusive)
 - **`VersionId` (string)**
   - ID of a specific extension version; found at the end of the ARN of the extension version
+
+
+### `DescribeAccountLimits`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeAccountLimits.html)
+
+Properties:
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `DescribeOrganizationsAccess`
@@ -681,8 +703,6 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
-- [`DeleteChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteChangeSet.html)
-- [`DescribeAccountLimits`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeAccountLimits.html)
 - [`DescribeChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSet.html)
 - [`DescribeChangeSetHooks`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSetHooks.html)
 - [`DescribePublisher`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribePublisher.html)

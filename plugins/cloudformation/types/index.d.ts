@@ -11,11 +11,13 @@ import {
   CreateStackInstancesCommandOutput as CreateStackInstancesResponse,
   CreateStackSetCommandOutput as CreateStackSetResponse,
   DeactivateOrganizationsAccessCommandOutput as DeactivateOrganizationsAccessResponse,
+  DeleteChangeSetCommandOutput as DeleteChangeSetResponse,
   DeactivateTypeCommandOutput as DeactivateTypeResponse,
   DeleteStackCommandOutput as DeleteStackResponse,
   DeleteStackInstancesCommandOutput as DeleteStackInstancesResponse,
   DeleteStackSetCommandOutput as DeleteStackSetResponse,
   DeregisterTypeCommandOutput as DeregisterTypeResponse,
+  DescribeAccountLimitsCommandOutput as DescribeAccountLimitsResponse,
   DescribeOrganizationsAccessCommandOutput as DescribeOrganizationsAccessResponse,
   DescribeStackInstanceCommandOutput as DescribeStackInstanceResponse,
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
@@ -93,6 +95,12 @@ declare interface AwsLiteCloudFormation {
   DeactivateOrganizationsAccess: () => Promise<DeactivateOrganizationsAccessResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteChangeSet.html CloudFormation: DeleteChangeSet}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeleteChangeSet CloudFormation: DeleteChangeSet}
+   */
+  DeleteChangeSet: (input: { ChangeSetName: string, StackName?: string }) => Promise<DeleteChangeSetResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeactivateType.html CloudFormation: DeactivateType}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeactivateType CloudFormation: DeactivateType}
    */
@@ -121,6 +129,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeregisterType CloudFormation: DeregisterType}
    */
   DeregisterType: (input: { Arn?: string, Type?: string, TypeName?: string, VersionId?: string }) => Promise<DeregisterTypeResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeAccountLimits.html CloudFormation: DescribeAccountLimits}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeAccountLimits CloudFormation: DescribeAccountLimits}
+   */
+  DescribeAccountLimits: (input: { NextToken?: string, paginate?: boolean | string }) => Promise<DescribeAccountLimitsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html CloudFormation: DescribeOrganizationsAccess}
@@ -246,11 +260,13 @@ export type {
   CreateStackInstancesResponse,
   CreateStackSetResponse,
   DeactivateOrganizationsAccessResponse,
+  DeleteChangeSetResponse,
   DeactivateTypeResponse,
   DeleteStackResponse,
   DeleteStackInstancesResponse,
   DeleteStackSetResponse,
   DeregisterTypeResponse,
+  DescribeAccountLimitsResponse,
   DescribeOrganizationsAccessResponse,
   DescribeStackInstanceResponse,
   DescribeStackResourcesResponse,
