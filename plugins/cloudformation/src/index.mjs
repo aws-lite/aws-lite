@@ -27,7 +27,7 @@ const EnableTerminationProtection = { ...bool, comment: 'Enable protection again
 const NotificationARNs = { ...arr, comment: 'Array of SNS topic ARNs to publish stack related events' }
 const OnFailure = { ...str, comment: 'Action to be taken if stack creation failes; can be one of: `DO_NOTHING`, `ROLLBACK`, `DELETE`' }
 const Parameters = { ...arr, comment: 'Array of objects specifying stack input parameters', ref: docRoot + 'API_Parameter.html' }
-const ResourceTypes = { ...arr, comment: 'Array of CloudFormation template resource types with permissions for this create stack action', ref: userGuide + 'using-iam-template.html' }
+const ResourceTypes = { ...arr, comment: 'Array of CloudFormation template resource types with permissions for this action', ref: userGuide + 'using-iam-template.html' }
 const RetainExceptOnCreate = { ...bool, comment: 'Set to true to ensure newly created resources are deleted if the operation rolls back, even if marked with a deletion policy of `Retain`' }
 const RoleARN = { ...str, comment: 'IAM role ARN CloudFormation assumes to create the stack' }
 const RollbackConfiguration = { ...obj, comment: 'Rollback triggers to be monitored during creation and updating', ref: docRoot + 'API_RollbackConfiguration.html' }
@@ -56,6 +56,8 @@ const OperationPreferences = { ...obj, comment: 'Preferences for how the stack s
 const StackInstanceAccount = { ...str, comment: 'ID of an AWS account associated with the stack instance' }
 const StackInstanceRegion = { ...str, comment: 'Region associated with the stack instance' }
 const ParameterOverrides = { ...arr, comment: 'Array of `Parameter` objects defining stack set parameters to override in the stack instances', ref: docRoot + 'API_Parameter.html' }
+const Description = { ...str, comment: 'Description' }
+
 
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 
@@ -103,6 +105,96 @@ const ActivateType = {
     }
   },
   response: ({ payload }) => payload.ActivateTypeResult,
+}
+
+const BatchDescribeTypeConfigurations = {
+  awsDoc: docRoot + 'API_BatchDescribeTypeConfigurations.html',
+  validate: {
+    TypeConfigurationIdentifiers: { ...arr, required, comment: 'Array of type configuration identifiers', ref: docRoot + 'API_TypeConfigurationIdentifier.html' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'BatchDescribeTypeConfigurations',
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { BatchDescribeTypeConfigurationsResult } = payload
+    return normalizeResponse(BatchDescribeTypeConfigurationsResult)
+  },
+}
+
+const CancelUpdateStack = {
+  awsDoc: docRoot + 'API_CancelUpdateStack.html',
+  validate: {
+    StackName,
+    ClientRequestToken,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'CancelUpdateStack',
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const ContinueUpdateRollback = {
+  awsDoc: docRoot + 'API_ContinueUpdateRollback.html',
+  validate: {
+    StackName,
+    ClientRequestToken,
+    ResourcesToSkip: { ...arr, comment: 'Array of logical IDs of resources to skip', ref: docRoot + 'API_ContinueUpdateRollback.html#API_ContinueUpdateRollback_RequestParameters' },
+    RoleARN,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'ContinueUpdateRollback',
+        Version: '2010-05-15',
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const CreateChangeSet = {
+  awsDoc: docRoot + 'API_CreateChangeSet.html',
+  validate: {
+    ChangeSetName: { ...str, required, comment: 'User created ID for the change set' },
+    StackName,
+    Capabilities,
+    ChangeSetType: { ...str, comment: 'Type of the change set; can be one of: `CREATE`, `UPDATE`, `IMPORT`' },
+    ClientToken: { ...str, comment: 'Unique identifier for this request; prevents repeats of the same request' },
+    Description,
+    ImportExistingResources: { ...bool, comment: 'Set to true to indicate that an existing resource will be imported' },
+    IncludeNestedStacks: { ...bool, comment: 'Set to true to include nested stacks in the specified template' },
+    NotificationARNs,
+    OnStackFailure: { ...str, comment: 'Specify an action to take on failure; can be one of: `DO_NOTHING`, `ROLLBACK`, `DELETE`' },
+    Parameters,
+    ResourceTypes,
+    ResourcesToImport: { ...arr, comment: 'Array of resources to import', ref: docRoot + 'API_ResourceToImport.html' },
+    RoleARN,
+    RollbackConfiguration,
+    Tags,
+    TemplateBody,
+    TemplateURL,
+    UsePreviousTemplate: { ...bool, comment: 'Set to true to reuse the template associated with the stack' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'CreateChangeSet',
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => payload.CreateChangeSetResult,
 }
 
 const CreateStack = {
@@ -179,7 +271,7 @@ const CreateStackSet = {
     AutoDeployment: { ...str, comment: 'Specify if stack sets automatically deploy to organization accounts that are added to the target organization; can be `SERVICE_MANAGED`' },
     CallAs,
     Capabilities,
-    Description: { ...str, comment: 'Description' },
+    Description,
     ExecutionRoleName: { ...str, comment: 'Name of the IAM execution role used to create the stack set; defaults to `AWSCloudFormationStackSetExecutionRole`' },
     ManagedExecution: { ...obj, comment: 'Specify if the stack sets operate concurrently when possible', ref: docRoot + 'API_ManagedExecution.html' },
     Parameters,
@@ -704,7 +796,7 @@ const ListTypes = {
   awsDoc: docRoot + 'API_ListTypes.html',
   validate: {
     DeprecatedStatus: { ...str, comment: 'Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`' },
-    Filters: { ...obj, comment: 'Filter configurations', ref:  docRoot + 'API_TypeFilters.html' },
+    Filters: { ...obj, comment: 'Filter configurations', ref: docRoot + 'API_TypeFilters.html' },
     MaxResults,
     NextToken,
     ProvisioningType: { ...str, comment: 'Filter results by provisioning type; can be one of: `FULLY_MUTABLE` (default), `IMMUTABLE`, `NON_PROVISIONABLE`' },
@@ -850,6 +942,10 @@ export default {
   methods: {
     ActivateOrganizationsAccess,
     ActivateType,
+    BatchDescribeTypeConfigurations,
+    CancelUpdateStack,
+    ContinueUpdateRollback,
+    CreateChangeSet,
     CreateStack,
     CreateStackInstances,
     CreateStackSet,

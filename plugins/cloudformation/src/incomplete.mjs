@@ -1,10 +1,6 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/'
 export default {
-  BatchDescribeTypeConfigurations:   { disabled, awsDoc: docRoot + 'API_BatchDescribeTypeConfigurations.html' },
-  CancelUpdateStack:                 { disabled, awsDoc: docRoot + 'API_CancelUpdateStack.html' },
-  ContinueUpdateRollback:            { disabled, awsDoc: docRoot + 'API_ContinueUpdateRollback.html' },
-  CreateChangeSet:                   { disabled, awsDoc: docRoot + 'API_CreateChangeSet.html' },
   DeleteChangeSet:                   { disabled, awsDoc: docRoot + 'API_DeleteChangeSet.html' },
   DescribeAccountLimits:             { disabled, awsDoc: docRoot + 'API_DescribeAccountLimits.html' },
   DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' },

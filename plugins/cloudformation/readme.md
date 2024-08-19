@@ -68,6 +68,93 @@ Properties:
   - Manually update a previously-activated type to a new major or minor version if available; can be one of: `MAJOR`, `MINOR`
 
 
+### `BatchDescribeTypeConfigurations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_BatchDescribeTypeConfigurations.html)
+
+Properties:
+- **`TypeConfigurationIdentifiers` (array) [required]**
+  - Array of type configuration identifiers
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TypeConfigurationIdentifier.html)
+
+
+### `CancelUpdateStack`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`ClientRequestToken` (string)**
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
+
+
+### `ContinueUpdateRollback`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ContinueUpdateRollback.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`ClientRequestToken` (string)**
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
+- **`ResourcesToSkip` (array)**
+  - Array of logical IDs of resources to skip
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ContinueUpdateRollback.html#API_ContinueUpdateRollback_RequestParameters)
+- **`RoleARN` (string)**
+  - IAM role ARN CloudFormation assumes to create the stack
+
+
+### `CreateChangeSet`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateChangeSet.html)
+
+Properties:
+- **`ChangeSetName` (string) [required]**
+  - User created ID for the change set
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`Capabilities` (array)**
+  - Array of CloudFormation capabilities necessary for stack creation; can be any of: `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`, `CAPABILITY_AUTO_EXPAND`
+- **`ChangeSetType` (string)**
+  - Type of the change set; can be one of: `CREATE`, `UPDATE`, `IMPORT`
+- **`ClientToken` (string)**
+  - Unique identifier for this request; prevents repeats of the same request
+- **`Description` (string)**
+  - Description
+- **`ImportExistingResources` (boolean)**
+  - Set to true to indicate that an existing resource will be imported
+- **`IncludeNestedStacks` (boolean)**
+  - Set to true to include nested stacks in the specified template
+- **`NotificationARNs` (array)**
+  - Array of SNS topic ARNs to publish stack related events
+- **`OnStackFailure` (string)**
+  - Specify an action to take on failure; can be one of: `DO_NOTHING`, `ROLLBACK`, `DELETE`
+- **`Parameters` (array)**
+  - Array of objects specifying stack input parameters
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
+- **`ResourceTypes` (array)**
+  - Array of CloudFormation template resource types with permissions for this action
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html)
+- **`ResourcesToImport` (array)**
+  - Array of resources to import
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ResourceToImport.html)
+- **`RoleARN` (string)**
+  - IAM role ARN CloudFormation assumes to create the stack
+- **`RollbackConfiguration` (object)**
+  - Rollback triggers to be monitored during creation and updating
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RollbackConfiguration.html)
+- **`Tags` (array)**
+  - Array of tag objects to associate with the stack
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Tag.html)
+- **`TemplateBody` (string, object)**
+  - CloudFormation template object (which will be automatically serialized to JSON for you), or pre-serialized JSON or YAML; can be up to 51,200 b
+- **`TemplateURL` (string)**
+  - S3 location of CloudFormation template; can be up to 460,800 b
+- **`UsePreviousTemplate` (boolean)**
+  - Set to true to reuse the template associated with the stack
+
+
 ### `CreateStack`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStack.html)
@@ -92,7 +179,7 @@ Properties:
   - Array of objects specifying stack input parameters
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
 - **`ResourceTypes` (array)**
-  - Array of CloudFormation template resource types with permissions for this create stack action
+  - Array of CloudFormation template resource types with permissions for this action
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html)
 - **`RetainExceptOnCreate` (boolean)**
   - Set to true to ensure newly created resources are deleted if the operation rolls back, even if marked with a deletion policy of `Retain`
@@ -529,7 +616,7 @@ Properties:
   - Array of objects specifying stack input parameters
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
 - **`ResourceTypes` (array)**
-  - Array of CloudFormation template resource types with permissions for this create stack action
+  - Array of CloudFormation template resource types with permissions for this action
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html)
 - **`RetainExceptOnCreate` (boolean)**
   - Set to true to ensure newly created resources are deleted if the operation rolls back, even if marked with a deletion policy of `Retain`
@@ -594,10 +681,6 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
-- [`BatchDescribeTypeConfigurations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_BatchDescribeTypeConfigurations.html)
-- [`CancelUpdateStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html)
-- [`ContinueUpdateRollback`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ContinueUpdateRollback.html)
-- [`CreateChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateChangeSet.html)
 - [`DeleteChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteChangeSet.html)
 - [`DescribeAccountLimits`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeAccountLimits.html)
 - [`DescribeChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSet.html)

@@ -3,6 +3,10 @@ import {
   // $IMPORTS_START
   ActivateOrganizationsAccessCommandOutput as ActivateOrganizationsAccessResponse,
   ActivateTypeCommandOutput as ActivateTypeResponse,
+  BatchDescribeTypeConfigurationsCommandOutput as BatchDescribeTypeConfigurationsResponse,
+  CancelUpdateStackCommandOutput as CancelUpdateStackResponse,
+  ContinueUpdateRollbackCommandOutput as ContinueUpdateRollbackResponse,
+  CreateChangeSetCommandOutput as CreateChangeSetResponse,
   CreateStackCommandOutput as CreateStackResponse,
   CreateStackInstancesCommandOutput as CreateStackInstancesResponse,
   CreateStackSetCommandOutput as CreateStackSetResponse,
@@ -43,6 +47,30 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ActivateType CloudFormation: ActivateType}
    */
   ActivateType: (input: { AutoUpdate?: boolean, ExecutionRoleArn?: string, LoggingConfig?: Record<string, any>, MajorVersion?: number, PublicTypeArn?: string, PublisherId?: string, Type?: string, TypeName?: string, TypeNameAlias?: string, VersionBump?: string }) => Promise<ActivateTypeResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_BatchDescribeTypeConfigurations.html CloudFormation: BatchDescribeTypeConfigurations}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#BatchDescribeTypeConfigurations CloudFormation: BatchDescribeTypeConfigurations}
+   */
+  BatchDescribeTypeConfigurations: (input: { TypeConfigurationIdentifiers: any[] }) => Promise<BatchDescribeTypeConfigurationsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html CloudFormation: CancelUpdateStack}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#CancelUpdateStack CloudFormation: CancelUpdateStack}
+   */
+  CancelUpdateStack: (input: { StackName: string, ClientRequestToken?: string }) => Promise<CancelUpdateStackResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ContinueUpdateRollback.html CloudFormation: ContinueUpdateRollback}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ContinueUpdateRollback CloudFormation: ContinueUpdateRollback}
+   */
+  ContinueUpdateRollback: (input: { StackName: string, ClientRequestToken?: string, ResourcesToSkip?: any[], RoleARN?: string }) => Promise<ContinueUpdateRollbackResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateChangeSet.html CloudFormation: CreateChangeSet}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#CreateChangeSet CloudFormation: CreateChangeSet}
+   */
+  CreateChangeSet: (input: { ChangeSetName: string, StackName: string, Capabilities?: any[], ChangeSetType?: string, ClientToken?: string, Description?: string, ImportExistingResources?: boolean, IncludeNestedStacks?: boolean, NotificationARNs?: any[], OnStackFailure?: string, Parameters?: any[], ResourceTypes?: any[], ResourcesToImport?: any[], RoleARN?: string, RollbackConfiguration?: Record<string, any>, Tags?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string, UsePreviousTemplate?: boolean }) => Promise<CreateChangeSetResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStack.html CloudFormation: CreateStack}
@@ -210,6 +238,10 @@ export type {
   // $EXPORT_START
   ActivateOrganizationsAccessResponse,
   ActivateTypeResponse,
+  BatchDescribeTypeConfigurationsResponse,
+  CancelUpdateStackResponse,
+  ContinueUpdateRollbackResponse,
+  CreateChangeSetResponse,
   CreateStackResponse,
   CreateStackInstancesResponse,
   CreateStackSetResponse,
