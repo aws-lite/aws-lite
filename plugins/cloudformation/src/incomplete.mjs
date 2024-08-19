@@ -6,7 +6,6 @@ export default {
   ContinueUpdateRollback:            { disabled, awsDoc: docRoot + 'API_ContinueUpdateRollback.html' },
   CreateChangeSet:                   { disabled, awsDoc: docRoot + 'API_CreateChangeSet.html' },
   DeleteChangeSet:                   { disabled, awsDoc: docRoot + 'API_DeleteChangeSet.html' },
-  DeleteStackSet:                    { disabled, awsDoc: docRoot + 'API_DeleteStackSet.html' },
   DescribeAccountLimits:             { disabled, awsDoc: docRoot + 'API_DescribeAccountLimits.html' },
   DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' },
   DescribeChangeSetHooks:            { disabled, awsDoc: docRoot + 'API_DescribeChangeSetHooks.html' },
@@ -30,9 +29,6 @@ export default {
   ListExports:                       { disabled, awsDoc: docRoot + 'API_ListExports.html' },
   ListImports:                       { disabled, awsDoc: docRoot + 'API_ListImports.html' },
   ListStackInstanceResourceDrifts:   { disabled, awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html' },
-  ListStackSetOperationResults:      { disabled, awsDoc: docRoot + 'API_ListStackSetOperationResults.html' },
-  ListStackSetOperations:            { disabled, awsDoc: docRoot + 'API_ListStackSetOperations.html' },
-  ListStackSets:                     { disabled, awsDoc: docRoot + 'API_ListStackSets.html' },
   ListTypeRegistrations:             { disabled, awsDoc: docRoot + 'API_ListTypeRegistrations.html' }, // TODO: test
   ListTypeVersions:                  { disabled, awsDoc: docRoot + 'API_ListTypeVersions.html' },
   PublishType:                       { disabled, awsDoc: docRoot + 'API_PublishType.html' },

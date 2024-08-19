@@ -64,7 +64,7 @@ const defaultError = ({ statusCode, error }) => ({ statusCode, error })
 const deMemberify = (prop) => {
   let result = []
   if (Array.isArray(prop.member) && prop.member.length) result = prop.member
-  else if (prop.member) result = [ prop.member ]
+  else if (prop.member && prop.member.length) result = [ prop.member ]
   return result
 }
 
@@ -270,6 +270,23 @@ const DeleteStackInstances = {
     }
   },
   response: ({ payload }) => payload.DeleteStackInstancesResult,
+}
+
+const DeleteStackSet = {
+  awsDoc: docRoot + 'API_DeleteStackSet.html',
+  validate: {
+    StackSetName,
+    CallAs,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DeleteStackSet',
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
 }
 
 const DeregisterType = {
@@ -539,6 +556,116 @@ const ListStacks = {
   },
 }
 
+const ListStackSetOperationResults = {
+  awsDoc: docRoot + 'API_ListStackSetOperationResults.html',
+  validate: {
+    StackSetName,
+    OperationId: { ...str, required, comment: 'ID of the stack set operation' },
+    CallAs,
+    Filters: { ...arr, comment: 'Array of filter objects', ref: docRoot + 'API_OperationResultFilter.html' },
+    MaxResults,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListStackSetOperationResults',
+      ...querystringifyParams(params),
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListStackSetOperationResultsResult.NextToken',
+        accumulator: 'ListStackSetOperationResultsResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { ListStackSetOperationResultsResult, NextToken } = payload
+    const Summaries = deMemberify(ListStackSetOperationResultsResult.Summaries)
+    const result = { Summaries }
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
+}
+
+const ListStackSetOperations = {
+  awsDoc: docRoot + 'API_ListStackSetOperations.html',
+  validate: {
+    StackSetName,
+    CallAs,
+    MaxResults,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let query = {
+      Action: 'ListStackSetOperations',
+      ...params,
+    }
+    let { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListStackSetOperationsResult.NextToken',
+        accumulator: 'ListStackSetOperationsResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { ListStackSetOperationsResult, NextToken } = payload
+    const Summaries = deMemberify(ListStackSetOperationsResult.Summaries)
+    const result = { Summaries }
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
+}
+
+const ListStackSets = {
+  awsDoc: docRoot + 'API_ListStackSets.html',
+  validate: {
+    CallAs,
+    MaxResults,
+    NextToken,
+    Status: { ...str, comment: 'Filter results by status; can be one of: `ACTIVE`, `DELETED`' },
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    let query = {
+      Action: 'ListStackSets',
+      ...params,
+    }
+    let { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListStackSetsResult.NextToken',
+        accumulator: 'ListStackSetsResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { ListStackSetsResult, NextToken } = payload
+    const Summaries = deMemberify(ListStackSetsResult.Summaries)
+    const result = { Summaries }
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
+}
+
 /* TODO: test
 const ListTypeRegistrations = {
   awsDoc: docRoot + 'API_ListTypeRegistrations.html',
@@ -730,6 +857,7 @@ export default {
     DeactivateType,
     DeleteStack,
     DeleteStackInstances,
+    DeleteStackSet,
     DeregisterType,
     DescribeOrganizationsAccess,
     DescribeStackInstance,
@@ -740,6 +868,9 @@ export default {
     ListStackInstances,
     ListStackResources,
     ListStacks,
+    ListStackSetOperationResults,
+    ListStackSetOperations,
+    ListStackSets,
     // ListTypeRegistrations,
     ListTypes,
     RegisterType,

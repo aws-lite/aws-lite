@@ -247,6 +247,18 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
 
 
+### `DeleteStackSet`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackSet.html)
+
+Properties:
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+
+
 ### `DeregisterType`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeregisterType.html)
@@ -395,6 +407,65 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListStackSetOperationResults`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperationResults.html)
+
+Properties:
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`OperationId` (string) [required]**
+  - ID of the stack set operation
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+- **`Filters` (array)**
+  - Array of filter objects
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_OperationResultFilter.html)
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListStackSetOperations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperations.html)
+
+Properties:
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListStackSets`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSets.html)
+
+Properties:
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`Status` (string)**
+  - Filter results by status; can be one of: `ACTIVE`, `DELETED`
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListTypes`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypes.html)
@@ -528,7 +599,6 @@ Properties:
 - [`ContinueUpdateRollback`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ContinueUpdateRollback.html)
 - [`CreateChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateChangeSet.html)
 - [`DeleteChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteChangeSet.html)
-- [`DeleteStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackSet.html)
 - [`DescribeAccountLimits`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeAccountLimits.html)
 - [`DescribeChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSet.html)
 - [`DescribeChangeSetHooks`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSetHooks.html)
@@ -552,9 +622,6 @@ Properties:
 - [`ListExports`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListExports.html)
 - [`ListImports`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
-- [`ListStackSetOperationResults`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperationResults.html)
-- [`ListStackSetOperations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperations.html)
-- [`ListStackSets`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSets.html)
 - [`ListTypeRegistrations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeRegistrations.html)
 - [`ListTypeVersions`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeVersions.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)

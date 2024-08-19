@@ -44,7 +44,7 @@ function normalizeResponse (obj, maxDepth = 0) {
       if (typeof value === 'object' && value.member) obj[key] = Array.isArray(value.member) ? value.member : [ value.member ]
     })
   }
-
+  return obj
 }
 
 export {

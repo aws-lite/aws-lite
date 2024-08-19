@@ -10,6 +10,7 @@ import {
   DeactivateTypeCommandOutput as DeactivateTypeResponse,
   DeleteStackCommandOutput as DeleteStackResponse,
   DeleteStackInstancesCommandOutput as DeleteStackInstancesResponse,
+  DeleteStackSetCommandOutput as DeleteStackSetResponse,
   DeregisterTypeCommandOutput as DeregisterTypeResponse,
   DescribeOrganizationsAccessCommandOutput as DescribeOrganizationsAccessResponse,
   DescribeStackInstanceCommandOutput as DescribeStackInstanceResponse,
@@ -20,6 +21,9 @@ import {
   ListStackInstancesCommandOutput as ListStackInstancesResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
   ListStacksCommandOutput as ListStacksResponse,
+  ListStackSetOperationResultsCommandOutput as ListStackSetOperationResultsResponse,
+  ListStackSetOperationsCommandOutput as ListStackSetOperationsResponse,
+  ListStackSetsCommandOutput as ListStackSetsResponse,
   ListTypesCommandOutput as ListTypesResponse,
   RegisterTypeCommandOutput as RegisterTypeResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
@@ -77,6 +81,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeleteStackInstances CloudFormation: DeleteStackInstances}
    */
   DeleteStackInstances: (input: { OperationId: string, Regions: any[], RetainStacks: boolean, StackSetName: string, Accounts?: any[], CallAs?: string, DeploymentTargets?: Record<string, any>, OperationPreferences?: Record<string, any> }) => Promise<DeleteStackInstancesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackSet.html CloudFormation: DeleteStackSet}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeleteStackSet CloudFormation: DeleteStackSet}
+   */
+  DeleteStackSet: (input: { StackSetName: string, CallAs?: string }) => Promise<DeleteStackSetResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeregisterType.html CloudFormation: DeregisterType}
@@ -139,6 +149,24 @@ declare interface AwsLiteCloudFormation {
   ListStacks: (input: { NextToken?: string, StackStatusFilter?: any[], paginate?: boolean | string }) => Promise<ListStacksResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperationResults.html CloudFormation: ListStackSetOperationResults}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackSetOperationResults CloudFormation: ListStackSetOperationResults}
+   */
+  ListStackSetOperationResults: (input: { StackSetName: string, OperationId: string, CallAs?: string, Filters?: any[], MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListStackSetOperationResultsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperations.html CloudFormation: ListStackSetOperations}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackSetOperations CloudFormation: ListStackSetOperations}
+   */
+  ListStackSetOperations: (input: { StackSetName: string, CallAs?: string, MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListStackSetOperationsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSets.html CloudFormation: ListStackSets}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackSets CloudFormation: ListStackSets}
+   */
+  ListStackSets: (input: { CallAs?: string, MaxResults?: number, NextToken?: string, Status?: string, paginate?: boolean | string }) => Promise<ListStackSetsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypes.html CloudFormation: ListTypes}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListTypes CloudFormation: ListTypes}
    */
@@ -189,6 +217,7 @@ export type {
   DeactivateTypeResponse,
   DeleteStackResponse,
   DeleteStackInstancesResponse,
+  DeleteStackSetResponse,
   DeregisterTypeResponse,
   DescribeOrganizationsAccessResponse,
   DescribeStackInstanceResponse,
@@ -199,6 +228,9 @@ export type {
   ListStackInstancesResponse,
   ListStackResourcesResponse,
   ListStacksResponse,
+  ListStackSetOperationResultsResponse,
+  ListStackSetOperationsResponse,
+  ListStackSetsResponse,
   ListTypesResponse,
   RegisterTypeResponse,
   UpdateStackResponse,
