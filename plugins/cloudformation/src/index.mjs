@@ -139,6 +139,7 @@ const CancelUpdateStack = {
     return {
       query: {
         Action: 'CancelUpdateStack',
+        Version,
         ...params,
       },
     }
@@ -193,6 +194,7 @@ const CreateChangeSet = {
     return {
       query: {
         Action: 'CreateChangeSet',
+        Version,
         ...querystringifyParams(params),
       },
     }
@@ -258,6 +260,7 @@ const CreateStackInstances = {
     return {
       query: {
         Action: 'CreateStackInstances',
+        Version,
         ...querystringifyParams(params),
       },
     }
@@ -288,6 +291,7 @@ const CreateStackSet = {
     return {
       query: {
         Action: 'CreateStackSet',
+        Version,
         ...querystringifyParams(params),
       },
     }
@@ -354,6 +358,7 @@ const DeleteStack = {
     return {
       query: {
         Action: 'DeleteStack',
+        Version,
         ...params,
       },
     }
@@ -378,6 +383,7 @@ const DeleteStackInstances = {
     return {
       query: {
         Action: 'DeleteStackInstances',
+        Version,
         ...querystringifyParams(params),
       },
     }
@@ -395,6 +401,7 @@ const DeleteStackSet = {
     return {
       query: {
         Action: 'DeleteStackSet',
+        Version,
         ...params,
       },
     }
@@ -414,6 +421,7 @@ const DeregisterType = {
     return {
       query: {
         Action: 'DeregisterType',
+        Version,
         ...params,
       },
     }
@@ -612,6 +620,7 @@ const DescribeStackInstance = {
     return {
       query: {
         Action: 'DescribeStackInstance',
+        Version,
         ...params,
       },
     }
@@ -683,6 +692,7 @@ const DescribeStackResources = {
     return {
       query: {
         Action: 'DescribeStackResources',
+        Version,
         ...params,
       },
     }
@@ -706,6 +716,7 @@ const DescribeStacks = {
   request: async (params) => {
     const query = {
       Action: 'DescribeStacks',
+      Version,
       ...params,
     }
     const { paginate } = params
@@ -747,6 +758,7 @@ const DescribeStackSet = {
     return {
       query: {
         Action: 'DescribeStackSet',
+        Version,
         ...params,
       },
     }
@@ -791,6 +803,7 @@ const DescribeType = {
     return {
       query: {
         Action: 'DescribeType',
+        Version,
         ...params,
       },
     }
@@ -889,6 +902,7 @@ const ListStackInstances = {
   request: (params) => {
     const query = {
       Action: 'ListStackInstances',
+      Version,
       ...querystringifyParams(params),
     }
     const { paginate } = params
@@ -923,6 +937,7 @@ const ListStackResources = {
   request: async (params) => {
     const query = {
       Action: 'ListStackResources',
+      Version,
       ...params,
     }
     const { paginate } = params
@@ -957,6 +972,7 @@ const ListStacks = {
   request: (params) => {
     const query = {
       Action: 'ListStacks',
+      Version,
       ...querystringifyParams(params),
     }
     const { paginate } = params
@@ -995,6 +1011,7 @@ const ListStackSetOperationResults = {
   request: (params) => {
     const query = {
       Action: 'ListStackSetOperationResults',
+      Version,
       ...querystringifyParams(params),
     }
     const { paginate } = params
@@ -1062,6 +1079,7 @@ const ListStackSets = {
   request: (params) => {
     let query = {
       Action: 'ListStackSets',
+      Version,
       ...params,
     }
     let { paginate } = params
@@ -1101,6 +1119,7 @@ const ListTypeRegistrations = {
   request: (params) => {
     const query = {
       Action: 'ListTypeRegistrations',
+      Version,
       ...params,
     }
     const { paginate } = params
@@ -1134,6 +1153,7 @@ const ListTypes = {
   request: (params) => {
     const query = {
       Action: 'ListTypes',
+      Version,
       ...querystringifyParams(params),
     }
     const { paginate } = params
@@ -1171,6 +1191,7 @@ const RegisterType = {
     return {
       query: {
         Action: 'RegisterType',
+        Version,
         ...querystringifyParams(params),
       },
     }
@@ -1254,7 +1275,6 @@ const UpdateTerminationProtection = {
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: qs.stringify({
         Action: 'UpdateTerminationProtection',
-        Version,
         ...params,
       }),
     }
