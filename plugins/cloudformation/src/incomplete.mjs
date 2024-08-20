@@ -1,15 +1,12 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/'
 export default {
-  // DeleteChangeSet:                   { disabled, awsDoc: docRoot + 'API_DeleteChangeSet.html' },
-  // DescribeAccountLimits:             { disabled, awsDoc: docRoot + 'API_DescribeAccountLimits.html' },
   DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' }, // TODO: test
-  DescribeChangeSetHooks:            { disabled, awsDoc: docRoot + 'API_DescribeChangeSetHooks.html' },
-  DescribePublisher:                 { disabled, awsDoc: docRoot + 'API_DescribePublisher.html' },
-  DescribeStackDriftDetectionStatus: { disabled, awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html' },
-  DescribeStackEvents:               { disabled, awsDoc: docRoot + 'API_DescribeStackEvents.html' },
-  DescribeStackResource:             { disabled, awsDoc: docRoot + 'API_DescribeStackResource.html' },
-  DescribeStackResourceDrifts:       { disabled, awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html' },
+  DescribeChangeSetHooks:            { disabled, awsDoc: docRoot + 'API_DescribeChangeSetHooks.html' }, // TODO: test
+  DescribeStackDriftDetectionStatus: { disabled, awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html' }, // TODO: test
+  DescribeStackResource:             { disabled, awsDoc: docRoot + 'API_DescribeStackResource.html' }, // TODO: test
+  // TODO: DescribeResourceScan
+  DescribeStackResourceDrifts:       { disabled, awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html' }, // TODO: test
   DescribeStackSetOperation:         { disabled, awsDoc: docRoot + 'API_DescribeStackSetOperation.html' },
   DescribeTypeRegistration:          { disabled, awsDoc: docRoot + 'API_DescribeTypeRegistration.html' },
   DetectStackDrift:                  { disabled, awsDoc: docRoot + 'API_DetectStackDrift.html' },

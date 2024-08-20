@@ -59,7 +59,8 @@ const ParameterOverrides = { ...arr, comment: 'Array of `Parameter` objects defi
 const Description = { ...str, comment: 'Description' }
 const ChangeSetName = { ...str, required, comment: 'User created ID for the change set' }
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-// const valIteratorPaginate = { ...str, comment: 'Enable iterator pagination; use this instead of making your own individual pagination requests' }
+const valIteratorPaginate = { ...str, comment: 'Enable iterator pagination; use this instead of making your own individual pagination requests' }
+const LogicalResourceId = { ...str, comment: 'Logical name of a resource' }
 
 const Version = '2010-05-15'
 
@@ -451,39 +452,69 @@ const DescribeAccountLimits = {
 }
 
 // TODO: test
-// const DescribeChangeSet = {
-//   awsDoc: docRoot + 'API_DescribeChangeSet.html',
-//   validate: {
-//     ChangeSetName,
-//     IncludePropertyValues: { ...bool, comment: 'Set to `true` to include property values in the response' },
-//     NextToken,
-//     StackName: { ...str, comment: 'Stack name; must be provided if `ChangeSetName` is not an ARN' },
-//     paginate: valIteratorPaginate,
-//   },
-//   request: (params) => {
-//     const query = {
-//       Action: 'DescribeChangeSet',
-//       Version,
-//       ...params,
-//     }
-//     const { paginate } = params
-//     if (paginate) delete query.paginate
-//     return {
-//       query,
-//       paginate,
-//       paginator: {
-//         cursor: 'NextToken',
-//         token: 'DescribeChangeSetResult.NextToken',
-//         type: 'query',
-//       },
-//     }
-//   },
-//   response: ({ payload }) => {
-//     const  DescribeChangeSetResult = normalizeResponse(payload.DescribeChangeSetResult)
-//     if (DescribeChangeSetResult.Changes) DescribeChangeSetResult.Changes.map(i => normalizeResponse(i, 1))
-//     return DescribeChangeSetResult
-//   },
-// }
+const DescribeChangeSet = {
+  awsDoc: docRoot + 'API_DescribeChangeSet.html',
+  validate: {
+    ChangeSetName,
+    IncludePropertyValues: { ...bool, comment: 'Set to `true` to include property values in the response' },
+    NextToken,
+    StackName: { ...str, comment: 'Stack name; must be provided if `ChangeSetName` is not an ARN' },
+    paginate: valIteratorPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'DescribeChangeSet',
+      Version,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'DescribeChangeSetResult.NextToken',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const  DescribeChangeSetResult = normalizeResponse(payload.DescribeChangeSetResult)
+    if (DescribeChangeSetResult.Changes) DescribeChangeSetResult.Changes.map(i => normalizeResponse(i, 1))
+    return DescribeChangeSetResult
+  },
+}
+
+// TODO: test
+const DescribeChangeSetHooks = {
+  awsDoc: docRoot + 'API_DescribeChangeSetHooks.html',
+  validate: {
+    ChangeSetName,
+    StackName: { ...StackName, required: false },
+    NextToken,
+    LogicalResourceId,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'DescribeChangeSetHooks',
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'DescribeChangeSetResult.NextToken',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => payload,
+}
 
 const DescribeOrganizationsAccess = {
   awsDoc: docRoot + 'API_DescribeOrganizationsAccess.html',
@@ -499,6 +530,74 @@ const DescribeOrganizationsAccess = {
     }
   },
   response: ({ payload }) => payload.DescribeOrganizationsAccessResult,
+}
+
+const DescribePublisher = {
+  awsDoc: docRoot + 'API_DescribePublisher.html',
+  validate: {
+    PublisherId: { ...PublisherId, required },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribePublisher',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DescribePublisherResult,
+}
+
+// TODO: test
+const DescribeStackDriftDetectionStatus = {
+  awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html',
+  validate: {
+    StackDriftDetectionId: { ...str, required, comment: 'Stack drift detection ID' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeStackDriftDetectionStatus',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DescribeStackDriftDetectionStatusResult,
+}
+
+const DescribeStackEvents = {
+  awsDoc: docRoot + 'API_DescribeStackEvents.html',
+  validate: {
+    StackName,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'DescribeStackEvents',
+      Version,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'DescribeStackEventsResult.NextToken',
+        accumulator: 'DescribeStackEventsResult.StackEvents.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { DescribeStackEventsResult, NextToken } = payload
+    const result = { StackEvents: deMemberify(DescribeStackEventsResult.StackEvents) }
+    if (NextToken) result.NextToken = NextToken
+    return  result
+  },
 }
 
 const DescribeStackInstance = {
@@ -520,11 +619,29 @@ const DescribeStackInstance = {
   response: ({ payload }) => payload.DescribeStackInstanceResult,
 }
 
+const DescribeStackResource = {
+  awsDoc: docRoot + 'API_DescribeStackResource.html',
+  validate: {
+    LogicalResourceId: { ...LogicalResourceId, required },
+    StackName,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeStackResource',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DescribeStackResourceResult,
+}
+
 const DescribeStackResources = {
   awsDoc: docRoot + 'API_DescribeStackResources.html',
   validate: {
     StackName: { ...StackName, required: false },
-    LogicalResourceId: { ...str, comment: 'Logical name of a resource' },
+    LogicalResourceId,
     PhysicalResourceId: { ...str, comment: 'Physical name or ID of a resource; if you do not specify `PhysicalResourceId`, you must specify `StackName`' },
   },
   request: async (params) => {
@@ -843,7 +960,7 @@ const ListStackSets = {
   },
 }
 
-/* TODO: test
+// TODO: test
 const ListTypeRegistrations = {
   awsDoc: docRoot + 'API_ListTypeRegistrations.html',
   validate: {
@@ -875,7 +992,7 @@ const ListTypeRegistrations = {
   },
   response: ({ payload }) => payload.ListTypeRegistrationsResult,
 }
-*/
+
 
 const ListTypes = {
   awsDoc: docRoot + 'API_ListTypes.html',
@@ -1042,9 +1159,14 @@ export default {
     DeleteStackSet,
     DeregisterType,
     DescribeAccountLimits,
-    // DescribeChangeSet,
+    DescribeChangeSet,
+    DescribeChangeSetHooks,
     DescribeOrganizationsAccess,
+    DescribePublisher,
+    DescribeStackDriftDetectionStatus,
+    DescribeStackEvents,
     DescribeStackInstance,
+    DescribeStackResource,
     DescribeStackResources,
     DescribeStacks,
     DescribeStackSet,
@@ -1055,7 +1177,7 @@ export default {
     ListStackSetOperationResults,
     ListStackSetOperations,
     ListStackSets,
-    // ListTypeRegistrations,
+    ListTypeRegistrations,
     ListTypes,
     RegisterType,
     UpdateStack,

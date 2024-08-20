@@ -19,6 +19,8 @@ import {
   DeregisterTypeCommandOutput as DeregisterTypeResponse,
   DescribeAccountLimitsCommandOutput as DescribeAccountLimitsResponse,
   DescribeOrganizationsAccessCommandOutput as DescribeOrganizationsAccessResponse,
+  DescribePublisherCommandOutput as DescribePublisherResponse,
+  DescribeStackEventsCommandOutput as DescribeStackEventsResponse,
   DescribeStackInstanceCommandOutput as DescribeStackInstanceResponse,
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
   DescribeStacksCommandOutput as DescribeStacksResponse,
@@ -141,6 +143,18 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeOrganizationsAccess CloudFormation: DescribeOrganizationsAccess}
    */
   DescribeOrganizationsAccess: (input: { CallAs?: string }) => Promise<DescribeOrganizationsAccessResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribePublisher.html CloudFormation: DescribePublisher}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribePublisher CloudFormation: DescribePublisher}
+   */
+  DescribePublisher: (input: { PublisherId: string }) => Promise<DescribePublisherResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackEvents.html CloudFormation: DescribeStackEvents}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackEvents CloudFormation: DescribeStackEvents}
+   */
+  DescribeStackEvents: (input: { StackName: string, NextToken?: string, paginate?: boolean | string }) => Promise<DescribeStackEventsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackInstance.html CloudFormation: DescribeStackInstance}
@@ -268,6 +282,8 @@ export type {
   DeregisterTypeResponse,
   DescribeAccountLimitsResponse,
   DescribeOrganizationsAccessResponse,
+  DescribePublisherResponse,
+  DescribeStackEventsResponse,
   DescribeStackInstanceResponse,
   DescribeStackResourcesResponse,
   DescribeStacksResponse,
