@@ -637,6 +637,41 @@ const DescribeStackResource = {
   response: ({ payload }) => payload.DescribeStackResourceResult,
 }
 
+// TODO: test
+const DescribeStackResourceDrifts = {
+  awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html',
+  validate: {
+    StackName,
+    MaxResults,
+    NextToken,
+    StackResourceDriftStatusFilters: { ...arr, comment: 'Specify filters for results; can contain: `DELETED`, `MODIFIED`, `IN_SYNC`, `NOT_CHECKED`' },
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'DescribeStackResourceDrifts',
+      Version,
+      ...querystringifyParams(params),
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'DescribeStackResourceDriftsResult.NextToken',
+        accumulator: 'DescribeStackResourceDriftsResult.StackResourceDrifts.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const result = normalizeResponse(payload, 1)
+    return result
+  },
+}
+
 const DescribeStackResources = {
   awsDoc: docRoot + 'API_DescribeStackResources.html',
   validate: {
@@ -723,6 +758,25 @@ const DescribeStackSet = {
   },
 }
 
+const DescribeStackSetOperation = {
+  awsDoc: docRoot + 'API_DescribeStackSetOperation.html',
+  validate: {
+    OperationId,
+    StackSetName,
+    CallAs,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeStackSetOperation',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DescribeStackSetOperationResult,
+}
+
 const DescribeType = {
   awsDoc: docRoot + 'API_DescribeType.html',
   validate: {
@@ -742,6 +796,83 @@ const DescribeType = {
     }
   },
   response: ({ payload }) => payload.DescribeTypeResult,
+}
+
+const DescribeTypeRegistration = {
+  awsDoc: docRoot + 'API_DescribeTypeRegistration.html',
+  validate: {
+    RegistrationToken: { ...str, required, comment: 'ID of the registration request returned from `RegisterType`' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeTypeRegistration',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.DescribeTypeRegistrationResult,
+}
+
+const DetectStackDrift = {
+  awsDoc: docRoot + 'API_DetectStackDrift.html',
+  validate: {
+    StackName,
+    LogicalResourceIds: { ...arr, comment: 'Filter results by resources' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DetectStackDrift',
+        Version,
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => payload.DetectStackDriftResult,
+}
+
+const DetectStackResourceDrift = {
+  awsDoc: docRoot + 'API_DetectStackResourceDrift.html',
+  validate: {
+    LogicalResourceId,
+    StackName,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DetectStackResourceDrift',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const maxDepth = 1
+    const DetectStackResourceDriftResult = normalizeResponse(payload.DetectStackResourceDriftResult, maxDepth)
+    return DetectStackResourceDriftResult
+  },
+}
+
+const DetectStackSetDrift = {
+  awsDoc: docRoot + 'API_DetectStackSetDrift.html',
+  validate: {
+    StackSetName,
+    CallAs,
+    OperationId,
+    OperationPreferences,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DetectStackSetDrift',
+        Version,
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => payload.DetectStackSetDriftResult,
 }
 
 const ListStackInstances = {
@@ -880,11 +1011,9 @@ const ListStackSetOperationResults = {
     }
   },
   response: ({ payload }) => {
-    const { ListStackSetOperationResultsResult, NextToken } = payload
-    const Summaries = deMemberify(ListStackSetOperationResultsResult.Summaries)
-    const result = { Summaries }
-    if (NextToken) result.NextToken = NextToken
-    return result
+    const ListStackSetOperationResultsResult = normalizeResponse(payload.ListStackSetOperationResultsResult)
+    if (!Array.isArray(ListStackSetOperationResultsResult.Summaries)) ListStackSetOperationResultsResult.Summaries = []
+    return ListStackSetOperationResultsResult
   },
 }
 
@@ -900,6 +1029,7 @@ const ListStackSetOperations = {
   request: (params) => {
     let query = {
       Action: 'ListStackSetOperations',
+      Version,
       ...params,
     }
     let { paginate } = params
@@ -916,11 +1046,7 @@ const ListStackSetOperations = {
     }
   },
   response: ({ payload }) => {
-    const { ListStackSetOperationsResult, NextToken } = payload
-    const Summaries = deMemberify(ListStackSetOperationsResult.Summaries)
-    const result = { Summaries }
-    if (NextToken) result.NextToken = NextToken
-    return result
+    return normalizeResponse(payload.ListStackSetOperationsResult)
   },
 }
 
@@ -992,7 +1118,6 @@ const ListTypeRegistrations = {
   },
   response: ({ payload }) => payload.ListTypeRegistrationsResult,
 }
-
 
 const ListTypes = {
   awsDoc: docRoot + 'API_ListTypes.html',
@@ -1167,10 +1292,16 @@ export default {
     DescribeStackEvents,
     DescribeStackInstance,
     DescribeStackResource,
+    DescribeStackResourceDrifts,
     DescribeStackResources,
     DescribeStacks,
     DescribeStackSet,
+    DescribeStackSetOperation,
     DescribeType,
+    DescribeTypeRegistration,
+    DetectStackDrift,
+    DetectStackResourceDrift,
+    DetectStackSetDrift,
     ListStackInstances,
     ListStackResources,
     ListStacks,

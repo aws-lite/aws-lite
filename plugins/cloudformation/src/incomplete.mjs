@@ -7,11 +7,9 @@ export default {
   DescribeStackResource:             { disabled, awsDoc: docRoot + 'API_DescribeStackResource.html' }, // TODO: test
   // TODO: DescribeResourceScan
   DescribeStackResourceDrifts:       { disabled, awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html' }, // TODO: test
-  DescribeStackSetOperation:         { disabled, awsDoc: docRoot + 'API_DescribeStackSetOperation.html' },
-  DescribeTypeRegistration:          { disabled, awsDoc: docRoot + 'API_DescribeTypeRegistration.html' },
-  DetectStackDrift:                  { disabled, awsDoc: docRoot + 'API_DetectStackDrift.html' },
-  DetectStackResourceDrift:          { disabled, awsDoc: docRoot + 'API_DetectStackResourceDrift.html' },
-  DetectStackSetDrift:               { disabled, awsDoc: docRoot + 'API_DetectStackSetDrift.html' },
+  DescribeTypeRegistration:          { disabled, awsDoc: docRoot + 'API_DescribeTypeRegistration.html' }, // TODO: test
+  DetectStackDrift:                  { disabled, awsDoc: docRoot + 'API_DetectStackDrift.html' }, // TODO: test
+  DetectStackResourceDrift:          { disabled, awsDoc: docRoot + 'API_DetectStackResourceDrift.html' }, // TODO: test
   EstimateTemplateCost:              { disabled, awsDoc: docRoot + 'API_EstimateTemplateCost.html' },
   ExecuteChangeSet:                  { disabled, awsDoc: docRoot + 'API_ExecuteChangeSet.html' },
   GetStackPolicy:                    { disabled, awsDoc: docRoot + 'API_GetStackPolicy.html' },

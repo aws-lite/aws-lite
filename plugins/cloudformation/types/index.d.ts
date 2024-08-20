@@ -25,7 +25,9 @@ import {
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
   DescribeStacksCommandOutput as DescribeStacksResponse,
   DescribeStackSetCommandOutput as DescribeStackSetResponse,
+  DescribeStackSetOperationCommandOutput as DescribeStackSetOperationResponse,
   DescribeTypeCommandOutput as DescribeTypeResponse,
+  DetectStackSetDriftCommandOutput as DetectStackSetDriftResponse,
   ListStackInstancesCommandOutput as ListStackInstancesResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
   ListStacksCommandOutput as ListStacksResponse,
@@ -181,10 +183,22 @@ declare interface AwsLiteCloudFormation {
   DescribeStackSet: (input: { StackSetName: string, CallAs?: string }) => Promise<DescribeStackSetResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackSetOperation.html CloudFormation: DescribeStackSetOperation}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackSetOperation CloudFormation: DescribeStackSetOperation}
+   */
+  DescribeStackSetOperation: (input: { OperationId: string, StackSetName: string, CallAs?: string }) => Promise<DescribeStackSetOperationResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeType.html CloudFormation: DescribeType}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeType CloudFormation: DescribeType}
    */
   DescribeType: (input: { Arn?: string, PublicVersionNumber?: string, PublisherId?: string, Type?: string, TypeName?: string, VersionId?: string }) => Promise<DescribeTypeResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackSetDrift.html CloudFormation: DetectStackSetDrift}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DetectStackSetDrift CloudFormation: DetectStackSetDrift}
+   */
+  DetectStackSetDrift: (input: { StackSetName: string, CallAs?: string, OperationId: string, OperationPreferences?: Record<string, any> }) => Promise<DetectStackSetDriftResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html CloudFormation: ListStackInstances}
@@ -288,7 +302,9 @@ export type {
   DescribeStackResourcesResponse,
   DescribeStacksResponse,
   DescribeStackSetResponse,
+  DescribeStackSetOperationResponse,
   DescribeTypeResponse,
+  DetectStackSetDriftResponse,
   ListStackInstancesResponse,
   ListStackResourcesResponse,
   ListStacksResponse,
