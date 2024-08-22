@@ -11,12 +11,13 @@ export default {
   DetectStackDrift:                  { disabled, awsDoc: docRoot + 'API_DetectStackDrift.html' }, // TODO: test
   DetectStackResourceDrift:          { disabled, awsDoc: docRoot + 'API_DetectStackResourceDrift.html' }, // TODO: test
   // TODO: GetGeneratedTemplate
-  GetTemplateSummary:                { disabled, awsDoc: docRoot + 'API_GetTemplateSummary.html' },
-  ImportStacksToStackSet:            { disabled, awsDoc: docRoot + 'API_ImportStacksToStackSet.html' },
-  ListChangeSets:                    { disabled, awsDoc: docRoot + 'API_ListChangeSets.html' },
-  ListExports:                       { disabled, awsDoc: docRoot + 'API_ListExports.html' },
-  ListImports:                       { disabled, awsDoc: docRoot + 'API_ListImports.html' },
-  ListStackInstanceResourceDrifts:   { disabled, awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html' },
+  ImportStacksToStackSet:            { disabled, awsDoc: docRoot + 'API_ImportStacksToStackSet.html' }, // TODO: test
+  // TODO: ListGeneratedTemplates
+  ListImports:                       { disabled, awsDoc: docRoot + 'API_ListImports.html' }, // TODO: test
+  // TODO: ListResourceScanRelatedResources
+  // TODO: ListResourceScanResources
+  // TODO: ListResourceScans
+  ListStackInstanceResourceDrifts:   { disabled, awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html' }, // TODO: test
   ListTypeRegistrations:             { disabled, awsDoc: docRoot + 'API_ListTypeRegistrations.html' }, // TODO: test
   ListTypeVersions:                  { disabled, awsDoc: docRoot + 'API_ListTypeVersions.html' },
   PublishType:                       { disabled, awsDoc: docRoot + 'API_PublishType.html' },

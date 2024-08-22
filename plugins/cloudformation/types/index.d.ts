@@ -31,7 +31,10 @@ import {
   EstimateTemplateCostCommandOutput as EstimateTemplateCostResponse,
   GetStackPolicyCommandOutput as GetStackPolicyResponse,
   GetTemplateCommandOutput as GetTemplateResponse,
+  GetTemplateSummaryCommandOutput as GetTemplateSummaryResponse,
   ExecuteChangeSetCommandOutput as ExecuteChangeSetResponse,
+  ListChangeSetsCommandOutput as ListChangeSetsResponse,
+  ListExportsCommandOutput as ListExportsResponse,
   ListStackInstancesCommandOutput as ListStackInstancesResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
   ListStacksCommandOutput as ListStacksResponse,
@@ -223,10 +226,28 @@ declare interface AwsLiteCloudFormation {
   GetTemplate: (input: { ChangeSetName?: string, StackName?: string, TemplateStage?: string }) => Promise<GetTemplateResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetTemplateSummary.html CloudFormation: GetTemplateSummary}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#GetTemplateSummary CloudFormation: GetTemplateSummary}
+   */
+  GetTemplateSummary: (input: { CallAs?: string, StackName?: string, StackSetName?: string, TemplateBody?: string | Record<string, any>, TemplateSummaryConfig?: Record<string, any>, TemplateURL?: string }) => Promise<GetTemplateSummaryResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ExecuteChangeSet.html CloudFormation: ExecuteChangeSet}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ExecuteChangeSet CloudFormation: ExecuteChangeSet}
    */
   ExecuteChangeSet: (input: { ChangeSetName: string, ClientRequestToken?: string, DisableRollback?: boolean, RetainExceptOnCreate?: boolean, StackName?: string }) => Promise<ExecuteChangeSetResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListChangeSets.html CloudFormation: ListChangeSets}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListChangeSets CloudFormation: ListChangeSets}
+   */
+  ListChangeSets: (input: { StackName: string, NextToken?: string, paginate?: boolean | string }) => Promise<ListChangeSetsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListExports.html CloudFormation: ListExports}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListExports CloudFormation: ListExports}
+   */
+  ListExports: (input: { NextToken?: string, paginate?: boolean | string }) => Promise<ListExportsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html CloudFormation: ListStackInstances}
@@ -336,7 +357,10 @@ export type {
   EstimateTemplateCostResponse,
   GetStackPolicyResponse,
   GetTemplateResponse,
+  GetTemplateSummaryResponse,
   ExecuteChangeSetResponse,
+  ListChangeSetsResponse,
+  ListExportsResponse,
   ListStackInstancesResponse,
   ListStackResourcesResponse,
   ListStacksResponse,

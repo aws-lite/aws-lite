@@ -970,6 +970,181 @@ const GetTemplate = {
   },
 }
 
+const GetTemplateSummary = {
+  awsDoc: docRoot + 'API_GetTemplateSummary.html',
+  validate: {
+    CallAs,
+    StackName: { ...StackName, required: false },
+    StackSetName: { ...StackSetName, required: false },
+    TemplateBody,
+    TemplateSummaryConfig: { ...obj, comment: 'Specify extra options', ref: docRoot + 'API_TemplateSummaryConfig.html' },
+    TemplateURL,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'GetTemplateSummary',
+      Version,
+      ...params,
+    }
+    const { TemplateBody } = params
+    if (TemplateBody) query.TemplateBody = JSON.stringify(TemplateBody)
+    return { query }
+  },
+  response: ({ payload }) => {
+    const maxDepth = 2
+    return deSerializeObject(payload.GetTemplateSummaryResult, maxDepth)
+  },
+}
+
+// TODO: test
+const ImportStacksToStackSet = {
+  awsDoc: docRoot + 'API_ImportStacksToStackSet.html',
+  validate: {
+    StackSetName,
+    CallAs,
+    OperationId: { ...OperationId, required: false },
+    OperationPreferences,
+    OrganizationalUnitIds: { ...arr, comment: 'List of organizational unit IDs to be mapped as the imported stacks deployment targets', ref: docRoot + 'API_ImportStacksToStackSet.html#API_ImportStacksToStackSet_RequestParameters' },
+    StackIds: { ...arr, comment: 'Array of at most 10 stack IDs to be imported' },
+    StackIdsUrl: { ...str, comment: 'S3 URL to a list of stack IDs to be imported' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'ImportStacksToStackSet',
+        Version,
+        ...querystringifyParams(params),
+      },
+    }
+  },
+  response: ({ payload }) => payload.ImportStacksToStackSetResult,
+}
+
+const ListChangeSets = {
+  awsDoc: docRoot + 'API_ListChangeSets.html',
+  validate: {
+    StackName,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListChangeSets',
+      Version,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListChangeSetsResult.NextToken',
+        accumulator: 'ListChangeSetsResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => deSerializeObject(payload.ListChangeSetsResult),
+}
+
+const ListExports = {
+  awsDoc: docRoot + 'API_ListExports.html',
+  validate: {
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListExports',
+      Version,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListExportsResult.NextToken',
+        accumulator: 'ListExportsResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => deSerializeObject(payload.ListExportsResult),
+}
+
+// TODO: test
+const ListImports = {
+  awsDoc: docRoot + 'API_ListImports.html',
+  validate: {
+    ExportName: { ...str, required, comment: 'Name of the exported value' },
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListImports',
+      Version,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListImportsResult.NextToken',
+        accumulator: 'ListImportsResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => deSerializeObject(payload.ListImportsResult),
+}
+
+// TODO: test
+const ListStackInstanceResourceDrifts = {
+  awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html',
+  validate: {
+    OperationId,
+    StackInstanceAccount: { ...StackInstanceAccount, required },
+    StackInstanceRegion: { ...StackInstanceRegion, required },
+    StackSetName,
+    CallAs,
+    MaxResults,
+    NextToken,
+    StackInstanceResourceDriftStatuses: { ...arr, comment: 'Filter results by resource drift status; can contain; `DELETED`, `MODIFIED`, `IN_SYNC`, `NOT_CHECKED`' },
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListStackInstanceResourceDrifts',
+      Version,
+      ...querystringifyParams(params),
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListStackInstanceResourceDriftsResult.NextToken',
+        accumulator: 'ListStackInstanceResourceDriftsResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const maxDepth = 1
+    return deSerializeObject(payload.ListStackInstanceResourceDriftsResult, maxDepth)
+  },
+}
+
 const ListStackInstances = {
   awsDoc: docRoot + 'API_ListStackInstances.html',
   validate: {
@@ -1383,7 +1558,13 @@ export default {
     EstimateTemplateCost,
     GetStackPolicy,
     GetTemplate,
+    GetTemplateSummary,
     ExecuteChangeSet,
+    ImportStacksToStackSet,
+    ListChangeSets,
+    ListExports,
+    ListImports,
+    ListStackInstanceResourceDrifts,
     ListStackInstances,
     ListStackResources,
     ListStacks,

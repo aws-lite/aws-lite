@@ -45,6 +45,15 @@ const arrayProperties = {
   StagesAvailable: 'member',
   // GetTemplateSummary
   // Parameters: 'member',
+  AllowedValues: 'member',
+  // Capabilities: 'member',
+  ResourceTypes: 'member',
+  DeclaredTransforms: 'member',
+  ResourceIdentifierSummaries: 'member',
+  LogicalResourceIds: 'member',
+  ResourceIdentifiers: 'member',
+  Warnings: 'member',
+  UnrecognizedResourceTypes: 'member',
   // ListChangeSets
   Summaries: 'member',
   // ListExports
@@ -67,7 +76,7 @@ const arrayProperties = {
   StackResourceSummaries: 'member',
   // ListStacks
   StackSummaries: 'member',
-  ResourceTypes: 'member',
+  // ResourceTypes: 'member',
   // ListStackSetAutoDeploymentTargets
   // Summaries: 'member',
   // ListStackSetOperationResults
@@ -117,16 +126,14 @@ function querystringifyParams (obj) {
 }
 
 function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
-  if (maxDepth < 0) return
+  if (maxDepth < 0) return obj
   if (typeof obj === 'object') {
     Object.entries(obj).forEach(([ key, value ]) => {
       if (maxDepth > 0) deSerializeObject(value, maxDepth - 1)
-
       if (arrayProps[key]) {
         let temp = []
-
         if (value.member) temp = Array.isArray(value.member) ? value.member : [ value.member ]
-
+        if (maxDepth > 0) temp = temp.map(i => deSerializeObject(i, maxDepth - 1))
         obj[key] = temp
       }
     })
