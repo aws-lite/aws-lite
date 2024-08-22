@@ -242,8 +242,9 @@ Properties:
   - Name or ID of a stack set
 - **`AdministrationRoleARN` (string)**
   - ARN of the IAM role to use
-- **`AutoDeployment` (string)**
-  - Specify if stack sets automatically deploy to organization accounts that are added to the target organization; can be `SERVICE_MANAGED`
+- **`AutoDeployment` (object)**
+  - Specify if stack sets automatically deploy to organization accounts that are added to the target organization
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ManagedExecution.html)
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)

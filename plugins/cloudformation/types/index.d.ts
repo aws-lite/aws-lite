@@ -94,7 +94,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackSet.html CloudFormation: CreateStackSet}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#CreateStackSet CloudFormation: CreateStackSet}
    */
-  CreateStackSet: (input: { ClientRequestToken: string, StackSetName: string, AdministrationRoleARN?: string, AutoDeployment?: string, CallAs?: string, Capabilities?: any[], Description?: string, ExecutionRoleName?: string, ManagedExecution?: Record<string, any>, Parameters?: any[], PermissionModel?: string, StackId?: string, Tags?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string }) => Promise<CreateStackSetResponse>
+  CreateStackSet: (input: { ClientRequestToken: string, StackSetName: string, AdministrationRoleARN?: string, AutoDeployment?: Record<string, any>, CallAs?: string, Capabilities?: any[], Description?: string, ExecutionRoleName?: string, ManagedExecution?: Record<string, any>, Parameters?: any[], PermissionModel?: string, StackId?: string, Tags?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string }) => Promise<CreateStackSetResponse>
   /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeactivateOrganizationsAccess CloudFormation: DeactivateOrganizationsAccess} */
   DeactivateOrganizationsAccess: () => Promise<DeactivateOrganizationsAccessResponse>
   /**

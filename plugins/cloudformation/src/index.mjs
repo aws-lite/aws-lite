@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import { default as qs } from 'node:querystring'
-import { querystringifyParams, normalizeResponse } from './lib.mjs'
+import { querystringifyParams, deSerializeObject } from './lib.mjs'
 
 const service = 'cloudformation'
 const property = 'CloudFormation'
@@ -123,10 +123,7 @@ const BatchDescribeTypeConfigurations = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { BatchDescribeTypeConfigurationsResult } = payload
-    return normalizeResponse(BatchDescribeTypeConfigurationsResult)
-  },
+  response: ({ payload }) => deSerializeObject(payload.BatchDescribeTypeConfigurationsResult),
 }
 
 const CancelUpdateStack = {
@@ -274,7 +271,7 @@ const CreateStackSet = {
     ClientRequestToken: { ...ClientRequestToken, required },
     StackSetName,
     AdministrationRoleARN: { ...str, comment: 'ARN of the IAM role to use' },
-    AutoDeployment: { ...str, comment: 'Specify if stack sets automatically deploy to organization accounts that are added to the target organization; can be `SERVICE_MANAGED`' },
+    AutoDeployment: { ...obj, comment: 'Specify if stack sets automatically deploy to organization accounts that are added to the target organization', ref: docRoot + 'API_ManagedExecution.html' },
     CallAs,
     Capabilities,
     Description,
@@ -288,6 +285,10 @@ const CreateStackSet = {
     TemplateURL,
   },
   request: (params) => {
+    const { TemplateBody } = params
+    if (TemplateBody && typeof params.TemplateBody === 'object') {
+      params.TemplateBody = JSON.stringify(TemplateBody)
+    }
     return {
       query: {
         Action: 'CreateStackSet',
@@ -488,13 +489,14 @@ const DescribeChangeSet = {
     }
   },
   response: ({ payload }) => {
-    const  DescribeChangeSetResult = normalizeResponse(payload.DescribeChangeSetResult)
-    if (DescribeChangeSetResult.Changes) DescribeChangeSetResult.Changes.map(i => normalizeResponse(i, 1))
+    const maxDepth = 1
+    const DescribeChangeSetResult = deSerializeObject(payload.DescribeChangeSetResult)
+    if (DescribeChangeSetResult.Changes) DescribeChangeSetResult.Changes.map(i => deSerializeObject(i, maxDepth))
     return DescribeChangeSetResult
   },
 }
 
-// TODO: test
+// TODO: test (AWS docs missing for XML response)
 const DescribeChangeSetHooks = {
   awsDoc: docRoot + 'API_DescribeChangeSetHooks.html',
   validate: {
@@ -600,12 +602,7 @@ const DescribeStackEvents = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { DescribeStackEventsResult, NextToken } = payload
-    const result = { StackEvents: deMemberify(DescribeStackEventsResult.StackEvents) }
-    if (NextToken) result.NextToken = NextToken
-    return  result
-  },
+  response: ({ payload }) => deSerializeObject(payload.DescribeStackEventsResult),
 }
 
 const DescribeStackInstance = {
@@ -676,8 +673,8 @@ const DescribeStackResourceDrifts = {
     }
   },
   response: ({ payload }) => {
-    const result = normalizeResponse(payload, 1)
-    return result
+    const maxDepth = 1
+    return deSerializeObject(payload.DescribeStackResourceDriftsResult, maxDepth)
   },
 }
 
@@ -764,9 +761,8 @@ const DescribeStackSet = {
     }
   },
   response: ({ payload }) => {
-    const { DescribeStackSetResult } = payload
-    normalizeResponse(DescribeStackSetResult, 1)
-    return DescribeStackSetResult
+    const maxDepth = 1
+    return deSerializeObject(payload.DescribeStackSetResult, maxDepth)
   },
 }
 
@@ -863,8 +859,7 @@ const DetectStackResourceDrift = {
   },
   response: ({ payload }) => {
     const maxDepth = 1
-    const DetectStackResourceDriftResult = normalizeResponse(payload.DetectStackResourceDriftResult, maxDepth)
-    return DetectStackResourceDriftResult
+    return deSerializeObject(payload.DetectStackResourceDriftResult, maxDepth)
   },
 }
 
@@ -918,13 +913,7 @@ const ListStackInstances = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { ListStackInstancesResult, NextToken } = payload
-    const Summaries = deMemberify(ListStackInstancesResult.Summaries)
-    const result = { Summaries }
-    if (NextToken) result.NextToken = NextToken
-    return result
-  },
+  response: ({ payload }) => deSerializeObject(payload.ListStackInstancesResult),
 }
 
 const ListStackResources = {
@@ -988,13 +977,7 @@ const ListStacks = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { ListStacksResult, NextToken } = payload
-    const StackSummaries = deMemberify(ListStacksResult.StackSummaries)
-    const result = { StackSummaries }
-    if (NextToken) result.NextToken = NextToken
-    return result
-  },
+  response: ({ payload }) => deSerializeObject(payload.ListStacksResult),
 }
 
 const ListStackSetOperationResults = {
@@ -1027,11 +1010,7 @@ const ListStackSetOperationResults = {
       },
     }
   },
-  response: ({ payload }) => {
-    const ListStackSetOperationResultsResult = normalizeResponse(payload.ListStackSetOperationResultsResult)
-    if (!Array.isArray(ListStackSetOperationResultsResult.Summaries)) ListStackSetOperationResultsResult.Summaries = []
-    return ListStackSetOperationResultsResult
-  },
+  response: ({ payload }) => deSerializeObject(payload.ListStackSetOperationResultsResult),
 }
 
 const ListStackSetOperations = {
@@ -1062,9 +1041,7 @@ const ListStackSetOperations = {
       },
     }
   },
-  response: ({ payload }) => {
-    return normalizeResponse(payload.ListStackSetOperationsResult)
-  },
+  response: ({ payload }) => deSerializeObject(payload.ListStackSetOperationsResult),
 }
 
 const ListStackSets = {
@@ -1095,13 +1072,7 @@ const ListStackSets = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { ListStackSetsResult, NextToken } = payload
-    const Summaries = deMemberify(ListStackSetsResult.Summaries)
-    const result = { Summaries }
-    if (NextToken) result.NextToken = NextToken
-    return result
-  },
+  response: ({ payload }) => deSerializeObject(payload.ListStackSetsResult),
 }
 
 // TODO: test
@@ -1135,7 +1106,7 @@ const ListTypeRegistrations = {
       },
     }
   },
-  response: ({ payload }) => payload.ListTypeRegistrationsResult,
+  response: ({ payload }) => deSerializeObject(payload.ListTypeRegistrationsResult),
 }
 
 const ListTypes = {

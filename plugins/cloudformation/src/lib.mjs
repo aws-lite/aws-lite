@@ -5,6 +5,85 @@ const isLiteral = i => isString(i) || isBool(i) || isNum(i)
 const isArr = i => Array.isArray(i)
 const isObj = i => typeof i === 'object' && Object.keys(i).length
 
+// Notes on all response array properties
+// Seems everything is serialized as a 'member' property, can probably turn this into a set to reduce clutter
+const arrayProperties = {
+  // BatchDescribeTypeConfigurations
+  Errors: 'member',
+  TypeConfigurations: 'member',
+  UnprocessedTypeConfigurations: 'member',
+  // DescribeAccountLimits
+  AccountLimits: 'member',
+  // DescribeChangeSet
+  Parameters: 'member',
+  Changes: 'member',
+  Scope: 'member',
+  Details: 'member',
+  // DescribeChangeSetHooks
+  // TODO
+  // DescribeGeneratedTemplate
+  // TODO
+  // DescribeResourceScan
+  // TODO
+  // DescribeStackEvents
+  StackEvents: 'member',
+  // DescribeStackResourceDrifts
+  StackResourceDrifts: 'member',
+  PropertyDifferences: 'member',
+  // DescribeStackResources
+  StackResources: 'member',
+  // DescribeStacks
+  Stacks: 'member',
+  Outputs: 'member',
+  // DescribeStackSet
+  Capabilities: 'member',
+  // Parameters: 'member',
+  Tags: 'member',
+  // DetectStackResourceDrift
+  // PropertyDifferences: 'member',
+  // GetTemplateSummary
+  // Parameters: 'member',
+  // ListChangeSets
+  Summaries: 'member',
+  // ListExports
+  Exports: 'member',
+  // ListGeneratedTemplates
+  // TODO
+  // ListImports
+  Imports: 'member',
+  // ListResourceScanRelatedResources
+  // TODO
+  // ListResourceScanResources
+  // TODO
+  // ListResourceScans
+  // TODO
+  // ListStackInstanceResourceDrifts
+  // TODO
+  // ListStackInstances
+  // Summaries: 'member',
+  // ListStackResources
+  StackResourceSummaries: 'member',
+  // ListStacks
+  StackSummaries: 'member',
+  ResourceTypes: 'member',
+  // ListStackSetAutoDeploymentTargets
+  // Summaries: 'member',
+  // ListStackSetOperationResults
+  // Summaries: 'member',
+  // ListStackSetOperations
+  // Summaries: 'member',
+  // ListStackSets
+  // Summaries: 'member',
+  // ListTypeRegistrations
+  RegistrationTokenList: 'member',
+  // ListTypes
+  TypeSummaries: 'member',
+  // ListTypeVersions
+  TypeVersionSummaries: 'member',
+  // ValidateTemplate
+  // Parameters: 'member',
+}
+
 function querystringifyParams (obj) {
   const raw = {}
 
@@ -35,13 +114,19 @@ function querystringifyParams (obj) {
   return query
 }
 
-function normalizeResponse (obj, maxDepth = 0) {
+function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
   if (maxDepth < 0) return
   if (typeof obj === 'object') {
     Object.entries(obj).forEach(([ key, value ]) => {
-      if (maxDepth > 0) normalizeResponse(value, maxDepth - 1)
+      if (maxDepth > 0) deSerializeObject(value, maxDepth - 1)
 
-      if (typeof value === 'object' && value.member) obj[key] = Array.isArray(value.member) ? value.member : [ value.member ]
+      if (arrayProps[key]) {
+        let temp = []
+
+        if (value.member) temp = Array.isArray(value.member) ? value.member : [ value.member ]
+
+        obj[key] = temp
+      }
     })
   }
   return obj
@@ -49,5 +134,5 @@ function normalizeResponse (obj, maxDepth = 0) {
 
 export {
   querystringifyParams,
-  normalizeResponse,
+  deSerializeObject,
 }
