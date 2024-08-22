@@ -883,6 +883,93 @@ const DetectStackSetDrift = {
   response: ({ payload }) => payload.DetectStackSetDriftResult,
 }
 
+const EstimateTemplateCost = {
+  awsDoc: docRoot + 'API_EstimateTemplateCost.html',
+  validate: {
+    Parameters,
+    TemplateBody,
+    TemplateURL,
+  },
+  request: (params) => {
+    const { Parameters, TemplateBody, TemplateURL } = params
+    const query = {
+      Action: 'EstimateTemplateCost',
+      Version,
+    }
+    if (Parameters) Object.assign(query, querystringifyParams({ Parameters }))
+    if (TemplateBody) query.TemplateBody = JSON.stringify(TemplateBody)
+    if (TemplateURL) query.TemplateURL = TemplateURL
+    return { query }
+  },
+  response: ({ payload }) => payload.EstimateTemplateCostResult,
+}
+
+const ExecuteChangeSet = {
+  awsDoc: docRoot + 'API_ExecuteChangeSet.html',
+  validate: {
+    ChangeSetName,
+    ClientRequestToken,
+    DisableRollback,
+    RetainExceptOnCreate,
+    StackName: { ...StackName, required: false },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'ExecuteChangeSet',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const GetStackPolicy = {
+  awsDoc: docRoot + 'API_GetStackPolicy.html',
+  validate: {
+    StackName,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'GetStackPolicy',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const result = payload.GetStackPolicyResult ? payload.GetStackPolicyResult : {}
+    if (result.StackPolicyBody) result.StackPolicyBody = JSON.parse(result.StackPolicyBody)
+    return result
+  },
+}
+
+const GetTemplate = {
+  awsDoc: docRoot + 'API_GetTemplate.html',
+  validate: {
+    ChangeSetName: { ...ChangeSetName, required: false },
+    StackName: { ...StackName, required: false },
+    TemplateStage: { ...str, comment: 'Template stage; can be one of: `Original`, `Processed`' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'GetTemplate',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const result = deSerializeObject(payload.GetTemplateResult)
+    // TemplateBody is a JSON string nested in an XML
+    result.TemplateBody = JSON.parse(result.TemplateBody)
+    return result
+  },
+}
+
 const ListStackInstances = {
   awsDoc: docRoot + 'API_ListStackInstances.html',
   validate: {
@@ -1293,6 +1380,10 @@ export default {
     DetectStackDrift,
     DetectStackResourceDrift,
     DetectStackSetDrift,
+    EstimateTemplateCost,
+    GetStackPolicy,
+    GetTemplate,
+    ExecuteChangeSet,
     ListStackInstances,
     ListStackResources,
     ListStacks,

@@ -28,6 +28,10 @@ import {
   DescribeStackSetOperationCommandOutput as DescribeStackSetOperationResponse,
   DescribeTypeCommandOutput as DescribeTypeResponse,
   DetectStackSetDriftCommandOutput as DetectStackSetDriftResponse,
+  EstimateTemplateCostCommandOutput as EstimateTemplateCostResponse,
+  GetStackPolicyCommandOutput as GetStackPolicyResponse,
+  GetTemplateCommandOutput as GetTemplateResponse,
+  ExecuteChangeSetCommandOutput as ExecuteChangeSetResponse,
   ListStackInstancesCommandOutput as ListStackInstancesResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
   ListStacksCommandOutput as ListStacksResponse,
@@ -201,6 +205,30 @@ declare interface AwsLiteCloudFormation {
   DetectStackSetDrift: (input: { StackSetName: string, CallAs?: string, OperationId: string, OperationPreferences?: Record<string, any> }) => Promise<DetectStackSetDriftResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_EstimateTemplateCost.html CloudFormation: EstimateTemplateCost}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#EstimateTemplateCost CloudFormation: EstimateTemplateCost}
+   */
+  EstimateTemplateCost: (input: { Parameters?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string }) => Promise<EstimateTemplateCostResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetStackPolicy.html CloudFormation: GetStackPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#GetStackPolicy CloudFormation: GetStackPolicy}
+   */
+  GetStackPolicy: (input: { StackName: string }) => Promise<GetStackPolicyResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetTemplate.html CloudFormation: GetTemplate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#GetTemplate CloudFormation: GetTemplate}
+   */
+  GetTemplate: (input: { ChangeSetName?: string, StackName?: string, TemplateStage?: string }) => Promise<GetTemplateResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ExecuteChangeSet.html CloudFormation: ExecuteChangeSet}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ExecuteChangeSet CloudFormation: ExecuteChangeSet}
+   */
+  ExecuteChangeSet: (input: { ChangeSetName: string, ClientRequestToken?: string, DisableRollback?: boolean, RetainExceptOnCreate?: boolean, StackName?: string }) => Promise<ExecuteChangeSetResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html CloudFormation: ListStackInstances}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackInstances CloudFormation: ListStackInstances}
    */
@@ -305,6 +333,10 @@ export type {
   DescribeStackSetOperationResponse,
   DescribeTypeResponse,
   DetectStackSetDriftResponse,
+  EstimateTemplateCostResponse,
+  GetStackPolicyResponse,
+  GetTemplateResponse,
+  ExecuteChangeSetResponse,
   ListStackInstancesResponse,
   ListStackResourcesResponse,
   ListStacksResponse,

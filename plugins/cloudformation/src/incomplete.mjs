@@ -10,10 +10,7 @@ export default {
   DescribeTypeRegistration:          { disabled, awsDoc: docRoot + 'API_DescribeTypeRegistration.html' }, // TODO: test
   DetectStackDrift:                  { disabled, awsDoc: docRoot + 'API_DetectStackDrift.html' }, // TODO: test
   DetectStackResourceDrift:          { disabled, awsDoc: docRoot + 'API_DetectStackResourceDrift.html' }, // TODO: test
-  EstimateTemplateCost:              { disabled, awsDoc: docRoot + 'API_EstimateTemplateCost.html' },
-  ExecuteChangeSet:                  { disabled, awsDoc: docRoot + 'API_ExecuteChangeSet.html' },
-  GetStackPolicy:                    { disabled, awsDoc: docRoot + 'API_GetStackPolicy.html' },
-  GetTemplate:                       { disabled, awsDoc: docRoot + 'API_GetTemplate.html' },
+  // TODO: GetGeneratedTemplate
   GetTemplateSummary:                { disabled, awsDoc: docRoot + 'API_GetTemplateSummary.html' },
   ImportStacksToStackSet:            { disabled, awsDoc: docRoot + 'API_ImportStacksToStackSet.html' },
   ListChangeSets:                    { disabled, awsDoc: docRoot + 'API_ListChangeSets.html' },

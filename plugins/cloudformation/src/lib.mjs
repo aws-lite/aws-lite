@@ -41,6 +41,8 @@ const arrayProperties = {
   Tags: 'member',
   // DetectStackResourceDrift
   // PropertyDifferences: 'member',
+  // GetTemplate
+  StagesAvailable: 'member',
   // GetTemplateSummary
   // Parameters: 'member',
   // ListChangeSets

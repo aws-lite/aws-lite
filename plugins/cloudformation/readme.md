@@ -520,6 +520,59 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
 
 
+### `EstimateTemplateCost`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_EstimateTemplateCost.html)
+
+Properties:
+- **`Parameters` (array)**
+  - Array of objects specifying stack input parameters
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
+- **`TemplateBody` (string, object)**
+  - CloudFormation template object (which will be automatically serialized to JSON for you), or pre-serialized JSON or YAML; can be up to 51,200 b
+- **`TemplateURL` (string)**
+  - S3 location of CloudFormation template; can be up to 460,800 b
+
+
+### `GetStackPolicy`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetStackPolicy.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+
+
+### `GetTemplate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetTemplate.html)
+
+Properties:
+- **`ChangeSetName` (string)**
+  - User created ID for the change set
+- **`StackName` (string)**
+  - Stack name or ID
+- **`TemplateStage` (string)**
+  - Template stage; can be one of: `Original`, `Processed`
+
+
+### `ExecuteChangeSet`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ExecuteChangeSet.html)
+
+Properties:
+- **`ChangeSetName` (string) [required]**
+  - User created ID for the change set
+- **`ClientRequestToken` (string)**
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
+- **`DisableRollback` (boolean)**
+  - Set to true to disable rollback of the stack if stack creation failed
+- **`RetainExceptOnCreate` (boolean)**
+  - Set to true to ensure newly created resources are deleted if the operation rolls back, even if marked with a deletion policy of `Retain`
+- **`StackName` (string)**
+  - Stack name or ID
+
+
 ### `ListStackInstances`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html)
@@ -766,10 +819,6 @@ Properties:
 - [`DetectStackDrift`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html)
 - [`DetectStackResourceDrift`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackResourceDrift.html)
 - [`ListTypeRegistrations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeRegistrations.html)
-- [`EstimateTemplateCost`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_EstimateTemplateCost.html)
-- [`ExecuteChangeSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ExecuteChangeSet.html)
-- [`GetStackPolicy`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetStackPolicy.html)
-- [`GetTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetTemplate.html)
 - [`GetTemplateSummary`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetTemplateSummary.html)
 - [`ImportStacksToStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ImportStacksToStackSet.html)
 - [`ListChangeSets`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListChangeSets.html)
