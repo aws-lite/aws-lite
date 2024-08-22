@@ -41,8 +41,12 @@ import {
   ListStackSetOperationResultsCommandOutput as ListStackSetOperationResultsResponse,
   ListStackSetOperationsCommandOutput as ListStackSetOperationsResponse,
   ListStackSetsCommandOutput as ListStackSetsResponse,
+  ListTypeRegistrationsCommandOutput as ListTypeRegistrationsResponse,
   ListTypesCommandOutput as ListTypesResponse,
+  ListTypeVersionsCommandOutput as ListTypeVersionsResponse,
+  RegisterPublisherCommandOutput as RegisterPublisherResponse,
   RegisterTypeCommandOutput as RegisterTypeResponse,
+  RollbackStackCommandOutput as RollbackStackResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
   UpdateStackInstancesCommandOutput as UpdateStackInstancesResponse,
   UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
@@ -286,16 +290,40 @@ declare interface AwsLiteCloudFormation {
   ListStackSets: (input: { CallAs?: string, MaxResults?: number, NextToken?: string, Status?: string, paginate?: boolean | string }) => Promise<ListStackSetsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeRegistrations.html CloudFormation: ListTypeRegistrations}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListTypeRegistrations CloudFormation: ListTypeRegistrations}
+   */
+  ListTypeRegistrations: (input: { MaxResults?: number, NextToken?: string, RegistrationStatusFilter?: string, Type?: string, TypeArn?: string, TypeName?: string, paginate?: boolean | string }) => Promise<ListTypeRegistrationsResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypes.html CloudFormation: ListTypes}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListTypes CloudFormation: ListTypes}
    */
   ListTypes: (input: { DeprecatedStatus?: string, Filters?: Record<string, any>, MaxResults?: number, NextToken?: string, ProvisioningType?: string, Type?: string, Visibility?: string, paginate?: boolean | string }) => Promise<ListTypesResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeVersions.html CloudFormation: ListTypeVersions}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListTypeVersions CloudFormation: ListTypeVersions}
+   */
+  ListTypeVersions: (input: { Arn?: string, DeprecatedStatus?: string, MaxResults?: number, NextToken?: string, PublisherId?: string, Type?: string, TypeName?: string }) => Promise<ListTypeVersionsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterPublisher.html CloudFormation: RegisterPublisher}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#RegisterPublisher CloudFormation: RegisterPublisher}
+   */
+  RegisterPublisher: (input: { AcceptTermsAndConditions?: boolean, ConnectionArn?: string }) => Promise<RegisterPublisherResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterType.html CloudFormation: RegisterType}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#RegisterType CloudFormation: RegisterType}
    */
   RegisterType: (input: { SchemaHandlerPackage: string, TypeName: string, ClientRequestToken?: string, ExecutionRoleArn?: string, LoggingConfig?: Record<string, any>, Type?: string }) => Promise<RegisterTypeResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RollbackStack.html CloudFormation: RollbackStack}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#RollbackStack CloudFormation: RollbackStack}
+   */
+  RollbackStack: (input: { StackName: string, ClientRequestToken?: string, RetainExceptOnCreate?: boolean, RoleARN?: string }) => Promise<RollbackStackResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html CloudFormation: UpdateStack}
@@ -367,8 +395,12 @@ export type {
   ListStackSetOperationResultsResponse,
   ListStackSetOperationsResponse,
   ListStackSetsResponse,
+  ListTypeRegistrationsResponse,
   ListTypesResponse,
+  ListTypeVersionsResponse,
+  RegisterPublisherResponse,
   RegisterTypeResponse,
+  RollbackStackResponse,
   UpdateStackResponse,
   UpdateStackInstancesResponse,
   UpdateTerminationProtectionResponse,

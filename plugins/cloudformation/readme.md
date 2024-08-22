@@ -727,6 +727,27 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListTypeRegistrations`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeRegistrations.html)
+
+Properties:
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`RegistrationStatusFilter` (string)**
+  - Filter results by status; can be one of: `COMPLETE`, `IN_PROGRESS` (default), `FAILED`
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeArn` (string)**
+  - ARN of the extension
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListTypes`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypes.html)
@@ -751,6 +772,39 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListTypeVersions`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeVersions.html)
+
+Properties:
+- **`Arn` (string)**
+  - Amazon resource name
+- **`DeprecatedStatus` (string)**
+  - Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`PublisherId` (string)**
+  - ID of the extension publisher
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
+
+
+### `RegisterPublisher`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterPublisher.html)
+
+Properties:
+- **`AcceptTermsAndConditions` (boolean)**
+  - Set to true to agree to Amazons terms and conditions
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterPublisher.html#API_RegisterPublisher_RequestParameters)
+- **`ConnectionArn` (string)**
+  - ARN to a Bitbucket or Github account if they are used to verify identity
+
+
 ### `RegisterType`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterType.html)
@@ -761,7 +815,7 @@ Properties:
 - **`TypeName` (string) [required]**
   - Name of the extension with length between 10 and 204 (inclusive)
 - **`ClientRequestToken` (string)**
-  - Unique identifier that acts as an idempotency key for the request
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
 - **`ExecutionRoleArn` (string)**
   - ARN of the IAM execution role used to activate the extension
 - **`LoggingConfig` (object)**
@@ -769,6 +823,21 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_LoggingConfig.html)
 - **`Type` (string)**
   - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+
+
+### `RollbackStack`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RollbackStack.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`ClientRequestToken` (string)**
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
+- **`RetainExceptOnCreate` (boolean)**
+  - Set to true to ensure newly created resources are deleted if the operation rolls back, even if marked with a deletion policy of `Retain`
+- **`RoleARN` (string)**
+  - IAM role ARN CloudFormation assumes to create the stack
 
 
 ### `UpdateStack`
@@ -866,12 +935,8 @@ Properties:
 - [`ImportStacksToStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ImportStacksToStackSet.html)
 - [`ListImports`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
-- [`ListTypeRegistrations`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeRegistrations.html)
-- [`ListTypeVersions`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeVersions.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)
-- [`RegisterPublisher`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterPublisher.html)
-- [`RollbackStack`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RollbackStack.html)
 - [`SetStackPolicy`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetStackPolicy.html)
 - [`SetTypeConfiguration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeConfiguration.html)
 - [`SetTypeDefaultVersion`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeDefaultVersion.html)

@@ -1,29 +1,25 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/'
 export default {
-  DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' }, // TODO: test
-  DescribeChangeSetHooks:            { disabled, awsDoc: docRoot + 'API_DescribeChangeSetHooks.html' }, // TODO: test
-  DescribeStackDriftDetectionStatus: { disabled, awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html' }, // TODO: test
-  DescribeStackResource:             { disabled, awsDoc: docRoot + 'API_DescribeStackResource.html' }, // TODO: test
+  DescribeChangeSet:                 { disabled, awsDoc: docRoot + 'API_DescribeChangeSet.html' }, // TODO: verify
+  DescribeChangeSetHooks:            { disabled, awsDoc: docRoot + 'API_DescribeChangeSetHooks.html' }, // TODO: verify
+  DescribeStackDriftDetectionStatus: { disabled, awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html' }, // TODO: verify
+  DescribeStackResource:             { disabled, awsDoc: docRoot + 'API_DescribeStackResource.html' }, // TODO: verify
   // TODO: DescribeResourceScan
-  DescribeStackResourceDrifts:       { disabled, awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html' }, // TODO: test
-  DescribeTypeRegistration:          { disabled, awsDoc: docRoot + 'API_DescribeTypeRegistration.html' }, // TODO: test
-  DetectStackDrift:                  { disabled, awsDoc: docRoot + 'API_DetectStackDrift.html' }, // TODO: test
-  DetectStackResourceDrift:          { disabled, awsDoc: docRoot + 'API_DetectStackResourceDrift.html' }, // TODO: test
+  DescribeStackResourceDrifts:       { disabled, awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html' }, // TODO: verify
+  DescribeTypeRegistration:          { disabled, awsDoc: docRoot + 'API_DescribeTypeRegistration.html' }, // TODO: verify
+  DetectStackDrift:                  { disabled, awsDoc: docRoot + 'API_DetectStackDrift.html' }, // TODO: verify
+  DetectStackResourceDrift:          { disabled, awsDoc: docRoot + 'API_DetectStackResourceDrift.html' }, // TODO: verify
   // TODO: GetGeneratedTemplate
-  ImportStacksToStackSet:            { disabled, awsDoc: docRoot + 'API_ImportStacksToStackSet.html' }, // TODO: test
+  ImportStacksToStackSet:            { disabled, awsDoc: docRoot + 'API_ImportStacksToStackSet.html' }, // TODO: verify
   // TODO: ListGeneratedTemplates
-  ListImports:                       { disabled, awsDoc: docRoot + 'API_ListImports.html' }, // TODO: test
+  ListImports:                       { disabled, awsDoc: docRoot + 'API_ListImports.html' }, // TODO: verify
   // TODO: ListResourceScanRelatedResources
   // TODO: ListResourceScanResources
   // TODO: ListResourceScans
-  ListStackInstanceResourceDrifts:   { disabled, awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html' }, // TODO: test
-  ListTypeRegistrations:             { disabled, awsDoc: docRoot + 'API_ListTypeRegistrations.html' }, // TODO: test
-  ListTypeVersions:                  { disabled, awsDoc: docRoot + 'API_ListTypeVersions.html' },
-  PublishType:                       { disabled, awsDoc: docRoot + 'API_PublishType.html' },
-  RecordHandlerProgress:             { disabled, awsDoc: docRoot + 'API_RecordHandlerProgress.html' },
-  RegisterPublisher:                 { disabled, awsDoc: docRoot + 'API_RegisterPublisher.html' },
-  RollbackStack:                     { disabled, awsDoc: docRoot + 'API_RollbackStack.html' },
+  ListStackInstanceResourceDrifts:   { disabled, awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html' }, // TODO: verify
+  PublishType:                       { disabled, awsDoc: docRoot + 'API_PublishType.html' }, // TODO: verify
+  RecordHandlerProgress:             { disabled, awsDoc: docRoot + 'API_RecordHandlerProgress.html' }, // Need to do some digging for documentation on this one
   SetStackPolicy:                    { disabled, awsDoc: docRoot + 'API_SetStackPolicy.html' },
   SetTypeConfiguration:              { disabled, awsDoc: docRoot + 'API_SetTypeConfiguration.html' },
   SetTypeDefaultVersion:             { disabled, awsDoc: docRoot + 'API_SetTypeDefaultVersion.html' },

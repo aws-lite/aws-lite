@@ -61,6 +61,8 @@ const ChangeSetName = { ...str, required, comment: 'User created ID for the chan
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
 const valIteratorPaginate = { ...str, comment: 'Enable iterator pagination; use this instead of making your own individual pagination requests' }
 const LogicalResourceId = { ...str, comment: 'Logical name of a resource' }
+const DeprecatedStatus = { ...str, comment: 'Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`' }
+
 
 const Version = '2010-05-15'
 
@@ -460,7 +462,7 @@ const DescribeAccountLimits = {
   },
 }
 
-// TODO: test
+// TODO: verify
 const DescribeChangeSet = {
   awsDoc: docRoot + 'API_DescribeChangeSet.html',
   validate: {
@@ -496,7 +498,7 @@ const DescribeChangeSet = {
   },
 }
 
-// TODO: test (AWS docs missing for XML response)
+// TODO: verify (AWS docs missing for XML response)
 const DescribeChangeSetHooks = {
   awsDoc: docRoot + 'API_DescribeChangeSetHooks.html',
   validate: {
@@ -558,7 +560,7 @@ const DescribePublisher = {
   response: ({ payload }) => payload.DescribePublisherResult,
 }
 
-// TODO: test
+// TODO: verify
 const DescribeStackDriftDetectionStatus = {
   awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html',
   validate: {
@@ -643,7 +645,7 @@ const DescribeStackResource = {
   response: ({ payload }) => payload.DescribeStackResourceResult,
 }
 
-// TODO: test
+// TODO: verify
 const DescribeStackResourceDrifts = {
   awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html',
   validate: {
@@ -996,7 +998,7 @@ const GetTemplateSummary = {
   },
 }
 
-// TODO: test
+// TODO: verify
 const ImportStacksToStackSet = {
   awsDoc: docRoot + 'API_ImportStacksToStackSet.html',
   validate: {
@@ -1069,7 +1071,7 @@ const ListExports = {
       paginator: {
         cursor: 'NextToken',
         token: 'ListExportsResult.NextToken',
-        accumulator: 'ListExportsResult.Summaries.member',
+        accumulator: 'ListExportsResult.Exports.member',
         type: 'query',
       },
     }
@@ -1077,7 +1079,7 @@ const ListExports = {
   response: ({ payload }) => deSerializeObject(payload.ListExportsResult),
 }
 
-// TODO: test
+// TODO: verify
 const ListImports = {
   awsDoc: docRoot + 'API_ListImports.html',
   validate: {
@@ -1099,7 +1101,7 @@ const ListImports = {
       paginator: {
         cursor: 'NextToken',
         token: 'ListImportsResult.NextToken',
-        accumulator: 'ListImportsResult.Summaries.member',
+        accumulator: 'ListImportsResult.Imports.member',
         type: 'query',
       },
     }
@@ -1107,7 +1109,7 @@ const ListImports = {
   response: ({ payload }) => deSerializeObject(payload.ListImportsResult),
 }
 
-// TODO: test
+// TODO: verify
 const ListStackInstanceResourceDrifts = {
   awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html',
   validate: {
@@ -1134,6 +1136,7 @@ const ListStackInstanceResourceDrifts = {
       paginator: {
         cursor: 'NextToken',
         token: 'ListStackInstanceResourceDriftsResult.NextToken',
+        // TODO: make sure this is correct, aws is missing XML response documentation
         accumulator: 'ListStackInstanceResourceDriftsResult.Summaries.member',
         type: 'query',
       },
@@ -1337,7 +1340,6 @@ const ListStackSets = {
   response: ({ payload }) => deSerializeObject(payload.ListStackSetsResult),
 }
 
-// TODO: test
 const ListTypeRegistrations = {
   awsDoc: docRoot + 'API_ListTypeRegistrations.html',
   validate: {
@@ -1363,7 +1365,7 @@ const ListTypeRegistrations = {
       paginator: {
         cursor: 'NextToken',
         token: 'ListTypeRegistrationsResult.NextToken',
-        accumulator: 'ListTypeRegistrationsResult.RegistrationTokenList',
+        accumulator: 'ListTypeRegistrationsResult.RegistrationTokenList.member',
         type: 'query',
       },
     }
@@ -1374,7 +1376,7 @@ const ListTypeRegistrations = {
 const ListTypes = {
   awsDoc: docRoot + 'API_ListTypes.html',
   validate: {
-    DeprecatedStatus: { ...str, comment: 'Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`' },
+    DeprecatedStatus,
     Filters: { ...obj, comment: 'Filter configurations', ref: docRoot + 'API_TypeFilters.html' },
     MaxResults,
     NextToken,
@@ -1409,13 +1411,85 @@ const ListTypes = {
   },
 }
 
-// TODO: test result
+const ListTypeVersions = {
+  awsDoc: docRoot + 'API_ListTypeVersions.html',
+  validate: {
+    Arn,
+    DeprecatedStatus,
+    MaxResults,
+    NextToken,
+    PublisherId,
+    Type,
+    TypeName,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListTypeVersions',
+      Version,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListTypeVersionsResult.NextToken',
+        accumulator: 'ListTypeVersionsResult.TypeVersionSummaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => deSerializeObject(payload.ListTypeVersionsResult),
+}
+
+// TODO: verify
+const PublishType = {
+  awsDoc: docRoot + 'API_PublishType.html',
+  validate: {
+    Arn,
+    PublicVersionNumber: { ...str, comment: 'Version number; use the format `MAJOR.MINOR.PATCH`' },
+    Type,
+    TypeName,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'PublishType',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.PublishTypeResult,
+}
+
+const RegisterPublisher = {
+  awsDoc: docRoot + 'API_RegisterPublisher.html',
+  validate: {
+    AcceptTermsAndConditions: { ...bool, comment: 'Set to true to agree to Amazons terms and conditions', ref: docRoot + 'API_RegisterPublisher.html#API_RegisterPublisher_RequestParameters' },
+    ConnectionArn: { ...str, comment: 'ARN to a Bitbucket or Github account if they are used to verify identity' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'RegisterPublisher',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.RegisterPublisherResult,
+}
+
+// TODO: verify
 const RegisterType = {
   awsDoc: docRoot + 'API_RegisterType.html',
   validate: {
     SchemaHandlerPackage: { ...str, required, comment: 'A URL to the S3 bucket containing the extension project package that contains the necessary files for the extension you want to register' },
     TypeName: { ...TypeName, required },
-    ClientRequestToken: { ...str, comment: 'Unique identifier that acts as an idempotency key for the request' },
+    ClientRequestToken,
     ExecutionRoleArn,
     LoggingConfig,
     Type,
@@ -1430,6 +1504,26 @@ const RegisterType = {
     }
   },
   response: ({ payload }) => payload.RegisterTypeResult,
+}
+
+const RollbackStack = {
+  awsDoc: docRoot + 'API_RollbackStack.html',
+  validate: {
+    StackName,
+    ClientRequestToken,
+    RetainExceptOnCreate,
+    RoleARN,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'RollbackStack',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.RollbackStack,
 }
 
 const UpdateStack = {
@@ -1573,7 +1667,11 @@ export default {
     ListStackSets,
     ListTypeRegistrations,
     ListTypes,
+    ListTypeVersions,
+    PublishType,
+    RegisterPublisher,
     RegisterType,
+    RollbackStack,
     UpdateStack,
     UpdateStackInstances,
     UpdateTerminationProtection,
