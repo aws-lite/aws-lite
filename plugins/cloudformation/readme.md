@@ -1064,6 +1064,17 @@ Properties:
   - Enable termination protection on the specified stack
 
 
+### `ValidateTemplate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ValidateTemplate.html)
+
+Properties:
+- **`TemplateBody` (string, object)**
+  - CloudFormation template object (which will be automatically serialized to JSON for you), or pre-serialized JSON or YAML; can be up to 51,200 b
+- **`TemplateURL` (string)**
+  - S3 location of CloudFormation template; can be up to 460,800 b
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
@@ -1078,7 +1089,6 @@ Properties:
 - [`StopStackSetOperation`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StopStackSetOperation.html)
 - [`TestType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TestType.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
-- [`ValidateTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ValidateTemplate.html)
 <!-- METHOD_DOCS_END -->
 
 

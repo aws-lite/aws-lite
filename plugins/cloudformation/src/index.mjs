@@ -996,7 +996,6 @@ const GetTemplateSummary = {
   },
 }
 
-// TODO: verify
 const ImportStacksToStackSet = {
   awsDoc: docRoot + 'API_ImportStacksToStackSet.html',
   validate: {
@@ -1626,6 +1625,24 @@ const UpdateTerminationProtection = {
   response: ({ payload }) => ({ StackId: payload.UpdateTerminationProtectionResult.StackId }),
 }
 
+const ValidateTemplate = {
+  awsDoc: docRoot + 'API_ValidateTemplate.html',
+  validate: {
+    TemplateBody,
+    TemplateURL,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ValidateTemplate',
+      Version,
+      ...params,
+    }
+    if (params.TemplateBody) query.TemplateBody = JSON.stringify(params.TemplateBody)
+    return { query }
+  },
+  response: ({ payload }) => deSerializeObject(payload.ValidateTemplateResult),
+}
+
 export default {
   name: '@aws-lite/cloudformation',
   service,
@@ -1693,6 +1710,7 @@ export default {
     UpdateStack,
     UpdateStackInstances,
     UpdateTerminationProtection,
+    ValidateTemplate,
     ...incomplete,
   },
 }

@@ -60,6 +60,7 @@ import {
   UpdateStackCommandOutput as UpdateStackResponse,
   UpdateStackInstancesCommandOutput as UpdateStackInstancesResponse,
   UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
+  ValidateTemplateCommandOutput as ValidateTemplateResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-cloudformation";
 
@@ -412,6 +413,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateTerminationProtection CloudFormation: UpdateTerminationProtection}
    */
   UpdateTerminationProtection: (input: { StackName: string, EnableTerminationProtection: boolean }) => Promise<UpdateTerminationProtectionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ValidateTemplate.html CloudFormation: ValidateTemplate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ValidateTemplate CloudFormation: ValidateTemplate}
+   */
+  ValidateTemplate: (input: { TemplateBody?: string | Record<string, any>, TemplateURL?: string }) => Promise<ValidateTemplateResponse>
   // $METHODS_END
 }
 
@@ -484,5 +491,6 @@ export type {
   UpdateStackResponse,
   UpdateStackInstancesResponse,
   UpdateTerminationProtectionResponse,
+  ValidateTemplateResponse,
   // $EXPORT_END
 }

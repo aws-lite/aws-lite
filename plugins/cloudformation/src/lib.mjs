@@ -93,6 +93,8 @@ const arrayProperties = {
   TypeVersionSummaries: 'member',
   // ValidateTemplate
   // Parameters: 'member',
+  // Capabilities: 'member',
+  // DeclaredTransforms: 'member',
 }
 
 function querystringifyParams (obj) {

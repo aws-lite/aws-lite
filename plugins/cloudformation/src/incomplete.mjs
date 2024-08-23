@@ -17,5 +17,4 @@ export default {
   StopStackSetOperation:             { disabled, awsDoc: docRoot + 'API_StopStackSetOperation.html' },
   TestType:                          { disabled, awsDoc: docRoot + 'API_TestType.html' },
   UpdateStackSet:                    { disabled, awsDoc: docRoot + 'API_UpdateStackSet.html' },
-  ValidateTemplate:                  { disabled, awsDoc: docRoot + 'API_ValidateTemplate.html' },
 }
