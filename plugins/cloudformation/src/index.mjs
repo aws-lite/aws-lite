@@ -559,7 +559,6 @@ const DescribePublisher = {
   response: ({ payload }) => payload.DescribePublisherResult,
 }
 
-// TODO: verify
 const DescribeStackDriftDetectionStatus = {
   awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html',
   validate: {
@@ -1078,7 +1077,6 @@ const ListExports = {
   response: ({ payload }) => deSerializeObject(payload.ListExportsResult),
 }
 
-// TODO: verify
 const ListImports = {
   awsDoc: docRoot + 'API_ListImports.html',
   validate: {

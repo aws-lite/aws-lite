@@ -3,11 +3,8 @@ const docRoot = 'https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReferen
 export default {
   // TODO: DescribeResourceScan
   DescribeTypeRegistration:          { disabled, awsDoc: docRoot + 'API_DescribeTypeRegistration.html' }, // TODO: verify
-  DetectStackResourceDrift:          { disabled, awsDoc: docRoot + 'API_DetectStackResourceDrift.html' }, // TODO: verify
   // TODO: GetGeneratedTemplate
-  ImportStacksToStackSet:            { disabled, awsDoc: docRoot + 'API_ImportStacksToStackSet.html' }, // TODO: verify
   // TODO: ListGeneratedTemplates
-  ListImports:                       { disabled, awsDoc: docRoot + 'API_ListImports.html' }, // TODO: verify
   // TODO: ListResourceScanRelatedResources
   // TODO: ListResourceScanResources
   // TODO: ListResourceScans

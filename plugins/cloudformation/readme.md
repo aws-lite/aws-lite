@@ -585,6 +585,17 @@ Properties:
   - Filter results by resources
 
 
+### `DetectStackResourceDrift`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackResourceDrift.html)
+
+Properties:
+- **`LogicalResourceId` (string)**
+  - Logical name of a resource
+- **`StackName` (string) [required]**
+  - Stack name or ID
+
+
 ### `DetectStackSetDrift`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackSetDrift.html)
@@ -676,6 +687,30 @@ Properties:
   - Stack name or ID
 
 
+### `ImportStacksToStackSet`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ImportStacksToStackSet.html)
+
+Properties:
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+- **`OperationId` (string)**
+  - Unique identifier for this stack set operation; prevents repeats of the same request
+- **`OperationPreferences` (object)**
+  - Preferences for how the stack set operation will be performed
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
+- **`OrganizationalUnitIds` (array)**
+  - List of organizational unit IDs to be mapped as the imported stacks deployment targets
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ImportStacksToStackSet.html#API_ImportStacksToStackSet_RequestParameters)
+- **`StackIds` (array)**
+  - Array of at most 10 stack IDs to be imported
+- **`StackIdsUrl` (string)**
+  - S3 URL to a list of stack IDs to be imported
+
+
 ### `ListChangeSets`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListChangeSets.html)
@@ -694,6 +729,19 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListExports.html)
 
 Properties:
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListImports`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html)
+
+Properties:
+- **`ExportName` (string) [required]**
+  - Name of the exported value
 - **`NextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`paginate` (boolean, string)**
@@ -1021,9 +1069,6 @@ Properties:
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
 - [`DescribeTypeRegistration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeTypeRegistration.html)
-- [`DetectStackResourceDrift`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackResourceDrift.html)
-- [`ImportStacksToStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ImportStacksToStackSet.html)
-- [`ListImports`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)

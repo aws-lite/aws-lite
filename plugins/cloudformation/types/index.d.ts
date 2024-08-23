@@ -33,14 +33,17 @@ import {
   DescribeStackSetOperationCommandOutput as DescribeStackSetOperationResponse,
   DescribeTypeCommandOutput as DescribeTypeResponse,
   DetectStackDriftCommandOutput as DetectStackDriftResponse,
+  DetectStackResourceDriftCommandOutput as DetectStackResourceDriftResponse,
   DetectStackSetDriftCommandOutput as DetectStackSetDriftResponse,
   EstimateTemplateCostCommandOutput as EstimateTemplateCostResponse,
   GetStackPolicyCommandOutput as GetStackPolicyResponse,
   GetTemplateCommandOutput as GetTemplateResponse,
   GetTemplateSummaryCommandOutput as GetTemplateSummaryResponse,
   ExecuteChangeSetCommandOutput as ExecuteChangeSetResponse,
+  ImportStacksToStackSetCommandOutput as ImportStacksToStackSetResponse,
   ListChangeSetsCommandOutput as ListChangeSetsResponse,
   ListExportsCommandOutput as ListExportsResponse,
+  ListImportsCommandOutput as ListImportsResponse,
   ListStackInstancesCommandOutput as ListStackInstancesResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
   ListStacksCommandOutput as ListStacksResponse,
@@ -249,6 +252,12 @@ declare interface AwsLiteCloudFormation {
   DetectStackDrift: (input: { StackName: string, LogicalResourceIds?: any[] }) => Promise<DetectStackDriftResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackResourceDrift.html CloudFormation: DetectStackResourceDrift}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DetectStackResourceDrift CloudFormation: DetectStackResourceDrift}
+   */
+  DetectStackResourceDrift: (input: { LogicalResourceId?: string, StackName: string }) => Promise<DetectStackResourceDriftResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackSetDrift.html CloudFormation: DetectStackSetDrift}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DetectStackSetDrift CloudFormation: DetectStackSetDrift}
    */
@@ -285,6 +294,12 @@ declare interface AwsLiteCloudFormation {
   ExecuteChangeSet: (input: { ChangeSetName: string, ClientRequestToken?: string, DisableRollback?: boolean, RetainExceptOnCreate?: boolean, StackName?: string }) => Promise<ExecuteChangeSetResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ImportStacksToStackSet.html CloudFormation: ImportStacksToStackSet}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ImportStacksToStackSet CloudFormation: ImportStacksToStackSet}
+   */
+  ImportStacksToStackSet: (input: { StackSetName: string, CallAs?: string, OperationId?: string, OperationPreferences?: Record<string, any>, OrganizationalUnitIds?: any[], StackIds?: any[], StackIdsUrl?: string }) => Promise<ImportStacksToStackSetResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListChangeSets.html CloudFormation: ListChangeSets}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListChangeSets CloudFormation: ListChangeSets}
    */
@@ -295,6 +310,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListExports CloudFormation: ListExports}
    */
   ListExports: (input: { NextToken?: string, paginate?: boolean | string }) => Promise<ListExportsResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html CloudFormation: ListImports}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListImports CloudFormation: ListImports}
+   */
+  ListImports: (input: { ExportName: string, NextToken?: string, paginate?: boolean | string }) => Promise<ListImportsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html CloudFormation: ListStackInstances}
@@ -436,14 +457,17 @@ export type {
   DescribeStackSetOperationResponse,
   DescribeTypeResponse,
   DetectStackDriftResponse,
+  DetectStackResourceDriftResponse,
   DetectStackSetDriftResponse,
   EstimateTemplateCostResponse,
   GetStackPolicyResponse,
   GetTemplateResponse,
   GetTemplateSummaryResponse,
   ExecuteChangeSetResponse,
+  ImportStacksToStackSetResponse,
   ListChangeSetsResponse,
   ListExportsResponse,
+  ListImportsResponse,
   ListStackInstancesResponse,
   ListStackResourcesResponse,
   ListStacksResponse,
