@@ -18,10 +18,13 @@ import {
   DeleteStackSetCommandOutput as DeleteStackSetResponse,
   DeregisterTypeCommandOutput as DeregisterTypeResponse,
   DescribeAccountLimitsCommandOutput as DescribeAccountLimitsResponse,
+  DescribeChangeSetCommandOutput as DescribeChangeSetResponse,
+  DescribeChangeSetHooksCommandOutput as DescribeChangeSetHooksResponse,
   DescribeOrganizationsAccessCommandOutput as DescribeOrganizationsAccessResponse,
   DescribePublisherCommandOutput as DescribePublisherResponse,
   DescribeStackEventsCommandOutput as DescribeStackEventsResponse,
   DescribeStackInstanceCommandOutput as DescribeStackInstanceResponse,
+  DescribeStackResourceCommandOutput as DescribeStackResourceResponse,
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
   DescribeStacksCommandOutput as DescribeStacksResponse,
   DescribeStackSetCommandOutput as DescribeStackSetResponse,
@@ -47,6 +50,7 @@ import {
   RegisterPublisherCommandOutput as RegisterPublisherResponse,
   RegisterTypeCommandOutput as RegisterTypeResponse,
   RollbackStackCommandOutput as RollbackStackResponse,
+  SetStackPolicyCommandOutput as SetStackPolicyResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
   UpdateStackInstancesCommandOutput as UpdateStackInstancesResponse,
   UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
@@ -152,6 +156,18 @@ declare interface AwsLiteCloudFormation {
   DescribeAccountLimits: (input: { NextToken?: string, paginate?: boolean | string }) => Promise<DescribeAccountLimitsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSet.html CloudFormation: DescribeChangeSet}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeChangeSet CloudFormation: DescribeChangeSet}
+   */
+  DescribeChangeSet: (input: { ChangeSetName: string, IncludePropertyValues?: boolean, NextToken?: string, StackName?: string, paginate?: string }) => Promise<DescribeChangeSetResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSetHooks.html CloudFormation: DescribeChangeSetHooks}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeChangeSetHooks CloudFormation: DescribeChangeSetHooks}
+   */
+  DescribeChangeSetHooks: (input: { ChangeSetName: string, StackName?: string, NextToken?: string, LogicalResourceId?: string, paginate?: boolean | string }) => Promise<DescribeChangeSetHooksResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html CloudFormation: DescribeOrganizationsAccess}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeOrganizationsAccess CloudFormation: DescribeOrganizationsAccess}
    */
@@ -174,6 +190,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackInstance CloudFormation: DescribeStackInstance}
    */
   DescribeStackInstance: (input: { StackInstanceAccount: string, StackInstanceRegion: string, StackSetName: string, CallAs?: string }) => Promise<DescribeStackInstanceResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResource.html CloudFormation: DescribeStackResource}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackResource CloudFormation: DescribeStackResource}
+   */
+  DescribeStackResource: (input: { LogicalResourceId: string, StackName: string }) => Promise<DescribeStackResourceResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResources.html CloudFormation: DescribeStackResources}
@@ -326,6 +348,12 @@ declare interface AwsLiteCloudFormation {
   RollbackStack: (input: { StackName: string, ClientRequestToken?: string, RetainExceptOnCreate?: boolean, RoleARN?: string }) => Promise<RollbackStackResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetStackPolicy.html CloudFormation: SetStackPolicy}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#SetStackPolicy CloudFormation: SetStackPolicy}
+   */
+  SetStackPolicy: (input: { StackName: string, StackPolicyBody?: string | Record<string, any>, StackPolicyURL?: string }) => Promise<SetStackPolicyResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html CloudFormation: UpdateStack}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateStack CloudFormation: UpdateStack}
    */
@@ -372,10 +400,13 @@ export type {
   DeleteStackSetResponse,
   DeregisterTypeResponse,
   DescribeAccountLimitsResponse,
+  DescribeChangeSetResponse,
+  DescribeChangeSetHooksResponse,
   DescribeOrganizationsAccessResponse,
   DescribePublisherResponse,
   DescribeStackEventsResponse,
   DescribeStackInstanceResponse,
+  DescribeStackResourceResponse,
   DescribeStackResourcesResponse,
   DescribeStacksResponse,
   DescribeStackSetResponse,
@@ -401,6 +432,7 @@ export type {
   RegisterPublisherResponse,
   RegisterTypeResponse,
   RollbackStackResponse,
+  SetStackPolicyResponse,
   UpdateStackResponse,
   UpdateStackInstancesResponse,
   UpdateTerminationProtectionResponse,

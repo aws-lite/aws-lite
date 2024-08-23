@@ -190,13 +190,15 @@ const CreateChangeSet = {
     UsePreviousTemplate: { ...bool, comment: 'Set to true to reuse the template associated with the stack' },
   },
   request: (params) => {
-    return {
-      query: {
-        Action: 'CreateChangeSet',
-        Version,
-        ...querystringifyParams(params),
-      },
+    const query = {
+      Action: 'CreateChangeSet',
+      Version,
     }
+    const temp = { ...params } // Used to prevent mutating params
+    const { TemplateBody } = params
+    if (TemplateBody && typeof TemplateBody === 'object') temp.TemplateBody = JSON.stringify(TemplateBody)
+    Object.assign(query, querystringifyParams(temp))
+    return { query }
   },
   response: ({ payload }) => payload.CreateChangeSetResult,
 }
@@ -288,9 +290,7 @@ const CreateStackSet = {
   },
   request: (params) => {
     const { TemplateBody } = params
-    if (TemplateBody && typeof params.TemplateBody === 'object') {
-      params.TemplateBody = JSON.stringify(TemplateBody)
-    }
+    if (TemplateBody && typeof params.TemplateBody === 'object') params.TemplateBody = JSON.stringify(TemplateBody)
     return {
       query: {
         Action: 'CreateStackSet',
@@ -462,7 +462,6 @@ const DescribeAccountLimits = {
   },
 }
 
-// TODO: verify
 const DescribeChangeSet = {
   awsDoc: docRoot + 'API_DescribeChangeSet.html',
   validate: {
@@ -498,7 +497,6 @@ const DescribeChangeSet = {
   },
 }
 
-// TODO: verify (AWS docs missing for XML response)
 const DescribeChangeSetHooks = {
   awsDoc: docRoot + 'API_DescribeChangeSetHooks.html',
   validate: {
@@ -520,12 +518,13 @@ const DescribeChangeSetHooks = {
       paginate,
       paginator: {
         cursor: 'NextToken',
-        token: 'DescribeChangeSetResult.NextToken',
+        token: 'DescribeChangeSetHooksResult.NextToken',
+        accumulator: 'DescribeChangeSetHooksResult.Hooks.member',
         type: 'query',
       },
     }
   },
-  response: ({ payload }) => payload,
+  response: ({ payload }) => deSerializeObject(payload.DescribeChangeSetHooksResult),
 }
 
 const DescribeOrganizationsAccess = {
@@ -989,7 +988,7 @@ const GetTemplateSummary = {
       ...params,
     }
     const { TemplateBody } = params
-    if (TemplateBody) query.TemplateBody = JSON.stringify(TemplateBody)
+    if (TemplateBody && typeof TemplateBody === 'object') query.TemplateBody = JSON.stringify(TemplateBody)
     return { query }
   },
   response: ({ payload }) => {
@@ -1526,6 +1525,26 @@ const RollbackStack = {
   response: ({ payload }) => payload.RollbackStack,
 }
 
+const SetStackPolicy = {
+  awsDoc: docRoot + 'API_SetStackPolicy.html',
+  validate: {
+    StackName,
+    StackPolicyBody,
+    StackPolicyURL,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'SetStackPolicy',
+      Version,
+      ...params,
+    }
+    const { StackPolicyBody } = params
+    if (StackPolicyBody && typeof StackPolicyBody === 'object') query.StackPolicyBody = JSON.stringify(StackPolicyBody)
+    return { query }
+  },
+  response: emptyResponse,
+}
+
 const UpdateStack = {
   awsDoc: docRoot + 'API_UpdateStack.html',
   validate: {
@@ -1672,6 +1691,7 @@ export default {
     RegisterPublisher,
     RegisterType,
     RollbackStack,
+    SetStackPolicy,
     UpdateStack,
     UpdateStackInstances,
     UpdateTerminationProtection,

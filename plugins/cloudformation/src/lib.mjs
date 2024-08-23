@@ -20,7 +20,7 @@ const arrayProperties = {
   Scope: 'member',
   Details: 'member',
   // DescribeChangeSetHooks
-  // TODO
+  Hooks: 'member',
   // DescribeGeneratedTemplate
   // TODO
   // DescribeResourceScan
