@@ -57,6 +57,10 @@ import {
   RegisterTypeCommandOutput as RegisterTypeResponse,
   RollbackStackCommandOutput as RollbackStackResponse,
   SetStackPolicyCommandOutput as SetStackPolicyResponse,
+  SetTypeDefaultVersionCommandOutput as SetTypeDefaultVersionResponse,
+  SignalResourceCommandOutput as SignalResourceResponse,
+  StopStackSetOperationCommandOutput as StopStackSetOperationResponse,
+  TestTypeCommandOutput as TestTypeResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
   UpdateStackInstancesCommandOutput as UpdateStackInstancesResponse,
   UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
@@ -397,6 +401,30 @@ declare interface AwsLiteCloudFormation {
   SetStackPolicy: (input: { StackName: string, StackPolicyBody?: string | Record<string, any>, StackPolicyURL?: string }) => Promise<SetStackPolicyResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeDefaultVersion.html CloudFormation: SetTypeDefaultVersion}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#SetTypeDefaultVersion CloudFormation: SetTypeDefaultVersion}
+   */
+  SetTypeDefaultVersion: (input: { Arn?: string, Type?: string, TypeName?: string, VersionId?: string }) => Promise<SetTypeDefaultVersionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SignalResource.html CloudFormation: SignalResource}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#SignalResource CloudFormation: SignalResource}
+   */
+  SignalResource: (input: { LogicalResourceId: string, StackName: string, Status: string, UniqueId: string }) => Promise<SignalResourceResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StopStackSetOperation.html CloudFormation: StopStackSetOperation}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#StopStackSetOperation CloudFormation: StopStackSetOperation}
+   */
+  StopStackSetOperation: (input: { OperationId: string, StackSetName: string, CallAs?: string }) => Promise<StopStackSetOperationResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TestType.html CloudFormation: TestType}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#TestType CloudFormation: TestType}
+   */
+  TestType: (input: { Arn?: string, LogDeliveryBucket?: string, Type?: string, TypeName?: string, VersionId?: string }) => Promise<TestTypeResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html CloudFormation: UpdateStack}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateStack CloudFormation: UpdateStack}
    */
@@ -488,6 +516,10 @@ export type {
   RegisterTypeResponse,
   RollbackStackResponse,
   SetStackPolicyResponse,
+  SetTypeDefaultVersionResponse,
+  SignalResourceResponse,
+  StopStackSetOperationResponse,
+  TestTypeResponse,
   UpdateStackResponse,
   UpdateStackInstancesResponse,
   UpdateTerminationProtectionResponse,

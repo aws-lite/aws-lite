@@ -62,6 +62,12 @@ const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic 
 const valIteratorPaginate = { ...str, comment: 'Enable iterator pagination; use this instead of making your own individual pagination requests' }
 const LogicalResourceId = { ...str, comment: 'Logical name of a resource' }
 const DeprecatedStatus = { ...str, comment: 'Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`' }
+const AdministrationRoleARN = { ...str, comment: 'ARN of the IAM role used to perform this action' }
+const AutoDeployment = { ...obj, comment: 'Specify if stack sets automatically deploy to organization accounts that are added to the target organization', ref: docRoot + 'API_ManagedExecution.html' }
+const ExecutionRoleName = { ...str, comment: 'Name of the IAM execution role used to create the stack set; defaults to `AWSCloudFormationStackSetExecutionRole`' }
+const ManagedExecution = { ...obj, comment: 'Specify if the stack sets operate concurrently when possible', ref: docRoot + 'API_ManagedExecution.html' }
+const PermissionModel = { ...str, comment: 'Describe how IAM roles required for operations are created; can be one of: `SELF_MANAGED` (default), `SERVICE_MANAGED`' }
+const UsePreviousTemplate = { ...bool, comment: 'Set to true to reuse the template associated with the stack' }
 
 
 const Version = '2010-05-15'
@@ -187,7 +193,7 @@ const CreateChangeSet = {
     Tags,
     TemplateBody,
     TemplateURL,
-    UsePreviousTemplate: { ...bool, comment: 'Set to true to reuse the template associated with the stack' },
+    UsePreviousTemplate,
   },
   request: (params) => {
     const query = {
@@ -274,15 +280,15 @@ const CreateStackSet = {
   validate: {
     ClientRequestToken: { ...ClientRequestToken, required },
     StackSetName,
-    AdministrationRoleARN: { ...str, comment: 'ARN of the IAM role to use' },
-    AutoDeployment: { ...obj, comment: 'Specify if stack sets automatically deploy to organization accounts that are added to the target organization', ref: docRoot + 'API_ManagedExecution.html' },
+    AdministrationRoleARN,
+    AutoDeployment,
     CallAs,
     Capabilities,
     Description,
-    ExecutionRoleName: { ...str, comment: 'Name of the IAM execution role used to create the stack set; defaults to `AWSCloudFormationStackSetExecutionRole`' },
-    ManagedExecution: { ...obj, comment: 'Specify if the stack sets operate concurrently when possible', ref: docRoot + 'API_ManagedExecution.html' },
+    ExecutionRoleName,
+    ManagedExecution,
     Parameters,
-    PermissionModel: { ...str, comment: 'Describe how IAM roles required for operations are created; can be one of: `SELF_MANAGED` (default), `SERVICE_MANAGED`' },
+    PermissionModel,
     StackId: { ...str, comment: 'ARN of a stack to be imported' },
     Tags,
     TemplateBody,
@@ -1542,6 +1548,108 @@ const SetStackPolicy = {
   response: emptyResponse,
 }
 
+// TODO: verify
+const SetTypeConfiguration = {
+  awsDoc: docRoot + 'API_SetTypeConfiguration.html',
+  validate: {
+    Configuration: { type: [ 'string', 'object' ], required, comment: 'Configuration data; must be JSON or object', ref: docRoot + 'API_SetTypeConfiguration.html#API_SetTypeConfiguration_RequestParameters' },
+    ConfigurationAlias: { ...str, comment: 'Alias for the configuration data' },
+    Type,
+    TypeArn: { ...str, comment: 'Extension ARN; public extension ARNs are assigned by calling `ActivateType`, private extension ARNs are assigned by calling `RegisterType`' },
+    TypeName,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'SetTypeConfiguration',
+      Version,
+      ...params,
+    }
+    if (typeof params.Configuration === 'object') query.Configuration = JSON.stringify(params.Configuration)
+    return { query }
+  },
+  response: ({ payload }) => payload.SetTypeConfigurationResult,
+}
+
+const SetTypeDefaultVersion = {
+  awsDoc: docRoot + 'API_SetTypeDefaultVersion.html',
+  validate: {
+    Arn,
+    Type,
+    TypeName,
+    VersionId,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'SetTypeDefaultVersion',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const SignalResource = {
+  awsDoc: docRoot + 'API_SignalResource.html',
+  validate: {
+    LogicalResourceId: { ...LogicalResourceId, required },
+    StackName,
+    Status: { ...str, required, comment: 'Status of the signal; can be one of: `SUCCESS`, `FAILURE`' },
+    UniqueId: { ...str, required, comment: 'User assigned ID for the signal; each signal ID must be unique' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'SignalResource',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const StopStackSetOperation = {
+  awsDoc: docRoot + 'API_StopStackSetOperation.html',
+  validate: {
+    OperationId,
+    StackSetName,
+    CallAs,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'StopStackSetOperation',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const TestType = {
+  awsDoc: docRoot + 'API_TestType.html',
+  validate: {
+    Arn,
+    LogDeliveryBucket: { ...str, comment: 'S3 bucket where execution logs will be saved; user must have `GetObject` and `PutObject` permissions on the S3 bucket' },
+    Type,
+    TypeName,
+    VersionId,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'TestType',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.TestTypeResult,
+}
+
 const UpdateStack = {
   awsDoc: docRoot + 'API_UpdateStack.html',
   validate: {
@@ -1607,6 +1715,44 @@ const UpdateStackInstances = {
   response: ({ payload }) => payload.UpdateStackInstancesResult,
 }
 
+// TODO: verify
+const UpdateStackSet = {
+  awsDoc: docRoot + 'API_UpdateStackSet.html',
+  validate: {
+    StackSetName,
+    Accounts,
+    AdministrationRoleARN,
+    AutoDeployment,
+    CallAs,
+    Capabilities,
+    DeploymentTargets,
+    Description,
+    ExecutionRoleName,
+    ManagedExecution,
+    OperationId: { ...OperationId, required: false },
+    OperationPreferences,
+    Parameters,
+    PermissionModel,
+    Regions: { ...Regions, required: false },
+    Tags,
+    TemplateBody,
+    TemplateURL,
+    UsePreviousTemplate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'UpdateStackSet',
+      Version,
+    }
+    const temp = { ...params }
+    const { TemplateBody } = params
+    if (TemplateBody && typeof TemplateBody === 'object') temp.TemplateBody = JSON.stringify(TemplateBody)
+    Object.assign(query, querystringifyParams(temp))
+    return { query }
+  },
+  response: ({ payload }) => payload.UpdateStackSetResult,
+}
+
 const UpdateTerminationProtection = {
   awsDoc: docRoot + 'API_UpdateTerminationProtection.html',
   validate: {
@@ -1637,7 +1783,8 @@ const ValidateTemplate = {
       Version,
       ...params,
     }
-    if (params.TemplateBody) query.TemplateBody = JSON.stringify(params.TemplateBody)
+    const { TemplateBody } = params
+    if (TemplateBody && typeof TemplateBody === 'object') query.TemplateBody = JSON.stringify(TemplateBody)
     return { query }
   },
   response: ({ payload }) => deSerializeObject(payload.ValidateTemplateResult),
@@ -1707,8 +1854,14 @@ export default {
     RegisterType,
     RollbackStack,
     SetStackPolicy,
+    SetTypeConfiguration,
+    SetTypeDefaultVersion,
+    SignalResource,
+    StopStackSetOperation,
+    TestType,
     UpdateStack,
     UpdateStackInstances,
+    UpdateStackSet,
     UpdateTerminationProtection,
     ValidateTemplate,
     ...incomplete,

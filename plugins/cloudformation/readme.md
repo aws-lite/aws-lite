@@ -241,7 +241,7 @@ Properties:
 - **`StackSetName` (string) [required]**
   - Name or ID of a stack set
 - **`AdministrationRoleARN` (string)**
-  - ARN of the IAM role to use
+  - ARN of the IAM role used to perform this action
 - **`AutoDeployment` (object)**
   - Specify if stack sets automatically deploy to organization accounts that are added to the target organization
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ManagedExecution.html)
@@ -984,6 +984,67 @@ Properties:
   - Stack policy url
 
 
+### `SetTypeDefaultVersion`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeDefaultVersion.html)
+
+Properties:
+- **`Arn` (string)**
+  - Amazon resource name
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
+- **`VersionId` (string)**
+  - ID of a specific extension version; found at the end of the ARN of the extension version
+
+
+### `SignalResource`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SignalResource.html)
+
+Properties:
+- **`LogicalResourceId` (string) [required]**
+  - Logical name of a resource
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`Status` (string) [required]**
+  - Status of the signal; can be one of: `SUCCESS`, `FAILURE`
+- **`UniqueId` (string) [required]**
+  - User assigned ID for the signal; each signal ID must be unique
+
+
+### `StopStackSetOperation`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StopStackSetOperation.html)
+
+Properties:
+- **`OperationId` (string) [required]**
+  - Unique identifier for this stack set operation; prevents repeats of the same request
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
+- **`CallAs` (string)**
+  - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
+
+
+### `TestType`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TestType.html)
+
+Properties:
+- **`Arn` (string)**
+  - Amazon resource name
+- **`LogDeliveryBucket` (string)**
+  - S3 bucket where execution logs will be saved; user must have `GetObject` and `PutObject` permissions on the S3 bucket
+- **`Type` (string)**
+  - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
+- **`TypeName` (string)**
+  - Name of the extension with length between 10 and 204 (inclusive)
+- **`VersionId` (string)**
+  - ID of a specific extension version; found at the end of the ARN of the extension version
+
+
 ### `UpdateStack`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html)
@@ -1082,13 +1143,16 @@ Properties:
 - [`DescribeTypeRegistration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeTypeRegistration.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
-- [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)
 - [`SetTypeConfiguration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeConfiguration.html)
-- [`SetTypeDefaultVersion`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeDefaultVersion.html)
-- [`SignalResource`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SignalResource.html)
-- [`StopStackSetOperation`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StopStackSetOperation.html)
-- [`TestType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TestType.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
+- [`DescribeResourceScan`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeResourceScan.html)
+- [`GetGeneratedTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetGeneratedTemplate.html)
+- [`ListGeneratedTemplates`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListGeneratedTemplates.html)
+- [`ListResourceScanRelatedResources`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanRelatedResources.html)
+- [`ListResourceScanResources`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanResources.html)
+- [`ListResourceScans`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScans.html)
+- [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)
+- [`StartResourceScan`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StartResourceScan.html)
 <!-- METHOD_DOCS_END -->
 
 
