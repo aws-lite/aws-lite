@@ -437,6 +437,15 @@ Properties:
   - ID of the extension publisher
 
 
+### `DescribeStackDriftDetectionStatus`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackDriftDetectionStatus.html)
+
+Properties:
+- **`StackDriftDetectionId` (string) [required]**
+  - Stack drift detection ID
+
+
 ### `DescribeStackEvents`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackEvents.html)
@@ -475,6 +484,23 @@ Properties:
   - Logical name of a resource
 - **`StackName` (string) [required]**
   - Stack name or ID
+
+
+### `DescribeStackResourceDrifts`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`StackResourceDriftStatusFilters` (array)**
+  - Specify filters for results; can contain: `DELETED`, `MODIFIED`, `IN_SYNC`, `NOT_CHECKED`
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `DescribeStackResources`
@@ -546,6 +572,17 @@ Properties:
   - Name of the extension with length between 10 and 204 (inclusive)
 - **`VersionId` (string)**
   - ID of a specific extension version; found at the end of the ARN of the extension version
+
+
+### `DetectStackDrift`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html)
+
+Properties:
+- **`StackName` (string) [required]**
+  - Stack name or ID
+- **`LogicalResourceIds` (array)**
+  - Filter results by resources
 
 
 ### `DetectStackSetDrift`
@@ -983,10 +1020,7 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
-- [`DescribeStackDriftDetectionStatus`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackDriftDetectionStatus.html)
-- [`DescribeStackResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html)
 - [`DescribeTypeRegistration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeTypeRegistration.html)
-- [`DetectStackDrift`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html)
 - [`DetectStackResourceDrift`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackResourceDrift.html)
 - [`ImportStacksToStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ImportStacksToStackSet.html)
 - [`ListImports`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html)

@@ -22,14 +22,17 @@ import {
   DescribeChangeSetHooksCommandOutput as DescribeChangeSetHooksResponse,
   DescribeOrganizationsAccessCommandOutput as DescribeOrganizationsAccessResponse,
   DescribePublisherCommandOutput as DescribePublisherResponse,
+  DescribeStackDriftDetectionStatusCommandOutput as DescribeStackDriftDetectionStatusResponse,
   DescribeStackEventsCommandOutput as DescribeStackEventsResponse,
   DescribeStackInstanceCommandOutput as DescribeStackInstanceResponse,
   DescribeStackResourceCommandOutput as DescribeStackResourceResponse,
+  DescribeStackResourceDriftsCommandOutput as DescribeStackResourceDriftsResponse,
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
   DescribeStacksCommandOutput as DescribeStacksResponse,
   DescribeStackSetCommandOutput as DescribeStackSetResponse,
   DescribeStackSetOperationCommandOutput as DescribeStackSetOperationResponse,
   DescribeTypeCommandOutput as DescribeTypeResponse,
+  DetectStackDriftCommandOutput as DetectStackDriftResponse,
   DetectStackSetDriftCommandOutput as DetectStackSetDriftResponse,
   EstimateTemplateCostCommandOutput as EstimateTemplateCostResponse,
   GetStackPolicyCommandOutput as GetStackPolicyResponse,
@@ -180,6 +183,12 @@ declare interface AwsLiteCloudFormation {
   DescribePublisher: (input: { PublisherId: string }) => Promise<DescribePublisherResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackDriftDetectionStatus.html CloudFormation: DescribeStackDriftDetectionStatus}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackDriftDetectionStatus CloudFormation: DescribeStackDriftDetectionStatus}
+   */
+  DescribeStackDriftDetectionStatus: (input: { StackDriftDetectionId: string }) => Promise<DescribeStackDriftDetectionStatusResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackEvents.html CloudFormation: DescribeStackEvents}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackEvents CloudFormation: DescribeStackEvents}
    */
@@ -196,6 +205,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackResource CloudFormation: DescribeStackResource}
    */
   DescribeStackResource: (input: { LogicalResourceId: string, StackName: string }) => Promise<DescribeStackResourceResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html CloudFormation: DescribeStackResourceDrifts}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackResourceDrifts CloudFormation: DescribeStackResourceDrifts}
+   */
+  DescribeStackResourceDrifts: (input: { StackName: string, MaxResults?: number, NextToken?: string, StackResourceDriftStatusFilters?: any[], paginate?: boolean | string }) => Promise<DescribeStackResourceDriftsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResources.html CloudFormation: DescribeStackResources}
@@ -226,6 +241,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeType CloudFormation: DescribeType}
    */
   DescribeType: (input: { Arn?: string, PublicVersionNumber?: string, PublisherId?: string, Type?: string, TypeName?: string, VersionId?: string }) => Promise<DescribeTypeResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html CloudFormation: DetectStackDrift}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DetectStackDrift CloudFormation: DetectStackDrift}
+   */
+  DetectStackDrift: (input: { StackName: string, LogicalResourceIds?: any[] }) => Promise<DetectStackDriftResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackSetDrift.html CloudFormation: DetectStackSetDrift}
@@ -404,14 +425,17 @@ export type {
   DescribeChangeSetHooksResponse,
   DescribeOrganizationsAccessResponse,
   DescribePublisherResponse,
+  DescribeStackDriftDetectionStatusResponse,
   DescribeStackEventsResponse,
   DescribeStackInstanceResponse,
   DescribeStackResourceResponse,
+  DescribeStackResourceDriftsResponse,
   DescribeStackResourcesResponse,
   DescribeStacksResponse,
   DescribeStackSetResponse,
   DescribeStackSetOperationResponse,
   DescribeTypeResponse,
+  DetectStackDriftResponse,
   DetectStackSetDriftResponse,
   EstimateTemplateCostResponse,
   GetStackPolicyResponse,
