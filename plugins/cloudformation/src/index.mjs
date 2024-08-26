@@ -68,6 +68,7 @@ const ExecutionRoleName = { ...str, comment: 'Name of the IAM execution role use
 const ManagedExecution = { ...obj, comment: 'Specify if the stack sets operate concurrently when possible', ref: docRoot + 'API_ManagedExecution.html' }
 const PermissionModel = { ...str, comment: 'Describe how IAM roles required for operations are created; can be one of: `SELF_MANAGED` (default), `SERVICE_MANAGED`' }
 const UsePreviousTemplate = { ...bool, comment: 'Set to true to reuse the template associated with the stack' }
+const GeneratedTemplateName = { ...str, required, comment: 'User defined name for the generated template; can be ARN for existing templates' }
 
 
 const Version = '2010-05-15'
@@ -209,6 +210,33 @@ const CreateChangeSet = {
   response: ({ payload }) => payload.CreateChangeSetResult,
 }
 
+const CreateGeneratedTemplate = {
+  awsDoc: docRoot + 'API_CreateGeneratedTemplate.html',
+  validate: {
+    GeneratedTemplateName,
+    Resources: { ...arr, comment: 'Array of `ResourceDefinition` objects to add to the template', ref: docRoot + 'API_CreateGeneratedTemplate.html#API_CreateGeneratedTemplate_RequestParameters' },
+    StackName: { ...StackName, required: false },
+    TemplateConfiguration: { ...obj, comment: 'Configuration details for the generated template', ref: docRoot + 'API_TemplateConfiguration.html' },
+  },
+  request: (params) => {
+    const query = { Action: 'CreateGeneratedTemplate', Version }
+    const temp = { ...params }
+    const { Resources } = params
+    if (Resources) temp.Resources = Resources.map(i => {
+      const result = { ...i }
+      const { ResourceIdentifier } = i
+      const entry = Object.entries(ResourceIdentifier).map(([ Key, Value ]) => {
+        return { Key, Value }
+      })
+      result.ResourceIdentifier = { entry }
+      return result
+    })
+    Object.assign(query, querystringifyParams(temp))
+    return { query }
+  },
+  response: ({ payload }) => payload.CreateGeneratedTemplateResult,
+}
+
 const CreateStack = {
   awsDoc: docRoot + 'API_CreateStack.html',
   validate: {
@@ -347,6 +375,23 @@ const DeleteChangeSet = {
     return {
       query: {
         Action: 'DeleteChangeSet',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: emptyResponse,
+}
+
+const DeleteGeneratedTemplate = {
+  awsDoc: docRoot + 'API_DeleteGeneratedTemplate.html',
+  validate: {
+    GeneratedTemplateName,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DeleteGeneratedTemplate',
         Version,
         ...params,
       },
@@ -533,6 +578,36 @@ const DescribeChangeSetHooks = {
   response: ({ payload }) => deSerializeObject(payload.DescribeChangeSetHooksResult),
 }
 
+const DescribeGeneratedTemplate = {
+  awsDoc: docRoot + 'API_DescribeGeneratedTemplate.html',
+  validate: {
+    GeneratedTemplateName,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeGeneratedTemplate',
+        Version,
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    // return payload.DescribeGeneratedTemplateResult
+    const maxDepth = 2 // Arrays nested in arrays nested in arrays
+    const result = deSerializeObject(payload.DescribeGeneratedTemplateResult, maxDepth)
+    if (result.Resources) result.Resources = result.Resources.map(i => {
+      const { ResourceIdentifier } = i
+      return Object.entries(ResourceIdentifier).map(([ Key, Value ]) => {
+        const temp = {}
+        temp[Key] = Value
+        return temp
+      })
+    })
+    return result
+  },
+}
+
 const DescribeOrganizationsAccess = {
   awsDoc: docRoot + 'API_DescribeOrganizationsAccess.html',
   validate: {
@@ -563,6 +638,23 @@ const DescribePublisher = {
     }
   },
   response: ({ payload }) => payload.DescribePublisherResult,
+}
+
+// TODO: verify
+const DescribeResourceScan = {
+  awsDoc: docRoot + 'API_DescribeResourceScan.html',
+  validate: {
+    ResourceScanId: { ...str, required, comment: 'Resource scan ARN' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'DescribeResourceScan',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => deSerializeObject(payload.DescribeResourceScanResult),
 }
 
 const DescribeStackDriftDetectionStatus = {
@@ -931,6 +1023,23 @@ const ExecuteChangeSet = {
   response: emptyResponse,
 }
 
+const GetGeneratedTemplate = {
+  awsDoc: docRoot + 'API_GetGeneratedTemplate.html',
+  validate: {
+    GeneratedTemplateName,
+    Format: { ...str, comment: 'Specify a format for the response; can be one of: `JSON`, `YAML`' },
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'GetGeneratedTemplate',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.GetGeneratedTemplateResult,
+}
+
 const GetStackPolicy = {
   awsDoc: docRoot + 'API_GetStackPolicy.html',
   validate: {
@@ -1080,6 +1189,34 @@ const ListExports = {
     }
   },
   response: ({ payload }) => deSerializeObject(payload.ListExportsResult),
+}
+
+const ListGeneratedTemplates = {
+  awsDoc: docRoot + 'API_ListGeneratedTemplates.html',
+  validate: {
+    MaxResults,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListGeneratedTemplates',
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListGeneratedTemplatesResult.NextToken',
+        accumulator: 'ListGeneratedTemplatesResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => deSerializeObject(payload.ListGeneratedTemplatesResult),
 }
 
 const ListImports = {
@@ -1650,6 +1787,29 @@ const TestType = {
   response: ({ payload }) => payload.TestTypeResult,
 }
 
+const UpdateGeneratedTemplateCommand = {
+  awsDoc: docRoot + 'API_UpdateGeneratedTemplate.html',
+  validate: {
+    GeneratedTemplateName,
+    AddResources: { ...arr, comment: 'Array of `ResourceDefinition` objects to add to the template', ref: docRoot + 'API_UpdateGeneratedTemplate.html#API_UpdateGeneratedTemplate_RequestParameters' },
+    NewGeneratedTemplateName: { ...str, comment: 'New name to assign the generated template' },
+    RefreshAllResources: { ...bool, comment: 'Set to true to update resource properties to their current live state', ref: docRoot + 'API_UpdateGeneratedTemplate.html#API_UpdateGeneratedTemplate_RequestParameters' },
+    RemoveResources: { ...arr, comment: 'Array of logical resource IDs to remove resources from the template' },
+    TemplateConfiguration: { ...obj, comment: 'New template configuration', ref: docRoot + 'API_TemplateConfiguration.html' },
+  },
+  request: (params) => {
+    const query = {
+      Action: 'UpdateGeneratedTemplateCommand',
+    }
+    const temp = { ...params }
+    const { TemplateConfiguration } = params
+    if (TemplateConfiguration) temp.TemplateConfiguration = JSON.stringify(TemplateConfiguration)
+    Object.assign(query, querystringifyParams(temp))
+    return { query }
+  },
+  response: ({ payload }) => payload.UpdateGeneratedTemplateCommandResult,
+}
+
 const UpdateStack = {
   awsDoc: docRoot + 'API_UpdateStack.html',
   validate: {
@@ -1801,12 +1961,14 @@ export default {
     CancelUpdateStack,
     ContinueUpdateRollback,
     CreateChangeSet,
+    CreateGeneratedTemplate,
     CreateStack,
     CreateStackInstances,
     CreateStackSet,
     DeactivateOrganizationsAccess,
     DeleteChangeSet,
     DeactivateType,
+    DeleteGeneratedTemplate,
     DeleteStack,
     DeleteStackInstances,
     DeleteStackSet,
@@ -1814,8 +1976,10 @@ export default {
     DescribeAccountLimits,
     DescribeChangeSet,
     DescribeChangeSetHooks,
+    DescribeGeneratedTemplate,
     DescribeOrganizationsAccess,
     DescribePublisher,
+    DescribeResourceScan,
     DescribeStackDriftDetectionStatus,
     DescribeStackEvents,
     DescribeStackInstance,
@@ -1831,6 +1995,7 @@ export default {
     DetectStackResourceDrift,
     DetectStackSetDrift,
     EstimateTemplateCost,
+    GetGeneratedTemplate,
     GetStackPolicy,
     GetTemplate,
     GetTemplateSummary,
@@ -1838,6 +2003,7 @@ export default {
     ImportStacksToStackSet,
     ListChangeSets,
     ListExports,
+    ListGeneratedTemplates,
     ListImports,
     ListStackInstanceResourceDrifts,
     ListStackInstances,
@@ -1859,6 +2025,7 @@ export default {
     SignalResource,
     StopStackSetOperation,
     TestType,
+    UpdateGeneratedTemplateCommand,
     UpdateStack,
     UpdateStackInstances,
     UpdateStackSet,

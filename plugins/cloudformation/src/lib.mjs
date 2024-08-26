@@ -22,9 +22,12 @@ const arrayProperties = {
   // DescribeChangeSetHooks
   Hooks: 'member',
   // DescribeGeneratedTemplate
-  // TODO
+  Resources: 'member',
+  ResourceIdentifier: 'entry',
+  Properties: 'member',
+  Warnings: 'member',
   // DescribeResourceScan
-  // TODO
+  // ResourceTypes: 'member',
   // DescribeStackEvents
   StackEvents: 'member',
   // DescribeStackResourceDrifts
@@ -52,7 +55,7 @@ const arrayProperties = {
   ResourceIdentifierSummaries: 'member',
   LogicalResourceIds: 'member',
   ResourceIdentifiers: 'member',
-  Warnings: 'member',
+  // Warnings: 'member',
   UnrecognizedResourceTypes: 'member',
   // ListChangeSets
   Summaries: 'member',
@@ -131,13 +134,16 @@ function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
   if (maxDepth < 0) return obj
   if (typeof obj === 'object') {
     Object.entries(obj).forEach(([ key, value ]) => {
-      if (maxDepth > 0) deSerializeObject(value, maxDepth - 1)
-      if (arrayProps[key]) {
+      const arrKey = arrayProps[key]
+      if (arrKey) {
         let temp = []
-        if (value.member) temp = Array.isArray(value.member) ? value.member : [ value.member ]
+        if (value[arrKey]) temp = Array.isArray(value[arrKey]) ? value[arrKey] : [ value[arrKey] ]
+
         if (maxDepth > 0) temp = temp.map(i => deSerializeObject(i, maxDepth - 1))
         obj[key] = temp
+        // console.log(value)
       }
+      else if (maxDepth > 0) deSerializeObject(value, maxDepth - 1)
     })
   }
   return obj

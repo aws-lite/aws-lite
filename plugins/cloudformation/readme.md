@@ -627,6 +627,17 @@ Properties:
   - S3 location of CloudFormation template; can be up to 460,800 b
 
 
+### `GetGeneratedTemplate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetGeneratedTemplate.html)
+
+Properties:
+- **`GeneratedTemplateName` (string) [required]**
+  - User defined name for the generated template; can be ARN for existing templates
+- **`Format` (string)**
+  - Specify a format for the response; can be one of: `JSON`, `YAML`
+
+
 ### `GetStackPolicy`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetStackPolicy.html)
@@ -1045,6 +1056,28 @@ Properties:
   - ID of a specific extension version; found at the end of the ARN of the extension version
 
 
+### `UpdateGeneratedTemplateCommand`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateGeneratedTemplate.html)
+
+Properties:
+- **`GeneratedTemplateName` (string) [required]**
+  - User defined name for the generated template; can be ARN for existing templates
+- **`AddResources` (array)**
+  - Array of `ResourceDefinition` objects to add to the template
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateGeneratedTemplate.html#API_UpdateGeneratedTemplate_RequestParameters)
+- **`NewGeneratedTemplateName` (string)**
+  - New name to assign the generated template
+- **`RefreshAllResources` (boolean)**
+  - Set to true to update resource properties to their current live state
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateGeneratedTemplate.html#API_UpdateGeneratedTemplate_RequestParameters)
+- **`RemoveResources` (array)**
+  - Array of logical resource IDs to remove resources from the template
+- **`TemplateConfiguration` (object)**
+  - New template configuration
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TemplateConfiguration.html)
+
+
 ### `UpdateStack`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html)
@@ -1140,14 +1173,16 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
+- [`CreateGeneratedTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateGeneratedTemplate.html)
+- [`DeleteGeneratedTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteGeneratedTemplate.html)
+- [`DescribeGeneratedTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeGeneratedTemplate.html)
+- [`DescribeResourceScan`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeResourceScan.html)
 - [`DescribeTypeRegistration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeTypeRegistration.html)
+- [`ListGeneratedTemplates`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListGeneratedTemplates.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`SetTypeConfiguration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeConfiguration.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
-- [`DescribeResourceScan`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeResourceScan.html)
-- [`GetGeneratedTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetGeneratedTemplate.html)
-- [`ListGeneratedTemplates`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListGeneratedTemplates.html)
 - [`ListResourceScanRelatedResources`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanRelatedResources.html)
 - [`ListResourceScanResources`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanResources.html)
 - [`ListResourceScans`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScans.html)

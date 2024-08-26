@@ -36,6 +36,7 @@ import {
   DetectStackResourceDriftCommandOutput as DetectStackResourceDriftResponse,
   DetectStackSetDriftCommandOutput as DetectStackSetDriftResponse,
   EstimateTemplateCostCommandOutput as EstimateTemplateCostResponse,
+  GetGeneratedTemplateCommandOutput as GetGeneratedTemplateResponse,
   GetStackPolicyCommandOutput as GetStackPolicyResponse,
   GetTemplateCommandOutput as GetTemplateResponse,
   GetTemplateSummaryCommandOutput as GetTemplateSummaryResponse,
@@ -61,6 +62,7 @@ import {
   SignalResourceCommandOutput as SignalResourceResponse,
   StopStackSetOperationCommandOutput as StopStackSetOperationResponse,
   TestTypeCommandOutput as TestTypeResponse,
+  UpdateGeneratedTemplateCommandCommandOutput as UpdateGeneratedTemplateCommandResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
   UpdateStackInstancesCommandOutput as UpdateStackInstancesResponse,
   UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
@@ -275,6 +277,12 @@ declare interface AwsLiteCloudFormation {
   EstimateTemplateCost: (input: { Parameters?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string }) => Promise<EstimateTemplateCostResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetGeneratedTemplate.html CloudFormation: GetGeneratedTemplate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#GetGeneratedTemplate CloudFormation: GetGeneratedTemplate}
+   */
+  GetGeneratedTemplate: (input: { GeneratedTemplateName: string, Format?: string }) => Promise<GetGeneratedTemplateResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_GetStackPolicy.html CloudFormation: GetStackPolicy}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#GetStackPolicy CloudFormation: GetStackPolicy}
    */
@@ -425,6 +433,12 @@ declare interface AwsLiteCloudFormation {
   TestType: (input: { Arn?: string, LogDeliveryBucket?: string, Type?: string, TypeName?: string, VersionId?: string }) => Promise<TestTypeResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateGeneratedTemplate.html CloudFormation: UpdateGeneratedTemplateCommand}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateGeneratedTemplateCommand CloudFormation: UpdateGeneratedTemplateCommand}
+   */
+  UpdateGeneratedTemplateCommand: (input: { GeneratedTemplateName: string, AddResources?: any[], NewGeneratedTemplateName?: string, RefreshAllResources?: boolean, RemoveResources?: any[], TemplateConfiguration?: Record<string, any> }) => Promise<UpdateGeneratedTemplateCommandResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html CloudFormation: UpdateStack}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateStack CloudFormation: UpdateStack}
    */
@@ -495,6 +509,7 @@ export type {
   DetectStackResourceDriftResponse,
   DetectStackSetDriftResponse,
   EstimateTemplateCostResponse,
+  GetGeneratedTemplateResponse,
   GetStackPolicyResponse,
   GetTemplateResponse,
   GetTemplateSummaryResponse,
@@ -520,6 +535,7 @@ export type {
   SignalResourceResponse,
   StopStackSetOperationResponse,
   TestTypeResponse,
+  UpdateGeneratedTemplateCommandResponse,
   UpdateStackResponse,
   UpdateStackInstancesResponse,
   UpdateTerminationProtectionResponse,
