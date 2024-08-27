@@ -155,6 +155,23 @@ Properties:
   - Set to true to reuse the template associated with the stack
 
 
+### `CreateGeneratedTemplate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateGeneratedTemplate.html)
+
+Properties:
+- **`GeneratedTemplateName` (string) [required]**
+  - User defined name for the generated template; can be ARN for existing templates
+- **`Resources` (array)**
+  - Array of `ResourceDefinition` objects to add to the template
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateGeneratedTemplate.html#API_CreateGeneratedTemplate_RequestParameters)
+- **`StackName` (string)**
+  - Stack name or ID
+- **`TemplateConfiguration` (object)**
+  - Configuration details for the generated template
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_TemplateConfiguration.html)
+
+
 ### `CreateStack`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStack.html)
@@ -305,6 +322,15 @@ Properties:
   - Name of the extension with length between 10 and 204 (inclusive)
 
 
+### `DeleteGeneratedTemplate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteGeneratedTemplate.html)
+
+Properties:
+- **`GeneratedTemplateName` (string) [required]**
+  - User defined name for the generated template; can be ARN for existing templates
+
+
 ### `DeleteStack`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStack.html)
@@ -416,6 +442,15 @@ Properties:
   - Logical name of a resource
 - **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `DescribeGeneratedTemplate`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeGeneratedTemplate.html)
+
+Properties:
+- **`GeneratedTemplateName` (string) [required]**
+  - User defined name for the generated template; can be ARN for existing templates
 
 
 ### `DescribeOrganizationsAccess`
@@ -746,6 +781,19 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListGeneratedTemplates`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListGeneratedTemplates.html)
+
+Properties:
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListImports`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html)
@@ -1056,7 +1104,7 @@ Properties:
   - ID of a specific extension version; found at the end of the ARN of the extension version
 
 
-### `UpdateGeneratedTemplateCommand`
+### `UpdateGeneratedTemplate`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateGeneratedTemplate.html)
 
@@ -1173,12 +1221,8 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
-- [`CreateGeneratedTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateGeneratedTemplate.html)
-- [`DeleteGeneratedTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteGeneratedTemplate.html)
-- [`DescribeGeneratedTemplate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeGeneratedTemplate.html)
 - [`DescribeResourceScan`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeResourceScan.html)
 - [`DescribeTypeRegistration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeTypeRegistration.html)
-- [`ListGeneratedTemplates`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListGeneratedTemplates.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`SetTypeConfiguration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeConfiguration.html)

@@ -7,12 +7,14 @@ import {
   CancelUpdateStackCommandOutput as CancelUpdateStackResponse,
   ContinueUpdateRollbackCommandOutput as ContinueUpdateRollbackResponse,
   CreateChangeSetCommandOutput as CreateChangeSetResponse,
+  CreateGeneratedTemplateCommandOutput as CreateGeneratedTemplateResponse,
   CreateStackCommandOutput as CreateStackResponse,
   CreateStackInstancesCommandOutput as CreateStackInstancesResponse,
   CreateStackSetCommandOutput as CreateStackSetResponse,
   DeactivateOrganizationsAccessCommandOutput as DeactivateOrganizationsAccessResponse,
   DeleteChangeSetCommandOutput as DeleteChangeSetResponse,
   DeactivateTypeCommandOutput as DeactivateTypeResponse,
+  DeleteGeneratedTemplateCommandOutput as DeleteGeneratedTemplateResponse,
   DeleteStackCommandOutput as DeleteStackResponse,
   DeleteStackInstancesCommandOutput as DeleteStackInstancesResponse,
   DeleteStackSetCommandOutput as DeleteStackSetResponse,
@@ -20,6 +22,7 @@ import {
   DescribeAccountLimitsCommandOutput as DescribeAccountLimitsResponse,
   DescribeChangeSetCommandOutput as DescribeChangeSetResponse,
   DescribeChangeSetHooksCommandOutput as DescribeChangeSetHooksResponse,
+  DescribeGeneratedTemplateCommandOutput as DescribeGeneratedTemplateResponse,
   DescribeOrganizationsAccessCommandOutput as DescribeOrganizationsAccessResponse,
   DescribePublisherCommandOutput as DescribePublisherResponse,
   DescribeStackDriftDetectionStatusCommandOutput as DescribeStackDriftDetectionStatusResponse,
@@ -44,6 +47,7 @@ import {
   ImportStacksToStackSetCommandOutput as ImportStacksToStackSetResponse,
   ListChangeSetsCommandOutput as ListChangeSetsResponse,
   ListExportsCommandOutput as ListExportsResponse,
+  ListGeneratedTemplatesCommandOutput as ListGeneratedTemplatesResponse,
   ListImportsCommandOutput as ListImportsResponse,
   ListStackInstancesCommandOutput as ListStackInstancesResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
@@ -62,7 +66,7 @@ import {
   SignalResourceCommandOutput as SignalResourceResponse,
   StopStackSetOperationCommandOutput as StopStackSetOperationResponse,
   TestTypeCommandOutput as TestTypeResponse,
-  UpdateGeneratedTemplateCommandCommandOutput as UpdateGeneratedTemplateCommandResponse,
+  UpdateGeneratedTemplateCommandOutput as UpdateGeneratedTemplateResponse,
   UpdateStackCommandOutput as UpdateStackResponse,
   UpdateStackInstancesCommandOutput as UpdateStackInstancesResponse,
   UpdateTerminationProtectionCommandOutput as UpdateTerminationProtectionResponse,
@@ -107,6 +111,12 @@ declare interface AwsLiteCloudFormation {
   CreateChangeSet: (input: { ChangeSetName: string, StackName: string, Capabilities?: any[], ChangeSetType?: string, ClientToken?: string, Description?: string, ImportExistingResources?: boolean, IncludeNestedStacks?: boolean, NotificationARNs?: any[], OnStackFailure?: string, Parameters?: any[], ResourceTypes?: any[], ResourcesToImport?: any[], RoleARN?: string, RollbackConfiguration?: Record<string, any>, Tags?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string, UsePreviousTemplate?: boolean }) => Promise<CreateChangeSetResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateGeneratedTemplate.html CloudFormation: CreateGeneratedTemplate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#CreateGeneratedTemplate CloudFormation: CreateGeneratedTemplate}
+   */
+  CreateGeneratedTemplate: (input: { GeneratedTemplateName: string, Resources?: any[], StackName?: string, TemplateConfiguration?: Record<string, any> }) => Promise<CreateGeneratedTemplateResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStack.html CloudFormation: CreateStack}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#CreateStack CloudFormation: CreateStack}
    */
@@ -137,6 +147,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeactivateType CloudFormation: DeactivateType}
    */
   DeactivateType: (input: { Arn?: string, Type?: string, TypeName?: string }) => Promise<DeactivateTypeResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteGeneratedTemplate.html CloudFormation: DeleteGeneratedTemplate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeleteGeneratedTemplate CloudFormation: DeleteGeneratedTemplate}
+   */
+  DeleteGeneratedTemplate: (input: { GeneratedTemplateName: string }) => Promise<DeleteGeneratedTemplateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStack.html CloudFormation: DeleteStack}
@@ -179,6 +195,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeChangeSetHooks CloudFormation: DescribeChangeSetHooks}
    */
   DescribeChangeSetHooks: (input: { ChangeSetName: string, StackName?: string, NextToken?: string, LogicalResourceId?: string, paginate?: boolean | string }) => Promise<DescribeChangeSetHooksResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeGeneratedTemplate.html CloudFormation: DescribeGeneratedTemplate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeGeneratedTemplate CloudFormation: DescribeGeneratedTemplate}
+   */
+  DescribeGeneratedTemplate: (input: { GeneratedTemplateName: string }) => Promise<DescribeGeneratedTemplateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html CloudFormation: DescribeOrganizationsAccess}
@@ -325,6 +347,12 @@ declare interface AwsLiteCloudFormation {
   ListExports: (input: { NextToken?: string, paginate?: boolean | string }) => Promise<ListExportsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListGeneratedTemplates.html CloudFormation: ListGeneratedTemplates}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListGeneratedTemplates CloudFormation: ListGeneratedTemplates}
+   */
+  ListGeneratedTemplates: (input: { MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListGeneratedTemplatesResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListImports.html CloudFormation: ListImports}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListImports CloudFormation: ListImports}
    */
@@ -433,10 +461,10 @@ declare interface AwsLiteCloudFormation {
   TestType: (input: { Arn?: string, LogDeliveryBucket?: string, Type?: string, TypeName?: string, VersionId?: string }) => Promise<TestTypeResponse>
   /**
    * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateGeneratedTemplate.html CloudFormation: UpdateGeneratedTemplateCommand}
-   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateGeneratedTemplateCommand CloudFormation: UpdateGeneratedTemplateCommand}
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateGeneratedTemplate.html CloudFormation: UpdateGeneratedTemplate}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateGeneratedTemplate CloudFormation: UpdateGeneratedTemplate}
    */
-  UpdateGeneratedTemplateCommand: (input: { GeneratedTemplateName: string, AddResources?: any[], NewGeneratedTemplateName?: string, RefreshAllResources?: boolean, RemoveResources?: any[], TemplateConfiguration?: Record<string, any> }) => Promise<UpdateGeneratedTemplateCommandResponse>
+  UpdateGeneratedTemplate: (input: { GeneratedTemplateName: string, AddResources?: any[], NewGeneratedTemplateName?: string, RefreshAllResources?: boolean, RemoveResources?: any[], TemplateConfiguration?: Record<string, any> }) => Promise<UpdateGeneratedTemplateResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStack.html CloudFormation: UpdateStack}
@@ -480,12 +508,14 @@ export type {
   CancelUpdateStackResponse,
   ContinueUpdateRollbackResponse,
   CreateChangeSetResponse,
+  CreateGeneratedTemplateResponse,
   CreateStackResponse,
   CreateStackInstancesResponse,
   CreateStackSetResponse,
   DeactivateOrganizationsAccessResponse,
   DeleteChangeSetResponse,
   DeactivateTypeResponse,
+  DeleteGeneratedTemplateResponse,
   DeleteStackResponse,
   DeleteStackInstancesResponse,
   DeleteStackSetResponse,
@@ -493,6 +523,7 @@ export type {
   DescribeAccountLimitsResponse,
   DescribeChangeSetResponse,
   DescribeChangeSetHooksResponse,
+  DescribeGeneratedTemplateResponse,
   DescribeOrganizationsAccessResponse,
   DescribePublisherResponse,
   DescribeStackDriftDetectionStatusResponse,
@@ -517,6 +548,7 @@ export type {
   ImportStacksToStackSetResponse,
   ListChangeSetsResponse,
   ListExportsResponse,
+  ListGeneratedTemplatesResponse,
   ListImportsResponse,
   ListStackInstancesResponse,
   ListStackResourcesResponse,
@@ -535,7 +567,7 @@ export type {
   SignalResourceResponse,
   StopStackSetOperationResponse,
   TestTypeResponse,
-  UpdateGeneratedTemplateCommandResponse,
+  UpdateGeneratedTemplateResponse,
   UpdateStackResponse,
   UpdateStackInstancesResponse,
   UpdateTerminationProtectionResponse,

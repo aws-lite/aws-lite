@@ -130,6 +130,31 @@ function querystringifyParams (obj) {
   return query
 }
 
+// Resource objects have a nested array `ResourceIdentifier` that serializes differently than everything else in cloudformation for some reason...
+function querystringifyResources (resourcesArrayObject) {
+  let result = {}
+  let i = 1
+  let baseKey = Object.keys(resourcesArrayObject)[0]
+  resourcesArrayObject[baseKey].forEach(resource => {
+    Object.entries(resource).forEach(([ resourceKey, resourceValue ]) => {
+      if (resourceKey === 'ResourceIdentifier') {
+        let j = 1
+        Object.entries(resourceValue).forEach(([ idKey, idValue ]) => {
+          result[`${baseKey}.member.${i}.ResourceIdentifier.entry.${j}.key`] = idKey
+          result[`${baseKey}.member.${i}.ResourceIdentifier.entry.${j}.value`] = idValue
+          j++
+        })
+      }
+      else {
+        result[`${baseKey}.member.${i}.${resourceKey}`] = resourceValue
+      }
+    })
+    i++
+  })
+  console.log(result)
+  return result
+}
+
 function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
   if (maxDepth < 0) return obj
   if (typeof obj === 'object') {
@@ -151,5 +176,6 @@ function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
 
 export {
   querystringifyParams,
+  querystringifyResources,
   deSerializeObject,
 }

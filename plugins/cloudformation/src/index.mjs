@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import { default as qs } from 'node:querystring'
-import { querystringifyParams, deSerializeObject } from './lib.mjs'
+import { querystringifyParams, querystringifyResources, deSerializeObject } from './lib.mjs'
 
 const service = 'cloudformation'
 const property = 'CloudFormation'
@@ -219,19 +219,20 @@ const CreateGeneratedTemplate = {
     TemplateConfiguration: { ...obj, comment: 'Configuration details for the generated template', ref: docRoot + 'API_TemplateConfiguration.html' },
   },
   request: (params) => {
-    const query = { Action: 'CreateGeneratedTemplate', Version }
-    const temp = { ...params }
-    const { Resources } = params
-    if (Resources) temp.Resources = Resources.map(i => {
-      const result = { ...i }
-      const { ResourceIdentifier } = i
-      const entry = Object.entries(ResourceIdentifier).map(([ Key, Value ]) => {
-        return { Key, Value }
-      })
-      result.ResourceIdentifier = { entry }
-      return result
-    })
-    Object.assign(query, querystringifyParams(temp))
+    const query = {
+      Action: 'CreateGeneratedTemplate',
+      Version,
+      ...params,
+    }
+    const { Resources, TemplateConfiguration } = params
+    if (Resources) {
+      delete query.Resources
+      Object.assign(query, querystringifyResources({ Resources }))
+    }
+    if (TemplateConfiguration) {
+      delete query.TemplateConfiguration
+      Object.assign(query, querystringifyParams({ TemplateConfiguration }))
+    }
     return { query }
   },
   response: ({ payload }) => payload.CreateGeneratedTemplateResult,
@@ -593,17 +594,18 @@ const DescribeGeneratedTemplate = {
     }
   },
   response: ({ payload }) => {
-    // return payload.DescribeGeneratedTemplateResult
     const maxDepth = 2 // Arrays nested in arrays nested in arrays
     const result = deSerializeObject(payload.DescribeGeneratedTemplateResult, maxDepth)
-    if (result.Resources) result.Resources = result.Resources.map(i => {
-      const { ResourceIdentifier } = i
-      return Object.entries(ResourceIdentifier).map(([ Key, Value ]) => {
-        const temp = {}
-        temp[Key] = Value
-        return temp
+    if (result.Resources) {
+      result.Resources = result.Resources.map(resource => {
+        const ResourceIdentifier = {}
+        resource.ResourceIdentifier.forEach(({ key, value }) => {
+          ResourceIdentifier[key] = value
+        })
+        resource.ResourceIdentifier = ResourceIdentifier
+        return resource
       })
-    })
+    }
     return result
   },
 }
@@ -1787,7 +1789,7 @@ const TestType = {
   response: ({ payload }) => payload.TestTypeResult,
 }
 
-const UpdateGeneratedTemplateCommand = {
+const UpdateGeneratedTemplate = {
   awsDoc: docRoot + 'API_UpdateGeneratedTemplate.html',
   validate: {
     GeneratedTemplateName,
@@ -1799,15 +1801,26 @@ const UpdateGeneratedTemplateCommand = {
   },
   request: (params) => {
     const query = {
-      Action: 'UpdateGeneratedTemplateCommand',
+      Action: 'UpdateGeneratedTemplate',
+      ...params,
     }
-    const temp = { ...params }
-    const { TemplateConfiguration } = params
-    if (TemplateConfiguration) temp.TemplateConfiguration = JSON.stringify(TemplateConfiguration)
-    Object.assign(query, querystringifyParams(temp))
+    const { AddResources, RemoveResources, TemplateConfiguration } = params
+    if (AddResources) {
+      delete query.AddResources
+      Object.assign(query, querystringifyResources({ AddResources }))
+    }
+    if (RemoveResources) {
+      delete query.RemoveResources
+      Object.assign(query, querystringifyParams({ RemoveResources }))
+    }
+    if (TemplateConfiguration) {
+      delete query.TemplateConfiguration
+      Object.assign(query, querystringifyParams({ TemplateConfiguration }))
+    }
+    console.log(query)
     return { query }
   },
-  response: ({ payload }) => payload.UpdateGeneratedTemplateCommandResult,
+  response: ({ payload }) => payload.UpdateGeneratedTemplateResult,
 }
 
 const UpdateStack = {
@@ -2025,7 +2038,7 @@ export default {
     SignalResource,
     StopStackSetOperation,
     TestType,
-    UpdateGeneratedTemplateCommand,
+    UpdateGeneratedTemplate,
     UpdateStack,
     UpdateStackInstances,
     UpdateStackSet,
