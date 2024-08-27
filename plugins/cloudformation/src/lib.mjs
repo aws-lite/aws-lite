@@ -151,7 +151,6 @@ function querystringifyResources (resourcesArrayObject) {
     })
     i++
   })
-  console.log(result)
   return result
 }
 
@@ -166,7 +165,6 @@ function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
 
         if (maxDepth > 0) temp = temp.map(i => deSerializeObject(i, maxDepth - 1))
         obj[key] = temp
-        // console.log(value)
       }
       else if (maxDepth > 0) deSerializeObject(value, maxDepth - 1)
     })

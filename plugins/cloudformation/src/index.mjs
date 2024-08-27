@@ -201,8 +201,12 @@ const CreateChangeSet = {
       Action: 'CreateChangeSet',
       Version,
     }
-    const temp = { ...params } // Used to prevent mutating params
-    const { TemplateBody } = params
+    const temp = { ...params }
+    const { ResourcesToImport, TemplateBody } = params
+    if (ResourcesToImport) {
+      delete temp.ResourcesToImport
+      Object.assign(temp, querystringifyResources({ ResourcesToImport }))
+    }
     if (TemplateBody && typeof TemplateBody === 'object') temp.TemplateBody = JSON.stringify(TemplateBody)
     Object.assign(query, querystringifyParams(temp))
     return { query }
@@ -991,14 +995,17 @@ const EstimateTemplateCost = {
     TemplateURL,
   },
   request: (params) => {
-    const { Parameters, TemplateBody, TemplateURL } = params
     const query = {
       Action: 'EstimateTemplateCost',
       Version,
+      ...params,
     }
-    if (Parameters) Object.assign(query, querystringifyParams({ Parameters }))
-    if (TemplateBody) query.TemplateBody = JSON.stringify(TemplateBody)
-    if (TemplateURL) query.TemplateURL = TemplateURL
+    const { Parameters, TemplateBody } = params
+    if (Parameters) {
+      delete query.Parameters
+      Object.assign(query, querystringifyParams({ Parameters }))
+    }
+    if (TemplateBody && typeof TemplateBody === 'object') query.TemplateBody = JSON.stringify(TemplateBody)
     return { query }
   },
   response: ({ payload }) => payload.EstimateTemplateCostResult,
@@ -1802,22 +1809,14 @@ const UpdateGeneratedTemplate = {
   request: (params) => {
     const query = {
       Action: 'UpdateGeneratedTemplate',
-      ...params,
     }
-    const { AddResources, RemoveResources, TemplateConfiguration } = params
+    const temp = { ...params }
+    const { AddResources } = params
     if (AddResources) {
-      delete query.AddResources
-      Object.assign(query, querystringifyResources({ AddResources }))
+      delete temp.AddResources
+      Object.assign(temp, querystringifyResources({ AddResources }))
     }
-    if (RemoveResources) {
-      delete query.RemoveResources
-      Object.assign(query, querystringifyParams({ RemoveResources }))
-    }
-    if (TemplateConfiguration) {
-      delete query.TemplateConfiguration
-      Object.assign(query, querystringifyParams({ TemplateConfiguration }))
-    }
-    console.log(query)
+    Object.assign(query, querystringifyParams(temp))
     return { query }
   },
   response: ({ payload }) => payload.UpdateGeneratedTemplateResult,
