@@ -20,68 +20,61 @@ const str = { type: 'string' }
 const num = { type: 'number' }
 
 const Accounts = { ...arr, comment: 'Names of the AWS accounts that will be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both' }
+const AdministrationRoleARN = { ...str, comment: 'ARN of the IAM role used to perform this action' }
+const Arn = { ...str, comment: 'Amazon resource name' }
+const AutoDeployment = { ...obj, comment: 'Specify if stack sets automatically deploy to organization accounts that are added to the target organization', ref: docRoot + 'API_ManagedExecution.html' }
+const CallAs = { ...str, comment: 'Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`' }
 const Capabilities = { ...arr, comment: 'Array of CloudFormation capabilities necessary for stack creation; can be any of: `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`, `CAPABILITY_AUTO_EXPAND`' }
+const ChangeSetName = { ...str, required, comment: 'User created ID for the change set' }
 const ClientRequestToken = { ...str, comment: 'Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`' }
+const DeploymentTargets = { ...obj, comment: 'Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both', ref: docRoot + 'API_DeploymentTargets.html' }
+const DeprecatedStatus = { ...str, comment: 'Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`' }
+const Description = { ...str, comment: 'Description' }
 const DisableRollback = { ...bool, comment: 'Set to true to disable rollback of the stack if stack creation failed' }
 const EnableTerminationProtection = { ...bool, comment: 'Enable protection against stack deletion', ref: userGuide + 'using-cfn-protect-stacks.html' }
+const ExecutionRoleArn = { ...str, comment: 'ARN of the IAM execution role used to activate the extension' }
+const ExecutionRoleName = { ...str, comment: 'Name of the IAM execution role used to create the stack set; defaults to `AWSCloudFormationStackSetExecutionRole`' }
+const GeneratedTemplateName = { ...str, required, comment: 'User defined name for the generated template; can be ARN for existing templates' }
+const LoggingConfig = { ...obj, comment: 'Logging configuration', ref: docRoot + 'API_LoggingConfig.html' }
+const LogicalResourceId = { ...str, comment: 'Logical name of a resource' }
+const ManagedExecution = { ...obj, comment: 'Specify if the stack sets operate concurrently when possible', ref: docRoot + 'API_ManagedExecution.html' }
+const MaxResults = { ...num, comment: 'Maximum number of results to be returned in a response' }
+const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const NotificationARNs = { ...arr, comment: 'Array of SNS topic ARNs to publish stack related events' }
 const OnFailure = { ...str, comment: 'Action to be taken if stack creation failes; can be one of: `DO_NOTHING`, `ROLLBACK`, `DELETE`' }
+const OperationId = { ...str, comment: 'Unique identifier for this stack set operation; prevents repeats of the same request' }
+const OperationPreferences = { ...obj, comment: 'Preferences for how the stack set operation will be performed', ref: docRoot + 'API_StackSetOperationPreferences.html' }
+const ParameterOverrides = { ...arr, comment: 'Array of `Parameter` objects defining stack set parameters to override in the stack instances', ref: docRoot + 'API_Parameter.html' }
 const Parameters = { ...arr, comment: 'Array of objects specifying stack input parameters', ref: docRoot + 'API_Parameter.html' }
+const PermissionModel = { ...str, comment: 'Describe how IAM roles required for operations are created; can be one of: `SELF_MANAGED` (default), `SERVICE_MANAGED`' }
+const PublisherId = { ...str, comment: 'ID of the extension publisher' }
+const Regions = { ...arr, required, comment: 'Array of regions where the stack instances will be created' }
+const ResourceScanId = { ...str, required, comment: 'Resource scan ID' }
 const ResourceTypes = { ...arr, comment: 'Array of CloudFormation template resource types with permissions for this action', ref: userGuide + 'using-iam-template.html' }
 const RetainExceptOnCreate = { ...bool, comment: 'Set to true to ensure newly created resources are deleted if the operation rolls back, even if marked with a deletion policy of `Retain`' }
 const RoleARN = { ...str, comment: 'IAM role ARN CloudFormation assumes to create the stack' }
 const RollbackConfiguration = { ...obj, comment: 'Rollback triggers to be monitored during creation and updating', ref: docRoot + 'API_RollbackConfiguration.html' }
+const StackInstanceAccount = { ...str, comment: 'ID of an AWS account associated with the stack instance' }
+const StackInstanceRegion = { ...str, comment: 'Region associated with the stack instance' }
+const StackName = { ...str, required, comment: 'Stack name or ID' }
 const StackPolicyBody = { type: [ 'string', 'object' ], comment: 'Stack policy document; an object will be automatically serialized to JSON, or supply pre-serialized JSON', ref: userGuide + 'protect-stack-resources.html' }
 const StackPolicyURL = { ...str, comment: 'Stack policy url' }
+const StackSetName = { ...str, required, comment: 'Name or ID of a stack set' }
 const Tags = { ...arr, comment: 'Array of tag objects to associate with the stack', ref: docRoot + 'API_Tag.html' }
 const TemplateBody = { type: [ 'string', 'object' ], comment: 'CloudFormation template object (which will be automatically serialized to JSON for you), or pre-serialized JSON or YAML; can be up to 51,200 b' }
 const TemplateURL = { ...str, comment: 'S3 location of CloudFormation template; can be up to 460,800 b' }
 const TimeoutInMinutes = { ...num, comment: 'Amount of time before the stack status becomes `CREATE_FAILED`' }
-const StackName = { ...str, required, comment: 'Stack name or ID' }
-const NextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const Type = { ...str, comment: 'Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`' }
 const TypeName = { ...str, comment: 'Name of the extension with length between 10 and 204 (inclusive)' }
-const Arn = { ...str, comment: 'Amazon resource name' }
-const ExecutionRoleArn = { ...str, comment: 'ARN of the IAM execution role used to activate the extension' }
-const LoggingConfig = { ...obj, comment: 'Logging configuration', ref: docRoot + 'API_LoggingConfig.html' }
-const PublisherId = { ...str, comment: 'ID of the extension publisher' }
-const VersionId = { ...str, comment: 'ID of a specific extension version; found at the end of the ARN of the extension version' }
-const MaxResults = { ...num, comment: 'Maximum number of results to be returned in a response' }
-const CallAs = { ...str, comment: 'Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`', ref: docRoot + 'API_DescribeOrganizationsAccess.html' }
-const Regions = { ...arr, required, comment: 'Array of regions where the stack instances will be created' }
-const StackSetName = { ...str, required, comment: 'Name or ID of a stack set' }
-const DeploymentTargets = { ...obj, comment: 'Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both', ref: docRoot + 'API_DeploymentTargets.html' }
-const OperationId = { ...str, required, comment: 'Unique identifier for this stack set operation; prevents repeats of the same request' }
-const OperationPreferences = { ...obj, comment: 'Preferences for how the stack set operation will be performed', ref: docRoot + 'API_StackSetOperationPreferences.html' }
-const StackInstanceAccount = { ...str, comment: 'ID of an AWS account associated with the stack instance' }
-const StackInstanceRegion = { ...str, comment: 'Region associated with the stack instance' }
-const ParameterOverrides = { ...arr, comment: 'Array of `Parameter` objects defining stack set parameters to override in the stack instances', ref: docRoot + 'API_Parameter.html' }
-const Description = { ...str, comment: 'Description' }
-const ChangeSetName = { ...str, required, comment: 'User created ID for the change set' }
-const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-const valIteratorPaginate = { ...str, comment: 'Enable iterator pagination; use this instead of making your own individual pagination requests' }
-const LogicalResourceId = { ...str, comment: 'Logical name of a resource' }
-const DeprecatedStatus = { ...str, comment: 'Filter results by deprecated status; can be one of: `LIVE`, `DEPRECATED`' }
-const AdministrationRoleARN = { ...str, comment: 'ARN of the IAM role used to perform this action' }
-const AutoDeployment = { ...obj, comment: 'Specify if stack sets automatically deploy to organization accounts that are added to the target organization', ref: docRoot + 'API_ManagedExecution.html' }
-const ExecutionRoleName = { ...str, comment: 'Name of the IAM execution role used to create the stack set; defaults to `AWSCloudFormationStackSetExecutionRole`' }
-const ManagedExecution = { ...obj, comment: 'Specify if the stack sets operate concurrently when possible', ref: docRoot + 'API_ManagedExecution.html' }
-const PermissionModel = { ...str, comment: 'Describe how IAM roles required for operations are created; can be one of: `SELF_MANAGED` (default), `SERVICE_MANAGED`' }
 const UsePreviousTemplate = { ...bool, comment: 'Set to true to reuse the template associated with the stack' }
-const GeneratedTemplateName = { ...str, required, comment: 'User defined name for the generated template; can be ARN for existing templates' }
-const ResourceScanId = { ...str, required, comment: 'Resource scan ID' }
-
+const valIteratorPaginate = { ...str, comment: 'Enable iterator pagination; use this instead of making your own individual pagination requests' }
+const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const VersionId = { ...str, comment: 'ID of a specific extension version; found at the end of the ARN of the extension version' }
 
 const Version = '2010-05-15'
 
 const emptyResponse = () => { return {} }
 const defaultError = ({ statusCode, error }) => ({ statusCode, error })
-const deMemberify = (prop) => {
-  let result = []
-  if (Array.isArray(prop.member) && prop.member.length) result = prop.member
-  else if (prop.member && prop.member.length) result = [ prop.member ]
-  return result
-}
 
 const ActivateOrganizationsAccess = {
   awsDoc: docRoot + 'API_ActivateOrganizationsAccess.html',
@@ -188,8 +181,8 @@ const CreateChangeSet = {
     NotificationARNs,
     OnStackFailure: { ...str, comment: 'Specify an action to take on failure; can be one of: `DO_NOTHING`, `ROLLBACK`, `DELETE`' },
     Parameters,
-    ResourceTypes,
     ResourcesToImport: { ...arr, comment: 'Array of resources to import', ref: docRoot + 'API_ResourceToImport.html' },
+    ResourceTypes,
     RoleARN,
     RollbackConfiguration,
     Tags,
@@ -288,12 +281,12 @@ const CreateStack = {
 const CreateStackInstances = {
   awsDoc: docRoot + 'API_CreateStackInstances.html',
   validate: {
-    OperationId,
     Regions,
     StackSetName,
     Accounts,
     CallAs,
     DeploymentTargets,
+    OperationId, // Supposedly not required but might not work without
     OperationPreferences,
     ParameterOverrides,
   },
@@ -312,7 +305,7 @@ const CreateStackInstances = {
 const CreateStackSet = {
   awsDoc: docRoot + 'API_CreateStackSet.html',
   validate: {
-    ClientRequestToken: { ...ClientRequestToken, required },
+    ClientRequestToken: { ...ClientRequestToken, required }, // Supposedly not required but does not work without
     StackSetName,
     AdministrationRoleARN,
     AutoDeployment,
@@ -375,7 +368,7 @@ const DeleteChangeSet = {
   awsDoc: docRoot + 'API_DeleteChangeSet.html',
   validate: {
     ChangeSetName,
-    StackName: { ...str, comment: 'Stack name; must be provided if `ChangeSetName` is not an ARN' },
+    StackName: { ...str, comment: 'Stack name or ARN; must be provided if `ChangeSetName` is not an ARN' },
   },
   request: (params) => {
     return {
@@ -419,7 +412,7 @@ const DeleteStack = {
       query: {
         Action: 'DeleteStack',
         Version,
-        ...params,
+        ...querystringifyParams(params),
       },
     }
   },
@@ -430,13 +423,13 @@ const DeleteStack = {
 const DeleteStackInstances = {
   awsDoc: docRoot + 'API_DeleteStackInstances.html',
   validate: {
-    OperationId,
     Regions,
     RetainStacks: { ...bool, required, comment: 'Specify if stacks will be retained after the instances are removed from the stack set' },
     StackSetName,
     Accounts,
     CallAs,
     DeploymentTargets,
+    OperationId, // Supposedly not required but might not work without
     OperationPreferences,
   },
   request: (params) => {
@@ -512,11 +505,7 @@ const DescribeAccountLimits = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { DescribeAccountLimitsResult } = payload
-    DescribeAccountLimitsResult.AccountLimits = deMemberify(DescribeAccountLimitsResult.AccountLimits)
-    return DescribeAccountLimitsResult
-  },
+  response: ({ payload }) => deSerializeObject(payload.DescribeAccountLimitsResult),
 }
 
 const DescribeChangeSet = {
@@ -525,7 +514,7 @@ const DescribeChangeSet = {
     ChangeSetName,
     IncludePropertyValues: { ...bool, comment: 'Set to `true` to include property values in the response' },
     NextToken,
-    StackName: { ...str, comment: 'Stack name; must be provided if `ChangeSetName` is not an ARN' },
+    StackName: { ...str, comment: 'Stack name or ARN; must be provided if `ChangeSetName` is not an ARN' },
     paginate: valIteratorPaginate,
   },
   request: (params) => {
@@ -547,10 +536,9 @@ const DescribeChangeSet = {
     }
   },
   response: ({ payload }) => {
-    const maxDepth = 1
-    const DescribeChangeSetResult = deSerializeObject(payload.DescribeChangeSetResult)
-    if (DescribeChangeSetResult.Changes) DescribeChangeSetResult.Changes.map(i => deSerializeObject(i, maxDepth))
-    return DescribeChangeSetResult
+    const maxDepth = 2
+    const result = deSerializeObject(payload.DescribeChangeSetResult, maxDepth)
+    return result
   },
 }
 
@@ -558,9 +546,9 @@ const DescribeChangeSetHooks = {
   awsDoc: docRoot + 'API_DescribeChangeSetHooks.html',
   validate: {
     ChangeSetName,
-    StackName: { ...StackName, required: false },
-    NextToken,
     LogicalResourceId,
+    NextToken,
+    StackName: { ...str, comment: 'Stack name or ARN; must be provided if `ChangeSetName` is not an ARN' },
     paginate: valPaginate,
   },
   request: (params) => {
@@ -609,7 +597,7 @@ const DescribeGeneratedTemplate = {
 const DescribeOrganizationsAccess = {
   awsDoc: docRoot + 'API_DescribeOrganizationsAccess.html',
   validate: {
-    CallAs: { ...str, comment: 'Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`', ref: docRoot + 'API_DescribeOrganizationsAccess.html' },
+    CallAs,
   },
   request: (params) => {
     return {
@@ -625,7 +613,7 @@ const DescribeOrganizationsAccess = {
 const DescribePublisher = {
   awsDoc: docRoot + 'API_DescribePublisher.html',
   validate: {
-    PublisherId: { ...PublisherId, required },
+    PublisherId,
   },
   request: (params) => {
     return {
@@ -654,7 +642,7 @@ const DescribeResourceScan = {
   },
   response: ({ payload }) => {
     const result = deSerializeObject(payload.DescribeResourceScanResult)
-    result.ResourceTypes = result.ResourceTypeSummaries.map(({ ResourceType }) => ResourceType)
+    if (result.ResourceTypeSummaries) result.ResourceTypes = result.ResourceTypeSummaries.map(({ ResourceType }) => ResourceType)
     delete result.ResourceTypeSummaries
     return result
   },
@@ -680,8 +668,8 @@ const DescribeStackDriftDetectionStatus = {
 const DescribeStackEvents = {
   awsDoc: docRoot + 'API_DescribeStackEvents.html',
   validate: {
-    StackName,
     NextToken,
+    StackName: { ...StackName, required: false }, // Supposedly not required
     paginate: valPaginate,
   },
   request: (params) => {
@@ -723,7 +711,10 @@ const DescribeStackInstance = {
       },
     }
   },
-  response: ({ payload }) => payload.DescribeStackInstanceResult,
+  response: ({ payload }) => {
+    const maxDepth = 1
+    return deSerializeObject(payload.DescribeStackInstanceResult, maxDepth)
+  },
 }
 
 const DescribeStackResource = {
@@ -795,12 +786,7 @@ const DescribeStackResources = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { StackResources, NextToken } = payload.DescribeStackResourcesResult
-    const result = { StackResources: deMemberify(StackResources) }
-    if (NextToken) result.NextToken = NextToken
-    return result
-  },
+  response: ({ payload }) => deSerializeObject(payload.DescribeStackResourcesResult),
   error: defaultError,
 }
 
@@ -831,17 +817,8 @@ const DescribeStacks = {
     }
   },
   response: ({ payload }) => {
-    const { Stacks, NextToken } = payload.DescribeStacksResult
-    const result = { Stacks: deMemberify(Stacks) }
-    if (result.Stacks.length) {
-      result.Stacks = result.Stacks.map(stack => {
-        if (stack.Outputs) stack.Outputs = deMemberify(stack.Outputs)
-        if (stack.Capabilities) stack.Capabilities = deMemberify(stack.Capabilities)
-        return stack
-      })
-    }
-    if (NextToken) result.NextToken = NextToken
-    return result
+    const maxDepth = 2
+    return deSerializeObject(payload.DescribeStacksResult, maxDepth)
   },
   error: defaultError,
 }
@@ -870,7 +847,7 @@ const DescribeStackSet = {
 const DescribeStackSetOperation = {
   awsDoc: docRoot + 'API_DescribeStackSetOperation.html',
   validate: {
-    OperationId,
+    OperationId: { ...OperationId, required },
     StackSetName,
     CallAs,
   },
@@ -883,7 +860,10 @@ const DescribeStackSetOperation = {
       },
     }
   },
-  response: ({ payload }) => payload.DescribeStackSetOperationResult,
+  response: ({ payload }) => {
+    const maxDepth = 2
+    return deSerializeObject(payload.DescribeStackSetOperationResult, maxDepth)
+  },
 }
 
 const DescribeType = {
@@ -905,7 +885,7 @@ const DescribeType = {
       },
     }
   },
-  response: ({ payload }) => payload.DescribeTypeResult,
+  response: ({ payload }) => deSerializeObject(payload.DescribeTypeResult),
 }
 
 const DescribeTypeRegistration = {
@@ -946,7 +926,7 @@ const DetectStackDrift = {
 const DetectStackResourceDrift = {
   awsDoc: docRoot + 'API_DetectStackResourceDrift.html',
   validate: {
-    LogicalResourceId,
+    LogicalResourceId: { ...LogicalResourceId, required },
     StackName,
   },
   request: (params) => {
@@ -1060,11 +1040,8 @@ const GetStackPolicy = {
       },
     }
   },
-  response: ({ payload }) => {
-    const result = payload.GetStackPolicyResult ? payload.GetStackPolicyResult : {}
-    if (result.StackPolicyBody) result.StackPolicyBody = JSON.parse(result.StackPolicyBody)
-    return result
-  },
+  // TODO: `StackPolicyBody` is a JSON returned as a string, maybe we should parse it?
+  response: ({ payload }) => payload.GetStackPolicyResult,
 }
 
 const GetTemplate = {
@@ -1083,12 +1060,8 @@ const GetTemplate = {
       },
     }
   },
-  response: ({ payload }) => {
-    const result = deSerializeObject(payload.GetTemplateResult)
-    // TemplateBody is a JSON string nested in an XML
-    result.TemplateBody = JSON.parse(result.TemplateBody)
-    return result
-  },
+  // TODO: `TemplateBody` is a JSON returned as a string, maybe we should parse it?
+  response: ({ payload }) => deSerializeObject(payload.GetTemplateResult),
 }
 
 const GetTemplateSummary = {
@@ -1228,7 +1201,7 @@ const ListGeneratedTemplates = {
 const ListImports = {
   awsDoc: docRoot + 'API_ListImports.html',
   validate: {
-    ExportName: { ...str, required, comment: 'Name of the exported value' },
+    ExportName: { ...str, required, comment: 'Name of the exported output value; results will be stacks that are importing this value' },
     NextToken,
     paginate: valPaginate,
   },
@@ -1289,7 +1262,7 @@ const ListResourceScanRelatedResources = {
   response: ({ payload }) => {
     const maxDepth = 1
     const result = deSerializeObject(payload.ListResourceScanRelatedResourcesResult, maxDepth)
-    result.RelatedResources = deSerializeResources(result.RelatedResources)
+    if (result.RelatedResources) result.RelatedResources = deSerializeResources(result.RelatedResources)
     return result
   },
 }
@@ -1328,7 +1301,7 @@ const ListResourceScanResources = {
   response: ({ payload }) => {
     const maxDepth = 1
     const result = deSerializeObject(payload.ListResourceScanResourcesResult, maxDepth)
-    result.Resources = deSerializeResources(result.Resources)
+    if (result.Resources) result.Resources = deSerializeResources(result.Resources)
     return result
   },
 }
@@ -1366,7 +1339,7 @@ const ListResourceScans = {
 const ListStackInstanceResourceDrifts = {
   awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html',
   validate: {
-    OperationId,
+    OperationId: { ...OperationId, required },
     StackInstanceAccount: { ...StackInstanceAccount, required },
     StackInstanceRegion: { ...StackInstanceRegion, required },
     StackSetName,
@@ -1374,6 +1347,7 @@ const ListStackInstanceResourceDrifts = {
     MaxResults,
     NextToken,
     StackInstanceResourceDriftStatuses: { ...arr, comment: 'Filter results by resource drift status; can contain; `DELETED`, `MODIFIED`, `IN_SYNC`, `NOT_CHECKED`' },
+    paginate: valPaginate,
   },
   request: (params) => {
     const query = {
@@ -1460,12 +1434,7 @@ const ListStackResources = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { StackResourceSummaries, NextToken } = payload.ListStackResourcesResult
-    const result = { StackResourceSummaries: deMemberify(StackResourceSummaries) }
-    if (NextToken) result.NextToken = NextToken
-    return result
-  },
+  response: ({ payload }) => deSerializeObject(payload.ListStackResourcesResult),
   error: defaultError,
 }
 
@@ -1501,8 +1470,8 @@ const ListStacks = {
 const ListStackSetOperationResults = {
   awsDoc: docRoot + 'API_ListStackSetOperationResults.html',
   validate: {
-    StackSetName,
     OperationId: { ...str, required, comment: 'ID of the stack set operation' },
+    StackSetName,
     CallAs,
     Filters: { ...arr, comment: 'Array of filter objects', ref: docRoot + 'API_OperationResultFilter.html' },
     MaxResults,
@@ -1559,7 +1528,10 @@ const ListStackSetOperations = {
       },
     }
   },
-  response: ({ payload }) => deSerializeObject(payload.ListStackSetOperationsResult),
+  response: ({ payload }) => {
+    const maxDepth = 2
+    return deSerializeObject(payload.ListStackSetOperationsResult, maxDepth)
+  },
 }
 
 const ListStackSets = {
@@ -1657,11 +1629,7 @@ const ListTypes = {
       },
     }
   },
-  response: ({ payload }) => {
-    const { ListTypesResult } = payload
-    ListTypesResult.TypeSummaries = deMemberify(ListTypesResult.TypeSummaries)
-    return ListTypesResult
-  },
+  response: ({ payload }) => deSerializeObject(payload.ListTypesResult),
 }
 
 const ListTypeVersions = {
@@ -1674,6 +1642,7 @@ const ListTypeVersions = {
     PublisherId,
     Type,
     TypeName,
+    paginate: valPaginate,
   },
   request: (params) => {
     const query = {
@@ -1721,7 +1690,7 @@ const PublishType = {
 const RegisterPublisher = {
   awsDoc: docRoot + 'API_RegisterPublisher.html',
   validate: {
-    AcceptTermsAndConditions: { ...bool, comment: 'Set to true to agree to Amazons terms and conditions', ref: docRoot + 'API_RegisterPublisher.html#API_RegisterPublisher_RequestParameters' },
+    AcceptTermsAndConditions: { ...bool, comment: 'Set to true to agree to Amazons terms and conditions specified in the AWS documentation', ref: docRoot + 'API_RegisterPublisher.html#API_RegisterPublisher_RequestParameters' },
     ConnectionArn: { ...str, comment: 'ARN to a Bitbucket or Github account if they are used to verify identity' },
   },
   request: (params) => {
@@ -1740,7 +1709,7 @@ const RegisterPublisher = {
 const RegisterType = {
   awsDoc: docRoot + 'API_RegisterType.html',
   validate: {
-    SchemaHandlerPackage: { ...str, required, comment: 'A URL to the S3 bucket containing the extension project package that contains the necessary files for the extension you want to register' },
+    SchemaHandlerPackage: { ...str, required, comment: 'URL to the S3 bucket containing the extension project package that contains the necessary files for the extension you want to register' },
     TypeName: { ...TypeName, required },
     ClientRequestToken,
     ExecutionRoleArn,
@@ -1776,7 +1745,7 @@ const RollbackStack = {
       },
     }
   },
-  response: ({ payload }) => payload.RollbackStack,
+  response: ({ payload }) => payload.RollbackStackResult,
 }
 
 const SetStackPolicy = {
@@ -1880,7 +1849,7 @@ const StartResourceScan = {
 const StopStackSetOperation = {
   awsDoc: docRoot + 'API_StopStackSetOperation.html',
   validate: {
-    OperationId,
+    OperationId: { ...OperationId, required },
     StackSetName,
     CallAs,
   },
@@ -1988,12 +1957,12 @@ const UpdateStack = {
 const UpdateStackInstances = {
   awsDoc: docRoot + 'API_UpdateStackInstances.html',
   validate: {
-    OperationId,
     Regions,
     StackSetName,
     Accounts,
     CallAs,
     DeploymentTargets,
+    OperationId,
     OperationPreferences,
     ParameterOverrides,
   },

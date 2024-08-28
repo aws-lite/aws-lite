@@ -113,7 +113,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateChangeSet.html CloudFormation: CreateChangeSet}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#CreateChangeSet CloudFormation: CreateChangeSet}
    */
-  CreateChangeSet: (input: { ChangeSetName: string, StackName: string, Capabilities?: any[], ChangeSetType?: string, ClientToken?: string, Description?: string, ImportExistingResources?: boolean, IncludeNestedStacks?: boolean, NotificationARNs?: any[], OnStackFailure?: string, Parameters?: any[], ResourceTypes?: any[], ResourcesToImport?: any[], RoleARN?: string, RollbackConfiguration?: Record<string, any>, Tags?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string, UsePreviousTemplate?: boolean }) => Promise<CreateChangeSetResponse>
+  CreateChangeSet: (input: { ChangeSetName: string, StackName: string, Capabilities?: any[], ChangeSetType?: string, ClientToken?: string, Description?: string, ImportExistingResources?: boolean, IncludeNestedStacks?: boolean, NotificationARNs?: any[], OnStackFailure?: string, Parameters?: any[], ResourcesToImport?: any[], ResourceTypes?: any[], RoleARN?: string, RollbackConfiguration?: Record<string, any>, Tags?: any[], TemplateBody?: string | Record<string, any>, TemplateURL?: string, UsePreviousTemplate?: boolean }) => Promise<CreateChangeSetResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateGeneratedTemplate.html CloudFormation: CreateGeneratedTemplate}
@@ -131,7 +131,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html CloudFormation: CreateStackInstances}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#CreateStackInstances CloudFormation: CreateStackInstances}
    */
-  CreateStackInstances: (input: { OperationId: string, Regions: any[], StackSetName: string, Accounts?: any[], CallAs?: string, DeploymentTargets?: Record<string, any>, OperationPreferences?: Record<string, any>, ParameterOverrides?: any[] }) => Promise<CreateStackInstancesResponse>
+  CreateStackInstances: (input: { Regions: any[], StackSetName: string, Accounts?: any[], CallAs?: string, DeploymentTargets?: Record<string, any>, OperationId?: string, OperationPreferences?: Record<string, any>, ParameterOverrides?: any[] }) => Promise<CreateStackInstancesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackSet.html CloudFormation: CreateStackSet}
@@ -169,7 +169,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackInstances.html CloudFormation: DeleteStackInstances}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeleteStackInstances CloudFormation: DeleteStackInstances}
    */
-  DeleteStackInstances: (input: { OperationId: string, Regions: any[], RetainStacks: boolean, StackSetName: string, Accounts?: any[], CallAs?: string, DeploymentTargets?: Record<string, any>, OperationPreferences?: Record<string, any> }) => Promise<DeleteStackInstancesResponse>
+  DeleteStackInstances: (input: { Regions: any[], RetainStacks: boolean, StackSetName: string, Accounts?: any[], CallAs?: string, DeploymentTargets?: Record<string, any>, OperationId?: string, OperationPreferences?: Record<string, any> }) => Promise<DeleteStackInstancesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackSet.html CloudFormation: DeleteStackSet}
@@ -199,7 +199,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSetHooks.html CloudFormation: DescribeChangeSetHooks}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeChangeSetHooks CloudFormation: DescribeChangeSetHooks}
    */
-  DescribeChangeSetHooks: (input: { ChangeSetName: string, StackName?: string, NextToken?: string, LogicalResourceId?: string, paginate?: boolean | string }) => Promise<DescribeChangeSetHooksResponse>
+  DescribeChangeSetHooks: (input: { ChangeSetName: string, LogicalResourceId?: string, NextToken?: string, StackName?: string, paginate?: boolean | string }) => Promise<DescribeChangeSetHooksResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeGeneratedTemplate.html CloudFormation: DescribeGeneratedTemplate}
@@ -217,7 +217,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribePublisher.html CloudFormation: DescribePublisher}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribePublisher CloudFormation: DescribePublisher}
    */
-  DescribePublisher: (input: { PublisherId: string }) => Promise<DescribePublisherResponse>
+  DescribePublisher: (input: { PublisherId?: string }) => Promise<DescribePublisherResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeResourceScan.html CloudFormation: DescribeResourceScan}
@@ -235,7 +235,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackEvents.html CloudFormation: DescribeStackEvents}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackEvents CloudFormation: DescribeStackEvents}
    */
-  DescribeStackEvents: (input: { StackName: string, NextToken?: string, paginate?: boolean | string }) => Promise<DescribeStackEventsResponse>
+  DescribeStackEvents: (input: { NextToken?: string, StackName?: string, paginate?: boolean | string }) => Promise<DescribeStackEventsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackInstance.html CloudFormation: DescribeStackInstance}
@@ -295,13 +295,13 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackResourceDrift.html CloudFormation: DetectStackResourceDrift}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DetectStackResourceDrift CloudFormation: DetectStackResourceDrift}
    */
-  DetectStackResourceDrift: (input: { LogicalResourceId?: string, StackName: string }) => Promise<DetectStackResourceDriftResponse>
+  DetectStackResourceDrift: (input: { LogicalResourceId: string, StackName: string }) => Promise<DetectStackResourceDriftResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackSetDrift.html CloudFormation: DetectStackSetDrift}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DetectStackSetDrift CloudFormation: DetectStackSetDrift}
    */
-  DetectStackSetDrift: (input: { StackSetName: string, CallAs?: string, OperationId: string, OperationPreferences?: Record<string, any> }) => Promise<DetectStackSetDriftResponse>
+  DetectStackSetDrift: (input: { StackSetName: string, CallAs?: string, OperationId?: string, OperationPreferences?: Record<string, any> }) => Promise<DetectStackSetDriftResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_EstimateTemplateCost.html CloudFormation: EstimateTemplateCost}
@@ -409,7 +409,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperationResults.html CloudFormation: ListStackSetOperationResults}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackSetOperationResults CloudFormation: ListStackSetOperationResults}
    */
-  ListStackSetOperationResults: (input: { StackSetName: string, OperationId: string, CallAs?: string, Filters?: any[], MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListStackSetOperationResultsResponse>
+  ListStackSetOperationResults: (input: { OperationId: string, StackSetName: string, CallAs?: string, Filters?: any[], MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListStackSetOperationResultsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperations.html CloudFormation: ListStackSetOperations}
@@ -439,7 +439,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListTypeVersions.html CloudFormation: ListTypeVersions}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListTypeVersions CloudFormation: ListTypeVersions}
    */
-  ListTypeVersions: (input: { Arn?: string, DeprecatedStatus?: string, MaxResults?: number, NextToken?: string, PublisherId?: string, Type?: string, TypeName?: string }) => Promise<ListTypeVersionsResponse>
+  ListTypeVersions: (input: { Arn?: string, DeprecatedStatus?: string, MaxResults?: number, NextToken?: string, PublisherId?: string, Type?: string, TypeName?: string, paginate?: boolean | string }) => Promise<ListTypeVersionsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterPublisher.html CloudFormation: RegisterPublisher}
@@ -511,7 +511,7 @@ declare interface AwsLiteCloudFormation {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackInstances.html CloudFormation: UpdateStackInstances}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#UpdateStackInstances CloudFormation: UpdateStackInstances}
    */
-  UpdateStackInstances: (input: { OperationId: string, Regions: any[], StackSetName: string, Accounts?: any[], CallAs?: string, DeploymentTargets?: Record<string, any>, OperationPreferences?: Record<string, any>, ParameterOverrides?: any[] }) => Promise<UpdateStackInstancesResponse>
+  UpdateStackInstances: (input: { Regions: any[], StackSetName: string, Accounts?: any[], CallAs?: string, DeploymentTargets?: Record<string, any>, OperationId?: string, OperationPreferences?: Record<string, any>, ParameterOverrides?: any[] }) => Promise<UpdateStackInstancesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateTerminationProtection.html CloudFormation: UpdateTerminationProtection}

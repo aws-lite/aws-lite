@@ -5,8 +5,9 @@ const isLiteral = i => isString(i) || isBool(i) || isNum(i)
 const isArr = i => Array.isArray(i)
 const isObj = i => typeof i === 'object' && Object.keys(i).length
 
-// Annoyingly one array serializes to `entry` instead of `member`
+// Notes on methods with serialized arrays in the response
 // TODO: maybe find another way to handle this since most arrays are `member`
+// TODO: change this to use full paths to avoid any mixups with a user defined value
 const arrayProperties = {
   // BatchDescribeTypeConfigurations
   Errors: 'member',
@@ -15,48 +16,66 @@ const arrayProperties = {
   // DescribeAccountLimits
   AccountLimits: 'member',
   // DescribeChangeSet
-  Parameters: 'member',
+  Capabilities: 'member',
   Changes: 'member',
-  Scope: 'member',
   Details: 'member',
+  Parameters: 'member',
+  RollbackTriggers: 'member',
+  Scope: 'member',
+  Tags: 'member',
   // DescribeChangeSetHooks
   Hooks: 'member',
   // DescribeGeneratedTemplate
-  Resources: 'member',
-  ResourceIdentifier: 'entry',
   Properties: 'member',
+  ResourceIdentifier: 'entry',
+  Resources: 'member',
   Warnings: 'member',
   // DescribeResourceScan
   ResourceTypeSummaries: 'member',
   // DescribeStackEvents
   StackEvents: 'member',
+  // DescribeStackInstance
+  ParameterOverrides: 'member',
   // DescribeStackResourceDrifts
-  StackResourceDrifts: 'member',
+  // PhysicalResourceIdContext: 'member',
   PropertyDifferences: 'member',
+  StackResourceDrifts: 'member',
   // DescribeStackResources
   StackResources: 'member',
   // DescribeStacks
-  Stacks: 'member',
+  // Capabilities: 'member',
+  NotificationARNs: 'member',
   Outputs: 'member',
-  // DescribeStackSet
-  Capabilities: 'member',
   // Parameters: 'member',
-  Tags: 'member',
+  // RollbackTriggers: 'member',
+  Stacks: 'member',
+  // Tags: 'member',
+  // DescribeStackSet
+  // Capabilities: 'member',
   // DetectStackResourceDrift
+  // Parameters: 'member',
   // PropertyDifferences: 'member',
+  PhysicalResourceIdContext: 'member',
+  // Tags: 'member',
+  // DescribeStackSetOperation
+  RegionOrder: 'member',
+  Accounts: 'member',
+  OrganizationalUnitIds: 'member',
+  // DescribeType
+  RequiredActivatedTypes: 'member',
   // GetTemplate
   StagesAvailable: 'member',
   // GetTemplateSummary
-  // Parameters: 'member',
   AllowedValues: 'member',
   // Capabilities: 'member',
-  ResourceTypes: 'member',
   DeclaredTransforms: 'member',
-  ResourceIdentifierSummaries: 'member',
   LogicalResourceIds: 'member',
+  // Parameters: 'member',
   ResourceIdentifiers: 'member',
-  // Warnings: 'member',
+  ResourceIdentifierSummaries: 'member',
+  ResourceTypes: 'member',
   UnrecognizedResourceTypes: 'member',
+  // Warnings: 'member',
   // ListChangeSets
   Summaries: 'member',
   // ListExports
@@ -85,6 +104,7 @@ const arrayProperties = {
   // ListStackSetOperationResults
   // Summaries: 'member',
   // ListStackSetOperations
+  // RegionOrder: 'member',
   // Summaries: 'member',
   // ListStackSets
   // Summaries: 'member',
@@ -130,7 +150,9 @@ function querystringifyParams (obj) {
   return query
 }
 
-// Resource objects have a nested array `ResourceIdentifier` that serializes differently than everything else in cloudformation for some reason...
+// `Resource` objects go by a number of different names. They serialize differently than everything else in cloudformation..
+// Specifically `ResourceIdentifier` uses `entry` instead of `member`, and key-value pairs are moved around.
+// See `CreateGeneratedTemplate` for an example
 function querystringifyResources (resourcesArrayObject) {
   let result = {}
   let i = 1
@@ -154,6 +176,7 @@ function querystringifyResources (resourcesArrayObject) {
   return result
 }
 
+// Use `maxDepth` to control how deep a search for arrays will go
 function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
   if (maxDepth < 0) return obj
   if (typeof obj === 'object') {
@@ -172,6 +195,9 @@ function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
   return obj
 }
 
+// `Resource` objects go by a number of different names. They serialize differently than everything else in cloudformation..
+// Specifically `ResourceIdentifier` uses `entry` instead of `member`, and key-value pairs are moved around.
+// See `DescribeGeneratedTemplate` for an example
 function deSerializeResources (resources) {
   let result = {}
   result = resources.map(i => {

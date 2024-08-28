@@ -133,12 +133,12 @@ Properties:
 - **`Parameters` (array)**
   - Array of objects specifying stack input parameters
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html)
-- **`ResourceTypes` (array)**
-  - Array of CloudFormation template resource types with permissions for this action
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html)
 - **`ResourcesToImport` (array)**
   - Array of resources to import
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ResourceToImport.html)
+- **`ResourceTypes` (array)**
+  - Array of CloudFormation template resource types with permissions for this action
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html)
 - **`RoleARN` (string)**
   - IAM role ARN CloudFormation assumes to create the stack
 - **`RollbackConfiguration` (object)**
@@ -226,8 +226,6 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html)
 
 Properties:
-- **`OperationId` (string) [required]**
-  - Unique identifier for this stack set operation; prevents repeats of the same request
 - **`Regions` (array) [required]**
   - Array of regions where the stack instances will be created
 - **`StackSetName` (string) [required]**
@@ -236,10 +234,11 @@ Properties:
   - Names of the AWS accounts that will be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`DeploymentTargets` (object)**
   - Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html)
+- **`OperationId` (string)**
+  - Unique identifier for this stack set operation; prevents repeats of the same request
 - **`OperationPreferences` (object)**
   - Preferences for how the stack set operation will be performed
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
@@ -264,7 +263,6 @@ Properties:
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ManagedExecution.html)
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`Capabilities` (array)**
   - Array of CloudFormation capabilities necessary for stack creation; can be any of: `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`, `CAPABILITY_AUTO_EXPAND`
 - **`Description` (string)**
@@ -306,7 +304,7 @@ Properties:
 - **`ChangeSetName` (string) [required]**
   - User created ID for the change set
 - **`StackName` (string)**
-  - Stack name; must be provided if `ChangeSetName` is not an ARN
+  - Stack name or ARN; must be provided if `ChangeSetName` is not an ARN
 
 
 ### `DeactivateType`
@@ -351,8 +349,6 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeleteStackInstances.html)
 
 Properties:
-- **`OperationId` (string) [required]**
-  - Unique identifier for this stack set operation; prevents repeats of the same request
 - **`Regions` (array) [required]**
   - Array of regions where the stack instances will be created
 - **`RetainStacks` (boolean) [required]**
@@ -363,10 +359,11 @@ Properties:
   - Names of the AWS accounts that will be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`DeploymentTargets` (object)**
   - Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html)
+- **`OperationId` (string)**
+  - Unique identifier for this stack set operation; prevents repeats of the same request
 - **`OperationPreferences` (object)**
   - Preferences for how the stack set operation will be performed
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
@@ -381,7 +378,6 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 
 
 ### `DeregisterType`
@@ -422,7 +418,7 @@ Properties:
 - **`NextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`StackName` (string)**
-  - Stack name; must be provided if `ChangeSetName` is not an ARN
+  - Stack name or ARN; must be provided if `ChangeSetName` is not an ARN
 - **`paginate` (string)**
   - Enable iterator pagination; use this instead of making your own individual pagination requests
 
@@ -434,12 +430,12 @@ Properties:
 Properties:
 - **`ChangeSetName` (string) [required]**
   - User created ID for the change set
-- **`StackName` (string)**
-  - Stack name or ID
-- **`NextToken` (string)**
-  - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`LogicalResourceId` (string)**
   - Logical name of a resource
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`StackName` (string)**
+  - Stack name or ARN; must be provided if `ChangeSetName` is not an ARN
 - **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -460,7 +456,6 @@ Properties:
 Properties:
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 
 
 ### `DescribePublisher`
@@ -468,7 +463,7 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribePublisher.html)
 
 Properties:
-- **`PublisherId` (string) [required]**
+- **`PublisherId` (string)**
   - ID of the extension publisher
 
 
@@ -495,10 +490,10 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackEvents.html)
 
 Properties:
-- **`StackName` (string) [required]**
-  - Stack name or ID
 - **`NextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`StackName` (string)**
+  - Stack name or ID
 - **`paginate` (boolean, string)**
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
@@ -516,7 +511,6 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 
 
 ### `DescribeStackResource`
@@ -582,7 +576,6 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 
 
 ### `DescribeStackSetOperation`
@@ -596,7 +589,6 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 
 
 ### `DescribeType`
@@ -634,7 +626,7 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackResourceDrift.html)
 
 Properties:
-- **`LogicalResourceId` (string)**
+- **`LogicalResourceId` (string) [required]**
   - Logical name of a resource
 - **`StackName` (string) [required]**
   - Stack name or ID
@@ -649,8 +641,7 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
-- **`OperationId` (string) [required]**
+- **`OperationId` (string)**
   - Unique identifier for this stack set operation; prevents repeats of the same request
 - **`OperationPreferences` (object)**
   - Preferences for how the stack set operation will be performed
@@ -711,7 +702,6 @@ Properties:
 Properties:
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`StackName` (string)**
   - Stack name or ID
 - **`StackSetName` (string)**
@@ -751,7 +741,6 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`OperationId` (string)**
   - Unique identifier for this stack set operation; prevents repeats of the same request
 - **`OperationPreferences` (object)**
@@ -809,7 +798,7 @@ Properties:
 
 Properties:
 - **`ExportName` (string) [required]**
-  - Name of the exported value
+  - Name of the exported output value; results will be stacks that are importing this value
 - **`NextToken` (string)**
   - Pagination cursor token to be used if `NextToken` was returned in a previous response
 - **`paginate` (boolean, string)**
@@ -879,7 +868,6 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`Filters` (array)**
   - Array of `StackInstanceFilter` objects to specify filters for the results
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackInstanceFilter.html)
@@ -925,13 +913,12 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetOperationResults.html)
 
 Properties:
-- **`StackSetName` (string) [required]**
-  - Name or ID of a stack set
 - **`OperationId` (string) [required]**
   - ID of the stack set operation
+- **`StackSetName` (string) [required]**
+  - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`Filters` (array)**
   - Array of filter objects
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_OperationResultFilter.html)
@@ -952,7 +939,6 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`MaxResults` (number)**
   - Maximum number of results to be returned in a response
 - **`NextToken` (string)**
@@ -968,7 +954,6 @@ Properties:
 Properties:
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`MaxResults` (number)**
   - Maximum number of results to be returned in a response
 - **`NextToken` (string)**
@@ -1043,6 +1028,8 @@ Properties:
   - Extension type; can be one of: `RESOURCE`, `MODULE`, `HOOK`
 - **`TypeName` (string)**
   - Name of the extension with length between 10 and 204 (inclusive)
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `RegisterPublisher`
@@ -1051,7 +1038,7 @@ Properties:
 
 Properties:
 - **`AcceptTermsAndConditions` (boolean)**
-  - Set to true to agree to Amazons terms and conditions
+  - Set to true to agree to Amazons terms and conditions specified in the AWS documentation
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RegisterPublisher.html#API_RegisterPublisher_RequestParameters)
 - **`ConnectionArn` (string)**
   - ARN to a Bitbucket or Github account if they are used to verify identity
@@ -1063,7 +1050,7 @@ Properties:
 
 Properties:
 - **`SchemaHandlerPackage` (string) [required]**
-  - A URL to the S3 bucket containing the extension project package that contains the necessary files for the extension you want to register
+  - URL to the S3 bucket containing the extension project package that contains the necessary files for the extension you want to register
 - **`TypeName` (string) [required]**
   - Name of the extension with length between 10 and 204 (inclusive)
 - **`ClientRequestToken` (string)**
@@ -1156,7 +1143,6 @@ Properties:
   - Name or ID of a stack set
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 
 
 ### `TestType`
@@ -1245,8 +1231,6 @@ Properties:
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackInstances.html)
 
 Properties:
-- **`OperationId` (string) [required]**
-  - Unique identifier for this stack set operation; prevents repeats of the same request
 - **`Regions` (array) [required]**
   - Array of regions where the stack instances will be created
 - **`StackSetName` (string) [required]**
@@ -1255,10 +1239,11 @@ Properties:
   - Names of the AWS accounts that will be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
 - **`CallAs` (string)**
   - Specify if you are acting as an account admin in the organizations management account or as a delegated admin in a member account; can be one of: `SELF` (default), `DELEGATED_ADMIN`
-  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeOrganizationsAccess.html)
 - **`DeploymentTargets` (object)**
   - Organizations accounts to be affiliated with the stack instances; can specify `Accounts` or `DeploymentTargets` but not both
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html)
+- **`OperationId` (string)**
+  - Unique identifier for this stack set operation; prevents repeats of the same request
 - **`OperationPreferences` (object)**
   - Preferences for how the stack set operation will be performed
   - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StackSetOperationPreferences.html)
@@ -1298,6 +1283,7 @@ Properties:
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`SetTypeConfiguration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeConfiguration.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
+- [`ListStackSetAutoDeploymentTargets`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetAutoDeploymentTargets.html)
 - [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)
 <!-- METHOD_DOCS_END -->
 
