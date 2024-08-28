@@ -81,17 +81,20 @@ const arrayProperties = {
   // ListExports
   Exports: 'member',
   // ListGeneratedTemplates
-  // TODO
+  // Summaries: 'member',
   // ListImports
   Imports: 'member',
   // ListResourceScanRelatedResources
   RelatedResources: 'member',
   // ListResourceScanResources
-  // TODO
+  // Resources: 'member',
+  // ResourceIdentifier: 'entry',
   // ListResourceScans
   ResourceScanSummaries: 'member',
   // ListStackInstanceResourceDrifts
-  // TODO
+  // Summaries: 'member',
+  // PhysicalResourceIdContext: 'member',
+  // PropertyDifferences: 'member',
   // ListStackInstances
   // Summaries: 'member',
   // ListStackResources
@@ -101,6 +104,7 @@ const arrayProperties = {
   // ResourceTypes: 'member',
   // ListStackSetAutoDeploymentTargets
   // Summaries: 'member',
+  Regions: 'member',
   // ListStackSetOperationResults
   // Summaries: 'member',
   // ListStackSetOperations

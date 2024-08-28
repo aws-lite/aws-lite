@@ -524,23 +524,6 @@ Properties:
   - Stack name or ID
 
 
-### `DescribeStackResourceDrifts`
-
-[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html)
-
-Properties:
-- **`StackName` (string) [required]**
-  - Stack name or ID
-- **`MaxResults` (number)**
-  - Maximum number of results to be returned in a response
-- **`NextToken` (string)**
-  - Pagination cursor token to be used if `NextToken` was returned in a previous response
-- **`StackResourceDriftStatusFilters` (array)**
-  - Specify filters for results; can contain: `DELETED`, `MODIFIED`, `IN_SYNC`, `NOT_CHECKED`
-- **`paginate` (boolean, string)**
-  - Enable automatic result pagination; use this instead of making your own individual pagination requests
-
-
 ### `DescribeStackResources`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResources.html)
@@ -1278,12 +1261,13 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
+- [`DescribeStackResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html)
 - [`DescribeTypeRegistration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeTypeRegistration.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
+- [`ListStackSetAutoDeploymentTargets`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetAutoDeploymentTargets.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`SetTypeConfiguration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeConfiguration.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
-- [`ListStackSetAutoDeploymentTargets`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackSetAutoDeploymentTargets.html)
 - [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)
 <!-- METHOD_DOCS_END -->
 

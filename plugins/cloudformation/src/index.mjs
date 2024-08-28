@@ -626,7 +626,6 @@ const DescribePublisher = {
   response: ({ payload }) => payload.DescribePublisherResult,
 }
 
-// TODO: confirm response
 const DescribeResourceScan = {
   awsDoc: docRoot + 'API_DescribeResourceScan.html',
   validate: {
@@ -1467,6 +1466,40 @@ const ListStacks = {
   response: ({ payload }) => deSerializeObject(payload.ListStacksResult),
 }
 
+// TODO: verify
+const ListStackSetAutoDeploymentTargets = {
+  awsDoc: docRoot + 'API_ListStackSetAutoDeploymentTargets.html',
+  validate: {
+    StackSetName,
+    CallAs,
+    MaxResults,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListStackSetAutoDeploymentTargets',
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListStackSetAutoDeploymentTargetsResult.NextToken',
+        accumulator: 'ListStackSetAutoDeploymentTargetsResult.Summaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const maxDepth = 1
+    return deSerializeObject(payload.ListStackSetAutoDeploymentTargetsResult, maxDepth)
+  },
+}
+
 const ListStackSetOperationResults = {
   awsDoc: docRoot + 'API_ListStackSetOperationResults.html',
   validate: {
@@ -2114,6 +2147,7 @@ export default {
     ListStackInstances,
     ListStackResources,
     ListStacks,
+    ListStackSetAutoDeploymentTargets,
     ListStackSetOperationResults,
     ListStackSetOperations,
     ListStackSets,

@@ -30,7 +30,6 @@ import {
   DescribeStackEventsCommandOutput as DescribeStackEventsResponse,
   DescribeStackInstanceCommandOutput as DescribeStackInstanceResponse,
   DescribeStackResourceCommandOutput as DescribeStackResourceResponse,
-  DescribeStackResourceDriftsCommandOutput as DescribeStackResourceDriftsResponse,
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
   DescribeStacksCommandOutput as DescribeStacksResponse,
   DescribeStackSetCommandOutput as DescribeStackSetResponse,
@@ -248,12 +247,6 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackResource CloudFormation: DescribeStackResource}
    */
   DescribeStackResource: (input: { LogicalResourceId: string, StackName: string }) => Promise<DescribeStackResourceResponse>
-  /**
-   * @description
-   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResourceDrifts.html CloudFormation: DescribeStackResourceDrifts}
-   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackResourceDrifts CloudFormation: DescribeStackResourceDrifts}
-   */
-  DescribeStackResourceDrifts: (input: { StackName: string, MaxResults?: number, NextToken?: string, StackResourceDriftStatusFilters?: any[], paginate?: boolean | string }) => Promise<DescribeStackResourceDriftsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResources.html CloudFormation: DescribeStackResources}
@@ -566,7 +559,6 @@ export type {
   DescribeStackEventsResponse,
   DescribeStackInstanceResponse,
   DescribeStackResourceResponse,
-  DescribeStackResourceDriftsResponse,
   DescribeStackResourcesResponse,
   DescribeStacksResponse,
   DescribeStackSetResponse,
