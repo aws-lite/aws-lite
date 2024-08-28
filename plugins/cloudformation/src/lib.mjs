@@ -5,8 +5,8 @@ const isLiteral = i => isString(i) || isBool(i) || isNum(i)
 const isArr = i => Array.isArray(i)
 const isObj = i => typeof i === 'object' && Object.keys(i).length
 
-// Notes on all response array properties
-// Seems everything is serialized as a 'member' property, can probably turn this into a set to reduce clutter
+// Annoyingly one array serializes to `entry` instead of `member`
+// TODO: maybe find another way to handle this since most arrays are `member`
 const arrayProperties = {
   // BatchDescribeTypeConfigurations
   Errors: 'member',
@@ -27,7 +27,7 @@ const arrayProperties = {
   Properties: 'member',
   Warnings: 'member',
   // DescribeResourceScan
-  // ResourceTypes: 'member',
+  ResourceTypeSummaries: 'member',
   // DescribeStackEvents
   StackEvents: 'member',
   // DescribeStackResourceDrifts
@@ -66,11 +66,11 @@ const arrayProperties = {
   // ListImports
   Imports: 'member',
   // ListResourceScanRelatedResources
-  // TODO
+  RelatedResources: 'member',
   // ListResourceScanResources
   // TODO
   // ListResourceScans
-  // TODO
+  ResourceScanSummaries: 'member',
   // ListStackInstanceResourceDrifts
   // TODO
   // ListStackInstances
@@ -172,8 +172,22 @@ function deSerializeObject (obj, maxDepth = 0, arrayProps = arrayProperties) {
   return obj
 }
 
+function deSerializeResources (resources) {
+  let result = {}
+  result = resources.map(i => {
+    const resource = { ...i }
+    resource.ResourceIdentifier = {}
+    i.ResourceIdentifier.forEach(({ key, value }) => {
+      resource.ResourceIdentifier[key] = value
+    })
+    return resource
+  })
+  return result
+}
+
 export {
   querystringifyParams,
   querystringifyResources,
   deSerializeObject,
+  deSerializeResources,
 }

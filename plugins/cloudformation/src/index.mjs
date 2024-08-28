@@ -4,7 +4,7 @@
 
 import incomplete from './incomplete.mjs'
 import { default as qs } from 'node:querystring'
-import { querystringifyParams, querystringifyResources, deSerializeObject } from './lib.mjs'
+import { querystringifyParams, querystringifyResources, deSerializeObject, deSerializeResources } from './lib.mjs'
 
 const service = 'cloudformation'
 const property = 'CloudFormation'
@@ -69,6 +69,7 @@ const ManagedExecution = { ...obj, comment: 'Specify if the stack sets operate c
 const PermissionModel = { ...str, comment: 'Describe how IAM roles required for operations are created; can be one of: `SELF_MANAGED` (default), `SERVICE_MANAGED`' }
 const UsePreviousTemplate = { ...bool, comment: 'Set to true to reuse the template associated with the stack' }
 const GeneratedTemplateName = { ...str, required, comment: 'User defined name for the generated template; can be ARN for existing templates' }
+const ResourceScanId = { ...str, required, comment: 'Resource scan ID' }
 
 
 const Version = '2010-05-15'
@@ -600,16 +601,7 @@ const DescribeGeneratedTemplate = {
   response: ({ payload }) => {
     const maxDepth = 2 // Arrays nested in arrays nested in arrays
     const result = deSerializeObject(payload.DescribeGeneratedTemplateResult, maxDepth)
-    if (result.Resources) {
-      result.Resources = result.Resources.map(resource => {
-        const ResourceIdentifier = {}
-        resource.ResourceIdentifier.forEach(({ key, value }) => {
-          ResourceIdentifier[key] = value
-        })
-        resource.ResourceIdentifier = ResourceIdentifier
-        return resource
-      })
-    }
+    if (result.Resources) result.Resources = deSerializeResources(result.Resources)
     return result
   },
 }
@@ -646,11 +638,11 @@ const DescribePublisher = {
   response: ({ payload }) => payload.DescribePublisherResult,
 }
 
-// TODO: verify
+// TODO: confirm response
 const DescribeResourceScan = {
   awsDoc: docRoot + 'API_DescribeResourceScan.html',
   validate: {
-    ResourceScanId: { ...str, required, comment: 'Resource scan ARN' },
+    ResourceScanId,
   },
   request: (params) => {
     return {
@@ -660,7 +652,12 @@ const DescribeResourceScan = {
       },
     }
   },
-  response: ({ payload }) => deSerializeObject(payload.DescribeResourceScanResult),
+  response: ({ payload }) => {
+    const result = deSerializeObject(payload.DescribeResourceScanResult)
+    result.ResourceTypes = result.ResourceTypeSummaries.map(({ ResourceType }) => ResourceType)
+    delete result.ResourceTypeSummaries
+    return result
+  },
 }
 
 const DescribeStackDriftDetectionStatus = {
@@ -1257,6 +1254,114 @@ const ListImports = {
   response: ({ payload }) => deSerializeObject(payload.ListImportsResult),
 }
 
+const ListResourceScanRelatedResources = {
+  awsDoc: docRoot + 'API_ListResourceScanRelatedResources.html',
+  validate: {
+    ResourceScanId,
+    Resources: { ...arr, required, comment: 'Array of `ScannedResourceIdentifier` objects', ref: docRoot + 'API_ListResourceScanRelatedResources.html#API_ListResourceScanRelatedResources_RequestParameters' },
+    MaxResults,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListResourceScanRelatedResources',
+      Version,
+      ...params,
+    }
+    const { Resources, paginate } = params
+    if (Resources) {
+      delete query.Resources
+      Object.assign(query, querystringifyResources({ Resources }))
+    }
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListResourceScanRelatedResourcesResult.NextToken',
+        accumulator: 'ListResourceScanRelatedResourcesResult.RelatedResources.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const maxDepth = 1
+    const result = deSerializeObject(payload.ListResourceScanRelatedResourcesResult, maxDepth)
+    result.RelatedResources = deSerializeResources(result.RelatedResources)
+    return result
+  },
+}
+
+const ListResourceScanResources = {
+  awsDoc: docRoot + 'API_ListResourceScanResources.html',
+  validate: {
+    ResourceScanId,
+    MaxResults,
+    NextToken,
+    ResourceIdentifier: { ...str, comment: 'Filter results by identifier' },
+    ResourceTypePrefix: { ...str, comment: 'Filter results by prefix' },
+    TagKey: { ...str, comment: 'Filter results by tag key' },
+    TagValue: { ...str, comment: 'Filter results by tag value' },
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListResourceScanResources',
+      Version,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListResourceScanResourcesResult.NextToken',
+        accumulator: 'ListResourceScanResourcesResult.Resources.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const maxDepth = 1
+    const result = deSerializeObject(payload.ListResourceScanResourcesResult, maxDepth)
+    result.Resources = deSerializeResources(result.Resources)
+    return result
+  },
+}
+
+const ListResourceScans = {
+  awsDoc: docRoot + 'API_ListResourceScans.html',
+  validate: {
+    MaxResults,
+    NextToken,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = {
+      Action: 'ListResourceScans',
+      Version,
+      ...params,
+    }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      query,
+      paginate,
+      paginator: {
+        cursor: 'NextToken',
+        token: 'ListResourceScansResult.NextToken',
+        accumulator: 'ListResourceScansResult.ResourceScanSummaries.member',
+        type: 'query',
+      },
+    }
+  },
+  response: ({ payload }) => deSerializeObject(payload.ListResourceScansResult),
+}
+
 // TODO: verify
 const ListStackInstanceResourceDrifts = {
   awsDoc: docRoot + 'API_ListStackInstanceResourceDrifts.html',
@@ -1756,6 +1861,22 @@ const SignalResource = {
   response: emptyResponse,
 }
 
+const StartResourceScan = {
+  awsDoc: docRoot + 'API_StartResourceScan.html',
+  validate: {
+    ClientRequestToken,
+  },
+  request: (params) => {
+    return {
+      query: {
+        Action: 'StartResourceScan',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => payload.StartResourceScanResult,
+}
+
 const StopStackSetOperation = {
   awsDoc: docRoot + 'API_StopStackSetOperation.html',
   validate: {
@@ -2017,6 +2138,9 @@ export default {
     ListExports,
     ListGeneratedTemplates,
     ListImports,
+    ListResourceScanRelatedResources,
+    ListResourceScanResources,
+    ListResourceScans,
     ListStackInstanceResourceDrifts,
     ListStackInstances,
     ListStackResources,
@@ -2035,6 +2159,7 @@ export default {
     SetTypeConfiguration,
     SetTypeDefaultVersion,
     SignalResource,
+    StartResourceScan,
     StopStackSetOperation,
     TestType,
     UpdateGeneratedTemplate,

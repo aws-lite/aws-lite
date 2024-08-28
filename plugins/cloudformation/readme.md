@@ -472,6 +472,15 @@ Properties:
   - ID of the extension publisher
 
 
+### `DescribeResourceScan`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeResourceScan.html)
+
+Properties:
+- **`ResourceScanId` (string) [required]**
+  - Resource scan ID
+
+
 ### `DescribeStackDriftDetectionStatus`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackDriftDetectionStatus.html)
@@ -807,6 +816,60 @@ Properties:
   - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
+### `ListResourceScanRelatedResources`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanRelatedResources.html)
+
+Properties:
+- **`ResourceScanId` (string) [required]**
+  - Resource scan ID
+- **`Resources` (array) [required]**
+  - Array of `ScannedResourceIdentifier` objects
+  - [More details (AWS)](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanRelatedResources.html#API_ListResourceScanRelatedResources_RequestParameters)
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListResourceScanResources`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanResources.html)
+
+Properties:
+- **`ResourceScanId` (string) [required]**
+  - Resource scan ID
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`ResourceIdentifier` (string)**
+  - Filter results by identifier
+- **`ResourceTypePrefix` (string)**
+  - Filter results by prefix
+- **`TagKey` (string)**
+  - Filter results by tag key
+- **`TagValue` (string)**
+  - Filter results by tag value
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
+### `ListResourceScans`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScans.html)
+
+Properties:
+- **`MaxResults` (number)**
+  - Maximum number of results to be returned in a response
+- **`NextToken` (string)**
+  - Pagination cursor token to be used if `NextToken` was returned in a previous response
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
+
+
 ### `ListStackInstances`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html)
@@ -1073,6 +1136,15 @@ Properties:
   - User assigned ID for the signal; each signal ID must be unique
 
 
+### `StartResourceScan`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StartResourceScan.html)
+
+Properties:
+- **`ClientRequestToken` (string)**
+  - Unique identifier for this request; from 1 - 128b matching `[a-zA-Z0-9][-a-zA-Z0-9]*`
+
+
 ### `StopStackSetOperation`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StopStackSetOperation.html)
@@ -1221,17 +1293,12 @@ Properties:
 
 > Please help out by [opening a PR](https://github.com/aws-lite/aws-lite#authoring-aws-lite-plugins)!
 
-- [`DescribeResourceScan`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeResourceScan.html)
 - [`DescribeTypeRegistration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeTypeRegistration.html)
 - [`ListStackInstanceResourceDrifts`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstanceResourceDrifts.html)
 - [`PublishType`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_PublishType.html)
 - [`SetTypeConfiguration`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_SetTypeConfiguration.html)
 - [`UpdateStackSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html)
-- [`ListResourceScanRelatedResources`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanRelatedResources.html)
-- [`ListResourceScanResources`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanResources.html)
-- [`ListResourceScans`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScans.html)
 - [`RecordHandlerProgress`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_RecordHandlerProgress.html)
-- [`StartResourceScan`](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StartResourceScan.html)
 <!-- METHOD_DOCS_END -->
 
 

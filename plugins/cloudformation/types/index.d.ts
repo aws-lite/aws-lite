@@ -25,6 +25,7 @@ import {
   DescribeGeneratedTemplateCommandOutput as DescribeGeneratedTemplateResponse,
   DescribeOrganizationsAccessCommandOutput as DescribeOrganizationsAccessResponse,
   DescribePublisherCommandOutput as DescribePublisherResponse,
+  DescribeResourceScanCommandOutput as DescribeResourceScanResponse,
   DescribeStackDriftDetectionStatusCommandOutput as DescribeStackDriftDetectionStatusResponse,
   DescribeStackEventsCommandOutput as DescribeStackEventsResponse,
   DescribeStackInstanceCommandOutput as DescribeStackInstanceResponse,
@@ -49,6 +50,9 @@ import {
   ListExportsCommandOutput as ListExportsResponse,
   ListGeneratedTemplatesCommandOutput as ListGeneratedTemplatesResponse,
   ListImportsCommandOutput as ListImportsResponse,
+  ListResourceScanRelatedResourcesCommandOutput as ListResourceScanRelatedResourcesResponse,
+  ListResourceScanResourcesCommandOutput as ListResourceScanResourcesResponse,
+  ListResourceScansCommandOutput as ListResourceScansResponse,
   ListStackInstancesCommandOutput as ListStackInstancesResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
   ListStacksCommandOutput as ListStacksResponse,
@@ -64,6 +68,7 @@ import {
   SetStackPolicyCommandOutput as SetStackPolicyResponse,
   SetTypeDefaultVersionCommandOutput as SetTypeDefaultVersionResponse,
   SignalResourceCommandOutput as SignalResourceResponse,
+  StartResourceScanCommandOutput as StartResourceScanResponse,
   StopStackSetOperationCommandOutput as StopStackSetOperationResponse,
   TestTypeCommandOutput as TestTypeResponse,
   UpdateGeneratedTemplateCommandOutput as UpdateGeneratedTemplateResponse,
@@ -215,6 +220,12 @@ declare interface AwsLiteCloudFormation {
   DescribePublisher: (input: { PublisherId: string }) => Promise<DescribePublisherResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeResourceScan.html CloudFormation: DescribeResourceScan}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeResourceScan CloudFormation: DescribeResourceScan}
+   */
+  DescribeResourceScan: (input: { ResourceScanId: string }) => Promise<DescribeResourceScanResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackDriftDetectionStatus.html CloudFormation: DescribeStackDriftDetectionStatus}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackDriftDetectionStatus CloudFormation: DescribeStackDriftDetectionStatus}
    */
@@ -359,6 +370,24 @@ declare interface AwsLiteCloudFormation {
   ListImports: (input: { ExportName: string, NextToken?: string, paginate?: boolean | string }) => Promise<ListImportsResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanRelatedResources.html CloudFormation: ListResourceScanRelatedResources}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListResourceScanRelatedResources CloudFormation: ListResourceScanRelatedResources}
+   */
+  ListResourceScanRelatedResources: (input: { ResourceScanId: string, Resources: any[], MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListResourceScanRelatedResourcesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScanResources.html CloudFormation: ListResourceScanResources}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListResourceScanResources CloudFormation: ListResourceScanResources}
+   */
+  ListResourceScanResources: (input: { ResourceScanId: string, MaxResults?: number, NextToken?: string, ResourceIdentifier?: string, ResourceTypePrefix?: string, TagKey?: string, TagValue?: string, paginate?: boolean | string }) => Promise<ListResourceScanResourcesResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListResourceScans.html CloudFormation: ListResourceScans}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListResourceScans CloudFormation: ListResourceScans}
+   */
+  ListResourceScans: (input: { MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListResourceScansResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_ListStackInstances.html CloudFormation: ListStackInstances}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#ListStackInstances CloudFormation: ListStackInstances}
    */
@@ -449,6 +478,12 @@ declare interface AwsLiteCloudFormation {
   SignalResource: (input: { LogicalResourceId: string, StackName: string, Status: string, UniqueId: string }) => Promise<SignalResourceResponse>
   /**
    * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StartResourceScan.html CloudFormation: StartResourceScan}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#StartResourceScan CloudFormation: StartResourceScan}
+   */
+  StartResourceScan: (input: { ClientRequestToken?: string }) => Promise<StartResourceScanResponse>
+  /**
+   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_StopStackSetOperation.html CloudFormation: StopStackSetOperation}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#StopStackSetOperation CloudFormation: StopStackSetOperation}
    */
@@ -526,6 +561,7 @@ export type {
   DescribeGeneratedTemplateResponse,
   DescribeOrganizationsAccessResponse,
   DescribePublisherResponse,
+  DescribeResourceScanResponse,
   DescribeStackDriftDetectionStatusResponse,
   DescribeStackEventsResponse,
   DescribeStackInstanceResponse,
@@ -550,6 +586,9 @@ export type {
   ListExportsResponse,
   ListGeneratedTemplatesResponse,
   ListImportsResponse,
+  ListResourceScanRelatedResourcesResponse,
+  ListResourceScanResourcesResponse,
+  ListResourceScansResponse,
   ListStackInstancesResponse,
   ListStackResourcesResponse,
   ListStacksResponse,
@@ -565,6 +604,7 @@ export type {
   SetStackPolicyResponse,
   SetTypeDefaultVersionResponse,
   SignalResourceResponse,
+  StartResourceScanResponse,
   StopStackSetOperationResponse,
   TestTypeResponse,
   UpdateGeneratedTemplateResponse,
