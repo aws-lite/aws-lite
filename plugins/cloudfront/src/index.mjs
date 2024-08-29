@@ -3,7 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
-import { arrayifyItemsProp, arrayifyObject, maybeAddETag, unarrayifyObject } from './lib.mjs'
+import { arrayifyItemsProp, arrayifyObject, maybeAddETag, unarrayifyObject, etagAndLocation } from './lib.mjs'
 
 const service = 'cloudfront'
 const property = 'CloudFront'
@@ -47,6 +47,12 @@ const ResponseHeadersPolicyConfig = { ...obj, required, comment: 'Complete respo
 const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
 const Type = { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' }
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
+const ARN = { ...str, comment: 'ARN of the real-time log configuration' }
+const EndPoints = { ...arr, required, comment: 'Array of `Endpoint` objects containing information about the Kinesis data stream', ref: docRoot + 'API_EndPoint.html' }
+const Fields = { ...arr, required, comment: 'Array of strings specifying fields to include in each log record', ref: docRoot + 'real-time-logs.html#understand-real-time-log-config-fields' }
+const SamplingRate = { ...num, required, comment: 'Percentage of viewer requests between 1 and 100 (inclusive) that will be sampled to generate logs' }
+const StreamingDistributionConfig = { ...obj, required, comment: 'Complete streaming distribution configuration', ref: docRoot + 'API_StreamingDistributionConfig.html' }
+
 
 const xmlns = 'http://cloudfront.amazonaws.com/doc/2020-05-31/'
 
@@ -232,33 +238,33 @@ const CreateDistribution = {
   },
 }
 
-// TODO: double check response
-// const CreateDistributionWithTags = {
-//   awsDoc: docRoot + 'API_CreateDistributionWithTags.html',
-//   validate: {
-//     DistributionConfigWithTags: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistributionWithTags.html#cloudfront-CreateDistributionWithTags-request-DistributionConfigWithTags' },
-//   },
-//   request: (params) => {
-//     const payload = unarrayifyObject(params)
-//     payload.DistributionConfigWithTags.DistributionConfig = unarrayifyObject(payload.DistributionConfigWithTags.DistributionConfig)
-//     return {
-//       path: '/2020-05-31/distribution?WithTags',
-//       method: 'POST',
-//       headers: xml,
-//       xmlns,
-//       payload,
-//     }
-//   },
-//   response: ({ headers, payload }) => {
-//     const { etag, location } = headers
-//     const Distribution = arrayifyObject(payload)
-//     return {
-//       Distribution,
-//       ETag: etag,
-//       Location: location,
-//     }
-//   },
-// }
+// TODO: verify
+const CreateDistributionWithTags = {
+  awsDoc: docRoot + 'API_CreateDistributionWithTags.html',
+  validate: {
+    DistributionConfigWithTags: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistributionWithTags.html#cloudfront-CreateDistributionWithTags-request-DistributionConfigWithTags' },
+  },
+  request: (params) => {
+    const payload = unarrayifyObject(params)
+    payload.DistributionConfigWithTags.DistributionConfig = unarrayifyObject(payload.DistributionConfigWithTags.DistributionConfig)
+    return {
+      path: '/2020-05-31/distribution?WithTags',
+      method: 'POST',
+      headers: xml,
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const { etag, location } = headers
+    const Distribution = arrayifyObject(payload)
+    return {
+      Distribution,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
 
 const CreateFieldLevelEncryptionConfig = {
   awsDoc: docRoot + 'API_CreateFieldLevelEncryptionConfig.html',
@@ -517,35 +523,35 @@ const CreatePublicKey = {
   },
 }
 
-// TODO: Test
-// const CreateRealtimeLogConfig = {
-//   awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html',
-//   validate: {
-//     EndPoints: { ...arr, required, comment: 'Array of `Endpoint` objects containing information about the Kinesis data stream', ref: docRoot + 'API_CreateRealtimeLogConfig.html#cloudfront-CreateRealtimeLogConfig-request-EndPoints' },
-//     Fields: { ...arr, required, comment: 'Array of strings specifying fields to include in each log record', ref: docRoot + 'API_CreateRealtimeLogConfig.html#cloudfront-CreateRealtimeLogConfig-request-Fields' },
-//     Name,
-//     SamplingRate: { ...num, required, comment: 'Percentage of viewer requests between 1 and 100 (inclusive) that will be sampled to generate logs' },
-//   },
-//   request: (params) => {
-//     const { EndPoints, Fields } = params
-//     const CreateRealtimeLogConfigRequest = { ...params }
-//     CreateRealtimeLogConfigRequest.EndPoints = { EndPoint: EndPoints }
-//     CreateRealtimeLogConfigRequest.Fields = { Field: Fields }
-//     return {
-//       path: '/2020-05-31/realtime-log-config',
-//       headers: xml,
-//       xmlns,
-//       payload: { CreateRealtimeLogConfigRequest },
-//     }
-//   },
-//   response: ({ payload }) => {
-//     const { EndPoint } = payload.EndPoints
-//     const { Field } = payload.Field
-//     payload.EndPoints = Array.isArray(EndPoint) ? EndPoint : [ EndPoint ]
-//     payload.Fields = Array.isArray(Field) ? Field : [ Field ]
-//     return { RealtimeLogConfig: payload }
-//   },
-// }
+// TODO: verify
+const CreateRealtimeLogConfig = {
+  awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html',
+  validate: {
+    EndPoints,
+    Fields,
+    Name,
+    SamplingRate,
+  },
+  request: (params) => {
+    const { EndPoints, Fields } = params
+    const CreateRealtimeLogConfigRequest = { ...params }
+    CreateRealtimeLogConfigRequest.EndPoints = { EndPoint: EndPoints }
+    CreateRealtimeLogConfigRequest.Fields = { Field: Fields }
+    return {
+      path: '/2020-05-31/realtime-log-config',
+      headers: xml,
+      xmlns,
+      payload: { CreateRealtimeLogConfigRequest },
+    }
+  },
+  response: ({ payload }) => {
+    const { EndPoint } = payload.EndPoints
+    const { Field } = payload.Field
+    payload.EndPoints = Array.isArray(EndPoint) ? EndPoint : [ EndPoint ]
+    payload.Fields = Array.isArray(Field) ? Field : [ Field ]
+    return { RealtimeLogConfig: payload }
+  },
+}
 
 const CreateResponseHeadersPolicy = {
   awsDoc: docRoot + 'API_CreateResponseHeadersPolicy.html',
@@ -573,30 +579,56 @@ const CreateResponseHeadersPolicy = {
 }
 
 // TODO: figure out why `rate exceeded` error happens
-// const CreateStreamingDistribution = {
-//   awsDoc: docRoot + 'API_CreateStreamingDistribution.html',
-//   validate: {
-//     StreamingDistributionConfig: { ...obj, required, comment: 'Complete streaming distribution configuration', ref: docRoot + 'API_StreamingDistributionConfig.html' },
-//   },
-//   request: (params) => {
-//     const StreamingDistributionConfig = unarrayifyObject(params.StreamingDistributionConfig)
-//     return {
-//       path: '/2020-05-31/streaming-distribution',
-//       headers: xml,
-//       xmlns,
-//       payload: { StreamingDistributionConfig },
-//     }
-//   },
-//   response: ({ headers, payload }) => {
-//     const StreamingDistribution = arrayifyObject(payload)
-//     const { etag, location } = headers
-//     return {
-//       StreamingDistribution,
-//       ETag: etag,
-//       Location: location,
-//     }
-//   },
-// }
+const CreateStreamingDistribution = {
+  awsDoc: docRoot + 'API_CreateStreamingDistribution.html',
+  validate: {
+    StreamingDistributionConfig,
+  },
+  request: (params) => {
+    const StreamingDistributionConfig = unarrayifyObject(params.StreamingDistributionConfig)
+    return {
+      path: '/2020-05-31/streaming-distribution',
+      headers: xml,
+      xmlns,
+      payload: { StreamingDistributionConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const StreamingDistribution = arrayifyObject(payload)
+    const { etag, location } = headers
+    return {
+      StreamingDistribution,
+      ETag: etag,
+      Location: location,
+    }
+  },
+}
+
+// TODO: figure out why `rate exceeded` error happens
+const CreateStreamingDistributionWithTags = {
+  awsDoc: docRoot + 'API_CreateStreamingDistributionWithTags.html',
+  validate: {
+    StreamingDistributionConfigWithTags: { ...obj, required, comment: 'Complete streaming distribution configuration with tags', ref:  docRoot + 'API_CreateStreamingDistributionWithTags.html#cloudfront-CreateStreamingDistributionWithTags-request-StreamingDistributionConfigWithTags' },
+  },
+  request: (params) => {
+    const StreamingDistributionConfigWithTags = unarrayifyObject(params.StreamingDistributionConfigWithTags)
+    console.dir(StreamingDistributionConfigWithTags, { depth: null })
+    return {
+      path: '/2020-05-31/streaming-distribution',
+      query: { WithTags: '' },
+      headers: xml,
+      xmlns,
+      payload: { StreamingDistributionConfigWithTags },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const StreamingDistribution = arrayifyObject(payload)
+    return {
+      StreamingDistribution,
+      ...etagAndLocation(headers),
+    }
+  },
+}
 
 const DeleteCachePolicy = {
   awsDoc: docRoot + 'API_DeleteCachePolicy.html',
@@ -804,6 +836,24 @@ const DeletePublicKey = {
   response: defaultResponse,
 }
 
+// TODO: verify
+const DeleteRealtimeLogConfig = {
+  awsDoc: docRoot + 'API_DeleteRealtimeLogConfig.html',
+  validate: {
+    ARN,
+    Name,
+  },
+  request: (params) => {
+    return {
+      path: '/2020-05-31/delete-realtime-log-config',
+      headers: xml,
+      xmlns,
+      payload: { ...params },
+    }
+  },
+  response: defaultResponse,
+}
+
 const DeleteResponseHeadersPolicy = {
   awsDoc: docRoot + 'API_DeleteResponseHeadersPolicy.html',
   validate: {
@@ -813,6 +863,23 @@ const DeleteResponseHeadersPolicy = {
   request: ({ Id, IfMatch }) => {
     return {
       path: `/2020-05-31/response-headers-policy/${Id}`,
+      method: 'DELETE',
+      headers: { 'if-match': IfMatch },
+    }
+  },
+  response: defaultResponse,
+}
+
+// TODO: verify
+const DeleteStreamingDistribution = {
+  awsDoc: docRoot + 'API_DeleteStreamingDistribution.html',
+  validate: {
+    Id,
+    IfMatch,
+  },
+  request: ({ Id, IfMatch }) => {
+    return {
+      path: `/2020-05-31/streaming-distribution/${Id}`,
       method: 'DELETE',
       headers: { 'if-match': IfMatch },
     }
@@ -1296,6 +1363,27 @@ const GetPublicKeyConfig = {
   },
 }
 
+// TODO: verify
+const GetRealtimeLogConfig = {
+  awsDoc: docRoot + 'API_GetRealtimeLogConfig.html',
+  validate: {
+    ARN,
+    Name,
+  },
+  request: (payload) => {
+    return {
+      path: '/2020-05-31/get-realtime-log-config',
+      headers: xml,
+      xmlns,
+      payload,
+    }
+  },
+  response: ({ payload }) => {
+    const RealtimeLogConfig = arrayifyObject(payload)
+    return { RealtimeLogConfig }
+  },
+}
+
 const GetResponseHeadersPolicy = {
   awsDoc: docRoot + 'API_GetResponseHeadersPolicy.html',
   validate: {
@@ -1331,6 +1419,48 @@ const GetResponseHeadersPolicyConfig = {
     const { etag } = headers
     return {
       ResponseHeadersPolicyConfig,
+      ETag: etag,
+    }
+  },
+}
+
+// TODO: verify
+const GetStreamingDistribution = {
+  awsDoc: docRoot + 'API_GetStreamingDistribution.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/streaming-distribution/${Id}`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const StreamingDistribution = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      StreamingDistribution,
+      ETag: etag,
+    }
+  },
+}
+
+// TODO: verify
+const GetStreamingDistributionConfig = {
+  awsDoc: docRoot + 'API_GetStreamingDistributionConfig.html',
+  validate: {
+    Id,
+  },
+  request: ({ Id }) => {
+    return {
+      path: `/2020-05-31/streaming-distribution/${Id}/config`,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const StreamingDistributionConfig = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      StreamingDistributionConfig,
       ETag: etag,
     }
   },
@@ -1573,6 +1703,39 @@ const ListDistributionsByOriginRequestPolicyId = {
   },
 }
 
+// TODO: verify
+const ListDistributionsByRealtimeLogConfig = {
+  awsDoc: docRoot + 'API_ListDistributionsByRealtimeLogConfig.html',
+  validate: {
+    Marker,
+    MaxItems,
+    RealtimeLogConfigArn: { ...str, comment: 'ARN of a real-time log configuration' },
+    RealtimeLogConfigName: { ...str, comment: 'Name of a real-time log configuration' },
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
+    return {
+      path: `/2020-05-31/distributionsByRealtimeLogConfig`,
+      headers: xml,
+      payload,
+      paginate,
+      paginator: {
+        ...paginator,
+        type: 'payload',
+        accumulator: 'Items.DistributionSummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const DistributionList = arrayifyItemsProp(payload)
+    DistributionList.Items = DistributionList.Items.map(i => arrayifyObject(i))
+    return { DistributionList }
+  },
+}
+
 const ListDistributionsByResponseHeadersPolicyId = {
   awsDoc: docRoot + 'API_ListDistributionsByResponseHeadersPolicyId.html',
   validate: {
@@ -1599,6 +1762,36 @@ const ListDistributionsByResponseHeadersPolicyId = {
   response: ({ payload }) => {
     const DistributionIdList = arrayifyItemsProp(payload)
     return { DistributionIdList }
+  },
+}
+
+// TODO: verify
+const ListDistributionsByWebACLId = {
+  awsDoc: docRoot + 'API_ListDistributionsByWebACLId.html',
+  validate: {
+    WebACLId: { ...str, required, comment: 'WAF Wev ACL ID; specify `null` to list distributions with no web ACL' },
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/distributionsByWebACLId`,
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.DistributionSummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const DistributionList = arrayifyItemsProp(payload)
+    DistributionList.Items = DistributionList.Items.map(i => arrayifyObject(i))
+    return { DistributionList }
   },
 }
 
@@ -1859,6 +2052,36 @@ const ListPublicKeys = {
   },
 }
 
+// TODO: verify
+const ListRealtimeLogConfigs = {
+  awsDoc: docRoot + 'API_ListRealtimeLogConfigs.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const query = { ...params }
+    const { paginate } = params
+    if (paginate) delete query.paginate
+    return {
+      path: `/2020-05-31/realtime-log-config`,
+      method: 'GET',
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.RealtimeLogConfig',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const RealtimeLogConfigs = arrayifyItemsProp(payload)
+    RealtimeLogConfigs.Items = RealtimeLogConfigs.Items.map(i => arrayifyObject(i))
+    return { RealtimeLogConfigs }
+  },
+}
+
 const ListResponseHeadersPolicies = {
   awsDoc: docRoot + 'API_ListResponseHeadersPolicies.html',
   validate: {
@@ -1888,6 +2111,35 @@ const ListResponseHeadersPolicies = {
   },
 }
 
+// TODO: verify
+const ListStreamingDistributions = {
+  awsDoc: docRoot + 'API_ListStreamingDistributions.html',
+  validate: {
+    Marker,
+    MaxItems,
+    paginate: valPaginate,
+  },
+  request: (params) => {
+    const { paginate } = params
+    const query = { ...params }
+    if (paginate) delete query.paginate
+    return {
+      path: '/2020-05-31/streaming-distribution',
+      query,
+      paginate,
+      paginator: {
+        ...paginator,
+        accumulator: 'Items.StreamingDistributionSummary',
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const StreamingDistributionList = arrayifyItemsProp(payload)
+    StreamingDistributionList.Items = StreamingDistributionList.Items.map(i => arrayifyObject(i))
+    return { StreamingDistributionList }
+  },
+}
+
 const ListTagsForResource = {
   awsDoc: docRoot + 'API_ListTagsForResource.html',
   validate: {
@@ -1902,6 +2154,26 @@ const ListTagsForResource = {
   response: ({ payload }) => {
     const Tags = arrayifyItemsProp(payload)
     return { Tags }
+  },
+}
+
+// TODO: verify
+const PublishFunction = {
+  awsDoc: docRoot + 'API_PublishFunction.html',
+  validate: {
+    IfMatch,
+    Name,
+  },
+  request: ({ IfMatch, Name }) => {
+    return {
+      path: `/2020-05-31/function/${Name}/publish`,
+      type: 'POST',
+      headers: { IfMatch },
+    }
+  },
+  response: ({ payload }) => {
+    const FunctionSummary = arrayifyObject(payload)
+    return { FunctionSummary }
   },
 }
 
@@ -2086,6 +2358,36 @@ const UpdateDistribution = {
   response: ({ headers, payload }) => {
     const DistributionConfig = arrayifyObject(payload)
     return maybeAddETag({ DistributionConfig }, headers)
+  },
+}
+
+// TODO: verify
+const UpdateDistributionWithStagingConfig = {
+  awsDoc: docRoot + 'API_UpdateDistributionWithStagingConfig.html',
+  validate: {
+    Id,
+    IfMatch: { ...IfMatch, required: false },
+    StagingDistributionId: { ...str, comment: 'ID of a staging distribution to copy into the primary distribution' },
+  },
+  request: ({ Id, IfMatch, StagingDistributionId }) => {
+    const headers = {}
+    const query = {}
+    if (IfMatch) headers.IfMatch = IfMatch
+    if (StagingDistributionId) query.StagingDistributionId = StagingDistributionId
+    return {
+      path: `/2020-05-31/distribution/${Id}`,
+      method: 'PUT',
+      query,
+      headers,
+    }
+  },
+  response: ({ headers, payload }) => {
+    const Distribution = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      Distribution,
+      ETag: etag,
+    }
   },
 }
 
@@ -2303,6 +2605,37 @@ const UpdatePublicKey = {
   },
 }
 
+// TODO: verify
+const UpdateRealtimeLogConfig = {
+  awsDoc: docRoot + 'API_UpdateRealtimeLogConfig.html',
+  validate: {
+    ARN,
+    EndPoints,
+    Fields,
+    Name,
+    SamplingRate,
+  },
+  request: (params) => {
+    const { EndPoints, Fields } = params
+    const UpdateRealtimeLogConfigRequest = { ...params }
+    if (EndPoints) UpdateRealtimeLogConfigRequest.EndPoints = { EndPoint: EndPoints }
+    if (Fields) UpdateRealtimeLogConfigRequest.Fields = { Field: Fields }
+    return {
+      path: '/2020-05-31/realtime-log-config',
+      headers: xml,
+      xmlns,
+      payload: { UpdateRealtimeLogConfigRequest },
+    }
+  },
+  response: ({ payload }) => {
+    const { EndPoint } = payload.EndPoints
+    const { Field } = payload.Field
+    payload.EndPoints = Array.isArray(EndPoint) ? EndPoint : [ EndPoint ]
+    payload.Fields = Array.isArray(Field) ? Field : [ Field ]
+    return { RealtimeLogConfig: payload }
+  },
+}
+
 const UpdateResponseHeadersPolicy = {
   awsDoc: docRoot + 'API_UpdateResponseHeadersPolicy.html',
   validate: {
@@ -2330,6 +2663,34 @@ const UpdateResponseHeadersPolicy = {
   },
 }
 
+// TODO: verify
+const UpdateStreamingDistribution = {
+  awsDoc: docRoot + 'API_UpdateStreamingDistribution.html',
+  validate: {
+    Id,
+    IfMatch,
+    StreamingDistributionConfig,
+  },
+  request: (params) => {
+    const { Id, IfMatch } = params
+    const StreamingDistributionConfig = unarrayifyObject(params.StreamingDistributionConfig)
+    return {
+      path: `/2020-05-31/streaming-distribution/${Id}/config`,
+      headers: { 'if-match': IfMatch, ...xml },
+      xmlns,
+      payload: { StreamingDistributionConfig },
+    }
+  },
+  response: ({ headers, payload }) => {
+    const StreamingDistribution = arrayifyObject(payload)
+    const { etag } = headers
+    return {
+      StreamingDistribution,
+      ETag: etag,
+    }
+  },
+}
+
 export default {
   name: '@aws-lite/cloudfront',
   service,
@@ -2341,7 +2702,7 @@ export default {
     CreateCloudFrontOriginAccessIdentity,
     CreateContinuousDeploymentPolicy,
     CreateDistribution,
-    // CreateDistributionWithTags,
+    CreateDistributionWithTags,
     CreateFieldLevelEncryptionConfig,
     CreateFieldLevelEncryptionProfile,
     CreateFunction,
@@ -2352,9 +2713,10 @@ export default {
     CreateOriginAccessControl,
     CreateOriginRequestPolicy,
     CreatePublicKey,
-    // CreateRealtimeLogConfig,
+    CreateRealtimeLogConfig,
     CreateResponseHeadersPolicy,
-    // CreateStreamingDistribution,
+    CreateStreamingDistribution,
+    CreateStreamingDistributionWithTags,
     DeleteCachePolicy,
     DeleteCloudFrontOriginAccessIdentity,
     DeleteContinuousDeploymentPolicy,
@@ -2368,7 +2730,9 @@ export default {
     DeleteOriginAccessControl,
     DeleteOriginRequestPolicy,
     DeletePublicKey,
+    DeleteRealtimeLogConfig,
     DeleteResponseHeadersPolicy,
+    DeleteStreamingDistribution,
     DescribeFunction,
     DescribeKeyValueStore,
     GetCachePolicy,
@@ -2394,8 +2758,11 @@ export default {
     GetOriginRequestPolicyConfig,
     GetPublicKey,
     GetPublicKeyConfig,
+    GetRealtimeLogConfig,
     GetResponseHeadersPolicy,
     GetResponseHeadersPolicyConfig,
+    GetStreamingDistribution,
+    GetStreamingDistributionConfig,
     ListCachePolicies,
     ListCloudFrontOriginAccessIdentities,
     ListConflictingAliases,
@@ -2404,7 +2771,9 @@ export default {
     ListDistributionsByCachePolicyId,
     ListDistributionsByKeyGroup,
     ListDistributionsByOriginRequestPolicyId,
+    ListDistributionsByRealtimeLogConfig,
     ListDistributionsByResponseHeadersPolicyId,
+    ListDistributionsByWebACLId,
     ListFieldLevelEncryptionConfigs,
     ListFieldLevelEncryptionProfiles,
     ListFunctions,
@@ -2414,8 +2783,11 @@ export default {
     ListOriginAccessControls,
     ListOriginRequestPolicies,
     ListPublicKeys,
+    ListRealtimeLogConfigs,
     ListResponseHeadersPolicies,
+    ListStreamingDistributions,
     ListTagsForResource,
+    PublishFunction,
     TagResource,
     TestFunction,
     UntagResource,
@@ -2423,6 +2795,7 @@ export default {
     UpdateCloudFrontOriginAccessIdentity,
     UpdateContinuousDeploymentPolicy,
     UpdateDistribution,
+    UpdateDistributionWithStagingConfig,
     UpdateFieldLevelEncryptionConfig,
     UpdateFieldLevelEncryptionProfile,
     UpdateFunction,
@@ -2431,7 +2804,9 @@ export default {
     UpdateOriginAccessControl,
     UpdateOriginRequestPolicy,
     UpdatePublicKey,
+    UpdateRealtimeLogConfig,
     UpdateResponseHeadersPolicy,
+    UpdateStreamingDistribution,
     ...incomplete,
   },
 }

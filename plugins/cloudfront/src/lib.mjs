@@ -50,6 +50,9 @@ const arrayProperties = {
   'DistributionConfigWithTags.Tags': 'Tag',
   'Tags': 'Tag',
   'TrustedSigners': 'AwsAccountNumber',
+  // StreamingDistributionConfig
+  'StreamingDistributionConfig.Aliases': 'CNAME',
+  'StreamingDistributionConfig.TrustedSigners': 'AwsAccountNumber',
   // FieldLevelEncryptionConfig
   'FieldLevelEncryptionConfig.ContentTypeProfileConfig.ContentTypeProfiles': 'ContentTypeProfile',
   'FieldLevelEncryptionConfig.QueryArgProfileConfig.QueryArgProfiles': 'QueryArgProfile',
@@ -157,6 +160,10 @@ function maybeAddETag (result, headers) {
   return result
 }
 
+function etagAndLocation (headers) {
+  return { ETag: headers.etag, Location: headers.location }
+}
+
 // Specifically for unarrayifying distros to be re-serialized to XML (see: UpdateDistribution)
 // TODO: refactor to prevent mutating input
 function unarrayifyObject (obj, lastPropertyPath) {
@@ -224,4 +231,5 @@ export {
   arrayifyObject,
   maybeAddETag,
   unarrayifyObject,
+  etagAndLocation,
 }
