@@ -7,6 +7,7 @@ import {
   CreateCloudFrontOriginAccessIdentityCommandOutput as CreateCloudFrontOriginAccessIdentityResponse,
   CreateContinuousDeploymentPolicyCommandOutput as CreateContinuousDeploymentPolicyResponse,
   CreateDistributionCommandOutput as CreateDistributionResponse,
+  CreateDistributionWithTagsCommandOutput as CreateDistributionWithTagsResponse,
   CreateFieldLevelEncryptionConfigCommandOutput as CreateFieldLevelEncryptionConfigResponse,
   CreateFieldLevelEncryptionProfileCommandOutput as CreateFieldLevelEncryptionProfileResponse,
   CreateFunctionCommandOutput as CreateFunctionResponse,
@@ -137,6 +138,12 @@ declare interface AwsLiteCloudFront {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateDistribution CloudFront: CreateDistribution}
    */
   CreateDistribution: (input: { DistributionConfig: Record<string, any> }) => Promise<CreateDistributionResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateDistributionWithTags.html CloudFront: CreateDistributionWithTags}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudfront/readme.md#CreateDistributionWithTags CloudFront: CreateDistributionWithTags}
+   */
+  CreateDistributionWithTags: (input: { DistributionConfigWithTags: Record<string, any> }) => Promise<CreateDistributionWithTagsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateFieldLevelEncryptionConfig.html CloudFront: CreateFieldLevelEncryptionConfig}
@@ -684,6 +691,7 @@ export type {
   CreateCloudFrontOriginAccessIdentityResponse,
   CreateContinuousDeploymentPolicyResponse,
   CreateDistributionResponse,
+  CreateDistributionWithTagsResponse,
   CreateFieldLevelEncryptionConfigResponse,
   CreateFieldLevelEncryptionProfileResponse,
   CreateFunctionResponse,

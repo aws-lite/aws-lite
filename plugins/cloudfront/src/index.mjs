@@ -3,7 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
-import { arrayifyItemsProp, arrayifyObject, maybeAddETag, unarrayifyObject, etagAndLocation } from './lib.mjs'
+import { arrayifyItemsProp, arrayifyObject, maybeAddETag, unarrayifyObject, maybeGetETagAndLocation } from './lib.mjs'
 
 const service = 'cloudfront'
 const property = 'CloudFront'
@@ -22,14 +22,17 @@ const xml = { 'content-type': 'application/xml' }
 
 // const Comment = { ...str, required, comment: 'Distribution description; must be under 128 characters' }
 const Alias = { ...str, required, comment: 'Alternative domain name; must contain one or more dots (.) and can only include lower case characters and dashes, a leading star (*) can be used to indicate all subdomains, for example `*.example.com`' }
+const ARN = { ...str, comment: 'ARN of the real-time log configuration' }
 const CachePolicyConfig = { ...obj, required, comment: 'Complete cache policy configuration', ref: docRoot + 'API_CachePolicyConfig.html' }
 const CallerReference = { ...str, required, comment: 'Unique value that ensures that the request cannot be replayed' }
 const CloudFrontOriginAccessIdentityConfig = { ...obj, required, comment: 'Complete  Cloud Front origin access identity configuration', ref: docRoot + 'API_CreateCloudFrontOriginAccessIdentity.html' }
 const ContinuousDeploymentPolicyConfig = { ...obj, required, comment: 'Complete continuous deployment policy configuration', ref: docRoot + 'API_ContinuousDeploymentPolicyConfig.html' }
 const DistributionConfig = { ...obj, required, comment: 'Complete distribution configuration', ref: docRoot + 'API_DistributionConfig.html' }
 const DistributionId = { ...str, required, comment: 'Distribution ID' }
+const EndPoints = { ...arr, required, comment: 'Array of `Endpoint` objects containing information about the Kinesis data stream', ref: docRoot + 'API_EndPoint.html' }
 const FieldLevelEncryptionConfig = { ...obj, required, comment: 'Complete field level encryption configuration', ref: docRoot + 'API_FieldLevelEncryptionConfig.html' }
 const FieldLevelEncryptionProfileConfig = { ...obj, required, comment: 'Complete field level encryption profile configuration', ref: 'API_FieldLevelEncryptionProfileConfig.html' }
+const Fields = { ...arr, required, comment: 'Array of strings specifying fields to include in each log record', ref: docRoot + 'real-time-logs.html#understand-real-time-log-config-fields' }
 const FunctionCode = { ...str, required, comment: 'Base64 encoded function code' }
 const FunctionConfig = { ...obj, required, comment: 'Function configuration' }
 const Id = { ...str, required, comment: 'Resource ID' }
@@ -44,15 +47,11 @@ const OriginRequestPolicyConfig = { ...obj, required, comment: 'Complete origin 
 const PublicKeyConfig = { ...obj, required, comment: 'Public key configuration', ref: docRoot + 'API_PublicKeyConfig.html' }
 const Resource = { ...str, required, comment: 'ARN of a cloudfront resource' }
 const ResponseHeadersPolicyConfig = { ...obj, required, comment: 'Complete response headers policy configuration', ref: docRoot + 'API_ResponseHeadersPolicyConfig.html' }
+const SamplingRate = { ...num, required, comment: 'Percentage of viewer requests between 1 and 100 (inclusive) that will be sampled to generate logs' }
 const Stage = { ...str, comment: 'The functions stage; can be one of: `DEVELOPMENT`, `LIVE`' }
+const StreamingDistributionConfig = { ...obj, required, comment: 'Complete streaming distribution configuration', ref: docRoot + 'API_StreamingDistributionConfig.html' }
 const Type = { ...str, comment: 'Filter results by policy type; can be one of: `managed`, `custom`' }
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
-const ARN = { ...str, comment: 'ARN of the real-time log configuration' }
-const EndPoints = { ...arr, required, comment: 'Array of `Endpoint` objects containing information about the Kinesis data stream', ref: docRoot + 'API_EndPoint.html' }
-const Fields = { ...arr, required, comment: 'Array of strings specifying fields to include in each log record', ref: docRoot + 'real-time-logs.html#understand-real-time-log-config-fields' }
-const SamplingRate = { ...num, required, comment: 'Percentage of viewer requests between 1 and 100 (inclusive) that will be sampled to generate logs' }
-const StreamingDistributionConfig = { ...obj, required, comment: 'Complete streaming distribution configuration', ref: docRoot + 'API_StreamingDistributionConfig.html' }
-
 
 const xmlns = 'http://cloudfront.amazonaws.com/doc/2020-05-31/'
 
@@ -110,12 +109,9 @@ const CopyDistribution = {
   },
   response: ({ headers, payload }) => {
     const Distribution = arrayifyObject(payload)
-    Distribution.DistributionConfig = arrayifyObject(Distribution.DistributionConfig)
-    const { etag, location } = headers
     return {
       Distribution,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -224,12 +220,13 @@ const CreateDistribution = {
      */
   },
   request: (params) => {
-    const DistributionConfig = unarrayifyObject(params.DistributionConfig)
+    const payload = unarrayifyObject(params)
     return {
       path: '/2020-05-31/distribution',
       method: 'POST',
       headers: xml,
-      payload: { DistributionConfig },
+      xmlns,
+      payload,
     }
   },
   response: ({ headers, payload }) => {
@@ -238,30 +235,27 @@ const CreateDistribution = {
   },
 }
 
-// TODO: verify
 const CreateDistributionWithTags = {
   awsDoc: docRoot + 'API_CreateDistributionWithTags.html',
   validate: {
     DistributionConfigWithTags: { ...obj, required, comment: 'Complete distribution configuration object', ref: docRoot + 'API_CreateDistributionWithTags.html#cloudfront-CreateDistributionWithTags-request-DistributionConfigWithTags' },
   },
   request: (params) => {
-    const payload = unarrayifyObject(params)
-    payload.DistributionConfigWithTags.DistributionConfig = unarrayifyObject(payload.DistributionConfigWithTags.DistributionConfig)
+    const DistributionConfigWithTags = unarrayifyObject(params.DistributionConfigWithTags)
     return {
-      path: '/2020-05-31/distribution?WithTags',
+      path: '/2020-05-31/distribution',
+      query: { WithTags: '' },
       method: 'POST',
       headers: xml,
       xmlns,
-      payload,
+      payload: { DistributionConfigWithTags },
     }
   },
   response: ({ headers, payload }) => {
-    const { etag, location } = headers
     const Distribution = arrayifyObject(payload)
     return {
       Distribution,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -625,7 +619,7 @@ const CreateStreamingDistributionWithTags = {
     const StreamingDistribution = arrayifyObject(payload)
     return {
       StreamingDistribution,
-      ...etagAndLocation(headers),
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1593,26 +1587,15 @@ const ListDistributions = {
       path: '/2020-05-31/distribution',
       query,
       paginator: {
-        cursor: 'Marker',
-        token: 'NextMarker',
-        accumulator: 'Items',
-        type: 'query',
+        ...paginator,
+        accumulator: 'Items.DistributionSummary',
       },
     }
   },
-  response: ({ headers, payload }) => {
-    const isPaginated = Array.isArray(payload.Items) &&
-      payload.Items.every(i => i?.DistributionSummary)
-    if (isPaginated) {
-      // In the raw paginated state, each response is its own array nested in an object containing a DistributionSummary property
-      // So we have to pull out all the arrays, concat + flatten them, then re-wrap the array in a single DistributionSummary obj before we run arrayifyItemsProp
-      payload.Items = {
-        DistributionSummary: payload.Items.map(i => i.DistributionSummary).flat(),
-      }
-    }
+  response: ({ payload }) => {
     const DistributionList = arrayifyItemsProp(payload)
     DistributionList.Items = DistributionList.Items.map(i => arrayifyObject(i))
-    return maybeAddETag({ DistributionList }, headers)
+    return { DistributionList }
   },
 }
 

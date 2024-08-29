@@ -1,7 +1,6 @@
 const disabled = true
 const docRoot = 'https://docs.aws.amazon.com/cloudfront/latest/APIReference/'
 export default {
-  CreateDistributionWithTags:                 { disabled, awsDoc: docRoot + 'API_CreateDistributionWithTags.html' }, // TODO: verify
   CreateRealtimeLogConfig:                    { disabled, awsDoc: docRoot + 'API_CreateRealtimeLogConfig.html' }, // TODO: verify
   CreateStreamingDistribution:                { disabled, awsDoc: docRoot + 'API_CreateStreamingDistribution.html' }, // TODO: figure out why `rate exceeded` error happens
   CreateStreamingDistributionWithTags:        { disabled, awsDoc: docRoot + 'API_CreateStreamingDistributionWithTags.html' }, // TODO: figure out why `rate exceeded` error happens

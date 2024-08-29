@@ -14,11 +14,43 @@ const arrayProperties = {
   'StagingDistributionDnsNames': 'DnsName',
   'ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
   'ContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
-  // Distributions
+
+  // Distribution
   'ActiveTrustedKeyGroups': 'KeyGroup',
   'ActiveTrustedKeyGroups.Items.KeyPairIds': 'KeyPairId',
   'ActiveTrustedSigners': 'Signer',
   'ActiveTrustedSigners.Items.KeyPairIds': 'KeyPairId',
+  'AliasICPRecordals': 'AliasICPRecordal',
+  // DistributionConfig
+  'DistributionConfig.Aliases': 'CNAME',
+  'DistributionConfig.CacheBehaviors': 'CacheBehavior',
+  'DistributionConfig.CacheBehaviors.Items.AllowedMethods': 'Method',
+  'DistributionConfig.CacheBehaviors.Items.AllowedMethods.CachedMethods': 'Method',
+  'DistributionConfig.CacheBehaviors.Items.ForwardedValues.Cookies.WhitelistedNames': 'Name',
+  'DistributionConfig.CacheBehaviors.Items.ForwardedValues.Headers': 'Name',
+  'DistributionConfig.CacheBehaviors.Items.ForwardedValues.QueryStringCacheKeys': 'Name',
+  'DistributionConfig.CacheBehaviors.Items.FunctionAssociations': 'FunctionAssociation',
+  'DistributionConfig.CacheBehaviors.Items.LambdaFunctionAssociations': 'LambdaFunctionAssociation',
+  'DistributionConfig.CacheBehaviors.Items.TrustedKeyGroups': 'KeyGroup',
+  'DistributionConfig.CacheBehaviors.Items.TrustedSigners': 'AwsAccountNumber',
+  'DistributionConfig.CustomErrorResponses': 'CustomErrorResponse',
+  'DistributionConfig.DefaultCacheBehavior.AllowedMethods': 'Method',
+  'DistributionConfig.DefaultCacheBehavior.AllowedMethods.CachedMethods': 'Method',
+  'DistributionConfig.DefaultCacheBehavior.ForwardedValues.Headers': 'Name',
+  'DistributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys': 'Name',
+  'DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames': 'Name',
+  'DistributionConfig.DefaultCacheBehavior.FunctionAssociations': 'FunctionAssociation',
+  'DistributionConfig.DefaultCacheBehavior.LambdaFunctionAssociations': 'LambdaFunctionAssociation',
+  'DistributionConfig.DefaultCacheBehavior.TrustedKeyGroups': 'KeyGroup',
+  'DistributionConfig.DefaultCacheBehavior.TrustedSigners': 'AwsAccountNumber',
+  'DistributionConfig.OriginGroups': 'OriginGroup',
+  'DistributionConfig.OriginGroups.Items.Members': 'OriginGroupMember',
+  'DistributionConfig.OriginGroups.Items.FailoverCriteria.StatusCodes': 'StatusCode',
+  'DistributionConfig.Origins': 'Origin',
+  'DistributionConfig.Origins.Items.CustomHeaders': 'OriginCustomHeader',
+  'DistributionConfig.Origins.Items.CustomOriginConfig.OriginSslProtocols': 'SslProtocol',
+  'DistributionConfig.Restrictions.GeoRestriction': 'Location',
+  // DistributionSummary
   'Aliases': 'CNAME',
   'CacheBehaviors': 'CacheBehavior',
   'CacheBehaviors.Items.AllowedMethods': 'Method',
@@ -47,9 +79,10 @@ const arrayProperties = {
   'Origins.Items.CustomHeaders': 'OriginCustomHeader',
   'Origins.Items.CustomOriginConfig.OriginSslProtocols': 'SslProtocol',
   'Restrictions.GeoRestriction': 'Location',
-  'DistributionConfigWithTags.Tags': 'Tag',
+
+  // DistributionConfigWithTags
   'Tags': 'Tag',
-  'TrustedSigners': 'AwsAccountNumber',
+
   // StreamingDistributionConfig
   'StreamingDistributionConfig.Aliases': 'CNAME',
   'StreamingDistributionConfig.TrustedSigners': 'AwsAccountNumber',
@@ -160,8 +193,11 @@ function maybeAddETag (result, headers) {
   return result
 }
 
-function etagAndLocation (headers) {
-  return { ETag: headers.etag, Location: headers.location }
+function maybeGetETagAndLocation (headers) {
+  const result = {}
+  if (headers.etag) result.ETag = headers.etag
+  if (headers.location) result.Location = headers.location
+  return result
 }
 
 // Specifically for unarrayifying distros to be re-serialized to XML (see: UpdateDistribution)
@@ -231,5 +267,5 @@ export {
   arrayifyObject,
   maybeAddETag,
   unarrayifyObject,
-  etagAndLocation,
+  maybeGetETagAndLocation,
 }
