@@ -3,7 +3,7 @@
  */
 
 import incomplete from './incomplete.mjs'
-import { arrayifyItemsProp, arrayifyObject, maybeAddETag, unarrayifyObject, maybeGetETagAndLocation } from './lib.mjs'
+import { arrayifyItemsProp, arrayifyObject, unarrayifyObject, maybeGetETagAndLocation } from './lib.mjs'
 
 const service = 'cloudfront'
 const property = 'CloudFront'
@@ -133,11 +133,9 @@ const CreateCachePolicy = {
   },
   response: ({ headers, payload }) => {
     const CachePolicy = arrayifyObject(payload)
-    const { etag, location } = headers
     return {
       CachePolicy,
-      Location: location,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -157,11 +155,9 @@ const CreateCloudFrontOriginAccessIdentity = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag, location } = headers
     return {
       CloudFrontOriginAccessIdentity: payload,
-      Location: location,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -183,11 +179,9 @@ const CreateContinuousDeploymentPolicy = {
   },
   response: ({ headers, payload }) => {
     const ContinuousDeploymentPolicy = arrayifyObject(payload)
-    const { etag, location } = headers
     return {
       ContinuousDeploymentPolicy,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -231,7 +225,10 @@ const CreateDistribution = {
   },
   response: ({ headers, payload }) => {
     const Distribution = arrayifyObject(payload)
-    return maybeAddETag({ Distribution }, headers)
+    return {
+      Distribution,
+      ...maybeGetETagAndLocation(headers),
+    }
   },
 }
 
@@ -277,11 +274,11 @@ const CreateFieldLevelEncryptionConfig = {
   },
   response: ({ headers, payload }) => {
     const FieldLevelEncryption = arrayifyObject(payload)
-    const { etag, location } = headers
+
     return {
       FieldLevelEncryption,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
+
     }
   },
 }
@@ -303,11 +300,11 @@ const CreateFieldLevelEncryptionProfile = {
   },
   response: ({ headers, payload }) => {
     const FieldLevelEncryptionProfile = arrayifyObject(payload)
-    const { etag, location } = headers
+
     return {
       FieldLevelEncryptionProfile,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
+
     }
   },
 }
@@ -333,11 +330,11 @@ const CreateFunction = {
   },
   response: ({ headers, payload }) => {
     const FunctionSummary = arrayifyObject(payload)
-    const { etag, location } = headers
+
     return {
       FunctionSummary,
-      Location: location,
-      ETag: etag,
+
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -388,11 +385,9 @@ const CreateKeyGroup = {
   },
   response: ({ headers, payload }) => {
     const KeyGroup = arrayifyObject(payload)
-    const { etag: ETag, location: Location } = headers
     return {
       KeyGroup,
-      ETag,
-      Location,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -414,11 +409,11 @@ const CreateKeyValueStore = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag, location } = headers
+
     return {
       KeyValueStore: payload,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
+
     }
   },
 }
@@ -458,11 +453,11 @@ const CreateOriginAccessControl = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag, location } = headers
+
     return {
       OriginAccessControl: payload,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
+
     }
   },
 }
@@ -484,11 +479,11 @@ const CreateOriginRequestPolicy = {
   },
   response: ({ headers, payload }) => {
     const OriginRequestPolicy = arrayifyObject(payload)
-    const { etag, location } = headers
+
     return {
       OriginRequestPolicy,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
+
     }
   },
 }
@@ -508,11 +503,11 @@ const CreatePublicKey = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag, location } = headers
+
     return {
       PublicKey: payload,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
+
     }
   },
 }
@@ -562,12 +557,12 @@ const CreateResponseHeadersPolicy = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag, location } = headers
+
     const ResponseHeadersPolicy = arrayifyObject(payload)
     return {
       ResponseHeadersPolicy,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
+
     }
   },
 }
@@ -589,11 +584,11 @@ const CreateStreamingDistribution = {
   },
   response: ({ headers, payload }) => {
     const StreamingDistribution = arrayifyObject(payload)
-    const { etag, location } = headers
+
     return {
       StreamingDistribution,
-      ETag: etag,
-      Location: location,
+      ...maybeGetETagAndLocation(headers),
+
     }
   },
 }
@@ -602,11 +597,10 @@ const CreateStreamingDistribution = {
 const CreateStreamingDistributionWithTags = {
   awsDoc: docRoot + 'API_CreateStreamingDistributionWithTags.html',
   validate: {
-    StreamingDistributionConfigWithTags: { ...obj, required, comment: 'Complete streaming distribution configuration with tags', ref:  docRoot + 'API_CreateStreamingDistributionWithTags.html#cloudfront-CreateStreamingDistributionWithTags-request-StreamingDistributionConfigWithTags' },
+    StreamingDistributionConfigWithTags: { ...obj, required, comment: 'Complete streaming distribution configuration with tags', ref: docRoot + 'API_CreateStreamingDistributionWithTags.html#cloudfront-CreateStreamingDistributionWithTags-request-StreamingDistributionConfigWithTags' },
   },
   request: (params) => {
     const StreamingDistributionConfigWithTags = unarrayifyObject(params.StreamingDistributionConfigWithTags)
-    console.dir(StreamingDistributionConfigWithTags, { depth: null })
     return {
       path: '/2020-05-31/streaming-distribution',
       query: { WithTags: '' },
@@ -895,11 +889,11 @@ const DescribeFunction = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
+
     const FunctionSummary = arrayifyObject(payload)
     return {
       FunctionSummary,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -916,10 +910,10 @@ const DescribeKeyValueStore = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
+
     return {
       KeyValueStore: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -936,10 +930,9 @@ const GetCachePolicy = {
   },
   response: ({ headers, payload }) => {
     const CachePolicy = arrayifyObject(payload)
-    const { etag } = headers
     return {
       CachePolicy,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -956,10 +949,9 @@ const GetCachePolicyConfig = {
   },
   response: ({ headers, payload }) => {
     const CachePolicyConfig = arrayifyObject(payload)
-    const { etag } = headers
     return {
       CachePolicyConfig,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -973,10 +965,10 @@ const GetCloudFrontOriginAccessIdentity = {
     return { path: `/2020-05-31/origin-access-identity/cloudfront/${Id}` }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
+
     return {
       CloudFrontOriginAccessIdentity: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -990,10 +982,10 @@ const GetCloudFrontOriginAccessIdentityConfig = {
     return { path: `/2020-05-31/origin-access-identity/cloudfront/${Id}/config` }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
+
     return {
       CloudFrontOriginAccessIdentityConfig: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1010,10 +1002,9 @@ const GetContinuousDeploymentPolicy = {
   },
   response: ({ headers, payload }) => {
     const ContinuousDeploymentPolicy = arrayifyObject(payload)
-    const { etag } = headers
     return {
       ContinuousDeploymentPolicy,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1030,10 +1021,9 @@ const GetContinuousDeploymentPolicyConfig = {
   },
   response: ({ headers, payload }) => {
     const ContinuousDeploymentPolicyConfig = arrayifyObject(payload)
-    const { etag } = headers
     return {
       ContinuousDeploymentPolicyConfig,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1050,9 +1040,10 @@ const GetDistribution = {
   },
   response: ({ headers, payload }) => {
     const Distribution = arrayifyObject(payload)
-    // Drop into the distribution config (instead of expecting arrayifyObject to handle things) so as to keep the property paths from having to prepend DistributionConfig
-    Distribution.DistributionConfig = arrayifyObject(Distribution.DistributionConfig)
-    return maybeAddETag({ Distribution }, headers)
+    return {
+      Distribution,
+      ...maybeGetETagAndLocation(headers),
+    }
   },
 }
 
@@ -1068,7 +1059,10 @@ const GetDistributionConfig = {
   },
   response: ({ headers, payload }) => {
     const DistributionConfig = arrayifyObject(payload)
-    return maybeAddETag({ DistributionConfig }, headers)
+    return {
+      DistributionConfig,
+      ...maybeGetETagAndLocation(headers),
+    }
   },
 }
 
@@ -1082,10 +1076,9 @@ const GetFieldLevelEncryption = {
   },
   response: ({ headers, payload }) => {
     const FieldLevelEncryption = arrayifyObject(payload)
-    const { etag } = headers
     return {
       FieldLevelEncryption,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1100,10 +1093,9 @@ const GetFieldLevelEncryptionConfig = {
   },
   response: ({ headers, payload }) => {
     const FieldLevelEncryptionConfig = arrayifyObject(payload)
-    const { etag } = headers
     return {
       FieldLevelEncryptionConfig,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1120,10 +1112,9 @@ const GetFieldLevelEncryptionProfile = {
   },
   response: ({ headers, payload }) => {
     const FieldLevelEncryptionProfile = arrayifyObject(payload)
-    const { etag } = headers
     return {
       FieldLevelEncryptionProfile,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1140,10 +1131,9 @@ const GetFieldLevelEncryptionProfileConfig = {
   },
   response: ({ headers, payload }) => {
     const FieldLevelEncryptionProfileConfig = arrayifyObject(payload)
-    const { etag } = headers
     return {
       FieldLevelEncryptionProfileConfig,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1250,10 +1240,9 @@ const GetOriginAccessControl = {
     }
   },
   response: ({ headers, payload }) => {
-    let { etag } = headers
     return {
       OriginAccessControl: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1269,10 +1258,9 @@ const GetOriginAccessControlConfig = {
     }
   },
   response: ({ headers, payload }) => {
-    let { etag } = headers
     return {
       OriginAccessControlConfig: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1289,10 +1277,9 @@ const GetOriginRequestPolicy = {
   },
   response: ({ headers, payload }) => {
     const OriginRequestPolicy = arrayifyObject(payload)
-    let { etag } = headers
     return {
       OriginRequestPolicy,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1309,10 +1296,9 @@ const GetOriginRequestPolicyConfig = {
   },
   response: ({ headers, payload }) => {
     const OriginRequestPolicyConfig = arrayifyObject(payload)
-    let { etag } = headers
     return {
       OriginRequestPolicyConfig,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1329,10 +1315,9 @@ const GetPublicKey = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
     return {
       PublicKey: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1349,10 +1334,9 @@ const GetPublicKeyConfig = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
     return {
       PublicKeyConfig: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1390,10 +1374,9 @@ const GetResponseHeadersPolicy = {
   },
   response: ({ headers, payload }) => {
     const ResponseHeadersPolicy = arrayifyObject(payload)
-    const { etag } = headers
     return {
       ResponseHeadersPolicy,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1410,10 +1393,9 @@ const GetResponseHeadersPolicyConfig = {
   },
   response: ({ headers, payload }) => {
     const ResponseHeadersPolicyConfig = arrayifyObject(payload)
-    const { etag } = headers
     return {
       ResponseHeadersPolicyConfig,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1431,10 +1413,9 @@ const GetStreamingDistribution = {
   },
   response: ({ headers, payload }) => {
     const StreamingDistribution = arrayifyObject(payload)
-    const { etag } = headers
     return {
       StreamingDistribution,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -1452,10 +1433,9 @@ const GetStreamingDistributionConfig = {
   },
   response: ({ headers, payload }) => {
     const StreamingDistributionConfig = arrayifyObject(payload)
-    const { etag } = headers
     return {
       StreamingDistributionConfig,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2261,10 +2241,9 @@ const UpdateCachePolicy = {
   },
   response: ({ headers, payload }) => {
     const CachePolicy = arrayifyObject(payload)
-    const { etag } = headers
     return {
       CachePolicy,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2286,10 +2265,9 @@ const UpdateCloudFrontOriginAccessIdentity = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
     return {
       CloudFrontOriginAccessIdentity: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2313,10 +2291,9 @@ const UpdateContinuousDeploymentPolicy = {
   },
   response: ({ headers, payload }) => {
     const ContinuousDeploymentPolicy = arrayifyObject(payload)
-    const { etag } = headers
     return {
       ContinuousDeploymentPolicy,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2340,7 +2317,10 @@ const UpdateDistribution = {
   },
   response: ({ headers, payload }) => {
     const DistributionConfig = arrayifyObject(payload)
-    return maybeAddETag({ DistributionConfig }, headers)
+    return {
+      DistributionConfig,
+      ...maybeGetETagAndLocation(headers),
+    }
   },
 }
 
@@ -2366,10 +2346,9 @@ const UpdateDistributionWithStagingConfig = {
   },
   response: ({ headers, payload }) => {
     const Distribution = arrayifyObject(payload)
-    const { etag } = headers
     return {
       Distribution,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2393,10 +2372,9 @@ const UpdateFieldLevelEncryptionConfig = {
   },
   response: ({ headers, payload }) => {
     const FieldLevelEncryption = arrayifyObject(payload)
-    const { etag } = headers
     return {
       FieldLevelEncryption,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2420,10 +2398,9 @@ const UpdateFieldLevelEncryptionProfile = {
   },
   response: ({ headers, payload }) => {
     const FieldLevelEncryptionProfile = arrayifyObject(payload)
-    const { etag } = headers
     return {
       FieldLevelEncryptionProfile,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2449,10 +2426,9 @@ const UpdateFunction = {
   },
   response: ({ headers, payload }) => {
     const FunctionSummary = arrayifyObject(payload)
-    const { ettag } = headers // wtf amazon
     return {
       FunctionSummary,
-      ETag: ettag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2476,10 +2452,9 @@ const UpdateKeyGroup = {
   },
   response: ({ headers, payload }) => {
     const KeyGroup = arrayifyObject(payload)
-    const { etag } = headers
     return {
       KeyGroup,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2501,10 +2476,9 @@ const UpdateKeyValueStore = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
     return {
       KeyValueStore: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2527,10 +2501,10 @@ const UpdateOriginAccessControl = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
+
     return {
       OriginAccessControl: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2554,10 +2528,10 @@ const UpdateOriginRequestPolicy = {
   },
   response: ({ headers, payload }) => {
     const OriginRequestPolicy = arrayifyObject(payload)
-    const { etag } = headers
+
     return {
       OriginRequestPolicy,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2580,10 +2554,10 @@ const UpdatePublicKey = {
     }
   },
   response: ({ headers, payload }) => {
-    const { etag } = headers
+
     return {
       PublicKey: payload,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2638,10 +2612,10 @@ const UpdateResponseHeadersPolicy = {
   },
   response: ({ headers, payload }) => {
     const ResponseHeadersPolicy = arrayifyObject(payload)
-    const { etag } = headers
+
     return {
       ResponseHeadersPolicy,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }
@@ -2666,10 +2640,10 @@ const UpdateStreamingDistribution = {
   },
   response: ({ headers, payload }) => {
     const StreamingDistribution = arrayifyObject(payload)
-    const { etag } = headers
+
     return {
       StreamingDistribution,
-      ETag: etag,
+      ...maybeGetETagAndLocation(headers),
     }
   },
 }

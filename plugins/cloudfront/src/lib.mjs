@@ -1,20 +1,22 @@
 // Each item here is expected to contain an Items property; each value is the XML property containing the Items in question
 const arrayProperties = {
-  // CachePolicyConfigs
-  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  // CachePolicy
   'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
   'CachePolicy.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
-  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  // CachePolicyConfig
   'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
+  'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
   'CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
-  'ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  // CachePolicyConfigConfig
   'ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies': 'Name',
-  'ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
-  // ContinuousDeploymentPolicyConfig
-  'StagingDistributionDnsNames': 'DnsName',
+  'ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers': 'Name',
+  // ContinuousDeploymentPolicy
   'ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
   'ContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames': 'DnsName',
-
+  // ContinuousDeploymentPolicyConfig
+  'ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings': 'Name',
+  'StagingDistributionDnsNames': 'DnsName',
   // Distribution
   'ActiveTrustedKeyGroups': 'KeyGroup',
   'ActiveTrustedKeyGroups.Items.KeyPairIds': 'KeyPairId',
@@ -79,10 +81,11 @@ const arrayProperties = {
   'Origins.Items.CustomHeaders': 'OriginCustomHeader',
   'Origins.Items.CustomOriginConfig.OriginSslProtocols': 'SslProtocol',
   'Restrictions.GeoRestriction': 'Location',
-
   // DistributionConfigWithTags
   'Tags': 'Tag',
-
+  // StreamingDistribution
+  // 'ActiveTrustedSigners': 'Signer',
+  // 'ActiveTrustedSigners.Items.KeyPairIds': 'KeyPairId',
   // StreamingDistributionConfig
   'StreamingDistributionConfig.Aliases': 'CNAME',
   'StreamingDistributionConfig.TrustedSigners': 'AwsAccountNumber',
@@ -187,15 +190,9 @@ function arrayifyObject (obj, lastPropertyPath, arraysList = arrayProperties) {
   return obj
 }
 
-function maybeAddETag (result, headers) {
-  const ETag = headers.etag || headers.ETag
-  if (ETag) result.ETag = ETag
-  return result
-}
-
 function maybeGetETagAndLocation (headers) {
   const result = {}
-  if (headers.etag) result.ETag = headers.etag
+  if (headers.etag || headers.ETag || headers.ettag) result.ETag = headers.etag || headers.ETag || headers.ettag // ettag for `UpdateFunction` wtf amazon
   if (headers.location) result.Location = headers.location
   return result
 }
@@ -265,7 +262,6 @@ function unarrayifyObject (obj, lastPropertyPath) {
 export {
   arrayifyItemsProp,
   arrayifyObject,
-  maybeAddETag,
   unarrayifyObject,
   maybeGetETagAndLocation,
 }
