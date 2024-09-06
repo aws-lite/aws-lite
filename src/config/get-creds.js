@@ -130,8 +130,9 @@ async function getCredsFromSSO (params) {
       throw ReferenceError(`Unable to load specified SSO session configuration: ${profile.sso_session}`)
     }
   }
+  console.log('BOB', sessionConfig, profile)
   let ssoConfig = { ...profile, ...sessionConfig }
-  let { sso_account_id, sso_region, sso_role_name, sso_start_url } = ssoConfig
+  let { sso_account_id, sso_region, sso_role_name, sso_start_url, sso_session } = ssoConfig
 
   // This isn't an SSO profile; possible this may provide to be a brittle test predicate
   if (!sso_start_url) return
@@ -146,20 +147,32 @@ async function getCredsFromSSO (params) {
     throw ReferenceError('SSO configuration must have `sso_role_name` property')
   }
 
-  let { join } = require('node:path')
   let { createHash } = require('node:crypto')
-  let ssoFile = createHash('sha1').update(sso_start_url).digest('hex') + '.json'
 
+  const generateHashKey = (sso_start_url, sso_session = null) => {
+
+    let str = sso_start_url
+    if (sso_session) {
+      str = sso_session
+    }
+
+    return createHash('sha1').update(str).digest('hex') + '.json'
+  }
+
+  let { join } = require('node:path')
+  let key = generateHashKey(sso_start_url, sso_session)
   let home = getHomedir()
-  let ssoFilename = join(home, '.aws', 'sso', 'cache', ssoFile)
-  let { readFile } = require('node:fs/promises')
-  if (!(await exists(ssoFilename))) {
+  let ssoFilename = join(home, '.aws', 'sso', 'cache', key)
+
+  if (!(await(exists(ssoFilename)))) {
     /* istanbul ignore next */
     if (config.debug) {
       console.error(`[aws-lite] Could not find AWS SSO token file at ${ssoFilename}`)
     }
     return
   }
+
+  let { readFile } = require('node:fs/promises')
 
   try {
     /* istanbul ignore next */
