@@ -130,7 +130,7 @@ async function getCredsFromSSO (params) {
       throw ReferenceError(`Unable to load specified SSO session configuration: ${profile.sso_session}`)
     }
   }
-  console.log('BOB', sessionConfig, profile)
+  
   let ssoConfig = { ...profile, ...sessionConfig }
   let { sso_account_id, sso_region, sso_role_name, sso_start_url, sso_session } = ssoConfig
 
