@@ -231,7 +231,7 @@ declare interface AwsLiteDynamoDB {
    * - AWS docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListBackups.html DynamoDB: ListBackups}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/dynamodb/readme.md#ListBackups DynamoDB: ListBackups}
    */
-  ListBackups: (input: { BackupType?: string, ExclusiveStartBackupArn?: string, Limit?: number, TableName?: string, TimeRangeLowerBound?: number, TimeRangeUpperBound?: number }) => Promise<ListBackupsResponse>
+  ListBackups: (input: { BackupType?: string, ExclusiveStartBackupArn?: string, Limit?: number, TableName?: string, TimeRangeLowerBound?: number, TimeRangeUpperBound?: number, paginate?: boolean | string }) => Promise<ListBackupsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListContributorInsights.html DynamoDB: ListContributorInsights}

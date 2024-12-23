@@ -428,6 +428,8 @@ Properties:
   - Inclusively return backups created after this time
 - **`TimeRangeUpperBound` (number)**
   - Exclusively return backups created before this time
+- **`paginate` (boolean, string)**
+  - Enable automatic result pagination; use this instead of making your own individual pagination requests
 
 
 ### `ListContributorInsights`

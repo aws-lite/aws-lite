@@ -615,17 +615,23 @@ const ListBackups = {
     TableName: { ...str, comment: 'List backups by DynamoDB table name' },
     TimeRangeLowerBound: { ...num, comment: 'Inclusively return backups created after this time' },
     TimeRangeUpperBound: { ...num, comment: 'Exclusively return backups created before this time' },
-  },
-  request: async (params) => ({
-    headers: headers('ListBackups'),
-    payload: params,
-    paginator: {
-      cursor: 'ExclusiveStartBackupArn',
-      token: 'LastEvaluatedBackupArn',
-      accumulator: 'BackupSummaries',
-    },
     paginate: valPaginate,
-  }),
+  },
+  request: async (params) => {
+    const payload = { ...params }
+    const { paginate } = params
+    if (paginate) delete payload.paginate
+    return {
+      headers: headers('ListBackups'),
+      paginate,
+      paginator: {
+        cursor: 'ExclusiveStartBackupArn',
+        token: 'LastEvaluatedBackupArn',
+        accumulator: 'BackupSummaries',
+      },
+      payload,
+    }
+  },
   response: defaultResponse,
   error: defaultError,
 }
