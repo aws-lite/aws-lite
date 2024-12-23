@@ -619,6 +619,12 @@ const ListBackups = {
   request: async (params) => ({
     headers: headers('ListBackups'),
     payload: params,
+    paginator: {
+      cursor: 'ExclusiveStartBackupArn',
+      token: 'LastEvaluatedBackupArn',
+      accumulator: 'BackupSummaries',
+    },
+    paginate: valPaginate,
   }),
   response: defaultResponse,
   error: defaultError,
