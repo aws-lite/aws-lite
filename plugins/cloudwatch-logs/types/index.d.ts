@@ -2,6 +2,7 @@ import {
   /* ! Do not remove IMPORTS_START / IMPORTS_END ! */
   // $IMPORTS_START
   DeleteLogGroupCommandOutput as DeleteLogGroupResponse,
+  DeleteLogStreamCommandOutput as DeleteLogStreamResponse,
   DescribeLogGroupsCommandOutput as DescribeLogGroupsResponse,
   DescribeLogStreamsCommandOutput as DescribeLogStreamsResponse,
   GetLogEventsCommandOutput as GetLogEventsResponse,
@@ -19,6 +20,12 @@ declare interface AwsLiteCloudWatchLogs {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudwatch-logs/readme.md#DeleteLogGroup CloudWatch Logs: DeleteLogGroup}
    */
   DeleteLogGroup: (input: { logGroupName: string }) => Promise<DeleteLogGroupResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteLogStream.html CloudWatch Logs: DeleteLogStream}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudwatch-logs/readme.md#DeleteLogStream CloudWatch Logs: DeleteLogStream}
+   */
+  DeleteLogStream: (input: { logGroupName: string, logStreamName: string }) => Promise<DeleteLogStreamResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html CloudWatch Logs: DescribeLogGroups}
@@ -63,6 +70,7 @@ export type {
   /* ! Do not remove EXPORT_START / EXPORT_END ! */
   // $EXPORT_START
   DeleteLogGroupResponse,
+  DeleteLogStreamResponse,
   DescribeLogGroupsResponse,
   DescribeLogStreamsResponse,
   GetLogEventsResponse,
