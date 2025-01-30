@@ -18,6 +18,7 @@ const num = { type: 'number' }
 
 const limit = { ...num, comment: 'Maximum number of items to evaluate and return' }
 const logGroupName = { ...str, comment: 'Name of the log group' }
+const logStreamName = { ...str, comment: 'Name of the log stream' }
 const nextToken = { ...str, comment: 'Pagination cursor token to be used if `NextToken` was returned in a previous response' }
 const logGroupIdentifier = { ...str, comment: 'Name or ARN of the log group' }
 const valPaginate = { type: [ 'boolean', 'string' ], comment: 'Enable automatic result pagination; use this instead of making your own individual pagination requests' }
@@ -73,6 +74,22 @@ const DescribeLogGroups = {
     }
   },
   response: defaultResponse,
+}
+
+const DeleteLogStream = {
+  awsDoc: docRoot + 'API_DeleteLogStream.html',
+  validate: {
+    logGroupName: { ...logGroupName, required },
+    logStreamName: { ...logStreamName, required },
+  },
+  request: (params) => {
+    return {
+      awsjson: false,
+      headers: headers('DeleteLogStream'),
+      payload: params,
+    }
+  },
+  response: () => ({}),
 }
 
 const DescribeLogStreams = {
@@ -179,5 +196,5 @@ export default {
   name: '@aws-lite/cloudwatch-logs',
   service,
   property,
-  methods: { DeleteLogGroup, DescribeLogGroups, DescribeLogStreams, GetLogEvents, GetQueryResults, StartQuery, ...incomplete },
+  methods: { DeleteLogGroup, DeleteLogStream, DescribeLogGroups, DescribeLogStreams, GetLogEvents, GetQueryResults, StartQuery, ...incomplete },
 }

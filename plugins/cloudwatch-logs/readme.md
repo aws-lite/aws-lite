@@ -41,6 +41,17 @@ Properties:
   - Name of the log group
 
 
+### `DeleteLogStream`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteLogStream.html)
+
+Properties:
+- **`logGroupName` (string) [required]**
+  - Name of the log group
+- **`logStreamName` (string) [required]**
+  - Name of the log stream
+
+
 ### `DescribeLogGroups`
 
 [Canonical AWS API doc](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html)
@@ -164,7 +175,6 @@ Properties:
 - [`DeleteDeliverySource`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteDeliverySource.html)
 - [`DeleteDestination`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteDestination.html)
 - [`DeleteLogAnomalyDetector`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteLogAnomalyDetector.html)
-- [`DeleteLogStream`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteLogStream.html)
 - [`DeleteMetricFilter`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteMetricFilter.html)
 - [`DeleteQueryDefinition`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteQueryDefinition.html)
 - [`DeleteResourcePolicy`](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteResourcePolicy.html)
