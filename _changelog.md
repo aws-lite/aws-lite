@@ -2,6 +2,14 @@
 
 ---
 
+## [0.23.0] 2025-01-31
+
+### Added
+
+- Added support for autoloading plugins in Node.js 22.x
+
+---
+
 ## [0.22.3 - 0.22.4] 2024-07-31
 
 ### Changed

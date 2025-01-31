@@ -82,7 +82,8 @@ module.exports = async function getPlugin (config) {
         /* istanbul ignore next */
         try {
           plugin = require(pluginName)
-          plugins.push(plugin)
+          if (plugin.__esModule) plugins.push(plugin.default)
+          else plugins.push(plugin)
         }
         catch (err) {
           if (hasEsmError(err)) {
