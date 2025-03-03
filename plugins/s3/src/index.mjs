@@ -6,6 +6,7 @@ import incomplete from './incomplete.mjs'
 import lib from './lib.mjs'
 const { getValidateHeaders, getHeadersFromParams, getQueryFromParams, paramMappings, parseHeadersToResults } = lib
 import PutObject from './put-object.mjs'
+import presignedUrl from './presigned-url.mjs'
 
 const service = 's3'
 const property = 'S3'
@@ -287,5 +288,19 @@ const ListObjectsV2 = {
   error: defaultError,
 }
 
-const methods = { CreateBucket, DeleteBucket, DeleteObject, DeleteObjects, GetObject, HeadObject, HeadBucket, ListBuckets, ListObjectsV2, PutObject, ...incomplete }
+const methods = {
+  CreateBucket,
+  DeleteBucket,
+  DeleteObject,
+  DeleteObjects,
+  GetObject,
+  HeadObject,
+  HeadBucket,
+  ListBuckets,
+  ListObjectsV2,
+  PutObject,
+  ...presignedUrl.methods,
+  ...incomplete
+}
+
 export default { service, property, methods }

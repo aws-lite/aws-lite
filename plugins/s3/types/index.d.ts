@@ -11,6 +11,7 @@ import {
   ListBucketsCommandOutput as ListBucketsResponse,
   ListObjectsV2CommandOutput as ListObjectsV2Response,
   PutObjectCommandOutput as PutObjectResponse,
+  GetPresignedUrlCommandOutput as GetPresignedUrlResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-s3";
 
@@ -73,6 +74,12 @@ declare interface AwsLiteS3 {
    * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#PutObject S3: PutObject}
    */
   PutObject: (input: { Bucket: string, Key: string, Body?: string | Buffer, File?: string, MinChunkSize?: number, ACL?: string, BucketKeyEnabled?: string, CacheControl?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, ContentDisposition?: string, ContentEncoding?: string, ContentLanguage?: string, ContentLength?: string, ContentMD5?: string, ContentType?: string, ExpectedBucketOwner?: string, Expires?: string, GrantFullControl?: string, GrantRead?: string, GrantReadACP?: string, GrantWriteACP?: string, ObjectLockLegalHoldStatus?: string, ObjectLockMode?: string, ObjectLockRetainUntilDate?: string, RequestPayer?: string, ServerSideEncryption?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, SSEKMSEncryptionContext?: string, SSEKMSKeyId?: string, StorageClass?: string, Tagging?: string, WebsiteRedirectLocation?: string }) => Promise<PutObjectResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html S3: GetPresignedUrl}
+   * - aws-lite docs: {@link https://github.com/architect/aws-lite/blob/main/plugins/s3/readme.md#GetPresignedUrl S3: GetPresignedUrl}
+   */
+  GetPresignedUrl: (input: { Bucket: string, Key: string, PartNumber?: number, VersionId?: string, ResponseCacheControl?: string, ResponseContentDisposition?: string, ResponseContentEncoding?: string, ResponseContentLanguage?: string, ResponseContentType?: string, ResponseExpires?: string, Expires?: number }) => Promise<GetPresignedUrlResponse>
   // $METHODS_END
 }
 

@@ -328,6 +328,35 @@ Properties:
   - Sets request header: `x-amz-website-redirect-location`
 
 
+### `GetPresignedUrl`
+
+[Canonical AWS API doc](https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html)
+
+Properties:
+- **`Bucket` (string) [required]**
+  - S3 bucket name
+- **`Key` (string) [required]**
+  - S3 key / file name
+- **`PartNumber` (number)**
+  - Part number (between 1 - 10,000) of the object
+- **`VersionId` (string)**
+  - Reference a specific version of the object
+- **`ResponseCacheControl` (string)**
+  - Sets response header: `cache-control`
+- **`ResponseContentDisposition` (string)**
+  - Sets response header: `content-disposition`
+- **`ResponseContentEncoding` (string)**
+  - Sets response header: `content-encoding`
+- **`ResponseContentLanguage` (string)**
+  - Sets response header: `content-language`
+- **`ResponseContentType` (string)**
+  - Sets response header: `content-type`
+- **`ResponseExpires` (string)**
+  - Sets response header: `expires`
+- **`Expires` (number)**
+  - Expiration time in seconds for the presigned URL (default: 3600)
+
+
 ### Methods yet to be implemented
 
 > Please help out by [opening a PR](https://github.com/architect/aws-lite#authoring-aws-lite-plugins)!
