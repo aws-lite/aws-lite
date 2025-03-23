@@ -2,12 +2,17 @@
 
 ---
 
+## [0.23.1] 2025-03-23
+
+### Added
+
+- Added types for the `testing` interface
+
 ## [0.23.0] 2025-01-31
 
 ### Added
 
 - Added support for autoloading plugins in Node.js 22.x
-
 
 ### Changed
 
