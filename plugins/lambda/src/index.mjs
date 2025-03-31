@@ -76,6 +76,7 @@ const VersionNumber = { ...num, required, comment: 'The version number of the la
 const VpcConfig = { ...obj, comment: 'VPC networking configuration', ref: docRoot + 'API_VpcConfig.html' }
 
 const defaultResponse = ({ payload }) => payload || {}
+
 const paginator = {
   type: 'query',
   token: 'NextMarker',
