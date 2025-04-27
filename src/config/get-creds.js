@@ -1,4 +1,5 @@
 let { exists, getHomedir, isInLambda, loadAwsConfig, readFile } = require('../lib')
+let testing = require('../testing')
 let noConnection = /(EHOSTDOWN|ECONNREFUSED|EHOSTUNREACH|ECONNRESET|ETIMEDOUT|Unknown system errno 64)/g
 
 /**
@@ -14,6 +15,10 @@ let noConnection = /(EHOSTDOWN|ECONNREFUSED|EHOSTUNREACH|ECONNRESET|ETIMEDOUT|Un
  */
 module.exports = async function getCreds (params) {
   let { config, awsConfig } = params
+
+  if (testing.isEnabled()) {
+    return { accessKeyId: 'testing', secretAccessKey: 'testing' }
+  }
 
   let configCreds = validate(config)
   if (configCreds) {

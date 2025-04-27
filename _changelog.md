@@ -2,6 +2,14 @@
 
 ---
 
+## [0.23.2] 2025-04-27
+
+### Fixed
+
+- When run in testing mode, client no longer uses or relies on AWS credentials, and instead uses dummy creds; fixes #187
+
+---
+
 ## [0.23.1] 2025-03-23
 
 ### Added

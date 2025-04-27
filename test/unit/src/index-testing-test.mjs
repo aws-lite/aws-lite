@@ -52,6 +52,19 @@ test('Testing - activation / deactivation', async t => {
   t.equal(state.enabled, enabled, 'test.isEnabled() shows testing mode disabled')
 })
 
+test('Testing - credentials', async t => {
+  t.plan(2)
+
+  client.testing.enable()
+  let aws
+  aws = await client({ region: defaults.region })
+  t.equal(aws.credentials.accessKeyId, 'testing', 'Client instantiated in testing mode backfills with testing credentials')
+
+  aws = await client(config)
+  client.testing.reset()
+  t.equal(aws.credentials.accessKeyId, 'testing', 'Client instantiated in testing mode overrides passed credentials')
+})
+
 // TODO: test resetting via enable/disable?
 
 test('Testing - main client', async t => {
