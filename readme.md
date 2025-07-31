@@ -176,7 +176,7 @@ Credential and general configuration options for [`aws-lite`](https://aws-lite.o
 Using [`aws-lite`](https://aws-lite.org/request-response) to make requests and receiving responses
 
 
-### [Using TypeScript](https://aws-lite.org/using-typeScript)
+### [Using TypeScript](https://aws-lite.org/using-typescript)
 
 Guide and examples for using TypeScript with `aws-lite`
 
