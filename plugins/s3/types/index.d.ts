@@ -86,7 +86,6 @@ import {
   PutObjectTaggingCommandOutput as PutObjectTaggingResponse,
   PutPublicAccessBlockCommandOutput as PutPublicAccessBlockResponse,
   RestoreObjectCommandOutput as RestoreObjectResponse,
-  UploadCommandOutput as UploadResponse,
   UploadPartCommandOutput as UploadPartResponse,
   // $IMPORTS_END
 } from "@aws-sdk/client-s3";
@@ -602,11 +601,6 @@ declare interface AwsLiteS3 {
   RestoreObject: (input: { Bucket: string, Key: string, RestoreRequest: Record<string, any>, VersionId?: string, RequestPayer?: string, ChecksumAlgorithm?: string, ExpectedBucketOwner?: string }) => Promise<RestoreObjectResponse>
   /**
    * @description
-   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/s3/readme.md#Upload S3: Upload}
-   */
-  Upload: (input: { Bucket: string, Key: string, Body?: Buffer | stream | string, File?: string, ChunkSize?: number, Concurrency?: number, ACL?: string, BucketKeyEnabled?: string, CacheControl?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, ContentDisposition?: string, ContentEncoding?: string, ContentLanguage?: string, ContentType?: string, ExpectedBucketOwner?: string, Expires?: string, GrantFullControl?: string, GrantRead?: string, GrantReadACP?: string, GrantWriteACP?: string, ObjectLockLegalHoldStatus?: string, ObjectLockMode?: string, ObjectLockRetainUntilDate?: string, RequestPayer?: string, ServerSideEncryption?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, SSEKMSEncryptionContext?: string, SSEKMSKeyId?: string, StorageClass?: string, Tagging?: string, WebsiteRedirectLocation?: string, Metadata?: Record<string, any> }) => Promise<UploadResponse>
-  /**
-   * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html S3: UploadPart}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/s3/readme.md#UploadPart S3: UploadPart}
    */
@@ -709,7 +703,6 @@ export type {
   PutObjectTaggingResponse,
   PutPublicAccessBlockResponse,
   RestoreObjectResponse,
-  UploadResponse,
   UploadPartResponse,
   // $EXPORT_END
 }
