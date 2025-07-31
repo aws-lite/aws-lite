@@ -90,6 +90,8 @@ import {
   // $IMPORTS_END
 } from "@aws-sdk/client-s3";
 
+import { Readable } from 'node:stream';
+
 declare interface AwsLiteS3 {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
@@ -562,7 +564,7 @@ declare interface AwsLiteS3 {
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html S3: PutObject}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/s3/readme.md#PutObject S3: PutObject}
    */
-  PutObject: (input: { Bucket: string, Key: string, Body?: Buffer | stream | string, File?: string, ApplyChecksum?: boolean, MinChunkSize?: number, ACL?: string, BucketKeyEnabled?: string, CacheControl?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, ContentDisposition?: string, ContentEncoding?: string, ContentLanguage?: string, ContentLength?: string, ContentMD5?: string, ContentType?: string, ExpectedBucketOwner?: string, Expires?: string, GrantFullControl?: string, GrantRead?: string, GrantReadACP?: string, GrantWriteACP?: string, ObjectLockLegalHoldStatus?: string, ObjectLockMode?: string, ObjectLockRetainUntilDate?: string, RequestPayer?: string, ServerSideEncryption?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, SSEKMSEncryptionContext?: string, SSEKMSKeyId?: string, StorageClass?: string, Tagging?: string, WebsiteRedirectLocation?: string, Metadata?: Record<string, any> }) => Promise<PutObjectResponse>
+  PutObject: (input: { Bucket: string, Key: string, Body?: Buffer | Readable | string, File?: string, ApplyChecksum?: boolean, MinChunkSize?: number, ACL?: string, BucketKeyEnabled?: string, CacheControl?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, ContentDisposition?: string, ContentEncoding?: string, ContentLanguage?: string, ContentLength?: string, ContentMD5?: string, ContentType?: string, ExpectedBucketOwner?: string, Expires?: string, GrantFullControl?: string, GrantRead?: string, GrantReadACP?: string, GrantWriteACP?: string, ObjectLockLegalHoldStatus?: string, ObjectLockMode?: string, ObjectLockRetainUntilDate?: string, RequestPayer?: string, ServerSideEncryption?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, SSEKMSEncryptionContext?: string, SSEKMSKeyId?: string, StorageClass?: string, Tagging?: string, WebsiteRedirectLocation?: string, Metadata?: Record<string, any> }) => Promise<PutObjectResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectLegalHold.html S3: PutObjectLegalHold}
@@ -604,7 +606,7 @@ declare interface AwsLiteS3 {
    * - AWS docs: {@link https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html S3: UploadPart}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/s3/readme.md#UploadPart S3: UploadPart}
    */
-  UploadPart: (input: { Bucket: string, Key: string, PartNumber?: number, Body?: Buffer | stream | string, ContentLength?: string, ContentMD5?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string }) => Promise<UploadPartResponse>
+  UploadPart: (input: { Bucket: string, Key: string, PartNumber?: number, Body?: Buffer | Readable | string, ContentLength?: string, ContentMD5?: string, ChecksumAlgorithm?: string, ChecksumCRC32?: string, ChecksumCRC32C?: string, ChecksumSHA1?: string, ChecksumSHA256?: string, SSECustomerAlgorithm?: string, SSECustomerKey?: string, SSECustomerKeyMD5?: string, RequestPayer?: string, ExpectedBucketOwner?: string }) => Promise<UploadPartResponse>
   // $METHODS_END
 }
 
