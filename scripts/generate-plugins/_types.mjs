@@ -17,6 +17,7 @@ function typeFromValidateEntry (value) {
     case 'object': return 'Record<string, any>'
     case 'array': return 'any[]'
     case 'buffer': return 'Buffer'
+    case 'stream': return 'Readable'
     default: return value
     }
   }
