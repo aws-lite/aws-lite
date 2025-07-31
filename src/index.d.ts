@@ -48,9 +48,11 @@ interface AwsLiteResponse {
   statusCode: number;
 }
 
-// export to allow <plugin>-types to extend AwsLiteClient
-export interface AwsLiteClient {
-  (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
+// Declared as part of the namespace to allow <plugin>-types to extend AwsLiteClient
+declare namespace CreateAwsLite { // Match the name of your main export
+  interface AwsLiteClient {
+    (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
+  }
 }
 
 interface AwsLiteBaseMock {
@@ -76,10 +78,8 @@ interface AwsLiteTesting {
   reset: () => void;
 }
 
-declare module "@aws-lite/client" {
-  const CreateAwsLite: {
-    (config?: AwsLiteConfig): Promise<AwsLiteClient>;
-    testing: AwsLiteTesting;
-  }
-  export = CreateAwsLite;
+declare const CreateAwsLite: {
+  (config?: AwsLiteConfig): Promise<CreateAwsLite.AwsLiteClient>;
+  testing: AwsLiteTesting;
 }
+export = CreateAwsLite;
