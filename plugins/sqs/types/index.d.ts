@@ -8,6 +8,8 @@ import {
   // $IMPORTS_END
 } from "@aws-sdk/client-sqs";
 
+import type { AwsLiteMethodOptions } from "@aws-lite/client";
+
 declare interface AwsLiteSQS {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
@@ -16,25 +18,25 @@ declare interface AwsLiteSQS {
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html SQS: SendMessage}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/sqs/readme.md#SendMessage SQS: SendMessage}
    */
-  SendMessage: (input: { MessageBody: string, QueueUrl: string, DelaySeconds?: number, MessageAttributes?: Record<string, any>, MessageDeduplicationId?: string, MessageGroupId?: string, MessageSystemAttributes?: Record<string, any> }) => Promise<SendMessageResponse>
+  SendMessage: (input: AwsLiteMethodOptions & { MessageBody: string, QueueUrl: string, DelaySeconds?: number, MessageAttributes?: Record<string, any>, MessageDeduplicationId?: string, MessageGroupId?: string, MessageSystemAttributes?: Record<string, any> }) => Promise<SendMessageResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_GetQueueAttributes.html SQS: GetQueueAttributes}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/sqs/readme.md#GetQueueAttributes SQS: GetQueueAttributes}
    */
-  GetQueueAttributes: (input: { QueueUrl: string, AttributeNames?: any[] }) => Promise<GetQueueAttributesResponse>
+  GetQueueAttributes: (input: AwsLiteMethodOptions & { QueueUrl: string, AttributeNames?: any[] }) => Promise<GetQueueAttributesResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html SQS: ReceiveMessage}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/sqs/readme.md#ReceiveMessage SQS: ReceiveMessage}
    */
-  ReceiveMessage: (input: { QueueUrl: string, AttributeNames?: any[], MaxNumberOfMessages?: number, MessageAttributeNames?: any[], MessageSystemAttributeNames?: any[], ReceiveRequestAttemptId?: string, VisibilityTimeout?: number, WaitTimeSeconds?: number }) => Promise<ReceiveMessageResponse>
+  ReceiveMessage: (input: AwsLiteMethodOptions & { QueueUrl: string, AttributeNames?: any[], MaxNumberOfMessages?: number, MessageAttributeNames?: any[], MessageSystemAttributeNames?: any[], ReceiveRequestAttemptId?: string, VisibilityTimeout?: number, WaitTimeSeconds?: number }) => Promise<ReceiveMessageResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteMessage.html SQS: DeleteMessage}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/sqs/readme.md#DeleteMessage SQS: DeleteMessage}
    */
-  DeleteMessage: (input: { QueueUrl: string, ReceiptHandle: string }) => Promise<DeleteMessageResponse>
+  DeleteMessage: (input: AwsLiteMethodOptions & { QueueUrl: string, ReceiptHandle: string }) => Promise<DeleteMessageResponse>
   // $METHODS_END
 }
 

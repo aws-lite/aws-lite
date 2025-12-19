@@ -48,6 +48,14 @@ interface AwsLiteResponse {
   statusCode: number;
 }
 
+// Base type for common parameters available on all plugin methods
+export interface AwsLiteMethodOptions {
+  /** Override the region for this specific method call */
+  region?: string;
+  /** Enable automatic pagination (true) or return an async iterator ('iterator') */
+  paginate?: boolean | 'iterator';
+}
+
 // export to allow <plugin>-types to extend AwsLiteClient
 export interface AwsLiteClient {
   (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
@@ -76,6 +84,7 @@ interface AwsLiteTesting {
   reset: () => void;
 }
 
+// Module declaration for npm package imports (e.g., require('@aws-lite/client'))
 declare module "@aws-lite/client" {
   const CreateAwsLite: {
     (config?: AwsLiteConfig): Promise<AwsLiteClient>;
