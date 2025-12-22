@@ -10,6 +10,11 @@ const xml = { 'content-type': 'application/xml' }
 
 const Upload = {
   awsDoc: false,
+  customResponse: `{
+    CompleteMultipartUpload: {
+        Part: any;
+    };
+  }`,
   validate: {
     Bucket:       { type: 'string', required, comment: 'S3 bucket name' },
     Key:          { type: 'string', required, comment: 'S3 key / file name' },
