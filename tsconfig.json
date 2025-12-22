@@ -1,17 +1,25 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "lib": ["es2020"],
-    "types": ["node"],
+    "lib": [
+      "es2020"
+    ],
+    "types": [
+      "node"
+    ],
     "target": "es2020",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@aws-lite/client": ["./src/index.d.ts"],
-      "@aws-lite/*": ["./plugins/*/types/index.d.ts"]
+      "@aws-lite/client": [
+        "./src/index.d.ts"
+      ],
+      "@aws-lite/*": [
+        "./plugins/*/types/index.d.ts"
+      ]
     }
   }
 }
