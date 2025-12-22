@@ -1,7 +1,7 @@
 name: Node CI
 
 # Push tests pushes; PR tests merges
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 defaults:
   run:
@@ -14,68 +14,70 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 16.x, 18.x, 20.x, 22.x ]
-        os: [ windows-latest, ubuntu-latest, macOS-latest ]
+        node-version: [16.x, 18.x, 20.x, 22.x]
+        os: [windows-latest, ubuntu-latest, macOS-latest]
 
     # Go
     steps:
-    - name: Check out repo
-      uses: actions/checkout@v4
+      - name: Check out repo
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Env
-      run: |
-        echo "Event name: ${{ github.event_name }}"
-        echo "Git ref:    ${{ github.ref }}"
-        echo "GH actor:   ${{ github.actor }}"
-        echo "SHA:        ${{ github.sha }}"
-        VER=`node --version`; echo "Node ver:   $VER"
-        VER=`npm --version`; echo "npm ver:    $VER"
-        echo "OS ver:     ${{ runner.os }}"
+      - name: Env
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Git ref:    ${{ github.ref }}"
+          echo "GH actor:   ${{ github.actor }}"
+          echo "SHA:        ${{ github.sha }}"
+          VER=`node --version`; echo "Node ver:   $VER"
+          VER=`npm --version`; echo "npm ver:    $VER"
+          echo "OS ver:     ${{ runner.os }}"
 
-    - name: Install
-      run: npm install
+      - name: Install
+        run: npm install
 
-    - name: Type Check
-      # Only run on latest Node to save CI time
-      if: matrix.node-version == '22.x'
-      run: npm run test:types
-      env:
-        CI: true
+      - name: Install Plugin Dependencies for Type Tests
+        run: |
+          for plugin_dir in plugins/*/; do
+            if [ -f "${plugin_dir}types/index.test-d.ts" ]; then
+              echo "Installing dependencies in ${plugin_dir}"
+              cd "$plugin_dir" && npm install && cd ../..
+            fi
+          done
 
-    - name: Test (Node.js 16.x only)
-      if: matrix.node-version == '16.x'
-      run: npm run test:16.x
-      env:
-        CI: true
+      - name: Test (Node.js 16.x only)
+        if: matrix.node-version == '16.x'
+        run: npm run test:16.x
+        env:
+          CI: true
 
-    - name: Test
-      if: matrix.node-version != '16.x'
-      run: npm test
-      env:
-        CI: true
+      - name: Test
+        if: matrix.node-version != '16.x'
+        run: npm test
+        env:
+          CI: true
 
-    - name: Test (live AWS)
-      if: env.AWS_ACCESS_KEY_ID != '' && env.AWS_SECRET_ACCESS_KEY != ''
-      run: npm run test:live
-      env:
-        CI: true
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Test (live AWS)
+        if: env.AWS_ACCESS_KEY_ID != '' && env.AWS_SECRET_ACCESS_KEY != ''
+        run: npm run test:live
+        env:
+          CI: true
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: Notify
-      uses: sarisia/actions-status-discord@v1
-      # Only fire alert once
-      if: github.ref == 'refs/heads/main' && failure() && matrix.node-version == '20.x' && matrix.os == 'ubuntu-latest'
-      with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        title: "build and test"
-        color: 0x222222
-        username: GitHub Actions
+      - name: Notify
+        uses: sarisia/actions-status-discord@v1
+        # Only fire alert once
+        if: github.ref == 'refs/heads/main' && failure() && matrix.node-version == '20.x' && matrix.os == 'ubuntu-latest'
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "build and test"
+          color: 0x222222
+          username: GitHub Actions
 
   # ----- Only package publishing beyond this point ----- #
 
