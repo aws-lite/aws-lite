@@ -23,7 +23,7 @@
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
     "test:plugins": "cross-env tape 'plugins/**/test/**/*-test.mjs' | tap-arc",
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
-    "test:types": "tsd",
+    "test:types": "tsd --files 'test/types/**/*.test-d.ts' --files 'plugins/*/types/**/*.test-d.ts'",
     "test:unit": "cross-env tape 'test/unit/**/*-test.mjs' | tap-arc",
     "test": "npm run lint && npm run gen && npm run test:types && npm run test:plugins && npm run coverage"
   },
@@ -101,8 +101,5 @@
       "test/",
       "src/_vendor/"
     ]
-  },
-  "tsd": {
-    "directory": "test/types"
   }
 }

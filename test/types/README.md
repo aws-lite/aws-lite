@@ -19,9 +19,13 @@ npm run test:precommit  # Pre-commit hook
 
 ## Test Structure
 
-- `index.test-d.ts` - Core client type tests (config, request, response, testing)
-- `plugin-dynamodb.test-d.ts` - DynamoDB plugin type tests
-- `plugin-s3.test-d.ts` - S3 plugin type tests
+**Core Tests:**
+- `test/types/index.test-d.ts` - Core client type tests (config, request, response, testing)
+
+**Plugin Tests:**
+- `plugins/{service}/types/index.test-d.ts` - Plugin-specific type tests (co-located with type definitions)
+- Example: `plugins/dynamodb/types/index.test-d.ts`
+- Example: `plugins/s3/types/index.test-d.ts`
 
 ## Writing Type Tests
 
@@ -42,7 +46,7 @@ expectAssignable<MyInterface>({ prop: 'value' })
 
 ## Adding Tests for New Plugins
 
-When adding a new plugin, create a test file named `plugin-{service}.test-d.ts` in `test/types/`:
+When adding a new plugin, create `index.test-d.ts` in the plugin's types directory at `plugins/{service}/types/index.test-d.ts`:
 
 1. Test 3-5 representative methods covering:
    - Required vs optional parameters
@@ -51,7 +55,7 @@ When adding a new plugin, create a test file named `plugin-{service}.test-d.ts` 
 2. Test module augmentation (plugin namespace exists)
 3. Test error scenarios with `expectError`
 
-Example:
+Example (`plugins/my-plugin/types/index.test-d.ts`):
 
 ```typescript
 import { expectError } from 'tsd'
@@ -72,6 +76,8 @@ awsLite({ plugins: [import('@aws-lite/my-plugin')] }).then((client) => {
   return client
 })
 ```
+
+Type tests are automatically discovered by tsd in both `test/types/` and `plugins/*/types/` directories.
 
 ## Resources
 
