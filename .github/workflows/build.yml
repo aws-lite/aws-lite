@@ -40,6 +40,13 @@ jobs:
     - name: Install
       run: npm install
 
+    - name: Type Check
+      # Only run on latest Node to save CI time
+      if: matrix.node-version == '22.x'
+      run: npm run test:types
+      env:
+        CI: true
+
     - name: Test (Node.js 16.x only)
       if: matrix.node-version == '16.x'
       run: npm run test:16.x
