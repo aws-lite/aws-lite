@@ -44,8 +44,8 @@ jobs:
         run: |
           for plugin_dir in plugins/*/; do
             if [ -f "${plugin_dir}types/index.test-d.ts" ]; then
-              echo "Installing dependencies in ${plugin_dir}/types"
-              cd "$plugin_dir/types" && npm install && cd ../..
+              echo "Installing dependencies in ${plugin_dir}types"
+              pushd "${plugin_dir}types" && npm install && popd
             fi
           done
 
