@@ -17,6 +17,7 @@ function typeFromValidateEntry (value) {
     case 'object': return 'Record<string, any>'
     case 'array': return 'any[]'
     case 'buffer': return 'Buffer'
+    case 'stream': return 'Readable'
     default: return value
     }
   }
@@ -52,11 +53,14 @@ function createTypesStr ({ methods, service, awsSdkName, property, display, exis
     const methodDef = methods[method]
 
     if (methodDef && !methodDef.disabled) {
-      const methodResponse = `${method}Response`
-      outputTypes.push(`  ${method}CommandOutput as ${methodResponse}`)
-      exportTypes.push(`  ${methodResponse}`)
+      const { awsDoc, customResponse, validate } = methodDef
+      const methodResponse = customResponse || `${method}Response`
+      // Only extract response types from aws-sdk if method does not have a custom response
+      if (!customResponse) {
+        outputTypes.push(`  ${method}CommandOutput as ${methodResponse}`)
+        exportTypes.push(`  ${methodResponse}`)
+      }
 
-      const { awsDoc, validate } = methodDef
       if (validate && Object.keys(validate).length) {
         const inputType = {}
         for (const key in validate) {
