@@ -2,6 +2,14 @@
 
 ---
 
+## [0.23.3] 2025-12-23
+
+### Fixed
+
+- Types for various methods fixed: `S3.Upload` method response type now defines a custom and existent type, all methods previously referencing a non-existent `stream` type now correctly reference `Readable` instead; thanks @Zegnat!
+
+---
+
 ## [0.23.2] 2025-04-27
 
 ### Fixed
