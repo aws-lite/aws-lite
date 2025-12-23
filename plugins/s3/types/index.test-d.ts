@@ -6,6 +6,13 @@ awsLite({ plugins: [import('@aws-lite/s3')] }).then((client) => {
   // Test: S3 namespace exists
   client.S3
 
+  // Test: region can be provided
+  client.S3.GetObject({
+    Bucket: 'my-bucket',
+    Key: 'path/to/file.txt',
+    region: 'us-east-1',
+  })
+
   // Test: GetObject - required parameters
   client.S3.GetObject({
     Bucket: 'my-bucket',

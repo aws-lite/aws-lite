@@ -4,6 +4,8 @@ import {
   // $IMPORTS_END
 } from "@aws-sdk/client-$SERVICE";
 
+import type { AwsLiteMethodOptions } from "@aws-lite/client";
+
 declare interface AwsLite$PROPERTY {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START

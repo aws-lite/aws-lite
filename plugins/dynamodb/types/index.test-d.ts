@@ -12,6 +12,13 @@ awsLite({ plugins: [import('@aws-lite/dynamodb')] }).then((client) => {
     Key: { id: { S: '123' } },
   })
 
+  // Test: region can be provided
+  client.DynamoDB.GetItem({
+    TableName: 'my-table',
+    Key: { id: { S: '123' } },
+    region: 'us-east-1',
+  })
+
   // Test: GetItem - with optional parameters
   client.DynamoDB.GetItem({
     TableName: 'my-table',

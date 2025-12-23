@@ -81,7 +81,7 @@ function createTypesStr ({ methods, service, awsSdkName, property, display, exis
         descString.push(`   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/${service}/readme.md#${method} ${display}: ${method}}`)
         descString.push('   */')
         methodTypes.push(descString.join('\n'))
-        methodTypes.push(`  ${method}: (input: { ${inputTypeString.join(', ')} }) => Promise<${methodResponse}>`)
+        methodTypes.push(`  ${method}: (input: AwsLiteMethodOptions & { ${inputTypeString.join(', ')} }) => Promise<${methodResponse}>`)
       }
       else {
         methodTypes.push(`  /** @description aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/${service}/readme.md#${method} ${display}: ${method}} */`)
@@ -93,9 +93,20 @@ function createTypesStr ({ methods, service, awsSdkName, property, display, exis
   const importsRegex = /(?<=(\/\/ \$IMPORTS_START\n))[\s\S]*?(?=(\/\/ \$IMPORTS_END))/g
   const methodsRegex = /(?<=(\/\/ \$METHODS_START\n))[\s\S]*?(?=(\/\/ \$METHODS_END))/g
   const exportRegex = /(?<=(\/\/ \$EXPORT_START\n))[\s\S]*?(?=(\/\/ \$EXPORT_END))/g
-  const typesTmpl = existingTypes
+  let typesTmpl = existingTypes
     ? existingTypes
     : readFileSync(join(__dirname, 'tmpl', '_types-tmpl.d.ts')).toString()
+  // Ensure AwsLiteMethodOptions import exists for existing files
+  if (existingTypes && !typesTmpl.includes('import type { AwsLiteMethodOptions }')) {
+    // Add the import after the AWS SDK import
+    const awsSdkImportEnd = typesTmpl.indexOf('} from "@aws-sdk/client-')
+    if (awsSdkImportEnd !== -1) {
+      const insertPoint = typesTmpl.indexOf(';\n', awsSdkImportEnd) + 2
+      typesTmpl = typesTmpl.slice(0, insertPoint) +
+                  '\nimport type { AwsLiteMethodOptions } from "@aws-lite/client";\n' +
+                  typesTmpl.slice(insertPoint)
+    }
+  }
   const trailingComma = outputTypes.length ? ',' : ''
   return typesTmpl
     .replace(/\$SERVICE/g, awsSdkName || service)
