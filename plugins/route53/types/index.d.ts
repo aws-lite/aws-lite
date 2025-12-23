@@ -6,6 +6,8 @@ import {
   // $IMPORTS_END
 } from "@aws-sdk/client-route-53";
 
+import type { AwsLiteMethodOptions } from "@aws-lite/client";
+
 declare interface AwsLiteRoute53 {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
@@ -14,13 +16,13 @@ declare interface AwsLiteRoute53 {
    * - AWS docs: {@link https://docs.aws.amazon.com/Route53/latest/APIReference/API_ChangeResourceRecordSets.html Route 53: ChangeResourceRecordSets}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/route53/readme.md#ChangeResourceRecordSets Route 53: ChangeResourceRecordSets}
    */
-  ChangeResourceRecordSets: (input: { HostedZoneId: string, ChangeBatch?: Record<string, any> }) => Promise<ChangeResourceRecordSetsResponse>
+  ChangeResourceRecordSets: (input: AwsLiteMethodOptions & { HostedZoneId: string, ChangeBatch?: Record<string, any> }) => Promise<ChangeResourceRecordSetsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListResourceRecordSets.html Route 53: ListResourceRecordSets}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/route53/readme.md#ListResourceRecordSets Route 53: ListResourceRecordSets}
    */
-  ListResourceRecordSets: (input: { HostedZoneId: string, MaxItems?: number, StartRecordIdentifier?: string, StartRecordName?: string, StartRecordType?: string, paginate?: boolean | string }) => Promise<ListResourceRecordSetsResponse>
+  ListResourceRecordSets: (input: AwsLiteMethodOptions & { HostedZoneId: string, MaxItems?: number, StartRecordIdentifier?: string, StartRecordName?: string, StartRecordType?: string, paginate?: boolean | string }) => Promise<ListResourceRecordSetsResponse>
   // $METHODS_END
 }
 

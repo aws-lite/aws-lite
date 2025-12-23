@@ -25,6 +25,12 @@ declare namespace CreateAwsLite {
     verifyService?: boolean;
   }
 
+  // Base type for common parameters available on all plugin methods
+  interface AwsLiteMethodOptions {
+    /** Override the region for this specific method call */
+    region?: string;
+  }
+
   interface AwsLiteRequest {
     awsjson?: boolean | string[];
     /** @description Alias for "payload" */

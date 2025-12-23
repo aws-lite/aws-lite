@@ -5,6 +5,8 @@ import {
   // $IMPORTS_END
 } from "@aws-sdk/client-organizations";
 
+import type { AwsLiteMethodOptions } from "@aws-lite/client";
+
 declare interface AwsLiteOrganizations {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
@@ -13,7 +15,7 @@ declare interface AwsLiteOrganizations {
    * - AWS docs: {@link https://docs.aws.amazon.com/organizations/latest/APIReference/API_ListAccounts.html Organizations: ListAccounts}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/organizations/readme.md#ListAccounts Organizations: ListAccounts}
    */
-  ListAccounts: (input: { MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListAccountsResponse>
+  ListAccounts: (input: AwsLiteMethodOptions & { MaxResults?: number, NextToken?: string, paginate?: boolean | string }) => Promise<ListAccountsResponse>
   // $METHODS_END
 }
 

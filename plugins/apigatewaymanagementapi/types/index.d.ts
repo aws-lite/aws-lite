@@ -7,6 +7,8 @@ import {
   // $IMPORTS_END
 } from "@aws-sdk/client-apigatewaymanagementapi";
 
+import type { AwsLiteMethodOptions } from "@aws-lite/client";
+
 declare interface AwsLiteApiGatewayManagementApi {
   /* ! Do not remove METHODS_START / METHODS_END ! */
   // $METHODS_START
@@ -15,19 +17,19 @@ declare interface AwsLiteApiGatewayManagementApi {
    * - AWS docs: {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html API Gateway WebSocket Management API: PostToConnection}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/apigatewaymanagementapi/readme.md#PostToConnection API Gateway WebSocket Management API: PostToConnection}
    */
-  PostToConnection: (input: { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string, Data?: string | Record<string, any> }) => Promise<PostToConnectionResponse>
+  PostToConnection: (input: AwsLiteMethodOptions & { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string, Data?: string | Record<string, any> }) => Promise<PostToConnectionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html API Gateway WebSocket Management API: DeleteConnection}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/apigatewaymanagementapi/readme.md#DeleteConnection API Gateway WebSocket Management API: DeleteConnection}
    */
-  DeleteConnection: (input: { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string }) => Promise<DeleteConnectionResponse>
+  DeleteConnection: (input: AwsLiteMethodOptions & { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string }) => Promise<DeleteConnectionResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html API Gateway WebSocket Management API: GetConnection}
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/apigatewaymanagementapi/readme.md#GetConnection API Gateway WebSocket Management API: GetConnection}
    */
-  GetConnection: (input: { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string }) => Promise<GetConnectionResponse>
+  GetConnection: (input: AwsLiteMethodOptions & { ConnectionId: string, ApiUrl?: string, ApiId?: string, Stage?: string }) => Promise<GetConnectionResponse>
   // $METHODS_END
 }
 
