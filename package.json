@@ -43,8 +43,8 @@
   "devDependencies": {
     "@actions/core": "^1.11.1",
     "@architect/eslint-config": "^3.0.0",
-    "@aws-sdk/util-dynamodb": "^3.797.0",
-    "@smithy/smithy-client": "^4.2.0",
+    "@aws-sdk/util-dynamodb": "^3.958.0",
+    "@smithy/smithy-client": "^4.10.2",
     "@types/node": "^25.0.3",
     "adm-zip": "^0.5.16",
     "cross-env": "^7.0.3",

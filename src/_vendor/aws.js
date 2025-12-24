@@ -1,4 +1,5 @@
 /* Vendored with gratitude from https://github.com/aws/aws-sdk-js-v3 and used under the Apache 2.0 license */
+"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
