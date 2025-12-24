@@ -20,10 +20,10 @@ jobs:
     # Go
     steps:
     - name: Check out repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Set up Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
 
@@ -82,10 +82,10 @@ jobs:
     # Go
     steps:
       - name: Check out repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
@@ -122,10 +122,10 @@ jobs:
     # Go
     steps:
       - name: Check out repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
@@ -146,7 +146,7 @@ jobs:
 
       - name: Publish aws-lite.org
         if: contains(github.ref, 'RC') == false && steps.publish.outputs.publish
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           # Workflow dispatches can't use GITHUB_TOKEN, so this uses a PAT from ArchitectCI
           github-token: ${{ secrets.ARC_TOKEN }}
