@@ -19,7 +19,6 @@
     "-----testing----": "",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint --fix .",
-    "test:16.x": "npm run gen && npm run test:plugins && npm run test:unit",
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
     "test:plugins": "cross-env tape 'plugins/**/test/**/*-test.mjs' | tap-arc",
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
