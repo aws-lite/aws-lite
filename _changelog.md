@@ -7,6 +7,7 @@
 ### Changed
 
 - [Breaking change] Remove support for EOL Node.js versions 16.x, 18.x
+- [Breaking change] Remove experimental support for JSR; fixes #109
 
 ---
 
