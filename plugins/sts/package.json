@@ -11,7 +11,7 @@
   "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "src/index.mjs",
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "author": "@architect",
   "license": "Apache-2.0",
