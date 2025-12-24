@@ -2,6 +2,15 @@
 
 ---
 
+## [1.0.0] 2025-12-24
+
+### Changed
+
+- [Breaking change] Remove support for EOL Node.js versions 16.x, 18.x
+- [Breaking change] Remove experimental support for JSR; fixes #109
+
+---
+
 ## [0.23.3] 2025-12-23
 
 ### Fixed

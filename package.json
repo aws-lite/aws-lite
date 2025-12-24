@@ -19,7 +19,6 @@
     "-----testing----": "",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint --fix .",
-    "test:16.x": "npm run gen && npm run test:plugins && npm run test:unit",
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
     "test:plugins": "cross-env tape 'plugins/**/test/**/*-test.mjs' | tap-arc",
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
@@ -34,29 +33,29 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "license": "Apache-2.0",
   "dependencies": {
     "aws4": "^1.13.2"
   },
   "devDependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^2.0.1",
     "@architect/eslint-config": "^3.0.0",
-    "@aws-sdk/util-dynamodb": "^3.797.0",
-    "@smithy/smithy-client": "^4.2.0",
+    "@aws-sdk/util-dynamodb": "^3.958.0",
+    "@smithy/smithy-client": "^4.10.2",
     "@types/node": "^25.0.3",
     "adm-zip": "^0.5.16",
-    "cross-env": "^7.0.3",
-    "eslint": "^9.25.1",
-    "fast-xml-parser": "^5.2.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.2",
+    "fast-xml-parser": "^5.3.3",
     "mock-tmp": "^0.0.4",
     "nyc": "^17.1.0",
-    "semver": "^7.7.1",
-    "simple-git-hooks": "^2.13.0",
+    "semver": "^7.7.3",
+    "simple-git-hooks": "^2.13.1",
     "tap-arc": "^1.3.2",
     "tape": "^5.9.0",
-    "tsd": "^0.31.2"
+    "tsd": "^0.33.0"
   },
   "files": [
     "src"
