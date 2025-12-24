@@ -69,7 +69,7 @@ module.exports = async function getPlugin (config) {
       let { dependencies: deps } = packageJson
       if (deps) {
         let found = Object.keys(deps)
-          .filter(m => m.startsWith('@aws-lite/') ||
+          .filter(m => (m.startsWith('@aws-lite/') && !m.endsWith('-types')) ||
                        m.startsWith('aws-lite-plugin-'))
           .filter(tidy)
         if (found.length) pluginsToLoad.push(...dedupe(plugins.concat(found)))

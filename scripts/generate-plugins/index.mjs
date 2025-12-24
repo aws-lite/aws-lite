@@ -27,6 +27,7 @@ async function main () {
     let repoDir = `plugins/${service}`
     let pluginDir = join(cwd, 'plugins', service)
     let maintainersList = maintainers.join(', ')
+    let pluginTypesEnabled = plugin.types !== false
     if (!existsSync(pluginDir)) {
       mutated = true
       let pluginSrc = join(pluginDir, 'src')
@@ -65,6 +66,9 @@ async function main () {
       let workspace = repoDir
       if (!awsLitePkg.workspaces.includes(workspace)) {
         awsLitePkg.workspaces.push(workspace)
+        if (pluginTypesEnabled) {
+          awsLitePkg.workspaces.push(workspace + '/types')
+        }
         awsLitePkg.workspaces = awsLitePkg.workspaces.sort()
         writeFileSync(awsLitePkgFile, JSON.stringify(awsLitePkg, null, 2))
       }
@@ -129,7 +133,7 @@ async function main () {
       }
     }
 
-    if (plugin.types !== false) {
+    if (pluginTypesEnabled) {
       try { await generateTypes(plugin) }
       catch (error) {
         console.error(`Failed to generate types for ${service}: ${error.message}`)
