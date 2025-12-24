@@ -20,7 +20,7 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@aws-sdk/client-apigateway": "3"
+    "@aws-sdk/client-api-gateway": "3"
   },
   "scripts": {}
 }

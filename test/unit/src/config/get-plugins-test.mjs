@@ -44,11 +44,11 @@ test('Load plugins array', async t => {
 
 test('Autoload plugins from process node_modules', async t => {
   t.plan(2)
-  let tidy = p => p.split('/')[1]
+  let tidy = p => !p.includes('/types') && p.split('/')[1]
 
   let packageJsonFile = join(cwd, 'package.json')
   let packageJson = JSON.parse(readFileSync(packageJsonFile))
-  let expected = packageJson.workspaces.map(tidy)
+  let expected = packageJson.workspaces.map(tidy).filter(p => p)
 
   // Since the process node_modules dir should be npm linked to all our plugins, the loaded plugin list should match the package.json workspace property
   let plugins = await getPlugins({ autoloadPlugins: true })
