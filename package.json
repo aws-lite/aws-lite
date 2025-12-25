@@ -19,7 +19,7 @@
     "-----testing----": "",
     "coverage": "node --test --test-concurrency=1 --experimental-test-coverage --test-coverage-exclude='src/_vendor/**/*' --test-coverage-exclude='plugins/**/*' --test-coverage-exclude='test/**/*' 'test/unit/**/*-test.mjs'",
     "lint": "eslint --fix .",
-    "test:live": "node --test 'test/live/**/*-test.js'",
+    "test:live": "node --test --test-concurrency=1 'test/live/**/*-test.js'",
     "test:plugins": "node --test --test-concurrency=1 'plugins/**/test/*-test.mjs'",
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
     "test:types": "tsd --files 'test/types/**/*.test-d.ts' --files 'plugins/*/types/**/*.test-d.ts'",

@@ -1,5 +1,5 @@
 let { join } = require('node:path')
-let test = require('tape')
+let test = require('node:test')
 let Zip = require('adm-zip')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
@@ -14,6 +14,7 @@ test('Set up env', async t => {
   t.assert.ok(client, 'aws-lite client is present')
   let plugins = [
     import(p(join(__dirname, '_iam.mjs'))),
+    // TODO: is the following comment still relevant?
     import(p(join(cwd, 'plugins', 'lambda', 'src', 'index.mjs'))), // We should be able to retire this once we phase out 14.x CI runs
   ]
   aws = await client({ region, plugins })
@@ -27,10 +28,12 @@ test('Get Lambda role', async t => {
 
   try {
     role = await aws.iam.GetRole({ name: roleName })
+    roleARN = role?.GetRoleResult?.Role?.Arn
   }
   catch { /* noop */ }
 
   if (!role) {
+    console.log('Creating test role')
     role = await aws.iam.CreateRole({
       name: roleName,
       desc: 'aws-lite test Lambda role: please do not delete!',
@@ -44,12 +47,13 @@ test('Get Lambda role', async t => {
       }),
       path: '/',
     })
+    roleARN = role?.CreateRoleResult?.Role?.Arn
     // Give it a few seconds for the role to be ready for a new Lambda
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+    // terraform does this too :/ https://github.com/hashicorp/terraform-provider-aws/blob/943230985fefc7b203eedaf6059e905279b27645/aws/resource_aws_lambda_function.go#L333-L353
+    await new Promise((resolve) => setTimeout(resolve, 10000))
   }
-  roleARN = role?.GetRoleResult?.Role?.Arn
   t.assert.ok(role, 'Got Lambda execution role')
-  t.assert.strictEqual(roleARN.split(':').length, 6, `Got role ARN: ${roleARN}`)
+  t.assert.strictEqual(roleARN?.split(':').length, 6, `Got role ARN: ${roleARN}`)
 })
 
 test('Invoke Lambda', async t => {
