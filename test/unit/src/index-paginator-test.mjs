@@ -73,7 +73,7 @@ test('Async iterator - raw client', async t => {
   const rawRequest = { service, headers, paginate }
   let page, response, request, expectedCursor, expectedPayload, expectedUrl
 
-  t.test('Query cursor', async t => {
+  await t.test('Query cursor', async t => {
 
     // Returns async iterator
     response = await aws({
@@ -113,7 +113,7 @@ test('Async iterator - raw client', async t => {
     reset()
   })
 
-  t.test('Query cursor - nested', async t => {
+  await t.test('Query cursor - nested', async t => {
 
     // Returns async iterator
     response = await aws({
@@ -153,7 +153,7 @@ test('Async iterator - raw client', async t => {
     reset()
   })
 
-  t.test('Payload cursor', async t => {
+  await t.test('Payload cursor', async t => {
 
     // Returns async iterator
     response = await aws({
@@ -193,7 +193,7 @@ test('Async iterator - raw client', async t => {
     reset()
   })
 
-  t.test('Payload cursor - nested', async t => {
+  await t.test('Payload cursor - nested', async t => {
 
     // Returns async iterator
     response = await aws({
@@ -233,7 +233,7 @@ test('Async iterator - raw client', async t => {
     reset()
   })
 
-  t.test('Headers cursor', async t => {
+  await t.test('Headers cursor', async t => {
 
     // Returns async iterator
     response = await aws({
@@ -273,7 +273,7 @@ test('Async iterator - raw client', async t => {
     reset()
   })
 
-  t.test('Headers cursor - nested', async t => {
+  await t.test('Headers cursor - nested', async t => {
 
     // Returns async iterator
     response = await aws({
@@ -418,7 +418,7 @@ test('Default paginator - raw client', async t => {
     },
   ]
 
-  t.test('Query cursor', async t => {
+  await t.test('Query cursor', async t => {
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -443,7 +443,7 @@ test('Default paginator - raw client', async t => {
     reset()
   })
 
-  t.test('Query cursor - nested', async t => {
+  await t.test('Query cursor - nested', async t => {
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -468,7 +468,7 @@ test('Default paginator - raw client', async t => {
     reset()
   })
 
-  t.test('Payload cursor', async t => {
+  await t.test('Payload cursor', async t => {
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -493,7 +493,7 @@ test('Default paginator - raw client', async t => {
     reset()
   })
 
-  t.test('Payload cursor - nested', async t => {
+  await t.test('Payload cursor - nested', async t => {
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -518,7 +518,7 @@ test('Default paginator - raw client', async t => {
     reset()
   })
 
-  t.test('Headers cursor', async t => {
+  await t.test('Headers cursor', async t => {
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -543,7 +543,7 @@ test('Default paginator - raw client', async t => {
     reset()
   })
 
-  t.test('Headers cursor - nested', async t => {
+  await t.test('Headers cursor - nested', async t => {
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
