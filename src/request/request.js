@@ -7,8 +7,8 @@ let agentCache = {
   http: { keepAliveEnabled: null, keepAliveDisabled: null },
   https: { keepAliveEnabled: null, keepAliveDisabled: null },
 }
-/* istanbul ignore next */
 function getAgent (client, isHTTPS, config) {
+  /* node:coverage ignore next */
   let http = isHTTPS ? 'https' : 'http'
 
   let keepAlive = config.keepAlive ?? useAWS()
@@ -29,6 +29,7 @@ module.exports = async function request (params, args) {
     throw ReferenceError('retries property must a number')
   }
 
+  /* node:coverage disable */
   for (let i = 0; i <= retries; i++) {
     try {
       let result = await call(params, args)
@@ -54,13 +55,13 @@ module.exports = async function request (params, args) {
           delete error.passthrough
           throw error
         }
-
         // HTTP error; call() properly rejected, prepare the error property for final error handling
-        error.error = error.error.message || /* istanbul ignore next */ error.error.code
+        error.error = error.error.message || error.error.code
         throw error
       }
     }
   }
+  /* node:coverage enable */
 }
 
 function call (params, args) {
@@ -73,9 +74,9 @@ function call (params, args) {
     // Sign and construct the request; hard, deep copy because aws4 mutates its inputs
     let options = aws4.sign(signing, creds)
     // Normalize host (again)
-    /* istanbul ignore next: this won't get seen by nyc */
+    /* node:coverage ignore next */
     options.host = options.host || options.hostname
-    /* istanbul ignore next */
+    /* node:coverage ignore next */
     if (options.hostname) delete options.hostname
 
     // Importing http(s) is a bit slow (~1ms), so only instantiate the client and http agent we need
@@ -84,16 +85,17 @@ function call (params, args) {
 
     // Debug derives protocol from options
     // This won't get fully exercised in unit tests because we aren't using https
-    /* istanbul ignore next */
+    /* node:coverage disable */
     if (!options.protocol) {
       options.protocol = isHTTPS ? 'https:' : 'http:'
     }
+    /* node:coverage enable */
 
-    /* istanbul ignore next */
+    /* node:coverage ignore next */
     let http = isHTTPS ? require('node:https') : require('node:http')
 
     // Port configuration
-    /* istanbul ignore next */
+    /* node:coverage ignore next */
     options.port = options.port || params.port || config.port
 
     // Disable keep-alive locally (or wait Node's default 5s for sockets to time out)
@@ -102,7 +104,7 @@ function call (params, args) {
     let { body } = params
     let isBuffer = body instanceof Buffer
 
-    /* istanbul ignore next */
+    /* node:coverage disable */
     if (debug) {
       let { method = 'GET', protocol, host, port, path, headers, service } = options
       let bodyOutput
@@ -132,14 +134,13 @@ function call (params, args) {
         body: bodyOutput,
       }, '\n')
     }
+    /* node:coverage enable */
 
     let req = http.request(options, res => {
       let data = []
-      /* istanbul ignore next: we can always expect headers, but jic */
       let { headers = {}, statusCode } = res
 
       if (streamResponsePayload) {
-        /* istanbul ignore next */
         if (debug) {
           console.error('[aws-lite] Response:', {
             time: new Date().toISOString(),
@@ -177,13 +178,11 @@ function call (params, args) {
           }
           if (body.length && XMLContentType(contentType)) {
             payload = parseXML(body)
-            /* istanbul ignore next */
             if (payload.xmlns) delete payload.xmlns
           }
           // Sometimes AWS omits content type from responses (cough, S3) and errors (ahem, Lambda) so that's fun
           // In performance testing JSON.parse fails fast and early
           // However, fast-xml-parser does not – so make an initial effort to detect before we attempt a very slow parse
-          /* istanbul ignore next: TODO remove + test */
           if (body.length && !contentType) {
             try {
               payload = JSON.parse(body)
@@ -203,7 +202,7 @@ function call (params, args) {
         }
         payload = payload || (body.length ? body : null)
 
-        /* istanbul ignore next */
+        /* node:coverage disable */
         if (debug) {
           let bodyOutput
           if (payload instanceof Buffer) bodyOutput = body.length ? `<body buffer of ${body.length}b>` : ''
@@ -216,14 +215,16 @@ function call (params, args) {
             body: bodyOutput || '<no body>',
           }, '\n')
         }
+        /* node:coverage enable */
         resolve({ statusCode, headers, payload })
       })
     })
     req.on('error', error => {
-      /* istanbul ignore next */
+      /* node:coverage disable */
       if (debug) {
         console.error('[aws-lite] HTTP error:', error)
       }
+      /* node:coverage enable */
       reject({
         error,
         metadata: {
@@ -239,7 +240,7 @@ function call (params, args) {
 
     if (streamReq) {
       streamReq.pipe(req)
-      /* istanbul ignore next */
+      /* node:coverage disable */
       if (debug) {
         let bytes = 0
         let interval
@@ -256,6 +257,7 @@ function call (params, args) {
           console.error(`Total bytes streamed: ${bytes}`)
         })
       }
+      /* node:coverage enable */
     }
     else req.end(options.body || '')
   })
@@ -302,10 +304,11 @@ async function retryDelay (i, reason, debug) {
   // A variety of available jitter algos, mhart's aws4fetch impl seemed like a tidy, simple approach. Smithy's default backoff algo behaves the same way.
   let rando = Math.floor(Math.random() * delayBase * Math.pow(2, i))
   let delay = Math.min(rando, maxRetryBackoff)
-  /* istanbul ignore next */
+  /* node:coverage disable */
   if (debug) {
     console.error(`[aws-lite] Request failed (${reason}), retrying in ${delay} ms`)
   }
+  /* node:coverage enable */
   await new Promise(res => setTimeout(res, delay))
 }
 

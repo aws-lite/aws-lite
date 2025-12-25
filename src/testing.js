@@ -1,10 +1,11 @@
-/* istanbul ignore next */
 let debug = (params = {}) => {
   let { print } = params
+  /* node:coverage disable */
   if (print) {
     console.error('[aws-lite] Testing debug:')
     console.dir(methods.data, { depth: null })
   }
+  /* node:coverage enable */
   return methods.data
 }
 

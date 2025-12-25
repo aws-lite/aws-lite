@@ -1,5 +1,4 @@
 module.exports = function errorHandler (input) {
-  /* istanbul ignore next: jic! */
   if (input instanceof Error) {
     throw input
   }

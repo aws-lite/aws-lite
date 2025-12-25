@@ -6,10 +6,10 @@ function marshaller (method, obj, options) {
     // Only require the vendor if + when it's actually needed
     aws = require('../_vendor/aws')
   }
-  /* istanbul ignore next */
+  /* node:coverage disable */
   options = options || {}
-  /* istanbul ignore next */
   let { awsjson: awsjsonSetting, config = {} } = options
+  /* node:coverage enable */
 
   // Allow arbitrary AWS JSON marshalling options
   let { awsjsonMarshall, awsjsonUnmarshall } = config
@@ -113,7 +113,6 @@ async function loadAwsConfig (params) {
     let configFile = AWS_CONFIG_FILE || join(home, '.aws', 'config')
     if (typeof awsConfigFile === 'string') configFile = awsConfigFile
     let config = await readIni(configFile)
-    /* istanbul ignore next: TODO remove + test */
     if (config) {
       awsConfig = {}
       awsConfig.config = config
@@ -130,7 +129,6 @@ async function loadAwsConfig (params) {
   // Always attempt to load the `credentials` file (default: ~/.aws/credentials)
   let credsFile = AWS_SHARED_CREDENTIALS_FILE || join(home, '.aws', 'credentials')
   let creds = await readIni(credsFile)
-  /* istanbul ignore next: TODO remove + test */
   if (creds) {
     awsConfig = awsConfig || {}
     awsConfig.creds = creds
@@ -148,9 +146,10 @@ async function loadAwsConfig (params) {
 }
 
 let cache = {}
-/* istanbul ignore next */
 async function readFile (file) {
+  /* node:coverage ignore next */
   if (cache[file]) return cache[file]
+  /* node:coverage ignore next */
   if (!(await exists(file))) return
 
   let { readFile } = require('node:fs/promises')
@@ -162,7 +161,7 @@ async function readIni (file) {
   if (!(await exists(file))) return
 
   let data = await readFile(file)
-  /* istanbul ignore next */
+  /* node:coverage ignore next */
   if (!data) return
   cache[file] = parseAwsIni(data.toString())
   return cache[file]
@@ -186,7 +185,6 @@ function parseAwsIni (ini) {
   let out = Object.create(null)
   let lines = ini.split(/\r?\n/)
 
-  /* istanbul ignore next */
   lines.forEach(line => {
     let match = line.match(iniRegex)
     if (!match) return
@@ -231,7 +229,7 @@ let textNodeName = '#text'
 
 // Interpolate XML string values to booleans, numbers, dates, etc.
 function maybeConvertString (str) {
-  /**/ if (str === 'true') return true
+  if (str === 'true') return true
   else if (str === 'false') return false
   else if (str === 'null') return null
   else if (str === '') return str
@@ -240,7 +238,6 @@ function maybeConvertString (str) {
     return Number(str)
   }
   try {
-    /* istanbul ignore else */
     if (new Date(Date.parse(str)).toISOString() === str) {
       return new Date(str)
     }
@@ -252,7 +249,6 @@ function maybeConvertString (str) {
 function coerceXMLValues (obj) {
   Object.keys(obj).forEach(k => {
     // For whatever reason ignore else isn't working after object check
-    /* istanbul ignore next */
     if (typeof obj[k] === 'string') {
       obj[k] = maybeConvertString(obj[k])
     }
@@ -271,7 +267,6 @@ function coerceXMLValues (obj) {
   return obj
 }
 
-/* istanbul ignore next */
 function instantiateXml () {
   if (xml) return
   // Only require the vendor if + when it's actually needed
@@ -311,11 +306,12 @@ function parseXML (body) {
   let parsed = xml.parser.parse(body)
   let key = Object.keys(parsed)[0]
   let payloadToReturn = parsed[key]
-  /* istanbul ignore next: TODO remove + test */
+  /* node:coverage disable */
   if (payloadToReturn[textNodeName]) {
     payloadToReturn[key] = payloadToReturn[textNodeName]
     delete payloadToReturn[textNodeName]
   }
+  /* node:coverage enable */
   return coerceXMLValues(xml.parser.getValueFromTextNode(payloadToReturn))
 }
 
