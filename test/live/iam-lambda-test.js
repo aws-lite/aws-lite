@@ -11,18 +11,16 @@ let FunctionName = process.env.AWS_LITE_TEST_LAMBDA_NAME || 'aws-lite-test-lambd
 let p = path => process.platform.startsWith('win') ? 'file://' + path : path
 
 test('Set up env', async t => {
-  t.plan(2)
-  t.ok(client, 'aws-lite client is present')
+  t.assert.ok(client, 'aws-lite client is present')
   let plugins = [
     import(p(join(__dirname, '_iam.mjs'))),
     import(p(join(cwd, 'plugins', 'lambda', 'src', 'index.mjs'))), // We should be able to retire this once we phase out 14.x CI runs
   ]
   aws = await client({ region, plugins })
-  t.ok(aws, 'Client ready')
+  t.assert.ok(aws, 'Client ready')
 })
 
 test('Get Lambda role', async t => {
-  t.plan(2)
 
   let role
   let roleName = FunctionName + '-role'
@@ -50,12 +48,11 @@ test('Get Lambda role', async t => {
     await new Promise((resolve) => setTimeout(resolve, 5000))
   }
   roleARN = role?.GetRoleResult?.Role?.Arn
-  t.ok(role, 'Got Lambda execution role')
-  t.equal(roleARN.split(':').length, 6, `Got role ARN: ${roleARN}`)
+  t.assert.ok(role, 'Got Lambda execution role')
+  t.assert.strictEqual(roleARN.split(':').length, 6, `Got role ARN: ${roleARN}`)
 })
 
 test('Invoke Lambda', async t => {
-  t.plan(3)
 
   async function getConfig (tryNum = 1) {
     let result = await aws.lambda.GetFunctionConfiguration({ FunctionName })
@@ -76,7 +73,7 @@ test('Invoke Lambda', async t => {
   }
   catch (err) {
     if (err.statusCode !== 404) {
-      t.fail('Failed, cannot proceed with test')
+      t.assert.fail('Failed, cannot proceed with test')
       console.log(err)
       return
     }
@@ -106,12 +103,12 @@ test('Invoke Lambda', async t => {
     config = await getConfig()
   }
 
-  t.equal(config.FunctionName, FunctionName, 'Got back function config for test Lambda')
-  t.equal(config.State, 'Active', 'Test Lambda is active!')
+  t.assert.strictEqual(config.FunctionName, FunctionName, 'Got back function config for test Lambda')
+  t.assert.strictEqual(config.State, 'Active', 'Test Lambda is active!')
 
   let Payload = { hello: 'there' }
   let result = await aws.lambda.Invoke({ FunctionName, Payload })
   let expected = { ok: true, event: Payload }
   console.log(`Lambda invoke returned:`, result)
-  t.deepEqual(result.Payload, expected, 'Lambda invoked with correct payload')
+  t.assert.deepStrictEqual(result.Payload, expected, 'Lambda invoked with correct payload')
 })

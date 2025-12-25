@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import process from 'node:process'
-import test from 'tape'
+import test from 'node:test'
 import { copy, defaults, resetServer as reset, server } from '../../lib/index.mjs'
 
 let client
@@ -58,13 +58,12 @@ const nestedResponseBodies = [
 ]
 
 test('Set up env', async t => {
-  t.plan(2)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
-  t.ok(client, 'aws-lite client is present')
+  t.assert.ok(client, 'aws-lite client is present')
   let started = await server.start()
-  t.ok(started, 'Started server')
+  t.assert.ok(started, 'Started server')
 })
 
 test('Async iterator - raw client', async t => {
@@ -75,7 +74,6 @@ test('Async iterator - raw client', async t => {
   let page, response, request, expectedCursor, expectedPayload, expectedUrl
 
   t.test('Query cursor', async t => {
-    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -86,7 +84,7 @@ test('Async iterator - raw client', async t => {
     // First page
     server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    t.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
@@ -94,8 +92,8 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
-    t.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
-    t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
+    t.assert.strictEqual(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
 
     // Third page
@@ -103,20 +101,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
-    t.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
-    t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
+    t.assert.strictEqual(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Client does not send extra request')
+    t.assert.ok(page.done, 'Iterator stops when expected')
+    t.assert.strictEqual(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Query cursor - nested', async t => {
-    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -127,7 +124,7 @@ test('Async iterator - raw client', async t => {
     // First page
     server.use({ responseBody: nestedResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    t.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
@@ -135,8 +132,8 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
-    t.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
-    t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
+    t.assert.strictEqual(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
 
     // Third page
@@ -144,20 +141,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
-    t.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
-    t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
+    t.assert.strictEqual(request.url, expectedUrl, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Client does not send extra request')
+    t.assert.ok(page.done, 'Iterator stops when expected')
+    t.assert.strictEqual(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Payload cursor', async t => {
-    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -168,7 +164,7 @@ test('Async iterator - raw client', async t => {
     // First page
     server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    t.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
@@ -176,8 +172,8 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedPayload = { Cursor: simpleResponseBodies[0].Token }
-    t.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
-    t.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
+    t.assert.deepStrictEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
     reset()
 
     // Third page
@@ -185,20 +181,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedPayload = { Cursor: simpleResponseBodies[1].Token }
-    t.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
-    t.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
+    t.assert.deepStrictEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Client does not send extra request')
+    t.assert.ok(page.done, 'Iterator stops when expected')
+    t.assert.strictEqual(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Payload cursor - nested', async t => {
-    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -209,7 +204,7 @@ test('Async iterator - raw client', async t => {
     // First page
     server.use({ responseBody: nestedResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    t.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
@@ -217,8 +212,8 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedPayload = { Cursor: nestedResponseBodies[0].Nest.Token }
-    t.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
-    t.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
+    t.assert.deepStrictEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
     reset()
 
     // Third page
@@ -226,20 +221,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedPayload = { Cursor: nestedResponseBodies[1].Nest.Token }
-    t.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
-    t.deepEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
+    t.assert.deepStrictEqual(request.body, expectedPayload, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Client does not send extra request')
+    t.assert.ok(page.done, 'Iterator stops when expected')
+    t.assert.strictEqual(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Headers cursor', async t => {
-    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -250,7 +244,7 @@ test('Async iterator - raw client', async t => {
     // First page
     server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    t.deepEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
@@ -258,8 +252,8 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedCursor = simpleResponseBodies[0].Token
-    t.deepEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
-    t.equal(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[1], 'Response is correct')
+    t.assert.strictEqual(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
     reset()
 
     // Third page
@@ -267,20 +261,19 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedCursor = simpleResponseBodies[1].Token
-    t.deepEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
-    t.equal(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, simpleResponseBodies[2], 'Response is correct')
+    t.assert.strictEqual(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Client does not send extra request')
+    t.assert.ok(page.done, 'Iterator stops when expected')
+    t.assert.strictEqual(request, undefined, 'Client does not send extra request')
     reset()
   })
 
   t.test('Headers cursor - nested', async t => {
-    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -291,7 +284,7 @@ test('Async iterator - raw client', async t => {
     // First page
     server.use({ responseBody: nestedResponseBodies[0], responseHeaders: jsonHeaders })
     page = await response.next()
-    t.deepEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[0], 'Response is correct')
     reset()
 
     // Second page
@@ -299,8 +292,8 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedCursor = nestedResponseBodies[0].Nest.Token
-    t.deepEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
-    t.equal(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[1], 'Response is correct')
+    t.assert.strictEqual(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
     reset()
 
     // Third page
@@ -308,21 +301,20 @@ test('Async iterator - raw client', async t => {
     page = await response.next()
     request = server.getCurrentRequest()
     expectedCursor = nestedResponseBodies[1].Nest.Token
-    t.deepEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
-    t.equal(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.deepStrictEqual(page.value.payload, nestedResponseBodies[2], 'Response is correct')
+    t.assert.strictEqual(request.headers.cursor, expectedCursor, 'Request cursor matches previous response token')
     reset()
 
     // No more pages
     page = await response.next()
     request = server.getCurrentRequest()
-    t.ok(page.done, 'Iterator stops when expected')
-    t.equal(request, undefined, 'Client does not send extra request')
+    t.assert.ok(page.done, 'Iterator stops when expected')
+    t.assert.strictEqual(request, undefined, 'Client does not send extra request')
     reset()
   })
 })
 
 test('Async iterator - plugin', async t => {
-  t.plan(7)
   const paginate = 'iterator'
   let aws = await client({
     ...config,
@@ -340,7 +332,7 @@ test('Async iterator - plugin', async t => {
   server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
   page = await response.next()
   expectedToken = simpleResponseBodies[0].Token
-  t.equal(page.value.Token, expectedToken, 'Response is correct')
+  t.assert.strictEqual(page.value.Token, expectedToken, 'Response is correct')
   reset()
 
   // Second page
@@ -349,8 +341,8 @@ test('Async iterator - plugin', async t => {
   request = server.getCurrentRequest()
   expectedToken = simpleResponseBodies[1].Token
   expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
-  t.equal(page.value.Token, expectedToken, 'Response is correct')
-  t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+  t.assert.strictEqual(page.value.Token, expectedToken, 'Response is correct')
+  t.assert.strictEqual(request.url, expectedUrl, 'Request cursor matches previous response token')
   reset()
 
   // Third page
@@ -358,15 +350,15 @@ test('Async iterator - plugin', async t => {
   page = await response.next()
   request = server.getCurrentRequest()
   expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
-  t.false(page.value.Token, 'Response is correct')
-  t.equal(request.url, expectedUrl, 'Request cursor matches previous response token')
+  t.assert.ok(!page.value.Token, 'Response is correct')
+  t.assert.strictEqual(request.url, expectedUrl, 'Request cursor matches previous response token')
   reset()
 
   // No more pages
   page = await response.next()
   request = server.getCurrentRequest()
-  t.ok(page.done, 'Iterator stops when expected')
-  t.equal(request, undefined, 'Client does not send extra request')
+  t.assert.ok(page.done, 'Iterator stops when expected')
+  t.assert.strictEqual(request, undefined, 'Client does not send extra request')
   reset()
 })
 
@@ -427,7 +419,6 @@ test('Default paginator - raw client', async t => {
   ]
 
   t.test('Query cursor', async t => {
-    t.plan(4)
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -437,23 +428,22 @@ test('Default paginator - raw client', async t => {
     requests = server.getCurrentRequest()
 
     // Response payload
-    t.deepEqual(response.payload, simpleExpectedPayload, 'Response is correct')
+    t.assert.deepStrictEqual(response.payload, simpleExpectedPayload, 'Response is correct')
 
     // Second page
     expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
-    t.equal(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
 
     // Third page
     expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
-    t.equal(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
+    t.assert.strictEqual(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Query cursor - nested', async t => {
-    t.plan(4)
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -463,23 +453,22 @@ test('Default paginator - raw client', async t => {
     requests = server.getCurrentRequest()
 
     // Response payload
-    t.deepEqual(response.payload, nestedExpectedPayload, 'Response is correct')
+    t.assert.deepStrictEqual(response.payload, nestedExpectedPayload, 'Response is correct')
 
     // Second page
     expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
-    t.equal(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
 
     // Third page
     expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
-    t.equal(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
+    t.assert.strictEqual(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Payload cursor', async t => {
-    t.plan(4)
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -489,23 +478,22 @@ test('Default paginator - raw client', async t => {
     requests = server.getCurrentRequest()
 
     // Response payload
-    t.deepEqual(response.payload, simpleExpectedPayload, 'Response is correct')
+    t.assert.deepStrictEqual(response.payload, simpleExpectedPayload, 'Response is correct')
 
     // Second page
     expectedCursor = simpleResponseBodies[0].Token
-    t.equal(requests[1].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[1].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Third page
     expectedCursor = simpleResponseBodies[1].Token
-    t.equal(requests[2].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[2].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
+    t.assert.strictEqual(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Payload cursor - nested', async t => {
-    t.plan(4)
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -515,23 +503,22 @@ test('Default paginator - raw client', async t => {
     requests = server.getCurrentRequest()
 
     // Response payload
-    t.deepEqual(response.payload, nestedExpectedPayload, 'Response is correct')
+    t.assert.deepStrictEqual(response.payload, nestedExpectedPayload, 'Response is correct')
 
     // Second page
     expectedCursor = nestedResponseBodies[0].Nest.Token
-    t.equal(requests[1].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[1].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Third page
     expectedCursor = nestedResponseBodies[1].Nest.Token
-    t.equal(requests[2].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[2].body.Cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
+    t.assert.strictEqual(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Headers cursor', async t => {
-    t.plan(4)
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -541,23 +528,22 @@ test('Default paginator - raw client', async t => {
     requests = server.getCurrentRequest()
 
     // Response payload
-    t.deepEqual(response.payload, simpleExpectedPayload, 'Response is correct')
+    t.assert.deepStrictEqual(response.payload, simpleExpectedPayload, 'Response is correct')
 
     // Second page
     expectedCursor = simpleResponseBodies[0].Token
-    t.equal(requests[1].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[1].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Third page
     expectedCursor = simpleResponseBodies[1].Token
-    t.equal(requests[2].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[2].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, simpleResponses.length, 'Client does not send extra request')
+    t.assert.strictEqual(requests.length, simpleResponses.length, 'Client does not send extra request')
     reset()
   })
 
   t.test('Headers cursor - nested', async t => {
-    t.plan(4)
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -567,24 +553,23 @@ test('Default paginator - raw client', async t => {
     requests = server.getCurrentRequest()
 
     // Response payload
-    t.deepEqual(response.payload, nestedExpectedPayload, 'Response is correct')
+    t.assert.deepStrictEqual(response.payload, nestedExpectedPayload, 'Response is correct')
 
     // Second page
     expectedCursor = nestedResponseBodies[0].Nest.Token
-    t.equal(requests[1].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[1].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Third page
     expectedCursor = nestedResponseBodies[1].Nest.Token
-    t.equal(requests[2].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
+    t.assert.strictEqual(requests[2].headers.cursor, expectedCursor, 'Request cursor matches previous response token')
 
     // Correct number of requests
-    t.equal(requests.length, nestedResponseBodies.length, 'Client does not send extra request')
+    t.assert.strictEqual(requests.length, nestedResponseBodies.length, 'Client does not send extra request')
     reset()
   })
 })
 
 test('Default paginator - plugin', async t => {
-  t.plan(5)
   const paginate = true
   let aws = await client({
     ...config,
@@ -624,27 +609,26 @@ test('Default paginator - plugin', async t => {
   requests = server.getCurrentRequest()
 
   // Response payload
-  t.deepEqual(response, expectedResponse, 'Response is correct')
+  t.assert.deepStrictEqual(response, expectedResponse, 'Response is correct')
 
   // First page
   expectedUrl = `/`
-  t.equal(requests[0].url, expectedUrl, 'Request cursor matches previous response token')
+  t.assert.strictEqual(requests[0].url, expectedUrl, 'Request cursor matches previous response token')
 
   // Second page
   expectedUrl = `/?Cursor=${simpleResponseBodies[0].Token}`
-  t.equal(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
+  t.assert.strictEqual(requests[1].url, expectedUrl, 'Request cursor matches previous response token')
 
   // Third page
   expectedUrl = `/?Cursor=${simpleResponseBodies[1].Token}`
-  t.equal(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
+  t.assert.strictEqual(requests[2].url, expectedUrl, 'Request cursor matches previous response token')
 
   // Correct number of requests
-  t.equal(requests.length, pluginResponses.length, 'Client does not send extra request')
+  t.assert.strictEqual(requests.length, pluginResponses.length, 'Client does not send extra request')
   reset()
 })
 
 test('Error handling', async t => {
-  t.plan(11)
   let aws = await client({
     ...config,
     plugins: [ import(p(join(pluginDir, 'paginated.js'))) ],
@@ -659,10 +643,10 @@ test('Error handling', async t => {
   server.use({ responseBody: simpleResponseBodies[0], responseHeaders: jsonHeaders })
   try {
     await response.next()
-    t.fail('Did not catch response error')
+    t.assert.fail('Did not catch response error')
   }
   catch {
-    t.pass('Caught response error')
+    t.assert.ok(true, 'Caught response error')
   }
   reset()
 
@@ -676,10 +660,10 @@ test('Error handling', async t => {
         type: 'query',
       },
     })
-    t.fail('Did not catch invalid cursor')
+    t.assert.fail('Did not catch invalid cursor')
   }
   catch {
-    t.pass('Caught invalid cursor')
+    t.assert.ok(true, 'Caught invalid cursor')
   }
   reset()
 
@@ -693,10 +677,10 @@ test('Error handling', async t => {
         type: 'query',
       },
     })
-    t.fail('Did not catch invalid token')
+    t.assert.fail('Did not catch invalid token')
   }
   catch {
-    t.pass('Caught invalid token')
+    t.assert.ok(true, 'Caught invalid token')
   }
   reset()
 
@@ -711,10 +695,10 @@ test('Error handling', async t => {
         type: 'query',
       },
     })
-    t.fail('Did not catch mismatched token/cursor')
+    t.assert.fail('Did not catch mismatched token/cursor')
   }
   catch {
-    t.pass('Caught mismatched token/cursor')
+    t.assert.ok(true, 'Caught mismatched token/cursor')
   }
   reset()
 
@@ -728,10 +712,10 @@ test('Error handling', async t => {
         type: 'query',
       },
     })
-    t.fail('Did not catch invalid accumulator')
+    t.assert.fail('Did not catch invalid accumulator')
   }
   catch {
-    t.pass('Caught invalid accumulator')
+    t.assert.ok(true, 'Caught invalid accumulator')
   }
   reset()
 
@@ -744,10 +728,10 @@ test('Error handling', async t => {
         type: 'bananarama',
       },
     })
-    t.fail('Did not catch invalid type')
+    t.assert.fail('Did not catch invalid type')
   }
   catch {
-    t.pass('Caught invalid type')
+    t.assert.ok(true, 'Caught invalid type')
   }
   reset()
 
@@ -762,10 +746,10 @@ test('Error handling', async t => {
         type: 'query',
       },
     })
-    t.fail('Did not catch mismatched token/cursor')
+    t.assert.fail('Did not catch mismatched token/cursor')
   }
   catch {
-    t.pass('Caught mismatched token/cursor')
+    t.assert.ok(true, 'Caught mismatched token/cursor')
   }
   reset()
 
@@ -777,10 +761,10 @@ test('Error handling', async t => {
   server.use({ responseHeaders: jsonHeaders })
   try {
     await response.next()
-    t.fail('Did not catch missing API response')
+    t.assert.fail('Did not catch missing API response')
   }
   catch {
-    t.pass('Caught missing API response')
+    t.assert.ok(true, 'Caught missing API response')
   }
   reset()
 
@@ -792,10 +776,10 @@ test('Error handling', async t => {
   server.use({ responseBody: 72, responseHeaders: jsonHeaders })
   try {
     await response.next()
-    t.fail('Did not catch invalid response payload')
+    t.assert.fail('Did not catch invalid response payload')
   }
   catch {
-    t.pass('Caught invalid response payload')
+    t.assert.ok(true, 'Caught invalid response payload')
   }
   reset()
 
@@ -806,10 +790,10 @@ test('Error handling', async t => {
       paginate: true,
       paginator: { ...simplePaginator, type: 'query' },
     })
-    t.fail('Did not catch missing API response')
+    t.assert.fail('Did not catch missing API response')
   }
   catch {
-    t.pass('Caught missing API response')
+    t.assert.ok(true, 'Caught missing API response')
   }
   reset()
 
@@ -820,16 +804,15 @@ test('Error handling', async t => {
       paginate: true,
       paginator: { ...simplePaginator, type: 'query' },
     })
-    t.fail('Did not catch invalid response payload')
+    t.assert.fail('Did not catch invalid response payload')
   }
   catch {
-    t.pass('Caught invalid response payload')
+    t.assert.ok(true, 'Caught invalid response payload')
   }
   reset()
 })
 
 test('Misc', async t => {
-  t.plan(1)
   let aws = await client({
     ...config,
     plugins: [ import(p(join(pluginDir, 'paginated.js'))) ],
@@ -856,11 +839,10 @@ test('Misc', async t => {
     paginate: true,
     paginator: { ...simplePaginator, type: 'query', default: 'enabled' },
   })
-  t.equal(response.Accumulator.length, 1, 'Terminate when accumulator is falsy')
+  t.assert.strictEqual(response.Accumulator.length, 1, 'Terminate when accumulator is falsy')
 })
 
 test('Tear down env', async t => {
-  t.plan(1)
   await server.end()
-  t.pass('Server ended')
+  t.assert.ok(true, 'Server ended')
 })

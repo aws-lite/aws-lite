@@ -2,7 +2,7 @@ import module from 'node:module'
 import { join } from 'node:path'
 import process from 'node:process'
 import url from 'node:url'
-import test from 'tape'
+import test from 'node:test'
 import { basicRequestChecks, defaults, resetServer as reset, server } from '../../lib/index.mjs'
 
 let client
@@ -16,16 +16,14 @@ let __filename = url.fileURLToPath(import.meta.url).replace(/\\/g, '/')
 let require = module.createRequire(import.meta.url)
 
 test('Set up env', async t => {
-  t.plan(2)
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
-  t.ok(client, 'aws-lite client is present')
+  t.assert.ok(client, 'aws-lite client is present')
   let started = await server.start()
-  t.ok(started, 'Started server')
+  t.assert.ok(started, 'Started server')
 })
 
 test('Plugins - validate input', async t => {
-  t.plan(25)
   let str = 'hi'
   let num = 123
 
@@ -34,11 +32,11 @@ test('Plugins - validate input', async t => {
   // No validation
   try {
     await aws.lambda.noValidation({ host, port })
-    t.pass('No validation')
+    t.assert.ok(true, 'No validation')
   }
   catch (err) {
     console.log(err)
-    t.fail('Method without validation should have passed validation without issue')
+    t.assert.fail('Method without validation should have passed validation without issue')
   }
 
   // Missing required parameter type
@@ -47,7 +45,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Missing required parameter: required/, 'Errored on missing required param')
+    t.assert.match(err.message, /Missing required parameter: required/, 'Errored on missing required param')
   }
 
   // Wrong required parameter type
@@ -56,7 +54,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Parameter 'required' must be: string/, 'Errored on wrong required param type')
+    t.assert.match(err.message, /Parameter 'required' must be: string/, 'Errored on wrong required param type')
   }
 
   // Wrong optional parameter type
@@ -65,7 +63,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Parameter 'arr' must be: array/, 'Errored on wrong optional param type')
+    t.assert.match(err.message, /Parameter 'arr' must be: array/, 'Errored on wrong optional param type')
   }
 
   // Disabled parameter
@@ -74,7 +72,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Parameter 'disabled' must not be used/, 'Errored on disabled param')
+    t.assert.match(err.message, /Parameter 'disabled' must not be used/, 'Errored on disabled param')
   }
 
   // Plugin specified an invalid validation type (string)
@@ -83,7 +81,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Invalid type found: invalidType \(lolidk\)/, 'Errored on invalid validation type (string)')
+    t.assert.match(err.message, /Invalid type found: invalidType \(lolidk\)/, 'Errored on invalid validation type (string)')
   }
 
   // Plugin specified an invalid validation type (list)
@@ -92,7 +90,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Invalid type found: invalidTypeList \(listidk\)/, 'Errored on invalid validation type (list)')
+    t.assert.match(err.message, /Invalid type found: invalidTypeList \(listidk\)/, 'Errored on invalid validation type (list)')
   }
 
   // Plugin specified an invalid validation type, uh, type
@@ -101,7 +99,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Validator 'type' property must be a string or array/, 'Errored on invalid validation type')
+    t.assert.match(err.message, /Validator 'type' property must be a string or array/, 'Errored on invalid validation type')
   }
 
   // Plugin specified an invalid validation type, uh, type (list)
@@ -110,7 +108,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Invalid type found: invalidTypeListType \(12345\)/, 'Errored on invalid validation type (list)')
+    t.assert.match(err.message, /Invalid type found: invalidTypeListType \(12345\)/, 'Errored on invalid validation type (list)')
   }
 
   // Plugin validation is missing a type
@@ -119,7 +117,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Validator is missing required 'type' property/, 'Errored on missing validation type')
+    t.assert.match(err.message, /Validator is missing required 'type' property/, 'Errored on missing validation type')
   }
 
   // Now just test the other various types work (and fail)
@@ -127,11 +125,11 @@ test('Plugins - validate input', async t => {
   for (let [ k, v ] of Object.entries(validTests)) {
     try {
       await aws.lambda.testTypes({ required: str, host, port, [k]: v })
-      t.pass(`Correct ${k} validation succeeded`)
+      t.assert.ok(true, `Correct ${k} validation succeeded`)
     }
     catch (err) {
       console.log(err)
-      t.fail(`Correct ${k} validation failed`)
+      t.assert.fail(`Correct ${k} validation failed`)
     }
   }
 
@@ -139,12 +137,12 @@ test('Plugins - validate input', async t => {
   for (let [ k, v ] of Object.entries(invalidTests)) {
     try {
       await aws.lambda.testTypes({ required: str, [k]: v })
-      t.fail(`Incorrect ${k} validation failed`)
+      t.assert.fail(`Incorrect ${k} validation failed`)
     }
     catch (err) {
       console.log(err)
       let re = new RegExp(`Parameter '${k}' must be`)
-      t.match(err.message, re, `Incorrect ${k} validation succeeded`)
+      t.assert.match(err.message, re, `Incorrect ${k} validation succeeded`)
     }
   }
 
@@ -154,7 +152,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Parameter 'arr' must be: array/, 'Errored on wrong param (from type array)')
+    t.assert.match(err.message, /Parameter 'arr' must be: array/, 'Errored on wrong param (from type array)')
   }
 
   // Type array
@@ -163,7 +161,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Parameter 'payload' must be one of/, 'Errored on wrong param (from type array)')
+    t.assert.match(err.message, /Parameter 'payload' must be one of/, 'Errored on wrong param (from type array)')
   }
 
   // Payload alias
@@ -172,7 +170,7 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Parameter 'data' must be one of/, 'Errored on wrong param (from type array, payload alias)')
+    t.assert.match(err.message, /Parameter 'data' must be one of/, 'Errored on wrong param (from type array, payload alias)')
   }
 
   // Duplicate aliases
@@ -181,34 +179,32 @@ test('Plugins - validate input', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /Found duplicate payload parameters/, 'Errored on duplicate payload params')
+    t.assert.match(err.message, /Found duplicate payload parameters/, 'Errored on duplicate payload params')
   }
   reset()
 })
 
 test('Plugins - validate service', async t => {
-  t.plan(2)
   let plugin = import(p(join(pluginDir, 'misc', 'unverified-service.js')))
   try {
     await client({ ...config, plugins: [ plugin ] })
-    t.fail('Plugin with unverified service should throw')
+    t.assert.fail('Plugin with unverified service should throw')
   }
   catch (error) {
-    t.match(error.message, /Invalid AWS service/, 'Throw on plugin with unverified service')
+    t.assert.match(error.message, /Invalid AWS service/, 'Throw on plugin with unverified service')
   }
 
   try {
     await client({ ...config, verifyService: false, plugins: [ plugin ] })
-    t.pass('"verifyService: false" allows plugin with unverified service')
+    t.assert.ok(true, '"verifyService: false" allows plugin with unverified service')
   }
   catch (error) {
     console.log(error)
-    t.fail('Should have allowed unverified service')
+    t.assert.fail('Should have allowed unverified service')
   }
 })
 
 test('Plugins - method construction, request()', async t => {
-  t.plan(28)
   let name = 'my-lambda'
   let aws, expectedPath, request
 
@@ -218,13 +214,13 @@ test('Plugins - method construction, request()', async t => {
 
   await aws.lambda.GetFunctionConfiguration({ name, host, port })
   request = server.getCurrentRequest()
-  t.equal(request.url, expectedPath, 'Plugin requested generated endpoint')
-  t.equal(request.body, undefined, 'Plugin made request without body')
+  t.assert.strictEqual(request.url, expectedPath, 'Plugin requested generated endpoint')
+  t.assert.strictEqual(request.body, undefined, 'Plugin made request without body')
   basicRequestChecks(t, 'GET', { url: expectedPath })
 
   await aws.lambda.GetFunctionConfiguration({ name, host, port, path: '/foo' })
   request = server.getCurrentRequest()
-  t.equal(request.url, expectedPath, 'Plugin can override normal client param')
+  t.assert.strictEqual(request.url, expectedPath, 'Plugin can override normal client param')
   basicRequestChecks(t, 'GET', { url: expectedPath })
 
   // Writes
@@ -234,70 +230,69 @@ test('Plugins - method construction, request()', async t => {
 
   await aws.lambda.Invoke({ name, payload, host, port })
   request = server.getCurrentRequest()
-  t.equal(request.url, expectedPath, 'Plugin requested generated path')
-  t.deepEqual(request.body, payload, 'Plugin made request with included payload')
+  t.assert.strictEqual(request.url, expectedPath, 'Plugin requested generated path')
+  t.assert.deepStrictEqual(request.body, payload, 'Plugin made request with included payload')
   basicRequestChecks(t, 'POST', { url: expectedPath })
 
   await aws.lambda.Invoke({ name, data: payload, host, port })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, `Payload can be aliased to 'data'`)
+  t.assert.deepStrictEqual(request.body, payload, `Payload can be aliased to 'data'`)
 
   await aws.lambda.Invoke({ name, body: payload, host, port })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, `Payload can be aliased to 'body'`)
+  t.assert.deepStrictEqual(request.body, payload, `Payload can be aliased to 'body'`)
 
   await aws.lambda.Invoke({ name, payload, host, port, path: '/foo' })
   request = server.getCurrentRequest()
-  t.equal(request.url, expectedPath, 'Plugin can override normal client param')
+  t.assert.strictEqual(request.url, expectedPath, 'Plugin can override normal client param')
   basicRequestChecks(t, 'POST', { url: expectedPath })
 })
 
 test('Plugins - response()', async t => {
-  t.plan(83)
   let aws, payload, response, responseBody, responseHeaders
 
   aws = await client({ ...config, host, port, plugins: [ import(p(join(pluginDir, 'response.js'))) ] })
 
   // Pass through by having no response() method
   response = await aws.lambda.NoResponseMethod()
-  t.equal(response.statusCode, 200, 'Response status code passed through')
-  t.ok(response.headers, 'Response headers passed through')
-  t.notOk(response.headers.foo, 'Response headers not mutated')
-  t.equal(response.payload, null, 'Response payload passed through')
+  t.assert.strictEqual(response.statusCode, 200, 'Response status code passed through')
+  t.assert.ok(response.headers, 'Response headers passed through')
+  t.assert.ok(!response.headers.foo, 'Response headers not mutated')
+  t.assert.strictEqual(response.payload, null, 'Response payload passed through')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // Actively pass through
   response = await aws.lambda.Passthrough()
-  t.equal(response.statusCode, 200, 'Response status code passed through')
-  t.ok(response.headers, 'Response headers passed through')
-  t.notOk(response.headers.foo, 'Response headers not mutated')
-  t.equal(response.payload, null, 'Response payload passed through')
+  t.assert.strictEqual(response.statusCode, 200, 'Response status code passed through')
+  t.assert.ok(response.headers, 'Response headers passed through')
+  t.assert.ok(!response.headers.foo, 'Response headers not mutated')
+  t.assert.strictEqual(response.payload, null, 'Response payload passed through')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // Mutate a single property, but pass the rest through
   response = await aws.lambda.MutateProperty()
-  t.equal(response.statusCode, 234, 'Response status code mutated by plugin')
-  t.ok(response.headers, 'Response headers passed through')
-  t.notOk(response.headers.foo, 'Response headers not mutated')
-  t.equal(response.payload, null, 'Response payload passed through')
+  t.assert.strictEqual(response.statusCode, 234, 'Response status code mutated by plugin')
+  t.assert.ok(response.headers, 'Response headers passed through')
+  t.assert.ok(!response.headers.foo, 'Response headers not mutated')
+  t.assert.strictEqual(response.payload, null, 'Response payload passed through')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // Mutate all properties
   response = await aws.lambda.MutateAllProperties()
-  t.equal(response.statusCode, 234, 'Response status code mutated by plugin')
-  t.equal(response.headers.foo, 'bar', 'Response headers mutated')
-  t.equal(response.payload.hi, 'there', 'Response payload mutated')
+  t.assert.strictEqual(response.statusCode, 234, 'Response status code mutated by plugin')
+  t.assert.strictEqual(response.headers.foo, 'bar', 'Response headers mutated')
+  t.assert.strictEqual(response.payload.hi, 'there', 'Response payload mutated')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   responseHeaders = { 'content-type': 'application/json' }
   payload = { hi: 'there' }
   server.use({ responseHeaders, responseBody: payload })
   response = await aws.lambda.OnlyPassThroughPayload()
-  t.deepEqual(response, payload, 'Response passed through just the payload')
+  t.assert.deepStrictEqual(response, payload, 'Response passed through just the payload')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   response = await aws.lambda.ReturnWhatever()
-  t.deepEqual(response, 'yooo', 'Response passed through whatever it wants')
+  t.assert.deepStrictEqual(response, 'yooo', 'Response passed through whatever it wants')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // A bit contrived since AWS JSON would normally be returned with an appropriate header, but we are just making sure we can force the entire payload to be unmarhsalled
@@ -305,8 +300,8 @@ test('Plugins - response()', async t => {
   responseBody = { aws: { S: 'idk' } }
   server.use({ responseHeaders, responseBody })
   response = await aws.lambda.ReturnAwsJsonAll()
-  t.deepEqual(response.payload, { aws: 'idk' }, 'Returned response payload as parsed, unmarshalled JSON')
-  t.notOk(response.awsjson, 'awsjson property stripped')
+  t.assert.deepStrictEqual(response.payload, { aws: 'idk' }, 'Returned response payload as parsed, unmarshalled JSON')
+  t.assert.ok(!response.awsjson, 'awsjson property stripped')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // Unmarshall just the payload contents, leaving out headers and status code
@@ -314,8 +309,8 @@ test('Plugins - response()', async t => {
   responseBody = { aws: { S: 'idk' } }
   server.use({ responseHeaders, responseBody })
   response = await aws.lambda.ReturnAwsJsonPayload()
-  t.deepEqual(response, { aws: 'idk' }, 'Returned response payload as parsed, unmarshalled JSON')
-  t.notOk(response.awsjson, 'awsjson property stripped')
+  t.assert.deepStrictEqual(response, { aws: 'idk' }, 'Returned response payload as parsed, unmarshalled JSON')
+  t.assert.ok(!response.awsjson, 'awsjson property stripped')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // Unmarshall an individual payload key
@@ -323,16 +318,16 @@ test('Plugins - response()', async t => {
   responseBody = { Item: { aws: { S: 'idk' } }, ok: true }
   server.use({ responseHeaders, responseBody })
   response = await aws.lambda.ReturnAwsJsonKey()
-  t.deepEqual(response.payload, { Item: { aws: 'idk' }, ok: true }, 'Returned response payload as parsed, unmarshalled JSON')
-  t.notOk(response.awsjson, 'awsjson property stripped')
+  t.assert.deepStrictEqual(response.payload, { Item: { aws: 'idk' }, ok: true }, 'Returned response payload as parsed, unmarshalled JSON')
+  t.assert.ok(!response.awsjson, 'awsjson property stripped')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // Response returns nothing
   response = await aws.lambda.ReturnNothing()
-  t.equal(response.statusCode, 200, 'Response status code passed through')
-  t.ok(response.headers, 'Response headers passed through')
-  t.notOk(response.headers.foo, 'Response headers not mutated')
-  t.equal(response.payload, null, 'Response payload passed through')
+  t.assert.strictEqual(response.statusCode, 200, 'Response status code passed through')
+  t.assert.ok(response.headers, 'Response headers passed through')
+  t.assert.ok(!response.headers.foo, 'Response headers not mutated')
+  t.assert.strictEqual(response.payload, null, 'Response payload passed through')
   basicRequestChecks(t, 'GET', { url: '/' })
 
   // Force content type on response
@@ -342,12 +337,11 @@ test('Plugins - response()', async t => {
   payload = { hi: 'there' }
   server.use({ responseHeaders, responseBody: JSON.stringify(payload) })
   response = await aws.lambda.Passthrough()
-  t.deepEqual(response.payload, payload, 'Returned response payload parsed despite wrong content-type')
+  t.assert.deepStrictEqual(response.payload, payload, 'Returned response payload parsed despite wrong content-type')
   basicRequestChecks(t, 'GET', { url: '/' })
 })
 
 test('Plugins - error(), error handling', async t => {
-  t.plan(48)
   let name = 'my-lambda'
   let payload = { ok: true }
   let responseBody, responseHeaders, responseStatusCode
@@ -359,12 +353,12 @@ test('Plugins - error(), error handling', async t => {
   try {
     await aws({ service, path, payload, host, port })
     await aws.lambda.noErrorMethod({ name, payload, host, port })
-    t.pass('Control test completed')
+    t.assert.ok(true, 'Control test completed')
     reset()
   }
   catch (err) {
     console.log(err)
-    t.fail('Did not expect an error in control test')
+    t.assert.fail('Did not expect an error in control test')
   }
 
   // Request method fails
@@ -373,11 +367,11 @@ test('Plugins - error(), error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.requestMethodBlowsUp: Cannot set/, 'Error included basic method information')
-    t.equal(err.service, service, 'Error has service metadata')
-    t.equal(err.awsDoc, 'https://requestMethodBlowsUp.lol', 'Error has AWS API doc')
-    t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda.requestMethodBlowsUp: Cannot set/, 'Error included basic method information')
+    t.assert.strictEqual(err.service, service, 'Error has service metadata')
+    t.assert.strictEqual(err.awsDoc, 'https://requestMethodBlowsUp.lol', 'Error has AWS API doc')
+    t.assert.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
 
@@ -387,11 +381,11 @@ test('Plugins - error(), error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.responseMethodBlowsUp: Cannot set/, 'Error included basic method information')
-    t.equal(err.service, service, 'Error has service metadata')
-    t.equal(err.awsDoc, 'https://responseMethodBlowsUp.lol', 'Error has AWS API doc')
-    t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda.responseMethodBlowsUp: Cannot set/, 'Error included basic method information')
+    t.assert.strictEqual(err.service, service, 'Error has service metadata')
+    t.assert.strictEqual(err.awsDoc, 'https://responseMethodBlowsUp.lol', 'Error has AWS API doc')
+    t.assert.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
 
@@ -405,14 +399,14 @@ test('Plugins - error(), error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodMutatesError/, 'Error included basic method information')
-    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
-    t.equal(err.service, service, 'Error has service metadata')
-    t.equal(err.awsDoc, 'https://errorMethodMutatesError.lol', 'Error has AWS API doc')
-    t.equal(err.readme, 'lolidk', 'Error has custom readme doc')
-    t.equal(err.other, responseBody.other, 'Error has other metadata')
-    t.notOk(err.type, 'Error does not have type (via plugin error)')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda.errorMethodMutatesError/, 'Error included basic method information')
+    t.assert.strictEqual(err.statusCode, responseStatusCode, 'Error has status code')
+    t.assert.strictEqual(err.service, service, 'Error has service metadata')
+    t.assert.strictEqual(err.awsDoc, 'https://errorMethodMutatesError.lol', 'Error has AWS API doc')
+    t.assert.strictEqual(err.readme, 'lolidk', 'Error has custom readme doc')
+    t.assert.strictEqual(err.other, responseBody.other, 'Error has other metadata')
+    t.assert.ok(!err.type, 'Error does not have type (via plugin error)')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
   }
   reset()
 
@@ -426,14 +420,14 @@ test('Plugins - error(), error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodMutatesError/, 'Error included basic method information')
-    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
-    t.equal(err.service, service, 'Error has service metadata')
-    t.equal(err.awsDoc, 'https://errorMethodMutatesError.lol', 'Error has AWS API doc')
-    t.equal(err.readme, 'lolidk', 'Error has custom readme doc')
-    t.equal(err.other, responseBody.other, 'Error has other metadata')
-    t.equal(err.type, 'Lambda validation error', 'Error has type (via plugin error)')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda.errorMethodMutatesError/, 'Error included basic method information')
+    t.assert.strictEqual(err.statusCode, responseStatusCode, 'Error has status code')
+    t.assert.strictEqual(err.service, service, 'Error has service metadata')
+    t.assert.strictEqual(err.awsDoc, 'https://errorMethodMutatesError.lol', 'Error has AWS API doc')
+    t.assert.strictEqual(err.readme, 'lolidk', 'Error has custom readme doc')
+    t.assert.strictEqual(err.other, responseBody.other, 'Error has other metadata')
+    t.assert.strictEqual(err.type, 'Lambda validation error', 'Error has type (via plugin error)')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
   }
   reset()
 
@@ -445,13 +439,13 @@ test('Plugins - error(), error handling', async t => {
     console.log(err)
     // Node.js 20.x changed the HTTP connection error format
     let re = /\@aws-lite\/client: lambda.noErrorMethod: (connect )?ECONNREFUSED/
-    t.match(err.message, re, 'Error included basic information')
-    t.equal(err.port, badPort, 'Error has port metadata')
-    t.equal(err.service, service, 'Error has service metadata')
-    t.equal(err.host, host, 'Error has host metadata')
-    t.equal(err.protocol, protocol, 'Error has protocol metadata')
-    t.equal(err.statusCode, undefined, 'Status code not found on incomplete request')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, re, 'Error included basic information')
+    t.assert.strictEqual(err.port, badPort, 'Error has port metadata')
+    t.assert.strictEqual(err.service, service, 'Error has service metadata')
+    t.assert.strictEqual(err.host, host, 'Error has host metadata')
+    t.assert.strictEqual(err.protocol, protocol, 'Error has protocol metadata')
+    t.assert.strictEqual(err.statusCode, undefined, 'Status code not found on incomplete request')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
 
@@ -465,13 +459,13 @@ test('Plugins - error(), error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodNoop/, 'Error included basic method information')
-    t.equal(err.statusCode, responseStatusCode, 'Error has status code')
-    t.equal(err.service, service, 'Error has service metadata')
-    t.equal(err.awsDoc, 'https://errorMethodNoop.lol', 'Error has AWS API doc')
-    t.equal(err.other, responseBody.other, 'Error has other metadata')
-    t.notOk(err.type, 'Error does not have type (via plugin error)')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda.errorMethodNoop/, 'Error included basic method information')
+    t.assert.strictEqual(err.statusCode, responseStatusCode, 'Error has status code')
+    t.assert.strictEqual(err.service, service, 'Error has service metadata')
+    t.assert.strictEqual(err.awsDoc, 'https://errorMethodNoop.lol', 'Error has AWS API doc')
+    t.assert.strictEqual(err.other, responseBody.other, 'Error has other metadata')
+    t.assert.ok(!err.type, 'Error does not have type (via plugin error)')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
 
@@ -485,19 +479,18 @@ test('Plugins - error(), error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda.errorMethodBlowsUp: Cannot set/, 'Error included basic method information')
-    t.equal(err.service, service, 'Error has service metadata')
-    t.notOk(err.awsDoc, 'Error does not have a doc')
-    t.notOk(err.other, 'Error does not have other metadata')
-    t.notOk(err.type, 'Error metadata was not mutated')
-    t.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda.errorMethodBlowsUp: Cannot set/, 'Error included basic method information')
+    t.assert.strictEqual(err.service, service, 'Error has service metadata')
+    t.assert.ok(!err.awsDoc, 'Error does not have a doc')
+    t.assert.ok(!err.other, 'Error does not have other metadata')
+    t.assert.ok(!err.type, 'Error metadata was not mutated')
+    t.assert.ok(err.stack.includes(errorsPlugin), 'Stack trace includes failing plugin')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
 })
 
 test('Plugins - error docs (@aws-lite)', async t => {
-  t.plan(2)
   let aws = await client({ ...config, plugins: [ import('@aws-lite/s3') ] })
 
   try {
@@ -506,46 +499,44 @@ test('Plugins - error docs (@aws-lite)', async t => {
   }
   catch (err) {
     console.log(err)
-    t.equal(err.awsDoc, 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html', 'Error has a doc')
-    t.equal(err.readme, 'https://aws-lite.org/services/s3#putobject', 'Error has link to method in readme')
+    t.assert.strictEqual(err.awsDoc, 'https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html', 'Error has a doc')
+    t.assert.strictEqual(err.readme, 'https://aws-lite.org/services/s3#putobject', 'Error has link to method in readme')
   }
 })
 
 test('Plugins - disabled methods', async t => {
-  t.plan(3)
   let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'misc', 'disabled-methods.js'))) ] })
-  t.ok(aws.lambda.ok, 'Client loaded plugin containing disabled methods')
-  t.notOk(aws.lambda.disabledByFalsy, 'Client did not load method disabled by boolean false')
-  t.notOk(aws.lambda.disabledByParam, `Client did not load method disabled by 'disabled' param`)
+  t.assert.ok(aws.lambda.ok, 'Client loaded plugin containing disabled methods')
+  t.assert.ok(!aws.lambda.disabledByFalsy, 'Client did not load method disabled by boolean false')
+  t.assert.ok(!aws.lambda.disabledByParam, `Client did not load method disabled by 'disabled' param`)
 })
 
 test('Plugins - plugin validation', async t => {
-  t.plan(12)
 
   // CJS
   try {
     await client({ ...config, plugins: [ require(join(pluginDir, 'cjs')) ] })
-    t.pass('CJS plugins work fine (directory import)')
+    t.assert.ok(true, 'CJS plugins work fine (directory import)')
     reset()
   }
   catch (err) {
     console.log(err)
-    t.fail('CJS plugin failure')
+    t.assert.fail('CJS plugin failure')
   }
 
   // ESM
   try {
     // .mjs file
     await client({ ...config, plugins: [ import(p(join(pluginDir, 'esm-mjs', 'index.mjs'))) ] })
-    t.pass('ESM .mjs plugins work fine')
+    t.assert.ok(true, 'ESM .mjs plugins work fine')
     // .js ext + package.json.type = module
     await client({ ...config, plugins: [ import(p(join(pluginDir, 'esm-pkg', 'index.js'))) ] })
-    t.pass('ESM .js + package.json plugins work fine')
+    t.assert.ok(true, 'ESM .js + package.json plugins work fine')
     reset()
   }
   catch (err) {
     console.log(err)
-    t.fail('ESM plugin failure')
+    t.assert.fail('ESM plugin failure')
   }
 
   // Failures
@@ -553,7 +544,7 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'invalid-request-method.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /All plugin request methods must be a function/, 'Throw on invalid request method')
+    t.assert.match(err.message, /All plugin request methods must be a function/, 'Throw on invalid request method')
     reset()
   }
 
@@ -561,7 +552,7 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'invalid-response-method.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /All plugin response methods must be a function/, 'Throw on invalid response method')
+    t.assert.match(err.message, /All plugin response methods must be a function/, 'Throw on invalid response method')
     reset()
   }
 
@@ -569,7 +560,7 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'invalid-error-method.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /All plugin error methods must be a function/, 'Throw on invalid error method')
+    t.assert.match(err.message, /All plugin error methods must be a function/, 'Throw on invalid error method')
     reset()
   }
 
@@ -577,7 +568,7 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'invalid-service.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /Invalid AWS service specified: lolidk/, 'Throw on invalid service')
+    t.assert.match(err.message, /Invalid AWS service specified: lolidk/, 'Throw on invalid service')
     reset()
   }
 
@@ -585,7 +576,7 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'this-plugin-does-not-exist.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
+    t.assert.match(err.message, /Cannot find module/, 'Throw on missing plugin')
     reset()
   }
 
@@ -593,7 +584,7 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'invalid-plugin.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /lol is not defined/, 'Throw on invalid plugin')
+    t.assert.match(err.message, /lol is not defined/, 'Throw on invalid plugin')
     reset()
   }
 
@@ -601,7 +592,7 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'invalid-methods-type.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /Plugin must export a methods object/, 'Throw on missing methods')
+    t.assert.match(err.message, /Plugin must export a methods object/, 'Throw on missing methods')
     reset()
   }
 
@@ -609,7 +600,7 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'invalid-methods-missing.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /Plugin must export a methods object/, 'Throw on missing methods')
+    t.assert.match(err.message, /Plugin must export a methods object/, 'Throw on missing methods')
     reset()
   }
 
@@ -617,13 +608,12 @@ test('Plugins - plugin validation', async t => {
     await client({ ...config, plugins: [ import(p(join(invalidPlugins, 'this-plugin-does-not-exist.js'))) ] })
   }
   catch (err) {
-    t.match(err.message, /Cannot find module/, 'Throw on missing plugin')
+    t.assert.match(err.message, /Cannot find module/, 'Throw on missing plugin')
     reset()
   }
 })
 
 test('Tear down env', async t => {
-  t.plan(1)
   await server.end()
-  t.pass('Server ended')
+  t.assert.ok(true, 'Server ended')
 })

@@ -1,7 +1,7 @@
 import http from 'node:http'
 import { join } from 'node:path'
 import process from 'node:process'
-import test from 'tape'
+import test from 'node:test'
 import { defaults } from '../../lib/index.mjs'
 
 let client
@@ -26,11 +26,10 @@ function reset () {
 }
 
 test('Set up env', async t => {
-  t.plan(2)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
-  t.ok(client, 'aws-lite client is present')
+  t.assert.ok(client, 'aws-lite client is present')
   retryServer = http.createServer((req, res) => {
     req.on('data', () => {})
     req.on('end', () => {
@@ -49,11 +48,10 @@ test('Set up env', async t => {
     })
   })
   retryServer.listen(port)
-  t.ok(retryServer, 'Started server')
+  t.assert.ok(retryServer, 'Started server')
 })
 
 test('Retries', async t => {
-  t.plan(9)
   let aws, retries, result
 
   /**
@@ -66,11 +64,11 @@ test('Retries', async t => {
     reset()
     responses.push(basicError)
     await aws({ service })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
     console.log(err)
-    t.equal(requests.length, 1, 'Client did not retry')
+    t.assert.strictEqual(requests.length, 1, 'Client did not retry')
   }
 
   // maxAttempts alias
@@ -79,11 +77,11 @@ test('Retries', async t => {
     reset()
     responses.push(basicError)
     await aws({ service })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
     console.log(err)
-    t.equal(requests.length, 1, 'Client did not retry')
+    t.assert.strictEqual(requests.length, 1, 'Client did not retry')
   }
 
   // Try, then retry (total of 2x attempts)
@@ -93,11 +91,11 @@ test('Retries', async t => {
     reset()
     responses.push(basicError, basicError)
     await aws({ service })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
     console.log(err)
-    t.equal(requests.length, retries + 1, 'Client retried, passed through error')
+    t.assert.strictEqual(requests.length, retries + 1, 'Client retried, passed through error')
   }
 
   // Try, then recover on successful retry
@@ -107,12 +105,12 @@ test('Retries', async t => {
     reset()
     responses.push(basicResponse, basicError)
     result = await aws({ service })
-    t.equal(requests.length, 2, 'Client retried, passed through error')
-    t.equal(result.statusCode, 200, 'Client returned successful response')
+    t.assert.strictEqual(requests.length, 2, 'Client retried, passed through error')
+    t.assert.strictEqual(result.statusCode, 200, 'Client returned successful response')
   }
   catch (err) {
     console.log(err)
-    t.fail('Did not expect an error')
+    t.assert.fail('Did not expect an error')
   }
 
   /**
@@ -125,11 +123,11 @@ test('Retries', async t => {
     reset()
     responses.push(throttleError, throttleError)
     await aws({ service })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
     console.log(err)
-    t.equal(requests.length, retries + 1, 'Client retried, passed through error')
+    t.assert.strictEqual(requests.length, retries + 1, 'Client retried, passed through error')
   }
 
   /**
@@ -141,11 +139,11 @@ test('Retries', async t => {
     reset()
     serverError = 'ECONNRESET'
     await aws({ service })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
     console.log(err)
-    t.equal(requests.length, retries + 1, 'Client retried, passed through error')
+    t.assert.strictEqual(requests.length, retries + 1, 'Client retried, passed through error')
   }
 
   /**
@@ -157,11 +155,11 @@ test('Retries', async t => {
     reset()
     responses.push(knownErrorName, knownErrorDunderType, knownErrorType)
     await aws({ service })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
     console.log(err)
-    t.equal(requests.length, retries + 1, 'Client retried, passed through error')
+    t.assert.strictEqual(requests.length, retries + 1, 'Client retried, passed through error')
   }
 
   /**
@@ -173,33 +171,31 @@ test('Retries', async t => {
     reset()
     responses.push(unknownNonRetryableError, unknownNonRetryableError)
     await aws({ service })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
     console.log(err)
-    t.equal(requests.length, retries, 'Client did not retry, passed through error')
+    t.assert.strictEqual(requests.length, retries, 'Client did not retry, passed through error')
   }
 })
 
 test('Retries - validation', async t => {
-  t.plan(1)
   let aws
 
   aws = await client({ ...config, retries: 'nah' })
   try {
     await aws({ service })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /must a number/, 'Errored on retries string value')
+    t.assert.match(err.message, /must a number/, 'Errored on retries string value')
   }
 })
 
 test('Tear down env', t => {
-  t.plan(1)
   retryServer.close(err => {
-    if (err) t.fail(err)
-    else t.pass('Server ended')
+    if (err) t.assert.fail(err)
+    else t.assert.ok(true, 'Server ended')
   })
 })

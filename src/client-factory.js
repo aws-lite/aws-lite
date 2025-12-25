@@ -240,6 +240,17 @@ async function getMock (property, name, params, metadata) {
     testing.data.allRequests.push(req)
     testing.data[property][name].requests.push(req)
 
+    // Destroy any stream payloads to prevent leaked file handles
+    if (params.payload?.on && params.payload?._read && params.payload?._readableState) {
+      // Destroy the stream and wait for it to complete cleanup
+      await new Promise((resolve) => {
+        params.payload.destroy()
+        // Wait for the stream to finish cleanup
+        params.payload.on('close', resolve)
+        params.payload.on('error', () => resolve()) // Resolve even on error
+      })
+    }
+
     if (testing.data[property][name].mocks.length === 1) {
       response = testing.data[property][name].mocks[0]
     }

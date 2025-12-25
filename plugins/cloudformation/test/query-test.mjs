@@ -1,4 +1,4 @@
-import test from 'tape'
+import test from 'node:test'
 import { querystringifyParams } from '../src/lib.mjs'
 
 const params = {
@@ -90,7 +90,6 @@ const expecting = {
 }
 
 test('Convert data into query params object', t => {
-  t.plan(1)
   const result = querystringifyParams(params)
-  t.deepEqual(result, expecting, 'Converted data into CloudFormation query params object')
+  t.assert.deepStrictEqual(result, expecting, 'Converted data into CloudFormation query params object')
 })
