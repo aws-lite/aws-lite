@@ -22,7 +22,6 @@ test('Check plugins for docs + validation', async t => {
     // Traverse methods
     let methods = Object.entries(plugin.methods)
     for (let [ name, method ] of methods) {
-      console.log(name)
       if (method === false) {
         t.assert.ok(true, `${name}: method disabled by boolean`)
         totalMethods++
