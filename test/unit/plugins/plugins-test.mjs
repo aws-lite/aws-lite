@@ -17,7 +17,7 @@ test('Check plugins for docs + validation', async t => {
   for (let { service } of plugins) {
     let path = service => 'file://' + join(cwd, 'plugins', service, 'src', 'index.mjs')
     let plugin = (await import(path(service))).default
-    // t.comment(`@aws-lite/${service}`)
+    console.log(`@aws-lite/${service}`)
 
     // Traverse methods
     let methods = Object.entries(plugin.methods)

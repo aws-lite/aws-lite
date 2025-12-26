@@ -229,7 +229,7 @@ let textNodeName = '#text'
 
 // Interpolate XML string values to booleans, numbers, dates, etc.
 function maybeConvertString (str) {
-  if (str === 'true') return true
+  /**/ if (str === 'true') return true
   else if (str === 'false') return false
   else if (str === 'null') return null
   else if (str === '') return str
