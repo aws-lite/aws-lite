@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 22.x, 24.x ]
+        node-version: [ 20.x, 22.x, 24.x ]
         os: [ windows-latest, ubuntu-latest, macOS-latest ]
 
     # Go
@@ -40,7 +40,14 @@ jobs:
     - name: Install
       run: npm install
 
-    - name: Test
+    - name: Test on node v20
+      if: matrix.node-version == '20.x'
+      run: npm run test:v20
+      env:
+        CI: true
+
+    - name: Test on node !v20
+      if: matrix.node-version != '20.x'
       run: npm test
       env:
         CI: true

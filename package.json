@@ -24,7 +24,11 @@
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
     "test:types": "tsd --files 'test/types/**/*.test-d.ts' --files 'plugins/*/types/**/*.test-d.ts'",
     "test:unit": "node --test --test-concurrency=1 'test/unit/**/*-test.mjs'",
-    "test": "npm run lint && npm run gen && npm run test:types && npm run test:plugins && npm run coverage"
+    "test": "npm run lint && npm run gen && npm run test:types && npm run test:plugins && npm run coverage",
+    "-----node-v20-only-run-scripts-----": "",
+    "test:plugins:v20": "node --test --test-concurrency=1 plugins",
+    "test:unit:v20": "node --test --test-concurrency=1 test/unit",
+    "test:v20": "npm run lint && npm run gen && npm run test:types && npm run test:plugins:v20 && npm run test:unit:v20"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run test:precommit",
