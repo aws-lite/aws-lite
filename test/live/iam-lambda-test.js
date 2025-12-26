@@ -11,6 +11,7 @@ let FunctionName = process.env.AWS_LITE_TEST_LAMBDA_NAME || 'aws-lite-test-lambd
 let p = path => process.platform.startsWith('win') ? 'file://' + path : path
 
 test('Set up env', async t => {
+  t.plan(2)
   t.assert.ok(client, 'aws-lite client is present')
   let plugins = [
     import(p(join(__dirname, '_iam.mjs'))),
@@ -22,7 +23,7 @@ test('Set up env', async t => {
 })
 
 test('Get Lambda role', async t => {
-
+  t.plan(2)
   let role
   let roleName = FunctionName + '-role'
 
@@ -57,7 +58,7 @@ test('Get Lambda role', async t => {
 })
 
 test('Invoke Lambda', async t => {
-
+  t.plan(3)
   async function getConfig (tryNum = 1) {
     let result = await aws.lambda.GetFunctionConfiguration({ FunctionName })
     if (result.State === 'Active') return result
