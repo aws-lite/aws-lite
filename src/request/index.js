@@ -21,9 +21,7 @@ async function makeRequest (params, creds, region, config, metadata, cursors = {
 
   // Final validation, remove aliases, etc.
   validateProtocol(protocol)
-  /* istanbul ignore next */
   if (params.endpoint) delete params.endpoint
-  /* istanbul ignore next */
   if (params.hostname) delete params.hostname
 
   // Path
@@ -51,8 +49,9 @@ async function makeRequest (params, creds, region, config, metadata, cursors = {
   // Headers, content-type
   let headers = Object.assign(params.headers || {}, cursors.headers || {})
   let contentType = headers['content-type'] || headers['Content-Type'] || ''
-  /* istanbul ignore next */
+  /* node:coverage disable */
   if (headers['Content-Type']) delete headers['Content-Type']
+  /* node:coverage enable */
 
   // Body - JSON-ify payload where convenient! Leave raw where needed
   let body = params.payload || params.body || params.data
@@ -104,7 +103,7 @@ async function makeRequest (params, creds, region, config, metadata, cursors = {
   // Sign the payload; let aws4 handle (most) logic related to region + service instantiation
   let signing = { region, ...params, protocol, host, port, pathPrefix, path }
 
-  /* istanbul ignore next */
+  /* node:coverage disable */
   if (globalServices.includes(params.service)) {
     // If it's semi-global and the region is not us-east-1, leave the region in
     // Otherwise, exclude the region from the signed headers
@@ -113,6 +112,7 @@ async function makeRequest (params, creds, region, config, metadata, cursors = {
       delete signing.region // jic the user specified it per-request
     }
   }
+  /* node:coverage enable */
 
   let streamReq = isReqStream ? body : undefined
   return await request(params, { creds, config, metadata, signing, streamReq })
@@ -122,7 +122,6 @@ let validPaginationTypes = [ 'headers', 'payload', 'query' ]
 
 async function paginator (params, creds, region, config, metadata) {
   let { debug } = config
-  /* istanbul ignore next */
   let { type = 'payload', cursor, token, accumulator } = params.paginator
   let isIterator = params.paginate === 'iterator'
 
@@ -180,8 +179,9 @@ async function paginator (params, creds, region, config, metadata) {
       // Continue requesting pages until no more tokens are found
       while (foundTokens.length) {
         page++
-        /* istanbul ignore next */
+        /* node:coverage disable */
         if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
+        /* node:coverage enable */
         let newCursors = getCursors(foundTokens, type)
         result = await get(newCursors)
         foundTokens = findTokens({ cursor, params, result, token, type })
@@ -220,13 +220,13 @@ async function paginator (params, creds, region, config, metadata) {
     statusCode = result.statusCode
     headers = result.headers
 
+    /* node:coverage disable */
     // Exit if it's XML that parses as a falsy value
-    /* istanbul ignore next */
     let contentType = result.headers['content-type'] || result.headers['Content-Type'] || ''
-    /* istanbul ignore next */
     if (XMLContentType(contentType) && !accumulated) {
       return
     }
+    /* node:coverage enable */
 
     // Exit if we're out of results
     if (!accumulated.length) {
@@ -239,8 +239,9 @@ async function paginator (params, creds, region, config, metadata) {
     let foundTokens = findTokens({ cursor, params, result, token, type })
     if (foundTokens.length) {
       page++
-      /* istanbul ignore next */
+      /* node:coverage disable */
       if (debug) console.error(`[aws-lite] Paginator: getting page ${page}`)
+      /* node:coverage enable */
       let newCursors = getCursors(foundTokens, type)
       await get(newCursors)
     }

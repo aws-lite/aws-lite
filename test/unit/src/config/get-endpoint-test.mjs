@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import test from 'tape'
+import test from 'node:test'
 import process from 'node:process'
 import mockTmp from 'mock-tmp'
 import { defaults, overrideHomedir, resetAWSEnvVars } from '../../../lib/index.mjs'
@@ -22,7 +22,7 @@ test('Set up env', async t => {
   t.plan(1)
   let sut = 'file://' + join(cwd, 'src', 'config', 'get-endpoint.js')
   getEndpoint = (await import(sut)).default
-  t.ok(getEndpoint, 'getEndpoint module is present')
+  t.assert.ok(getEndpoint, 'getEndpoint module is present')
 })
 
 test('Get endpoint params from passed config', async t => {
@@ -31,22 +31,22 @@ test('Get endpoint params from passed config', async t => {
   let result
 
   result = await getEndpoint({ config: { host: fullHost } })
-  t.deepEqual(result, { host }, 'Returned correct endpoint params from host param')
+  t.assert.deepStrictEqual(result, { host }, 'Returned correct endpoint params from host param')
 
   result = await getEndpoint({ config: { endpoint: fullHost } })
-  t.deepEqual(result, { host, protocol }, 'Returned correct endpoint params from endpoint param')
+  t.assert.deepStrictEqual(result, { host, protocol }, 'Returned correct endpoint params from endpoint param')
 
   result = await getEndpoint({ config: { url: fullHost } })
-  t.deepEqual(result, { host, protocol }, 'Returned correct endpoint params from url alias')
+  t.assert.deepStrictEqual(result, { host, protocol }, 'Returned correct endpoint params from url alias')
 
   // Prioritize passed params before env or config file
   process.env.AWS_ENDPOINT_URL = localhost
   result = await getEndpoint({ config: { host: fullHost } })
-  t.deepEqual(result, { host }, 'Prioritized passed params over env var')
+  t.assert.deepStrictEqual(result, { host }, 'Prioritized passed params over env var')
   resetAWSEnvVars()
 
   result = await getEndpoint({ config: { awsConfigFile: configMock, host: fullHost } })
-  t.deepEqual(result, { host }, 'Prioritized passed params over config file')
+  t.assert.deepStrictEqual(result, { host }, 'Prioritized passed params over config file')
 })
 
 test('Get endpoint params from env vars', async t => {
@@ -56,13 +56,13 @@ test('Get endpoint params from env vars', async t => {
 
   process.env.AWS_ENDPOINT_URL = localhost
   result = await getEndpoint({ config: {} })
-  t.deepEqual(result, { host: localhost }, 'Returned correct endpoint params from env var')
+  t.assert.deepStrictEqual(result, { host: localhost }, 'Returned correct endpoint params from env var')
   resetAWSEnvVars()
 
   // Prioritize env vars before config file
   process.env.AWS_ENDPOINT_URL = localhost
   result = await getEndpoint({ config: { awsConfigFile: configMock } })
-  t.deepEqual(result, { host: localhost }, 'Prioritized env var over config file')
+  t.assert.deepStrictEqual(result, { host: localhost }, 'Prioritized env var over config file')
   resetAWSEnvVars()
 })
 
@@ -80,25 +80,25 @@ test('Get endpoint params from config file', async t => {
   overrideHomedir(homedir)
   process.env.AWS_SDK_LOAD_CONFIG = true
   result = await getEndpoint({ config: { profile } })
-  t.deepEqual(result, { host: awsUrl, protocol }, 'Returned correct endpoint params from config file (~/.aws file location) via env var')
+  t.assert.deepStrictEqual(result, { host: awsUrl, protocol }, 'Returned correct endpoint params from config file (~/.aws file location) via env var')
   resetAWSEnvVars()
 
   result = await getEndpoint({ config: { awsConfigFile: true, profile } })
-  t.deepEqual(result, { host: awsUrl, protocol }, 'Returned correct endpoint params from config file (~/.aws file location) via param')
+  t.assert.deepStrictEqual(result, { host: awsUrl, protocol }, 'Returned correct endpoint params from config file (~/.aws file location) via param')
   mockTmp.reset()
 
   // Configured file locations
   process.env.AWS_SDK_LOAD_CONFIG = true
   process.env.AWS_CONFIG_FILE = configMock
   result = await getEndpoint({ config: { profile } })
-  t.deepEqual(result, { host: awsUrl, protocol }, 'Returned correct endpoint params from config file (default profile) via env var')
+  t.assert.deepStrictEqual(result, { host: awsUrl, protocol }, 'Returned correct endpoint params from config file (default profile) via env var')
   resetAWSEnvVars()
 
   result = await getEndpoint({ config: { awsConfigFile: configMock, profile } })
-  t.deepEqual(result, { host: awsUrl, protocol }, 'Returned correct endpoint params from config file (default profile) via param')
+  t.assert.deepStrictEqual(result, { host: awsUrl, protocol }, 'Returned correct endpoint params from config file (default profile) via param')
 
   result = await getEndpoint({ config: { awsConfigFile: configMock, profile: profile1 } })
-  t.deepEqual(result, { host: lolUrl, protocol }, 'Returned correct endpoint params from config file (!default profile) via param')
+  t.assert.deepStrictEqual(result, { host: lolUrl, protocol }, 'Returned correct endpoint params from config file (!default profile) via param')
 })
 
 test('Host not found (and that is ok)', async t => {
@@ -106,10 +106,10 @@ test('Host not found (and that is ok)', async t => {
   let result
 
   result = await getEndpoint({ config: { awsConfigFile: configMock, profile } })
-  t.ok(result.host && result.protocol, 'Got endpoint params from a profile that has a host')
+  t.assert.ok(result.host && result.protocol, 'Got endpoint params from a profile that has a host')
 
   result = await getEndpoint({ config: { awsConfigFile: configMock, profile: 'profile_2' } })
-  t.equal(result, undefined, 'Did not get endpoint params from a profile that has no endpoint config')
+  t.assert.strictEqual(result, undefined, 'Did not get endpoint params from a profile that has no endpoint config')
 })
 
 test('Parse URLs into properties', async t => {
@@ -119,59 +119,59 @@ test('Parse URLs into properties', async t => {
   // http://localhost
   url = 'http://localhost'
   result = await getEndpoint({ config: { endpoint: url } })
-  t.deepEqual(result, { host: localhost, protocol: http }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host: localhost, protocol: http }, 'Returned correctly parsed endpoint params')
 
-  t.deepEqual(result, await getEndpoint({ config: { url } }), 'Endpoint param is correctly aliased to url')
+  t.assert.deepStrictEqual(result, await getEndpoint({ config: { url } }), 'Endpoint param is correctly aliased to url')
 
   result = await getEndpoint({ config: { host: url } })
-  t.deepEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
 
   // http://localhost:3333
   url = 'http://localhost:3333'
   result = await getEndpoint({ config: { endpoint: url } })
-  t.deepEqual(result, { host: localhost, protocol: http, port: 3333 }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host: localhost, protocol: http, port: 3333 }, 'Returned correctly parsed endpoint params')
 
-  t.deepEqual(result, await getEndpoint({ config: { url } }), 'Endpoint param is correctly aliased to url')
+  t.assert.deepStrictEqual(result, await getEndpoint({ config: { url } }), 'Endpoint param is correctly aliased to url')
 
   result = await getEndpoint({ config: { host: url } })
-  t.deepEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
 
   // http://localhost/foo-bar
   url = 'http://localhost/foo-bar'
   result = await getEndpoint({ config: { endpoint: url } })
-  t.deepEqual(result, { host: localhost, protocol: http, pathPrefix }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host: localhost, protocol: http, pathPrefix }, 'Returned correctly parsed endpoint params')
 
-  t.deepEqual(result, await getEndpoint({ config: { url } }), 'Endpoint param is correctly aliased to url')
+  t.assert.deepStrictEqual(result, await getEndpoint({ config: { url } }), 'Endpoint param is correctly aliased to url')
 
   result = await getEndpoint({ config: { host: url } })
-  t.deepEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
 
   // localhost
   result = await getEndpoint({ config: { endpoint: localhost } })
-  t.deepEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
 
-  t.deepEqual(result, await getEndpoint({ config: { url: localhost } }), 'Endpoint param is correctly aliased to url')
+  t.assert.deepStrictEqual(result, await getEndpoint({ config: { url: localhost } }), 'Endpoint param is correctly aliased to url')
 
   result = await getEndpoint({ config: { host: localhost } })
-  t.deepEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host: localhost }, 'Returned correctly parsed endpoint params')
 
   // Regular domain
   result = await getEndpoint({ config: { endpoint: fullHost } })
-  t.deepEqual(result, { host, protocol }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host, protocol }, 'Returned correctly parsed endpoint params')
 
-  t.deepEqual(result, await getEndpoint({ config: { url: fullHost } }), 'Endpoint param is correctly aliased to url')
+  t.assert.deepStrictEqual(result, await getEndpoint({ config: { url: fullHost } }), 'Endpoint param is correctly aliased to url')
 
   result = await getEndpoint({ config: { host: fullHost } })
-  t.deepEqual(result, { host }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host }, 'Returned correctly parsed endpoint params')
 
   // Domain hostname
   result = await getEndpoint({ config: { endpoint: host } })
-  t.deepEqual(result, { host }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host }, 'Returned correctly parsed endpoint params')
 
-  t.deepEqual(result, await getEndpoint({ config: { url: host } }), 'Endpoint param is correctly aliased to url')
+  t.assert.deepStrictEqual(result, await getEndpoint({ config: { url: host } }), 'Endpoint param is correctly aliased to url')
 
   result = await getEndpoint({ config: { host: host } })
-  t.deepEqual(result, { host }, 'Returned correctly parsed endpoint params')
+  t.assert.deepStrictEqual(result, { host }, 'Returned correctly parsed endpoint params')
 })
 
 test('Other cases', async t => {
@@ -181,35 +181,36 @@ test('Other cases', async t => {
 
   // pathPrefix
   result = await getEndpoint({ config: { host, pathPrefix } })
-  t.deepEqual(result, { host, pathPrefix }, 'Returned correct path prefix')
+  t.assert.deepStrictEqual(result, { host, pathPrefix }, 'Returned correct path prefix')
 
   result = await getEndpoint({ config: { host, pathPrefix: 'foo' } })
-  t.deepEqual(result, { host, pathPrefix }, 'Returned mutated path prefix')
+  t.assert.deepStrictEqual(result, { host, pathPrefix }, 'Returned mutated path prefix')
 
   result = await getEndpoint({ config: { host, pathPrefix: 'foo/' } })
-  t.deepEqual(result, { host, pathPrefix }, 'Returned mutated path prefix')
+  t.assert.deepStrictEqual(result, { host, pathPrefix }, 'Returned mutated path prefix')
 
   result = await getEndpoint({ config: { host, pathPrefix: '/foo/' } })
-  t.deepEqual(result, { host, pathPrefix }, 'Returned mutated path prefix')
+  t.assert.deepStrictEqual(result, { host, pathPrefix }, 'Returned mutated path prefix')
 
   result = await getEndpoint({ config: { host, pathPrefix: '/' } })
-  t.deepEqual(result, { host }, 'Returned no path prefix')
+  t.assert.deepStrictEqual(result, { host }, 'Returned no path prefix')
 
   // Protocol / scheme
   result = await getEndpoint({ config: { host, protocol: https } })
-  t.deepEqual(result, { host, protocol }, 'Returned correct protocol')
+  t.assert.deepStrictEqual(result, { host, protocol }, 'Returned correct protocol')
 
   result = await getEndpoint({ config: { host, protocol: 'https' } })
-  t.deepEqual(result, { host, protocol }, 'Returned scheme mutated to protocol')
+  t.assert.deepStrictEqual(result, { host, protocol }, 'Returned scheme mutated to protocol')
 
   result = await getEndpoint({ config: { host, protocol: http } })
-  t.deepEqual(result, { host, protocol: http }, 'Returned correct protocol')
+  t.assert.deepStrictEqual(result, { host, protocol: http }, 'Returned correct protocol')
 
   result = await getEndpoint({ config: { host, protocol: 'http' } })
-  t.deepEqual(result, { host, protocol: http }, 'Returned scheme mutated to protocol')
+  t.assert.deepStrictEqual(result, { host, protocol: http }, 'Returned scheme mutated to protocol')
 })
 
 test('Tear down', t => {
+  t.plan(1)
   overrideHomedir.reset()
-  t.end()
+  t.assert.ok(true, 'Tear down complete')
 })

@@ -3,7 +3,7 @@ import { Readable } from 'node:stream'
 import process from 'node:process'
 import qs from 'node:querystring'
 import { Buffer } from 'node:buffer'
-import test from 'tape'
+import test from 'node:test'
 import { basicRequestChecks, copy, defaults, resetServer as reset, server } from '../../lib/index.mjs'
 import url from 'node:url'
 
@@ -23,9 +23,9 @@ test('Set up env', async t => {
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
-  t.ok(client, 'aws-lite client is present')
+  t.assert.ok(client, 'aws-lite client is present')
   let started = await server.start()
-  t.ok(started, 'Started server')
+  t.assert.ok(started, 'Started server')
 })
 
 test('Primary client - core functionality', async t => {
@@ -34,20 +34,20 @@ test('Primary client - core functionality', async t => {
   let aws = await client(config)
 
   // Client has configuration and credentials
-  t.ok(Object.keys(aws.config).length, `Client has config object with configuration properties: ${Object.keys(aws.config).join(', ')}`)
-  t.equal(aws.credentials.accessKeyId, config.accessKeyId, `Client has credentials object with accessKeyId property`)
-  t.equal(aws.credentials.secretAccessKey, config.secretAccessKey, `Client has credentials object wih secretAccessKey property`)
-  t.equal(aws.credentials.sessionToken, config.sessionToken, `Client has credentials object wih sessionToken property`)
-  t.notOk({}.propertyIsEnumerable.call(aws.credentials, 'secretAccessKey'), `secretAccessKey is a non-enumerable property`)
-  t.notOk({}.propertyIsEnumerable.call(aws.credentials, 'sessionToken'), `sessionToken is a non-enumerable property`)
+  t.assert.ok(Object.keys(aws.config).length, `Client has config object with configuration properties: ${Object.keys(aws.config).join(', ')}`)
+  t.assert.strictEqual(aws.credentials.accessKeyId, config.accessKeyId, `Client has credentials object with accessKeyId property`)
+  t.assert.strictEqual(aws.credentials.secretAccessKey, config.secretAccessKey, `Client has credentials object wih secretAccessKey property`)
+  t.assert.strictEqual(aws.credentials.sessionToken, config.sessionToken, `Client has credentials object wih sessionToken property`)
+  t.assert.ok(!{}.propertyIsEnumerable.call(aws.credentials, 'secretAccessKey'), `secretAccessKey is a non-enumerable property`)
+  t.assert.ok(!{}.propertyIsEnumerable.call(aws.credentials, 'sessionToken'), `sessionToken is a non-enumerable property`)
 
   // Basic get request
   result = await aws({ service, path })
   request = server.getCurrentRequest()
-  t.notOk(request.body, 'Request included no body')
-  t.equal(result.statusCode, 200, 'Client returned status code of response')
-  t.ok(result.headers, 'Client returned response headers')
-  t.equal(result.payload, null, 'Client returned empty response payload as null')
+  t.assert.ok(!request.body, 'Request included no body')
+  t.assert.strictEqual(result.statusCode, 200, 'Client returned status code of response')
+  t.assert.ok(result.headers, 'Client returned response headers')
+  t.assert.strictEqual(result.payload, null, 'Client returned empty response payload as null')
   basicRequestChecks(t, 'GET')
 
   // Basic get request with query string params
@@ -62,8 +62,8 @@ test('Primary client - core functionality', async t => {
   server.use({ responseBody, responseHeaders: jsonHeaders })
   result = await aws({ service, path, payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, 'Request included correct body')
-  t.deepEqual(result.payload, responseBody, 'Client returned response payload as parsed JSON')
+  t.assert.deepStrictEqual(request.body, payload, 'Request included correct body')
+  t.assert.deepStrictEqual(result.payload, responseBody, 'Client returned response payload as parsed JSON')
   basicRequestChecks(t, 'POST')
 
   // Basic post with query string params
@@ -92,27 +92,27 @@ test('Primary client - core functionality', async t => {
   payload = { ok: true }
   result = await aws({ service, path, payload, headers: copy(jsonHeaders) })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, 'Request included correct body (pre-encoded JSON)')
+  t.assert.deepStrictEqual(request.body, payload, 'Request included correct body (pre-encoded JSON)')
   reset()
 
   // Publish JSON while passing headers
   payload = JSON.stringify({ ok: true })
   result = await aws({ service, path, payload, headers: copy(jsonHeaders) })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, JSON.parse(payload), 'Request included correct body (pre-encoded JSON)')
+  t.assert.deepStrictEqual(request.body, JSON.parse(payload), 'Request included correct body (pre-encoded JSON)')
   reset()
 
   // Publish a buffer
   payload = Buffer.from(JSON.stringify({ ok: true }))
   result = await aws({ service, path, payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body.toString(), payload.toString(), 'Request included correct body (buffer)')
+  t.assert.deepStrictEqual(request.body.toString(), payload.toString(), 'Request included correct body (buffer)')
 
   // Publish some other kind of non-JSON request
   payload = 'hi'
   result = await aws({ service, path, payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body.toString(), payload, 'Request included correct body (just a string)')
+  t.assert.deepStrictEqual(request.body.toString(), payload, 'Request included correct body (just a string)')
   reset()
 
   // Publish a stream
@@ -122,7 +122,7 @@ test('Primary client - core functionality', async t => {
   payload.push(null)
   await aws({ service, path, payload, method: 'POST', headers: { 'content-length': text.length } })
   request = server.getCurrentRequest()
-  t.equal(request.body.toString(), text, 'Request included correct body')
+  t.assert.strictEqual(request.body.toString(), text, 'Request included correct body')
   basicRequestChecks(t, 'POST')
 
   // Get a streamed response
@@ -139,26 +139,26 @@ test('Primary client - core functionality', async t => {
       res()
     })
   })
-  t.equal(streamedResponse, responseBody.toString(), 'Client returned response payload as stream')
+  t.assert.strictEqual(streamedResponse, responseBody.toString(), 'Client returned response payload as stream')
 
   // Ensure paths without leading slashes are handled properly
   result = await aws({ service, path: 'a/path' })
   request = server.getCurrentRequest()
-  t.deepEqual(request.url, path, 'Request included correct body (just a string)')
+  t.assert.deepStrictEqual(request.url, path, 'Request included correct body (just a string)')
   reset()
 
   // Path returns XML
   responseBody = '<result><hello>yo</hello></result>'
   server.use({ responseBody, responseHeaders: xmlHeaders })
   result = await aws({ service, path })
-  t.deepEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
+  t.assert.deepStrictEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
   basicRequestChecks(t, 'GET')
 
   // Path returns a buffer
   responseBody = Buffer.from('ohi')
   server.use({ responseBody, responseHeaders: { 'content-type': 'application/octet-stream' } })
   result = await aws({ service, path })
-  t.deepEqual(result.payload, responseBody, 'Client returned response payload as buffer')
+  t.assert.deepStrictEqual(result.payload, responseBody, 'Client returned response payload as buffer')
   basicRequestChecks(t, 'GET')
 })
 
@@ -170,38 +170,38 @@ test('Primary client - aliased params', async t => {
   // Path
   await aws({ service, path })
   request = server.getCurrentRequest()
-  t.equal(request.url, path, 'Made request to correct path (options.path)')
+  t.assert.strictEqual(request.url, path, 'Made request to correct path (options.path)')
   reset()
 
   // Host / hostname
   await aws({ service, path })
   request = server.getCurrentRequest()
-  t.ok(request, 'Made request to correct host (options.host)')
+  t.assert.ok(request, 'Made request to correct host (options.host)')
   reset()
   await aws({ service, hostname: host, port, path: path })
   request = server.getCurrentRequest()
-  t.ok(request, 'Made request to correct host (options.hostname)')
+  t.assert.ok(request, 'Made request to correct host (options.hostname)')
   reset()
 
   // Payload / body / data / json + serialization
   let payload = { ok: true }
   await aws({ service, path, payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, 'Made request with correct body (options.payload)')
+  t.assert.deepStrictEqual(request.body, payload, 'Made request with correct body (options.payload)')
   reset()
   await aws({ service, path, body: payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, 'Made request with correct body (options.body)')
+  t.assert.deepStrictEqual(request.body, payload, 'Made request with correct body (options.body)')
   reset()
   await aws({ service, path, data: payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, payload, 'Made request with correct body (options.data)')
+  t.assert.deepStrictEqual(request.body, payload, 'Made request with correct body (options.data)')
   reset()
 
   let string = 'hi'
   await aws({ service, path, payload: string })
   request = server.getCurrentRequest()
-  t.equal(request.body.toString(), string, 'Made request with correct body (plain string)')
+  t.assert.strictEqual(request.body.toString(), string, 'Made request with correct body (plain string)')
   reset()
 })
 
@@ -218,8 +218,8 @@ test('Primary client - AWS JSON payloads', async t => {
   server.use({ responseBody, responseHeaders: headers })
   result = await aws({ service, path, body, headers: copy(headers) })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, { ok: { BOOL: true } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
+  t.assert.deepStrictEqual(request.body, { ok: { BOOL: true } }, 'Request included correct body (raw AWS JSON)')
+  t.assert.deepStrictEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -228,8 +228,8 @@ test('Primary client - AWS JSON payloads', async t => {
   server.use({ responseBody, responseHeaders: headers })
   result = await aws({ service, path, body, headers: copy(headers) })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
+  t.assert.deepStrictEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
+  t.assert.deepStrictEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -238,8 +238,8 @@ test('Primary client - AWS JSON payloads', async t => {
   server.use({ responseBody, responseHeaders: headers })
   result = await aws({ service, path, body, awsjson: true })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
+  t.assert.deepStrictEqual(request.body, { ok: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
+  t.assert.deepStrictEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -248,8 +248,8 @@ test('Primary client - AWS JSON payloads', async t => {
   server.use({ responseBody, responseHeaders: headers })
   result = await aws({ service, path, body, awsjson: [ 'fine' ] })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, { ok: true, fine: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
-  t.deepEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
+  t.assert.deepStrictEqual(request.body, { ok: true, fine: { BOOL: false } }, 'Request included correct body (raw AWS JSON)')
+  t.assert.deepStrictEqual(result.payload, expectedResponseBody(), 'Client returned response payload as parsed, unmarshalled JSON')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -257,7 +257,7 @@ test('Primary client - AWS JSON payloads', async t => {
   let regularJSON = { regular: 'JSON' }
   server.use({ responseBody: regularJSON, responseHeaders: headers })
   result = await aws({ service, path })
-  t.deepEqual(result.payload, regularJSON, 'Client returned response payload as parsed, unmarshalled JSON')
+  t.assert.deepStrictEqual(result.payload, regularJSON, 'Client returned response payload as parsed, unmarshalled JSON')
   reset()
 })
 
@@ -272,7 +272,7 @@ test('Primary client - XML payloads', async t => {
   server.use({ responseBody, responseHeaders: jsonHeaders })
   await aws({ service, path, headers: copy(xmlHeaders), payload })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, '<ok>true</ok>', 'Request included correct body')
+  t.assert.deepStrictEqual(request.body, '<ok>true</ok>', 'Request included correct body')
   basicRequestChecks(t, 'POST')
   reset()
 
@@ -283,14 +283,14 @@ test('Primary client - XML payloads', async t => {
   server.use({ responseBody, responseHeaders: jsonHeaders })
   await aws({ service, path, headers: copy(xmlHeaders), payload, xmlns })
   request = server.getCurrentRequest()
-  t.deepEqual(request.body, `<ok xmlns="${xmlns}">true</ok>`, 'Request included correct body')
+  t.assert.deepStrictEqual(request.body, `<ok xmlns="${xmlns}">true</ok>`, 'Request included correct body')
   reset()
 
   // Path returns XML
   responseBody = '<result><hello>yo</hello></result>'
   server.use({ responseBody, responseHeaders: xmlHeaders })
   result = await aws({ service, path })
-  t.deepEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
+  t.assert.deepStrictEqual(result.payload, { hello: 'yo' }, 'Client returned XML response payload as parsed object')
   basicRequestChecks(t, 'GET')
   reset()
 
@@ -322,17 +322,17 @@ test('Primary client - XML payloads', async t => {
 </result>`
   server.use({ responseBody, responseHeaders: xmlHeaders })
   result = await aws({ service, path })
-  t.equal(result.payload.string, 'yo', 'Client returned XML response with parsed string')
-  t.equal(result.payload.number, 1, 'Client returned XML response with parsed number')
-  t.equal(result.payload.float, 1.23, 'Client returned XML response with parsed float')
-  t.deepEqual(result.payload.date, new Date('2024-01-01T00:00:00.000Z'), 'Client returned XML response with parsed date')
-  t.equal(result.payload.booltrue, true, 'Client returned XML response with parsed boolean (true)')
-  t.equal(result.payload.boolfalse, false, 'Client returned XML response with parsed boolean (false)')
-  t.equal(result.payload.null, null, 'Client returned XML response with parsed null')
-  t.equal(result.payload.empty, '', 'Client returned XML response with empty string')
-  t.equal(result.payload.space, '  ', 'Client returned XML response with string of space(s)')
-  t.deepEqual(result.payload.obj, { number: 1 }, 'Client returned XML response with parsed nested object values')
-  t.deepEqual(result.payload.arr, { item: [ 1, 2, 3, { booltrue: true, boolfalse: false, null: null } ] }, 'Client returned XML response with parsed array values, including nested objects')
+  t.assert.strictEqual(result.payload.string, 'yo', 'Client returned XML response with parsed string')
+  t.assert.strictEqual(result.payload.number, 1, 'Client returned XML response with parsed number')
+  t.assert.strictEqual(result.payload.float, 1.23, 'Client returned XML response with parsed float')
+  t.assert.deepStrictEqual(result.payload.date, new Date('2024-01-01T00:00:00.000Z'), 'Client returned XML response with parsed date')
+  t.assert.strictEqual(result.payload.booltrue, true, 'Client returned XML response with parsed boolean (true)')
+  t.assert.strictEqual(result.payload.boolfalse, false, 'Client returned XML response with parsed boolean (false)')
+  t.assert.strictEqual(result.payload.null, null, 'Client returned XML response with parsed null')
+  t.assert.strictEqual(result.payload.empty, '', 'Client returned XML response with empty string')
+  t.assert.strictEqual(result.payload.space, '  ', 'Client returned XML response with string of space(s)')
+  t.assert.deepStrictEqual(result.payload.obj, { number: 1 }, 'Client returned XML response with parsed nested object values')
+  t.assert.deepStrictEqual(result.payload.arr, { item: [ 1, 2, 3, { booltrue: true, boolfalse: false, null: null } ] }, 'Client returned XML response with parsed array values, including nested objects')
   reset()
 })
 
@@ -345,7 +345,7 @@ test('Primary client - raw response payloads', async t => {
   responseBody = JSON.stringify({ ok: true })
   server.use({ responseBody, responseHeaders: xmlHeaders })
   result = await aws({ service, path, rawResponsePayload: true })
-  t.deepEqual(result.payload, Buffer.from(responseBody), `Client returned JSON response payload as unparsed buffer: ${responseBody}`)
+  t.assert.deepStrictEqual(result.payload, Buffer.from(responseBody), `Client returned JSON response payload as unparsed buffer: ${responseBody}`)
   basicRequestChecks(t, 'GET')
   reset()
 
@@ -353,7 +353,7 @@ test('Primary client - raw response payloads', async t => {
   responseBody = '<result><hello>yo</hello></result>'
   server.use({ responseBody, responseHeaders: xmlHeaders })
   result = await aws({ service, path, rawResponsePayload: true })
-  t.deepEqual(result.payload, Buffer.from(responseBody), `Client returned XML response payload as unparsed buffer: ${responseBody}`)
+  t.assert.deepStrictEqual(result.payload, Buffer.from(responseBody), `Client returned XML response payload as unparsed buffer: ${responseBody}`)
   basicRequestChecks(t, 'GET')
   reset()
 })
@@ -372,13 +372,13 @@ test('Primary client - error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda: lolno/, 'Error included basic information')
-    t.equal(err.other, responseBody.other, 'Error has other metadata')
-    t.equal(err.statusCode, responseStatusCode, 'Error has response status code')
-    t.ok(err.headers, 'Error has response headers')
-    t.equal(err.service, service, 'Error has service')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
-    t.ok(err.time, 'Error includes a timestamp')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda: lolno/, 'Error included basic information')
+    t.assert.strictEqual(err.other, responseBody.other, 'Error has other metadata')
+    t.assert.strictEqual(err.statusCode, responseStatusCode, 'Error has response status code')
+    t.assert.ok(err.headers, 'Error has response headers')
+    t.assert.strictEqual(err.service, service, 'Error has service')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.ok(err.time, 'Error includes a timestamp')
     reset()
   }
 
@@ -392,13 +392,13 @@ test('Primary client - error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda: lolno/, 'Error included basic information')
-    t.equal(err.other, responseBody.Error.other, 'Error has other metadata')
-    t.equal(err.statusCode, responseStatusCode, 'Error has response status code')
-    t.ok(err.headers, 'Error has response headers')
-    t.equal(err.service, service, 'Error has service')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
-    t.equal(err.time, 'early', 'Error includes a timestamp passed from response')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda: lolno/, 'Error included basic information')
+    t.assert.strictEqual(err.other, responseBody.Error.other, 'Error has other metadata')
+    t.assert.strictEqual(err.statusCode, responseStatusCode, 'Error has response status code')
+    t.assert.ok(err.headers, 'Error has response headers')
+    t.assert.strictEqual(err.service, service, 'Error has service')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.strictEqual(err.time, 'early', 'Error includes a timestamp passed from response')
     reset()
   }
 
@@ -412,9 +412,9 @@ test('Primary client - error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.equal(err.name, 'idk', 'Error name is set to error.Code')
-    t.equal(err.code, 'idk', 'error.code is set to error.Code')
-    t.notOk(err.Code, 'error.Code was removed')
+    t.assert.strictEqual(err.name, 'idk', 'Error name is set to error.Code')
+    t.assert.strictEqual(err.code, 'idk', 'error.code is set to error.Code')
+    t.assert.ok(!err.Code, 'error.Code was removed')
     reset()
   }
   try {
@@ -426,8 +426,8 @@ test('Primary client - error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.equal(err.name, 'idk', 'Error name is set to error.code')
-    t.equal(err.code, 'idk', 'error.code is set')
+    t.assert.strictEqual(err.name, 'idk', 'Error name is set to error.code')
+    t.assert.strictEqual(err.code, 'idk', 'error.code is set')
     reset()
   }
 
@@ -441,9 +441,9 @@ test('Primary client - error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.equal(err.name, 'idk', 'Error name is set to error.Code')
-    t.equal(err.code, 'idk', 'error.code is set to error.__type')
-    t.equal(err.__type, 'idk', 'error.__type is set')
+    t.assert.strictEqual(err.name, 'idk', 'Error name is set to error.Code')
+    t.assert.strictEqual(err.code, 'idk', 'error.code is set to error.__type')
+    t.assert.strictEqual(err.__type, 'idk', 'error.__type is set')
     reset()
   }
 
@@ -459,12 +459,12 @@ test('Primary client - error handling', async t => {
   }
   catch (err) {
     console.log(err)
-    t.match(err.message, /\@aws-lite\/client: lambda/, 'Error included basic information')
-    t.ok(err.message.includes(responseBody), 'Error has message')
-    t.equal(err.statusCode, responseStatusCode, 'Error has response status code')
-    t.ok(err.headers, 'Error has response headers')
-    t.equal(err.service, service, 'Error has service')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, /\@aws-lite\/client: lambda/, 'Error included basic information')
+    t.assert.ok(err.message.includes(responseBody), 'Error has message')
+    t.assert.strictEqual(err.statusCode, responseStatusCode, 'Error has response status code')
+    t.assert.ok(err.headers, 'Error has response headers')
+    t.assert.strictEqual(err.service, service, 'Error has service')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
 
@@ -477,13 +477,13 @@ test('Primary client - error handling', async t => {
     console.log(err)
     // Node.js 20.x changed the HTTP connection error format
     let re = /\@aws-lite\/client: lambda: (connect )?ECONNREFUSED/
-    t.match(err.message, re, 'Error included basic information')
-    t.equal(err.port, badPort, 'Error has port metadata')
-    t.equal(err.service, service, 'Error has service metadata')
-    t.equal(err.host, host, 'Error has host metadata')
-    t.equal(err.protocol, protocol, 'Error has protocol metadata')
-    t.equal(err.statusCode, undefined, 'Status code not found on incomplete request')
-    t.ok(err.stack.includes(__filename), 'Stack trace includes this test')
+    t.assert.match(err.message, re, 'Error included basic information')
+    t.assert.strictEqual(err.port, badPort, 'Error has port metadata')
+    t.assert.strictEqual(err.service, service, 'Error has service metadata')
+    t.assert.strictEqual(err.host, host, 'Error has host metadata')
+    t.assert.strictEqual(err.protocol, protocol, 'Error has protocol metadata')
+    t.assert.strictEqual(err.statusCode, undefined, 'Status code not found on incomplete request')
+    t.assert.ok(err.stack.includes(__filename), 'Stack trace includes this test')
     reset()
   }
 })
@@ -495,7 +495,7 @@ test('Primary client - validation', async t => {
     await aws()
   }
   catch (err) {
-    t.match(err.message, /No AWS service specified/, 'Throw on missing AWS service')
+    t.assert.match(err.message, /No AWS service specified/, 'Throw on missing AWS service')
     reset()
   }
 
@@ -504,7 +504,7 @@ test('Primary client - validation', async t => {
     await aws({ service: 'lolidk', path })
   }
   catch (err) {
-    t.match(err.message, /Invalid AWS service specified/, 'Throw on invalid AWS service')
+    t.assert.match(err.message, /Invalid AWS service specified/, 'Throw on invalid AWS service')
     reset()
   }
 
@@ -513,7 +513,7 @@ test('Primary client - validation', async t => {
     await aws({ service, path, query: [ 'hi', 'there' ] })
   }
   catch (err) {
-    t.match(err.message, /Query property must be an object/, 'Throw on invalid AWS service')
+    t.assert.match(err.message, /Query property must be an object/, 'Throw on invalid AWS service')
     reset()
   }
 })
@@ -531,18 +531,18 @@ test('Primary client - misc', async t => {
 
   await aws({ service, path, headers, payload: payload1 })
   request = server.getCurrentRequest()
-  t.deepEqual(headers, jsonHeaders, 'Headers not mutated')
-  t.equal(Number(request.headers['content-length']), payload1.length, `Got correct content-length: ${payload2.length}`)
+  t.assert.deepStrictEqual(headers, jsonHeaders, 'Headers not mutated')
+  t.assert.strictEqual(Number(request.headers['content-length']), payload1.length, `Got correct content-length: ${payload2.length}`)
   reset()
 
   await aws({ service, path, headers, payload: payload2 })
   request = server.getCurrentRequest()
-  t.deepEqual(headers, jsonHeaders, 'Headers not mutated')
-  t.equal(Number(request.headers['content-length']), payload2.length, `Got correct content-length: ${payload2.length}`)
+  t.assert.deepStrictEqual(headers, jsonHeaders, 'Headers not mutated')
+  t.assert.strictEqual(Number(request.headers['content-length']), payload2.length, `Got correct content-length: ${payload2.length}`)
 })
 
 test('Tear down env', async t => {
   t.plan(1)
   await server.end()
-  t.pass('Server ended')
+  t.assert.ok(true, 'Server ended')
 })

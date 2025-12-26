@@ -1,6 +1,6 @@
 import url from 'node:url'
 import { join } from 'node:path'
-import test from 'tape'
+import test from 'node:test'
 import { readFile } from 'node:fs/promises'
 import { parseXML, buildXML } from '../../../src/lib/index.js'
 // arrayifyItemsProp tests inferred via arrayify, but maybe add some standalone tests?
@@ -17,7 +17,7 @@ test('Set up env', async t => {
     .replace(/^[ ]*/gm, '') // Strip spaces
     .replace(/[\r\n]/gm, '') // Strip line breaks
   docBefore = parseXML(xmlBefore)
-  t.ok(docBefore.CacheBehaviors, 'Loaded mock, parsed XML')
+  t.assert.ok(docBefore.CacheBehaviors, 'Loaded mock, parsed XML')
 })
 
 test('Transform XML', async t => {
@@ -55,15 +55,15 @@ test('Transform XML', async t => {
       Quantity: 1,
     },
   }
-  t.deepEqual(jsObj, same, 'Correctly transformed deeply nested XML `Items` arrays to a sane JS format')
+  t.assert.deepStrictEqual(jsObj, same, 'Correctly transformed deeply nested XML `Items` arrays to a sane JS format')
 })
 
 test('Untransform XML', async t => {
   t.plan(2)
   docAfter = unarrayifyObject(copy(jsObj))
-  t.deepEqual(docBefore, docAfter, 'Correctly transformed deeply nested XML `Items` arrays to a sane JS format')
+  t.assert.deepStrictEqual(docBefore, docAfter, 'Correctly transformed deeply nested XML `Items` arrays to a sane JS format')
 
   // Re-add the top-level `DistributionConfig` document tag
   xmlAfter = buildXML({ DistributionConfig: docAfter })
-  t.equal(xmlBefore, xmlAfter, 'XML documents match')
+  t.assert.strictEqual(xmlBefore, xmlAfter, 'XML documents match')
 })

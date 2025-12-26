@@ -40,13 +40,20 @@ jobs:
     - name: Install
       run: npm install
 
-    - name: Test
+    - name: Test on node v20
+      if: matrix.node-version == '20.x'
+      run: npm run test:v20
+      env:
+        CI: true
+
+    - name: Test on node !v20
+      if: matrix.node-version != '20.x'
       run: npm test
       env:
         CI: true
 
     - name: Test (live AWS)
-      if: env.AWS_ACCESS_KEY_ID != '' && env.AWS_SECRET_ACCESS_KEY != ''
+      if: env.AWS_ACCESS_KEY_ID != '' && env.AWS_SECRET_ACCESS_KEY != '' && matrix.node-version != '20.x'
       run: npm run test:live
       env:
         CI: true
@@ -56,7 +63,7 @@ jobs:
     - name: Notify
       uses: sarisia/actions-status-discord@v1
       # Only fire alert once
-      if: github.ref == 'refs/heads/main' && failure() && matrix.node-version == '20.x' && matrix.os == 'ubuntu-latest'
+      if: github.ref == 'refs/heads/main' && failure() && matrix.node-version == '24.x' && matrix.os == 'ubuntu-latest'
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
         title: "build and test"
@@ -80,7 +87,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 24.x
           registry-url: https://registry.npmjs.org/
 
       # Publish to npm
@@ -120,7 +127,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 24.x
           registry-url: https://registry.npmjs.org/
 
       # Publish to npm

@@ -22,7 +22,7 @@ module.exports = async function getCreds (params) {
 
   let configCreds = validate(config)
   if (configCreds) {
-    /* istanbul ignore next */
+    /* node:coverage ignore next 3 */
     if (config.debug) {
       console.error(`[aws-lite] Loaded credentials from client configuration`)
     }
@@ -31,7 +31,7 @@ module.exports = async function getCreds (params) {
 
   let envCreds = getCredsFromEnv()
   if (envCreds) {
-    /* istanbul ignore next */
+    /* node:coverage ignore next 3 */
     if (config.debug) {
       console.error(`[aws-lite] Loaded credentials from environment variables`)
     }
@@ -44,7 +44,7 @@ module.exports = async function getCreds (params) {
   let SSOStart = Date.now()
   let SSOCreds = await getCredsFromSSO(params)
   if (SSOCreds) {
-    /* istanbul ignore next */
+    /* node:coverage ignore next 3 */
     if (config.debug) {
       console.error(`[aws-lite] Loaded credentials from AWS SSO in ${Date.now() - SSOStart}ms`)
     }
@@ -57,7 +57,7 @@ module.exports = async function getCreds (params) {
     let secretAccessKey
     let sessionToken
     if (profile.credential_process) {
-      /* istanbul ignore next */
+      /* node:coverage ignore next 3 */
       if (config.debug) {
         console.error(`[aws-lite] Loading credentials from process: ${profile.credential_process}`)
       }
@@ -70,7 +70,7 @@ module.exports = async function getCreds (params) {
       } = JSON.parse(result))
     }
     else {
-      /* istanbul ignore next */
+      /* node:coverage ignore next 3 */
       if (config.debug) {
         console.error(`[aws-lite] Loading credentials from AWS profile`)
       }
@@ -87,7 +87,7 @@ module.exports = async function getCreds (params) {
   // TODO:
   // let tokenFileCreds = await getCredsFromTokenFileCreds(params)
   // if (tokenFileCreds) {
-  //   /* istanbul ignore next */
+  //   /* node:coverage ignore next 3 */
   //   if (config.debug) {
   //     console.error(`[aws-lite] Loaded credentials from token file credentials`)
   //   }
@@ -96,14 +96,14 @@ module.exports = async function getCreds (params) {
 
   let IMDSStart = Date.now()
   let IMDSCreds = await getCredsFromIMDS(params)
-  /* istanbul ignore next: TODO remove + test */
+  /* node:coverage disable */
   if (IMDSCreds) {
-    /* istanbul ignore next */
     if (config.debug) {
       console.error(`[aws-lite] Loaded credentials from IMDSv2 in ${Date.now() - IMDSStart}ms`)
     }
     return IMDSCreds
   }
+  /* node:coverage enable */
 
   throw ReferenceError('Unable to find AWS credentials via params, environment variables, SSO, or credential / config files')
 }
@@ -159,7 +159,7 @@ async function getCredsFromSSO (params) {
   let ssoFilename = join(home, '.aws', 'sso', 'cache', ssoFile)
   let { readFile } = require('node:fs/promises')
   if (!(await exists(ssoFilename))) {
-    /* istanbul ignore next */
+    /* node:coverage ignore next 3 */
     if (config.debug) {
       console.error(`[aws-lite] Could not find AWS SSO token file at ${ssoFilename}`)
     }
@@ -167,7 +167,7 @@ async function getCredsFromSSO (params) {
   }
 
   try {
-    /* istanbul ignore next */
+    /* node:coverage ignore next 3 */
     if (config.debug) {
       console.error(`[aws-lite] Loading credentials from AWS SSO token file at ${ssoFilename}`)
     }
@@ -185,14 +185,14 @@ async function getCredsFromSSO (params) {
       throw Error('SSO token is expired, please refresh by running: aws sso login [options]')
     }
 
-    /* istanbul ignore next */
+    /* node:coverage disable */
     if (config.debug) {
       console.error(`[aws-lite] Requesting credentials from AWS IAM Identity Center`)
     }
-    /* istanbul ignore next */
     let endpoint = config?.sso?.endpoint
       ? config.sso.endpoint
       : `https://portal.sso.${sso_region}.amazonaws.com`
+    /* node:coverage enable */
     let result = await request({
       params: {
         service: 'sso',
@@ -219,7 +219,8 @@ async function getCredsFromSSO (params) {
   }
 }
 
-/* istanbul ignore next: TODO remove + test */
+// TODO: test this
+/* node:coverage disable */
 async function getCredsFromIMDS (params) {
   // Don't attempt to load credentials from IMDS when in Lambda
   if (isInLambda()) return
@@ -247,7 +248,6 @@ async function getCredsFromIMDS (params) {
       : `http://${ECSIP}${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}`
 
     if (!token && AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE) {
-      /* istanbul ignore next */
       if (config.debug) {
         console.error(`[aws-lite] Loading token from auth token file at: ${AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE}`)
       }
@@ -371,6 +371,7 @@ async function getCredsFromIMDS (params) {
     throw err
   }
 }
+/* node:coverage enable */
 
 function validate (creds) {
   let { accessKeyId, secretAccessKey, sessionToken } = creds
@@ -398,7 +399,7 @@ function validate (creds) {
 
 let req
 async function request ({ params, region, config, service }) {
-  /* istanbul ignore next */
+  /* node:coverage ignore next */
   region = region || ''
   if (!req) req = require('../request')
   return await req(
@@ -419,7 +420,7 @@ async function request ({ params, region, config, service }) {
 }
 
 // Check if the IMDS host is up before connecting
-/* istanbul ignore next */
+/* node:coverage disable */
 function checkHost (endpoint, debug) {
   return new Promise((res, rej) => {
     try {
@@ -473,12 +474,13 @@ function checkHost (endpoint, debug) {
     }
   })
 }
+/* node:coverage enable */
 
 // Assume if IMDS is (un)available, it will remain that way
 let hostCache = {}
 
 // IMDS response normalizer
-/* istanbul ignore next */
+/* node:coverage disable */
 function normalize (creds) {
   if (!creds.AccessKeyId || !creds.SecretAccessKey || !creds.Token) {
     throw ReferenceError('Invalid IMDSv2 response or missing credentials')
@@ -490,3 +492,4 @@ function normalize (creds) {
     expiration:       new Date(creds.Expiration),
   }
 }
+/* node:coverage enable */

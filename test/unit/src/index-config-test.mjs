@@ -2,7 +2,7 @@ import module from 'node:module'
 import { join } from 'node:path'
 import process from 'node:process'
 import mockTmp from 'mock-tmp'
-import test from 'tape'
+import test from 'node:test'
 import { basicRequestChecks, defaults, resetAWSEnvVars as reset, server } from '../../lib/index.mjs'
 
 let client
@@ -17,7 +17,7 @@ test('Set up env', async t => {
   t.plan(1)
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
-  t.ok(client, 'aws-lite client is present')
+  t.assert.ok(client, 'aws-lite client is present')
 })
 
 test('Configuration - basic config', async t => {
@@ -25,14 +25,14 @@ test('Configuration - basic config', async t => {
   let aws
 
   aws = await client({ accessKeyId, secretAccessKey, region })
-  t.equal(typeof aws, 'function', 'Client configurator returned client function with passed config')
-  t.equal(aws.config.region, region, 'Client uses the passed region')
-  t.equal(aws.config.profile, 'default', 'Client defaults to the, uh, default profile')
-  t.equal(aws.config.host, undefined, 'Client defaults to no host')
+  t.assert.strictEqual(typeof aws, 'function', 'Client configurator returned client function with passed config')
+  t.assert.strictEqual(aws.config.region, region, 'Client uses the passed region')
+  t.assert.strictEqual(aws.config.profile, 'default', 'Client defaults to the, uh, default profile')
+  t.assert.strictEqual(aws.config.host, undefined, 'Client defaults to no host')
 
   aws = await client({ accessKeyId, secretAccessKey, region, profile: profile1, host })
-  t.equal(aws.config.profile, profile1, 'Client uses the passed !default profile')
-  t.equal(aws.config.host, host, 'Client uses the passed host')
+  t.assert.strictEqual(aws.config.profile, profile1, 'Client uses the passed !default profile')
+  t.assert.strictEqual(aws.config.host, host, 'Client uses the passed host')
 
   process.env.AWS_ACCESS_KEY_ID = accessKeyId
   process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey
@@ -40,10 +40,10 @@ test('Configuration - basic config', async t => {
   process.env.AWS_PROFILE = profile1
   process.env.AWS_ENDPOINT_URL = host
   aws = await client()
-  t.equal(typeof aws, 'function', 'Client configurator returned client function without passed config')
-  t.equal(aws.config.region, region, 'Client uses the env var region')
-  t.equal(aws.config.profile, profile1, 'Client uses the env var !default profile')
-  t.equal(aws.config.host, host, 'Client uses the env var host')
+  t.assert.strictEqual(typeof aws, 'function', 'Client configurator returned client function without passed config')
+  t.assert.strictEqual(aws.config.region, region, 'Client uses the env var region')
+  t.assert.strictEqual(aws.config.profile, profile1, 'Client uses the env var !default profile')
+  t.assert.strictEqual(aws.config.host, host, 'Client uses the env var host')
   reset()
 
   try {
@@ -51,7 +51,7 @@ test('Configuration - basic config', async t => {
     await client()
   }
   catch (err) {
-    t.match(err.message, /Unable to find AWS credentials/, 'Client configurator throws without creds and region')
+    t.assert.match(err.message, /Unable to find AWS credentials/, 'Client configurator throws without creds and region')
     reset()
   }
 })
@@ -62,30 +62,30 @@ test('Configuration - plugin loading', async t => {
   let minConfig = { accessKeyId, secretAccessKey, region }
 
   aws = await client({ ...minConfig, plugins: [ import('@aws-lite/ssm') ] })
-  t.ok(aws.ssm, 'Client explicitly loaded ESM plugin with unresolved import')
+  t.assert.ok(aws.ssm, 'Client explicitly loaded ESM plugin with unresolved import')
 
   aws = await client({ ...minConfig, plugins: [ await import('@aws-lite/sqs') ] })
-  t.ok(aws.sqs, 'Client explicitly loaded ESM plugin with resolved import')
+  t.assert.ok(aws.sqs, 'Client explicitly loaded ESM plugin with resolved import')
 
   let cjsPluginPath = join(pluginDir, 'cjs')
   aws = await client({ ...minConfig, plugins: [ require(cjsPluginPath) ] })
-  t.ok(aws.lambda, 'Client explicitly loaded CJS plugin with require')
+  t.assert.ok(aws.lambda, 'Client explicitly loaded CJS plugin with require')
 
   let plugin = require(cjsPluginPath)
   aws = await client({ ...minConfig, plugins: [ plugin ] })
-  t.ok(aws.lambda, 'Client explicitly loaded CJS plugin object')
+  t.assert.ok(aws.lambda, 'Client explicitly loaded CJS plugin object')
 
   aws = await client({ ...minConfig, autoloadPlugins: true })
-  t.ok(aws.dynamodb, 'Client auto-loaded @aws-lite/dynamodb')
+  t.assert.ok(aws.dynamodb, 'Client auto-loaded @aws-lite/dynamodb')
 
   aws = await client({ ...minConfig })
-  t.notOk(aws.dynamodb, 'Client did not auto-load @aws-lite/dynamodb')
+  t.assert.ok(!aws.dynamodb, 'Client did not auto-load @aws-lite/dynamodb')
 
   let nodeModules = 'node_modules'
   tmp = mockTmp({ [nodeModules]: {} })
   process.chdir(tmp)
   aws = await client({ ...minConfig, autoloadPlugins: true })
-  t.notOk(aws.dynamodb, `Client did not auto-load @aws-lite/* plugins it can't find`)
+  t.assert.ok(!aws.dynamodb, `Client did not auto-load @aws-lite/* plugins it can't find`)
   process.chdir(cwd)
   mockTmp.reset()
 
@@ -93,7 +93,7 @@ test('Configuration - plugin loading', async t => {
   tmp = mockTmp({ hi: {} })
   process.chdir(tmp)
   aws = await client({ ...minConfig, autoloadPlugins: true })
-  t.notOk(aws.dynamodb, `Client did not auto-load @aws-lite/* plugins it can't find`)
+  t.assert.ok(!aws.dynamodb, `Client did not auto-load @aws-lite/* plugins it can't find`)
   process.chdir(cwd)
   mockTmp.reset()
 
@@ -105,19 +105,19 @@ test('Configuration - plugin loading', async t => {
     process.chdir(cwd)
   }
   catch (err) {
-    t.match(err.message, /Cannot find module 'aws-lite-plugin-hi'/, 'Found and aloaded aws-lite-plugin-*')
+    t.assert.match(err.message, /Cannot find module 'aws-lite-plugin-hi'/, 'Found and aloaded aws-lite-plugin-*')
   }
   process.chdir(cwd)
   mockTmp.reset()
 })
 
 test('Configuration - AWS-flavored JSON marshalling options', async t => {
-  // We could probably also test the unmarshalling options as well, but we haven't had any requests for that functionality
   t.plan(5)
+  // We could probably also test the unmarshalling options as well, but we haven't had any requests for that functionality
   let aws, req
 
   let started = await server.start()
-  t.ok(started, 'Started server')
+  t.assert.ok(started, 'Started server')
 
   server.use({
     responseHeaders: { 'content-type': 'application/json' },
@@ -145,10 +145,10 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
         },
       },
     })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
-    t.match(err.message, /removeUndefinedValues=true/, 'Errored because `removeUndefinedValues` was not set to `true`')
+    t.assert.match(err.message, /removeUndefinedValues=true/, 'Errored because `removeUndefinedValues` was not set to `true`')
   }
 
   try {
@@ -166,10 +166,10 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
         },
       },
     })
-    t.fail('Expected an error')
+    t.assert.fail('Expected an error')
   }
   catch (err) {
-    t.match(err.message, /convertClassInstanceToMap=true/, 'Errored because `convertClassInstanceToMap` was not set to `true`')
+    t.assert.match(err.message, /convertClassInstanceToMap=true/, 'Errored because `convertClassInstanceToMap` was not set to `true`')
   }
 
   aws = await client({
@@ -200,7 +200,7 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
       },
     })
     req = server.getCurrentRequest()
-    t.deepEqual(req.body, {
+    t.assert.deepStrictEqual(req.body, {
       TableName: 'foo',
       Item: {
         M: {
@@ -218,17 +218,17 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
   }
   catch (err) {
     console.log(err)
-    t.fail('Did not expect an error')
+    t.assert.fail('Did not expect an error')
   }
 
   await server.end()
-  t.pass('Server ended')
+  t.assert.ok(true, 'Server ended')
 })
 
 test('Configuration - per-request overrides', async t => {
   t.plan(7)
   let started = await server.start()
-  t.ok(started, 'Started server')
+  t.assert.ok(started, 'Started server')
 
   // Just add a bad host[name]!
   let badHost = 'some-host'
@@ -254,7 +254,7 @@ test('Configuration - per-request overrides', async t => {
   reset()
 
   await server.end()
-  t.pass('Server ended')
+  t.assert.ok(true, 'Server ended')
 })
 
 test('Configuration - endpoint, url, host', async t => {
@@ -262,7 +262,7 @@ test('Configuration - endpoint, url, host', async t => {
   let aws
   let basicConfig = { accessKeyId, secretAccessKey, region, service }
   let started = await server.start()
-  t.ok(started, 'Started server')
+  t.assert.ok(started, 'Started server')
 
   // Basic requests
   aws = await client({ ...basicConfig, endpoint: `http://localhost:${port}` })
@@ -283,14 +283,14 @@ test('Configuration - endpoint, url, host', async t => {
   basicRequestChecks(t, 'GET', { url: '/to/path' })
 
   await server.end()
-  t.pass('Server ended')
+  t.assert.ok(true, 'Server ended')
 })
 
 test('Configuration - path prefix', async t => {
   t.plan(22)
   let aws
   let started = await server.start()
-  t.ok(started, 'Started server')
+  t.assert.ok(started, 'Started server')
 
   let pathPrefix
   pathPrefix = 'foo'
@@ -314,7 +314,7 @@ test('Configuration - path prefix', async t => {
   basicRequestChecks(t, 'GET', { url: `/foo/bar${path}` })
 
   await server.end()
-  t.pass('Server ended')
+  t.assert.ok(true, 'Server ended')
 })
 
 test('Configuration - validation', async t => {
@@ -323,7 +323,7 @@ test('Configuration - validation', async t => {
     await client({ ...config, protocol: 'lolidk' })
   }
   catch (err) {
-    t.match(err.message, /Protocol must be/, 'Throw on bad protocol config')
+    t.assert.match(err.message, /Protocol must be/, 'Throw on bad protocol config')
     reset()
   }
 
@@ -331,7 +331,7 @@ test('Configuration - validation', async t => {
     await client({ ...config, plugins: { ok: true } })
   }
   catch (err) {
-    t.match(err.message, /Plugins must be an array/, 'Throw on invalid plugins config')
+    t.assert.match(err.message, /Plugins must be an array/, 'Throw on invalid plugins config')
     reset()
   }
 
@@ -344,7 +344,7 @@ test('Configuration - validation', async t => {
     })
   }
   catch (err) {
-    t.match(err.message, /AWS JSON marshall\/unmarshall options must be an object/, 'Throw on invalid AWS JSON marshall config')
+    t.assert.match(err.message, /AWS JSON marshall\/unmarshall options must be an object/, 'Throw on invalid AWS JSON marshall config')
     reset()
   }
 })
@@ -353,60 +353,60 @@ test('Configuration - service verification', async t => {
   t.plan(8)
   let aws
   let started = await server.start()
-  t.ok(started, 'Started server')
+  t.assert.ok(started, 'Started server')
 
   // Default behavior: verification enabled
   aws = await client(config)
   try {
     await aws({ service: 'not-a-service' })
-    t.fail('Should throw on unverified service name')
+    t.assert.fail('Should throw on unverified service name')
   }
   catch (err) {
-    t.match(err.message, /Invalid AWS service/, 'By default, throw on unverified service name')
+    t.assert.match(err.message, /Invalid AWS service/, 'By default, throw on unverified service name')
   }
   // Disable service verification at request time
   try {
     await aws({ verifyService: false, service: 'not-a-service' })
-    t.pass('Service verification disabled')
+    t.assert.ok(true, 'Service verification disabled')
   }
   catch (err) {
-    t.fail(err)
+    t.assert.fail(err)
   }
   // Service name still required
   try {
     await aws({ verifyService: false })
-    t.fail('Should throw on missing service name')
+    t.assert.fail('Should throw on missing service name')
   }
   catch (err) {
-    t.match(err.message, /No AWS service specified/, 'Throw on missing service name')
+    t.assert.match(err.message, /No AWS service specified/, 'Throw on missing service name')
   }
 
   // Disable verification at client
   aws = await client({ ...config, verifyService: false })
   try {
     await aws({ service: 'not-a-service' })
-    t.pass('Service verification disabled')
+    t.assert.ok(true, 'Service verification disabled')
   }
   catch (err) {
-    t.fail(err)
+    t.assert.fail(err)
   }
   // Request can enable service verification
   try {
     await aws({ verifyService: true, service: 'not-a-service' })
-    t.fail('Should throw on unverified service name')
+    t.assert.fail('Should throw on unverified service name')
   }
   catch (err) {
-    t.match(err.message, /Invalid AWS service/, 'Throw on unverified service name')
+    t.assert.match(err.message, /Invalid AWS service/, 'Throw on unverified service name')
   }
   // Service name still required
   try {
     await aws({ verifyService: true })
-    t.fail('Should throw on missing service name')
+    t.assert.fail('Should throw on missing service name')
   }
   catch (err) {
-    t.match(err.message, /No AWS service specified/, 'Throw on missing service name')
+    t.assert.match(err.message, /No AWS service specified/, 'Throw on missing service name')
   }
 
   await server.end()
-  t.pass('Server ended')
+  t.assert.ok(true, 'Server ended')
 })

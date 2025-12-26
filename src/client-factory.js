@@ -42,7 +42,7 @@ module.exports = async function clientFactory (config, creds, region) {
   client.config = { ...configuration, region }
   client.credentials = credentials
 
-  /* istanbul ignore next */
+  /* node:coverage disable */
   if (config.debug) {
     console.error('[aws-lite] Client instantiated with this config:', client.config)
     console.error('[aws-lite] Client instantiated with these creds:', {
@@ -51,13 +51,15 @@ module.exports = async function clientFactory (config, creds, region) {
       sessionToken: credentials.sessionToken ? '[found / redacted]' : undefined,
     })
   }
+  /* node:coverage enable */
 
   let { plugins } = config
   if (plugins.length) {
-    /* istanbul ignore next */
+    /* node:coverage disable */
     if (config.debug) {
       console.error('[aws-lite] Loading plugins', plugins.map(({ name, service }) => name || service), '\n')
     }
+    /* node:coverage enable */
     for (let plugin of plugins) {
       try {
         let { service, methods, property } = plugin
@@ -203,7 +205,6 @@ module.exports = async function clientFactory (config, creds, region) {
         }
       }
       catch (err) {
-        /* istanbul ignore next */
         let name = plugin.name ? `: ${plugin.name}` : ''
         console.error(`Plugin error${name}`)
         throw err
@@ -239,6 +240,20 @@ async function getMock (property, name, params, metadata) {
     let req = { ...item, request: params }
     testing.data.allRequests.push(req)
     testing.data[property][name].requests.push(req)
+
+    // TODO: add a test for stream cleanups when using mocks? without this section, s3 tests fail using node test runner as s3 PutObject w/ an unused ReadableStream is leaked
+    /* node:coverage disable */
+    // Destroy any stream payloads to prevent leaked file handles
+    if (params.payload?.on && params.payload?._read && params.payload?._readableState) {
+      // Destroy the stream and wait for it to complete cleanup
+      await new Promise((resolve) => {
+        params.payload.destroy()
+        // Wait for the stream to finish cleanup
+        params.payload.on('close', resolve)
+        params.payload.on('error', () => resolve()) // Resolve even on error
+      })
+    }
+    /* node:coverage enable */
 
     if (testing.data[property][name].mocks.length === 1) {
       response = testing.data[property][name].mocks[0]

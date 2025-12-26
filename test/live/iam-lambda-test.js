@@ -1,5 +1,5 @@
 let { join } = require('node:path')
-let test = require('tape')
+let test = require('node:test')
 let Zip = require('adm-zip')
 let cwd = process.cwd()
 let sut = join(cwd, 'src', 'index.js')
@@ -12,27 +12,29 @@ let p = path => process.platform.startsWith('win') ? 'file://' + path : path
 
 test('Set up env', async t => {
   t.plan(2)
-  t.ok(client, 'aws-lite client is present')
+  t.assert.ok(client, 'aws-lite client is present')
   let plugins = [
     import(p(join(__dirname, '_iam.mjs'))),
+    // TODO: is the following comment still relevant?
     import(p(join(cwd, 'plugins', 'lambda', 'src', 'index.mjs'))), // We should be able to retire this once we phase out 14.x CI runs
   ]
   aws = await client({ region, plugins })
-  t.ok(aws, 'Client ready')
+  t.assert.ok(aws, 'Client ready')
 })
 
 test('Get Lambda role', async t => {
   t.plan(2)
-
   let role
   let roleName = FunctionName + '-role'
 
   try {
     role = await aws.iam.GetRole({ name: roleName })
+    roleARN = role?.GetRoleResult?.Role?.Arn
   }
   catch { /* noop */ }
 
   if (!role) {
+    console.log('Creating test role')
     role = await aws.iam.CreateRole({
       name: roleName,
       desc: 'aws-lite test Lambda role: please do not delete!',
@@ -46,17 +48,17 @@ test('Get Lambda role', async t => {
       }),
       path: '/',
     })
+    roleARN = role?.CreateRoleResult?.Role?.Arn
     // Give it a few seconds for the role to be ready for a new Lambda
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+    // terraform does this too :/ https://github.com/hashicorp/terraform-provider-aws/blob/943230985fefc7b203eedaf6059e905279b27645/aws/resource_aws_lambda_function.go#L333-L353
+    await new Promise((resolve) => setTimeout(resolve, 10000))
   }
-  roleARN = role?.GetRoleResult?.Role?.Arn
-  t.ok(role, 'Got Lambda execution role')
-  t.equal(roleARN.split(':').length, 6, `Got role ARN: ${roleARN}`)
+  t.assert.ok(role, 'Got Lambda execution role')
+  t.assert.strictEqual(roleARN?.split(':').length, 6, `Got role ARN: ${roleARN}`)
 })
 
 test('Invoke Lambda', async t => {
   t.plan(3)
-
   async function getConfig (tryNum = 1) {
     let result = await aws.lambda.GetFunctionConfiguration({ FunctionName })
     if (result.State === 'Active') return result
@@ -76,7 +78,7 @@ test('Invoke Lambda', async t => {
   }
   catch (err) {
     if (err.statusCode !== 404) {
-      t.fail('Failed, cannot proceed with test')
+      t.assert.fail('Failed, cannot proceed with test')
       console.log(err)
       return
     }
@@ -106,12 +108,12 @@ test('Invoke Lambda', async t => {
     config = await getConfig()
   }
 
-  t.equal(config.FunctionName, FunctionName, 'Got back function config for test Lambda')
-  t.equal(config.State, 'Active', 'Test Lambda is active!')
+  t.assert.strictEqual(config.FunctionName, FunctionName, 'Got back function config for test Lambda')
+  t.assert.strictEqual(config.State, 'Active', 'Test Lambda is active!')
 
   let Payload = { hello: 'there' }
   let result = await aws.lambda.Invoke({ FunctionName, Payload })
   let expected = { ok: true, event: Payload }
   console.log(`Lambda invoke returned:`, result)
-  t.deepEqual(result.Payload, expected, 'Lambda invoked with correct payload')
+  t.assert.deepStrictEqual(result.Payload, expected, 'Lambda invoked with correct payload')
 })

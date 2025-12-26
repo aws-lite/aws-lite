@@ -3,7 +3,7 @@ import module from 'node:module'
 import { join } from 'node:path'
 import process from 'node:process'
 import mockTmp from 'mock-tmp'
-import test from 'tape'
+import test from 'node:test'
 
 let getPlugins
 let cwd = process.cwd()
@@ -15,12 +15,12 @@ test('Set up env',  async t => {
   t.plan(1)
   let sut = 'file://' + join(cwd, 'src', 'config', 'get-plugins.js')
   getPlugins = (await import(sut)).default
-  t.ok(getPlugins, 'getPlugins module is present')
+  t.assert.ok(getPlugins, 'getPlugins module is present')
 })
 
 test('Just return an empty array ', async t => {
   t.plan(1)
-  t.deepEqual(await getPlugins({}), [], 'Returned empty array')
+  t.assert.deepStrictEqual(await getPlugins({}), [], 'Returned empty array')
 })
 
 test('Load plugins array', async t => {
@@ -28,18 +28,18 @@ test('Load plugins array', async t => {
   let plugins
 
   plugins = await getPlugins({ plugins: [ import('@aws-lite/dynamodb') ] })
-  t.equal(plugins[0].service, 'dynamodb', 'Client explicitly loaded ESM plugin with unresolved import')
+  t.assert.strictEqual(plugins[0].service, 'dynamodb', 'Client explicitly loaded ESM plugin with unresolved import')
 
   plugins = await getPlugins({ plugins: [ await import('@aws-lite/lambda') ] })
-  t.equal(plugins[0].service, 'lambda', 'Client explicitly loaded ESM plugin with resolved import')
+  t.assert.strictEqual(plugins[0].service, 'lambda', 'Client explicitly loaded ESM plugin with resolved import')
 
   let cjsPluginPath = join(pluginDir, 'cjs')
   plugins = await getPlugins({ plugins: [ require(cjsPluginPath) ] })
-  t.equal(plugins[0].service, 'lambda', 'Client explicitly loaded CJS plugin with require')
+  t.assert.strictEqual(plugins[0].service, 'lambda', 'Client explicitly loaded CJS plugin with require')
 
   let plugin = require(cjsPluginPath)
   plugins = await getPlugins({ plugins: [ plugin ] })
-  t.equal(plugins[0].service, 'lambda', 'Client explicitly loaded CJS plugin object')
+  t.assert.strictEqual(plugins[0].service, 'lambda', 'Client explicitly loaded CJS plugin object')
 })
 
 test('Autoload plugins from process node_modules', async t => {
@@ -52,10 +52,10 @@ test('Autoload plugins from process node_modules', async t => {
 
   // Since the process node_modules dir should be npm linked to all our plugins, the loaded plugin list should match the package.json workspace property
   let plugins = await getPlugins({ autoloadPlugins: true })
-  t.equal(plugins.length, expected.length, 'Loaded the correct number of plugins')
+  t.assert.strictEqual(plugins.length, expected.length, 'Loaded the correct number of plugins')
 
   let loadedAll = expected.every(svc => plugins.find(({ name }) => svc === tidy(name)))
-  t.ok(loadedAll, 'Loaded plugins from process node_modules')
+  t.assert.ok(loadedAll, 'Loaded plugins from process node_modules')
 })
 
 // TODO: figure out a solid way to test the relative node_modules dir scan path via `require.resolve('@aws-lite/client')` (which is known to fail on tests against itself)
@@ -74,8 +74,8 @@ test('Autoload plugins from project package.json', async t => {
   process.chdir(tmp)
 
   let plugins = await getPlugins({ autoloadPlugins: true })
-  t.equal(plugins.length, 1, 'Loaded the correct number of plugins')
-  t.equal(plugins[0].name, '@aws-lite/dynamodb', 'Loaded plugin from project package.json')
+  t.assert.strictEqual(plugins.length, 1, 'Loaded the correct number of plugins')
+  t.assert.strictEqual(plugins[0].name, '@aws-lite/dynamodb', 'Loaded plugin from project package.json')
 
   process.chdir(cwd)
   mockTmp.reset()
@@ -88,13 +88,13 @@ test('Validate params', async t => {
     await getPlugins({ plugins: false })
   }
   catch (err) {
-    t.match(err.message, /Plugins must be an array/, 'Threw on invalid plugins param')
+    t.assert.match(err.message, /Plugins must be an array/, 'Threw on invalid plugins param')
   }
 
   try {
     await getPlugins({ plugins: [ '@aws-lite/dynamodb' ] })
   }
   catch (err) {
-    t.match(err.message, /Plugins must be an imported \/ required module or an import statement/, 'Threw on invalid plugin')
+    t.assert.match(err.message, /Plugins must be an imported \/ required module or an import statement/, 'Threw on invalid plugin')
   }
 })
