@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import process from 'node:process'
-import test from 'node:test'
+import { after, before, test } from 'node:test'
 import mockTmp from 'mock-tmp'
 import { defaults, overrideHomedir, resetAWSEnvVars, server } from '../../../lib/index.mjs'
 
@@ -18,10 +18,13 @@ let awsIniMock = join(mock, '.aws')
 let awsSSOMock = join(mock, 'sso')
 let credentialsMock = join(awsIniMock, 'credentials')
 
-test('Set up env', async t => {
+before(async () => {
   let sut = 'file://' + join(cwd, 'src', 'config', 'get-creds.js')
   getCreds = (await import(sut)).default
-  t.assert.ok(getCreds, 'getCreds module is present')
+})
+
+after(() => {
+  overrideHomedir.reset()
 })
 
 test('Get credentials from passed params', async t => {
@@ -81,7 +84,7 @@ test('Get credentials from SSO', async t => {
   let homedir, result, request
   let ssoPath = '.aws/sso/cache/1d4488e85b2549abce77758ec396e9e37332312b.json'
 
-  let started = await server.start()
+  let started = server.start()
   t.assert.ok(started, 'Started server')
 
   let roleCredentials = {
@@ -365,9 +368,4 @@ test('Validate credentials', async t => {
     t.assert.match(err.message, /Unable to find AWS credentials/, 'Threw on no available credentials')
   }
   resetAWSEnvVars()
-})
-
-test('Tear down', t => {
-  overrideHomedir.reset()
-  t.assert.ok(true, 'Tear down complete')
 })
