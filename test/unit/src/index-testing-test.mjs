@@ -23,6 +23,7 @@ let mockErr = {
 }
 
 test('Set up env', async t => {
+  t.plan(1)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
@@ -30,6 +31,7 @@ test('Set up env', async t => {
 })
 
 test('Testing - activation / deactivation', async t => {
+  t.plan(6)
   let enabled, state
 
   state = client.testing.debug()
@@ -51,6 +53,7 @@ test('Testing - activation / deactivation', async t => {
 })
 
 test('Testing - credentials', async t => {
+  t.plan(2)
 
   client.testing.enable()
   let aws
@@ -65,6 +68,7 @@ test('Testing - credentials', async t => {
 // TODO: test resetting via enable/disable?
 
 test('Testing - main client', async t => {
+  t.plan(15)
   client.testing.enable()
   let aws = await client(config)
 
@@ -121,6 +125,7 @@ test('Testing - main client', async t => {
 })
 
 test('Testing - plugins (not checking response method output)', async t => {
+  t.plan(19)
   client.testing.enable()
 
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
@@ -187,6 +192,7 @@ test('Testing - plugins (not checking response method output)', async t => {
 })
 
 test('Testing - plugins (response method output)', async t => {
+  t.plan(18)
   client.testing.enable({ usePluginResponseMethod: true })
 
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
@@ -260,6 +266,7 @@ test('Testing - plugins (response method output)', async t => {
 })
 
 test('Testing - request / response sequences', async t => {
+  t.plan(15)
   let allRes, lastReq, lastRes, reqParams
   client.testing.enable()
 
@@ -329,6 +336,7 @@ test('Testing - request / response sequences', async t => {
 })
 
 test('Testing - dynamic responses', async t => {
+  t.plan(9)
   client.testing.enable()
 
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })
@@ -368,6 +376,7 @@ test('Testing - dynamic responses', async t => {
 })
 
 test('Testing - multiple services', async t => {
+  t.plan(14)
   let allRes, lastReq, lastRes, reqParams
   client.testing.enable()
 
@@ -443,6 +452,7 @@ test('Testing - multiple services', async t => {
 })
 
 test('Testing - mock errors', async t => {
+  t.plan(4)
   client.testing.enable()
 
   let aws = await client({ ...config, plugins: [ import('@aws-lite/dynamodb') ] })

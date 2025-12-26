@@ -19,6 +19,7 @@ function reset () {
 }
 
 test('Set up env', async t => {
+  t.plan(4)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'lib', 'index.js')
   let lib = await import(sut)
@@ -33,6 +34,7 @@ test('Set up env', async t => {
 })
 
 test('loadAwsConfig', async t => {
+  t.plan(15)
   let result
   let homedir = mockTmp({ '.aws': mockTmp.copy(awsIniMock) })
   overrideHomedir(homedir)
@@ -90,6 +92,7 @@ test('loadAwsConfig', async t => {
 })
 
 test('readIni', async t => {
+  t.plan(17)
   let config
 
   config = await readIni(join(awsIniMock, 'credentials'))
@@ -125,6 +128,7 @@ test('readIni', async t => {
 })
 
 test('useAWS', t => {
+  t.plan(4)
   let result
 
   result = useAWS()
@@ -151,6 +155,7 @@ test('useAWS', t => {
 })
 
 test('tidyQuery', t => {
+  t.plan(6)
   let result
 
   result = tidyQuery({ ok: 'hi', hello: 'there' })
@@ -173,6 +178,7 @@ test('tidyQuery', t => {
 })
 
 test('Tear down', t => {
+  t.plan(1)
   overrideHomedir.reset()
   t.assert.ok(true, 'Tear down complete')
 })

@@ -11,6 +11,7 @@ const copy = i => JSON.parse(JSON.stringify(i))
 let xmlBefore, docBefore, jsObj, docAfter, xmlAfter
 
 test('Set up env', async t => {
+  t.plan(1)
   const rawXml = await readFile(join(__dirname, 'mock.xml'))
   xmlBefore = rawXml.toString()
     .replace(/^[ ]*/gm, '') // Strip spaces
@@ -20,6 +21,7 @@ test('Set up env', async t => {
 })
 
 test('Transform XML', async t => {
+  t.plan(1)
   jsObj = arrayifyObject(copy(docBefore))
   const same = {
     CacheBehaviors: {
@@ -57,6 +59,7 @@ test('Transform XML', async t => {
 })
 
 test('Untransform XML', async t => {
+  t.plan(2)
   docAfter = unarrayifyObject(copy(jsObj))
   t.assert.deepStrictEqual(docBefore, docAfter, 'Correctly transformed deeply nested XML `Items` arrays to a sane JS format')
 

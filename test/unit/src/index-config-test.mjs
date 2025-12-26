@@ -14,12 +14,14 @@ let pluginDir = join(mock, 'plugins')
 let require = module.createRequire(import.meta.url)
 
 test('Set up env', async t => {
+  t.plan(1)
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
   t.assert.ok(client, 'aws-lite client is present')
 })
 
 test('Configuration - basic config', async t => {
+  t.plan(11)
   let aws
 
   aws = await client({ accessKeyId, secretAccessKey, region })
@@ -55,6 +57,7 @@ test('Configuration - basic config', async t => {
 })
 
 test('Configuration - plugin loading', async t => {
+  t.plan(9)
   let aws, tmp
   let minConfig = { accessKeyId, secretAccessKey, region }
 
@@ -109,6 +112,7 @@ test('Configuration - plugin loading', async t => {
 })
 
 test('Configuration - AWS-flavored JSON marshalling options', async t => {
+  t.plan(5)
   // We could probably also test the unmarshalling options as well, but we haven't had any requests for that functionality
   let aws, req
 
@@ -222,6 +226,7 @@ test('Configuration - AWS-flavored JSON marshalling options', async t => {
 })
 
 test('Configuration - per-request overrides', async t => {
+  t.plan(7)
   let started = await server.start()
   t.assert.ok(started, 'Started server')
 
@@ -253,6 +258,7 @@ test('Configuration - per-request overrides', async t => {
 })
 
 test('Configuration - endpoint, url, host', async t => {
+  t.plan(22)
   let aws
   let basicConfig = { accessKeyId, secretAccessKey, region, service }
   let started = await server.start()
@@ -281,6 +287,7 @@ test('Configuration - endpoint, url, host', async t => {
 })
 
 test('Configuration - path prefix', async t => {
+  t.plan(22)
   let aws
   let started = await server.start()
   t.assert.ok(started, 'Started server')
@@ -311,6 +318,7 @@ test('Configuration - path prefix', async t => {
 })
 
 test('Configuration - validation', async t => {
+  t.plan(3)
   try {
     await client({ ...config, protocol: 'lolidk' })
   }
@@ -342,6 +350,7 @@ test('Configuration - validation', async t => {
 })
 
 test('Configuration - service verification', async t => {
+  t.plan(8)
   let aws
   let started = await server.start()
   t.assert.ok(started, 'Started server')

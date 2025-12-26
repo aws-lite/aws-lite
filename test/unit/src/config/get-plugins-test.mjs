@@ -12,16 +12,19 @@ let mock = join(cwd, 'test', 'mock')
 let pluginDir = join(mock, 'plugins')
 
 test('Set up env',  async t => {
+  t.plan(1)
   let sut = 'file://' + join(cwd, 'src', 'config', 'get-plugins.js')
   getPlugins = (await import(sut)).default
   t.assert.ok(getPlugins, 'getPlugins module is present')
 })
 
 test('Just return an empty array ', async t => {
+  t.plan(1)
   t.assert.deepStrictEqual(await getPlugins({}), [], 'Returned empty array')
 })
 
 test('Load plugins array', async t => {
+  t.plan(4)
   let plugins
 
   plugins = await getPlugins({ plugins: [ import('@aws-lite/dynamodb') ] })
@@ -40,6 +43,7 @@ test('Load plugins array', async t => {
 })
 
 test('Autoload plugins from process node_modules', async t => {
+  t.plan(2)
   let tidy = p => !p.includes('/types') && p.split('/')[1]
 
   let packageJsonFile = join(cwd, 'package.json')
@@ -57,6 +61,7 @@ test('Autoload plugins from process node_modules', async t => {
 // TODO: figure out a solid way to test the relative node_modules dir scan path via `require.resolve('@aws-lite/client')` (which is known to fail on tests against itself)
 
 test('Autoload plugins from project package.json', async t => {
+  t.plan(2)
   let tmp = mockTmp({
     'package.json': JSON.stringify({
       dependencies: {
@@ -77,6 +82,7 @@ test('Autoload plugins from project package.json', async t => {
 })
 
 test('Validate params', async t => {
+  t.plan(2)
 
   try {
     await getPlugins({ plugins: false })

@@ -20,6 +20,7 @@ let okXml = {
 }
 
 test('Set up env', async t => {
+  t.plan(2)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
@@ -35,6 +36,7 @@ test('Set up env', async t => {
 })
 
 test('List zero buckets - first time', async t => {
+  t.plan(1)
 
   let rawXml = `<?xml version="1.0" encoding="UTF-8"?>
 <ListAllMyBucketsResult xmlns="http://doc.s3.amazonaws.com/2006-03-01/"><Owner><ID>123456789000</ID><DisplayName>Mock</DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult>`
@@ -46,6 +48,7 @@ test('List zero buckets - first time', async t => {
 })
 
 test('Create bucket', async t => {
+  t.plan(1)
   let location = `/${bucketName}`
   client.testing.mock('S3.CreateBucket', { statusCode: 200, headers: { location } })
   let createBucketResponse = await aws.S3.CreateBucket({
@@ -58,12 +61,14 @@ test('Create bucket', async t => {
 })
 
 test('Head bucket', async t => {
+  t.plan(1)
   client.testing.mock('S3.HeadBucket', { statusCode: 200 })
   let headBucketResponse = await aws.S3.HeadBucket({ Bucket: bucketName })
   t.assert.ok(headBucketResponse, `Head bucket ${bucketName}`)
 })
 
 test('List one bucket', async t => {
+  t.plan(2)
 
   let rawXml = `<?xml version="1.0" encoding="UTF-8"?>
 <ListAllMyBucketsResult xmlns="http://doc.s3.amazonaws.com/2006-03-01/"><Owner><ID>123456789000</ID><DisplayName>bucket1</DisplayName></Owner><Buckets><Bucket><Name>bucket1</Name><CreationDate>2024-02-24T02:58:41.066Z</CreationDate></Bucket></Buckets></ListAllMyBucketsResult>'`
@@ -76,6 +81,7 @@ test('List one bucket', async t => {
 })
 
 test('List objects - empty bucket', async t => {
+  t.plan(2)
 
   let rawXml = `<?xml version="1.0" encoding="UTF-8"?>
 <ListBucketResult xmlns="http://doc.s3.amazonaws.com/2006-03-01/"><Name>bucket1</Name><Prefix></Prefix><KeyCount>0</KeyCount><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated></ListBucketResult>`
@@ -88,6 +94,7 @@ test('List objects - empty bucket', async t => {
 })
 
 test('Put first object (from file)', async t => {
+  t.plan(1)
   client.testing.mock('S3.PutObject', { statusCode: 200 })
   let putObjectResponse = await aws.S3.PutObject({
     Bucket: bucketName,
@@ -99,6 +106,7 @@ test('Put first object (from file)', async t => {
 })
 
 test('List objects - single object', async t => {
+  t.plan(3)
 
   let rawXml = `<?xml version="1.0" encoding="UTF-8"?>
 <ListBucketResult xmlns="http://doc.s3.amazonaws.com/2006-03-01/"><Name>bucket1</Name><Prefix></Prefix><KeyCount>1</KeyCount><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>object1.txt</Key><LastModified>2024-02-24T03:05:06.000Z</LastModified><ETag>&quot;65a8e27d8879283831b664bd8b7f0ad4&quot;</ETag><Size>13</Size><StorageClass>STANDARD</StorageClass></Contents></ListBucketResult>`
@@ -112,6 +120,7 @@ test('List objects - single object', async t => {
 })
 
 test('Head first object', async t => {
+  t.plan(3)
   client.testing.mock('S3.HeadObject', {
     statusCode: 200,
     headers: {
@@ -127,6 +136,7 @@ test('Head first object', async t => {
 })
 
 test('Get first object', async t => {
+  t.plan(4)
   client.testing.mock('S3.GetObject', {
     statusCode: 200,
     headers: {
@@ -144,6 +154,7 @@ test('Get first object', async t => {
 })
 
 test('Put second object (from string)', async t => {
+  t.plan(1)
   client.testing.mock('S3.PutObject', { statusCode: 200 })
   let putObjectResponse = await aws.S3.PutObject({
     Bucket: bucketName,
@@ -155,6 +166,7 @@ test('Put second object (from string)', async t => {
 })
 
 test('Head second object', async t => {
+  t.plan(3)
   client.testing.mock('S3.HeadObject', {
     statusCode: 200,
     headers: {
@@ -170,6 +182,7 @@ test('Head second object', async t => {
 })
 
 test('Get second object', async t => {
+  t.plan(8)
 
   // Get as parsed payload
   client.testing.mock('S3.GetObject', {
@@ -205,6 +218,7 @@ test('Get second object', async t => {
 })
 
 test('List objects - two objects', async t => {
+  t.plan(4)
 
   let rawXml = `<?xml version="1.0" encoding="UTF-8"?>
 <ListBucketResult xmlns="http://doc.s3.amazonaws.com/2006-03-01/"><Name>bucket1</Name><Prefix></Prefix><KeyCount>2</KeyCount><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>object1.txt</Key><LastModified>2024-02-24T03:17:14.000Z</LastModified><ETag>&quot;65a8e27d8879283831b664bd8b7f0ad4&quot;</ETag><Size>13</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>object2.json</Key><LastModified>2024-02-24T03:17:14.000Z</LastModified><ETag>&quot;c34d278a648248d8b1e84e1f8e6fa511&quot;</ETag><Size>22</Size><StorageClass>STANDARD</StorageClass></Contents></ListBucketResult>`
@@ -219,6 +233,7 @@ test('List objects - two objects', async t => {
 })
 
 test('Delete first object', async t => {
+  t.plan(1)
   client.testing.mock('S3.DeleteObject', { statusCode: 204 })
   let deleteObjectResponse = await aws.S3.DeleteObject({
     Bucket: bucketName,
@@ -228,6 +243,7 @@ test('Delete first object', async t => {
 })
 
 test('Delete second object', async t => {
+  t.plan(1)
 
   let rawXml = `<?xml version="1.0" encoding="UTF-8"?>
   <DeleteResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Deleted><Key>object2.json</Key></Deleted></DeleteResult>`
@@ -242,6 +258,7 @@ test('Delete second object', async t => {
 })
 
 test('Delete bucket', async t => {
+  t.plan(1)
   client.testing.mock('S3.DeleteBucket', { statusCode: 204 })
   let deleteBucketResponse = await aws.S3.DeleteBucket({
     Bucket: bucketName,
@@ -250,6 +267,7 @@ test('Delete bucket', async t => {
 })
 
 test('List zero buckets - second time', async t => {
+  t.plan(1)
 
   let rawXml = `<?xml version="1.0" encoding="UTF-8"?>
 <ListAllMyBucketsResult xmlns="http://doc.s3.amazonaws.com/2006-03-01/"><Owner><ID>123456789000</ID><DisplayName>S3rver</DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult>`
@@ -261,6 +279,7 @@ test('List zero buckets - second time', async t => {
 })
 
 test('Tear down env', async t => {
+  t.plan(1)
   client.testing.disable()
   mockTmp.reset()
   t.assert.ok(true, `mockTmp removed`)

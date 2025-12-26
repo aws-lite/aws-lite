@@ -19,6 +19,7 @@ let __filename = url.fileURLToPath(import.meta.url).replace(/\\/g, '/')
  */
 
 test('Set up env', async t => {
+  t.plan(2)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
@@ -28,6 +29,7 @@ test('Set up env', async t => {
 })
 
 test('Primary client - core functionality', async t => {
+  t.plan(66)
   let request, result, payload, query, responseBody, url
   let aws = await client(config)
 
@@ -161,6 +163,7 @@ test('Primary client - core functionality', async t => {
 })
 
 test('Primary client - aliased params', async t => {
+  t.plan(7)
   let request
   let aws = await client(config)
 
@@ -203,6 +206,7 @@ test('Primary client - aliased params', async t => {
 })
 
 test('Primary client - AWS JSON payloads', async t => {
+  t.plan(29)
   let request, result, body
   let headers = { 'content-type': 'application/x-amz-json-1.0' }
   let responseBody = { aws: { S: 'idk' } } // Raw response object should be AWS JSON
@@ -258,6 +262,7 @@ test('Primary client - AWS JSON payloads', async t => {
 })
 
 test('Primary client - XML payloads', async t => {
+  t.plan(24)
   let request, result, payload, responseBody
   let aws = await client(config)
 
@@ -332,6 +337,7 @@ test('Primary client - XML payloads', async t => {
 })
 
 test('Primary client - raw response payloads', async t => {
+  t.plan(12)
   let result, responseBody
   let aws = await client(config)
 
@@ -353,6 +359,7 @@ test('Primary client - raw response payloads', async t => {
 })
 
 test('Primary client - error handling', async t => {
+  t.plan(35)
   let responseStatusCode, responseBody
 
   // Normal error
@@ -482,6 +489,7 @@ test('Primary client - error handling', async t => {
 })
 
 test('Primary client - validation', async t => {
+  t.plan(3)
   try {
     let aws = await client(config)
     await aws()
@@ -511,6 +519,7 @@ test('Primary client - validation', async t => {
 })
 
 test('Primary client - misc', async t => {
+  t.plan(4)
   let request
   let aws = await client(config)
 
@@ -533,6 +542,7 @@ test('Primary client - misc', async t => {
 })
 
 test('Tear down env', async t => {
+  t.plan(1)
   await server.end()
   t.assert.ok(true, 'Server ended')
 })

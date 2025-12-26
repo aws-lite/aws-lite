@@ -58,6 +58,7 @@ const nestedResponseBodies = [
 ]
 
 test('Set up env', async t => {
+  t.plan(2)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
@@ -74,6 +75,7 @@ test('Async iterator - raw client', async t => {
   let page, response, request, expectedCursor, expectedPayload, expectedUrl
 
   await t.test('Query cursor', async t => {
+    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -114,6 +116,7 @@ test('Async iterator - raw client', async t => {
   })
 
   await t.test('Query cursor - nested', async t => {
+    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -154,6 +157,7 @@ test('Async iterator - raw client', async t => {
   })
 
   await t.test('Payload cursor', async t => {
+    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -194,6 +198,7 @@ test('Async iterator - raw client', async t => {
   })
 
   await t.test('Payload cursor - nested', async t => {
+    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -234,6 +239,7 @@ test('Async iterator - raw client', async t => {
   })
 
   await t.test('Headers cursor', async t => {
+    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -274,6 +280,7 @@ test('Async iterator - raw client', async t => {
   })
 
   await t.test('Headers cursor - nested', async t => {
+    t.plan(7)
 
     // Returns async iterator
     response = await aws({
@@ -315,6 +322,7 @@ test('Async iterator - raw client', async t => {
 })
 
 test('Async iterator - plugin', async t => {
+  t.plan(7)
   const paginate = 'iterator'
   let aws = await client({
     ...config,
@@ -419,6 +427,7 @@ test('Default paginator - raw client', async t => {
   ]
 
   await t.test('Query cursor', async t => {
+    t.plan(4)
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -444,6 +453,7 @@ test('Default paginator - raw client', async t => {
   })
 
   await t.test('Query cursor - nested', async t => {
+    t.plan(4)
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -469,6 +479,7 @@ test('Default paginator - raw client', async t => {
   })
 
   await t.test('Payload cursor', async t => {
+    t.plan(4)
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -494,6 +505,7 @@ test('Default paginator - raw client', async t => {
   })
 
   await t.test('Payload cursor - nested', async t => {
+    t.plan(4)
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -519,6 +531,7 @@ test('Default paginator - raw client', async t => {
   })
 
   await t.test('Headers cursor', async t => {
+    t.plan(4)
     responseIterator = simpleResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -544,6 +557,7 @@ test('Default paginator - raw client', async t => {
   })
 
   await t.test('Headers cursor - nested', async t => {
+    t.plan(4)
     responseIterator = nestedResponses.entries()
     server.use({ accumulateRequests, responseIterator })
     response = await aws({
@@ -570,6 +584,7 @@ test('Default paginator - raw client', async t => {
 })
 
 test('Default paginator - plugin', async t => {
+  t.plan(5)
   const paginate = true
   let aws = await client({
     ...config,
@@ -629,6 +644,7 @@ test('Default paginator - plugin', async t => {
 })
 
 test('Error handling', async t => {
+  t.plan(11)
   let aws = await client({
     ...config,
     plugins: [ import(p(join(pluginDir, 'paginated.js'))) ],
@@ -813,6 +829,7 @@ test('Error handling', async t => {
 })
 
 test('Misc', async t => {
+  t.plan(1)
   let aws = await client({
     ...config,
     plugins: [ import(p(join(pluginDir, 'paginated.js'))) ],
@@ -843,6 +860,7 @@ test('Misc', async t => {
 })
 
 test('Tear down env', async t => {
+  t.plan(1)
   await server.end()
   t.assert.ok(true, 'Server ended')
 })

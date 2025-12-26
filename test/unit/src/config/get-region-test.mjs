@@ -16,18 +16,21 @@ let num = 1
 let configMock = join(mock, '.aws', 'config')
 
 test('Set up env', async t => {
+  t.plan(1)
   let sut = 'file://' + join(cwd, 'src', 'config', 'get-region.js')
   getRegion = (await import(sut)).default
   t.assert.ok(getRegion, 'getRegion module is present')
 })
 
 test('Get region from passed params', async t => {
+  t.plan(1)
   let region = east1
   let result = await getRegion({ config: { region } })
   t.assert.strictEqual(result, region, 'Returned correct region from passed params')
 })
 
 test('Get region from env vars', async t => {
+  t.plan(3)
   resetAWSEnvVars()
   let result
 
@@ -48,6 +51,7 @@ test('Get region from env vars', async t => {
 })
 
 test('Get region from config file', async t => {
+  t.plan(6)
   resetAWSEnvVars()
   let result
   let profile1 = 'profile_1'
@@ -90,12 +94,14 @@ test('Get region from config file', async t => {
 })
 
 test('Allow !aws regions when specifying a custom host', async t => {
+  t.plan(1)
   let region = 'nonstandard-region'
   let result = await getRegion({ config: { host: 'idk', region } })
   t.assert.strictEqual(result, region, 'Returned correct region from passed params')
 })
 
 test('Validate config', async t => {
+  t.plan(5)
   resetAWSEnvVars()
 
   try {
@@ -142,6 +148,7 @@ test('Validate config', async t => {
 })
 
 test('Tear down', t => {
+  t.plan(1)
   overrideHomedir.reset()
   t.assert.ok(true, 'Tear down complete')
 })

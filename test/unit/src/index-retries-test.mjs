@@ -26,6 +26,7 @@ function reset () {
 }
 
 test('Set up env', async t => {
+  t.plan(2)
   let cwd = process.cwd()
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
@@ -52,6 +53,7 @@ test('Set up env', async t => {
 })
 
 test('Retries', async t => {
+  t.plan(9)
   let aws, retries, result
 
   /**
@@ -180,6 +182,7 @@ test('Retries', async t => {
 })
 
 test('Retries - validation', async t => {
+  t.plan(1)
   let aws
 
   aws = await client({ ...config, retries: 'nah' })
@@ -193,9 +196,11 @@ test('Retries - validation', async t => {
   }
 })
 
-test('Tear down env', t => {
-  retryServer.close(err => {
-    if (err) t.assert.fail(err)
-    else t.assert.ok(true, 'Server ended')
+test('Tear down env', async () => {
+  await new Promise((res, rej) => {
+    retryServer.close(err => {
+      if (err) rej(err)
+      else res()
+    })
   })
 })

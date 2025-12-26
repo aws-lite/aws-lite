@@ -19,12 +19,14 @@ let pathPrefix = '/foo-bar'
 let protocol = https // https is the sensible default!
 
 test('Set up env', async t => {
+  t.plan(1)
   let sut = 'file://' + join(cwd, 'src', 'config', 'get-endpoint.js')
   getEndpoint = (await import(sut)).default
   t.assert.ok(getEndpoint, 'getEndpoint module is present')
 })
 
 test('Get endpoint params from passed config', async t => {
+  t.plan(5)
   resetAWSEnvVars()
   let result
 
@@ -48,6 +50,7 @@ test('Get endpoint params from passed config', async t => {
 })
 
 test('Get endpoint params from env vars', async t => {
+  t.plan(2)
   resetAWSEnvVars()
   let result
 
@@ -64,6 +67,7 @@ test('Get endpoint params from env vars', async t => {
 })
 
 test('Get endpoint params from config file', async t => {
+  t.plan(5)
   resetAWSEnvVars()
   let result
   let profile1 = 'profile_1'
@@ -98,6 +102,7 @@ test('Get endpoint params from config file', async t => {
 })
 
 test('Host not found (and that is ok)', async t => {
+  t.plan(2)
   let result
 
   result = await getEndpoint({ config: { awsConfigFile: configMock, profile } })
@@ -108,6 +113,7 @@ test('Host not found (and that is ok)', async t => {
 })
 
 test('Parse URLs into properties', async t => {
+  t.plan(18)
   let result, url
 
   // http://localhost
@@ -169,6 +175,7 @@ test('Parse URLs into properties', async t => {
 })
 
 test('Other cases', async t => {
+  t.plan(9)
   let result
   let pathPrefix = '/foo'
 
@@ -203,6 +210,7 @@ test('Other cases', async t => {
 })
 
 test('Tear down', t => {
+  t.plan(1)
   overrideHomedir.reset()
   t.assert.ok(true, 'Tear down complete')
 })

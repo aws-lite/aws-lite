@@ -90,6 +90,7 @@ const expecting = {
 }
 
 test('Convert data into query params object', t => {
+  t.plan(1)
   const result = querystringifyParams(params)
   t.assert.deepStrictEqual(result, expecting, 'Converted data into CloudFormation query params object')
 })

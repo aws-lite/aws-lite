@@ -28,6 +28,7 @@ after(() => {
 })
 
 test('Get credentials from passed params', async t => {
+  t.plan(4)
   resetAWSEnvVars()
   let passed, result
 
@@ -56,6 +57,7 @@ test('Get credentials from passed params', async t => {
 })
 
 test('Get credentials from env vars', async t => {
+  t.plan(3)
   resetAWSEnvVars()
   let passed, result
 
@@ -81,6 +83,7 @@ test('Get credentials from env vars', async t => {
 })
 
 test('Get credentials from SSO', async t => {
+  t.plan(18)
   let homedir, result, request
   let ssoPath = '.aws/sso/cache/1d4488e85b2549abce77758ec396e9e37332312b.json'
 
@@ -245,6 +248,7 @@ test('Get credentials from SSO', async t => {
 })
 
 test('Get credentials from config / credentials file', async t => {
+  t.plan(5)
   resetAWSEnvVars()
   let result
   let profile1 = 'profile_1'
@@ -305,6 +309,7 @@ test('Get credentials from config / credentials file', async t => {
 })
 
 test('Validate credentials', async t => {
+  t.plan(8)
   resetAWSEnvVars()
 
   try {

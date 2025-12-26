@@ -7,6 +7,7 @@ let validTypes = [ 'array', 'boolean', 'buffer', 'number', 'object', 'stream', '
 let plugins
 
 test('Set up env', async t => {
+  t.plan(1)
   plugins = (await import('file://' + join(cwd, 'plugins.mjs'))).default
   t.assert.ok(plugins.length, `Loaded ${plugins.length} \`@aws-lite/*\` plugins`)
 })

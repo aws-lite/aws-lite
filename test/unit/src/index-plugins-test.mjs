@@ -16,6 +16,7 @@ let __filename = url.fileURLToPath(import.meta.url).replace(/\\/g, '/')
 let require = module.createRequire(import.meta.url)
 
 test('Set up env', async t => {
+  t.plan(2)
   let sut = 'file://' + join(cwd, 'src', 'index.js')
   client = (await import(sut)).default
   t.assert.ok(client, 'aws-lite client is present')
@@ -24,6 +25,7 @@ test('Set up env', async t => {
 })
 
 test('Plugins - validate input', async t => {
+  t.plan(25)
   let str = 'hi'
   let num = 123
 
@@ -185,6 +187,7 @@ test('Plugins - validate input', async t => {
 })
 
 test('Plugins - validate service', async t => {
+  t.plan(2)
   let plugin = import(p(join(pluginDir, 'misc', 'unverified-service.js')))
   try {
     await client({ ...config, plugins: [ plugin ] })
@@ -205,6 +208,7 @@ test('Plugins - validate service', async t => {
 })
 
 test('Plugins - method construction, request()', async t => {
+  t.plan(28)
   let name = 'my-lambda'
   let aws, expectedPath, request
 
@@ -249,6 +253,7 @@ test('Plugins - method construction, request()', async t => {
 })
 
 test('Plugins - response()', async t => {
+  t.plan(83)
   let aws, payload, response, responseBody, responseHeaders
 
   aws = await client({ ...config, host, port, plugins: [ import(p(join(pluginDir, 'response.js'))) ] })
@@ -342,6 +347,7 @@ test('Plugins - response()', async t => {
 })
 
 test('Plugins - error(), error handling', async t => {
+  t.plan(48)
   let name = 'my-lambda'
   let payload = { ok: true }
   let responseBody, responseHeaders, responseStatusCode
@@ -491,6 +497,7 @@ test('Plugins - error(), error handling', async t => {
 })
 
 test('Plugins - error docs (@aws-lite)', async t => {
+  t.plan(2)
   let aws = await client({ ...config, plugins: [ import('@aws-lite/s3') ] })
 
   try {
@@ -505,6 +512,7 @@ test('Plugins - error docs (@aws-lite)', async t => {
 })
 
 test('Plugins - disabled methods', async t => {
+  t.plan(3)
   let aws = await client({ ...config, plugins: [ import(p(join(pluginDir, 'misc', 'disabled-methods.js'))) ] })
   t.assert.ok(aws.lambda.ok, 'Client loaded plugin containing disabled methods')
   t.assert.ok(!aws.lambda.disabledByFalsy, 'Client did not load method disabled by boolean false')
@@ -512,6 +520,7 @@ test('Plugins - disabled methods', async t => {
 })
 
 test('Plugins - plugin validation', async t => {
+  t.plan(12)
 
   // CJS
   try {
@@ -614,6 +623,7 @@ test('Plugins - plugin validation', async t => {
 })
 
 test('Tear down env', async t => {
+  t.plan(1)
   await server.end()
   t.assert.ok(true, 'Server ended')
 })
