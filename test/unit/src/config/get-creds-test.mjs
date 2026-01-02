@@ -81,10 +81,10 @@ test('Get credentials from env vars', async t => {
 })
 
 test('Get credentials from SSO', async t => {
-  t.plan(18)
+  t.plan(19)
   let homedir, result, request
   let ssoPath = '.aws/sso/cache/1d4488e85b2549abce77758ec396e9e37332312b.json'
-
+  let ssoSessionNamePath = '.aws/sso/cache/03f7c6869a0b1544548ead77b47666a8bd130c99.json'
   let started = await server.start()
   t.ok(started, 'Started server')
 
@@ -108,6 +108,7 @@ test('Get credentials from SSO', async t => {
   homedir = mockTmp({
     '.aws': mockTmp.copy(awsIniMock),
     [ssoPath]: mockTmp.copy(join(awsSSOMock, 'valid.json')),
+    [ssoSessionNamePath]: mockTmp.copy(join(awsSSOMock, 'valid.json')),
   })
   overrideHomedir(homedir)
 
@@ -135,6 +136,21 @@ test('Get credentials from SSO', async t => {
   t.equal(request.url, '/federation/credentials?account_id=123456789012&role_name=eh', 'Fetched correct URL')
   t.equal(request.headers['x-amz-sso_bearer_token'], 'an-access-token', 'Used correct authorization header')
   t.deepEqual(result, roleCredentials, 'Fetched creds from SSO portal')
+
+  // SSO profile with session name
+  try {
+    let result = await getCreds({
+      config: {
+        sso: { endpoint: `http://${host}:${port}` },
+        profile: 'profile_with_session_name',
+        awsConfigFile: true },
+    })
+    t.deepEqual(result, roleCredentials, 'Creds obtained using session name hash')
+  }
+  catch (err) {
+    console.log(err)
+    t.fail("Can't find cache token using session name hash")
+  }
 
   mockTmp.reset()
 
