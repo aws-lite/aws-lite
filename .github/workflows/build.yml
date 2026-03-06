@@ -123,6 +123,10 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
+    # OIDC publishing
+    permissions:
+      id-token: write
+
     # Go
     steps:
       - name: Check out repo
