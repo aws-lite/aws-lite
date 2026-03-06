@@ -2,11 +2,12 @@
 
 ---
 
-## [0.23.3] 2025-12-23
+## [0.23.3] 2026-03-06
 
 ### Fixed
 
 - Types for various methods fixed: `S3.Upload` method response type now defines a custom and existent type, all methods previously referencing a non-existent `stream` type now correctly reference `Readable` instead; thanks @Zegnat!
+- Types allow for providing `region` override on any aws-lite method
 
 ---
 
