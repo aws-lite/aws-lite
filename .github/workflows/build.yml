@@ -79,6 +79,10 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
+    # OIDC publishing
+    permissions:
+      id-token: write
+
     # Go
     steps:
       - name: Check out repo
