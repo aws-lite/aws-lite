@@ -41,7 +41,7 @@
     "aws4": "^1.13.2"
   },
   "devDependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^3.0.0",
     "@architect/eslint-config": "^3.0.0",
     "@aws-sdk/util-dynamodb": "^3.797.0",
     "@smithy/smithy-client": "^4.2.0",
