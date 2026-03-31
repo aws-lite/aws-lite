@@ -123,6 +123,14 @@ awsLite().then((client) => {
     verifyService: false,
   })
 
+  // Test: method
+  client({
+    service: 'scheduler',
+    method: 'GET',
+    path: `/schedules/${encodeURIComponent('my-name')}`,
+    query: { groupName: 'default' },
+  })
+
   return client
 })
 
