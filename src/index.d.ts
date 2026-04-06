@@ -39,6 +39,7 @@ declare namespace CreateAwsLite {
     data?: Record<string, any> | Buffer | ReadableStream | string;
     headers?: Record<string, string>;
     host?: string;
+    method?: string;
     path?: string;
     payload?: Record<string, any> | Buffer | ReadableStream | string;
     port?: number;
