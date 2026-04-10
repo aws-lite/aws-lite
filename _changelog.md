@@ -2,6 +2,14 @@
 
 ---
 
+## [0.23.6] 2025-04-10
+
+### Added
+
+- Added `method` to `AwsLiteRequest` type
+
+---
+
 ## [0.23.3 - 0.23.5] 2026-03-06
 
 ### Fixed
