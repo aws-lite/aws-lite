@@ -2,6 +2,14 @@
 
 ---
 
+## [0.24.0] 2026-??-??
+
+### Fixed
+
+- Conform to AWS CLI's interpretation of comments in ini files. The AWS CLI does not support inline comments for key-value pairs. Comments are only supported by starting a line with `#`. This has implications for correctly supporting lookup of cached SSO sessions.
+
+---
+
 ## [0.23.6] 2025-04-10
 
 ### Added
