@@ -108,4 +108,4 @@ function initMethod (service, method) {
   }
 }
 
-let lastItem = arr => arr[arr.length - 1]
+let lastItem = arr => arr?.[arr.length - 1]
