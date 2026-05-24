@@ -2,6 +2,14 @@
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Testing helpers now return `undefined` instead of throwing for unissued method-specific request and response lookups; fixes #191
+
+---
+
 ## [0.23.6] 2025-04-10
 
 ### Added
