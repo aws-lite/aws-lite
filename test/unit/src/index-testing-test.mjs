@@ -451,6 +451,18 @@ test('Testing - multiple services', async t => {
   t.deepEqual(client.testing.getAllResponses(), [], 'Responses reset')
 })
 
+test('Testing - unissued method request / response', async t => {
+  t.plan(4)
+  client.testing.enable()
+
+  client.testing.mock('DynamoDB.GetItem', mockRes)
+
+  t.equal(client.testing.getLastRequest('DynamoDB.Query'), null, 'getLastRequest() returns null for unissued methods')
+  t.equal(client.testing.getLastResponse('DynamoDB.Query'), null, 'getLastResponse() returns null for unissued methods')
+  t.deepEqual(client.testing.getAllRequests('DynamoDB.Query'), [], 'getAllRequests() returns an empty array for unissued methods')
+  t.deepEqual(client.testing.getAllResponses('DynamoDB.Query'), [], 'getAllResponses() returns an empty array for unissued methods')
+})
+
 test('Testing - mock errors', async t => {
   t.plan(4)
   client.testing.enable()
