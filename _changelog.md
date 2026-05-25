@@ -6,7 +6,7 @@
 
 ### Fixed
 
-- Testing helpers now return `undefined` instead of throwing for unissued method-specific request and response lookups; fixes #191
+- Testing helpers now return empty values instead of throwing for unissued method-specific request and response lookups; fixes #191
 
 ---
 

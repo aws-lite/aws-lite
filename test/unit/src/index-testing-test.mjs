@@ -457,10 +457,10 @@ test('Testing - unissued method request / response', async t => {
 
   client.testing.mock('DynamoDB.GetItem', mockRes)
 
-  t.equal(client.testing.getLastRequest('DynamoDB.Query'), undefined, 'getLastRequest() returns undefined for unissued methods')
-  t.equal(client.testing.getLastResponse('DynamoDB.Query'), undefined, 'getLastResponse() returns undefined for unissued methods')
-  t.equal(client.testing.getAllRequests('DynamoDB.Query'), undefined, 'getAllRequests() returns undefined for unissued methods')
-  t.equal(client.testing.getAllResponses('DynamoDB.Query'), undefined, 'getAllResponses() returns undefined for unissued methods')
+  t.equal(client.testing.getLastRequest('DynamoDB.Query'), null, 'getLastRequest() returns null for unissued methods')
+  t.equal(client.testing.getLastResponse('DynamoDB.Query'), null, 'getLastResponse() returns null for unissued methods')
+  t.deepEqual(client.testing.getAllRequests('DynamoDB.Query'), [], 'getAllRequests() returns an empty array for unissued methods')
+  t.deepEqual(client.testing.getAllResponses('DynamoDB.Query'), [], 'getAllResponses() returns an empty array for unissued methods')
 })
 
 test('Testing - mock errors', async t => {

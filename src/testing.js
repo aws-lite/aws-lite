@@ -24,13 +24,13 @@ function enable (params = {}) {
 function getAllRequests (target) {
   if (!target) return methods.data.allRequests
   let { service, method } = getMethod(target)
-  return methods.data?.[service]?.[method]?.requests
+  return methods.data?.[service]?.[method]?.requests || []
 }
 
 function getAllResponses (target) {
   if (!target) return methods.data.allResponses
   let { service, method } = getMethod(target)
-  return methods.data?.[service]?.[method]?.responses
+  return methods.data?.[service]?.[method]?.responses || []
 }
 
 function getLastRequest (target) {
@@ -108,4 +108,4 @@ function initMethod (service, method) {
   }
 }
 
-let lastItem = arr => arr?.[arr.length - 1]
+let lastItem = arr => arr?.[arr.length - 1] ?? null
