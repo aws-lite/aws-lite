@@ -3,6 +3,7 @@ import {
   // $IMPORTS_START
   CreateStackCommandOutput as CreateStackResponse,
   DeleteStackCommandOutput as DeleteStackResponse,
+  DescribeStackEventsCommandOutput as DescribeStackEventsResponse,
   DescribeStackResourcesCommandOutput as DescribeStackResourcesResponse,
   DescribeStacksCommandOutput as DescribeStacksResponse,
   ListStackResourcesCommandOutput as ListStackResourcesResponse,
@@ -28,6 +29,12 @@ declare interface AwsLiteCloudFormation {
    * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DeleteStack CloudFormation: DeleteStack}
    */
   DeleteStack: (input: AwsLiteMethodOptions & { StackName: string, ClientRequestToken?: string, RetainResources?: any[], RoleARN?: string }) => Promise<DeleteStackResponse>
+  /**
+   * @description
+   * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackEvents.html CloudFormation: DescribeStackEvents}
+   * - aws-lite docs: {@link https://github.com/aws-lite/aws-lite/blob/main/plugins/cloudformation/readme.md#DescribeStackEvents CloudFormation: DescribeStackEvents}
+   */
+  DescribeStackEvents: (input: AwsLiteMethodOptions & { StackName: string }) => Promise<DescribeStackEventsResponse>
   /**
    * @description
    * - AWS docs: {@link https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeStackResources.html CloudFormation: DescribeStackResources}
@@ -73,6 +80,7 @@ export type {
   // $EXPORT_START
   CreateStackResponse,
   DeleteStackResponse,
+  DescribeStackEventsResponse,
   DescribeStackResourcesResponse,
   DescribeStacksResponse,
   ListStackResourcesResponse,

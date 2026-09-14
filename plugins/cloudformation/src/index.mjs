@@ -110,6 +110,28 @@ const DeleteStack = {
   error: defaultError,
 }
 
+const DescribeStackEvents = {
+  awsDoc: docRoot + 'API_DescribeStackEvents.html',
+  validate: {
+    StackName: { ...StackName, required: true },
+  },
+  request: async (params) => {
+    return {
+      query: {
+        Action: 'DescribeStackEvents',
+        ...params,
+      },
+    }
+  },
+  response: ({ payload }) => {
+    const { StackEvents, NextToken } = payload.DescribeStackEventsResult
+    const result = { StackEvents: deMemberify(StackEvents) }
+    if (NextToken) result.NextToken = NextToken
+    return result
+  },
+  error: defaultError,
+}
+
 const DescribeStackResources = {
   awsDoc: docRoot + 'API_DescribeStackResources.html',
   validate: {
@@ -274,5 +296,5 @@ export default {
   name: '@aws-lite/cloudformation',
   service,
   property,
-  methods: { CreateStack, DeleteStack, DescribeStackResources, DescribeStacks, ListStackResources, UpdateStack, UpdateTerminationProtection, ...incomplete },
+  methods: { CreateStack, DeleteStack, DescribeStackEvents, DescribeStackResources, DescribeStacks, ListStackResources, UpdateStack, UpdateTerminationProtection, ...incomplete },
 }
