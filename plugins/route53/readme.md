@@ -11,11 +11,9 @@
 npm i @aws-lite/route53
 ```
 
-Optionally install types:
+TypeScript types are included in this package.
 
-```sh
-npm i -D @aws-lite/route53-types
-```
+Import types from `@aws-lite/route53`. For plugin autoloading or string plugin names, add `import type {} from '@aws-lite/route53'` in TypeScript (or `import '@aws-lite/route53'` in JavaScript) to load the declarations.
 
 
 ## Reference
@@ -142,3 +140,7 @@ Properties:
 
 - [More information about the `aws-lite` plugin API](https://aws-lite.org/plugin-api)
 - [Learn about contributing to this and other `aws-lite` plugins](https://aws-lite.org/contributing)
+
+## Attribution
+
+The declarations in `src/aws-sdk.d.ts` are adapted from [AWS SDK for JavaScript v3](https://github.com/aws/aws-sdk-js-v3/blob/main/LICENSE) and [Smithy TypeScript](https://github.com/smithy-lang/smithy-typescript/blob/main/LICENSE), licensed under Apache-2.0.

@@ -2,6 +2,16 @@
 
 ---
 
+## [0.23.8] 2026-09-20
+
+### Changed
+
+- Service plugins include TypeScript declarations, loaded automatically on import. Named types are exported from each service package.
+- Response declarations are extracted from AWS SDK types during generation.
+- Separate `@aws-lite/*-types` packages are no longer published.
+
+---
+
 ## [0.23.7] 2026-06-09
 
 ### Fixed

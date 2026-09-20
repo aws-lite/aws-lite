@@ -99,11 +99,19 @@ You can use the client as-is to quickly interact with AWS service APIs, or exten
 npm i @aws-lite/dynamodb
 ```
 
-Generally, types are available as optional `@aws-lite/*-types` packages, and can be added like so:
+Official service plugins include TypeScript types, loaded when you import the plugin:
 
-```shell
-npm i -D @aws-lite/dynamodb-types
+```ts
+import awsLite from '@aws-lite/client'
+import dynamodb from '@aws-lite/dynamodb'
+
+const aws = await awsLite({ plugins: [dynamodb] })
+// aws.DynamoDB has method and response types
 ```
+
+When using plugin autoloading or string plugin names, add `import type {} from '@aws-lite/dynamodb'` in TypeScript (or `import '@aws-lite/dynamodb'` in JavaScript) to load the declarations.
+
+See [generating types](scripts/generate-plugins/readme.md) for the maintainer workflow.
 
 [Learn more about `aws-lite` types.](https://aws-lite.org/configuration#types)
 

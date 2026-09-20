@@ -16,9 +16,6 @@
     "paths": {
       "@aws-lite/client": [
         "./src/index.d.ts"
-      ],
-      "@aws-lite/*": [
-        "./plugins/*/types/index.d.ts"
       ]
     }
   }

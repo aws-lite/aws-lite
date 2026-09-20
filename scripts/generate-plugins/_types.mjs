@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { cwd } from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -23,7 +23,7 @@ function typeFromValidateEntry (value) {
   }
 }
 
-function createTypesStr ({ methods, service, awsSdkName, property, display, existingTypes }) {
+function createTypesStr ({ methods, service, property, display, existingTypes }) {
   let existingMethods = []
   if (existingTypes) {
     const interfaceRegex = new RegExp(`declare interface AwsLite${property} {([^]*?)\n}\n`, 'g')
@@ -95,21 +95,14 @@ function createTypesStr ({ methods, service, awsSdkName, property, display, exis
   const exportRegex = /(?<=(\/\/ \$EXPORT_START\n))[\s\S]*?(?=(\/\/ \$EXPORT_END))/g
   let typesTmpl = existingTypes
     ? existingTypes
-    : readFileSync(join(__dirname, 'tmpl', '_types-tmpl.d.ts')).toString()
+    : readFileSync(join(__dirname, 'tmpl', '_types-tmpl.d.mts')).toString()
   // Ensure AwsLiteMethodOptions import exists for existing files
   if (existingTypes && !typesTmpl.includes('import type { AwsLiteMethodOptions }')) {
-    // Add the import after the AWS SDK import
-    const awsSdkImportEnd = typesTmpl.indexOf('} from "@aws-sdk/client-')
-    if (awsSdkImportEnd !== -1) {
-      const insertPoint = typesTmpl.indexOf(';\n', awsSdkImportEnd) + 2
-      typesTmpl = typesTmpl.slice(0, insertPoint) +
-                  '\nimport type { AwsLiteMethodOptions } from "@aws-lite/client";\n' +
-                  typesTmpl.slice(insertPoint)
-    }
+    typesTmpl = 'import type { AwsLiteMethodOptions } from "@aws-lite/client";\n\n' + typesTmpl
   }
   const trailingComma = outputTypes.length ? ',' : ''
   return typesTmpl
-    .replace(/\$SERVICE/g, awsSdkName || service)
+    .replace(/\$PACKAGE_NAME/g, `@aws-lite/${service}`)
     .replace(/\$PROPERTY/g, property)
     .replace(importsRegex, outputTypes.join(',\n') + `${trailingComma}\n  `)
     .replace(methodsRegex, methodTypes.join('\n') + '\n  ')
@@ -122,42 +115,26 @@ function createTypesStr ({ methods, service, awsSdkName, property, display, exis
  * @param {string} plugin.awsSdkName - the AWS SDK v3 package name; example: `route-53`
  * @param {string} plugin.property - service property name to be used in code
  * @param {string} plugin.display - the commonly recognized, more formal version (including casing); example: `CloudFormation`
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>} Whether the declarations changed
  */
 export default async function main ({ service, awsSdkName, property, display }) {
-  const typesName = `${service}-types`
-  const typesPackageName = `@aws-lite/${typesName}`
-  const packageName = `@aws-lite/${service}`
-  const pluginTypesDir = join(CWD, 'plugins', service, 'types')
+  const pluginDir = join(CWD, 'plugins', service)
+  const pluginPackageFile = join(pluginDir, 'package.json')
+  const pluginPackage = readFileSync(pluginPackageFile, 'utf8')
+  const pkg = JSON.parse(pluginPackage)
+  pkg.types = 'src/index.d.mts'
+  pkg.devDependencies ||= {}
+  pkg.devDependencies[`@aws-sdk/client-${awsSdkName || service}`] ||= '3'
+  const updatedPackage = JSON.stringify(pkg, null, 2) + '\n'
+  if (updatedPackage !== pluginPackage) writeFileSync(pluginPackageFile, updatedPackage)
 
   const { methods } = (await import('file://' + join(CWD, 'plugins', service, 'src', 'index.mjs'))).default
 
-  if (!existsSync(pluginTypesDir)) {
-    // new plugin types package - this only happens once
-    mkdirSync(pluginTypesDir, { recursive: true })
-
-    const typesPackageTmpl = readFileSync(join(__dirname, 'tmpl', '_types-package-tmpl.json')).toString()
-    const typesPkg = JSON.parse(typesPackageTmpl)
-
-    typesPkg.name = typesPackageName
-    typesPkg.description = `Type definitions for the \`${packageName}\` plugin`
-    typesPkg.homepage = `https://aws-lite.org/services/${service}`
-    typesPkg.repository.directory = `plugins/${service}/types`
-
-    typesPkg.dependencies[`@aws-sdk/client-${awsSdkName || service}`] = '3'
-
-    writeFileSync(join(pluginTypesDir, 'package.json'), JSON.stringify(typesPkg, null, 2) + '\n')
-
-    const typesReadmeTmpl = readFileSync(join(__dirname, 'tmpl', '_types-readme-tmpl.md'))
-      .toString()
-      .replace(/\$SERVICE/g, service)
-
-    writeFileSync(join(pluginTypesDir, 'readme.md'), typesReadmeTmpl)
-  }
-
-  const existingTypes = existsSync(join(pluginTypesDir, 'index.d.ts'))
-    ? readFileSync(join(pluginTypesDir, 'index.d.ts')).toString()
+  const typesFile = join(pluginDir, 'src', 'index.d.mts')
+  const existingTypes = existsSync(typesFile)
+    ? readFileSync(typesFile).toString()
     : null
-  const typesStr = createTypesStr({ methods, service, awsSdkName, property, display, existingTypes })
-  writeFileSync(join(pluginTypesDir, 'index.d.ts'), typesStr)
+  const typesStr = createTypesStr({ methods, service, property, display, existingTypes })
+  writeFileSync(typesFile, typesStr)
+  return typesStr !== existingTypes || updatedPackage !== pluginPackage
 }

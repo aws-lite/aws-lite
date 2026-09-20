@@ -23,9 +23,10 @@
     "test:live": "cross-env tape 'test/live/**/*-test.js' | tap-arc",
     "test:plugins": "cross-env tape 'plugins/**/test/**/*-test.mjs' | tap-arc",
     "test:precommit": "cross-env PRECOMMIT=true npm run gen && npm run lint",
-    "test:types": "tsd --files 'test/types/**/*.test-d.ts' --files 'plugins/*/types/**/*.test-d.ts'",
+    "test:types": "tsd --files 'test/types/**/*.test-d.ts' --files 'plugins/*/test/**/*.test-d.ts'",
+    "test:types:standalone": "node scripts/test-standalone-types.mjs",
     "test:unit": "cross-env tape 'test/unit/**/*-test.mjs' | tap-arc",
-    "test": "npm run lint && npm run gen && npm run test:types && npm run test:plugins && npm run coverage"
+    "test": "npm run lint && npm run gen && npm run test:types && npm run test:types:standalone && npm run test:plugins && npm run coverage"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run test:precommit",
@@ -48,6 +49,7 @@
     "@types/node": "^25.0.3",
     "adm-zip": "^0.5.16",
     "cross-env": "^7.0.3",
+    "dts-bundle-generator": "9.5.1",
     "eslint": "^9.25.1",
     "fast-xml-parser": "^5.2.1",
     "mock-tmp": "^0.0.4",
@@ -56,48 +58,31 @@
     "simple-git-hooks": "^2.13.0",
     "tap-arc": "^1.3.2",
     "tape": "^5.9.0",
-    "tsd": "^0.31.2"
+    "tsd": "^0.31.2",
+    "typescript": "5.9.3"
   },
   "files": [
     "src"
   ],
   "workspaces": [
     "plugins/acm",
-    "plugins/acm/types",
     "plugins/apigateway",
-    "plugins/apigateway/types",
     "plugins/apigatewaymanagementapi",
-    "plugins/apigatewaymanagementapi/types",
     "plugins/apigatewayv2",
-    "plugins/apigatewayv2/types",
     "plugins/cloudformation",
-    "plugins/cloudformation/types",
     "plugins/cloudfront",
-    "plugins/cloudfront/types",
     "plugins/cloudwatch-logs",
-    "plugins/cloudwatch-logs/types",
     "plugins/dynamodb",
-    "plugins/dynamodb/types",
     "plugins/iam",
-    "plugins/iam/types",
     "plugins/lambda",
-    "plugins/lambda/types",
     "plugins/organizations",
-    "plugins/organizations/types",
     "plugins/rds-data",
-    "plugins/rds-data/types",
     "plugins/route53",
-    "plugins/route53/types",
     "plugins/s3",
-    "plugins/s3/types",
     "plugins/sns",
-    "plugins/sns/types",
     "plugins/sqs",
-    "plugins/sqs/types",
     "plugins/ssm",
-    "plugins/ssm/types",
-    "plugins/sts",
-    "plugins/sts/types"
+    "plugins/sts"
   ],
   "eslintConfig": {
     "extends": "@architect/eslint-config",
