@@ -18,5 +18,9 @@
   "files": [
     "src"
   ],
-  "scripts": {}
+  "scripts": {},
+  "types": "src/index.d.mts",
+  "devDependencies": {
+    "@aws-sdk/client-route-53": "3"
+  }
 }

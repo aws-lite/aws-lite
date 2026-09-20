@@ -57,7 +57,7 @@ declare namespace CreateAwsLite {
     statusCode: number;
   }
 
-  // Allow <plugin>-types to extend AwsLiteClient
+  // Allow service plugins to extend AwsLiteClient
   interface AwsLiteClient {
     (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
   }

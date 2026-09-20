@@ -25,10 +25,7 @@ if (status.length) {
 
 const files = []
 const msg = []
-for (let p of plugins) {
-  const plugin = p.replace('-types', '')
-  const typesOnly = p.endsWith('-types')
-
+for (let plugin of plugins) {
   const pluginDir = join(cwd, 'plugins', plugin)
 
   if (!existsSync(pluginDir)) {
@@ -37,42 +34,15 @@ for (let p of plugins) {
   if (!pluginList.some(({ service }) => service === plugin)) {
     throw ReferenceError(`Plugin not found in aws-lite plugins list: ${plugin}`)
   }
-  if (typesOnly && action !== 'patch') {
-    throw ReferenceError(`Types packages may only receive patches independent of the main plugin`)
-  }
-
   const pluginPkgFile = join(pluginDir, 'package.json')
-  const pluginTypeDir = join(pluginDir, 'types')
-  const pluginTypePkgFile = join(pluginTypeDir, 'package.json')
-  if (!existsSync(pluginDir) || !existsSync(pluginTypeDir)) {
-    throw ReferenceError(`Plugin or plugin types directory not found: ${plugin}`)
-  }
-  if (!existsSync(pluginPkgFile) || !existsSync(pluginTypePkgFile)) {
-    throw ReferenceError(`Plugin or types package.json file not found: ${plugin}`)
+  if (!existsSync(pluginPkgFile)) {
+    throw ReferenceError(`Plugin package.json file not found: ${plugin}`)
   }
 
-  const changes = {}
-  if (!typesOnly) changes[pluginPkgFile] = { msg: `\`@aws-lite/${plugin}\` ` }
-  changes[pluginTypePkgFile] = { msg: `\`@aws-lite/${plugin}-types\` ` }
-
-  Object.keys(changes).forEach(file => {
-    const pkg = JSON.parse(readFileSync(file))
-    const newVersion = semver.inc(pkg.version, action)
-    if (typesOnly) {
-      changes[file].ver = newVersion
-    }
-    else if (file === pluginTypePkgFile &&
-             semver.lt(newVersion, changes[pluginPkgFile].ver)) {
-      changes[file].ver = changes[pluginPkgFile].ver
-    }
-    else changes[file].ver = newVersion
-
-    pkg.version = changes[file].ver
-    changes[file].msg = changes[file].msg += changes[file].ver
-    writeFileSync(file, JSON.stringify(pkg, null, 2) + '\n')
-  })
-
-  files.push(...Object.keys(changes))
-  msg.push(...Object.values(changes).map(({ msg }) => msg))
+  const pkg = JSON.parse(readFileSync(pluginPkgFile))
+  pkg.version = semver.inc(pkg.version, action)
+  writeFileSync(pluginPkgFile, JSON.stringify(pkg, null, 2) + '\n')
+  files.push(pluginPkgFile)
+  msg.push(`\`@aws-lite/${plugin}\` ${pkg.version}`)
 }
 execSync(`git commit ${files.join(' ')} -m '${msg.join('\n')}'`)

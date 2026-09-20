@@ -11,11 +11,9 @@
 npm i @aws-lite/rds-data
 ```
 
-Optionally install types:
+TypeScript types are included in this package.
 
-```sh
-npm i -D @aws-lite/rds-data-types
-```
+Import types from `@aws-lite/rds-data`. For plugin autoloading or string plugin names, add `import type {} from '@aws-lite/rds-data'` in TypeScript (or `import '@aws-lite/rds-data'` in JavaScript) to load the declarations.
 
 ## Reference
 
@@ -127,3 +125,7 @@ Properties:
 
 - [More information about the `aws-lite` plugin API](https://aws-lite.org/plugin-api)
 - [Learn about contributing to this and other `aws-lite` plugins](https://aws-lite.org/contributing)
+
+## Attribution
+
+The declarations in `src/aws-sdk.d.ts` are adapted from [AWS SDK for JavaScript v3](https://github.com/aws/aws-sdk-js-v3/blob/main/LICENSE) and [Smithy TypeScript](https://github.com/smithy-lang/smithy-typescript/blob/main/LICENSE), licensed under Apache-2.0.

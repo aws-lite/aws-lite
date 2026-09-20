@@ -2,6 +2,7 @@
 import { join } from 'node:path'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import generateTypes from './_types.mjs'
+import generateSdkTypes from './_sdk-types.mjs'
 import plugins from '../../plugins.mjs'
 
 const cwd = process.cwd()
@@ -66,9 +67,6 @@ async function main () {
       let workspace = repoDir
       if (!awsLitePkg.workspaces.includes(workspace)) {
         awsLitePkg.workspaces.push(workspace)
-        if (pluginTypesEnabled) {
-          awsLitePkg.workspaces.push(workspace + '/types')
-        }
         awsLitePkg.workspaces = awsLitePkg.workspaces.sort()
         writeFileSync(awsLitePkgFile, JSON.stringify(awsLitePkg, null, 2))
       }
@@ -134,12 +132,16 @@ async function main () {
     }
 
     if (pluginTypesEnabled) {
-      try { await generateTypes(plugin) }
+      try {
+        if (await generateTypes(plugin)) mutated = true
+      }
       catch (error) {
-        console.error(`Failed to generate types for ${service}: ${error.message}`)
+        throw Error(`Failed to generate types for ${service}: ${error.message}`)
       }
     }
   }
+
+  if (generateSdkTypes()) mutated = true
 
   // Project readme.md
   const projectReadmeFile = join(cwd, 'readme.md')
