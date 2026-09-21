@@ -2,6 +2,15 @@
 
 ---
 
+## [0.23.8] 2026-09-21
+
+### Fixed
+
+- Retryable error codes are now found in XML error payloads and in the `x-amzn-errortype` response header, in addition to the `code` / `name` / `__type` / `type` payload properties already checked.
+- Each retry attempt is now signed with a fresh timestamp. `aws4` mutates the object it signs, writing `X-Amz-Date` into its headers and reusing that value if it is still present on the next call. This could result in failure from an expired signature.
+
+---
+
 ## [0.23.7] 2026-06-09
 
 ### Fixed
