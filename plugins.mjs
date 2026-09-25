@@ -31,6 +31,7 @@ const plugins = [
     service: 'route53', property: 'Route53', display: 'Route 53', maintainers,
   },
   { service: 's3', property: 'S3', display: 'S3', maintainers },
+  { service: 'ses', property: 'SES', display: 'SES', maintainers },
   { service: 'sns', property: 'SNS', display: 'SNS', maintainers },
   { service: 'sqs', property: 'SQS', display: 'SQS', maintainers },
   { service: 'ssm', property: 'SSM', display: 'SSM', maintainers },

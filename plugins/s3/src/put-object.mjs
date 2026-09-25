@@ -66,7 +66,7 @@ const PutObject = {
     }
 
     if (Body) {
-      dataSize = Body.length
+      dataSize = Buffer.byteLength(Body)
     }
     else {
       try {
