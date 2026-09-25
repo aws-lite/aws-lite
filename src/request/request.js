@@ -70,8 +70,9 @@ function call (params, args) {
   let { protocol } = signing
 
   return new Promise((resolve, reject) => {
-    // Sign and construct the request; hard, deep copy because aws4 mutates its inputs
-    let options = aws4.sign(signing, creds)
+    // Sign and construct the request from a copy, because aws4 mutates its inputs.
+    // Signing the old `signing` object will replay the first attempt's timestamp which will eventually expire.
+    let options = aws4.sign({ ...signing }, creds)
     // Normalize host (again)
     /* istanbul ignore next: this won't get seen by nyc */
     options.host = options.host || options.hostname
@@ -309,18 +310,45 @@ async function retryDelay (i, reason, debug) {
   await new Promise(res => setTimeout(res, delay))
 }
 
+// Protocols report the error code in different places.
+// We gather them and compare them to the known retryable error codes.
+function getErrorCodes ({ error, headers }) {
+  // name + __type are common (type here jic)
+  let { name, __type, type } = error
+
+  // REST-JSON services may only report the code in a header
+  // See: https://smithy.io/2.0/aws/protocols/aws-restjson1-protocol.html#operation-error-serialization
+  let header = headers?.['x-amzn-errortype'] || headers?.['X-Amzn-Errortype']
+
+  // XML services use `Code`: nested under `Error`, under `Errors` > `Error`, or at the root.
+  let errors = error?.Errors?.Error ?? error?.Errors ?? error?.Error
+  // Multiple errors parse to an array of `Error`
+  let xmlError = Array.isArray(errors) ? errors[0] : errors
+
+  return [ name, __type, type, header, error?.Code, xmlError?.Code ]
+}
+
+// Legacy services may namespace the code (`com.amazonaws.dynamodb.v20120810#Code`) or append a
+// URI (`Code:http://internal.amazon.com/coral/...`).
+// See: https://smithy.io/2.0/aws/protocols/aws-restjson1-protocol.html#operation-error-serialization
+// API Gateway appends its own `x-amzn-errortype` to gateway responses, which
+// may result as a comma-separated list of error codes.
+function normalizeErrorCode (factor) {
+  let value = String(factor).split(',')[0].split(':')[0]
+  let hash = value.indexOf('#')
+  return hash === -1 ? value : value.substring(hash + 1)
+}
+
 function isRetryableError (error) {
-  let { code, name, __type, type } = error.error
+  let { code } = error.error
 
   // code is for connection errors only
   if (code && retryableTimeoutErrorCodes.includes(code)) {
     return `connection error: ${code}`
   }
 
-  // name + __type are fairly common; type is jic
-  for (let factor of [ name, __type, type ].filter(Boolean)) {
-    let bits = String(factor).split('#')
-    let errorCode = bits[bits.length - 1]
+  for (let factor of getErrorCodes(error).filter(Boolean)) {
+    let errorCode = normalizeErrorCode(factor)
     if (clockSkewErrorCodes.includes(errorCode)) return `clock skew error: ${errorCode}`
     if (throttlingErrorCodes.includes(errorCode)) return `throttling error: ${errorCode}`
     if (transientErrorCodes.includes(errorCode)) return `transient error: ${errorCode}`
