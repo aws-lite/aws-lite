@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Breaking change: `aws-lite` client and all plugins now require Node.js 22 or later (was 16); CI now tests Node.js 22.x, 24.x, and 26.x
+
 ### Fixed
 
 - Testing helpers now return empty values instead of throwing for unissued method-specific request and response lookups; fixes #191
