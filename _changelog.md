@@ -2,6 +2,12 @@
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Testing helpers now return empty values instead of throwing for unissued method-specific request and response lookups; fixes #191
+
 ## [0.23.7] 2026-06-09
 
 ### Fixed
