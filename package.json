@@ -1,6 +1,6 @@
 {
   "name": "@aws-lite/client",
-  "version": "0.23.6",
+  "version": "0.23.7",
   "description": "A simple, fast, extensible AWS client",
   "homepage": "https://aws-lite.org",
   "repository": {
@@ -90,6 +90,8 @@
     "plugins/route53/types",
     "plugins/s3",
     "plugins/s3/types",
+    "plugins/ses",
+    "plugins/ses/types",
     "plugins/sns",
     "plugins/sns/types",
     "plugins/sqs",

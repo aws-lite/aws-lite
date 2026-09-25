@@ -1,12 +1,12 @@
 {
-  "name": "@aws-lite/s3",
-  "version": "0.2.7",
-  "description": "Official `aws-lite` plugin for S3",
-  "homepage": "https://aws-lite.org/services/s3",
+  "name": "@aws-lite/ses",
+  "version": "0.0.0",
+  "description": "Official `aws-lite` plugin for SES",
+  "homepage": "https://aws-lite.org/services/ses",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",
-    "directory": "plugins/s3"
+    "directory": "plugins/ses"
   },
   "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "src/index.mjs",

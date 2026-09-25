@@ -21,7 +21,6 @@ export default {
   DescribeOrganizationsAccess:       { disabled, awsDoc: docRoot + 'API_DescribeOrganizationsAccess.html' },
   DescribePublisher:                 { disabled, awsDoc: docRoot + 'API_DescribePublisher.html' },
   DescribeStackDriftDetectionStatus: { disabled, awsDoc: docRoot + 'API_DescribeStackDriftDetectionStatus.html' },
-  DescribeStackEvents:               { disabled, awsDoc: docRoot + 'API_DescribeStackEvents.html' },
   DescribeStackInstance:             { disabled, awsDoc: docRoot + 'API_DescribeStackInstance.html' },
   DescribeStackResource:             { disabled, awsDoc: docRoot + 'API_DescribeStackResource.html' },
   DescribeStackResourceDrifts:       { disabled, awsDoc: docRoot + 'API_DescribeStackResourceDrifts.html' },

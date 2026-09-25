@@ -1,6 +1,7 @@
 import { join } from 'node:path'
 import test from 'tape'
 import mockTmp from 'mock-tmp'
+import PutObject from '../src/put-object.mjs'
 import { parseXML } from '../../../src/lib/index.js'
 import { defaults } from '../../../test/lib/index.mjs'
 let { config } = defaults
@@ -283,4 +284,28 @@ test('Tear down env', async t => {
   client.testing.disable()
   mockTmp.reset()
   t.pass(`mockTmp removed`)
+})
+
+let putObjectUtils = { config, credentials: {}, region }
+// String length 25, UTF-8 byte length 34
+let multibyteBody = JSON.stringify({ message: 'café 🚀 日本語' })
+
+test('PutObject Content-Length is the UTF-8 byte length of a multi-byte string Body', async t => {
+  t.plan(1)
+  let { headers } = await PutObject.request({ Bucket: bucketName, Key: objectNames[1], Body: multibyteBody }, putObjectUtils)
+  t.equal(headers['content-length'], Buffer.byteLength(multibyteBody), 'Content-Length is the byte length, not the string length')
+})
+
+test('PutObject Content-Length is the byte length of a multi-byte Buffer Body', async t => {
+  t.plan(1)
+  let Body = Buffer.from(multibyteBody)
+  let { headers } = await PutObject.request({ Bucket: bucketName, Key: objectNames[1], Body }, putObjectUtils)
+  t.equal(headers['content-length'], Body.length, 'Content-Length is the buffer byte length')
+})
+
+test('PutObject Content-Length is unchanged for an ASCII string Body', async t => {
+  t.plan(1)
+  let Body = objectContents[1]
+  let { headers } = await PutObject.request({ Bucket: bucketName, Key: objectNames[1], Body }, putObjectUtils)
+  t.equal(headers['content-length'], Buffer.byteLength(Body), 'Content-Length is correct for ASCII strings')
 })

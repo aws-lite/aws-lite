@@ -8,6 +8,11 @@
 
 - Testing helpers now return empty values instead of throwing for unissued method-specific request and response lookups; fixes #191
 
+## [0.23.7] 2026-06-09
+
+### Fixed
+
+- `S3.PutObject` now gets `Content-Length` from the UTF-8 byte length of a string `Body` instead of its JS string length. Multi-byte characters (emoji, accented letters, CJK) were under counting `Content-Length`. The truncated body caused S3 to reject the upload with a 400 error.
 ---
 
 ## [0.23.6] 2025-04-10

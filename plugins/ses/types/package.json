@@ -1,12 +1,12 @@
 {
-  "name": "@aws-lite/s3-types",
-  "version": "0.2.8",
-  "description": "Type definitions for the `@aws-lite/s3` plugin",
-  "homepage": "https://aws-lite.org/services/s3",
+  "name": "@aws-lite/ses-types",
+  "version": "0.0.0",
+  "description": "Type definitions for the `@aws-lite/ses` plugin",
+  "homepage": "https://aws-lite.org/services/ses",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws-lite/aws-lite.git",
-    "directory": "plugins/s3/types"
+    "directory": "plugins/ses/types"
   },
   "bugs": "https://github.com/aws-lite/aws-lite/issues",
   "main": "",
@@ -20,7 +20,7 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@aws-sdk/client-s3": "3"
+    "@aws-sdk/client-ses": "3"
   },
   "scripts": {}
 }
