@@ -121,7 +121,7 @@ test('readIni', async t => {
   t.equal(config.default.aws_access_key_id, 'default_aws_access_key_id', 'Loaded default access key with inline comments')
   t.equal(config.default.aws_secret_access_key, 'default_aws_secret_access_key', 'Loaded default secret key')
   // Profile 1
-  t.equal(config.profile_1.aws_access_key_id, 'profile_1_aws_access_key_id', 'Loaded profile_1 access key with inline comments')
+  t.equal(config.profile_1.aws_access_key_id, 'profile_1_aws_access_key_id             # henlo', 'Loaded profile_1 access key, including unsuccessful hash comment')
   t.equal(config.profile_1.aws_secret_access_key, 'profile_1_aws_secret_access_key ; ok', 'Loaded profile_1 access key, including unsuccessful semicolon comment')
   t.notOk(config.profile_1.ignore, 'Did not load commented line')
   t.notOk(config.profile_1.ignore_this, 'Did not load commented line')

@@ -180,7 +180,7 @@ function isInLambda () {
 // mhart's fairly strict INI parser – only deals with alpha keys, data must be within sections
 // Adapted from: https://github.com/mhart/awscred
 // Added support for inline + whole line comments
-let iniRegex = /^\[([^\]]+)\]\s*(?:#.*)?$|^([a-z_]+)\s*=\s*(.+?)\s*(?:#.*)?$/
+let iniRegex = /^\[([^\]]+)\]\s*(?:#.*)?$|^([a-z_]+)\s*=\s*(.+?)\s*$/
 function parseAwsIni (ini) {
   let section
   let out = Object.create(null)
