@@ -7,6 +7,7 @@ import plugins from '../../plugins.mjs'
 const cwd = process.cwd()
 const tmplDir = join(cwd, 'scripts', 'generate-plugins', 'tmpl')
 const pluginTmpl = readFileSync(join(tmplDir, '_plugin-tmpl.mjs')).toString()
+const pluginTypesTmpl = readFileSync(join(tmplDir, '_plugin-types-tmpl.d.mts')).toString()
 const readmeTmpl = readFileSync(join(tmplDir, '_readme-tmpl.md')).toString()
 const packageTmpl = readFileSync(join(tmplDir, '_package-tmpl.json')).toString()
 const pluginListRegex = /(?<=(<!-- plugins_start -->\n))[\s\S]*?(?=(<!-- plugins_end -->))/g
@@ -131,6 +132,15 @@ async function main () {
       if (updatedPluginReadme !== pluginReadme) {
         mutated = true
       }
+    }
+
+    const pluginTypesFile = join(pluginDir, 'src', 'index.d.mts')
+    const existingPluginTypes = existsSync(pluginTypesFile)
+      ? readFileSync(pluginTypesFile).toString()
+      : undefined
+    if (existingPluginTypes !== pluginTypesTmpl) {
+      writeFileSync(pluginTypesFile, pluginTypesTmpl)
+      mutated = true
     }
 
     if (pluginTypesEnabled) {
