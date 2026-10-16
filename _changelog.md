@@ -2,6 +2,14 @@
 
 ---
 
+## [0.24.1] 2026-10-16
+
+### Changed
+
+-  Added `paginate` and `paginator` to `AwsLiteRequest` type
+
+---
+
 ## [0.24.0] 2026-09-25
 
 ### Changed
