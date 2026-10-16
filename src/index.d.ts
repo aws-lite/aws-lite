@@ -31,6 +31,19 @@ declare namespace CreateAwsLite {
     region?: string;
   }
 
+  interface AwsLitePaginator {
+    /** @description Property name(s) to pass the pagination token in subsequent requests */
+    cursor: string | string[];
+    /** @description Property name(s) of the pagination token in the response */
+    token: string | string[];
+    /** @description Response property to accumulate across pages (required unless `paginate` is `'iterator'`) */
+    accumulator?: string;
+    /** @description Where the cursor is passed in requests; defaults to `'payload'` */
+    type?: 'headers' | 'payload' | 'query';
+    /** @description Paginate by default unless `paginate` is `false` */
+    default?: 'enabled';
+  }
+
   interface AwsLiteRequest {
     awsjson?: boolean | string[];
     /** @description Alias for "payload" */
@@ -40,6 +53,9 @@ declare namespace CreateAwsLite {
     headers?: Record<string, string>;
     host?: string;
     method?: string;
+    /** @description Enable pagination (requires `paginator`); pass `'iterator'` to return an async iterator of pages */
+    paginate?: boolean | 'iterator';
+    paginator?: AwsLitePaginator;
     path?: string;
     payload?: Record<string, any> | Buffer | ReadableStream | string;
     port?: number;
@@ -59,6 +75,7 @@ declare namespace CreateAwsLite {
 
   // Allow <plugin>-types to extend AwsLiteClient
   interface AwsLiteClient {
+    (payload: AwsLiteRequest & { paginate: 'iterator' }): Promise<AsyncGenerator<AwsLiteResponse, void, undefined>>;
     (payload: AwsLiteRequest): Promise<AwsLiteResponse>;
   }
 

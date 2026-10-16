@@ -131,6 +131,37 @@ awsLite().then((client) => {
     query: { groupName: 'default' },
   })
 
+  // Test: paginate + paginator
+  client({
+    service: 'lambda',
+    path: '/2015-03-31/functions/',
+    paginate: true,
+    paginator: { type: 'query', cursor: 'Marker', token: 'NextMarker', accumulator: 'Functions' },
+  })
+
+  client({
+    service: 'lambda',
+    path: '/2015-03-31/functions/',
+    paginate: 'iterator',
+    paginator: { type: 'query', cursor: 'Marker', token: 'NextMarker' },
+  })
+
+  client({
+    service: 'dynamodb',
+    paginate: false,
+    paginator: {
+      cursor: [ 'ExclusiveStartKey' ],
+      token: [ 'LastEvaluatedKey' ],
+      accumulator: 'Items',
+      default: 'enabled',
+    },
+  })
+
+  expectError(client({ service: 's3', paginate: 'yes' }))
+  expectError(client({ service: 's3', paginator: { token: 'Token' } })) // Missing cursor
+  expectError(client({ service: 's3', paginator: { cursor: 'Cursor' } })) // Missing token
+  expectError(client({ service: 's3', paginator: { cursor: 'C', token: 'T', type: 'body' } }))
+
   return client
 })
 
@@ -156,6 +187,31 @@ awsLite().then(async (client) => {
     payload: Record<string, any>
     statusCode: number
   }>(response)
+
+  return client
+})
+
+// Test: paginate: 'iterator' returns an async generator of responses
+awsLite().then(async (client) => {
+  const pages = await client({
+    service: 'lambda',
+    path: '/2015-03-31/functions/',
+    paginate: 'iterator',
+    paginator: { type: 'query', cursor: 'Marker', token: 'NextMarker' },
+  })
+  expectType<AsyncGenerator<awsLite.AwsLiteResponse, void, undefined>>(pages)
+
+  for await (const page of pages) {
+    expectType<awsLite.AwsLiteResponse>(page)
+  }
+
+  // Other paginate values still return a single response
+  expectType<awsLite.AwsLiteResponse>(await client({
+    service: 'lambda',
+    paginate: true,
+    paginator: { cursor: 'Marker', token: 'NextMarker', accumulator: 'Functions' },
+  }))
+  expectType<awsLite.AwsLiteResponse>(await client({ service: 'lambda' }))
 
   return client
 })
