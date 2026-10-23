@@ -1,4 +1,5 @@
 import { join } from 'node:path'
+import { Readable } from 'node:stream'
 import test from 'tape'
 import mockTmp from 'mock-tmp'
 import PutObject from '../src/put-object.mjs'
@@ -277,6 +278,127 @@ test('List zero buckets - second time', async t => {
 
   let listBucketsResponse = await aws.S3.ListBuckets()
   t.equal(listBucketsResponse.Buckets.length, 0, 'Response has an empty Buckets array')
+})
+
+let UploadId = 'upload-id'
+let uploadKey = 'upload.bin'
+
+function mockUpload ({ partError, onPart } = {}) {
+  client.testing.reset()
+  client.testing.mock('S3.CreateMultipartUpload', { statusCode: 200, payload: { UploadId } })
+  // Respond asynchronously like a real request, so several parts can be uploading at once
+  client.testing.mock('S3.UploadPart', params => new Promise(res => setTimeout(() => {
+    onPart?.(params)
+    res(partError
+      ? { statusCode: 500, error: { message: 'Part failed' } }
+      : { statusCode: 200, headers: { etag: `"etag-${params.PartNumber}"` } })
+  }, 5)))
+  client.testing.mock('S3.AbortMultipartUpload', { statusCode: 204 })
+  client.testing.mock('S3.Upload', { ...okXml, payload: {} })
+}
+
+function getUploadParts () {
+  return client.testing.getAllRequests('S3.UploadPart').map(({ request }) => request)
+}
+
+function getCompletedParts () {
+  return client.testing.getLastRequest('S3.Upload').request.payload.CompleteMultipartUpload.Part
+}
+
+test('Upload sends object params only with CreateMultipartUpload', async t => {
+  t.plan(7)
+  mockUpload()
+  await aws.S3.Upload({
+    Bucket: bucketName,
+    Key: uploadKey,
+    Body: Readable.from([ Buffer.from(objectContents[0]) ]),
+    ACL: 'public-read',
+    ContentType: 'image/png',
+    Metadata: { width: '640' },
+  })
+  let create = client.testing.getLastRequest('S3.CreateMultipartUpload').request
+  t.equal(create.ContentType, 'image/png', 'CreateMultipartUpload gets ContentType')
+  t.equal(create.ACL, 'public-read', 'CreateMultipartUpload gets ACL')
+  t.deepEqual(create.Metadata, { width: '640' }, 'CreateMultipartUpload gets Metadata')
+  let [ part ] = getUploadParts()
+  t.notOk(part.ContentType || part.ACL || part.Metadata, 'UploadPart does not get object params')
+  let { headers } = client.testing.getLastRequest('S3.Upload').request
+  t.equal(headers['content-type'], 'application/xml', 'CompleteMultipartUpload is sent as XML')
+  t.notOk(headers['x-amz-acl'], 'CompleteMultipartUpload does not get ACL')
+  t.notOk(headers['x-amz-meta-width'], 'CompleteMultipartUpload does not get Metadata')
+})
+
+test('Upload splits a Buffer or string Body into parts', async t => {
+  t.plan(5)
+  let Body = Buffer.from('0123456789'.repeat(2) + '01234')
+  mockUpload()
+  await aws.S3.Upload({ Bucket: bucketName, Key: uploadKey, Body, ChunkSize: 10 })
+  let parts = getUploadParts()
+  t.deepEqual(parts.map(({ PartNumber }) => PartNumber), [ 1, 2, 3 ], 'Uploaded three parts')
+  t.deepEqual(Buffer.concat(parts.map(part => part.Body)), Body, 'Parts contain the whole Body')
+  t.deepEqual(getCompletedParts().map(({ PartNumber }) => PartNumber), [ 1, 2, 3 ], 'Completed with three parts')
+
+  mockUpload()
+  await aws.S3.Upload({ Bucket: bucketName, Key: uploadKey, Body: objectContents[0] })
+  parts = getUploadParts()
+  t.equal(parts.length, 1, 'Uploaded one part')
+  t.equal(parts[0].Body.toString(), objectContents[0], 'Part contains the string Body')
+})
+
+test('Upload keeps all data of a stream chunk larger than ChunkSize', async t => {
+  t.plan(2)
+  let Body = Buffer.from('0123456789'.repeat(2) + '01234')
+  mockUpload()
+  await aws.S3.Upload({ Bucket: bucketName, Key: uploadKey, Body: Readable.from([ Body ]), ChunkSize: 10 })
+  let parts = getUploadParts()
+  t.deepEqual(Buffer.concat(parts.map(part => part.Body)), Body, 'Parts contain the whole Body')
+  t.equal(getCompletedParts().length, 3, 'Completed with three parts')
+})
+
+test('Upload completes an empty Body with one empty part', async t => {
+  t.plan(3)
+  mockUpload()
+  await aws.S3.Upload({ Bucket: bucketName, Key: uploadKey, Body: Readable.from([]) })
+  let parts = getUploadParts()
+  t.equal(parts.length, 1, 'Uploaded one part')
+  t.equal(parts[0].Body.length, 0, 'Part is empty')
+  t.equal(getCompletedParts().length, 1, 'Completed with one part')
+})
+
+test('Upload rejects and aborts when a part fails', async t => {
+  t.plan(3)
+  mockUpload({ partError: true })
+  try {
+    await aws.S3.Upload({ Bucket: bucketName, Key: uploadKey, Body: Readable.from([ Buffer.alloc(30) ]), ChunkSize: 10 })
+    t.fail('Upload should have failed')
+  }
+  catch (err) {
+    t.match(err.message, /Part failed/, 'Upload rejects with the part error')
+  }
+  t.equal(client.testing.getAllRequests('S3.AbortMultipartUpload').length, 1, 'Multipart upload was aborted')
+  t.notOk(process.getActiveResourcesInfo().includes('Timeout'), 'No timers are left running')
+})
+
+test('Upload holds at most Concurrency parts in memory', async t => {
+  t.plan(2)
+  let ChunkSize = 1024
+  let Concurrency = 2
+  let chunkSize = 256
+  let maxBuffered = (ChunkSize * Concurrency) + chunkSize
+  let read = 0
+  let uploaded = 0
+  let maxHeld = 0
+  async function * generate () {
+    for (let i = 0; i < 64; i++) {
+      read += chunkSize
+      maxHeld = Math.max(maxHeld, read - uploaded)
+      yield Buffer.alloc(chunkSize, i)
+    }
+  }
+  mockUpload({ onPart: ({ Body }) => uploaded += Body.length })
+  await aws.S3.Upload({ Bucket: bucketName, Key: uploadKey, Body: Readable.from(generate()), ChunkSize, Concurrency })
+  t.equal(getUploadParts().length, 16, 'Uploaded all parts')
+  t.ok(maxHeld <= maxBuffered, `Held ${maxHeld} bytes, at most Concurrency parts plus one chunk`)
 })
 
 test('Tear down env', async t => {
