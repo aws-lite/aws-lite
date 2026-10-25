@@ -1,4 +1,11 @@
 # aws-lite changelog
+---
+
+## [0.24.2] 2026-10-25
+
+### Fixed
+
+- `SNS.Publish` now allows for sending large SNS publish payloads by using POST requests
 
 ---
 
@@ -6,7 +13,7 @@
 
 ### Changed
 
--  Added `paginate` and `paginator` to `AwsLiteRequest` type
+- Added `paginate` and `paginator` to `AwsLiteRequest` type
 
 ---
 
