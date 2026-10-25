@@ -1,8 +1,9 @@
 /**
  * Plugin maintained by: @architect
  */
-
 import incomplete from './incomplete.mjs'
+import { default as qs } from 'node:querystring'
+
 
 const service = 'sns'
 const property = 'SNS'
@@ -10,6 +11,8 @@ const required = true
 const docRoot = 'https://docs.aws.amazon.com/sns/latest/api/'
 
 const str = { type: 'string' }
+
+const formEncodedContentType = { 'content-type': 'application/x-www-form-urlencoded' }
 
 const defaultResponse = ({ payload }) => {
   let response = payload
@@ -43,10 +46,9 @@ const Publish = {
     TopicArn: { ...str, comment: 'ARN of the the topic to publish to; if not specified, you must specify `PhoneNumber` or `TargetArn`' },
   },
   request: async (params) => ({
-    query: {
-      Action: 'Publish',
-      ...params,
-    },
+    headers: formEncodedContentType,
+    method: 'POST',
+    payload: qs.stringify({ Action: 'Publish', ...params }),
   }),
   response: defaultResponse, // v2 lifts PublishResult contents to the top level
   error: defaultError,
