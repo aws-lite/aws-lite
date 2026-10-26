@@ -9,6 +9,18 @@
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- `S3.Upload` no longer sends object params such as `ContentType`, `ACL` or `Metadata` with `UploadPart`, `CompleteMultipartUpload` and `AbortMultipartUpload`. `ContentType` replaced the XML content type of `CompleteMultipartUpload`, which S3 rejected as malformed.
+- `S3.Upload` now uploads a buffer or string `Body`; it failed with `The _read() method is not implemented`
+- `S3.Upload` no longer drops the end of a stream whose single chunk is larger than `ChunkSize`; the upload succeeded with a truncated object
+- `S3.Upload` now uploads an empty `Body` as one empty part, instead of crashing the process with an uncaught `TypeError`
+- `S3.Upload` now pauses reading while `Concurrency` parts are buffered and concatenates each part once, instead of buffering the whole stream and copying it on every chunk; a 25 MB stream peaked at ~+560 MB RSS with the defaults, now ~+50 MB
+
+---
+
 ## [0.24.1] 2026-10-16
 
 ### Changed

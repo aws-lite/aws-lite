@@ -37,6 +37,16 @@ const Upload = {
   response: ({ payload, headers }) => ({ ...payload || {}, ...parseHeadersToResults({ headers }) }),
 }
 
+// Of all `Upload` params, only these belong to the requests that follow `CreateMultipartUpload`
+const multipartParams = [ 'Bucket', 'Key', 'ExpectedBucketOwner', 'RequestPayer' ]
+const sseParams = [ 'SSECustomerAlgorithm', 'SSECustomerKey', 'SSECustomerKeyMD5' ]
+const partParams = [ ...multipartParams, ...sseParams, 'ChecksumAlgorithm' ]
+const completeParams = [ ...multipartParams, ...sseParams, 'ChecksumCRC32', 'ChecksumCRC32C', 'ChecksumSHA1', 'ChecksumSHA256' ]
+
+function pick (params, keys) {
+  return Object.fromEntries(keys.filter(key => params[key] !== undefined).map(key => [ key, params[key] ]))
+}
+
 async function request (params, utils) {
   const { File, Body } = params
   const { config } = utils
@@ -64,12 +74,13 @@ async function request (params, utils) {
     Parts = await processUpload(params, utils, UploadId)
   }
   catch (err) {
-    await S3.AbortMultipartUpload({ ...params, UploadId })
+    await S3.AbortMultipartUpload({ ...pick(params, multipartParams), UploadId })
     throw err
   }
 
-  const headers = getHeadersFromParams({ ...params, UploadId }, queryParams)
-  const query = getQueryFromParams({ ...params, UploadId }, queryParams)
+  const completeUpload = { ...pick(params, completeParams), UploadId }
+  const headers = getHeadersFromParams(completeUpload, queryParams)
+  const query = getQueryFromParams(completeUpload, queryParams)
   return {
     host,
     pathPrefix,
@@ -83,150 +94,120 @@ async function request (params, utils) {
 
 function processUpload (params, utils, UploadId) {
   return new Promise((res, rej) => {
+    const { File, Body } = params
+    const { config, client } = utils
+    const { S3 } = client
+
+    const ChunkSize = params.ChunkSize || params.partSize || tenMB
+    const Concurrency = params.Concurrency || params.queueSize || 5
+    // Stop reading while this much data is waiting for or in upload, see `Concurrency` docs
+    const maxBuffered = ChunkSize * Concurrency
+
+    const part = { ...pick(params, partParams), UploadId }
+    const queue = [] // The work queue
+    const finalPartList = []
+
+    let chunks = [] // Data of the next part, concatenated once it is complete
+    let chunksLength = 0
+    let buffered = 0
+    let counter = 1
+    let raw = 0
     let running = 0
+    let done = false
     let error = false
-    let pubInterval, errInterval
+
     let stream
+    const bodyIsStream = Body?.on && Body?._read && Body?._readableState
+    if (bodyIsStream) {
+      stream = Body
+    }
+    else if (Body) {
+      stream = Readable.from(Body, { objectMode: false })
+    }
+    else {
+      stream = createReadStream(File)
+    }
 
-    // Gracefully wait before terminating
+    // Settle once no part is uploading anymore
     // Why: we see occasional `write EPIPE` errors when aborting multipart uploads while a part is still being uploaded
-    // So allow current async operations to finish before rejecting
-    function terminate () {
-      if (!errInterval) errInterval = setInterval(terminate, 50)
-
-      // Stop queueing more work and kill the stream
-      clearInterval(pubInterval)
-      stream.destroy()
-
-      if (running === 0) {
-        clearInterval(errInterval)
-        rej(error)
-      }
+    function settle () {
+      if (running) return
+      if (error) rej(error)
+      else if (done && !queue.length) res(finalPartList.sort((a, b) => a.PartNumber - b.PartNumber))
     }
 
-    try {
-      const { File, Body } = params
-      const { config, client } = utils
-      const { S3 } = client
-
-      const ChunkSize = params.ChunkSize || params.partSize || tenMB
-      const Concurrency = params.Concurrency || params.queueSize || 5
-
-      const parts = {} // Data is loaded here with sequence properties before being queued
-      const queue = [] // The work queue
-      const finalPartList = []
-
-      let counter = 1
-      let raw = 0
-      let done = false
-
-      const bodyIsStream = Body?.on && Body?._read && Body?._readableState
-      if (bodyIsStream) {
-        stream = Body
-      }
-      else if (Body) {
-        stream = new Readable()
-        stream.push(Body)
-      }
-      else {
-        stream = createReadStream(File)
-      }
-
-      stream.on('data', chunk => {
-        raw += chunk.length
-        if (!parts[counter]) parts[counter] = chunk
-        else {
-          parts[counter] = Buffer.concat([ parts[counter], chunk ])
-          check()
-        }
-
-        // Feasible to accomplish publishing without an interval, but this is a pretty simple way to ensure any work remaining at the end of the queue is tidily wrapped up
-        if (!pubInterval) pubInterval = setInterval(publish, 50)
-
-        if (running === Concurrency && queue.length) {
-          if (config.debug) {
-            console.error(`[S3.Upload] Stream temporarily paused to finish concurrent uploads`)
-          }
-          stream.pause()
-        }
-      })
-
-      function check () {
-        if (parts[counter].length > ChunkSize) {
-          const last = counter
-          counter++
-          parts[counter] = parts[last].subarray(ChunkSize)
-          enqueue(last)
-          // Run again in case the incoming chunk is so big it generates multiple parts
-          check()
-        }
-      }
-
-      function enqueue (i) {
-        const Body = parts[i].subarray(0, ChunkSize)
-        // Low odds, but the final call may have 0b remaining in the buffer
-        if (Body.length) {
-          queue.push({ PartNumber: i, Body })
-        }
-        delete parts[i]
-      }
-
-      function publish () {
-        if (running < Concurrency && queue.length && !error) {
-          running++
-          const { PartNumber, Body } = queue.shift()
-          if (config.debug) {
-            console.error(`[S3.Upload] Uploading part ${PartNumber}, ${Body.length}b`)
-          }
-
-          S3.UploadPart({ ...params, UploadId, PartNumber, Body })
-            .then(result => {
-              running--
-              const { ETag } = result
-              finalPartList.push({ PartNumber, ETag })
-
-              if (stream.isPaused()) {
-                stream.resume()
-              }
-              // This was the last part to upload, yay!
-              if (running === 0 && done && !queue.length && !error) {
-                clearInterval(pubInterval)
-                res(finalPartList.sort((a, b) => a.PartNumber - b.PartNumber))
-              }
-            })
-            .catch(err => {
-              running--
-              if (!error) error = err
-              terminate()
-            })
-          // Continue attempting to clear the queue
-          publish()
-        }
-      }
-
-      stream.on('error', err => {
-        if (!error) error = err
-        terminate()
-      })
-
-      stream.on('end', () => {
-        done = true
-
-        // Small files/streams may be smaller than the chunk size, which may run afoul of AWS minimums
-        // This can result in partial uploads or hangs, depending on the file and the configured chunk size
-        // So try to figure out whatever remains in the latest part, and send that
-        if (parts[counter].length > ChunkSize) check()
-        else enqueue(counter)
-
-        if (config.debug) {
-          console.error(`[S3.Upload] readable stream ended after ${raw}b, clearing remaining upload queue`)
-        }
-      })
-    }
-    catch (err) {
+    function terminate (err) {
       if (!error) error = err
-      terminate()
+      // Stop queueing more work and kill the stream
+      stream.destroy()
+      settle()
     }
+
+    function enqueue () {
+      const Body = chunks.length === 1 ? chunks[0] : Buffer.concat(chunks, chunksLength)
+      queue.push({ PartNumber: counter++, Body })
+      chunks = []
+      chunksLength = 0
+      publish()
+    }
+
+    function publish () {
+      while (running < Concurrency && queue.length && !error) {
+        running++
+        const { PartNumber, Body } = queue.shift()
+        if (config.debug) {
+          console.error(`[S3.Upload] Uploading part ${PartNumber}, ${Body.length}b`)
+        }
+
+        S3.UploadPart({ ...part, PartNumber, Body })
+          .then(({ ETag }) => {
+            running--
+            buffered -= Body.length
+            finalPartList.push({ PartNumber, ETag })
+            if (stream.isPaused() && buffered < maxBuffered) {
+              stream.resume()
+            }
+            publish()
+            settle()
+          }, err => {
+            running--
+            terminate(err)
+          })
+      }
+    }
+
+    stream.on('data', chunk => {
+      raw += chunk.length
+      buffered += chunk.length
+      // Fill parts of exactly `ChunkSize`, splitting chunks as needed
+      while (chunk.length) {
+        const data = chunk.subarray(0, ChunkSize - chunksLength)
+        chunks.push(data)
+        chunksLength += data.length
+        chunk = chunk.subarray(data.length)
+        if (chunksLength === ChunkSize) enqueue()
+      }
+
+      if (buffered >= maxBuffered) {
+        if (config.debug) {
+          console.error(`[S3.Upload] Stream temporarily paused to finish concurrent uploads`)
+        }
+        stream.pause()
+      }
+    })
+
+    stream.on('error', terminate)
+
+    stream.on('end', () => {
+      done = true
+      // Send whatever remains in the last part; S3 requires at least one part, so an empty body is sent as one empty part
+      if (chunksLength || counter === 1) enqueue()
+
+      if (config.debug) {
+        console.error(`[S3.Upload] readable stream ended after ${raw}b, clearing remaining upload queue`)
+      }
+      settle()
+    })
   })
 }
 
