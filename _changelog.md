@@ -31,11 +31,21 @@
 - Conform to AWS CLI's interpretation of comments in ini files. The AWS CLI does not support inline comments for key-value pairs. Comments are only supported by starting a line with `#`. This has implications for correctly supporting lookup of cached SSO sessions.
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Plugins now include module declarations, allowing TypeScript projects to import plugins without local ambient declarations.
+  - Since consumers are not intended to interact with plugin values, the types are intentionally generic.
+
+---
+
 ## [0.23.7] 2026-06-09
 
 ### Fixed
 
 - `S3.PutObject` now gets `Content-Length` from the UTF-8 byte length of a string `Body` instead of its JS string length. Multi-byte characters (emoji, accented letters, CJK) were under counting `Content-Length`. The truncated body caused S3 to reject the upload with a 400 error.
+
 ---
 
 ## [0.23.6] 2025-04-10
@@ -100,7 +110,6 @@
   - Learn more at: http://aws-lite.org/configuration#credential-provider-chain-details
 - Added support for async iterator pagination by specifying `iterator` as the pagination type
 
-
 ### Changed
 
 - Minor performance improvement: only ever load AWS credentials / config once per client instantiation
@@ -113,7 +122,6 @@
 ### Added
 
 - Added support for accepting pagination cursors via headers
-
 
 ### Fixed
 
@@ -183,7 +191,6 @@
 
 - Updated dependencies
 
-
 ### Fixed
 
 - Inspect error payloads for clock skew, throttling, and transient error codes; fixes #127
@@ -242,7 +249,6 @@
   - Read more at https://aws-lite.org/testing-api
   - Feature should be considered experimental
 
-
 ### Changed
 
 - Removed Node.js 14.x support
@@ -254,7 +260,6 @@
 ### Added
 
 - Enable debug mode via `AWS_LITE_DEBUG` environment variable
-
 
 ### Changed
 
@@ -277,7 +282,6 @@
 - Client config option `verifyService` (default: `true`) can be set to `false` to skip checking service name against the internal list of known AWS services on all requests
   - This option is also considered when loading and validating plugins
 - Request param `verifyService` (default: `true`) does the same, on a per-request basis
-
 
 ### Changed
 
@@ -324,13 +328,11 @@
 - Added STS to semi-global services
 - Added some missing types
 
-
 ### Changed
 
 - Improved protocol validation
 - Improved duplicate slash improvement in path construction
 - Updated deps
-
 
 ### Removed
 
